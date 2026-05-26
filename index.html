@@ -567,13 +567,15 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 .ta-wagers { display: flex; gap: 0.2rem; flex-shrink: 0; margin-left: auto; }
 .wager-btn {
-  width: 2rem; height: 2rem;
+  min-width: 2.6rem;
+  min-height: 2.6rem;
   border: 1px solid var(--border-light); border-radius: 6px;
   background: var(--bg-input); color: var(--text-primary);
-  font-family: var(--font-display); font-size: 0.82rem; font-weight: 700;
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
   cursor: pointer; transition: var(--transition);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   position: relative;
+  touch-action: manipulation;
 }
 .wager-btn:hover:not(.used) { background: var(--bg-hover); border-color: var(--accent-cyan); }
 .wager-btn.correct {
@@ -604,9 +606,10 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 /* Result buttons for special wager sections (halftime + final) */
 .ta-result { display: flex; gap: 0.2rem; flex-shrink: 0; }
 .result-btn {
-  width: 2.2rem; height: 2rem;
+  min-width: 2.6rem;
+  min-height: 2.6rem;
   border: 1px solid var(--border); border-radius: 6px;
-  background: var(--bg-input); font-size: 0.95rem;
+  background: var(--bg-input); font-size: 1.1rem;
   cursor: pointer; transition: var(--transition);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
@@ -621,7 +624,7 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 
 .ta-pts {
-  font-family: var(--font-display); font-size: 0.82rem; font-weight: 700;
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 700;
   min-width: 28px; text-align: right; flex-shrink: 0;
 }
 .pts-pos { color: var(--accent-green); }
@@ -634,7 +637,7 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
   border-radius: var(--radius); padding: 10px; margin-bottom: 8px;
 }
 .standings-block .standings-title {
-  font-family: var(--font-display); font-size: 0.78rem; font-weight: 600;
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 600;
   color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px;
   margin-bottom: 6px;
 }
@@ -720,7 +723,7 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 
 @media (max-width: 480px) {
   .ta-name { width: 5.5rem; font-size: 0.78rem; padding-left: 2px; padding-right: 16px; margin-right: auto;}
-  .wager-btn { width: 1.8rem; height: 1.8rem; font-size: 0.72rem; }
+  .wager-btn { width: 1.8rem; height: 1.8rem; font-size: 1.1rem; }
   .meta-grid { grid-template-columns: 1fr; }
   .team-entry { grid-template-columns: 1fr 3rem 3.2rem auto auto; }
   .sort-btn { font-size: 0.62rem; padding: 5px 2px; }
