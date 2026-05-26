@@ -668,28 +668,30 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 .special-section.final-wager { border-color: var(--accent-orange); }
 .special-section.final-wager h3 { color: var(--accent-orange); }
 .special-wager-row {
-  display: flex; align-items: center; gap: 0.4rem;
+  display: flex; align-items: center; gap: 1rem;
   padding: var(--row-pad) 12px; border-bottom: 1px solid rgba(42,42,68,0.5);
   margin-left: -12px; margin-right: -12px;
 }
 .special-wager-row:last-child { border-bottom: none; }
 .special-wager-row:nth-child(even) { background: var(--row-stripe); }
-.sw-input { width: 3.5rem!important; text-align: center; padding: 5px 3px!important; flex-shrink: 0; }
+.sw-input { min-height: 2.6rem; width: 3.5rem!important; text-align: center; padding: 5px 3px!important; font-size: 1.1rem; flex-shrink: 0; }
 
 /* Bonus Stepper (R1 & R3 only) */
 .bonus-row {
-  display: flex; align-items: center; gap: 0.4rem;
+  display: flex; align-items: center; gap: 0.8rem;
   padding: var(--row-pad) 10px; border-bottom: 1px solid rgba(42,42,68,0.5);
   margin-left: -10px; margin-right: -10px;
 }
 .bonus-row:last-child { border-bottom: none; }
 .bonus-row:nth-child(even) { background: var(--row-stripe); }
-.stepper { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
+.stepper { display: flex; align-items: center; gap: 0; flex-shrink: 0; margin-left: auto;}
 .stepper button {
   width: 1.8rem; height: 1.8rem; border: 1px solid var(--border-light);
   background: var(--bg-input); color: var(--text-primary);
-  font-size: 0.9rem; font-weight: 700; cursor: pointer;
+  font-size: 1.2rem; font-weight: 700; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
+  touch-action: manipulation; 
+  -webkit-tap-highlight-color: transparent;
 }
 .stepper button:first-child { border-radius: 6px 0 0 6px; }
 .stepper button:last-child { border-radius: 0 6px 6px 0; }
@@ -703,7 +705,7 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 .bonus-pts {
   font-family: var(--font-display); font-size: 0.82rem; font-weight: 700;
-  color: var(--accent-gold); margin-left: auto; flex-shrink: 0;
+  color: var(--accent-gold); margin-left: auto; flex-shrink: 0; max-width: 80px; text-align: right;
 }
 
 .export-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 10px 0; }
