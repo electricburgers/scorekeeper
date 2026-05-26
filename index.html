@@ -6,7 +6,7 @@
 <title>Miguel Manalo — Scorekeeper v5</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Source+Sans+3:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
@@ -32,11 +32,11 @@
   --radius: 8px;
   --radius-lg: 12px;
   --shadow: 0 4px 24px rgba(0,0,0,0.5);
-  --font-display: 'Oswald', sans-serif;
-  --font-body: 'Source Sans 3', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
   --transition: 0.2s ease;
   --row-stripe: rgba(255,255,255,0.09);
-  --row-pad: 5px;
+  --row-pad: 8px;
 }
 
 [data-theme="light"] {
@@ -50,10 +50,10 @@
   --text-primary: #1a1a2e;
   --text-secondary: #55556a;
   --text-muted: #8888a0;
-  --accent-cyan: #0099bb;
+  --accent-cyan: #007a99;
   --accent-magenta: #d6006e;
-  --accent-gold: #b89700;
-  --accent-green: #1a9e00;
+  --accent-gold: #947a00;
+  --accent-green: #147a00;
   --accent-red: #cc1122;
   --accent-orange: #cc6e00;
   --correct-bg: rgba(26,158,0,0.1);
@@ -161,10 +161,10 @@
 }
 
 /* Density */
-[data-density="compact"] { --row-pad: 2px; }
-[data-density="relaxed"] { --row-pad: 8px; }
+[data-density="compact"] { --row-pad: 4px; }
+[data-density="relaxed"] { --row-pad: 12px; }
 
-html { font-size: 15px; }
+html { font-size: 16px; }
 body {
   font-family: var(--font-body);
   background: var(--bg-primary);
@@ -217,8 +217,8 @@ body {
 .settings-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .settings-row .sep { width: 1px; height: 18px; background: var(--border-light); margin: 0 2px; flex-shrink: 0; }
 .settings-btn {
-  font-family: var(--font-body); font-size: 0.72rem; font-weight: 700;
-  padding: 4px 8px; border: 1px solid var(--border); border-radius: var(--radius);
+  font-family: var(--font-body); font-size: 0.8rem; font-weight: 600;
+  padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--bg-card); color: var(--text-primary); cursor: pointer;
   transition: var(--transition); white-space: nowrap;
 }
@@ -250,7 +250,7 @@ body {
 /* ═══════ TWO-COLUMN LAYOUT ═══════ */
 .app-layout {
   display: flex;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 85px);
 }
 .col-left { flex: 1; min-width: 300px; padding: 0 16px 40px; overflow-y: auto; }
 .col-right {
@@ -510,11 +510,13 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 .team-answer:last-child { border-bottom: none; }
 .team-answer:nth-child(even) { background: var(--row-stripe); }
 .ta-name {
-  font-weight: 600; font-size: 0.82rem;
-  width: 7rem; flex-shrink: 0;
+  font-weight: 600; font-size: 0.9rem;
+  max-width: 15rem; flex-shrink: 0;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   background: transparent;
   padding-left: 4px;
+  margin-right: auto;
+  padding-right: 16px;
 }
 
 /* Last-action flash */
@@ -645,7 +647,7 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 .standings-row:nth-child(even) { background: var(--row-stripe); }
 .standings-name {
   font-weight: 600; font-size: 0.82rem;
-  width: 7rem; flex-shrink: 0;
+  max-width: 14rem; flex-shrink: 0;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .standings-pts {
@@ -715,7 +717,7 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 #fileLoadInput { display: none; }
 
 @media (max-width: 480px) {
-  .ta-name { width: 5.5rem; font-size: 0.78rem; padding-left: 2px; }
+  .ta-name { width: 5.5rem; font-size: 0.78rem; padding-left: 2px; padding-right: 16px; margin-right: auto;}
   .wager-btn { width: 1.8rem; height: 1.8rem; font-size: 0.72rem; }
   .meta-grid { grid-template-columns: 1fr; }
   .team-entry { grid-template-columns: 1fr 3rem 3.2rem auto auto; }
