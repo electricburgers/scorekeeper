@@ -590,13 +590,13 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 .wager-btn.used { opacity: 0.2; cursor: not-allowed; text-decoration: line-through; }
 .wager-badge {
-  position: absolute; top: -5px; right: -5px;
+  position: absolute; top: -8px; right: -5px;
   width: 17px; height: 17px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 0.69rem; font-weight: 1300; line-height: 1;
+  font-size: 0.69rem; font-weight: 900; line-height: 1;
   padding-bottom: 2px
 }
-.wager-badge.bg-correct { background: #22a00d; color: #fff; }
+.wager-badge.bg-correct { background: transparent; color: #fff; }
 .wager-badge.bg-incorrect { background: var(--accent-red); color: #fff; }
 
 /* Result buttons for special wager sections (halftime + final) */
@@ -1019,7 +1019,7 @@ function renderWQ(ri,qi){
   const qState=qs.total===0?'':qs.done===qs.total?'q-done':qs.done>0?'q-active':'';
   const badgeCls=qs.done===qs.total?'q-badge q-complete':'q-badge q-remaining';
   const badgeText=qs.total===0?'':qs.done===qs.total?'✓ Done':(qs.total-qs.done)+' left';
-  let h=`<div class="question-block ${qState}"><div class="question-title"><span>Q${qi+1}</span><button class="mark-all-btn mark-correct" onclick="markAll(${ri},${qi},true)">All ✓</button><button class="mark-all-btn mark-incorrect" onclick="markAll(${ri},${qi},false)">All ✗</button>${qs.total?'<span class="'+badgeCls+'">'+badgeText+'</span>':''}</div>`;
+  let h=`<div class="question-block ${qState}"><div class="question-title"><span>Q${qi+1}</span><button class="mark-all-btn mark-correct" onclick="markAll(${ri},${qi},true)">All ✓</button><button class="mark-all-btn mark-incorrect" onclick="markAll(${ri},${qi},false)">All ✕</button>${qs.total?'<span class="'+badgeCls+'">'+badgeText+'</span>':''}</div>`;
   gameState.teams.forEach((t,ti)=>{
     const ans=gameState.rounds[ri].questions[qi][ti]||{};
     const uw=usedW(ti,ri);const sel=ans.wager;
@@ -1029,7 +1029,7 @@ function renderWQ(ri,qi){
     wagers.forEach(w=>{
       const isSel=sel===w,isUsed=!isSel&&uw.some(u=>u.wager===w&&u.qi!==qi);
       let cls='wager-btn',badge='';
-      if(isSel&&ans.correct===true){cls+=' correct';badge='<span class="wager-badge bg-correct">✔</span>';}
+      if(isSel&&ans.correct===true){cls+=' correct';badge='<span class="wager-badge bg-correct">✅</span>';}
       else if(isSel&&ans.correct===false){cls+=' incorrect';badge='<span class="wager-badge bg-incorrect">✕</span>';}
       else if(isUsed)cls+=' used';
       h+=`<button class="${cls}" onclick="cycleW(${ri},${qi},${ti},${w})" ${isUsed?'disabled':''}>${w}${badge}</button>`;
