@@ -689,8 +689,8 @@ input:disabled { opacity: 0.5; cursor: not-allowed; }
 .bonus-row:nth-child(even) { background: var(--row-stripe); }
 .stepper { display: flex; align-items: center; gap: 0; flex-shrink: 0; margin-left: auto;}
 .stepper button {
-  width: 1.8rem; height: 1.8rem; border: 1px solid var(--border-light);
-  background: var(--bg-input); color: var(--text-primary);
+  width: 1.8rem; height: 1.8rem; border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--bg-card); color: var(--text-secondary);
   font-size: 1.2rem; font-weight: 700; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   touch-action: manipulation; 
@@ -956,7 +956,7 @@ function renderLeft(){
 
   h+=`<div class="section ${collapsedSections.has('sec-meta')?'collapsed':''}" id="sec-meta"><div class="section-header" onclick="toggleSection('sec-meta')"><h2>Session Info</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
     <div class="field"><label>Date</label><input type="date" value="${esc(gameState.meta.date)}" ${gs?'disabled':''} onchange="gameState.meta.date=this.value;autosave();"></div>
-    <div class="field"><label>Quiz ID</label><input type="text" value="${esc(gameState.meta.quizId)}" placeholder="e.g. HM066" ${gs?'disabled':''} onchange="gameState.meta.quizId=this.value;autosave();"></div>
+    <div class="field"><label>Quiz ID</label><input type="text" value="${esc(gameState.meta.quizId)}" placeholder="e.g. ABC-1234" ${gs?'disabled':''} onchange="gameState.meta.quizId=this.value;autosave();"></div>
     <div class="field full"><label>Location</label><input type="text" value="${esc(gameState.meta.location)}" placeholder="Bar name" ${gs?'disabled':''} onchange="gameState.meta.location=this.value;autosave();"></div>
     <div class="field"><label>Craft Partner</label><input type="text" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery" ${gs?'disabled':''} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
     <div class="field"><label>Partner Town</label><input type="text" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town" ${gs?'disabled':''} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
