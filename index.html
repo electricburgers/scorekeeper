@@ -38,6 +38,15 @@
 [data-density="compact"]{--row-pad:4px}
 [data-density="relaxed"]{--row-pad:12px}
 
+/* ── Zebra stripe contrast levels ──
+   Level 0 = subtle (theme default, no attribute needed)
+   Level 1 = medium
+   Level 2 = high contrast — still readable, never inverts text */
+[data-theme="hc-dark"][data-stripe="1"],[data-stripe="1"]{--row-stripe:rgba(255,255,255,.11)}
+[data-theme="hc-dark"][data-stripe="2"],[data-stripe="2"]{--row-stripe:rgba(255,255,255,.19)}
+[data-theme="hc-light"][data-stripe="1"]{--row-stripe:rgba(0,0,0,.09)}
+[data-theme="hc-light"][data-stripe="2"]{--row-stripe:rgba(0,0,0,.16)}
+
 html{font-size:16px}
 body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);min-height:100vh;-webkit-tap-highlight-color:transparent}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg-primary)}::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:3px}
@@ -270,7 +279,11 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .stepper button:last-child{border-radius:0 6px 6px 0}
 .stepper button:hover{background:var(--bg-hover);color:var(--text-primary)}
 .stepper-val{width:2.2rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem}
-.bonus-pts{font-family:var(--font-display);font-size:.8rem;font-weight:700;color:var(--accent-gold);flex-shrink:0;min-width:54px;text-align:right}
+/* bonus pts now matches the ta-pts pill exactly */
+.bonus-pts{font-family:var(--font-display);font-size:.95rem;font-weight:700;min-width:44px;text-align:center;flex-shrink:0;padding:3px 7px;border-radius:6px}
+.bonus-pts.pts-pos{color:var(--accent-green);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
+.bonus-pts.pts-nil{color:var(--text-muted);background:var(--pts-nil-bg);border:1px solid var(--pts-nil-border);font-size:.8rem}
+.bonus-pts.pts-zero{color:var(--text-muted);min-width:44px;text-align:center}
 
 /* EXPORT */
 .export-bar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0}
@@ -288,7 +301,6 @@ input:disabled{opacity:.5;cursor:not-allowed}
   .team-entry{grid-template-columns:1fr 3.5rem auto auto;gap:5px}
   .sort-btn{font-size:.62rem;padding:5px 2px}
   .sw-input{width:2.8rem!important}
-  .bonus-pts{min-width:44px;font-size:.72rem}
 }
 </style>
 </head>
@@ -316,6 +328,9 @@ input:disabled{opacity:.5;cursor:not-allowed}
     <span class="sep"></span>
     <span class="size-label">Density</span>
     <button class="settings-btn" id="densityToggle" onclick="toggleDensity()">Normal</button>
+    <span class="sep"></span>
+    <span class="size-label">Zebra</span>
+    <button class="settings-btn" id="stripeToggle" onclick="toggleStripe()">Subtle</button>
   </div>
 </div>
 
@@ -348,10 +363,11 @@ const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
 const FONT_SIZES=[12,13,14,15,16,17,18,20,22,24,26,28,30],DEFAULT_SI=3;
 const DENSITIES=['normal','compact','relaxed'],DENSITY_LABELS={normal:'Normal',compact:'Compact',relaxed:'Relaxed'};
+const STRIPE_LEVELS=[0,1,2],STRIPE_LABELS={0:'Subtle',1:'Medium',2:'High'};
 
 function loadPrefs(){
-  try{const r=localStorage.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;return p;}}catch(e){}
-  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false};
+  try{const r=localStorage.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;return p;}}catch(e){}
+  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0};
 }
 function savePrefs(p){try{localStorage.setItem(PREFS_KEY,JSON.stringify(p));}catch(e){}}
 function applyPrefs(){
@@ -367,13 +383,18 @@ function applyPrefs(){
   const dt=document.getElementById('densityToggle');if(dt)dt.textContent=DENSITY_LABELS[dn]||'Normal';
   const panel=document.getElementById('settingsPanel');if(panel)panel.classList.toggle('settings-visible',!!p.settingsOpen);
   const stb=document.getElementById('settingsToggleBtn');if(stb)stb.classList.toggle('active',!!p.settingsOpen);
+  const sl=p.stripeLevel??0;
+  if(sl===0)document.documentElement.removeAttribute('data-stripe');
+  else document.documentElement.setAttribute('data-stripe',String(sl));
+  const slt=document.getElementById('stripeToggle');if(slt)slt.textContent=STRIPE_LABELS[sl]||'Subtle';
 }
 function setTheme(t){if(!['hc-dark','hc-light'].includes(t))t='hc-dark';const p=loadPrefs();p.theme=t;savePrefs(p);applyPrefs();}
 function toggleDensity(){const p=loadPrefs();const ci=DENSITIES.indexOf(p.density||'normal');p.density=DENSITIES[(ci+1)%DENSITIES.length];savePrefs(p);applyPrefs();}
+function toggleStripe(){const p=loadPrefs();const ci=STRIPE_LEVELS.indexOf(p.stripeLevel??0);p.stripeLevel=STRIPE_LEVELS[(ci+1)%STRIPE_LEVELS.length];savePrefs(p);applyPrefs();}
 function adjustFontSize(d){const p=loadPrefs();if(d===0)p.sizeIndex=DEFAULT_SI;else p.sizeIndex=Math.max(0,Math.min(FONT_SIZES.length-1,(p.sizeIndex??DEFAULT_SI)+d));savePrefs(p);applyPrefs();}
 function toggleSettings(){const p=loadPrefs();p.settingsOpen=!p.settingsOpen;savePrefs(p);applyPrefs();}
 
-(function(){const p=loadPrefs();document.documentElement.setAttribute('data-theme',p.theme);if(p.density&&p.density!=='normal')document.documentElement.setAttribute('data-density',p.density);document.documentElement.style.fontSize=FONT_SIZES[Math.max(0,Math.min(FONT_SIZES.length-1,p.sizeIndex??DEFAULT_SI))]+'px';})();
+(function(){const p=loadPrefs();document.documentElement.setAttribute('data-theme',p.theme);if(p.density&&p.density!=='normal')document.documentElement.setAttribute('data-density',p.density);if(p.stripeLevel&&p.stripeLevel>0)document.documentElement.setAttribute('data-stripe',String(p.stripeLevel));document.documentElement.style.fontSize=FONT_SIZES[Math.max(0,Math.min(FONT_SIZES.length-1,p.sizeIndex??DEFAULT_SI))]+'px';})();
 
 function freshState(){return{meta:{date:new Date().toISOString().slice(0,10),location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:''},teams:[],rounds:[0,1,2,3].map(()=>({questions:[{},{},{},{}],bonus:{}})),halftime:{},finalWager:{},gameStarted:false};}
 function freshTeam(n){return{name:n||'',scoreGuess:'',bonusItem:false,njcb:false,adjustment:0};}
@@ -548,10 +569,11 @@ function renderBQ(ri){
   let h=`<div class="question-block"><div class="question-title">Q5 \u2014 Bonus (0\u20134 correct \u00D7 5 pts)</div>`;
   gameState.teams.forEach((t,ti)=>{
     const v=gameState.rounds[ri].bonus[ti],c=v!=null?v:0;
-    const ptsText=c*5>0?'+'+c*5:c*5+' pts';
+    const ptsCls=c*5>0?'pts-pos':'pts-nil';
+    const ptsHtml=`<span class="bonus-pts ${ptsCls}">${c*5>0?'+'+c*5:0}</span>`;
     h+=`<div class="bonus-row"><span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span>
       <div class="bonus-right"><div class="stepper"><button onclick="setB(${ri},${ti},${Math.max(0,c-1)})">\u2212</button><span class="stepper-val">${c}</span><button onclick="setB(${ri},${ti},${Math.min(4,c+1)})">+</button></div>
-      <span class="bonus-pts">${ptsText}</span></div></div>`;
+      ${ptsHtml}</div></div>`;
   });
   return h+`</div>`;
 }
