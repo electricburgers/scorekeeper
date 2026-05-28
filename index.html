@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Scorekeeper v9.1</title>
+<title>Scorekeeper v9.3</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
@@ -265,7 +265,6 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .special-wager-row{display:flex;align-items:center;gap:.5rem;padding:var(--row-pad) 12px;border-bottom:1px solid var(--border);margin-left:-12px;margin-right:-12px;min-height:3.2rem}
 .special-wager-row:last-child{border-bottom:none}
 .special-wager-row:nth-child(even){background:var(--row-stripe)}
-.sw-input{min-height:2.6rem;width:3.5rem!important;text-align:center;padding:5px 3px!important;font-size:1.1rem;flex-shrink:0}
 
 /* BONUS Q5 ROWS */
 .bonus-row{display:flex;align-items:center;gap:.5rem;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);margin-left:-10px;margin-right:-10px;min-height:3.2rem}
@@ -279,6 +278,9 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .stepper button:last-child{border-radius:0 6px 6px 0}
 .stepper button:hover{background:var(--bg-hover);color:var(--text-primary)}
 .stepper-val{width:2.2rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem}
+/* Wager stepper value — wider to fit two-digit numbers, shows em-dash when unset */
+.sw-val{width:2.8rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-primary)}
+.sw-val.unset{color:var(--text-muted);font-size:.85rem}
 /* bonus pts now matches the ta-pts pill exactly */
 .bonus-pts{font-family:var(--font-display);font-size:.95rem;font-weight:700;min-width:44px;text-align:center;flex-shrink:0;padding:3px 7px;border-radius:6px}
 .bonus-pts.pts-pos{color:var(--accent-green);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
@@ -300,7 +302,6 @@ input:disabled{opacity:.5;cursor:not-allowed}
   .meta-grid{grid-template-columns:1fr}
   .team-entry{grid-template-columns:1fr 3.5rem auto auto;gap:5px}
   .sort-btn{font-size:.62rem;padding:5px 2px}
-  .sw-input{width:2.8rem!important}
 }
 </style>
 </head>
@@ -308,7 +309,7 @@ input:disabled{opacity:.5;cursor:not-allowed}
 
 <div class="header">
   <div class="header-top">
-    <div class="logo">Scorekeeper</div>
+    <div class="logo">Score <span>Keeper</span></div>
     <div class="toolbar">
       <button onclick="saveToFile()">💾 Save</button>
       <button onclick="triggerLoadFile()">📂 Load</button>
@@ -581,34 +582,56 @@ function renderBQ(ri){
 function renderHT(){
   let h=`<div class="special-section"><h3>\u23F8 Q5 \u2014 Bonus Wager (1\u201310 pts, win or lose)</h3>`;
   gameState.teams.forEach((t,ti)=>{
-    const d=gameState.halftime[ti]||{},w=d.wager!=null&&d.wager!==''?d.wager:'';
+    const d=gameState.halftime[ti]||{};
+    const w=d.wager!=null&&d.wager!==''?+d.wager:null;
     let pts=`<span class="ta-pts pts-zero">\u2014</span>`;
-    if(w!==''&&d.correct!=null){const p=d.correct?+w:-w;pts=`<span class="ta-pts ${p>0?'pts-pos':p<0?'pts-neg':'pts-nil'}">${p>0?'+':''}${p}</span>`;}
-    h+=`<div class="special-wager-row"><span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span>
-      <input type="number" class="sw-input" min="1" max="10" value="${w}" placeholder="1-10" onchange="setHW(${ti},this.value)">
+    if(w!=null&&d.correct!=null){const p=d.correct?w:-w;pts=`<span class="ta-pts ${p>0?'pts-pos':p<0?'pts-neg':'pts-nil'}">${p>0?'+':''}${p}</span>`;}
+    const valHtml=w!=null?`<span class="sw-val">${w}</span>`:`<span class="sw-val unset">\u2014</span>`;
+    const canDec=w!=null&&w>1, canInc=w==null||w<10;
+    h+=`<div class="special-wager-row">
+      <span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span>
+      <div class="stepper">
+        <button onclick="setHW(${ti},${w!=null?Math.max(1,w-1):1})" ${!canDec?'disabled style="opacity:.3;cursor:default"':''}>\u2212</button>
+        ${valHtml}
+        <button onclick="setHW(${ti},${w!=null?Math.min(10,w+1):1})" ${!canInc?'disabled style="opacity:.3;cursor:default"':''}>+</button>
+      </div>
       <div class="ta-result">
         <button class="result-btn ${d.correct===true?'correct-sel':''}" onclick="setHC(${ti},true)">\u2713${d.correct===true?'<span class="wager-badge bg-correct">\u2705</span>':''}</button>
         <button class="result-btn ${d.correct===false?'incorrect-sel':''}" onclick="setHC(${ti},false)">\u2717${d.correct===false?'<span class="wager-badge bg-incorrect">\u2715</span>':''}</button>
-      </div>${pts}</div>`;
+      </div>
+      ${pts}
+    </div>`;
   });
   return h+`</div>`;
 }
 
+
 function renderFW(){
   let h=`<div class="special-section final-wager"><h3>\uD83C\uDFAF Q5 \u2014 Final Wager (1\u201320 pts, win or lose)</h3>`;
   gameState.teams.forEach((t,ti)=>{
-    const d=gameState.finalWager[ti]||{},w=d.wager!=null&&d.wager!==''?d.wager:'';
+    const d=gameState.finalWager[ti]||{};
+    const w=d.wager!=null&&d.wager!==''?+d.wager:null;
     let pts=`<span class="ta-pts pts-zero">\u2014</span>`;
-    if(w!==''&&d.correct!=null){const p=d.correct?+w:-w;pts=`<span class="ta-pts ${p>0?'pts-pos':p<0?'pts-neg':'pts-nil'}">${p>0?'+':''}${p}</span>`;}
-    h+=`<div class="special-wager-row"><span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span>
-      <input type="number" class="sw-input" min="1" max="20" value="${w}" placeholder="1-20" onchange="setFW(${ti},this.value)">
+    if(w!=null&&d.correct!=null){const p=d.correct?w:-w;pts=`<span class="ta-pts ${p>0?'pts-pos':p<0?'pts-neg':'pts-nil'}">${p>0?'+':''}${p}</span>`;}
+    const valHtml=w!=null?`<span class="sw-val">${w}</span>`:`<span class="sw-val unset">\u2014</span>`;
+    const canDec=w!=null&&w>1, canInc=w==null||w<20;
+    h+=`<div class="special-wager-row">
+      <span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span>
+      <div class="stepper">
+        <button onclick="setFW(${ti},${w!=null?Math.max(1,w-1):1})" ${!canDec?'disabled style="opacity:.3;cursor:default"':''}>\u2212</button>
+        ${valHtml}
+        <button onclick="setFW(${ti},${w!=null?Math.min(20,w+1):1})" ${!canInc?'disabled style="opacity:.3;cursor:default"':''}>+</button>
+      </div>
       <div class="ta-result">
         <button class="result-btn ${d.correct===true?'correct-sel':''}" onclick="setFC(${ti},true)">\u2713${d.correct===true?'<span class="wager-badge bg-correct">\u2705</span>':''}</button>
         <button class="result-btn ${d.correct===false?'incorrect-sel':''}" onclick="setFC(${ti},false)">\u2717${d.correct===false?'<span class="wager-badge bg-incorrect">\u2715</span>':''}</button>
-      </div>${pts}</div>`;
+      </div>
+      ${pts}
+    </div>`;
   });
   return h+`</div>`;
 }
+
 
 function toggleSidebar(){
   const sb=document.getElementById('sidebar');sb.classList.toggle('minimized');
@@ -666,9 +689,9 @@ function cycleW(ri,qi,ti,w){
 }
 function markAll(ri,qi,correct){gameState.teams.forEach((_,ti)=>{const a=gameState.rounds[ri].questions[qi][ti];if(a&&a.wager!==undefined)a.correct=correct;});lastAction=null;gameState.gameStarted=true;autosave();renderAll();}
 function setB(ri,ti,v){gameState.rounds[ri].bonus[ti]=v;gameState.gameStarted=true;autosave();renderAll();}
-function setHW(ti,v){if(!gameState.halftime[ti])gameState.halftime[ti]={};gameState.halftime[ti].wager=v!==''?Math.max(1,Math.min(10,parseInt(v)||0)):'';gameState.gameStarted=true;autosave();renderAll();}
+function setHW(ti,v){if(!gameState.halftime[ti])gameState.halftime[ti]={};gameState.halftime[ti].wager=Math.max(1,Math.min(10,+v||1));gameState.gameStarted=true;autosave();renderAll();}
 function setHC(ti,v){if(!gameState.halftime[ti])gameState.halftime[ti]={};const c=gameState.halftime[ti].correct;if(c===v)delete gameState.halftime[ti].correct;else gameState.halftime[ti].correct=v;gameState.gameStarted=true;autosave();renderAll();}
-function setFW(ti,v){if(!gameState.finalWager[ti])gameState.finalWager[ti]={};gameState.finalWager[ti].wager=v!==''?Math.max(1,Math.min(20,parseInt(v)||0)):'';gameState.gameStarted=true;autosave();renderAll();}
+function setFW(ti,v){if(!gameState.finalWager[ti])gameState.finalWager[ti]={};gameState.finalWager[ti].wager=Math.max(1,Math.min(20,+v||1));gameState.gameStarted=true;autosave();renderAll();}
 function setFC(ti,v){if(!gameState.finalWager[ti])gameState.finalWager[ti]={};const c=gameState.finalWager[ti].correct;if(c===v)delete gameState.finalWager[ti].correct;else gameState.finalWager[ti].correct=v;gameState.gameStarted=true;autosave();renderAll();}
 function toggleSection(id){if(collapsedSections.has(id))collapsedSections.delete(id);else collapsedSections.add(id);const el=document.getElementById(id);if(el)el.classList.toggle('collapsed');}
 
