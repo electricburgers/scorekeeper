@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Scorekeeper v9.3</title>
+<title>Scorekeeper v9.4</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
@@ -38,10 +38,6 @@
 [data-density="compact"]{--row-pad:4px}
 [data-density="relaxed"]{--row-pad:12px}
 
-/* ── Zebra stripe contrast levels ──
-   Level 0 = subtle (theme default, no attribute needed)
-   Level 1 = medium
-   Level 2 = high contrast — still readable, never inverts text */
 [data-theme="hc-dark"][data-stripe="1"],[data-stripe="1"]{--row-stripe:rgba(255,255,255,.11)}
 [data-theme="hc-dark"][data-stripe="2"],[data-stripe="2"]{--row-stripe:rgba(255,255,255,.19)}
 [data-theme="hc-light"][data-stripe="1"]{--row-stripe:rgba(0,0,0,.09)}
@@ -103,7 +99,6 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .col-right{position:fixed;bottom:0;left:0;right:0;top:auto;width:auto!important;min-width:0;max-width:none;height:auto;max-height:50vh;border-left:none;border-top:2px solid var(--accent-cyan);box-shadow:0 -4px 20px rgba(0,0,0,.6);z-index:200}
   .col-right.minimized{max-height:44px}
   .col-right.minimized .sidebar-body{display:none}
-  /* Padding tall enough to scroll past fixed sidebar + header */
   .col-left{padding-bottom:calc(54vh + 48px)}
   body.sidebar-minimized .col-left{padding-bottom:64px}
 }
@@ -194,12 +189,22 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .round-badge.rb-partial{background:rgba(255,238,0,.13);color:var(--accent-gold)}
 .round-badge.rb-done{background:rgba(68,255,68,.1);color:var(--accent-green)}
 
-/* QUESTION BLOCKS */
-.question-block{background:var(--bg-card-alt);border:1px solid var(--border);border-left:3px solid transparent;border-radius:var(--radius);padding:10px;margin-bottom:8px}
+/* QUESTION BLOCKS — collapsible */
+.question-block{background:var(--bg-card-alt);border:1px solid var(--border);border-left:3px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
 .question-block.q-active{border-left-color:var(--accent-cyan)}
 .question-block.q-done{border-left-color:var(--accent-green);opacity:.82}
-.question-title{font-family:var(--font-display);font-size:.82rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.question-title>span:first-child{flex:1 1 auto}
+/* Beer Round wins over q-done green */
+.question-block.beer-round{border-left-color:var(--accent-gold)!important;opacity:1!important}
+
+.q-header{display:flex;align-items:center;gap:6px;padding:8px 10px;user-select:none;transition:var(--transition)}
+.q-header-left{display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;min-width:0}
+.q-header-left:hover{opacity:.8}
+.question-title{font-family:var(--font-display);font-size:.82rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
+.q-chevron{font-size:.85rem;color:var(--text-muted);transition:transform .25s;flex-shrink:0}
+.q-header-right{display:flex;align-items:center;gap:4px;flex-shrink:0;margin-left:auto}
+.question-block.q-collapsed .q-body{display:none}
+.question-block.q-collapsed .q-chevron{transform:rotate(-90deg)}
+
 .mark-all-btn{font-family:var(--font-body);font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:4px;cursor:pointer;border:1px solid var(--border-light);background:var(--bg-input);transition:var(--transition);text-transform:none;letter-spacing:0}
 .mark-all-btn.mark-correct{color:var(--accent-green);border-color:var(--accent-green)}
 .mark-all-btn.mark-correct:hover{background:rgba(68,255,68,.13)}
@@ -209,12 +214,21 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .q-badge.q-remaining{background:rgba(255,238,0,.13);color:var(--accent-gold)}
 .q-badge.q-complete{background:rgba(68,255,68,.1);color:var(--accent-green)}
 
+/* BEER ROUND banner */
+.beer-banner{display:flex;align-items:center;gap:8px;padding:6px 10px 8px;background:rgba(255,238,0,.07);border-bottom:1px solid rgba(255,238,0,.2);animation:beerPop .5s ease-out}
+@keyframes beerPop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.beer-banner-icon{font-size:1.3rem;animation:beerWobble 1.2s ease-in-out infinite alternate}
+@keyframes beerWobble{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+.beer-banner-text{font-family:var(--font-display);font-size:.78rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:1.5px}
+.beer-banner-sub{font-size:.68rem;color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;display:block;margin-top:1px}
+
+.q-body{padding:0 10px 8px}
+
 /* TEAM ANSWER ROWS */
 .team-answer{display:flex;align-items:center;gap:.35rem;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);flex-wrap:nowrap;margin-left:-10px;margin-right:-10px;min-height:3.2rem}
 .team-answer:last-child{border-bottom:none}
 .team-answer:nth-child(even){background:var(--row-stripe)}
 
-/* 2-line clamp before ellipsis */
 .ta-name{font-weight:600;font-size:.88rem;flex-shrink:0;width:11rem;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;padding-left:4px;padding-right:8px;line-height:1.3}
 
 .team-answer.flash{animation:row-flash .85s ease-out}
@@ -222,7 +236,13 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .team-answer:nth-child(even).flash{animation:row-flash-stripe .85s ease-out}
 @keyframes row-flash-stripe{0%{background:rgba(0,255,255,.22)}100%{background:var(--row-stripe)}}
 
-/* WAGER BUTTONS — opaque bg, position:relative for badge */
+/* BEER ROUND row gold flash */
+.team-answer.beer-flash{animation:beer-row-flash 1.1s ease-out}
+@keyframes beer-row-flash{0%{background:rgba(255,238,0,.35)}60%{background:rgba(255,238,0,.12)}100%{background:transparent}}
+.team-answer:nth-child(even).beer-flash{animation:beer-row-flash-stripe 1.1s ease-out}
+@keyframes beer-row-flash-stripe{0%{background:rgba(255,238,0,.35)}60%{background:rgba(255,238,0,.12)}100%{background:var(--row-stripe)}}
+
+/* WAGER BUTTONS */
 .ta-wagers{display:flex;gap:.2rem;flex-shrink:0;margin-left:auto}
 .wager-btn{min-width:2.6rem;min-height:2.6rem;border:1px solid var(--border-light);border-radius:6px;background:var(--btn-idle-bg);color:var(--text-primary);font-family:var(--font-display);font-size:1.1rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation}
 .wager-btn:hover:not(.used):not(.correct):not(.incorrect){background:var(--bg-hover);border-color:var(--accent-cyan)}
@@ -241,7 +261,7 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .pts-nil{color:var(--text-muted);background:var(--pts-nil-bg);border:1px solid var(--pts-nil-border);font-size:.8rem}
 .pts-zero{color:var(--text-muted);min-width:44px;text-align:center}
 
-/* RESULT BUTTONS (halftime / final) */
+/* RESULT BUTTONS */
 .ta-result{display:flex;gap:.2rem;flex-shrink:0}
 .result-btn{min-width:2.6rem;min-height:2.6rem;border:1px solid var(--border);border-radius:6px;background:var(--btn-idle-bg);font-size:1.1rem;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation;color:var(--text-secondary)}
 .result-btn:hover:not(.correct-sel):not(.incorrect-sel){background:var(--bg-hover)}
@@ -270,7 +290,6 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .bonus-row{display:flex;align-items:center;gap:.5rem;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);margin-left:-10px;margin-right:-10px;min-height:3.2rem}
 .bonus-row:last-child{border-bottom:none}
 .bonus-row:nth-child(even){background:var(--row-stripe)}
-/* Right group: stepper + pts always together, no shift */
 .bonus-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
 .stepper{display:flex;align-items:center;flex-shrink:0}
 .stepper button{width:1.9rem;height:1.9rem;border:1px solid var(--border-light);background:var(--bg-card);color:var(--text-secondary);font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:var(--transition)}
@@ -278,10 +297,8 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .stepper button:last-child{border-radius:0 6px 6px 0}
 .stepper button:hover{background:var(--bg-hover);color:var(--text-primary)}
 .stepper-val{width:2.2rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem}
-/* Wager stepper value — wider to fit two-digit numbers, shows em-dash when unset */
 .sw-val{width:2.8rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-primary)}
 .sw-val.unset{color:var(--text-muted);font-size:.85rem}
-/* bonus pts now matches the ta-pts pill exactly */
 .bonus-pts{font-family:var(--font-display);font-size:.95rem;font-weight:700;min-width:44px;text-align:center;flex-shrink:0;padding:3px 7px;border-radius:6px}
 .bonus-pts.pts-pos{color:var(--accent-green);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
 .bonus-pts.pts-nil{color:var(--text-muted);background:var(--pts-nil-bg);border:1px solid var(--pts-nil-border);font-size:.8rem}
@@ -293,6 +310,8 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .export-prompt.show{display:block}
 .export-prompt p{margin-bottom:6px;color:var(--accent-gold);font-weight:600;font-size:.85rem}
 #fileLoadInput{display:none}
+
+
 
 @media(max-width:480px){
   .ta-name{width:5.5rem;font-size:.78rem;padding-left:2px;padding-right:6px}
@@ -366,6 +385,9 @@ const FONT_SIZES=[12,13,14,15,16,17,18,20,22,24,26,28,30],DEFAULT_SI=3;
 const DENSITIES=['normal','compact','relaxed'],DENSITY_LABELS={normal:'Normal',compact:'Compact',relaxed:'Relaxed'};
 const STRIPE_LEVELS=[0,1,2],STRIPE_LABELS={0:'Subtle',1:'Medium',2:'High'};
 
+// collapsed question state: Set of "ri-qi" keys
+let collapsedQuestions=new Set();
+
 function loadPrefs(){
   try{const r=localStorage.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;return p;}}catch(e){}
   return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0};
@@ -403,6 +425,9 @@ function freshTeam(n){return{name:n||'',scoreGuess:'',bonusItem:false,njcb:false
 let gameState=freshState(),scoreSortMode='entry',randomOrder=null;
 let collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);
 let adjOpenTeams=new Set(),lastAction=null;
+// Track which (ri,qi) combos we've already toasted for Beer Round
+let beerRoundToasted=new Set();
+
 
 function autosave(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(gameState));}catch(e){}}
 function loadSaved(){try{const r=localStorage.getItem(STORAGE_KEY);if(r)return JSON.parse(r);}catch(e){}return null;}
@@ -411,7 +436,7 @@ function clearSaved(){localStorage.removeItem(STORAGE_KEY);}
 (function(){const s=loadSaved();if(s){document.getElementById('resumeText').textContent='\u26A0\uFE0F Saved session from '+(s.meta?.date||'?')+' at '+(s.meta?.location||'(no location)')+'. Resume or start fresh?';document.getElementById('resumeBanner').classList.add('show');}else{gameState=freshState();renderAll();}})();
 
 function resumeSession(){const s=loadSaved();if(s)gameState=migrateState(s);document.getElementById('resumeBanner').classList.remove('show');renderAll();}
-function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);adjOpenTeams=new Set();document.getElementById('resumeBanner').classList.remove('show');renderAll();}
+function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();beerRoundToasted=new Set();adjOpenTeams=new Set();document.getElementById('resumeBanner').classList.remove('show');renderAll();}
 
 function migrateState(s){
   if(!s.meta)s.meta={date:'',location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:''};
@@ -429,6 +454,22 @@ function checkGameStarted(){
   for(const k in gameState.halftime){if(gameState.halftime[k]?.wager){gameState.gameStarted=true;return true;}}
   for(const k in gameState.finalWager){if(gameState.finalWager[k]?.wager){gameState.gameStarted=true;return true;}}
   return gameState.gameStarted;
+}
+
+// BEER ROUND: question is a beer round if every team has been marked AND all are correct
+function isBeerRound(ri,qi){
+  const n=gameState.teams.length;
+  if(n===0)return false;
+  for(let ti=0;ti<n;ti++){
+    const a=gameState.rounds[ri].questions[qi][ti];
+    if(!a||a.wager===undefined||a.correct!==true)return false;
+  }
+  return true;
+}
+
+function checkBeerRound(ri,qi){
+  const key=ri+'-'+qi;
+  if(isBeerRound(ri,qi))beerRoundToasted.add(key);
 }
 
 function roundSub(ti,ri){const rd=gameState.rounds[ri];let t=0;for(let qi=0;qi<4;qi++){const a=rd.questions[qi][ti];if(a&&a.wager!==undefined&&a.correct!==undefined)t+=a.correct?a.wager:0;}if(BONUS_ROUNDS.has(ri)){const bc=rd.bonus[ti];if(bc!=null)t+=bc*5;}return t;}
@@ -495,7 +536,7 @@ function renderLeft(){
       </div>
       <div class="team-guess-cell"><label>Guess</label><input type="number" min="1" max="146" value="${t.scoreGuess!==''?t.scoreGuess:''}" placeholder="1-146" ${gs?'disabled':''} onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();"></div>
       <div class="adj-wrap">
-        <button class="adj-chip${adj!==0?' adj-active':''}" onclick="toggleAdj(${i})" title="${adj!==0?'Adj: '+(adj>0?'+':'')+adj+' \u2014 click to edit':'Manual point adjustment'}">${adj!==0?(adj>0?'+'+adj:adj):'\u00B1'}</button>
+        <button class="adj-chip${adj!==0?' adj-active':''}" onclick="toggleAdj(${i})" title="${adj!==0?'Adj: '+(adj>0?'+':'')+adj+' — click to edit':'Manual point adjustment'}">${adj!==0?(adj>0?'+'+adj:adj):'\u00B1'}</button>
         ${adjOpen?`<div class="adj-stepper"><button onclick="adjPts(${i},-1)">\u2212</button><span class="adj-val${adj>0?' pos':adj<0?' neg':''}">${adj>0?'+'+adj:adj}</span><button onclick="adjPts(${i},1)">+</button></div>`:''}
       </div>
       <div class="remove-team"><button onclick="removeTeam(${i})" title="Remove team">\u2715</button></div>
@@ -519,7 +560,7 @@ function renderLeft(){
   h+=`<div class="section ${collapsedSections.has('sec-export')?'collapsed':''}" id="sec-export"><div class="section-header" onclick="toggleSection('sec-export')"><h2>Export &amp; Data</h2><span class="chevron">▼</span></div><div class="section-body">
     <div class="export-bar"><button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 XLSX</button></div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="clearSaved();document.getElementById('exportPrompt').classList.remove('show');">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
-    <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?')){clearSaved();gameState=freshState();adjOpenTeams=new Set();collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);renderAll();}">\uD83D\uDDD1 Clear Session</button></div>
+    <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?')){clearSaved();gameState=freshState();adjOpenTeams=new Set();collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();beerRoundToasted=new Set();renderAll();}">\uD83D\uDDD1 Clear Session</button></div>
   </div></div>`;
 
   m.innerHTML=h;
@@ -540,19 +581,59 @@ function roundProgress(ri){
 function renderWQ(ri,qi){
   const wagers=ROUND_WAGERS[ri];
   const qs=qScored(ri,qi);
-  const qState=qs.total===0?'':qs.done===qs.total?'q-done':qs.done>0?'q-active':'';
+  const beer=isBeerRound(ri,qi);
+  const qKey=ri+'-'+qi;
+  const isCollapsed=collapsedQuestions.has(qKey);
+
+  // Block-level state class
+  let blockCls='question-block';
+  if(beer)blockCls+=' beer-round';
+  else if(qs.total>0&&qs.done===qs.total)blockCls+=' q-done';
+  else if(qs.done>0)blockCls+=' q-active';
+  if(isCollapsed)blockCls+=' q-collapsed';
+
   const badgeCls=qs.done===qs.total?'q-badge q-complete':'q-badge q-remaining';
-  const badgeText=qs.total===0?'':qs.done===qs.total?'\u2713 Done':(qs.total-qs.done)+' left';
-  let h=`<div class="question-block ${qState}"><div class="question-title"><span>Q${qi+1}</span><button class="mark-all-btn mark-correct" onclick="markAll(${ri},${qi},true)">All \u2713</button><button class="mark-all-btn mark-incorrect" onclick="markAll(${ri},${qi},false)">All \u2715</button>${qs.total?`<span class="${badgeCls}">${badgeText}</span>`:''}</div>`;
+  const badgeText=qs.total===0?'':beer?'🍺 Beer Round!':qs.done===qs.total?'\u2713 Done':(qs.total-qs.done)+' left';
+
+  let h=`<div class="${blockCls}" id="qblock-${ri}-${qi}">`;
+
+  // Collapsible header
+  h+=`<div class="q-header">
+    <div class="q-header-left" onclick="toggleQuestion(${ri},${qi})">
+      <span class="q-chevron">▼</span>
+      <div class="question-title">
+        <span>Q${qi+1}</span>
+        ${qs.total?`<span class="${badgeCls}">${badgeText}</span>`:''}
+      </div>
+    </div>
+    <div class="q-header-right">
+      <button class="mark-all-btn mark-correct" onclick="markAll(${ri},${qi},true)">All ✓</button>
+      <button class="mark-all-btn mark-incorrect" onclick="markAll(${ri},${qi},false)">All ✗</button>
+    </div>
+  </div>`;
+
+  // Beer Round banner (inside body, only shown when expanded)
+  if(beer){
+    h+=`<div class="beer-banner"><span class="beer-banner-icon">🍺</span><div><span class="beer-banner-text">Beer Round!</span><span class="beer-banner-sub">Every team got this one right</span></div></div>`;
+  }
+
+  // Body (collapsible)
+  h+=`<div class="q-body">`;
   gameState.teams.forEach((t,ti)=>{
     const ans=gameState.rounds[ri].questions[qi][ti]||{};
     const uw=usedW(ti,ri);const sel=ans.wager;
     const hasW=sel!==undefined,hasR=ans.correct!==undefined;
     const isFlash=lastAction&&lastAction.ri===ri&&lastAction.qi===qi&&lastAction.ti===ti;
+    const isBeerFlash=lastAction&&lastAction.ri===ri&&lastAction.qi===qi&&lastAction.beerRound&&!isFlash;
     let ptsHtml;
     if(hasW&&hasR){const p=ans.correct?ans.wager:0;ptsHtml=p>0?`<span class="ta-pts pts-pos">+${p}</span>`:`<span class="ta-pts pts-nil">0</span>`;}
     else ptsHtml=`<span class="ta-pts pts-zero">\u2014</span>`;
-    h+=`<div class="team-answer${isFlash?' flash':''}" data-ta="${ri}-${qi}-${ti}"><span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span><div class="ta-wagers">`;
+
+    let rowCls='team-answer';
+    if(isBeerFlash)rowCls+=' beer-flash';
+    else if(isFlash)rowCls+=' flash';
+
+    h+=`<div class="${rowCls}" data-ta="${ri}-${qi}-${ti}"><span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span><div class="ta-wagers">`;
     wagers.forEach(w=>{
       const isSel=sel===w,isUsed=!isSel&&uw.some(u=>u.wager===w&&u.qi!==qi);
       let cls='wager-btn',badge='';
@@ -563,11 +644,20 @@ function renderWQ(ri,qi){
     });
     h+=`</div>${ptsHtml}</div>`;
   });
-  return h+`</div>`;
+  h+=`</div></div>`;
+  return h;
+}
+
+function toggleQuestion(ri,qi){
+  const key=ri+'-'+qi;
+  if(collapsedQuestions.has(key))collapsedQuestions.delete(key);
+  else collapsedQuestions.add(key);
+  const el=document.getElementById('qblock-'+ri+'-'+qi);
+  if(el)el.classList.toggle('q-collapsed');
 }
 
 function renderBQ(ri){
-  let h=`<div class="question-block"><div class="question-title">Q5 \u2014 Bonus (0\u20134 correct \u00D7 5 pts)</div>`;
+  let h=`<div class="question-block"><div class="q-header" style="cursor:default"><div class="question-title"><span>Q5 \u2014 Bonus (0\u20134 correct \u00D7 5 pts)</span></div></div><div class="q-body">`;
   gameState.teams.forEach((t,ti)=>{
     const v=gameState.rounds[ri].bonus[ti],c=v!=null?v:0;
     const ptsCls=c*5>0?'pts-pos':'pts-nil';
@@ -576,7 +666,7 @@ function renderBQ(ri){
       <div class="bonus-right"><div class="stepper"><button onclick="setB(${ri},${ti},${Math.max(0,c-1)})">\u2212</button><span class="stepper-val">${c}</span><button onclick="setB(${ri},${ti},${Math.min(4,c+1)})">+</button></div>
       ${ptsHtml}</div></div>`;
   });
-  return h+`</div>`;
+  return h+`</div></div>`;
 }
 
 function renderHT(){
@@ -605,7 +695,6 @@ function renderHT(){
   return h+`</div>`;
 }
 
-
 function renderFW(){
   let h=`<div class="special-section final-wager"><h3>\uD83C\uDFAF Q5 \u2014 Final Wager (1\u201320 pts, win or lose)</h3>`;
   gameState.teams.forEach((t,ti)=>{
@@ -631,7 +720,6 @@ function renderFW(){
   });
   return h+`</div>`;
 }
-
 
 function toggleSidebar(){
   const sb=document.getElementById('sidebar');sb.classList.toggle('minimized');
@@ -684,10 +772,21 @@ function cycleW(ri,qi,ti,w){
   const a=gameState.rounds[ri].questions[qi][ti];
   if(a.wager===w){if(a.correct===true){a.correct=false;}else{delete a.wager;delete a.correct;}}
   else{if(usedW(ti,ri).find(u=>u.wager===w&&u.qi!==qi))return;a.wager=w;a.correct=true;}
-  lastAction={ri,qi,ti};gameState.gameStarted=true;autosave();renderAll();
+  const wasBeer=beerRoundToasted.has(ri+'-'+qi);
+  lastAction={ri,qi,ti};gameState.gameStarted=true;autosave();
+  // Check beer round BEFORE re-render so we can set beer flash context
+  const nowBeer=isBeerRound(ri,qi);
+  if(nowBeer&&!wasBeer){lastAction.beerRound=true;}
+  renderAll();
+  checkBeerRound(ri,qi);
   setTimeout(()=>{lastAction=null;},900);
 }
-function markAll(ri,qi,correct){gameState.teams.forEach((_,ti)=>{const a=gameState.rounds[ri].questions[qi][ti];if(a&&a.wager!==undefined)a.correct=correct;});lastAction=null;gameState.gameStarted=true;autosave();renderAll();}
+function markAll(ri,qi,correct){
+  const wasBeer=beerRoundToasted.has(ri+'-'+qi);
+  gameState.teams.forEach((_,ti)=>{const a=gameState.rounds[ri].questions[qi][ti];if(a&&a.wager!==undefined)a.correct=correct;});
+  lastAction=null;gameState.gameStarted=true;autosave();renderAll();
+  if(correct&&!wasBeer)checkBeerRound(ri,qi);
+}
 function setB(ri,ti,v){gameState.rounds[ri].bonus[ti]=v;gameState.gameStarted=true;autosave();renderAll();}
 function setHW(ti,v){if(!gameState.halftime[ti])gameState.halftime[ti]={};gameState.halftime[ti].wager=Math.max(1,Math.min(10,+v||1));gameState.gameStarted=true;autosave();renderAll();}
 function setHC(ti,v){if(!gameState.halftime[ti])gameState.halftime[ti]={};const c=gameState.halftime[ti].correct;if(c===v)delete gameState.halftime[ti].correct;else gameState.halftime[ti].correct=v;gameState.gameStarted=true;autosave();renderAll();}
