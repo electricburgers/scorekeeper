@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Scorekeeper v9.7</title>
+<title>Scorekeeper v9.6</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
@@ -270,12 +270,24 @@ input:disabled{opacity:.5;cursor:not-allowed}
 
 /* STANDINGS */
 .standings-block{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:8px}
-.standings-block .standings-title{font-family:var(--font-display);font-size:1rem;font-weight:600;color:var(--accent-gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.standings-title-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--accent-gold);text-transform:uppercase;letter-spacing:.5px}
+.standings-sort-btns{display:flex;gap:4px}
+.standings-sort-btn{font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.standings-sort-btn.active{background:var(--accent-gold);color:#000;border-color:var(--accent-gold)}
 .standings-row{display:flex;align-items:center;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);margin-left:-10px;margin-right:-10px}
 .standings-row:last-child{border-bottom:none}
 .standings-row:nth-child(even){background:var(--row-stripe)}
 .standings-name{font-weight:600;font-size:.82rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .standings-pts{font-family:var(--font-display);font-size:.9rem;font-weight:700;color:var(--accent-cyan);margin-left:auto;min-width:2.5rem;text-align:right;flex-shrink:0}
+
+/* BEER STRIPE — for Q5 bonus and special wager beer rounds */
+.beer-stripe{display:flex;align-items:center;gap:6px;padding:5px 12px 6px;background:rgba(255,238,0,.07);border-bottom:1px solid rgba(255,238,0,.18)}
+.beer-stripe-icon{font-size:1.05rem}
+.beer-stripe-text{font-family:var(--font-display);font-size:.75rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:1.2px}
+.special-section.beer-round{border-color:var(--accent-gold)!important}
+.special-section.beer-round h3{color:var(--accent-gold)!important}
 
 /* SPECIAL WAGER SECTIONS */
 .special-section{background:var(--bg-card-alt);border:2px solid var(--accent-magenta);border-radius:var(--radius-lg);padding:12px;margin-bottom:8px}
@@ -483,6 +495,7 @@ function freshState(){return{meta:{date:new Date().toISOString().slice(0,10),loc
 function freshTeam(n){return{name:n||'',scoreGuess:'',bonusItem:false,njcb:false,adjustment:0};}
 
 let gameState=freshState(),scoreSortMode='entry',randomOrder=null;
+let standingsSortMode={halftime:'desc',final:'desc'};
 let collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);
 let adjOpenTeams=new Set(),lastAction=null;
 // Track which (ri,qi) combos we've already toasted for Beer Round
@@ -496,7 +509,7 @@ function clearSaved(){localStorage.removeItem(STORAGE_KEY);}
 (function(){const s=loadSaved();if(s){document.getElementById('resumeText').textContent='\u26A0\uFE0F Saved session from '+(s.meta?.date||'?')+' at '+(s.meta?.location||'(no location)')+'. Resume or start fresh?';document.getElementById('resumeBanner').classList.add('show');}else{gameState=freshState();renderAll();}})();
 
 function resumeSession(){const s=loadSaved();if(s)gameState=migrateState(s);document.getElementById('resumeBanner').classList.remove('show');renderAll();}
-function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();beerRoundToasted=new Set();adjOpenTeams=new Set();document.getElementById('resumeBanner').classList.remove('show');renderAll();}
+function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;standingsSortMode={halftime:'desc',final:'desc'};collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();beerRoundToasted=new Set();adjOpenTeams=new Set();document.getElementById('resumeBanner').classList.remove('show');renderAll();}
 
 function migrateState(s){
   if(!s.meta)s.meta={date:'',location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:''};
@@ -542,9 +555,16 @@ function preWagerTotal(ti,type){let t=roundSub(ti,0)+roundSub(ti,1);if(type==='f
 
 function renderStandings(type){
   if(!gameState.teams.length)return'';
-  const label=type==='halftime'?'Current Scores \u2014 Before Halftime Wager':'Current Scores \u2014 Before Final Wager';
-  const list=gameState.teams.map((t,ti)=>({name:t.name||'Team '+(ti+1),pts:preWagerTotal(ti,type)})).sort((a,b)=>b.pts-a.pts);
-  let h=`<div class="standings-block"><div class="standings-title">${label}</div>`;
+  const label=type==='halftime'?'Scores \u2014 Before Halftime Wager':'Scores \u2014 Before Final Wager';
+  const mode=standingsSortMode[type]||'desc';
+  const base=gameState.teams.map((t,ti)=>({ti,name:t.name||'Team '+(ti+1),pts:preWagerTotal(ti,type)}));
+  let list;
+  if(mode==='entry')list=base;
+  else if(mode==='asc')list=base.slice().sort((a,b)=>a.pts-b.pts);
+  else list=base.slice().sort((a,b)=>b.pts-a.pts);
+  const btns=[['entry','Entry'],[`asc`,'\u2191 Asc'],['desc','\u2193 Desc']].map(([m,lbl])=>
+    `<button class="standings-sort-btn${mode===m?' active':''}" onclick="setStandingsSort('${type}','${m}')">${lbl}</button>`).join('');
+  let h=`<div class="standings-block"><div class="standings-title-row"><span class="standings-title">${label}</span><div class="standings-sort-btns">${btns}</div></div>`;
   list.forEach(t=>{h+=`<div class="standings-row"><span class="standings-name">${esc(t.name)}</span><span class="standings-pts">${t.pts}</span></div>`;});
   return h+'</div>';
 }
@@ -561,6 +581,20 @@ function getDisplayOrder(){
   return gameState.teams.map((_,i)=>i);
 }
 function sortModeLabel(){switch(scoreSortMode){case'random':return'\uD83C\uDFB2 Random order \u2014 for mid-game reads';case'asc':return'\u2191 Lowest to highest \u2014 dramatic reveal';case'desc':return'\u2193 Highest to lowest \u2014 leaderboard order';default:return'Entry order \u2014 matches your scoresheet';}}
+
+function setStandingsSort(type,mode){standingsSortMode[type]=mode;renderLeft();}
+
+function isBonusBeerRound(ri){
+  const n=gameState.teams.length;if(!n)return false;
+  for(let ti=0;ti<n;ti++){if(gameState.rounds[ri].bonus[ti]!==4)return false;}
+  return true;
+}
+function isSpecialBeerRound(type){
+  const n=gameState.teams.length;if(!n)return false;
+  const data=type==='halftime'?gameState.halftime:gameState.finalWager;
+  for(let ti=0;ti<n;ti++){const d=data[ti];if(!d||d.correct!==true)return false;}
+  return true;
+}
 
 function renderAll(){renderLeft();renderSB();applyPrefs();}
 
@@ -716,9 +750,15 @@ function toggleQuestion(ri,qi){
 function renderBQ(ri){
   const n=gameState.teams.length;
   let subDone=0;for(let ti=0;ti<n;ti++){if(gameState.rounds[ri].bonus[ti]!=null)subDone++;}
+  const beer=isBonusBeerRound(ri);
   let badge='';
-  if(n)badge=subDone===n?'<span class="q-badge q-complete">\u2713 Done</span>':`<span class="q-badge q-remaining">${n-subDone} left</span>`;
-  let h=`<div class="question-block"><div class="q-header" style="cursor:default"><div class="question-title"><span>Q5 \u2014 Bonus (0\u20134 correct \u00D7 5 pts)</span>${badge}</div></div><div class="q-body">`;
+  if(n){
+    if(beer)badge='<span class="q-badge q-complete">\uD83C\uDF7A Beer Round!</span>';
+    else if(subDone===n)badge='<span class="q-badge q-complete">\u2713 Done</span>';
+    else badge=`<span class="q-badge q-remaining">${n-subDone} left</span>`;
+  }
+  const blockCls='question-block'+(beer?' beer-round':'');
+  let h=`<div class="${blockCls}"><div class="q-header" style="cursor:default"><div class="question-title"><span>Q5 \u2014 Bonus (0\u20134 correct \u00D7 5 pts)</span>${badge}</div></div><div class="q-body">`;
   gameState.teams.forEach((t,ti)=>{
     const v=gameState.rounds[ri].bonus[ti];
     const submitted=v!=null;
@@ -741,7 +781,9 @@ function renderBQ(ri){
 }
 
 function renderHT(){
-  let h=`<div class="special-section"><h3>\u23F8 Q5 \u2014 Bonus Wager (1\u201310 pts, win or lose)</h3>`;
+  const beer=isSpecialBeerRound('halftime');
+  let h=`<div class="special-section${beer?' beer-round':''}"><h3>\u23F8 Q5 \u2014 Bonus Wager (1\u201310 pts, win or lose)</h3>`;
+  if(beer)h+=`<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
   gameState.teams.forEach((t,ti)=>{
     const d=gameState.halftime[ti]||{};
     const w=d.wager!=null&&d.wager!==''?+d.wager:null;
@@ -767,7 +809,9 @@ function renderHT(){
 }
 
 function renderFW(){
-  let h=`<div class="special-section final-wager"><h3>\uD83C\uDFAF Q5 \u2014 Final Wager (1\u201320 pts, win or lose)</h3>`;
+  const beer=isSpecialBeerRound('final');
+  let h=`<div class="special-section final-wager${beer?' beer-round':''}"><h3>\uD83C\uDFAF Q5 \u2014 Final Wager (1\u201320 pts, win or lose)</h3>`;
+  if(beer)h+=`<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
   gameState.teams.forEach((t,ti)=>{
     const d=gameState.finalWager[ti]||{};
     const w=d.wager!=null&&d.wager!==''?+d.wager:null;
