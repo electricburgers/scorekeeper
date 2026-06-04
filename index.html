@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Scorekeeper v9.4</title>
+<title>Scorekeeper v9.7</title>
 <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap');
@@ -313,7 +313,63 @@ input:disabled{opacity:.5;cursor:not-allowed}
 
 
 
+/* CLICKABLE TEAM NAME (opens audit) */
+.ta-name-clickable{cursor:pointer}
+.ta-name-clickable:hover{color:var(--accent-cyan);text-decoration:underline}
+.ta-name-clickable::after{content:'\\1F50D';font-size:.7em;opacity:0;margin-left:4px;transition:opacity .15s}
+.ta-name-clickable:hover::after{opacity:.7}
+
+/* MANUAL ENTRY for special wagers (stepper + type) */
+.stepper input.sw-input{width:2.8rem;height:1.9rem;text-align:center;background:var(--bg-card);border:none;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);border-radius:0;color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0;outline:none;box-shadow:none;-moz-appearance:textfield;appearance:textfield}
+.stepper input.sw-input::-webkit-outer-spin-button,.stepper input.sw-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.stepper input.sw-input::placeholder{color:var(--text-muted);font-weight:400}
+.stepper input.sw-input:focus{background:var(--bg-hover);box-shadow:none}
+
+/* BONUS submitted / zero-correct state (R1 & R3) */
+.stepper-val.unset{color:var(--text-muted);font-size:.85rem}
+.bonus-pts.submitted-zero{color:var(--accent-green);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border);font-size:.78rem;font-weight:700}
+.bonus-zero{font-family:var(--font-display);font-size:.72rem;font-weight:700;padding:0 8px;height:1.9rem;border:1px solid var(--accent-green);border-radius:6px;background:rgba(68,255,68,.08);color:var(--accent-green);cursor:pointer;transition:var(--transition);white-space:nowrap;flex-shrink:0;touch-action:manipulation}
+.bonus-zero:hover{background:rgba(68,255,68,.18)}
+.bonus-clear{width:1.9rem;height:1.9rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-input);color:var(--text-muted);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;touch-action:manipulation}
+.bonus-clear:hover{background:rgba(255,68,68,.12);color:var(--accent-red);border-color:var(--accent-red)}
+
+/* SCORE AUDIT MODAL */
+.audit-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);align-items:flex-start;justify-content:center;padding:20px 10px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.audit-overlay.show{display:flex}
+.audit-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:680px;box-shadow:var(--shadow);margin:auto;animation:auditPop .18s ease-out}
+@keyframes auditPop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.audit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg-card);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:2}
+.audit-head h2{font-family:var(--font-display);font-size:1.05rem;color:var(--accent-cyan);text-transform:uppercase;letter-spacing:1px;line-height:1.2;word-break:break-word}
+.audit-head .aud-sub{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:3px}
+.audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--border);background:var(--bg-input);color:var(--text-primary);border-radius:var(--radius);padding:7px 12px;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
+.audit-close:hover{background:var(--bg-hover);border-color:var(--border-light)}
+.audit-body{padding:12px 14px 18px}
+.aud-round{margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.aud-round-h{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-card-alt);font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.aud-line{display:flex;align-items:center;gap:8px;padding:6px 12px;border-top:1px solid var(--border);font-size:.85rem}
+.aud-line:nth-child(even){background:var(--row-stripe)}
+.aud-q{font-family:var(--font-display);font-weight:700;width:2.3rem;flex-shrink:0;color:var(--text-secondary)}
+.aud-wager{color:var(--text-secondary);font-size:.78rem;width:5.2rem;flex-shrink:0}
+.aud-res{flex:1;font-size:.8rem;font-weight:600;min-width:0}
+.aud-res.aud-correct{color:var(--accent-green)}
+.aud-res.aud-wrong{color:var(--accent-red)}
+.aud-res.aud-none,.aud-res.aud-pending{color:var(--text-muted);font-weight:400;font-style:italic}
+.aud-p{font-family:var(--font-display);font-weight:700;min-width:2.8rem;text-align:right;flex-shrink:0}
+.aud-p.pos{color:var(--accent-green)}
+.aud-p.neg{color:var(--accent-red)}
+.aud-p.zero,.aud-p.none{color:var(--text-muted)}
+.aud-subline{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 12px;border-top:1px solid var(--border-light);background:var(--bg-input);font-size:.78rem;font-weight:700}
+.aud-subline .lbl{color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px}
+.aud-subline .run{font-family:var(--font-display);color:var(--accent-cyan);font-size:.95rem}
+.aud-subline .sub{font-family:var(--font-display);color:var(--text-primary)}
+.aud-total{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:rgba(0,255,255,.08);border:1px solid var(--accent-cyan);border-radius:var(--radius);font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.aud-total .val{font-size:1.5rem;color:var(--accent-cyan)}
+.aud-note{font-size:.72rem;color:var(--text-muted);margin-top:10px;line-height:1.4}
+
 @media(max-width:480px){
+  .aud-wager{width:4.2rem;font-size:.72rem}
+  .aud-res{font-size:.74rem}
+  .ta-name-clickable::after{display:none}
   .ta-name{width:5.5rem;font-size:.78rem;padding-left:2px;padding-right:6px}
   .wager-btn{min-width:1.85rem;min-height:1.85rem;width:1.85rem;height:1.85rem;font-size:1rem}
   .result-btn{min-width:1.85rem;min-height:1.85rem;width:1.85rem;height:1.85rem;font-size:1rem}
@@ -374,6 +430,10 @@ input:disabled{opacity:.5;cursor:not-allowed}
     </div>
     <div class="sidebar-body" id="sidebarBody"></div>
   </div>
+</div>
+
+<div class="audit-overlay" id="auditOverlay" onclick="if(event.target===this)closeAudit()">
+  <div class="audit-modal" id="auditModal"></div>
 </div>
 
 <script>
@@ -630,7 +690,7 @@ function renderWQ(ri,qi){
     if(isBeerFlash)rowCls+=' beer-flash';
     else if(isFlash)rowCls+=' flash';
 
-    h+=`<div class="${rowCls}" data-ta="${ri}-${qi}-${ti}"><span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span><div class="ta-wagers">`;
+    h+=`<div class="${rowCls}" data-ta="${ri}-${qi}-${ti}"><span class="ta-name ta-name-clickable" title="${esc(t.name||'Team '+(ti+1))} — tap to audit score" onclick="openAudit(${ti})">${esc(t.name||'T'+(ti+1))}</span><div class="ta-wagers">`;
     wagers.forEach(w=>{
       const isSel=sel===w,isUsed=!isSel&&uw.some(u=>u.wager===w&&u.qi!==qi);
       let cls='wager-btn',badge='';
@@ -654,13 +714,27 @@ function toggleQuestion(ri,qi){
 }
 
 function renderBQ(ri){
-  let h=`<div class="question-block"><div class="q-header" style="cursor:default"><div class="question-title"><span>Q5 \u2014 Bonus (0\u20134 correct \u00D7 5 pts)</span></div></div><div class="q-body">`;
+  const n=gameState.teams.length;
+  let subDone=0;for(let ti=0;ti<n;ti++){if(gameState.rounds[ri].bonus[ti]!=null)subDone++;}
+  let badge='';
+  if(n)badge=subDone===n?'<span class="q-badge q-complete">\u2713 Done</span>':`<span class="q-badge q-remaining">${n-subDone} left</span>`;
+  let h=`<div class="question-block"><div class="q-header" style="cursor:default"><div class="question-title"><span>Q5 \u2014 Bonus (0\u20134 correct \u00D7 5 pts)</span>${badge}</div></div><div class="q-body">`;
   gameState.teams.forEach((t,ti)=>{
-    const v=gameState.rounds[ri].bonus[ti],c=v!=null?v:0;
-    const ptsCls=c*5>0?'pts-pos':'pts-nil';
-    const ptsHtml=`<span class="bonus-pts ${ptsCls}">${c*5>0?'+'+c*5:0}</span>`;
-    h+=`<div class="bonus-row"><span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span>
-      <div class="bonus-right"><div class="stepper"><button onclick="setB(${ri},${ti},${Math.max(0,c-1)})">\u2212</button><span class="stepper-val">${c}</span><button onclick="setB(${ri},${ti},${Math.min(4,c+1)})">+</button></div>
+    const v=gameState.rounds[ri].bonus[ti];
+    const submitted=v!=null;
+    const c=submitted?v:0;
+    let ptsHtml;
+    if(!submitted)ptsHtml=`<span class="bonus-pts pts-zero">\u2014</span>`;
+    else if(c>0)ptsHtml=`<span class="bonus-pts pts-pos">+${c*5}</span>`;
+    else ptsHtml=`<span class="bonus-pts submitted-zero">\u2713 0</span>`;
+    const valHtml=submitted?`<span class="stepper-val">${c}</span>`:`<span class="stepper-val unset">\u2014</span>`;
+    const minusTarget=submitted?Math.max(0,c-1):0;
+    const plusTarget=submitted?Math.min(4,c+1):1;
+    const sideBtn=submitted
+      ?`<button class="bonus-clear" onclick="clearB(${ri},${ti})" title="Clear \u2014 unmark this team">\u21BA</button>`
+      :`<button class="bonus-zero" onclick="setB(${ri},${ti},0)" title="Mark submitted \u2014 0 correct">\u2713 0</button>`;
+    h+=`<div class="bonus-row${submitted?' is-submitted':''}"><span class="ta-name ta-name-clickable" title="${esc(t.name||'Team '+(ti+1))} \u2014 tap to audit score" onclick="openAudit(${ti})">${esc(t.name||'T'+(ti+1))}</span>
+      <div class="bonus-right">${sideBtn}<div class="stepper"><button onclick="setB(${ri},${ti},${minusTarget})" title="${submitted?'Decrease':'Mark submitted \u2014 0 correct'}">\u2212</button>${valHtml}<button onclick="setB(${ri},${ti},${plusTarget})" title="Increase">+</button></div>
       ${ptsHtml}</div></div>`;
   });
   return h+`</div></div>`;
@@ -673,10 +747,10 @@ function renderHT(){
     const w=d.wager!=null&&d.wager!==''?+d.wager:null;
     let pts=`<span class="ta-pts pts-zero">\u2014</span>`;
     if(w!=null&&d.correct!=null){const p=d.correct?w:-w;pts=`<span class="ta-pts ${p>0?'pts-pos':p<0?'pts-neg':'pts-nil'}">${p>0?'+':''}${p}</span>`;}
-    const valHtml=w!=null?`<span class="sw-val">${w}</span>`:`<span class="sw-val unset">\u2014</span>`;
+    const valHtml=`<input type="number" class="sw-input" inputmode="numeric" min="1" max="10" value="${w!=null?w:''}" placeholder="\u2014" onchange="setHWInput(${ti},this.value)" onfocus="this.select()">`;
     const canDec=w!=null&&w>1, canInc=w==null||w<10;
     h+=`<div class="special-wager-row">
-      <span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span>
+      <span class="ta-name ta-name-clickable" title="${esc(t.name||'Team '+(ti+1))} \u2014 tap to audit score" onclick="openAudit(${ti})">${esc(t.name||'T'+(ti+1))}</span>
       <div class="stepper">
         <button onclick="setHW(${ti},${w!=null?Math.max(1,w-1):1})" ${!canDec?'disabled style="opacity:.3;cursor:default"':''}>\u2212</button>
         ${valHtml}
@@ -699,10 +773,10 @@ function renderFW(){
     const w=d.wager!=null&&d.wager!==''?+d.wager:null;
     let pts=`<span class="ta-pts pts-zero">\u2014</span>`;
     if(w!=null&&d.correct!=null){const p=d.correct?w:-w;pts=`<span class="ta-pts ${p>0?'pts-pos':p<0?'pts-neg':'pts-nil'}">${p>0?'+':''}${p}</span>`;}
-    const valHtml=w!=null?`<span class="sw-val">${w}</span>`:`<span class="sw-val unset">\u2014</span>`;
+    const valHtml=`<input type="number" class="sw-input" inputmode="numeric" min="1" max="20" value="${w!=null?w:''}" placeholder="\u2014" onchange="setFWInput(${ti},this.value)" onfocus="this.select()">`;
     const canDec=w!=null&&w>1, canInc=w==null||w<20;
     h+=`<div class="special-wager-row">
-      <span class="ta-name" title="${esc(t.name||'Team '+(ti+1))}">${esc(t.name||'T'+(ti+1))}</span>
+      <span class="ta-name ta-name-clickable" title="${esc(t.name||'Team '+(ti+1))} \u2014 tap to audit score" onclick="openAudit(${ti})">${esc(t.name||'T'+(ti+1))}</span>
       <div class="stepper">
         <button onclick="setFW(${ti},${w!=null?Math.max(1,w-1):1})" ${!canDec?'disabled style="opacity:.3;cursor:default"':''}>\u2212</button>
         ${valHtml}
@@ -785,10 +859,111 @@ function markAll(ri,qi,correct){
   if(correct&&!wasBeer)checkBeerRound(ri,qi);
 }
 function setB(ri,ti,v){gameState.rounds[ri].bonus[ti]=v;gameState.gameStarted=true;autosave();renderAll();}
+function clearB(ri,ti){delete gameState.rounds[ri].bonus[ti];autosave();renderAll();}
 function setHW(ti,v){if(!gameState.halftime[ti])gameState.halftime[ti]={};gameState.halftime[ti].wager=Math.max(1,Math.min(10,+v||1));gameState.gameStarted=true;autosave();renderAll();}
 function setHC(ti,v){if(!gameState.halftime[ti])gameState.halftime[ti]={};const c=gameState.halftime[ti].correct;if(c===v)delete gameState.halftime[ti].correct;else gameState.halftime[ti].correct=v;gameState.gameStarted=true;autosave();renderAll();}
 function setFW(ti,v){if(!gameState.finalWager[ti])gameState.finalWager[ti]={};gameState.finalWager[ti].wager=Math.max(1,Math.min(20,+v||1));gameState.gameStarted=true;autosave();renderAll();}
 function setFC(ti,v){if(!gameState.finalWager[ti])gameState.finalWager[ti]={};const c=gameState.finalWager[ti].correct;if(c===v)delete gameState.finalWager[ti].correct;else gameState.finalWager[ti].correct=v;gameState.gameStarted=true;autosave();renderAll();}
+
+// Manual typed entry for the special wagers (works alongside the +/- steppers)
+function setHWInput(ti,raw){
+  if(!gameState.halftime[ti])gameState.halftime[ti]={};
+  const s=(''+raw).trim();
+  if(s===''||parseInt(s,10)===0){delete gameState.halftime[ti].wager;}
+  else{let v=parseInt(s,10);if(!isNaN(v)){gameState.halftime[ti].wager=Math.max(1,Math.min(10,v));}}
+  gameState.gameStarted=true;autosave();renderAll();
+}
+function setFWInput(ti,raw){
+  if(!gameState.finalWager[ti])gameState.finalWager[ti]={};
+  const s=(''+raw).trim();
+  if(s===''||parseInt(s,10)===0){delete gameState.finalWager[ti].wager;}
+  else{let v=parseInt(s,10);if(!isNaN(v)){gameState.finalWager[ti].wager=Math.max(1,Math.min(20,v));}}
+  gameState.gameStarted=true;autosave();renderAll();
+}
+
+// ===== SCORE AUDIT =====
+function openAudit(ti){
+  const el=document.getElementById('auditModal');if(!el)return;
+  el.innerHTML=buildAudit(ti);
+  document.getElementById('auditOverlay').classList.add('show');
+}
+function closeAudit(){document.getElementById('auditOverlay').classList.remove('show');}
+
+function auditQLine(ri,qi,ti){
+  const a=gameState.rounds[ri].questions[qi][ti]||{};
+  const hasW=a.wager!==undefined,hasR=a.correct!==undefined;
+  let res,pts,pcls;
+  if(!hasW){res='<span class="aud-res aud-none">no wager placed</span>';pts='\u2014';pcls='none';}
+  else if(!hasR){res='<span class="aud-res aud-pending">wager '+a.wager+' \u2014 not marked</span>';pts='\u2014';pcls='none';}
+  else if(a.correct){res='<span class="aud-res aud-correct">\u2713 correct</span>';pts='+'+a.wager;pcls='pos';}
+  else{res='<span class="aud-res aud-wrong">\u2717 incorrect</span>';pts='0';pcls='zero';}
+  const wtxt=hasW?('wager '+a.wager):'\u2014';
+  return `<div class="aud-line"><span class="aud-q">Q${qi+1}</span><span class="aud-wager">${wtxt}</span>${res}<span class="aud-p ${pcls}">${pts}</span></div>`;
+}
+
+function buildAudit(ti){
+  const t=gameState.teams[ti];if(!t)return'';
+  const name=esc(t.name||'Team '+(ti+1));
+  const rk=ranked();const rm={};rk.forEach((r,i)=>{rm[r.index]=i+1;});
+  const rank=rm[ti];
+  let h=`<div class="audit-head"><h2>${name}<span class="aud-sub">Score audit \u2014 rank #${rank} of ${gameState.teams.length} \u00B7 ${esc(gameState.meta.location||'')}${gameState.meta.quizId?(' \u00B7 Quiz '+esc(gameState.meta.quizId)):''}</span></h2><button class="audit-close" onclick="closeAudit()">\u2715 Close</button></div>`;
+  h+=`<div class="audit-body">`;
+
+  let run=0;
+  function roundBlock(ri,label,colorCls){
+    let b=`<div class="aud-round"><div class="aud-round-h"><span class="round-label ${colorCls}">${label}</span><span style="color:var(--text-muted);font-weight:400;font-size:.68rem;letter-spacing:0;text-transform:none">wagers ${ROUND_WAGERS[ri].join(', ')}</span></div>`;
+    for(let qi=0;qi<4;qi++)b+=auditQLine(ri,qi,ti);
+    if(BONUS_ROUNDS.has(ri)){
+      const v=gameState.rounds[ri].bonus[ti];
+      let res,pts,pcls;
+      if(v==null){res='<span class="aud-res aud-none">not marked</span>';pts='\u2014';pcls='none';}
+      else if(v>0){res='<span class="aud-res aud-correct">'+v+' of 4 correct</span>';pts='+'+(v*5);pcls='pos';}
+      else{res='<span class="aud-res aud-wrong">0 of 4 correct (submitted)</span>';pts='0';pcls='zero';}
+      b+=`<div class="aud-line"><span class="aud-q">B</span><span class="aud-wager">bonus \u00D75</span>${res}<span class="aud-p ${pcls}">${pts}</span></div>`;
+    }
+    const sub=roundSub(ti,ri);run+=sub;
+    b+=`<div class="aud-subline"><span class="lbl">${label} subtotal</span><span><span class="sub">${sub}</span> &nbsp;\u00B7&nbsp; total so far <span class="run">${run}</span></span></div>`;
+    return b+`</div>`;
+  }
+  function wagerBlock(data,label,colorCls,maxTxt){
+    const w=data&&data.wager!=null&&data.wager!==''?+data.wager:null;
+    let res,pts,pcls;
+    if(w==null){res='<span class="aud-res aud-none">no wager placed</span>';pts='\u2014';pcls='none';}
+    else if(data.correct==null){res='<span class="aud-res aud-pending">wager '+w+' \u2014 not marked</span>';pts='\u2014';pcls='none';}
+    else if(data.correct){res='<span class="aud-res aud-correct">\u2713 correct</span>';pts='+'+w;pcls='pos';}
+    else{res='<span class="aud-res aud-wrong">\u2717 incorrect</span>';pts='\u2212'+w;pcls='neg';}
+    const p=(w!=null&&data.correct!=null)?(data.correct?w:-w):0;run+=p;
+    let b=`<div class="aud-round"><div class="aud-round-h"><span class="round-label ${colorCls}">${label}</span><span style="color:var(--text-muted);font-weight:400;font-size:.68rem;letter-spacing:0;text-transform:none">${maxTxt}</span></div>`;
+    b+=`<div class="aud-line"><span class="aud-q">\u2605</span><span class="aud-wager">${w!=null?('wager '+w):'\u2014'}</span>${res}<span class="aud-p ${pcls}">${pts}</span></div>`;
+    b+=`<div class="aud-subline"><span class="lbl">after ${label}</span><span>total so far <span class="run">${run}</span></span></div>`;
+    return b+`</div>`;
+  }
+
+  h+=roundBlock(0,'Round 1','rl-1');
+  h+=roundBlock(1,'Round 2','rl-2');
+  h+=wagerBlock(gameState.halftime[ti],'Halftime Bonus','rl-2','win or lose, 1\u201310');
+  h+=roundBlock(2,'Round 3','rl-3');
+  h+=roundBlock(3,'Round 4','rl-4');
+  h+=wagerBlock(gameState.finalWager[ti],'Final Wager','rl-4','win or lose, 1\u201320');
+
+  // Extras
+  const item=t.bonusItem?5:0,nj=t.njcb?3:0,adj=t.adjustment||0;
+  if(item||nj||adj){
+    h+=`<div class="aud-round"><div class="aud-round-h"><span class="round-label rl-3">Extras</span></div>`;
+    if(item)h+=`<div class="aud-line"><span class="aud-q">+5</span><span class="aud-res aud-correct">Bonus item brought</span><span class="aud-p pos">+5</span></div>`;
+    if(nj)h+=`<div class="aud-line"><span class="aud-q">+3</span><span class="aud-res aud-correct">NJCB</span><span class="aud-p pos">+3</span></div>`;
+    if(adj)h+=`<div class="aud-line"><span class="aud-q">${adj>0?'+':''}${adj}</span><span class="aud-res">Manual adjustment</span><span class="aud-p ${adj>0?'pos':'neg'}">${adj>0?'+':''}${adj}</span></div>`;
+    run+=item+nj+adj;
+    h+=`</div>`;
+  }
+
+  const gt=grandTotal(ti);
+  h+=`<div class="aud-total"><span>Grand Total</span><span class="val">${gt}</span></div>`;
+  if(run!==gt)h+=`<div class="aud-note">Note: running figure (${run}) and grand total (${gt}) differ \u2014 if you see this, take a screenshot.</div>`;
+  else h+=`<div class="aud-note">Tip: each round shows that question's wager, whether it was marked correct or incorrect, and the team's running score. To fix a wrong wager, close this and tap the wager button in the round itself.</div>`;
+  h+=`</div>`;
+  return h;
+}
 function toggleSection(id){if(collapsedSections.has(id))collapsedSections.delete(id);else collapsedSections.add(id);const el=document.getElementById(id);if(el)el.classList.toggle('collapsed');}
 
 function saveToFile(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(gameState,null,2)],{type:'application/json'}));a.download=`trivia-${gameState.meta.quizId||'NOID'}-${gameState.meta.date||new Date().toISOString().slice(0,10)}-save.json`;a.click();}
@@ -897,6 +1072,8 @@ function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').re
   handle.addEventListener('touchstart',onDown,{passive:false});document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onUp);
   try{const saved=localStorage.getItem('trivRev6_sideW');if(saved)sidebar.style.width=saved+'px';}catch(e){}
 })();
+
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){const o=document.getElementById('auditOverlay');if(o&&o.classList.contains('show'))closeAudit();}});
 </script>
 </body>
 </html>
