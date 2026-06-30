@@ -40,6 +40,19 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
   --pts-nil-bg:rgba(0,0,0,.07);--pts-nil-border:rgba(0,0,0,.22);
 }
 [data-theme="hc-light"] .header{background:linear-gradient(180deg,var(--bg-primary) 60%,transparent)!important}
+/* COLOR BLIND MODE — independent toggle, swaps green/red for blue/orange in either light or dark theme */
+[data-theme="hc-dark"][data-cb="1"]{
+  --accent-green:#3399ff;--accent-red:#ff8800;
+  --btn-correct-bg:#0d1f2e;--btn-incorrect-bg:#2e1f0d;
+  --pts-pos-bg:rgba(51,153,255,.16);--pts-pos-border:rgba(51,153,255,.5);
+  --pts-neg-bg:rgba(255,136,0,.16);--pts-neg-border:rgba(255,136,0,.5);
+}
+[data-theme="hc-light"][data-cb="1"]{
+  --accent-green:#0067c5;--accent-red:#cc6600;
+  --btn-correct-bg:#cfe6fb;--btn-incorrect-bg:#ffe1bf;
+  --pts-pos-bg:rgba(0,103,197,.16);--pts-pos-border:rgba(0,103,197,.5);
+  --pts-neg-bg:rgba(204,102,0,.18);--pts-neg-border:rgba(204,102,0,.55);
+}
 
 [data-density="compact"]{--row-pad:4px}
 [data-density="relaxed"]{--row-pad:12px}
@@ -76,6 +89,7 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 
 .settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
+.settings-btn.active{background:var(--accent-cyan);color:#000;border-color:var(--accent-cyan)}
 .theme-select{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
 .theme-select:hover{background-color:var(--bg-hover)}
 .theme-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,.13)}
@@ -266,7 +280,7 @@ input:disabled{opacity:.5;cursor:not-allowed}
 
 .wager-badge{position:absolute;top:-8px;right:-5px;width:1.3rem;height:1.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:900;line-height:1;padding-bottom:1px;pointer-events:none}
 .wager-badge.bg-correct{background:transparent;color:#fff}
-.wager-badge.bg-incorrect{background:var(--accent-red);color:#fff;font-size:.7rem}
+.wager-badge.bg-incorrect{background:var(--accent-red);color:#fff;font-size:1.05rem;font-weight:900}
 
 /* SCORE PILL */
 .ta-pts{font-family:var(--font-display);font-size:.95rem;font-weight:700;min-width:44px;text-align:center;flex-shrink:0;padding:3px 7px;border-radius:6px}
@@ -359,12 +373,15 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .bonus-clear{width:1.9rem;height:1.9rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-input);color:var(--text-muted);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;touch-action:manipulation}
 .bonus-clear:hover{background:rgba(255,68,68,.12);color:var(--accent-red);border-color:var(--accent-red)}
 
-/* BONUS ONE-CLICK CHOICE (R1 & R3) — one tap sets 0-4 correct */
+/* BONUS ONE-CLICK CHOICE (R1 & R3) — one tap sets 0-4 correct, tap again to unselect */
 .bonus-choice{display:flex;gap:.18rem;flex-shrink:0}
-.bonus-choice-btn{width:1.9rem;height:1.9rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-secondary);font-family:var(--font-display);font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:var(--transition)}
-.bonus-choice-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
-.bonus-choice-btn.sel{background:var(--accent-green);border-color:var(--accent-green);color:#06210b}
-[data-theme="hc-dark"] .bonus-choice-btn.sel{color:#04150a}
+.bonus-choice-btn{width:2.2rem;height:2.2rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-secondary);font-family:var(--font-display);font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:var(--transition);position:relative}
+.bonus-choice-btn:hover:not(.correct):not(.incorrect){background:var(--bg-hover);color:var(--text-primary)}
+.bonus-choice-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green);color:var(--text-primary)}
+.bonus-choice-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red);color:var(--text-primary)}
+
+/* forces "0–4 CORRECT × 5 PTS" onto its own line under "Q5 — Bonus" on mobile */
+.bonus-subtitle{flex-basis:100%;font-size:.7rem;font-weight:600;color:var(--text-muted);letter-spacing:.3px;text-transform:uppercase}
 
 /* SPECIAL WAGER collapse (R2 Bonus Wager / R4 Final Wager) */
 .sw-header{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
@@ -431,6 +448,7 @@ input:disabled{opacity:.5;cursor:not-allowed}
   /* wager / result buttons: clamp so they can't balloon past the column */
   .wager-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
   .result-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
+  .bonus-choice-btn{width:clamp(1.7rem,7.5cqw,2.2rem);height:clamp(1.7rem,7.5cqw,2.2rem);font-size:.92rem}
 
   /* score pill */
   .ta-pts{min-width:clamp(2rem,9cqw,2.6rem);font-size:.82rem;padding:2px 4px}
@@ -594,6 +612,9 @@ input:disabled{opacity:.5;cursor:not-allowed}
   <div class="settings-panel" id="settingsPanel">
     <span class="size-label">Theme</span>
     <button class="settings-btn" id="themeToggle" onclick="toggleTheme()">🌑 Dark</button>
+    <span class="sep"></span>
+    <span class="size-label">Color Blind</span>
+    <button class="settings-btn" id="cbToggle" onclick="toggleColorblind()" title="Swap green/red for blue/orange, for red-green color blindness">👁️ Off</button>
     <span class="sep"></span>
     <span class="size-label">Size</span>
     <button class="settings-btn" onclick="adjustFontSize(-1)">A−</button>
@@ -1038,7 +1059,7 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const ROUND_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
-const APP_VERSION='v10.21'; // #Version Number — bump this manually when you release a new build
+const APP_VERSION='v10.23'; // #Version Number — bump this manually when you release a new build
 
 /* ── HOST BANTER LINES ──────────────────────────────────────────────
    Cycle through these between questions/rounds and after reading scores.
@@ -1149,10 +1170,11 @@ const STRIPE_LEVELS=[0,1,2],STRIPE_LABELS={0:'Subtle',1:'Medium',2:'High'};
 let collapsedQuestions=new Set();
 let collapsedBonusQuestions=new Set();
 let collapsedSpecialWagers=new Set();
+let questionSortMode={};
 
 function loadPrefs(){
-  try{const r=TRStore.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;if(!p.dateFmt)p.dateFmt='mdy';return p;}}catch(e){}
-  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0,dateFmt:'mdy'};
+  try{const r=TRStore.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;if(!p.dateFmt)p.dateFmt='mdy';if(p.colorblind==null)p.colorblind=false;return p;}}catch(e){}
+  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0,dateFmt:'mdy',colorblind:false};
 }
 function savePrefs(p){TRStore.setItem(PREFS_KEY,JSON.stringify(p));}
 function applyPrefs(){
@@ -1161,7 +1183,9 @@ function applyPrefs(){
   const dn=p.density||'normal';
   if(dn==='normal')document.documentElement.removeAttribute('data-density');
   else document.documentElement.setAttribute('data-density',dn);
-  const tb=document.getElementById('themeToggle');if(tb)tb.textContent=(p.theme==='hc-light')?'☀️ Light':'🌑 Dark';
+  const tb=document.getElementById('themeToggle');if(tb)tb.textContent=(p.theme==='hc-light')?'\u2600\uFE0F Light':'\uD83C\uDF11 Dark';
+  if(p.colorblind)document.documentElement.setAttribute('data-cb','1');else document.documentElement.removeAttribute('data-cb');
+  const cbb=document.getElementById('cbToggle');if(cbb){cbb.classList.toggle('active',!!p.colorblind);cbb.textContent=p.colorblind?'👁️ On':'👁️ Off';}
   const si=Math.max(0,Math.min(FONT_SIZES.length-1,p.sizeIndex??DEFAULT_SI));
   document.documentElement.style.fontSize=FONT_SIZES[si]+'px';
   const sr=document.getElementById('sizeResetBtn');if(sr)sr.textContent=(si===DEFAULT_SI)?'A':FONT_SIZES[si]+'px';
@@ -1177,12 +1201,13 @@ function applyPrefs(){
 }
 function setTheme(t){if(!['hc-dark','hc-light'].includes(t))t='hc-dark';const p=loadPrefs();p.theme=t;savePrefs(p);applyPrefs();}
 function toggleTheme(){const p=loadPrefs();setTheme(p.theme==='hc-dark'?'hc-light':'hc-dark');}
+function toggleColorblind(){const p=loadPrefs();p.colorblind=!p.colorblind;savePrefs(p);applyPrefs();}
 function toggleDensity(){const p=loadPrefs();const ci=DENSITIES.indexOf(p.density||'normal');p.density=DENSITIES[(ci+1)%DENSITIES.length];savePrefs(p);applyPrefs();}
 function toggleStripe(){const p=loadPrefs();const ci=STRIPE_LEVELS.indexOf(p.stripeLevel??0);p.stripeLevel=STRIPE_LEVELS[(ci+1)%STRIPE_LEVELS.length];savePrefs(p);applyPrefs();}
 function adjustFontSize(d){const p=loadPrefs();if(d===0)p.sizeIndex=DEFAULT_SI;else p.sizeIndex=Math.max(0,Math.min(FONT_SIZES.length-1,(p.sizeIndex??DEFAULT_SI)+d));savePrefs(p);applyPrefs();}
 function toggleSettings(){const p=loadPrefs();p.settingsOpen=!p.settingsOpen;savePrefs(p);applyPrefs();}
 
-(function(){const p=loadPrefs();document.documentElement.setAttribute('data-theme',p.theme);if(p.density&&p.density!=='normal')document.documentElement.setAttribute('data-density',p.density);if(p.stripeLevel&&p.stripeLevel>0)document.documentElement.setAttribute('data-stripe',String(p.stripeLevel));document.documentElement.style.fontSize=FONT_SIZES[Math.max(0,Math.min(FONT_SIZES.length-1,p.sizeIndex??DEFAULT_SI))]+'px';})();
+(function(){const p=loadPrefs();document.documentElement.setAttribute('data-theme',p.theme);if(p.colorblind)document.documentElement.setAttribute('data-cb','1');if(p.density&&p.density!=='normal')document.documentElement.setAttribute('data-density',p.density);if(p.stripeLevel&&p.stripeLevel>0)document.documentElement.setAttribute('data-stripe',String(p.stripeLevel));document.documentElement.style.fontSize=FONT_SIZES[Math.max(0,Math.min(FONT_SIZES.length-1,p.sizeIndex??DEFAULT_SI))]+'px';})();
 
 function freshState(){return{meta:{date:new Date().toISOString().slice(0,10),location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:'',staffNames:''},teams:[],rounds:[0,1,2,3].map(()=>({questions:[{},{},{},{}],bonus:{}})),halftime:{},finalWager:{},gameStarted:false};}
 function freshTeam(n){return{name:n||'',scoreGuess:'',bonusItem:false,njcb:false,adjustment:0,craftPrize:false};}
@@ -1202,7 +1227,7 @@ function clearSaved(){TRStore.removeItem(STORAGE_KEY);}
 (function(){const s=loadSaved();if(s){document.getElementById('resumeText').textContent='\u26A0\uFE0F Saved session from '+(s.meta?.date?fmtDateDisplay(s.meta.date):'?')+' at '+(s.meta?.location||'(no location)')+'. Resume or start fresh?';document.getElementById('resumeBanner').classList.add('show');}else{gameState=freshState();renderAll();}})();
 
 function resumeSession(){const s=loadSaved();if(s)gameState=migrateState(s);document.getElementById('resumeBanner').classList.remove('show');renderAll();}
-function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;standingsSortMode={halftime:'entry',final:'desc'};collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();collapsedBonusQuestions=new Set();collapsedSpecialWagers=new Set();beerRoundToasted=new Set();adjOpenTeams=new Set();document.getElementById('resumeBanner').classList.remove('show');renderAll();}
+function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;standingsSortMode={halftime:'entry',final:'desc'};collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();collapsedBonusQuestions=new Set();collapsedSpecialWagers=new Set();questionSortMode={};beerRoundToasted=new Set();adjOpenTeams=new Set();document.getElementById('resumeBanner').classList.remove('show');renderAll();}
 
 function migrateState(s){
   if(!s.meta)s.meta={date:'',location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:'',staffNames:''};
@@ -1450,6 +1475,7 @@ function renderWQ(ri,qi){
       </div>
     </div>
     <div class="q-header-right">
+      <button class="mark-all-btn" onclick="toggleQSort(${ri},${qi})" title="Sort teams who haven't answered to the top">${questionSortMode[qKey]?'\u2195 Reset':'\u2195 Sort'}</button>
       <button class="mark-all-btn mark-correct" onclick="markAll(${ri},${qi},true)">All ✓</button>
       <button class="mark-all-btn mark-incorrect" onclick="markAll(${ri},${qi},false)">All ✗</button>
     </div>
@@ -1459,7 +1485,13 @@ function renderWQ(ri,qi){
 
   // Body (collapsible)
   h+=`<div class="q-body">`;
-  gameState.teams.forEach((t,ti)=>{
+  let teamOrder=gameState.teams.map((_,i)=>i);
+  if(questionSortMode[qKey]){
+    const answered=(ti)=>{const a=gameState.rounds[ri].questions[qi][ti];return !!(a&&a.wager!==undefined&&a.correct!==undefined);};
+    teamOrder=teamOrder.map((ti,idx)=>({ti,idx})).sort((a,b)=>{const aa=answered(a.ti)?1:0,bb=answered(b.ti)?1:0;return aa-bb||a.idx-b.idx;}).map(x=>x.ti);
+  }
+  teamOrder.forEach(ti=>{
+    const t=gameState.teams[ti];
     const ans=gameState.rounds[ri].questions[qi][ti]||{};
     const uw=usedW(ti,ri);const sel=ans.wager;
     const hasW=sel!==undefined,hasR=ans.correct!==undefined;
@@ -1497,6 +1529,12 @@ function toggleQuestion(ri,qi){
   const el=document.getElementById('qblock-'+ri+'-'+qi);
   if(el)el.classList.toggle('q-collapsed');
 }
+function toggleQSort(ri,qi){
+  const key=ri+'-'+qi;
+  if(questionSortMode[key])delete questionSortMode[key];
+  else questionSortMode[key]=true;
+  renderAll();
+}
 function toggleBonusQ(ri){
   const key='b'+ri;
   if(collapsedBonusQuestions.has(key))collapsedBonusQuestions.delete(key);
@@ -1517,7 +1555,7 @@ function renderBQ(ri){
   }
   const isCollapsedBQ=collapsedBonusQuestions.has('b'+ri);
   const blockCls='question-block'+(beer?' beer-round':'')+(isCollapsedBQ?' bq-collapsed':'');
-  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title"><span>Q5 \u2014 Bonus (0\u20134 correct \u00D7 5 pts)</span>${badge}</div></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
+  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title"><span>Q5 \u2014 Bonus</span>${badge}<span class="bonus-subtitle">0\u20134 CORRECT \u00D7 5 PTS</span></div></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
   gameState.teams.forEach((t,ti)=>{
     const v=gameState.rounds[ri].bonus[ti];
     const submitted=v!=null;
@@ -1526,10 +1564,15 @@ function renderBQ(ri){
     if(!submitted)ptsHtml=`<span class="bonus-pts pts-zero">\u2014</span>`;
     else if(c>0)ptsHtml=`<span class="bonus-pts pts-pos">+${c*5}</span>`;
     else ptsHtml=`<span class="bonus-pts submitted-zero">\u2713 0</span>`;
-    const choices=[0,1,2,3,4].map(k=>`<button class="bonus-choice-btn${submitted&&c===k?' sel':''}" onclick="setB(${ri},${ti},${k})" title="${k} correct \u2014 +${k*5} pts">${k}</button>`).join('');
-    const clearBtn=submitted?`<button class="bonus-clear" onclick="clearB(${ri},${ti})" title="Clear \u2014 unmark this team">\u21BA</button>`:'';
+    const choices=[0,1,2,3,4].map(k=>{
+      const isSel=submitted&&c===k;
+      let cls='bonus-choice-btn',cbadge='';
+      if(isSel&&k===0){cls+=' incorrect';cbadge='<span class="wager-badge bg-incorrect">\u2715</span>';}
+      else if(isSel&&k>0){cls+=' correct';cbadge='<span class="wager-badge bg-correct">\u2705</span>';}
+      return `<button class="${cls}" onclick="setB(${ri},${ti},${k})" title="${k} correct \u2014 +${k*5} pts \u2014 tap again to unselect">${k}${cbadge}</button>`;
+    }).join('');
     h+=`<div class="bonus-row${submitted?' is-submitted':''}"><span class="ta-name ta-name-clickable" title="${esc(t.name||'Team '+(ti+1))} \u2014 tap to audit score" onclick="openAudit(${ti})">${esc(t.name||'T'+(ti+1))}</span>
-      <div class="bonus-right"><div class="bonus-choice">${choices}</div>${clearBtn}
+      <div class="bonus-right"><div class="bonus-choice">${choices}</div>
       ${ptsHtml}</div></div>`;
   });
   return h+`</div></div>`;
@@ -1684,7 +1727,7 @@ function canScore(){
   if(sec){if(sec.classList.contains('collapsed'))sec.classList.remove('collapsed');sec.scrollIntoView({behavior:'smooth',block:'start'});}
   return false;
 }
-function setB(ri,ti,v){if(!canScore())return;gameState.rounds[ri].bonus[ti]=v;gameState.gameStarted=true;autosave();renderAll();}
+function setB(ri,ti,v){if(!canScore())return;const cur=gameState.rounds[ri].bonus[ti];if(cur===v){delete gameState.rounds[ri].bonus[ti];}else{gameState.rounds[ri].bonus[ti]=v;}gameState.gameStarted=true;autosave();renderAll();}
 function clearB(ri,ti){delete gameState.rounds[ri].bonus[ti];autosave();renderAll();}
 function setHW(ti,v){if(!canScore())return;if(!gameState.halftime[ti])gameState.halftime[ti]={};gameState.halftime[ti].wager=Math.max(1,Math.min(10,+v||1));gameState.gameStarted=true;autosave();renderAll();}
 function setHC(ti,v){if(!canScore())return;const d=gameState.halftime[ti];if(!d||d.wager==null||d.wager==='')return;/* need a wager first */const c=d.correct;if(c===v)delete d.correct;else d.correct=v;gameState.gameStarted=true;autosave();renderAll();}
