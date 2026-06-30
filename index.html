@@ -24,9 +24,10 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
   --font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;
   --transition:.18s ease;--row-pad:8px;
   --btn-idle-bg:#1c1c1c;--btn-correct-bg:#0d2e0d;--btn-incorrect-bg:#2e0d0d;--btn-used-bg:#141414;
-  --pts-pos-bg:rgba(68,255,68,.14);--pts-pos-border:rgba(68,255,68,.45);
-  --pts-neg-bg:rgba(255,68,68,.14);--pts-neg-border:rgba(255,68,68,.45);
+  --pts-pos-bg:rgba(68,255,68,.18);--pts-pos-border:rgba(68,255,68,.55);--pts-pos-fg:#8dff8d;
+  --pts-neg-bg:rgba(255,68,68,.2);--pts-neg-border:rgba(255,68,68,.6);--pts-neg-fg:#ffa3a3;
   --pts-nil-bg:rgba(255,255,255,.06);--pts-nil-border:rgba(255,255,255,.12);
+  --on-accent-cyan:#000;--on-accent-gold:#000;
 }
 [data-theme="hc-light"]{
   --bg-primary:#f5f5f5;--bg-card:#fff;--bg-card-alt:#f0f0f0;--bg-input:#e8e8e8;--bg-hover:#dcdcdc;
@@ -35,23 +36,24 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
   --accent-red:#cc0000;--accent-orange:#994400;--shadow:0 4px 24px rgba(0,0,0,.12);
   --row-stripe:rgba(0,0,0,.048);
   --btn-idle-bg:#e8e8e8;--btn-correct-bg:#8ee89a;--btn-incorrect-bg:#eeaaaa;--btn-used-bg:#f0f0f0;
-  --pts-pos-bg:rgba(0,140,0,.18);--pts-pos-border:rgba(0,130,0,.6);
-  --pts-neg-bg:rgba(200,0,0,.15);--pts-neg-border:rgba(200,0,0,.55);
+  --pts-pos-bg:#0c7a0c;--pts-pos-border:#0a6a0a;--pts-pos-fg:#fff;
+  --pts-neg-bg:#c01818;--pts-neg-border:#a81414;--pts-neg-fg:#fff;
   --pts-nil-bg:rgba(0,0,0,.07);--pts-nil-border:rgba(0,0,0,.22);
+  --on-accent-cyan:#fff;--on-accent-gold:#000;
 }
 [data-theme="hc-light"] .header{background:linear-gradient(180deg,var(--bg-primary) 60%,transparent)!important}
 /* COLOR BLIND MODE — independent toggle, swaps green/red for blue/orange in either light or dark theme */
 [data-theme="hc-dark"][data-cb="1"]{
   --accent-green:#3399ff;--accent-red:#ff8800;
   --btn-correct-bg:#0d1f2e;--btn-incorrect-bg:#2e1f0d;
-  --pts-pos-bg:rgba(51,153,255,.16);--pts-pos-border:rgba(51,153,255,.5);
-  --pts-neg-bg:rgba(255,136,0,.16);--pts-neg-border:rgba(255,136,0,.5);
+  --pts-pos-bg:rgba(51,153,255,.2);--pts-pos-border:rgba(51,153,255,.6);--pts-pos-fg:#8fc6ff;
+  --pts-neg-bg:rgba(255,136,0,.2);--pts-neg-border:rgba(255,136,0,.6);--pts-neg-fg:#ffc182;
 }
 [data-theme="hc-light"][data-cb="1"]{
   --accent-green:#0067c5;--accent-red:#cc6600;
   --btn-correct-bg:#cfe6fb;--btn-incorrect-bg:#ffe1bf;
-  --pts-pos-bg:rgba(0,103,197,.16);--pts-pos-border:rgba(0,103,197,.5);
-  --pts-neg-bg:rgba(204,102,0,.18);--pts-neg-border:rgba(204,102,0,.55);
+  --pts-pos-bg:#0067c5;--pts-pos-border:#005aae;--pts-pos-fg:#fff;
+  --pts-neg-bg:#b35900;--pts-neg-border:#9c4e00;--pts-neg-fg:#fff;
 }
 
 [data-density="compact"]{--row-pad:4px}
@@ -81,15 +83,25 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 
 .settings-toggle-btn{font-size:1rem;padding:5px 8px;line-height:1;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
 .settings-toggle-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
-.settings-toggle-btn.active{background:var(--accent-cyan);color:#000;border-color:var(--accent-cyan)}
+.settings-toggle-btn.active{background:var(--accent-cyan);color:var(--on-accent-cyan);border-color:var(--accent-cyan)}
 
-.settings-panel{display:none;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 0 4px;border-top:1px solid var(--border);margin-top:8px;animation:slideDown .18s ease}
+.settings-panel{display:none;align-items:center;gap:8px 16px;flex-wrap:wrap;padding:8px 0 4px;border-top:1px solid var(--border);margin-top:8px;animation:slideDown .18s ease}
 .settings-panel.settings-visible{display:flex}
+.settings-row{display:flex;align-items:center;gap:6px}
+.settings-controls{display:inline-flex;align-items:center;gap:4px}
 @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 
 .settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
-.settings-btn.active{background:var(--accent-cyan);color:#000;border-color:var(--accent-cyan)}
+.settings-btn.active{background:var(--accent-cyan);color:var(--on-accent-cyan);border-color:var(--accent-cyan)}
+@media(max-width:600px){
+  .settings-panel.settings-visible{flex-direction:column;align-items:stretch;gap:0}
+  .settings-row{justify-content:space-between;width:100%;padding:10px 2px;border-bottom:1px solid var(--border);gap:10px}
+  .settings-row .size-label{font-size:.78rem}
+  .settings-controls{flex-shrink:0}
+  .settings-controls .settings-btn{padding:7px 12px;font-size:.85rem}
+  .settings-meta{padding-top:8px}
+}
 .theme-select{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
 .theme-select:hover{background-color:var(--bg-hover)}
 .theme-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,.13)}
@@ -106,16 +118,9 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .app-layout{display:flex;height:calc(100vh - 60px);overflow:hidden}
 .col-left{flex:1;min-width:300px;padding:0 16px 40px;overflow-y:auto;overflow-x:hidden;max-width:100%;container-type:inline-size;container-name:scorecol}
 .col-right{width:380px;min-width:200px;max-width:60vw;height:100%;overflow-y:auto;background:var(--bg-card);display:flex;flex-direction:column;flex-shrink:0;border-left:1px solid var(--border)}
-.drag-handle{width:6px;flex-shrink:0;height:100%;background:var(--border);cursor:col-resize;z-index:101;transition:background .15s}
-.drag-handle:hover,.drag-handle.dragging{background:var(--accent-cyan)}
-.drag-handle::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:32px;border-radius:1px;background:var(--text-muted);opacity:.5}
-.drag-handle:hover::after,.drag-handle.dragging::after{background:#000;opacity:.8}
-body.col-resizing{cursor:col-resize!important;user-select:none!important}
-body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 
 @media(max-width:900px){
   .app-layout{flex-direction:column;height:auto;overflow:visible}
-  .drag-handle{display:none}
   .col-right{position:fixed;bottom:0;left:0;right:0;top:auto;width:auto!important;min-width:0;max-width:none;height:auto;max-height:50vh;border-left:none;border-top:2px solid var(--accent-cyan);box-shadow:0 -4px 20px rgba(0,0,0,.6);z-index:200;padding-bottom:env(safe-area-inset-bottom)}
   .col-right.minimized{max-height:44px}
   .col-right.minimized .sidebar-body{display:none}
@@ -133,7 +138,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sort-controls{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
 .sort-btn{flex:1;min-width:0;font-family:var(--font-display);font-size:.7rem;font-weight:700;padding:6px 4px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
 .sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
-.sort-btn.active{background:var(--accent-cyan);color:#000;border-color:var(--accent-cyan);box-shadow:0 0 6px rgba(0,255,255,.3)}
+.sort-btn.active{background:var(--accent-cyan);color:var(--on-accent-cyan);border-color:var(--accent-cyan);box-shadow:0 0 6px rgba(0,255,255,.3)}
 .sort-mode-label{padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0}
 
 .scores-list{padding:8px 12px;flex:1;overflow-y:auto}
@@ -233,11 +238,9 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .question-block.bq-collapsed .q-body{display:none}
 .question-block.bq-collapsed .q-chevron{transform:rotate(-90deg)}
 
-.mark-all-btn{font-family:var(--font-body);font-size:.68rem;font-weight:700;padding:3px 8px;border-radius:4px;cursor:pointer;border:1px solid var(--border-light);background:var(--bg-input);transition:var(--transition);text-transform:none;letter-spacing:0}
-.mark-all-btn.mark-correct{color:var(--accent-green);border-color:var(--accent-green)}
-.mark-all-btn.mark-correct:hover{background:rgba(68,255,68,.13)}
-.mark-all-btn.mark-incorrect{color:var(--accent-red);border-color:var(--accent-red)}
-.mark-all-btn.mark-incorrect:hover{background:rgba(255,68,68,.13)}
+.mark-all-btn{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--border-light);background:var(--bg-input);color:var(--text-primary);transition:var(--transition);text-transform:none;letter-spacing:0}
+.mark-all-btn:hover{background:var(--bg-hover);border-color:var(--accent-cyan);color:var(--text-primary)}
+.mark-all-btn.active{background:var(--accent-cyan);color:var(--on-accent-cyan);border-color:var(--accent-cyan)}
 .q-badge{font-family:var(--font-body);font-size:.66rem;font-weight:600;padding:2px 6px;border-radius:4px}
 .q-badge.q-remaining{background:rgba(255,238,0,.13);color:var(--accent-gold)}
 .q-badge.q-complete{background:rgba(68,255,68,.1);color:var(--accent-green)}
@@ -283,11 +286,11 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .wager-badge.bg-incorrect{background:var(--accent-red);color:#fff;font-size:1.05rem;font-weight:900}
 
 /* SCORE PILL */
-.ta-pts{font-family:var(--font-display);font-size:.95rem;font-weight:700;min-width:44px;text-align:center;flex-shrink:0;padding:3px 7px;border-radius:6px}
-.pts-pos{color:var(--accent-green);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
-.pts-neg{color:var(--accent-red);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
-.pts-nil{color:var(--text-muted);background:var(--pts-nil-bg);border:1px solid var(--pts-nil-border);font-size:.8rem}
-.pts-zero{color:var(--text-muted);min-width:44px;text-align:center}
+.ta-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;min-width:3.4rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
+.pts-pos{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
+.pts-neg{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
+.pts-nil{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
+.pts-zero{color:var(--text-muted);min-width:3.4rem;text-align:center;font-weight:700;opacity:.7}
 
 /* RESULT BUTTONS */
 .ta-result{display:flex;gap:.2rem;flex-shrink:0}
@@ -303,7 +306,7 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .standings-sort-btns{display:flex;gap:4px}
 .standings-sort-btn{font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
-.standings-sort-btn.active{background:var(--accent-gold);color:#000;border-color:var(--accent-gold)}
+.standings-sort-btn.active{background:var(--accent-gold);color:var(--on-accent-gold);border-color:var(--accent-gold)}
 .standings-row{display:flex;align-items:center;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);margin-left:-10px;margin-right:-10px}
 .standings-row:last-child{border-bottom:none}
 .standings-row:nth-child(even){background:var(--row-stripe)}
@@ -339,10 +342,10 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .stepper-val{width:2.2rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem}
 .sw-val{width:2.8rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-primary)}
 .sw-val.unset{color:var(--text-muted);font-size:.85rem}
-.bonus-pts{font-family:var(--font-display);font-size:.95rem;font-weight:700;min-width:44px;text-align:center;flex-shrink:0;padding:3px 7px;border-radius:6px}
-.bonus-pts.pts-pos{color:var(--accent-green);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
-.bonus-pts.pts-nil{color:var(--text-muted);background:var(--pts-nil-bg);border:1px solid var(--pts-nil-border);font-size:.8rem}
-.bonus-pts.pts-zero{color:var(--text-muted);min-width:44px;text-align:center}
+.bonus-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;min-width:3.4rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
+.bonus-pts.pts-pos{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
+.bonus-pts.pts-nil{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
+.bonus-pts.pts-zero{color:var(--text-muted);min-width:3.4rem;text-align:center;font-weight:700;opacity:.7}
 
 /* EXPORT */
 .export-bar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0}
@@ -367,7 +370,7 @@ input:disabled{opacity:.5;cursor:not-allowed}
 
 /* BONUS submitted / zero-correct state (R1 & R3) */
 .stepper-val.unset{color:var(--text-muted);font-size:.85rem}
-.bonus-pts.submitted-zero{color:var(--accent-green);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border);font-size:.78rem;font-weight:700}
+.bonus-pts.submitted-zero{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border);font-size:1.05rem;font-weight:800}
 .bonus-zero{font-family:var(--font-display);font-size:.72rem;font-weight:700;padding:0 8px;height:1.9rem;border:1px solid var(--accent-green);border-radius:6px;background:rgba(68,255,68,.08);color:var(--accent-green);cursor:pointer;transition:var(--transition);white-space:nowrap;flex-shrink:0;touch-action:manipulation}
 .bonus-zero:hover{background:rgba(68,255,68,.18)}
 .bonus-clear{width:1.9rem;height:1.9rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-input);color:var(--text-muted);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;touch-action:manipulation}
@@ -381,7 +384,10 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .bonus-choice-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red);color:var(--text-primary)}
 
 /* forces "0–4 CORRECT × 5 PTS" onto its own line under "Q5 — Bonus" on mobile */
-.bonus-subtitle{flex-basis:100%;font-size:.7rem;font-weight:600;color:var(--text-muted);letter-spacing:.3px;text-transform:uppercase}
+.bonus-subtitle{font-size:.84rem;font-weight:700;color:var(--text-secondary);letter-spacing:.4px;text-transform:uppercase}
+.question-title.bonus-title{flex-direction:column;align-items:flex-start;gap:4px}
+.bonus-title-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.q-badge.q-badge-lg{font-size:.82rem;padding:3px 10px}
 
 /* SPECIAL WAGER collapse (R2 Bonus Wager / R4 Final Wager) */
 .sw-header{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
@@ -451,7 +457,7 @@ input:disabled{opacity:.5;cursor:not-allowed}
   .bonus-choice-btn{width:clamp(1.7rem,7.5cqw,2.2rem);height:clamp(1.7rem,7.5cqw,2.2rem);font-size:.92rem}
 
   /* score pill */
-  .ta-pts{min-width:clamp(2rem,9cqw,2.6rem);font-size:.82rem;padding:2px 4px}
+  .ta-pts,.bonus-pts{min-width:clamp(2.6rem,13cqw,3.4rem);font-size:1rem;padding:4px 6px}
 
   /* bonus steppers (sw-val / sw-input) */
   .sw-val{width:clamp(2rem,9cqw,2.6rem);min-width:0}
@@ -610,25 +616,12 @@ input:disabled{opacity:.5;cursor:not-allowed}
     </div>
   </div>
   <div class="settings-panel" id="settingsPanel">
-    <span class="size-label">Theme</span>
-    <button class="settings-btn" id="themeToggle" onclick="toggleTheme()">🌑 Dark</button>
-    <span class="sep"></span>
-    <span class="size-label">Color Blind</span>
-    <button class="settings-btn" id="cbToggle" onclick="toggleColorblind()" title="Swap green/red for blue/orange, for red-green color blindness">👁️ Off</button>
-    <span class="sep"></span>
-    <span class="size-label">Size</span>
-    <button class="settings-btn" onclick="adjustFontSize(-1)">A−</button>
-    <button class="settings-btn" id="sizeResetBtn" onclick="adjustFontSize(0)">A</button>
-    <button class="settings-btn" onclick="adjustFontSize(1)">A+</button>
-    <span class="sep"></span>
-    <span class="size-label">Density</span>
-    <button class="settings-btn" id="densityToggle" onclick="toggleDensity()">Normal</button>
-    <span class="sep"></span>
-    <span class="size-label">Zebra</span>
-    <button class="settings-btn" id="stripeToggle" onclick="toggleStripe()">Subtle</button>
-    <span class="sep"></span>
-    <span class="size-label">Date</span>
-    <button class="settings-btn" id="dateFmtToggle" onclick="toggleDateFmt()">MM-DD-YYYY</button>
+    <div class="settings-row"><span class="size-label">Theme</span><div class="settings-controls"><button class="settings-btn" id="themeToggle" onclick="toggleTheme()">🌑 Dark</button></div></div>
+    <div class="settings-row"><span class="size-label">Color Blind</span><div class="settings-controls"><button class="settings-btn" id="cbToggle" onclick="toggleColorblind()" title="Swap green/red for blue/orange, for red-green color blindness">👁️ Off</button></div></div>
+    <div class="settings-row"><span class="size-label">Size</span><div class="settings-controls"><button class="settings-btn" onclick="adjustFontSize(-1)">A−</button><button class="settings-btn" id="sizeResetBtn" onclick="adjustFontSize(0)">A</button><button class="settings-btn" onclick="adjustFontSize(1)">A+</button></div></div>
+    <div class="settings-row"><span class="size-label">Density</span><div class="settings-controls"><button class="settings-btn" id="densityToggle" onclick="toggleDensity()">Normal</button></div></div>
+    <div class="settings-row"><span class="size-label">Zebra</span><div class="settings-controls"><button class="settings-btn" id="stripeToggle" onclick="toggleStripe()">Subtle</button></div></div>
+    <div class="settings-row"><span class="size-label">Date</span><div class="settings-controls"><button class="settings-btn" id="dateFmtToggle" onclick="toggleDateFmt()">MM-DD-YYYY</button></div></div>
     <span class="settings-meta"><span class="settings-version" id="versionLabel"></span><span class="settings-disclaimer">⚠️ Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></span>
   </div>
 </div>
@@ -645,7 +638,6 @@ input:disabled{opacity:.5;cursor:not-allowed}
 
 <div class="app-layout">
   <div class="col-left" id="mainContent"></div>
-  <div class="drag-handle" id="dragHandle"></div>
   <div class="col-right" id="sidebar">
     <div class="sidebar-header" onclick="toggleSidebar()">
       <h3>📊 Scores</h3>
@@ -1059,7 +1051,7 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const ROUND_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
-const APP_VERSION='v10.23'; // #Version Number — bump this manually when you release a new build
+const APP_VERSION='v10.24'; // #Version Number — bump this manually when you release a new build
 
 /* ── HOST BANTER LINES ──────────────────────────────────────────────
    Cycle through these between questions/rounds and after reading scores.
@@ -1412,7 +1404,7 @@ function renderLeft(){
   h+=`<div class="section" id="sec-final"><div class="section-header" onclick="toggleSection('sec-final')"><h2>\uD83C\uDFC1 Final Results <span class="round-badge rb-partial">ascending</span></h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
 
   h+=`<div class="section ${collapsedSections.has('sec-export')?'collapsed':''}" id="sec-export"><div class="section-header" onclick="toggleSection('sec-export')"><h2>Export &amp; Data</h2><span class="chevron">▼</span></div><div class="section-body">
-    <div class="export-bar"><button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 XLSM</button><button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button></div>
+    <div class="export-bar"><button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 New XLSX</button><button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 Old XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button></div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="startNewGame();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?'))startNewGame();">\uD83D\uDDD1 Clear Session</button></div>
   </div></div>`;
@@ -1475,9 +1467,7 @@ function renderWQ(ri,qi){
       </div>
     </div>
     <div class="q-header-right">
-      <button class="mark-all-btn" onclick="toggleQSort(${ri},${qi})" title="Sort teams who haven't answered to the top">${questionSortMode[qKey]?'\u2195 Reset':'\u2195 Sort'}</button>
-      <button class="mark-all-btn mark-correct" onclick="markAll(${ri},${qi},true)">All ✓</button>
-      <button class="mark-all-btn mark-incorrect" onclick="markAll(${ri},${qi},false)">All ✗</button>
+      <button class="mark-all-btn${questionSortMode[qKey]?' active':''}" onclick="toggleQSort(${ri},${qi})" title="Sort teams who haven't answered to the top">${questionSortMode[qKey]?'\u2195 Reset':'\u2195 Sort'}</button>
     </div>
   </div>`;
 
@@ -1549,13 +1539,13 @@ function renderBQ(ri){
   const beer=isBonusBeerRound(ri);
   let badge='';
   if(n){
-    if(beer)badge='<span class="q-badge q-complete">\uD83C\uDF7A Beer Round!</span>';
-    else if(subDone===n)badge='<span class="q-badge q-complete">\u2713 Done</span>';
-    else badge=`<span class="q-badge q-remaining">${n-subDone} left</span>`;
+    if(beer)badge='<span class="q-badge q-badge-lg q-complete">\uD83C\uDF7A Beer Round!</span>';
+    else if(subDone===n)badge='<span class="q-badge q-badge-lg q-complete">\u2713 Done</span>';
+    else badge=`<span class="q-badge q-badge-lg q-remaining">${n-subDone} left</span>`;
   }
   const isCollapsedBQ=collapsedBonusQuestions.has('b'+ri);
   const blockCls='question-block'+(beer?' beer-round':'')+(isCollapsedBQ?' bq-collapsed':'');
-  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title"><span>Q5 \u2014 Bonus</span>${badge}<span class="bonus-subtitle">0\u20134 CORRECT \u00D7 5 PTS</span></div></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
+  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span>Q5 \u2014 Bonus</span>${badge}</div><span class="bonus-subtitle">0\u20134 CORRECT \u00D7 5 PTS</span></div></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
   gameState.teams.forEach((t,ti)=>{
     const v=gameState.rounds[ri].bonus[ti];
     const submitted=v!=null;
@@ -2105,8 +2095,8 @@ function exportXLSX(){
     if(typeof TRIVIA_TEMPLATE_B64==='undefined'){alert('Template not embedded.');return;}
     const bytes=trivB64ToBytes(TRIVIA_TEMPLATE_B64);
     const out=trivInjectTemplate(bytes, gameState);
-    const name=exportFn('xlsm');
-    dl(new Blob([out],{type:'application/vnd.ms-excel.sheet.macroEnabled.12'}),name);
+    const name=exportFn('xlsx');
+    dl(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),name);
     document.getElementById('exportPrompt').classList.add('show');
   }catch(e){alert('XLSX export failed: '+(e&&e.message?e.message:e));}
 }
@@ -2187,35 +2177,6 @@ function trivInjectTemplate(templateBytes, gs){
 function fn(ext){return`trivia-${gameState.meta.quizId||'NOID'}-${gameState.meta.date||new Date().toISOString().slice(0,10)}.${ext}`;}
 function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
 function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
-
-// DRAG HANDLE
-(function(){
-  const handle=document.getElementById('dragHandle'),sidebar=document.getElementById('sidebar');
-  if(!handle||!sidebar)return;
-  let dragging=false,startX=0,startW=0;
-  function onDown(e){e.preventDefault();dragging=true;startX=e.touches?e.touches[0].clientX:e.clientX;startW=sidebar.offsetWidth;handle.classList.add('dragging');document.body.classList.add('col-resizing');}
-  function onMove(e){
-    if(!dragging)return;
-    let x;
-    if(e.touches){
-      if(!e.touches[0])return; // touch already lifted
-      e.preventDefault(); // prevent page scroll fighting the drag
-      x=e.touches[0].clientX;
-    } else {
-      // If mouse button was released outside the window, cancel drag
-      if(typeof e.buttons!=='undefined'&&e.buttons===0){onUp();return;}
-      x=e.clientX;
-    }
-    const delta=startX-x;
-    const newW=Math.max(200,Math.min(window.innerWidth*0.6,startW+delta));
-    sidebar.style.width=newW+'px';
-  }
-  function onUp(){if(!dragging)return;dragging=false;handle.classList.remove('dragging');document.body.classList.remove('col-resizing');TRStore.setItem('trivRev6_sideW',sidebar.offsetWidth);}
-  handle.addEventListener('mousedown',onDown);document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
-  handle.addEventListener('touchstart',onDown,{passive:false});document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onUp);
-  document.addEventListener('touchcancel',onUp); // reset if touch interrupted (notification, etc.)
-  const saved=TRStore.getItem('trivRev6_sideW');if(saved)sidebar.style.width=saved+'px';
-})();
 
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){const o=document.getElementById('auditOverlay');if(o&&o.classList.contains('show'))closeAudit();}});
 
