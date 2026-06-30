@@ -65,7 +65,7 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
 [data-theme="hc-light"][data-stripe="2"]{--row-stripe:rgba(0,0,0,.16)}
 
 html{font-size:16px;overflow-x:hidden;max-width:100%}
-body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;max-width:100%}
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;max-width:100%;overflow-anchor:none}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg-primary)}::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:3px}
 
 /* HEADER */
@@ -116,11 +116,18 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 
 /* LAYOUT */
 .app-layout{display:flex;height:calc(100vh - 60px);overflow:hidden}
-.col-left{flex:1;min-width:300px;padding:0 16px 40px;overflow-y:auto;overflow-x:hidden;max-width:100%;container-type:inline-size;container-name:scorecol}
+.col-left{flex:1;min-width:300px;padding:0 16px 40px;overflow-y:auto;overflow-x:hidden;max-width:100%;container-type:inline-size;container-name:scorecol;overflow-anchor:none}
 .col-right{width:380px;min-width:200px;max-width:60vw;height:100%;overflow-y:auto;background:var(--bg-card);display:flex;flex-direction:column;flex-shrink:0;border-left:1px solid var(--border)}
+.drag-handle{width:6px;flex-shrink:0;height:100%;background:var(--border);cursor:col-resize;z-index:101;transition:background .15s}
+.drag-handle:hover,.drag-handle.dragging{background:var(--accent-cyan)}
+.drag-handle::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:32px;border-radius:1px;background:var(--text-muted);opacity:.5}
+.drag-handle:hover::after,.drag-handle.dragging::after{background:#000;opacity:.8}
+body.col-resizing{cursor:col-resize!important;user-select:none!important}
+body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 
 @media(max-width:900px){
   .app-layout{flex-direction:column;height:auto;overflow:visible}
+  .drag-handle{display:none}
   .col-right{position:fixed;bottom:0;left:0;right:0;top:auto;width:auto!important;min-width:0;max-width:none;height:auto;max-height:50vh;border-left:none;border-top:2px solid var(--accent-cyan);box-shadow:0 -4px 20px rgba(0,0,0,.6);z-index:200;padding-bottom:env(safe-area-inset-bottom)}
   .col-right.minimized{max-height:44px}
   .col-right.minimized .sidebar-body{display:none}
@@ -301,17 +308,18 @@ input:disabled{opacity:.5;cursor:not-allowed}
 
 /* STANDINGS */
 .standings-block{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:8px}
+@media(min-width:901px){.standings-block{max-width:420px}}
 .standings-title-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px}
 .standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--accent-gold);text-transform:uppercase;letter-spacing:.5px}
 .standings-sort-btns{display:flex;gap:4px}
 .standings-sort-btn{font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .standings-sort-btn.active{background:var(--accent-gold);color:var(--on-accent-gold);border-color:var(--accent-gold)}
-.standings-row{display:flex;align-items:center;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);margin-left:-10px;margin-right:-10px}
+.standings-row{display:flex;align-items:center;gap:10px;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);margin-left:-10px;margin-right:-10px}
 .standings-row:last-child{border-bottom:none}
 .standings-row:nth-child(even){background:var(--row-stripe)}
 .standings-name{font-weight:600;font-size:.82rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.standings-pts{font-family:var(--font-display);font-size:.9rem;font-weight:700;color:var(--accent-cyan);margin-left:auto;min-width:2.5rem;text-align:right;flex-shrink:0}
+.standings-pts{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--accent-cyan);margin-left:auto;min-width:2.5rem;text-align:right;flex-shrink:0}
 
 /* BEER STRIPE — for Q5 bonus and special wager beer rounds */
 .beer-stripe{display:flex;align-items:center;gap:6px;padding:5px 12px 6px;background:rgba(255,238,0,.07);border-bottom:1px solid rgba(255,238,0,.18)}
@@ -638,6 +646,7 @@ input:disabled{opacity:.5;cursor:not-allowed}
 
 <div class="app-layout">
   <div class="col-left" id="mainContent"></div>
+  <div class="drag-handle" id="dragHandle"></div>
   <div class="col-right" id="sidebar">
     <div class="sidebar-header" onclick="toggleSidebar()">
       <h3>📊 Scores</h3>
@@ -1051,7 +1060,7 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const ROUND_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
-const APP_VERSION='v10.24'; // #Version Number — bump this manually when you release a new build
+const APP_VERSION='v10.25'; // #Version Number — bump this manually when you release a new build
 
 /* ── HOST BANTER LINES ──────────────────────────────────────────────
    Cycle through these between questions/rounds and after reading scores.
@@ -1205,7 +1214,7 @@ function freshState(){return{meta:{date:new Date().toISOString().slice(0,10),loc
 function freshTeam(n){return{name:n||'',scoreGuess:'',bonusItem:false,njcb:false,adjustment:0,craftPrize:false};}
 
 let gameState=freshState(),scoreSortMode='entry',randomOrder=null;
-let standingsSortMode={halftime:'entry',final:'desc'};
+let standingsSortMode={halftime:'entry',final:'entry'};
 let collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);
 let adjOpenTeams=new Set(),lastAction=null;
 // Track which (ri,qi) combos we've already toasted for Beer Round
@@ -1219,7 +1228,7 @@ function clearSaved(){TRStore.removeItem(STORAGE_KEY);}
 (function(){const s=loadSaved();if(s){document.getElementById('resumeText').textContent='\u26A0\uFE0F Saved session from '+(s.meta?.date?fmtDateDisplay(s.meta.date):'?')+' at '+(s.meta?.location||'(no location)')+'. Resume or start fresh?';document.getElementById('resumeBanner').classList.add('show');}else{gameState=freshState();renderAll();}})();
 
 function resumeSession(){const s=loadSaved();if(s)gameState=migrateState(s);document.getElementById('resumeBanner').classList.remove('show');renderAll();}
-function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;standingsSortMode={halftime:'entry',final:'desc'};collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();collapsedBonusQuestions=new Set();collapsedSpecialWagers=new Set();questionSortMode={};beerRoundToasted=new Set();adjOpenTeams=new Set();document.getElementById('resumeBanner').classList.remove('show');renderAll();}
+function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;standingsSortMode={halftime:'entry',final:'entry'};collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();collapsedBonusQuestions=new Set();collapsedSpecialWagers=new Set();questionSortMode={};beerRoundToasted=new Set();adjOpenTeams=new Set();document.getElementById('resumeBanner').classList.remove('show');renderAll();}
 
 function migrateState(s){
   if(!s.meta)s.meta={date:'',location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:'',staffNames:''};
@@ -1404,7 +1413,7 @@ function renderLeft(){
   h+=`<div class="section" id="sec-final"><div class="section-header" onclick="toggleSection('sec-final')"><h2>\uD83C\uDFC1 Final Results <span class="round-badge rb-partial">ascending</span></h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
 
   h+=`<div class="section ${collapsedSections.has('sec-export')?'collapsed':''}" id="sec-export"><div class="section-header" onclick="toggleSection('sec-export')"><h2>Export &amp; Data</h2><span class="chevron">▼</span></div><div class="section-body">
-    <div class="export-bar"><button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 New XLSX</button><button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 Old XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button></div>
+    <div class="export-bar"><button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 XLSM</button><button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button></div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="startNewGame();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?'))startNewGame();">\uD83D\uDDD1 Clear Session</button></div>
   </div></div>`;
@@ -2095,8 +2104,8 @@ function exportXLSX(){
     if(typeof TRIVIA_TEMPLATE_B64==='undefined'){alert('Template not embedded.');return;}
     const bytes=trivB64ToBytes(TRIVIA_TEMPLATE_B64);
     const out=trivInjectTemplate(bytes, gameState);
-    const name=exportFn('xlsx');
-    dl(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),name);
+    const name=exportFn('xlsm');
+    dl(new Blob([out],{type:'application/vnd.ms-excel.sheet.macroEnabled.12'}),name);
     document.getElementById('exportPrompt').classList.add('show');
   }catch(e){alert('XLSX export failed: '+(e&&e.message?e.message:e));}
 }
@@ -2177,6 +2186,35 @@ function trivInjectTemplate(templateBytes, gs){
 function fn(ext){return`trivia-${gameState.meta.quizId||'NOID'}-${gameState.meta.date||new Date().toISOString().slice(0,10)}.${ext}`;}
 function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
 function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
+
+// DRAG HANDLE
+(function(){
+  const handle=document.getElementById('dragHandle'),sidebar=document.getElementById('sidebar');
+  if(!handle||!sidebar)return;
+  let dragging=false,startX=0,startW=0;
+  function onDown(e){e.preventDefault();dragging=true;startX=e.touches?e.touches[0].clientX:e.clientX;startW=sidebar.offsetWidth;handle.classList.add('dragging');document.body.classList.add('col-resizing');}
+  function onMove(e){
+    if(!dragging)return;
+    let x;
+    if(e.touches){
+      if(!e.touches[0])return; // touch already lifted
+      e.preventDefault(); // prevent page scroll fighting the drag
+      x=e.touches[0].clientX;
+    } else {
+      // If mouse button was released outside the window, cancel drag
+      if(typeof e.buttons!=='undefined'&&e.buttons===0){onUp();return;}
+      x=e.clientX;
+    }
+    const delta=startX-x;
+    const newW=Math.max(200,Math.min(window.innerWidth*0.6,startW+delta));
+    sidebar.style.width=newW+'px';
+  }
+  function onUp(){if(!dragging)return;dragging=false;handle.classList.remove('dragging');document.body.classList.remove('col-resizing');TRStore.setItem('trivRev6_sideW',sidebar.offsetWidth);}
+  handle.addEventListener('mousedown',onDown);document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
+  handle.addEventListener('touchstart',onDown,{passive:false});document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onUp);
+  document.addEventListener('touchcancel',onUp); // reset if touch interrupted (notification, etc.)
+  const saved=TRStore.getItem('trivRev6_sideW');if(saved)sidebar.style.width=saved+'px';
+})();
 
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){const o=document.getElementById('auditOverlay');if(o&&o.classList.contains('show'))closeAudit();}});
 
