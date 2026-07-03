@@ -36,6 +36,7 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
   --pts-nil-bg:rgba(255,255,255,.06);--pts-nil-border:rgba(255,255,255,.12);
   --on-accent-cyan:#000;--on-accent-gold:#000;
   --check-a-fg:#ffee00;--check-b-fg:#00ffff;
+  --badge-gold-fg:#ffee00;--badge-green-fg:#44ff44;
 }
 [data-theme="hc-light"]{
   --bg-primary:#f5f5f5;--bg-card:#fff;--bg-card-alt:#f0f0f0;--bg-input:#e8e8e8;--bg-hover:#dcdcdc;
@@ -48,7 +49,8 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
   --pts-neg-bg:#c01818;--pts-neg-border:#a81414;--pts-neg-fg:#fff;
   --pts-nil-bg:rgba(0,0,0,.07);--pts-nil-border:rgba(0,0,0,.22);
   --on-accent-cyan:#fff;--on-accent-gold:#000;
-  --check-a-fg:#7a5500;--check-b-fg:#006688;
+  --check-a-fg:#6b4a00;--check-b-fg:#004d66;
+  --badge-gold-fg:#6b4a00;--badge-green-fg:#0d6b0d;
 }
 [data-theme="hc-light"] .header{background:linear-gradient(180deg,var(--bg-primary) 60%,transparent)!important}
 /* COLOR VISION MODES — independent of theme.
@@ -60,20 +62,24 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
   --btn-correct-bg:#0d1f2e;--btn-incorrect-bg:#2e1f0d;
   --pts-pos-bg:rgba(51,153,255,.2);--pts-pos-border:rgba(51,153,255,.6);--pts-pos-fg:#8fc6ff;
   --pts-neg-bg:rgba(255,136,0,.2);--pts-neg-border:rgba(255,136,0,.6);--pts-neg-fg:#ffc182;
+  --badge-green-fg:#3399ff;
 }
 [data-theme="hc-light"][data-cb="1"]{
   --accent-green:#0067c5;--accent-red:#cc6600;
   --btn-correct-bg:#cfe6fb;--btn-incorrect-bg:#ffe1bf;
   --pts-pos-bg:#0067c5;--pts-pos-border:#005aae;--pts-pos-fg:#fff;
   --pts-neg-bg:#b35900;--pts-neg-border:#9c4e00;--pts-neg-fg:#fff;
+  --badge-green-fg:#004a8f;
 }
 [data-theme="hc-dark"][data-cb="2"]{
   --accent-gold:#ff66cc;--accent-cyan:#00cc88;
   --check-a-fg:#ff66cc;--check-b-fg:#00cc88;
+  --badge-gold-fg:#ff66cc;
 }
 [data-theme="hc-light"][data-cb="2"]{
   --accent-gold:#c2007a;--accent-cyan:#008060;
   --check-a-fg:#8a0057;--check-b-fg:#005c45;
+  --badge-gold-fg:#8a0057;
 }
 
 [data-density="compact"]{--row-pad:4px}
@@ -202,12 +208,13 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .meta-grid .full{grid-column:1/-1}
 
 /* TEAM ENTRY */
-.team-entry{display:grid;grid-template-columns:1fr auto 4.5rem auto auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.team-entry{display:grid;grid-template-columns:1fr 4.5rem auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.team-entry.has-adj{grid-template-columns:1fr 4.5rem auto auto}
 .team-entry:last-of-type{border-bottom:none}
-.team-name-cell{display:flex;flex-direction:column;gap:5px;min-width:0}
+.team-name-cell{display:flex;flex-direction:column;gap:7px;min-width:0}
 .team-number{font-family:var(--font-display);font-size:.66rem;color:var(--text-muted);letter-spacing:1px}
 .team-name-cell>input[type="text"]{width:100%}
-.team-checks{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.team-checks{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px}
 .check-label{display:inline-flex;align-items:center;gap:7px;font-size:.85rem;font-weight:700;cursor:pointer;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg-input);white-space:nowrap;transition:var(--transition);letter-spacing:.3px;margin-bottom:0!important;color:var(--text-muted)}
 .check-label input[type="checkbox"]{width:22px;height:22px;cursor:pointer;flex-shrink:0;margin:0}
 .item-check{color:var(--check-a-fg);border-color:var(--check-a-fg)}
@@ -242,11 +249,11 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .round-label{display:inline-block;font-family:var(--font-display);font-size:.66rem;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:1px}
 .rl-1{background:rgba(0,255,255,.13);color:var(--accent-cyan)}
 .rl-2{background:rgba(255,68,170,.13);color:var(--accent-magenta)}
-.rl-3{background:rgba(255,238,0,.13);color:var(--accent-gold)}
+.rl-3{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .rl-4{background:rgba(255,170,0,.13);color:var(--accent-orange)}
 .round-badge{font-family:var(--font-body);font-size:.66rem;font-weight:600;padding:2px 7px;border-radius:4px}
-.round-badge.rb-partial{background:rgba(255,238,0,.13);color:var(--accent-gold)}
-.round-badge.rb-done{background:rgba(68,255,68,.1);color:var(--accent-green)}
+.round-badge.rb-partial{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
+.round-badge.rb-done{background:rgba(68,255,68,.1);color:var(--badge-green-fg)}
 
 /* QUESTION BLOCKS — collapsible */
 .question-block{background:var(--bg-card-alt);border:1px solid var(--border);border-left:3px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
@@ -270,8 +277,8 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .mark-all-btn:hover{background:var(--bg-hover);border-color:var(--accent-cyan);color:var(--text-primary)}
 .mark-all-btn.active{background:var(--accent-cyan);color:var(--on-accent-cyan);border-color:var(--accent-cyan)}
 .q-badge{font-family:var(--font-body);font-size:.66rem;font-weight:600;padding:2px 6px;border-radius:4px}
-.q-badge.q-remaining{background:rgba(255,238,0,.13);color:var(--accent-gold)}
-.q-badge.q-complete{background:rgba(68,255,68,.1);color:var(--accent-green)}
+.q-badge.q-remaining{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
+.q-badge.q-complete{background:rgba(68,255,68,.1);color:var(--badge-green-fg)}
 
 /* BEER ROUND banner */
 .beer-banner{display:flex;align-items:center;gap:8px;padding:6px 10px 8px;background:rgba(255,238,0,.07);border-bottom:1px solid rgba(255,238,0,.2);animation:beerPop .5s ease-out}
@@ -512,7 +519,8 @@ input:disabled{opacity:.5;cursor:not-allowed}
 
   /* team-setup grid */
   .meta-grid{grid-template-columns:1fr}
-  .team-entry{grid-template-columns:1fr auto 3.5rem auto auto;gap:5px}
+  .team-entry{grid-template-columns:1fr 3.5rem auto;gap:5px}
+  .team-entry.has-adj{grid-template-columns:1fr 3.5rem auto auto}
   .check-label{font-size:.72rem;padding:5px 8px;gap:5px}
   .check-label input[type="checkbox"]{width:20px;height:20px}
 }
@@ -668,6 +676,7 @@ input:disabled{opacity:.5;cursor:not-allowed}
     <div class="settings-row"><span class="size-label">Density</span><div class="settings-controls"><button class="settings-btn" id="densityToggle" onclick="toggleDensity()">Normal</button></div></div>
     <div class="settings-row"><span class="size-label">Zebra</span><div class="settings-controls"><button class="settings-btn" id="stripeToggle" onclick="toggleStripe()">Subtle</button></div></div>
     <div class="settings-row"><span class="size-label">Date</span><div class="settings-controls"><button class="settings-btn" id="dateFmtToggle" onclick="toggleDateFmt()">MM-DD-YYYY</button></div></div>
+    <div class="settings-row"><span class="size-label">Point Adjustments</span><div class="settings-controls"><button class="settings-btn" id="adjToggle" onclick="toggleAdjSetting()" title="Show a manual ± point adjustment control on each team row">Hidden</button></div></div>
     <div class="settings-row"><span class="size-label">Sample Data</span><div class="settings-controls"><button class="settings-btn" onclick="loadSampleGame()" title="Load a real completed game so you can explore the app">🧪 Try Example</button></div></div>
     <div class="settings-row"><span class="size-label">Color Vision</span><div class="settings-controls"><select class="theme-select" id="cbSelect" aria-label="Color vision mode" onchange="setCbMode(this.value)" title="Adjust pass/fail colors for color blindness"><option value="0">Off</option><option value="1">Red-Green (deuteranopia/protanopia)</option><option value="2">Blue-Yellow (tritanopia)</option></select></div></div>
     <span class="settings-meta"><span class="settings-version" id="versionLabel"></span><span class="settings-disclaimer">⚠️ Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></span>
@@ -1100,7 +1109,7 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const ROUND_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
-const APP_VERSION='v10.31'; // #Version Number — bump this manually when you release a new build
+const APP_VERSION='v10.32'; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON=`{"meta":{"date":"2026-06-25","location":"Rebel Sheep Winery","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":20,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -1219,8 +1228,8 @@ let collapsedSpecialWagers=new Set();
 let questionSortOrder={};
 
 function loadPrefs(){
-  try{const r=TRStore.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;if(!p.dateFmt)p.dateFmt='mdy';if(p.cbMode==null)p.cbMode=p.colorblind?1:0;if(!p.craftDrawSeconds)p.craftDrawSeconds=6;return p;}}catch(e){}
-  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0,dateFmt:'mdy',cbMode:0,craftDrawSeconds:6};
+  try{const r=TRStore.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;if(!p.dateFmt)p.dateFmt='mdy';if(p.cbMode==null)p.cbMode=p.colorblind?1:0;if(!p.craftDrawSeconds)p.craftDrawSeconds=6;if(p.showAdjustments==null)p.showAdjustments=false;return p;}}catch(e){}
+  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0,dateFmt:'mdy',cbMode:0,craftDrawSeconds:6,showAdjustments:false};
 }
 function savePrefs(p){TRStore.setItem(PREFS_KEY,JSON.stringify(p));}
 function applyPrefs(){
@@ -1244,10 +1253,12 @@ function applyPrefs(){
   else document.documentElement.setAttribute('data-stripe',String(sl));
   const slt=document.getElementById('stripeToggle');if(slt)slt.textContent=STRIPE_LABELS[sl]||'Subtle';
   const dft=document.getElementById('dateFmtToggle');if(dft)dft.textContent=(p.dateFmt==='dmon')?'DD-Mon-YYYY':'MM-DD-YYYY';
+  const adt=document.getElementById('adjToggle');if(adt){adt.classList.toggle('active',!!p.showAdjustments);adt.textContent=p.showAdjustments?'Shown':'Hidden';}
   const vl=document.getElementById('versionLabel');if(vl)vl.textContent='Scorekeeper '+APP_VERSION;
 }
 function setTheme(t){if(!['hc-dark','hc-light'].includes(t))t='hc-dark';const p=loadPrefs();p.theme=t;savePrefs(p);applyPrefs();}
 function toggleTheme(){const p=loadPrefs();setTheme(p.theme==='hc-dark'?'hc-light':'hc-dark');}
+function toggleAdjSetting(){const p=loadPrefs();p.showAdjustments=!p.showAdjustments;savePrefs(p);applyPrefs();renderLeft();}
 function setCbMode(v){const p=loadPrefs();p.cbMode=parseInt(v,10)||0;savePrefs(p);applyPrefs();}
 function toggleDensity(){const p=loadPrefs();const ci=DENSITIES.indexOf(p.density||'normal');p.density=DENSITIES[(ci+1)%DENSITIES.length];savePrefs(p);applyPrefs();}
 function toggleStripe(){const p=loadPrefs();const ci=STRIPE_LEVELS.indexOf(p.stripeLevel??0);p.stripeLevel=STRIPE_LEVELS[(ci+1)%STRIPE_LEVELS.length];savePrefs(p);applyPrefs();}
@@ -1421,26 +1432,27 @@ function renderLeft(){
 
   const missingGuessCount=!gs?gameState.teams.filter(t=>t.scoreGuess===''||t.scoreGuess==null).length:0;
   h+=`<div class="section ${collapsedSections.has('sec-teams')?'collapsed':''}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><h2>Teams (${gameState.teams.length})${missingGuessCount?` <span style="font-size:.65rem;font-weight:700;color:var(--accent-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount>1?'es':''}</span>`:''}</h2><span class="chevron">▼</span></div><div class="section-body">`;
+  const showAdj=!!loadPrefs().showAdjustments;
   gameState.teams.forEach((t,i)=>{
     const adj=t.adjustment||0,adjOpen=adjOpenTeams.has(i);
-    h+=`<div class="team-entry">
+    h+=`<div class="team-entry${showAdj?' has-adj':''}">
       <div class="team-name-cell">
         <span class="team-number">Team ${i+1}</span>
         <input type="text" value="${esc(t.name)}" placeholder="Team name" ${gs?'disabled':''} onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
-      </div>
-      <div class="team-checks">
-        <label class="check-label item-check${t.bonusItem?' is-checked':''}">
-          <input type="checkbox" id="bi${i}" ${t.bonusItem?'checked':''} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();">+5 Item
-        </label>
-        <label class="check-label njcb-check${t.njcb?' is-checked':''}">
-          <input type="checkbox" id="nj${i}" ${t.njcb?'checked':''} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();">+3 NJCB
-        </label>
+        <div class="team-checks">
+          <label class="check-label item-check${t.bonusItem?' is-checked':''}">
+            <input type="checkbox" id="bi${i}" ${t.bonusItem?'checked':''} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();">+5 Item
+          </label>
+          <label class="check-label njcb-check${t.njcb?' is-checked':''}">
+            <input type="checkbox" id="nj${i}" ${t.njcb?'checked':''} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();">+3 NJCB
+          </label>
+        </div>
       </div>
       <div class="team-guess-cell${!gs&&(t.scoreGuess===''||t.scoreGuess==null)?' guess-missing':''}"><label>Guess</label><input type="number" min="1" max="146" value="${t.scoreGuess!==''?t.scoreGuess:''}" placeholder="1-146" ${gs?'disabled':''} onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${!gs&&(t.scoreGuess===''||t.scoreGuess==null)?'<span class=\"guess-warn\">&#9888; required</span>':''}</div>
-      <div class="adj-wrap">
-        <button class="adj-chip${adj!==0?' adj-active':''}" onclick="toggleAdj(${i})" title="${adj!==0?'Adj: '+(adj>0?'+':'')+adj+' — click to edit':'Manual point adjustment'}">${adj!==0?(adj>0?'+'+adj:adj):'\u00B1'}</button>
+      ${showAdj?`<div class="adj-wrap">
+        <button class="adj-chip${adj!==0?' adj-active':''}" onclick="toggleAdj(${i})" title="${adj!==0?'Adj: '+(adj>0?'+':'')+adj+' \u2014 click to edit':'Manual point adjustment'}">${adj!==0?(adj>0?'+'+adj:adj):'\u00B1'}</button>
         ${adjOpen?`<div class="adj-stepper"><button onclick="adjPts(${i},-1)">\u2212</button><span class="adj-val${adj>0?' pos':adj<0?' neg':''}">${adj>0?'+'+adj:adj}</span><button onclick="adjPts(${i},1)">+</button></div>`:''}
-      </div>
+      </div>`:''}
       <div class="remove-team"><button onclick="removeTeam(${i})" title="Remove team" aria-label="Remove team ${i+1}">\u2715</button></div>
     </div>`;
   });
