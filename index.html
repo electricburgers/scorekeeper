@@ -35,7 +35,9 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
   --pts-neg-bg:rgba(255,68,68,.2);--pts-neg-border:rgba(255,68,68,.6);--pts-neg-fg:#ffa3a3;
   --pts-nil-bg:rgba(255,255,255,.06);--pts-nil-border:rgba(255,255,255,.12);
   --on-accent-cyan:#000;--on-accent-gold:#000;--on-badge:#000;
-  --check-a-fg:#ffee00;--check-b-fg:#00ffff;
+  --item-border:#B4552F;--item-fill-checked:#B4552F;
+  --njcb-border:#5B84A8;--njcb-fill-checked:#5B84A8;
+  --check-icon-color:#ffffff;
   --badge-gold-fg:#ffee00;--badge-green-fg:#44ff44;
   /* AAA (7:1) text-safe variants of the brand accents, for use as TEXT on neutral surfaces
      (bg-card/bg-card-alt/bg-input) — kept separate from --accent-* so borders, focus rings,
@@ -54,7 +56,8 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
   --pts-neg-bg:#c01818;--pts-neg-border:#a81414;--pts-neg-fg:#fff;
   --pts-nil-bg:rgba(0,0,0,.07);--pts-nil-border:rgba(0,0,0,.22);
   --on-accent-cyan:#fff;--on-accent-gold:#000;--on-badge:#fff;
-  --check-a-fg:#9c6c00;--check-b-fg:#007ea8;
+  --item-border:#B4552F;--item-fill-checked:#B4552F;
+  --njcb-border:#3B5B7A;--njcb-fill-checked:#3B5B7A;
   --badge-gold-fg:#55420e;--badge-green-fg:#0a500a;
   --txt-cyan:#004b64;--txt-magenta:#8c0040;--txt-red:#900000;--txt-orange:#723300;
   --accent-cyan-solid:#006081;--danger-solid-bg:#b60000;
@@ -80,12 +83,14 @@ var TRIVIA_XLSX_B64="UEsDBAoAAAAAAIdO4kAAAAAAAAAAAAAAAAAJAAAAZG9jUHJvcHMvUEsDBBQ
 }
 [data-theme="hc-dark"][data-cb="2"]{
   --accent-gold:#ff66cc;--accent-cyan:#00cc88;
-  --check-a-fg:#ff66cc;--check-b-fg:#00cc88;
+  --item-border:#ff66cc;--item-fill-checked:#ff66cc;
+  --njcb-border:#00cc88;--njcb-fill-checked:#00cc88;
   --badge-gold-fg:#ff96fc;--accent-cyan-solid:#00cc88;
 }
 [data-theme="hc-light"][data-cb="2"]{
   --accent-gold:#c2007a;--accent-cyan:#008060;
-  --check-a-fg:#e0008e;--check-b-fg:#008564;
+  --item-border:#e0008e;--item-fill-checked:#e0008e;
+  --njcb-border:#008564;--njcb-fill-checked:#008564;
   --badge-gold-fg:#880056;--txt-cyan:#004f3b;--accent-cyan-solid:#00654c;
 }
 
@@ -230,24 +235,23 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    accent-color can't guarantee the checkmark glyph's own contrast (browser-chosen, unverifiable),
    so the visible box + checkmark below is fully custom-drawn and contrast-audited instead. */
 .check-input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;margin:0;cursor:pointer}
-.check-box{width:22px;height:22px;flex-shrink:0;border-radius:5px;box-sizing:border-box;position:relative;background:var(--bg-input);transition:var(--transition)}
-.item-check .check-box{border:2px solid var(--check-a-fg)}
-.njcb-check .check-box{border:2px solid var(--check-b-fg)}
-.item-check .check-input:checked+.check-box{background:var(--check-a-fg);border-width:3px}
-.njcb-check .check-input:checked+.check-box{background:var(--check-b-fg);border-width:3px}
+.check-box{width:22px;height:22px;flex-shrink:0;border-radius:5px;box-sizing:border-box;position:relative;background:transparent;transition:var(--transition)}
+/* Outline-until-checked: unchecked is a bordered outline with no fill, checked is a
+   solid fill — checked/unchecked is signaled by shape+border as well as color, so it
+   isn't lost for users who can't perceive the fill color at all. */
+.item-check .check-box{border:2px solid var(--item-border)}
+.njcb-check .check-box{border:2px solid var(--njcb-border)}
+.item-check .check-input:checked+.check-box{background:var(--item-fill-checked);border-color:var(--item-fill-checked)}
+.njcb-check .check-input:checked+.check-box{background:var(--njcb-fill-checked);border-color:var(--njcb-fill-checked)}
 .item-check .check-input:checked+.check-box::after,.njcb-check .check-input:checked+.check-box::after{
   content:'';position:absolute;left:6px;top:2px;width:6px;height:11px;
-  border:solid var(--on-badge);border-width:0 2.5px 2.5px 0;transform:rotate(45deg);
+  border:solid var(--check-icon-color);border-width:0 3px 3px 0;transform:rotate(45deg);
 }
 .check-input:focus-visible+.check-box{outline:2px solid var(--accent-cyan-solid);outline-offset:2px}
-.item-check{color:var(--check-a-fg);border-color:var(--check-a-fg)}
-.item-check.is-checked{background:color-mix(in srgb,var(--check-a-fg) 14%,var(--bg-input));border-color:var(--check-a-fg)}
-.njcb-check{color:var(--check-b-fg);border-color:var(--check-b-fg)}
-.njcb-check.is-checked{background:color-mix(in srgb,var(--check-b-fg) 14%,var(--bg-input));border-color:var(--check-b-fg)}
-[data-theme="hc-light"] .item-check{background:var(--check-a-fg);color:#fff}
-[data-theme="hc-light"] .item-check.is-checked{background:var(--check-a-fg);color:#fff;border-color:#000}
-[data-theme="hc-light"] .njcb-check{background:var(--check-b-fg);color:#fff}
-[data-theme="hc-light"] .njcb-check.is-checked{background:var(--check-b-fg);color:#fff;border-color:#000}
+.item-check{color:var(--item-border);border-color:var(--item-border);background:var(--bg-input)}
+.item-check.is-checked{background:var(--item-fill-checked);color:var(--check-icon-color);border-color:var(--item-fill-checked)}
+.njcb-check{color:var(--njcb-border);border-color:var(--njcb-border);background:var(--bg-input)}
+.njcb-check.is-checked{background:var(--njcb-fill-checked);color:var(--check-icon-color);border-color:var(--njcb-fill-checked)}
 .team-guess-cell>label{font-size:.66rem}
 .team-guess-cell.guess-missing>label{color:var(--txt-orange)}
 .team-guess-cell.guess-missing input{border-color:var(--accent-orange);box-shadow:0 0 0 2px rgba(255,170,0,.18)}
@@ -420,7 +424,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* CLICKABLE TEAM NAME (opens audit) */
 .ta-name-clickable{cursor:pointer}
 .ta-name-clickable:hover{color:var(--txt-cyan);text-decoration:underline}
-.ta-name-clickable::after{content:'\\1F50D';font-size:.7em;opacity:0;margin-left:4px;transition:opacity .15s}
+.ta-name-clickable::after{content:'\1F50D';font-size:.7em;opacity:0;margin-left:4px;transition:opacity .15s}
 .ta-name-clickable:hover::after{opacity:.7}
 
 /* MANUAL ENTRY for special wagers (stepper + type) */
@@ -1515,7 +1519,7 @@ function renderStandings(type){
   const btns=[['entry','Entry'],[`asc`,'\u2191 Asc'],['desc','\u2193 Desc']].map(([m,lbl])=>
     `<button class="standings-sort-btn${mode===m?' active':''}" onclick="setStandingsSort('${type}','${m}')">${lbl}</button>`).join('');
   let h=`<div class="standings-block"><div class="standings-title-row"><span class="standings-title">${label}</span><div class="standings-sort-btns">${btns}</div></div>`;
-  list.forEach(t=>{h+=`<div class="standings-row"><span class="standings-name">${esc(t.name)}</span><span class="standings-pts">${t.pts}</span></div>`;});
+  list.forEach(t=>{h+=`<div class="standings-row"><span class="standings-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name)} — tap to audit score" onclick="openAudit(${t.ti})">${esc(t.name)}</span><span class="standings-pts">${t.pts}</span></div>`;});
   h+=renderBanter('scores','sc-'+type,{sm:true});
   return h+'</div>';
 }
@@ -1576,7 +1580,7 @@ function renderLeft(){
         <input type="text" value="${esc(t.name)}" placeholder="Team name" ${gs?'disabled':''} onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
         <div class="team-checks">
           <label class="check-label item-check${t.bonusItem?' is-checked':''}">
-            <input type="checkbox" class="check-input" id="bi${i}" ${t.bonusItem?'checked':''} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+5 Item
+            <input type="checkbox" class="check-input" id="bi${i}" ${t.bonusItem?'checked':''} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+5 Bonus
           </label>
           <label class="check-label njcb-check${t.njcb?' is-checked':''}">
             <input type="checkbox" class="check-input" id="nj${i}" ${t.njcb?'checked':''} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+3 NJCB
@@ -2185,23 +2189,24 @@ function buildAudit(ti){
     return b+`</div>`;
   }
 
+  // Extras \u2014 bonus item and NJCB card are checked in before the game starts, so show
+  // them first; the running "total so far" in every later block includes them from the start.
+  const item=t.bonusItem?5:0,nj=t.njcb?3:0,adj=t.adjustment||0;
+  if(item||nj||adj){
+    h+=`<div class="aud-round"><div class="aud-round-h"><span class="round-label rl-3">Extras</span></div>`;
+    if(item)h+=`<div class="aud-line"><span class="aud-q">+5</span><span class="aud-res aud-correct">Bonus item brought</span><span class="aud-p pos">+5</span></div>`;
+    if(nj)h+=`<div class="aud-line"><span class="aud-q">+3</span><span class="aud-res aud-correct">NJCB Member Card shown</span><span class="aud-p pos">+3</span></div>`;
+    if(adj)h+=`<div class="aud-line"><span class="aud-q">${adj>0?'+':''}${adj}</span><span class="aud-res">Manual adjustment</span><span class="aud-p ${adj>0?'pos':'neg'}">${adj>0?'+':''}${adj}</span></div>`;
+    run+=item+nj+adj;
+    h+=`</div>`;
+  }
+
   h+=roundBlock(0,'Round 1','rl-1');
   h+=roundBlock(1,'Round 2','rl-2');
   h+=wagerBlock(gameState.halftime[ti],'Halftime Bonus','rl-2','win or lose, 1\u201310');
   h+=roundBlock(2,'Round 3','rl-3');
   h+=roundBlock(3,'Round 4','rl-4');
   h+=wagerBlock(gameState.finalWager[ti],'Final Wager','rl-4','win or lose, 1\u201320');
-
-  // Extras
-  const item=t.bonusItem?5:0,nj=t.njcb?3:0,adj=t.adjustment||0;
-  if(item||nj||adj){
-    h+=`<div class="aud-round"><div class="aud-round-h"><span class="round-label rl-3">Extras</span></div>`;
-    if(item)h+=`<div class="aud-line"><span class="aud-q">+5</span><span class="aud-res aud-correct">Bonus item brought</span><span class="aud-p pos">+5</span></div>`;
-    if(nj)h+=`<div class="aud-line"><span class="aud-q">+3</span><span class="aud-res aud-correct">NJCB</span><span class="aud-p pos">+3</span></div>`;
-    if(adj)h+=`<div class="aud-line"><span class="aud-q">${adj>0?'+':''}${adj}</span><span class="aud-res">Manual adjustment</span><span class="aud-p ${adj>0?'pos':'neg'}">${adj>0?'+':''}${adj}</span></div>`;
-    run+=item+nj+adj;
-    h+=`</div>`;
-  }
 
   const gt=grandTotal(ti);
   h+=`<div class="aud-total"><span>Grand Total</span><span class="val">${gt}</span></div>`;
