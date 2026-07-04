@@ -210,6 +210,8 @@ label{display:block;font-size:.72rem;font-weight:600;color:var(--text-secondary)
 input[type="text"],input[type="number"],input[type="date"]{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;outline:none;transition:var(--transition)}
 input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,.13)}
 input:disabled{opacity:.5;cursor:not-allowed}
+input[list]{padding-right:26px;background-image:linear-gradient(45deg,transparent 50%,var(--text-muted) 50%),linear-gradient(135deg,var(--text-muted) 50%,transparent 50%);background-position:calc(100% - 16px) 55%,calc(100% - 11px) 55%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+input[list]::-webkit-calendar-picker-indicator{opacity:0}
 [role="button"]:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--accent-cyan);outline-offset:2px}
 [role="button"]{outline:none}
 .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -481,7 +483,8 @@ input:disabled{opacity:.5;cursor:not-allowed}
 .cp-intro{font-size:.78rem;color:var(--text-secondary);margin-bottom:6px;font-style:italic}
 .cp-flash{font-family:var(--font-display);font-size:1.3rem;font-weight:800;text-align:center;padding:14px 8px;color:var(--badge-gold-fg);background:rgba(255,238,0,.08);border:2px dashed var(--accent-gold);border-radius:var(--radius);animation:cpPulse .22s ease-in-out infinite alternate}
 @keyframes cpPulse{from{opacity:.75;transform:scale(.99)}to{opacity:1;transform:scale(1.01)}}
-.cp-winner{font-size:.9rem;margin:8px 0 6px;color:var(--text-primary)}
+.cp-winner{font-size:.9rem;margin:8px 0 6px;color:var(--text-primary);display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.cp-clear-btn{font-size:.7rem;padding:4px 10px}
 .cp-script-label{display:block;font-size:.66rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
 
@@ -710,6 +713,110 @@ input:disabled{opacity:.5;cursor:not-allowed}
 </div>
 
 <input type="file" id="fileLoadInput" accept=".json" onchange="loadFromFile(event)">
+
+<datalist id="locationList">
+      <option value="33's Tavern">
+      <option value="Angry Erik Brewing">
+      <option value="Anshe Emeth Memorial Temple">
+      <option value="Autodidact Beer">
+      <option value="Avenue A Club">
+      <option value="B2 Bistro &amp; Grill">
+      <option value="Bakes Brewing Co">
+      <option value="Battle River Brewing">
+      <option value="Brick 46">
+      <option value="Brunswick Grove">
+      <option value="Bull N Bear Brewery">
+      <option value="Capital Craft East Hanover">
+      <option value="Capital Craft Green brook">
+      <option value="Chef’s Bar &amp; Bistro">
+      <option value="Cinders Wood Fire Grill">
+      <option value="Claremont Distillery">
+      <option value="Climax Brewing Co">
+      <option value="Conclave Brewing">
+      <option value="Cranberry Lake Community Club">
+      <option value="Cricket Hill Brewery">
+      <option value="Cupsaw Lake Improvement Assoc.">
+      <option value="Czig Meister Brewing">
+      <option value="Dismal Harmony Distilling">
+      <option value="Druery Brewery, The">
+      <option value="Ellery's Grill">
+      <option value="Evolution Restaurant and Bar">
+      <option value="Fort Nonsense Brewing Company">
+      <option value="Garden Bar &amp; Liquors">
+      <option value="Garden State Tavern">
+      <option value="Garden State Yacht Club">
+      <option value="Gearblock Brewing Company">
+      <option value="Ghost Hawk Brewery">
+      <option value="Hansil's Bar and Grill">
+      <option value="Harrigan's Family Restaurant">
+      <option value="Hawk Pointe Golf Club">
+      <option value="Heavy Reel Brewing">
+      <option value="HOB Tavern">
+      <option value="Hoover's Tavern">
+      <option value="Hops Craft Bar">
+      <option value="Jimbo's Bar and Grill">
+      <option value="Keepers">
+      <option value="Kitchen and Beer Bar">
+      <option value="Krogh's Restaurant &amp; Brew Pub">
+      <option value="Kymers Campground">
+      <option value="Lafayette House">
+      <option value="Lake Mohawk Golf Club">
+      <option value="Lakeside at North Haledon">
+      <option value="Lamp Post Inn, the">
+      <option value="Lamplighter Restaurant &amp; Pub">
+      <option value="Landing, The">
+      <option value="Lions Roar Brewing Co.">
+      <option value="Living Spirits Distillery">
+      <option value="Man Skirt Brewery">
+      <option value="Manasquan Bank">
+      <option value="Middlemist Meadery">
+      <option value="Milk Street Distillery">
+      <option value="Morristown Club">
+      <option value="New Jersey Beer Company">
+      <option value="Newark Local Beer">
+      <option value="Newton Moose Lodge 432">
+      <option value="Oakflower Brewing Company">
+      <option value="Ort Farms">
+      <option value="Panther Valley Golf &amp; Country Club">
+      <option value="Pat's Bar &amp; Grill">
+      <option value="Point 5 Lafayette">
+      <option value="PRIVATE EVENT">
+      <option value="Prospect Tavern">
+      <option value="Raritan Valley Country Club">
+      <option value="Readington Brewery &amp; Hop Farm">
+      <option value="Rebel Sheep Wine Co">
+      <option value="Red Bull Arena">
+      <option value="River of Beer">
+      <option value="Sam’s Bar &amp; Grill">
+      <option value="Seven Tribesmen Brewery">
+      <option value="Shannon Rose-Ramsay">
+      <option value="Sheridan's Tavern">
+      <option value="Sparta Pour House">
+      <option value="Springfield Park Place Condominium Association">
+      <option value="Stage House Tavern">
+      <option value="Stumble Inn">
+      <option value="SUMMIT SPORTS BAR">
+      <option value="Sunken Silo Brew Works">
+      <option value="Suspenders Pub">
+      <option value="Taphouse 15">
+      <option value="Taphouse Grill">
+      <option value="Temple Beth El">
+      <option value="Thirsty Farmer">
+      <option value="Ties, The">
+      <option value="Toms River Brewing">
+      <option value="Trenton Elks Lodge">
+      <option value="Twin Lights Brewery">
+      <option value="Two Ton Brewing Co.">
+      <option value="Untied Brewery">
+      <option value="Vasa Park Club House">
+      <option value="Verona Inn">
+      <option value="VFW South River">
+      <option value="Village Brewing Company">
+      <option value="Village Saloon">
+      <option value="Washington Township Public Library">
+      <option value="White Meadow Lake Country Club">
+      <option value="Yesterdays Bar and Grille">
+</datalist>
 
 <div class="resume-banner" id="resumeBanner">
   <p id="resumeText">⚠️ Saved session found.</p>
@@ -1135,7 +1242,7 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const ROUND_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
-const APP_VERSION='v10.37'; // #Version Number — bump this manually when you release a new build
+const APP_VERSION='v10.38'; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON=`{"meta":{"date":"2026-06-25","location":"Rebel Sheep Winery","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":20,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -1448,10 +1555,10 @@ function renderLeft(){
   const wy=window.scrollY||document.documentElement.scrollTop||0;
   const gs=checkGameStarted();let h='';
 
-  h+=`<div class="section ${collapsedSections.has('sec-meta')?'collapsed':''}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Session Info</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
+  h+=`<div class="section ${collapsedSections.has('sec-meta')?'collapsed':''}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
     <div class="field"><label>Date</label><input type="text" inputmode="numeric" placeholder="MM-DD-YYYY" value="${esc(fmtDateDisplay(gameState.meta.date))}" ${gs?'disabled':''} onchange="setGameDate(this.value)"></div>
     <div class="field"><label>Quiz ID</label><input type="text" value="${esc(gameState.meta.quizId)}" placeholder="e.g. ABC-1234" ${gs?'disabled':''} onchange="gameState.meta.quizId=this.value;autosave();"></div>
-    <div class="field full"><label>Location</label><input type="text" value="${esc(gameState.meta.location)}" placeholder="Bar name" ${gs?'disabled':''} onchange="gameState.meta.location=this.value;autosave();"></div>
+    <div class="field full"><label>Location</label><input type="text" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${gs?'disabled':''} onchange="gameState.meta.location=this.value;autosave();"></div>
     <div class="field"><label>Craft Partner</label><input type="text" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery" ${gs?'disabled':''} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
     <div class="field"><label>Partner Town</label><input type="text" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town" ${gs?'disabled':''} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
     <div class="field full"><label>Bonus Item (+5)</label><input type="text" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
@@ -1887,6 +1994,16 @@ function startCraftPrizeDraw(){
   },totalMs));
   renderLeft();
 }
+function clearCraftPrizeWinner(){
+  if(!gameState.craftPrizeWinner)return;
+  if(!confirm('Clear the craft prize winner? You can run the drumroll again after.'))return;
+  clearCraftDrawTimers();
+  stopAllDrumAudio();
+  gameState.teams.forEach(t=>{t.craftPrize=false;});
+  gameState.craftPrizeWinner=null;
+  autosave();
+  renderAll();
+}
 function renderCraftPrizeBlock(){
   const n=gameState.teams.length;
   if(!n)return'<p class="fr-note">Add teams to run the craft prize drawing.</p>';
@@ -1916,7 +2033,7 @@ function renderCraftPrizeBlock(){
   }
   if(winner&&!drawing){
     const wname=gameState.teams[winner.ti]?.name||'Team '+(winner.ti+1);
-    h+=`<div class="cp-winner">🏆 <strong>${esc(wname)}</strong> won!</div>
+    h+=`<div class="cp-winner">🏆 <strong>${esc(wname)}</strong> won! <button class="btn btn-danger cp-clear-btn" onclick="clearCraftPrizeWinner()" title="Clear the winner and run the drawing again">Clear</button></div>
       <label class="cp-script-label">Winner Announcement Script</label>
       <textarea class="cp-script" onchange="updateCraftScript(this.value)">${esc(winner.script)}</textarea>`;
   }
