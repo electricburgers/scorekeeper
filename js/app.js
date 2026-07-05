@@ -21,7 +21,7 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const ROUND_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
-const APP_VERSION='v10.39'; // #Version Number — bump this manually when you release a new build
+const APP_VERSION='v10.40'; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON=`{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":20,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -219,6 +219,7 @@ function freshTeam(n){return{name:n||'',scoreGuess:'',bonusItem:false,njcb:false
 
 let gameState=freshState(),scoreSortMode='entry',randomOrder=null;
 let standingsSortMode={halftime:'entry',final:'entry'};
+let standingsRandomOrder={halftime:null,final:null};
 let collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);
 let adjOpenTeams=new Set(),lastAction=null;
 // Track which (ri,qi) combos we've already toasted for Beer Round
@@ -234,7 +235,7 @@ function clearSaved(){TRStore.removeItem(STORAGE_KEY);}
 (function(){const s=loadSaved();if(s){document.getElementById('resumeText').textContent='\u26A0\uFE0F Saved session from '+(s.meta?.date?fmtDateDisplay(s.meta.date):'?')+' at '+(s.meta?.location||'(no location)')+'. Resume or start fresh?';document.getElementById('resumeBanner').classList.add('show');}else{gameState=freshState();renderAll();}})();
 
 function resumeSession(){const s=loadSaved();if(s)gameState=migrateState(s);document.getElementById('resumeBanner').classList.remove('show');renderAll();}
-function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;standingsSortMode={halftime:'entry',final:'entry'};collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();collapsedBonusQuestions=new Set();collapsedSpecialWagers=new Set();questionSortOrder={};beerRoundToasted=new Set();adjOpenTeams=new Set();clearCraftDrawTimers();stopAllDrumAudio();craftDrawState=null;document.getElementById('resumeBanner').classList.remove('show');renderAll();}
+function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;standingsSortMode={halftime:'entry',final:'entry'};standingsRandomOrder={halftime:null,final:null};collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();collapsedBonusQuestions=new Set();collapsedSpecialWagers=new Set();questionSortOrder={};beerRoundToasted=new Set();adjOpenTeams=new Set();clearCraftDrawTimers();stopAllDrumAudio();craftDrawState=null;document.getElementById('resumeBanner').classList.remove('show');renderAll();}
 
 function migrateState(s){
   if(!s.meta)s.meta={date:'',location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:'',staffNames:''};
@@ -325,12 +326,13 @@ function renderStandings(type){
   let list;
   if(mode==='entry')list=base;
   else if(mode==='asc')list=base.slice().sort((a,b)=>a.pts-b.pts);
+  else if(mode==='random'){const ro=standingsRandomOrder[type];list=(ro&&ro.length===base.length)?ro.map(ti=>base[ti]):base;}
   else list=base.slice().sort((a,b)=>b.pts-a.pts);
-  const btns=[['entry','Entry'],[`asc`,'\u2191 Asc'],['desc','\u2193 Desc']].map(([m,lbl])=>
+  const btns=[['entry','Entry'],['random','🎲 Random'],[`asc`,'\u2191 Asc'],['desc','\u2193 Desc']].map(([m,lbl])=>
     `<button class="standings-sort-btn${mode===m?' active':''}" onclick="setStandingsSort('${type}','${m}')">${lbl}</button>`).join('');
-  let h=`<div class="standings-block"><div class="standings-title-row"><span class="standings-title">${label}</span><div class="standings-sort-btns">${btns}</div></div>`;
+  let h=`<div class="standings-block">`+renderBanter('scores','sc-'+type,{sm:true})+
+    `<div class="standings-title-row"><span class="standings-title">${label}</span><div class="standings-sort-btns">${btns}</div></div>`;
   list.forEach(t=>{h+=`<div class="standings-row"><span class="standings-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name)} — tap to audit score" onclick="openAudit(${t.ti})">${esc(t.name)}</span><span class="standings-pts">${t.pts}</span></div>`;});
-  h+=renderBanter('scores','sc-'+type,{sm:true});
   return h+'</div>';
 }
 
@@ -347,7 +349,14 @@ function getDisplayOrder(){
 }
 function sortModeLabel(){switch(scoreSortMode){case'random':return'\uD83C\uDFB2 Random order \u2014 for mid-game reads';case'asc':return'\u2191 Lowest to highest \u2014 dramatic reveal';case'desc':return'\u2193 Highest to lowest \u2014 leaderboard order';default:return'Entry order \u2014 matches your scoresheet';}}
 
-function setStandingsSort(type,mode){standingsSortMode[type]=mode;renderLeft();}
+function setStandingsSort(type,mode){
+  if(mode==='random'){
+    const order=gameState.teams.map((_,i)=>i);
+    for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+    standingsRandomOrder[type]=order;
+  }
+  standingsSortMode[type]=mode;renderLeft();
+}
 
 function isBonusBeerRound(ri){
   const n=gameState.teams.length;if(!n)return false;
@@ -530,8 +539,11 @@ function renderWQ(ri,qi){
     });
     h+=`</div>${ptsHtml}</div>`;
   });
+  // Banter lives inside .q-body (not after it) so collapsing the question via CSS
+  // (.q-collapsed .q-body{display:none}) hides the banter along with the rest of
+  // the body instead of leaving it visible as an orphaned sibling.
+  const v=qVerdict(ri,qi);h+=renderBanter(v,`q-${ri}-${qi}-${v}`,{sm:true});
   h+=`</div>`;
-  if(qs.done>0&&!isCollapsed){const v=qVerdict(ri,qi);h+=renderBanter(v,`q-${ri}-${qi}-${v}`,{sm:true});}
   h+=`</div>`;
   return h;
 }

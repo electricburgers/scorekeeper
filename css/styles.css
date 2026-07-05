@@ -421,8 +421,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* CLICKABLE TEAM NAME (opens audit) */
 .ta-name-clickable{cursor:pointer}
 .ta-name-clickable:hover{color:var(--txt-cyan);text-decoration:underline}
-.ta-name-clickable::after{content:'\1F50D';font-size:.7em;opacity:0;margin-left:4px;transition:opacity .15s}
-.ta-name-clickable:hover::after{opacity:.7}
+/* \FE0F (VS16) forces full-color emoji presentation — without it some platforms fall
+   back to a plain monochrome glyph, which can end up low-contrast against a theme's
+   background instead of the intended colorful magnifying glass. */
+.ta-name-clickable::after{content:'\1F50D\FE0F';font-size:.8em;opacity:0;margin-left:4px;transition:opacity .15s}
+.ta-name-clickable:hover::after{opacity:1}
 
 /* MANUAL ENTRY for special wagers (stepper + type) */
 .stepper input.sw-input{width:2.8rem;height:1.9rem;text-align:center;background:var(--bg-card);border:none;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);border-radius:0;color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0;outline:none;box-shadow:none;-moz-appearance:textfield;appearance:textfield}
