@@ -27,9 +27,9 @@
   <div class="settings-panel" id="settingsPanel">
     <div class="settings-row"><span class="size-label">Theme</span><div class="settings-controls"><button class="settings-btn" id="themeToggle" onclick="toggleTheme()">🌑 Dark</button></div></div>
     <div class="settings-row"><span class="size-label">Size</span><div class="settings-controls"><button class="settings-btn" onclick="adjustFontSize(-1)">A−</button><button class="settings-btn" id="sizeResetBtn" onclick="adjustFontSize(0)">A</button><button class="settings-btn" onclick="adjustFontSize(1)">A+</button></div></div>
-    <div class="settings-row"><span class="size-label">Density</span><div class="settings-controls"><button class="settings-btn" id="densityToggle" onclick="toggleDensity()">Normal</button></div></div>
-    <div class="settings-row"><span class="size-label">Zebra</span><div class="settings-controls"><button class="settings-btn" id="stripeToggle" onclick="toggleStripe()">Subtle</button></div></div>
-    <div class="settings-row"><span class="size-label">Date</span><div class="settings-controls"><button class="settings-btn" id="dateFmtToggle" onclick="toggleDateFmt()">MM-DD-YYYY</button></div></div>
+    <div class="settings-row"><span class="size-label">Row Density</span><div class="settings-controls"><button class="settings-btn" id="densityToggle" onclick="toggleDensity()">Normal</button></div></div>
+    <div class="settings-row"><span class="size-label">Row Zebra Stripes</span><div class="settings-controls"><button class="settings-btn" id="stripeToggle" onclick="toggleStripe()">Subtle</button></div></div>
+    <div class="settings-row"><span class="size-label">Date Format</span><div class="settings-controls"><button class="settings-btn" id="dateFmtToggle" onclick="toggleDateFmt()">MM-DD-YYYY</button></div></div>
     <div class="settings-row"><span class="size-label">Point Adjustments</span><div class="settings-controls"><button class="settings-btn" id="adjToggle" onclick="toggleAdjSetting()" title="Show a manual ± point adjustment control on each team row">Hidden</button></div></div>
     <div class="settings-row"><span class="size-label">Sample Data</span><div class="settings-controls"><button class="settings-btn" onclick="loadSampleGame()" title="Load a real completed game so you can explore the app">🧪 Try Example</button></div></div>
     <div class="settings-row"><span class="size-label">Color Vision</span><div class="settings-controls">
@@ -45,6 +45,7 @@
       </div>
     </div></div>
     <span class="settings-meta"><span class="settings-version" id="versionLabel"></span><span class="settings-disclaimer">⚠️ Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></span>
+    <button class="settings-close-chevron" onclick="toggleSettings()" aria-label="Close settings" title="Close settings">▲</button>
   </div>
 </div>
 
