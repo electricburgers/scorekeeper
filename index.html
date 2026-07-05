@@ -30,7 +30,6 @@
     <div class="settings-row"><span class="size-label">Row Density</span><div class="settings-controls"><button class="settings-btn" id="densityToggle" onclick="toggleDensity()">Normal</button></div></div>
     <div class="settings-row"><span class="size-label">Row Zebra Stripes</span><div class="settings-controls"><button class="settings-btn" id="stripeToggle" onclick="toggleStripe()">Subtle</button></div></div>
     <div class="settings-row"><span class="size-label">Date Format</span><div class="settings-controls"><button class="settings-btn" id="dateFmtToggle" onclick="toggleDateFmt()">MM-DD-YYYY</button></div></div>
-    <div class="settings-row"><span class="size-label">Point Adjustments</span><div class="settings-controls"><button class="settings-btn" id="adjToggle" onclick="toggleAdjSetting()" title="Show a manual ± point adjustment control on each team row">Hidden</button></div></div>
     <div class="settings-row"><span class="size-label">Sample Data</span><div class="settings-controls"><button class="settings-btn" onclick="loadSampleGame()" title="Load a real completed game so you can explore the app">🧪 Try Example</button></div></div>
     <div class="settings-row"><span class="size-label">Color Vision</span><div class="settings-controls">
       <div class="cv-select" id="cbSelect">
@@ -44,6 +43,11 @@
         </ul>
       </div>
     </div></div>
+    <div class="settings-advanced-toggle-row"><button class="settings-advanced-toggle" id="advToggleBtn" onclick="toggleAdvancedSettings()" aria-expanded="false">Advanced Settings <span class="adv-chevron" aria-hidden="true">▾</span></button></div>
+    <div class="settings-advanced-group" id="advancedGroup">
+      <div class="settings-row"><span class="size-label">Point Adjustments</span><div class="settings-controls"><button class="settings-btn" id="adjToggle" onclick="toggleAdjSetting()" title="Show a manual ± point adjustment control on each team row">Hidden</button></div></div>
+      <div class="settings-row"><span class="size-label">Legacy Exports (CSV / XLSM)</span><div class="settings-controls"><button class="settings-btn" id="legacyExportToggle" onclick="toggleLegacyExports()" title="Show the CSV and XLSM buttons in Export &amp; Data">Hidden</button></div></div>
+    </div>
     <span class="settings-meta"><span class="settings-version" id="versionLabel"></span><span class="settings-disclaimer">⚠️ Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></span>
     <button class="settings-close-chevron" onclick="toggleSettings()" aria-label="Close settings" title="Close settings">▲</button>
   </div>

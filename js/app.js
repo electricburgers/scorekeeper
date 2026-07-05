@@ -21,7 +21,7 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const ROUND_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
-const APP_VERSION='v11.0'; // #Version Number — bump this manually when you release a new build
+const APP_VERSION='v12.0'; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON=`{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":20,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -140,8 +140,8 @@ let collapsedSpecialWagers=new Set();
 let questionSortOrder={};
 
 function loadPrefs(){
-  try{const r=TRStore.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;if(!p.dateFmt)p.dateFmt='mdy';if(p.cbMode==null)p.cbMode=p.colorblind?1:0;if(!p.craftDrawSeconds)p.craftDrawSeconds=6;if(p.showAdjustments==null)p.showAdjustments=false;return p;}}catch(e){}
-  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0,dateFmt:'mdy',cbMode:0,craftDrawSeconds:6,showAdjustments:false};
+  try{const r=TRStore.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;if(!p.dateFmt)p.dateFmt='mdy';if(p.cbMode==null)p.cbMode=p.colorblind?1:0;if(!p.craftDrawSeconds)p.craftDrawSeconds=6;if(p.showAdjustments==null)p.showAdjustments=false;if(p.advancedOpen==null)p.advancedOpen=false;if(p.showLegacyExports==null)p.showLegacyExports=false;return p;}}catch(e){}
+  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0,dateFmt:'mdy',cbMode:0,craftDrawSeconds:6,showAdjustments:false,advancedOpen:false,showLegacyExports:false};
 }
 function savePrefs(p){TRStore.setItem(PREFS_KEY,JSON.stringify(p));}
 function applyPrefs(){
@@ -166,11 +166,16 @@ function applyPrefs(){
   const slt=document.getElementById('stripeToggle');if(slt)slt.textContent=STRIPE_LABELS[sl]||'Subtle';
   const dft=document.getElementById('dateFmtToggle');if(dft)dft.textContent=(p.dateFmt==='dmon')?'DD-Mon-YYYY':'MM-DD-YYYY';
   const adt=document.getElementById('adjToggle');if(adt){adt.classList.toggle('active',!!p.showAdjustments);adt.textContent=p.showAdjustments?'Shown':'Hidden';}
+  const advBtn=document.getElementById('advToggleBtn'),advGroup=document.getElementById('advancedGroup');
+  if(advBtn&&advGroup){advBtn.classList.toggle('open',!!p.advancedOpen);advBtn.setAttribute('aria-expanded',String(!!p.advancedOpen));advGroup.classList.toggle('open',!!p.advancedOpen);}
+  const legToggle=document.getElementById('legacyExportToggle');if(legToggle){legToggle.classList.toggle('active',!!p.showLegacyExports);legToggle.textContent=p.showLegacyExports?'Shown':'Hidden';}
   const vl=document.getElementById('versionLabel');if(vl)vl.textContent='Scorekeeper '+APP_VERSION;
 }
 function setTheme(t){if(!['hc-dark','hc-light'].includes(t))t='hc-dark';const p=loadPrefs();p.theme=t;savePrefs(p);applyPrefs();}
 function toggleTheme(){const p=loadPrefs();setTheme(p.theme==='hc-dark'?'hc-light':'hc-dark');}
 function toggleAdjSetting(){const p=loadPrefs();p.showAdjustments=!p.showAdjustments;savePrefs(p);applyPrefs();renderLeft();}
+function toggleAdvancedSettings(){const p=loadPrefs();p.advancedOpen=!p.advancedOpen;savePrefs(p);applyPrefs();}
+function toggleLegacyExports(){const p=loadPrefs();p.showLegacyExports=!p.showLegacyExports;savePrefs(p);applyPrefs();renderLeft();}
 function setCbMode(v){const p=loadPrefs();p.cbMode=parseInt(v,10)||0;savePrefs(p);applyPrefs();}
 
 function closeCvMenu(){
@@ -220,6 +225,7 @@ function freshTeam(n){return{name:n||'',scoreGuess:'',bonusItem:false,njcb:false
 let gameState=freshState(),scoreSortMode='entry',randomOrder=null;
 let standingsSortMode={halftime:'entry',final:'entry'};
 let standingsRandomOrder={halftime:null,final:null};
+let collapsedStandings=new Set();
 let collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);
 let adjOpenTeams=new Set(),lastAction=null;
 // Track which (ri,qi) combos we've already toasted for Beer Round
@@ -235,7 +241,7 @@ function clearSaved(){TRStore.removeItem(STORAGE_KEY);}
 (function(){const s=loadSaved();if(s){document.getElementById('resumeText').textContent='\u26A0\uFE0F Saved session from '+(s.meta?.date?fmtDateDisplay(s.meta.date):'?')+' at '+(s.meta?.location||'(no location)')+'. Resume or start fresh?';document.getElementById('resumeBanner').classList.add('show');}else{gameState=freshState();renderAll();}})();
 
 function resumeSession(){const s=loadSaved();if(s)gameState=migrateState(s);document.getElementById('resumeBanner').classList.remove('show');renderAll();}
-function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;standingsSortMode={halftime:'entry',final:'entry'};standingsRandomOrder={halftime:null,final:null};collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();collapsedBonusQuestions=new Set();collapsedSpecialWagers=new Set();questionSortOrder={};beerRoundToasted=new Set();adjOpenTeams=new Set();clearCraftDrawTimers();stopAllDrumAudio();craftDrawState=null;document.getElementById('resumeBanner').classList.remove('show');renderAll();}
+function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry';randomOrder=null;standingsSortMode={halftime:'entry',final:'entry'};standingsRandomOrder={halftime:null,final:null};collapsedStandings=new Set();collapsedSections=new Set(['sec-r1','sec-r2','sec-r3','sec-r4','sec-export']);collapsedQuestions=new Set();collapsedBonusQuestions=new Set();collapsedSpecialWagers=new Set();questionSortOrder={};beerRoundToasted=new Set();adjOpenTeams=new Set();clearCraftDrawTimers();stopAllDrumAudio();craftDrawState=null;document.getElementById('resumeBanner').classList.remove('show');renderAll();}
 
 function migrateState(s){
   if(!s.meta)s.meta={date:'',location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:'',staffNames:''};
@@ -299,15 +305,15 @@ function finalResultsRows(){
 function renderFinalResults(){
   if(!gameState.teams.length)return'<p class="fr-note">Add teams and score the game to see final results.</p>';
   const rows=finalResultsRows();
-  let h='<table class="final-table"><thead><tr><th>Place</th><th>Team</th><th>Score</th><th>Guess / Diff*</th></tr></thead><tbody>';
+  let h='<table class="final-table"><thead><tr><th>Place</th><th>Team</th><th>Score</th><th>| DIFF |* / GUESS</th></tr></thead><tbody>';
   rows.forEach(r=>{
     const medal=r.place===1?' fr-gold':r.place===2?' fr-silver':r.place===3?' fr-bronze':'';
-    const guessDiff=r.guess==null?'\u2014':`Diff ${r.diff}, Guess ${r.guess}`;
+    const guessDiff=r.guess==null?'\u2014':`| ${r.diff} | / ${r.guess}`;
     h+=`<tr class="${r.tie?'fr-tie':''}${medal}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to audit score" onclick="openAudit(${r.index})">`+
        `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>`+
        `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie?` <span class="fr-tiebadge${r.tieWinner?' fr-win':''}">${r.tieWinner?'\u2713 closer':'tie'}</span>`:''}</td>`+
        `<td class="fr-score" data-label="Score">${r.score}</td>`+
-       `<td class="fr-guessdiff${r.tieWinner?' fr-diff-win':''}" data-label="Guess / Diff">${guessDiff}</td>`+
+       `<td class="fr-guessdiff${r.tieWinner?' fr-diff-win':''}" data-label="| DIFF |* / GUESS">${guessDiff}</td>`+
        `</tr>`;
   });
   h+='</tbody></table>';
@@ -330,10 +336,16 @@ function renderStandings(type){
   else list=base.slice().sort((a,b)=>b.pts-a.pts);
   const btns=[['entry','Entry'],['random','🎲 Random'],[`asc`,'\u2191 Asc'],['desc','\u2193 Desc']].map(([m,lbl])=>
     `<button class="standings-sort-btn${mode===m?' active':''}" onclick="setStandingsSort('${type}','${m}')">${lbl}</button>`).join('');
-  let h=`<div class="standings-block">`+renderBanter('scores','sc-'+type,{sm:true})+
-    `<div class="standings-title-row"><span class="standings-title">${label}</span><div class="standings-sort-btns">${btns}</div></div>`;
+  const isCollapsed=collapsedStandings.has(type);
+  let h=`<div class="standings-block${isCollapsed?' collapsed':''}">`+renderBanter('scores','sc-'+type,{sm:true})+
+    `<div class="standings-title-row"><button class="standings-collapse-btn" onclick="toggleStandingsCollapse('${type}')" title="${isCollapsed?'Expand':'Collapse'}" aria-label="${isCollapsed?'Expand':'Collapse'} ${esc(label)}"><span class="chevron">\u25BC</span></button><span class="standings-title">${label}</span><div class="standings-sort-btns">${btns}</div></div><div class="standings-rows">`;
   list.forEach(t=>{h+=`<div class="standings-row" role="button" tabindex="0" title="${esc(t.name)} — tap to audit score" onclick="openAudit(${t.ti})"><span class="standings-name ta-name-clickable">${esc(t.name)}</span><span class="standings-pts">${t.pts}</span></div>`;});
-  return h+'</div>';
+  return h+'</div></div>';
+}
+function toggleStandingsCollapse(type){
+  if(collapsedStandings.has(type))collapsedStandings.delete(type);
+  else collapsedStandings.add(type);
+  renderLeft();
 }
 
 function setSortMode(mode){
@@ -378,10 +390,12 @@ function renderLeft(){
   const wy=window.scrollY||document.documentElement.scrollTop||0;
   const gs=checkGameStarted();let h='';
 
+  const quizIdInvalid=!gs&&!isQuizIdValid(gameState.meta.quizId);
+  const locInvalid=!gs&&!isLocationValid(gameState.meta.location);
   h+=`<div class="section ${collapsedSections.has('sec-meta')?'collapsed':''}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
     <div class="field"><label>Date</label><input type="date" class="date-native" value="${esc(gameState.meta.date||'')}" ${gs?'disabled':''} onchange="setGameDateISO(this.value)"></div>
-    <div class="field"><label>Quiz ID</label><input type="text" value="${esc(gameState.meta.quizId)}" placeholder="e.g. ABC-1234" ${gs?'disabled':''} onchange="gameState.meta.quizId=this.value;autosave();"></div>
-    <div class="field full"><label>Location</label><input type="text" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${gs?'disabled':''} onchange="gameState.meta.location=this.value;autosave();"></div>
+    <div class="field${quizIdInvalid?' field-invalid':''}"><label>Quiz ID</label><input type="text" value="${esc(gameState.meta.quizId)}" placeholder="e.g. ABC-123 or ABC123" ${gs?'disabled':''} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid?'<span class="guess-warn">&#9888; format: ABC-123 or ABC123</span>':''}</div>
+    <div class="field full${locInvalid?' field-invalid':''}"><label>Location</label><input type="text" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${gs?'disabled':''} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid?'<span class="guess-warn">&#9888; required</span>':''}</div>
     <div class="field"><label>Craft Partner</label><input type="text" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery" ${gs?'disabled':''} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
     <div class="field"><label>Partner Town</label><input type="text" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town" ${gs?'disabled':''} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
     <div class="field full"><label>Bonus Item (+5)</label><input type="text" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
@@ -435,7 +449,7 @@ function renderLeft(){
   h+=`<div class="section ${collapsedSections.has('sec-craftprize')?'collapsed':''}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><h2>\uD83C\uDF7A Craft Prize Drawing</h2><span class="chevron">\u25BC</span></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
 
   h+=`<div class="section ${collapsedSections.has('sec-export')?'collapsed':''}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><h2>Export &amp; Data</h2><span class="chevron">▼</span></div><div class="section-body">
-    <div class="export-bar"><button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 XLSM</button><button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button><a class="btn" href="https://form.jotform.com/261746701455055" target="_blank" rel="noopener noreferrer">\uD83D\uDD17 JD Upload Form</a></div>
+    <div class="export-bar">${loadPrefs().showLegacyExports?'<button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 XLSM</button>':''}<button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button><a class="btn" href="https://form.jotform.com/261746701455055" target="_blank" rel="noopener noreferrer">\uD83D\uDD17 JD Upload Form</a></div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="startNewGame();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?'))startNewGame();">\uD83D\uDDD1 Clear Session</button></div>
   </div></div>`;
@@ -483,7 +497,7 @@ function renderWQ(ri,qi){
   else if(qs.done>0)blockCls+=' q-active';
   if(isCollapsed)blockCls+=' q-collapsed';
 
-  const badgeCls=qs.done===qs.total?'q-badge q-complete':'q-badge q-remaining';
+  const badgeCls=beer?'q-badge q-beer':(qs.done===qs.total?'q-badge q-complete':'q-badge q-remaining');
   const badgeText=qs.total===0?'':beer?'🍺 Beer Round!':qs.done===qs.total?'\u2713 Done':(qs.total-qs.done)+' left';
 
   let h=`<div class="${blockCls}" id="qblock-${ri}-${qi}">`;
@@ -499,7 +513,7 @@ function renderWQ(ri,qi){
     </div>
     <div class="q-header-right">
       <button class="mark-all-btn${questionSortOrder[qKey]?' active':''}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button>
-      <button class="mark-all-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order">\u21ba Reset</button>
+      <button class="mark-all-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order">\u21ba Reset<br>Sort</button>
     </div>
   </div>`;
 
@@ -565,6 +579,16 @@ function resetQuestionSort(ri,qi){
   delete questionSortOrder[ri+'-'+qi];
   renderAll();
 }
+function sortBonusQuestion(ri){
+  const key='b'+ri;
+  const answered=(ti)=>gameState.rounds[ri].bonus[ti]!=null;
+  questionSortOrder[key]=gameState.teams.map((_,ti)=>ti).sort((a,b)=>{const aa=answered(a)?1:0,bb=answered(b)?1:0;return aa-bb||a-b;});
+  renderAll();
+}
+function resetBonusQuestionSort(ri){
+  delete questionSortOrder['b'+ri];
+  renderAll();
+}
 function toggleBonusQ(ri){
   const key='b'+ri;
   if(collapsedBonusQuestions.has(key))collapsedBonusQuestions.delete(key);
@@ -584,15 +608,22 @@ function renderBQ(ri){
   const beer=isBonusBeerRound(ri);
   let badge='';
   if(n){
-    if(beer)badge='<span class="q-badge q-badge-lg q-complete">\uD83C\uDF7A Beer Round!</span>';
+    if(beer)badge='<span class="q-badge q-badge-lg q-beer">\uD83C\uDF7A Beer Round!</span>';
     else if(subDone===n)badge='<span class="q-badge q-badge-lg q-complete">\u2713 Done</span>';
     else badge=`<span class="q-badge q-badge-lg q-remaining">${n-subDone} left</span>`;
   }
   const isCollapsedBQ=collapsedBonusQuestions.has('b'+ri);
   const blockCls='question-block'+(beer?' beer-round':'')+(isCollapsedBQ?' bq-collapsed':'');
   const bqStyle=BONUS_Q_STYLE[ri]||{emoji:'',cls:''};
-  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5 \u2014 Bonus</span>${badge}</div><span class="bonus-subtitle">0\u20134 CORRECT \u00D7 5 PTS</span></div></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
-  gameState.teams.forEach((t,ti)=>{
+  const bqKey='b'+ri;
+  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5 \u2014 Bonus</span>${badge}</div><span class="bonus-subtitle">0\u20134 CORRECT \u00D7 5 PTS</span></div></div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[bqKey]?' active':''}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order">\u21ba Reset<br>Sort</button></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
+  const bqEntryOrder=gameState.teams.map((_,i)=>i);
+  let bqTeamOrder=questionSortOrder[bqKey]?questionSortOrder[bqKey].filter(ti=>ti<gameState.teams.length):bqEntryOrder;
+  if(questionSortOrder[bqKey]){
+    bqEntryOrder.forEach(ti=>{if(!bqTeamOrder.includes(ti))bqTeamOrder.push(ti);});
+  }
+  bqTeamOrder.forEach(ti=>{
+    const t=gameState.teams[ti];
     const v=gameState.rounds[ri].bonus[ti];
     const submitted=v!=null;
     const c=submitted?v:0;
@@ -625,7 +656,7 @@ function renderSpecialWager(type){
   const wSet=isFinal?'setFW':'setHW', cSet=isFinal?'setFC':'setHC', iSet=isFinal?'setFWInput':'setHWInput';
   const beer=isSpecialBeerRound(type);
   const swN=gameState.teams.length;let swDone=0;for(let ti=0;ti<swN;ti++){const d=data[ti];if(d&&d.wager!=null&&d.wager!==''&&d.correct!=null)swDone++;}
-  let swBadge='';if(swN){if(beer)swBadge='<span class="q-badge q-complete">\uD83C\uDF7A Beer Round!</span>';else if(swDone===swN)swBadge='<span class="q-badge q-complete">\u2713 Done</span>';else swBadge=`<span class="q-badge q-remaining">${swN-swDone} left</span>`;}
+  let swBadge='';if(swN){if(beer)swBadge='<span class="q-badge q-beer">\uD83C\uDF7A Beer Round!</span>';else if(swDone===swN)swBadge='<span class="q-badge q-complete">\u2713 Done</span>';else swBadge=`<span class="q-badge q-remaining">${swN-swDone} left</span>`;}
   const swCollapsed=collapsedSpecialWagers.has(type);
   let h=`<div class="${sectionCls}${beer?' beer-round':''}${swCollapsed?' sw-collapsed':''}" id="swblock-${type}"><div class="sw-header" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3>${titleMain}<span class="sw-range">${titleSub}</span></h3>${swBadge}</div>`;
   if(beer)h+=`<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
@@ -672,7 +703,7 @@ function renderSB(){
   const sy=body.scrollTop;
   body.innerHTML=`<div class="sort-controls">
     <button class="sort-btn ${scoreSortMode==='entry'?'active':''}" onclick="setSortMode('entry')">Entry</button>
-    <button class="sort-btn ${scoreSortMode==='random'?'active':''}" onclick="setSortMode('random')">\uD83C\uDFB2 Random</button>
+    <button class="sort-btn ${scoreSortMode==='random'?'active':''}" onclick="setSortMode('random')">\uD83C\uDFB2 RAND</button>
     <button class="sort-btn ${scoreSortMode==='asc'?'active':''}" onclick="setSortMode('asc')">\u2191 Asc</button>
     <button class="sort-btn ${scoreSortMode==='desc'?'active':''}" onclick="setSortMode('desc')">\u2193 Desc</button>
   </div><div class="sort-mode-label">${sortModeLabel()}</div>${buildScores()}`;
@@ -919,10 +950,21 @@ function markAll(ri,qi,correct){
   lastAction=null;gameState.gameStarted=true;autosave();renderAll();
   if(correct&&!wasBeer)checkBeerRound(ri,qi);
 }
-// Guard: before the very first scoring action, every team must have a guess entered.
-// After the game has started once, this check is bypassed.
+// Accepts "ABC-123" or "ABC123": 3 letters, optional dash, 3 digits.
+function isQuizIdValid(v){return /^[A-Za-z]{3}-?\d{3}$/.test((v||'').trim());}
+function isLocationValid(v){return !!(v||'').trim();}
+
+// Guard: before the very first scoring action, a valid Quiz ID + Location must be set and
+// every team must have a guess entered. After the game has started once, this check is bypassed.
 function canScore(){
   if(gameState.gameStarted)return true;
+  if(!isQuizIdValid(gameState.meta.quizId)||!isLocationValid(gameState.meta.location)){
+    alert('Please enter a valid Quiz ID (format ABC-123 or ABC123) and a Location in Event Details before scoring begins.');
+    const sec=document.getElementById('sec-meta');
+    if(sec){if(sec.classList.contains('collapsed'))sec.classList.remove('collapsed');sec.scrollIntoView({behavior:'smooth',block:'start'});}
+    renderLeft();
+    return false;
+  }
   const missing=gameState.teams.reduce((acc,t,i)=>{
     if(t.scoreGuess===''||t.scoreGuess==null)acc.push(t.name||('Team '+(i+1)));
     return acc;

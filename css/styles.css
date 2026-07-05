@@ -82,11 +82,18 @@
 [data-theme="hc-light"][data-stripe="2"]{--row-stripe:rgba(0,0,0,.16)}
 
 html{font-size:16px;overflow-x:hidden;max-width:100%}
-body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;max-width:100%;overflow-anchor:none}
+/* touch-action:manipulation app-wide: without it, two rapid taps on rapidly re-rendered
+   controls (e.g. the standings Random button, which replaces its own DOM node on every tap)
+   can be read by mobile browsers as a double-tap-to-zoom gesture instead of two clicks. */
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;max-width:100%;overflow-anchor:none;touch-action:manipulation}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg-primary)}::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:3px}
 
 /* HEADER */
-.header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,var(--bg-primary) 60%,transparent);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
+/* z-index kept above .drag-handle (101) and every other app-layout child: .header creates its
+   own stacking context, so a lower value here would let the resize handle's higher z-index win
+   and paint over the settings overlay (which lives inside .header) wherever their boxes overlap
+   on screen — that's the "drag handle pokes through the settings panel" bug. */
+.header{position:sticky;top:0;z-index:200;background:linear-gradient(180deg,var(--bg-primary) 60%,transparent);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
 /* flex-wrap here (not on .toolbar) means Save/Load/Gear wrap onto a new line as one group
    under the logo when they don't fit — .toolbar itself no longer wraps its own buttons
    individually, so it's all-or-nothing instead of one icon peeling off at a time. */
@@ -119,6 +126,16 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    in the app, so contrast is already covered by the existing design system. */
 .settings-close-chevron{grid-column:1/-1;justify-self:center;width:100%;max-width:240px;margin-top:6px;padding:12px 10px;font-size:1.3rem;line-height:1;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-primary);cursor:pointer;transition:var(--transition);touch-action:manipulation}
 .settings-close-chevron:hover{background:var(--bg-hover)}
+
+/* ADVANCED SETTINGS — collapsible group holding the rarer controls (point adjustments,
+   legacy CSV/XLSM export) so the default settings list stays short. */
+.settings-advanced-toggle-row{grid-column:1/-1;margin-top:2px}
+.settings-advanced-toggle{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-body);font-size:.78rem;font-weight:700;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px}
+.settings-advanced-toggle:hover{background:var(--bg-hover);color:var(--text-primary)}
+.settings-advanced-toggle .adv-chevron{transition:transform .25s;display:inline-block}
+.settings-advanced-toggle.open .adv-chevron{transform:rotate(180deg)}
+.settings-advanced-group{grid-column:1/-1;display:none;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
+.settings-advanced-group.open{display:grid}
 
 .settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
@@ -182,7 +199,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 }
 
 /* SIDEBAR */
-.sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);flex-shrink:0}
+.sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-card-alt)}
+.sidebar-header:hover{background:var(--bg-hover)}
 .sidebar-header h3{font-family:var(--font-display);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--txt-cyan)}
 .sidebar-toggle{font-size:1rem;color:var(--text-muted);transition:transform .3s}
 .col-right.minimized .sidebar-toggle{transform:rotate(180deg)}
@@ -211,7 +229,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 
 /* SECTIONS */
 .section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden}
-.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;transition:var(--transition);border-left:3px solid transparent}
+/* Subtle default background (distinct from .section-body's bg-card) so a clickable header
+   reads as its own control at a glance, not just on hover. --bg-card-alt vs --text-primary is
+   >=18:1 in both themes, so this never threatens the header text's own AA contrast. */
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;transition:var(--transition);border-left:3px solid transparent;background:var(--bg-card-alt)}
 .section-header:hover{background:var(--bg-hover)}
 .section-header h2{font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 .section-header .chevron{transition:transform .3s;color:var(--text-muted);font-size:1.1rem;flex-shrink:0}
@@ -236,6 +257,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 [role="button"]{outline:none}
 .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .meta-grid .full{grid-column:1/-1}
+/* Required-before-scoring fields (Quiz ID, Location) — same visual language as the
+   team guess-missing state so both validation cues read consistently. */
+.field.field-invalid>label{color:var(--txt-orange)}
+.field.field-invalid input{border-color:var(--accent-orange);box-shadow:0 0 0 2px rgba(255,170,0,.18)}
 
 /* TEAM ENTRY */
 .team-entry{display:grid;grid-template-columns:1fr 4.5rem auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
@@ -295,7 +320,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .rl-2{background:rgba(255,68,170,.13);color:var(--txt-magenta)}
 .rl-3{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .rl-4{background:rgba(255,170,0,.13);color:var(--txt-orange)}
-.round-badge{font-family:var(--font-body);font-size:.8rem;font-weight:700;padding:3px 9px;border-radius:4px}
+.round-badge{font-family:var(--font-body);font-size:1rem;font-weight:700;padding:2px 8px;border-radius:4px;border:1px solid currentColor}
 .round-badge.rb-partial{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .round-badge.rb-done{background:rgba(68,255,68,.1);color:var(--badge-green-fg)}
 
@@ -303,10 +328,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .question-block{background:var(--bg-card-alt);border:1px solid var(--border);border-left:3px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
 .question-block.q-active{border-left-color:var(--accent-cyan)}
 .question-block.q-done{border-left-color:var(--accent-green);opacity:.82}
-/* Beer Round wins over q-done green */
-.question-block.beer-round{border-left-color:var(--accent-gold)!important;opacity:1!important}
+/* Beer Round wins over q-done green. Uses --badge-gold-fg, not --accent-gold: the raw accent
+   fails the 3:1 non-text contrast requirement against --bg-card-alt in the light theme
+   (~1.8:1) — badge-gold-fg is the same gold family already tuned per-theme for AA-safe use
+   on this surface. */
+.question-block.beer-round{border-left-color:var(--badge-gold-fg)!important;opacity:1!important}
 
-.q-header{display:flex;align-items:center;gap:6px;padding:8px 10px;user-select:none;transition:var(--transition)}
+/* Differentiate the Q1/Q2/Q5-Bonus header from the team-answer rows in the body below, which
+   otherwise share the question-block's own --bg-card-alt and blend together. */
+.q-header{display:flex;align-items:center;gap:6px;padding:8px 10px;user-select:none;transition:var(--transition);background:var(--bg-input)}
 .q-header-left{display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;min-width:0}
 .q-header-left:hover{opacity:.8}
 .question-title{font-family:var(--font-display);font-size:.82rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
@@ -320,9 +350,12 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .mark-all-btn{font-family:var(--font-body);font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--border-light);background:var(--bg-input);color:var(--text-primary);transition:var(--transition);text-transform:none;letter-spacing:0;text-align:center;line-height:1.3}
 .mark-all-btn:hover{background:var(--bg-hover);border-color:var(--accent-cyan);color:var(--text-primary)}
 .mark-all-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
-.q-badge{font-family:var(--font-body);font-size:.82rem;font-weight:700;padding:3px 10px;border-radius:4px}
+.q-badge{font-family:var(--font-body);font-size:1rem;font-weight:700;padding:2px 9px;border-radius:4px;border:1px solid currentColor}
 .q-badge.q-remaining{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .q-badge.q-complete{background:rgba(68,255,68,.1);color:var(--badge-green-fg)}
+/* Beer Round badge is always golden yellow — it previously reused .q-complete's green,
+   which read as a pass/fail color rather than the "everyone nailed it" celebration it is. */
+.q-badge.q-beer{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 
 /* BEER ROUND banner */
 .beer-banner{display:flex;align-items:center;gap:8px;padding:6px 10px 8px;background:rgba(255,238,0,.07);border-bottom:1px solid rgba(255,238,0,.2);animation:beerPop .5s ease-out}
@@ -381,23 +414,37 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* STANDINGS */
 .standings-block{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:8px}
 @media(min-width:901px){.standings-block{max-width:420px}}
-.standings-title-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px}
-.standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:.5px}
-.standings-sort-btns{display:flex;gap:4px}
+/* Chevron first (left, matching the Q1/Q2 question-header pattern), title takes remaining
+   space, sort buttons hug the right edge. */
+.standings-title-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:.5px;flex:1 1 auto;min-width:0}
+.standings-sort-btns{display:flex;gap:4px;align-items:center;flex-shrink:0}
 .standings-sort-btn{font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .standings-sort-btn.active{background:var(--badge-gold-fg);color:var(--on-badge);border-color:var(--badge-gold-fg)}
-.standings-row{display:flex;align-items:center;gap:10px;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);margin-left:-10px;margin-right:-10px}
-.standings-row:last-child{border-bottom:none}
+/* Collapse chevron for "Scores — Before Halftime/Final Wager" */
+.standings-collapse-btn{background:none;border:1px solid var(--border);border-radius:var(--radius);color:var(--text-muted);cursor:pointer;font-size:.85rem;line-height:1;padding:5px 7px;transition:var(--transition);flex-shrink:0;display:flex;align-items:center}
+.standings-collapse-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+.standings-collapse-btn .chevron{display:inline-block;transition:transform .25s}
+.standings-block.collapsed .standings-rows{display:none}
+.standings-block.collapsed .standings-collapse-btn .chevron{transform:rotate(-90deg)}
+/* Table layout (not flex): every row's name column and score column share the SAME computed
+   width across the whole block, so names right-align to one shared edge and scores left-align
+   to another — real vertical column alignment, not just each row centered independently. The
+   table itself shrink-wraps to its content and centers via margin:auto, giving the "narrower,
+   centered container" look instead of a full-bleed block. */
+.standings-rows{display:table;margin:0 auto;max-width:100%}
+.standings-row{display:table-row;cursor:pointer;transition:var(--transition)}
 .standings-row:nth-child(even){background:var(--row-stripe)}
-.standings-name{font-weight:600;font-size:.82rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.standings-pts{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);margin-left:auto;min-width:2.5rem;text-align:right;flex-shrink:0}
+.standings-name{display:table-cell;font-weight:600;font-size:.82rem;text-align:right;vertical-align:middle;max-width:12rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:var(--row-pad) 10px var(--row-pad) 4px;border-bottom:1px solid var(--border)}
+.standings-pts{display:table-cell;font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);text-align:left;vertical-align:middle;padding:var(--row-pad) 4px var(--row-pad) 10px;border-bottom:1px solid var(--border)}
+.standings-row:last-child .standings-name,.standings-row:last-child .standings-pts{border-bottom:none}
 
 /* BEER STRIPE — for Q5 bonus and special wager beer rounds */
 .beer-stripe{display:flex;align-items:center;gap:6px;padding:5px 12px 6px;background:rgba(255,238,0,.07);border-bottom:1px solid rgba(255,238,0,.18)}
 .beer-stripe-icon{font-size:1.05rem}
 .beer-stripe-text{font-family:var(--font-display);font-size:.75rem;font-weight:700;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:1.2px}
-.special-section.beer-round{border-color:var(--accent-gold)!important}
+.special-section.beer-round{border-color:var(--badge-gold-fg)!important}
 .special-section.beer-round h3{color:var(--badge-gold-fg)!important}
 
 /* SPECIAL WAGER SECTIONS */
@@ -449,7 +496,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    just the name text, so the hover cue (border highlight + background tint) and the
    magnifying glass both need to react to hovering anywhere in the row, not only the name. */
 .standings-row,.final-table tbody tr{cursor:pointer;transition:var(--transition)}
-.standings-row:hover,.final-table tbody tr:hover{background:var(--bg-hover);box-shadow:inset 0 0 0 1px var(--border-light)}
+/* Outline instead of a background swap: the row's fill stays put on hover, and the outline
+   color (--accent-cyan-solid) is >=4.3:1 against every theme/color-vision surface it sits on
+   here, unlike the old inset box-shadow (--border-light was only ~1.8–2.7:1). */
+.standings-row:hover,.final-table tbody tr:hover{outline:2px solid var(--accent-cyan-solid);outline-offset:-2px}
 .standings-row:hover .ta-name-clickable,.final-table tbody tr:hover .ta-name-clickable{color:var(--txt-cyan);text-decoration:underline}
 .standings-row:hover .ta-name-clickable::after,.final-table tbody tr:hover .ta-name-clickable::after{opacity:1}
 
@@ -484,9 +534,9 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .bq-r1{color:var(--txt-cyan)}
 .bq-r3{color:var(--badge-gold-fg)}
 /* q-badge-lg used to bump the bonus-question badge above the base .q-badge size; now that
-   every "Done"/status badge shares the same larger size, it's a no-op kept only so existing
-   markup referencing the class still resolves to something. */
-.q-badge.q-badge-lg{font-size:.82rem;padding:3px 10px}
+   every "Done"/status badge already uses the larger 1rem base size, only the padding bump
+   is still meaningful — kept so existing markup referencing the class still resolves. */
+.q-badge.q-badge-lg{padding:3px 10px}
 
 /* SPECIAL WAGER collapse (R2 Bonus Wager / R4 Final Wager) */
 .sw-header{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
@@ -498,7 +548,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .special-section .sw-body{margin-top:8px}
 
 /* Beer round — full gold border so it reads at a glance (no size change) */
-.question-block.beer-round{border-color:var(--accent-gold)!important}
+.question-block.beer-round{border-color:var(--badge-gold-fg)!important}
 
 /* CRAFT BEER PRIZE winner — tap a name in the scoreboard to toggle */
 .sr-name-clickable{cursor:pointer}
@@ -618,7 +668,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .final-table thead th{color:var(--text-muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em}
 .final-table td.fr-name{text-align:left;color:var(--text-primary)}
 .final-table td.fr-place{color:var(--text-secondary);font-weight:700;white-space:nowrap}
-.final-table td.fr-score{font-weight:800;color:var(--text-primary)}
+.final-table td.fr-score{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan)}
 .final-table td.fr-guessdiff{color:var(--text-secondary);font-weight:600}
 .final-table tbody tr:last-child td{border-bottom:none}
 .final-table tbody tr:nth-child(even):not(.fr-tie):not(.fr-gold):not(.fr-silver):not(.fr-bronze){background:var(--row-stripe)}
