@@ -87,10 +87,13 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 
 /* HEADER */
 .header{position:sticky;top:0;z-index:100;background:linear-gradient(180deg,var(--bg-primary) 60%,transparent);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
-.header-top{display:flex;align-items:center;justify-content:space-between}
+/* flex-wrap here (not on .toolbar) means Save/Load/Gear wrap onto a new line as one group
+   under the logo when they don't fit — .toolbar itself no longer wraps its own buttons
+   individually, so it's all-or-nothing instead of one icon peeling off at a time. */
+.header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:8px}
 .logo{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--accent-cyan);text-transform:uppercase;letter-spacing:2px}
 .logo span{color:var(--accent-magenta)}
-.toolbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.toolbar{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
 .toolbar>button,.btn{font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .toolbar>button:hover,.btn:hover{background:var(--bg-hover);border-color:var(--border-light)}
 .btn-accent{background:var(--accent-cyan-solid)!important;color:var(--on-accent-cyan)!important;border-color:var(--accent-cyan-solid)!important;font-weight:700!important}
@@ -98,15 +101,24 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .btn-danger{border-color:var(--accent-red)!important;color:var(--txt-red)!important}
 .btn-danger:hover{background:rgba(255,68,68,.13)!important}
 
-.settings-toggle-btn{font-size:1rem;padding:5px 8px;line-height:1;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
+.settings-toggle-btn{font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
 .settings-toggle-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .settings-toggle-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 
-.settings-panel{display:none;padding:6px 0 4px;border-top:1px solid var(--border);margin-top:8px;animation:slideDown .18s ease}
+/* Overlay, not in-flow: .header is position:sticky (a valid containing block for an
+   absolutely-positioned child), so this floats above the app instead of pushing the
+   scoreboard down every time it opens. */
+.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow);z-index:150;max-height:calc(100vh - 80px);overflow-y:auto;animation:slideDown .18s ease}
 .settings-panel.settings-visible{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border)}
 .settings-controls{display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
 @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+/* Closing affordance at the bottom of the overlay, in addition to re-tapping the gear icon.
+   Padding + line-height keep the tappable area comfortably above the ~44px touch-target
+   guideline; color/background reuse the same input/button token pair used everywhere else
+   in the app, so contrast is already covered by the existing design system. */
+.settings-close-chevron{grid-column:1/-1;justify-self:center;width:100%;max-width:240px;margin-top:6px;padding:12px 10px;font-size:1.3rem;line-height:1;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-primary);cursor:pointer;transition:var(--transition);touch-action:manipulation}
+.settings-close-chevron:hover{background:var(--bg-hover)}
 
 .settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
@@ -177,7 +189,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sidebar-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;overflow-anchor:none}
 
 .sort-controls{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
-.sort-btn{flex:1;min-width:0;font-family:var(--font-display);font-size:.7rem;font-weight:700;padding:6px 4px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+.sort-btn{flex:1;min-width:0;font-family:var(--font-display);font-size:.86rem;font-weight:700;padding:8px 4px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;touch-action:manipulation}
 .sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .sort-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid);box-shadow:0 0 6px rgba(0,255,255,.3)}
 .sort-mode-label{padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -211,6 +223,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 label{display:block;font-size:.72rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
 input[type="text"],input[type="number"],input[type="date"]{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;outline:none;transition:var(--transition)}
 input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,.13)}
+/* color-scheme tells the browser which native-control palette to use for the date input's
+   own calendar-picker icon and popup (so the icon isn't a near-invisible dark glyph on our
+   dark theme's input background) — this is the standards-based fix, not a filter/invert hack. */
+[data-theme="hc-dark"] input[type="date"]{color-scheme:dark}
+[data-theme="hc-light"] input[type="date"]{color-scheme:light}
+.date-native{cursor:pointer}
 input:disabled{opacity:.5;cursor:not-allowed}
 input[list]{padding-right:26px;background-image:linear-gradient(45deg,transparent 50%,var(--text-muted) 50%),linear-gradient(135deg,var(--text-muted) 50%,transparent 50%);background-position:calc(100% - 16px) 55%,calc(100% - 11px) 55%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
 input[list]::-webkit-calendar-picker-indicator{opacity:0}
@@ -277,7 +295,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .rl-2{background:rgba(255,68,170,.13);color:var(--txt-magenta)}
 .rl-3{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .rl-4{background:rgba(255,170,0,.13);color:var(--txt-orange)}
-.round-badge{font-family:var(--font-body);font-size:.66rem;font-weight:600;padding:2px 7px;border-radius:4px}
+.round-badge{font-family:var(--font-body);font-size:.8rem;font-weight:700;padding:3px 9px;border-radius:4px}
 .round-badge.rb-partial{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .round-badge.rb-done{background:rgba(68,255,68,.1);color:var(--badge-green-fg)}
 
@@ -302,7 +320,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .mark-all-btn{font-family:var(--font-body);font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--border-light);background:var(--bg-input);color:var(--text-primary);transition:var(--transition);text-transform:none;letter-spacing:0;text-align:center;line-height:1.3}
 .mark-all-btn:hover{background:var(--bg-hover);border-color:var(--accent-cyan);color:var(--text-primary)}
 .mark-all-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
-.q-badge{font-family:var(--font-body);font-size:.66rem;font-weight:600;padding:2px 6px;border-radius:4px}
+.q-badge{font-family:var(--font-body);font-size:.82rem;font-weight:700;padding:3px 10px;border-radius:4px}
 .q-badge.q-remaining{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .q-badge.q-complete{background:rgba(68,255,68,.1);color:var(--badge-green-fg)}
 
@@ -366,7 +384,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .standings-title-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px}
 .standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:.5px}
 .standings-sort-btns{display:flex;gap:4px}
-.standings-sort-btn{font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap}
+.standings-sort-btn{font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .standings-sort-btn.active{background:var(--badge-gold-fg);color:var(--on-badge);border-color:var(--badge-gold-fg)}
 .standings-row{display:flex;align-items:center;gap:10px;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);margin-left:-10px;margin-right:-10px}
@@ -424,8 +442,16 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* \FE0F (VS16) forces full-color emoji presentation — without it some platforms fall
    back to a plain monochrome glyph, which can end up low-contrast against a theme's
    background instead of the intended colorful magnifying glass. */
-.ta-name-clickable::after{content:'\1F50D\FE0F';font-size:.8em;opacity:0;margin-left:4px;transition:opacity .15s}
+.ta-name-clickable::after{content:'\1F50D\FE0F';font-size:1.25em;opacity:0;margin-left:4px;transition:opacity .15s}
 .ta-name-clickable:hover::after{opacity:1}
+
+/* FULLY CLICKABLE ROWS (standings + final results) — the whole row is the audit target, not
+   just the name text, so the hover cue (border highlight + background tint) and the
+   magnifying glass both need to react to hovering anywhere in the row, not only the name. */
+.standings-row,.final-table tbody tr{cursor:pointer;transition:var(--transition)}
+.standings-row:hover,.final-table tbody tr:hover{background:var(--bg-hover);box-shadow:inset 0 0 0 1px var(--border-light)}
+.standings-row:hover .ta-name-clickable,.final-table tbody tr:hover .ta-name-clickable{color:var(--txt-cyan);text-decoration:underline}
+.standings-row:hover .ta-name-clickable::after,.final-table tbody tr:hover .ta-name-clickable::after{opacity:1}
 
 /* MANUAL ENTRY for special wagers (stepper + type) */
 .stepper input.sw-input{width:2.8rem;height:1.9rem;text-align:center;background:var(--bg-card);border:none;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);border-radius:0;color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0;outline:none;box-shadow:none;-moz-appearance:textfield;appearance:textfield}
@@ -452,6 +478,14 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .bonus-subtitle{font-size:.84rem;font-weight:700;color:var(--text-secondary);letter-spacing:.4px;text-transform:uppercase}
 .question-title.bonus-title{flex-direction:column;align-items:flex-start;gap:4px}
 .bonus-title-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+/* Round 1/3 bonus title colors — reuses the same tokens the rl-1/rl-3 round badges already
+   use elsewhere, verified >=8:1 contrast against --bg-card-alt in every theme x color-vision
+   mode combination (dark, light, and both colorblind simulations). */
+.bq-r1{color:var(--txt-cyan)}
+.bq-r3{color:var(--badge-gold-fg)}
+/* q-badge-lg used to bump the bonus-question badge above the base .q-badge size; now that
+   every "Done"/status badge shares the same larger size, it's a no-op kept only so existing
+   markup referencing the class still resolves to something. */
 .q-badge.q-badge-lg{font-size:.82rem;padding:3px 10px}
 
 /* SPECIAL WAGER collapse (R2 Bonus Wager / R4 Final Wager) */
@@ -476,9 +510,9 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 [data-theme="hc-dark"][data-cb="2"] .score-row.cb-prize .cb-tag{color:#ffb3ff}
 
 /* CRAFT PRIZE RANDOMIZER */
-.cp-config{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:8px}
-.cp-field{display:flex;flex-direction:column;gap:5px}
-.cp-field-label{font-size:.68rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.cp-config{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:8px}
+.cp-field{display:flex;flex-direction:column;align-items:center;gap:5px}
+.cp-field-label{font-size:.68rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;text-align:center}
 .cp-field .stepper input.sw-input{width:3.2rem}
 .cp-status{font-size:.72rem;color:var(--text-muted);margin-bottom:2px}
 .cp-note{font-size:.66rem;color:var(--text-muted);opacity:.75;margin-bottom:8px;font-style:italic}
@@ -575,7 +609,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .logo{font-size:1.1rem;letter-spacing:1px}
 
   /* ── sort buttons (sidebar) ── */
-  .sort-btn{font-size:.62rem;padding:5px 2px}
+  .sort-btn{font-size:.74rem;padding:7px 2px}
 }
 
 /* Final results table */
@@ -585,8 +619,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .final-table td.fr-name{text-align:left;color:var(--text-primary)}
 .final-table td.fr-place{color:var(--text-secondary);font-weight:700;white-space:nowrap}
 .final-table td.fr-score{font-weight:800;color:var(--text-primary)}
-.final-table td.fr-guess{color:var(--text-secondary)}
-.final-table td.fr-diff{color:var(--text-secondary);font-weight:600}
+.final-table td.fr-guessdiff{color:var(--text-secondary);font-weight:600}
 .final-table tbody tr:last-child td{border-bottom:none}
 .final-table tbody tr:nth-child(even):not(.fr-tie):not(.fr-gold):not(.fr-silver):not(.fr-bronze){background:var(--row-stripe)}
 .final-table tr.fr-tie{background:rgba(255,221,0,.13)}
@@ -634,7 +667,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .final-table,.final-table tbody{display:block;width:100%}
   .final-table tr{
     display:grid;
-    grid-template-columns:auto minmax(0,1fr) auto;
+    /* place gets a fixed track (not auto) — each <tr> is its own independent grid, so an
+       "auto" column sizes to that ONE row's own content, and "1st" vs "10th" end up with
+       different column widths and misaligned team names. A fixed width is shared by every
+       row's grid uniformly, so the team-name column always starts at the same x position. */
+    grid-template-columns:2.75rem minmax(0,1fr) auto;
     column-gap:10px;row-gap:3px;
     align-items:center;
     padding:9px 11px;
@@ -642,19 +679,12 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   }
   .final-table tbody tr:last-child{border-bottom:none}
   .final-table td{display:block;border-bottom:none;padding:0;text-align:left}
-  /* row 1: place · team · score */
+  /* row 1: place · team · score, all on one line. Guess+Diff are combined into a single
+     right-justified line under Score (row 2) instead of two stacked rows. */
   .final-table td.fr-place{grid-column:1;grid-row:1;font-size:1rem}
   .final-table td.fr-name {grid-column:2;grid-row:1;font-size:.95rem;white-space:normal;overflow-wrap:break-word;line-height:1.25}
   .final-table td.fr-score{grid-column:3;grid-row:1;text-align:right;font-size:1.1rem}
-  /* row 2: guess (left) · |diff| (right), each with an inline label */
-  .final-table td.fr-guess{grid-column:1 / 3;grid-row:2}
-  .final-table td.fr-diff {grid-column:3;grid-row:2;text-align:right;white-space:nowrap}
-  .final-table td.fr-guess,.final-table td.fr-diff{font-size:.78rem;color:var(--text-secondary)}
-  .final-table td.fr-guess::before,.final-table td.fr-diff::before{
-    content:attr(data-label) " ";
-    color:var(--text-muted);font-size:.66rem;font-weight:700;
-    text-transform:uppercase;letter-spacing:.03em;
-  }
+  .final-table td.fr-guessdiff{grid-column:1 / 4;grid-row:2;text-align:right;white-space:nowrap;font-size:.78rem;color:var(--text-secondary)}
   /* tie badge: let it wrap under the name instead of pushing width */
   .final-table td.fr-name .fr-tiebadge{margin-left:0;margin-top:3px}
 }

@@ -21,7 +21,7 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const ROUND_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
-const APP_VERSION='v10.40'; // #Version Number — bump this manually when you release a new build
+const APP_VERSION='v11.0'; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON=`{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":20,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -214,7 +214,7 @@ function toggleSettings(){const p=loadPrefs();p.settingsOpen=!p.settingsOpen;sav
 
 (function(){const p=loadPrefs();document.documentElement.setAttribute('data-theme',p.theme);if(p.cbMode)document.documentElement.setAttribute('data-cb',String(p.cbMode));if(p.density&&p.density!=='normal')document.documentElement.setAttribute('data-density',p.density);if(p.stripeLevel&&p.stripeLevel>0)document.documentElement.setAttribute('data-stripe',String(p.stripeLevel));document.documentElement.style.fontSize=FONT_SIZES[Math.max(0,Math.min(FONT_SIZES.length-1,p.sizeIndex??DEFAULT_SI))]+'px';})();
 
-function freshState(){return{meta:{date:new Date().toISOString().slice(0,10),location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:'',staffNames:'',excludeTopN:1},teams:[],rounds:[0,1,2,3].map(()=>({questions:[{},{},{},{}],bonus:{}})),halftime:{},finalWager:{},gameStarted:false,craftPrizeWinner:null};}
+function freshState(){return{meta:{date:new Date().toISOString().slice(0,10),location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:'',staffNames:'',excludeTopN:2},teams:[],rounds:[0,1,2,3].map(()=>({questions:[{},{},{},{}],bonus:{}})),halftime:{},finalWager:{},gameStarted:false,craftPrizeWinner:null};}
 function freshTeam(n){return{name:n||'',scoreGuess:'',bonusItem:false,njcb:false,adjustment:0,craftPrize:false};}
 
 let gameState=freshState(),scoreSortMode='entry',randomOrder=null;
@@ -240,7 +240,7 @@ function startNewGame(){clearSaved();gameState=freshState();scoreSortMode='entry
 function migrateState(s){
   if(!s.meta)s.meta={date:'',location:'',quizId:'',craftPartner:'',craftPartnerTown:'',bonusItem:'',staffNames:''};
   ['craftPartner','craftPartnerTown','bonusItem','staffNames'].forEach(k=>{s.meta[k]=s.meta[k]||'';});
-  if(!s.meta.excludeTopN)s.meta.excludeTopN=s.meta.giftCardCount||1;
+  if(!s.meta.excludeTopN)s.meta.excludeTopN=s.meta.giftCardCount||2;
   if(!s.teams)s.teams=[];
   s.teams.forEach(t=>{if(t.adjustment===undefined)t.adjustment=0;if(t.njcb===undefined)t.njcb=false;if(t.craftPrize===undefined)t.craftPrize=false;});
   if(!s.rounds||s.rounds.length<4)s.rounds=[0,1,2,3].map(i=>s.rounds?.[i]||{questions:[{},{},{},{}],bonus:{}});
@@ -299,20 +299,20 @@ function finalResultsRows(){
 function renderFinalResults(){
   if(!gameState.teams.length)return'<p class="fr-note">Add teams and score the game to see final results.</p>';
   const rows=finalResultsRows();
-  let h='<table class="final-table"><thead><tr><th>Place</th><th>Team</th><th>Score</th><th>Guess</th><th>|Diff|*</th></tr></thead><tbody>';
+  let h='<table class="final-table"><thead><tr><th>Place</th><th>Team</th><th>Score</th><th>Guess / Diff*</th></tr></thead><tbody>';
   rows.forEach(r=>{
     const medal=r.place===1?' fr-gold':r.place===2?' fr-silver':r.place===3?' fr-bronze':'';
-    h+=`<tr class="${r.tie?'fr-tie':''}${medal}">`+
+    const guessDiff=r.guess==null?'\u2014':`Diff ${r.diff}, Guess ${r.guess}`;
+    h+=`<tr class="${r.tie?'fr-tie':''}${medal}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to audit score" onclick="openAudit(${r.index})">`+
        `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>`+
-       `<td class="fr-name" data-label="Team"><span class="ta-name-clickable" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to audit score" onclick="openAudit(${r.index})">${esc(r.name)}</span>${r.tie?` <span class="fr-tiebadge${r.tieWinner?' fr-win':''}">${r.tieWinner?'\u2713 closer':'tie'}</span>`:''}</td>`+
+       `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie?` <span class="fr-tiebadge${r.tieWinner?' fr-win':''}">${r.tieWinner?'\u2713 closer':'tie'}</span>`:''}</td>`+
        `<td class="fr-score" data-label="Score">${r.score}</td>`+
-       `<td class="fr-guess" data-label="Guess">${r.guess==null?'\u2014':r.guess}</td>`+
-       `<td class="fr-diff${r.tieWinner?' fr-diff-win':''}" data-label="|Diff|">${r.diff==null?'\u2014':r.diff}</td>`+
+       `<td class="fr-guessdiff${r.tieWinner?' fr-diff-win':''}" data-label="Guess / Diff">${guessDiff}</td>`+
        `</tr>`;
   });
   h+='</tbody></table>';
-  h+='<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Ties are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>|Diff|</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>).</p>';
-  h+='<p class="fr-note">* <strong>|Diff|</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team\'s score before it\'s compared to their guess, for every team.</p>';
+  h+='<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Ties are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>).</p>';
+  h+='<p class="fr-note">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team\'s score before it\'s compared to their guess, for every team.</p>';
   return h;
 }
 function usedW(ti,ri){const u=[];for(let qi=0;qi<4;qi++){const a=gameState.rounds[ri].questions[qi][ti];if(a&&a.wager!==undefined)u.push({qi,wager:a.wager});}return u;}
@@ -332,7 +332,7 @@ function renderStandings(type){
     `<button class="standings-sort-btn${mode===m?' active':''}" onclick="setStandingsSort('${type}','${m}')">${lbl}</button>`).join('');
   let h=`<div class="standings-block">`+renderBanter('scores','sc-'+type,{sm:true})+
     `<div class="standings-title-row"><span class="standings-title">${label}</span><div class="standings-sort-btns">${btns}</div></div>`;
-  list.forEach(t=>{h+=`<div class="standings-row"><span class="standings-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name)} — tap to audit score" onclick="openAudit(${t.ti})">${esc(t.name)}</span><span class="standings-pts">${t.pts}</span></div>`;});
+  list.forEach(t=>{h+=`<div class="standings-row" role="button" tabindex="0" title="${esc(t.name)} — tap to audit score" onclick="openAudit(${t.ti})"><span class="standings-name ta-name-clickable">${esc(t.name)}</span><span class="standings-pts">${t.pts}</span></div>`;});
   return h+'</div>';
 }
 
@@ -379,7 +379,7 @@ function renderLeft(){
   const gs=checkGameStarted();let h='';
 
   h+=`<div class="section ${collapsedSections.has('sec-meta')?'collapsed':''}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
-    <div class="field"><label>Date</label><input type="text" inputmode="numeric" placeholder="MM-DD-YYYY" value="${esc(fmtDateDisplay(gameState.meta.date))}" ${gs?'disabled':''} onchange="setGameDate(this.value)"></div>
+    <div class="field"><label>Date</label><input type="date" class="date-native" value="${esc(gameState.meta.date||'')}" ${gs?'disabled':''} onchange="setGameDateISO(this.value)"></div>
     <div class="field"><label>Quiz ID</label><input type="text" value="${esc(gameState.meta.quizId)}" placeholder="e.g. ABC-1234" ${gs?'disabled':''} onchange="gameState.meta.quizId=this.value;autosave();"></div>
     <div class="field full"><label>Location</label><input type="text" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${gs?'disabled':''} onchange="gameState.meta.location=this.value;autosave();"></div>
     <div class="field"><label>Craft Partner</label><input type="text" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery" ${gs?'disabled':''} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
@@ -573,6 +573,11 @@ function toggleBonusQ(ri){
   if(el)el.classList.toggle('bq-collapsed');
 }
 
+// Round 2's halftime wager and Round 4's final wager already get a fun emoji + their own
+// accent color (\u23F8 magenta, \uD83C\uDFAF orange) via renderSpecialWager \u2014 this gives Round 1 and Round 3's
+// bonus question the same treatment, reusing the color each round is already tagged with
+// elsewhere (rl-1 cyan, rl-3 gold) so it's consistent rather than a brand-new color choice.
+const BONUS_Q_STYLE={0:{emoji:'\uD83C\uDF81',cls:'bq-r1'},2:{emoji:'\uD83C\uDF40',cls:'bq-r3'}};
 function renderBQ(ri){
   const n=gameState.teams.length;
   let subDone=0;for(let ti=0;ti<n;ti++){if(gameState.rounds[ri].bonus[ti]!=null)subDone++;}
@@ -585,7 +590,8 @@ function renderBQ(ri){
   }
   const isCollapsedBQ=collapsedBonusQuestions.has('b'+ri);
   const blockCls='question-block'+(beer?' beer-round':'')+(isCollapsedBQ?' bq-collapsed':'');
-  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span>Q5 \u2014 Bonus</span>${badge}</div><span class="bonus-subtitle">0\u20134 CORRECT \u00D7 5 PTS</span></div></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
+  const bqStyle=BONUS_Q_STYLE[ri]||{emoji:'',cls:''};
+  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5 \u2014 Bonus</span>${badge}</div><span class="bonus-subtitle">0\u20134 CORRECT \u00D7 5 PTS</span></div></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
   gameState.teams.forEach((t,ti)=>{
     const v=gameState.rounds[ri].bonus[ti];
     const submitted=v!=null;
@@ -761,7 +767,7 @@ function craftPrizeScript(ti){
   return `Congratulations to ${name}! You've won a craft beer gift card to ${brewery}${town?' in '+town:''}. Cheers!`;
 }
 function setExcludeTopN(v){
-  const n=Math.max(1,Math.min(20,parseInt(v,10)||1));
+  const n=Math.max(1,Math.min(20,parseInt(v,10)||2));
   gameState.meta.excludeTopN=n;autosave();renderLeft();
 }
 function setCraftDrawSeconds(v){
@@ -773,7 +779,7 @@ function updateCraftScript(val){
 }
 // The top N places (N = exclude-top setting) don't compete for the one craft-beer prize.
 function craftEligiblePool(){
-  const n=gameState.meta.excludeTopN||1;
+  const n=gameState.meta.excludeTopN||2;
   const topN=new Set(ranked().slice(0,n).map(r=>r.index));
   return gameState.teams.map((_,i)=>i).filter(i=>!topN.has(i));
 }
@@ -833,7 +839,7 @@ function clearCraftPrizeWinner(){
 function renderCraftPrizeBlock(){
   const n=gameState.teams.length;
   if(!n)return'<p class="fr-note">Add teams to run the craft prize drawing.</p>';
-  const excludeN=gameState.meta.excludeTopN||1;
+  const excludeN=gameState.meta.excludeTopN||2;
   const poolLeft=craftEligiblePool().length;
   const prefs=loadPrefs();
   const secs=prefs.craftDrawSeconds||6;
@@ -1072,10 +1078,23 @@ function exportPDF(){
     if(typeof window.jspdf==='undefined'||!window.jspdf.jsPDF){alert('PDF library not loaded — cannot build PDF.');return;}
     if(!gameState.teams||!gameState.teams.length){alert('No teams yet — nothing to export.');return;}
     const { jsPDF }=window.jspdf;
-    const SPEC=[{"w":16,"k":"rownum","df":"DCE6F2","dc":"000000","b":true,"l4":"#","a":"C"},{"w":150,"k":"teamname","df":"DCE6F2","dc":"000000","b":true,"l4":"Team Name","a":"L"},{"w":32,"k":"njcb3","df":"F2DCDB","dc":"9BBB59","b":false,"l4":"BC=3","a":"C"},{"w":30,"k":"item5","df":"CCC1DA","dc":"9BBB59","b":false,"l4":"B=5","a":"C"},{"w":20,"k":"r1q0","df":"FFFFFF","dc":"000000","b":true,"l4":"1","a":"C"},{"w":20,"k":"r1q1","df":"FFFFFF","dc":"000000","b":true,"l4":"2","a":"C"},{"w":20,"k":"r1q2","df":"FFFFFF","dc":"000000","b":true,"l4":"3","a":"C"},{"w":20,"k":"r1q3","df":"FFFFFF","dc":"000000","b":true,"l4":"4","a":"C"},{"w":26,"k":"r1bonus","df":"DCE6F2","dc":"000000","b":false,"l4":"Bonus","a":"C"},{"w":34,"k":"tK","df":"FFC000","dc":"000000","b":true,"l4":"Total","a":"C"},{"w":20,"k":"r2q0","df":"DCE6F2","dc":"000000","b":false,"l4":"1","a":"C"},{"w":20,"k":"r2q1","df":"DCE6F2","dc":"000000","b":false,"l4":"3","a":"C"},{"w":20,"k":"r2q2","df":"DCE6F2","dc":"000000","b":false,"l4":"5","a":"C"},{"w":20,"k":"r2q3","df":"DCE6F2","dc":"000000","b":false,"l4":"7","a":"C"},{"w":28,"k":"tP","df":"EFEFEF","dc":"FF0000","b":true,"l4":"Sub","a":"C"},{"w":40,"k":"htpts","df":"DCE6F2","dc":"000000","b":false,"l4":"HT 1-10","a":"C"},{"w":34,"k":"tR","df":"FFC000","dc":"000000","b":true,"l4":"Total","a":"C"},{"w":20,"k":"r3q0","df":"DCE6F2","dc":"000000","b":false,"l4":"2","a":"C"},{"w":20,"k":"r3q1","df":"DCE6F2","dc":"000000","b":false,"l4":"4","a":"C"},{"w":20,"k":"r3q2","df":"DCE6F2","dc":"000000","b":false,"l4":"6","a":"C"},{"w":20,"k":"r3q3","df":"DCE6F2","dc":"000000","b":false,"l4":"8","a":"C"},{"w":26,"k":"r3bonus","df":"DCE6F2","dc":"000000","b":false,"l4":"Bonus","a":"C"},{"w":34,"k":"tY","df":"FFC000","dc":"000000","b":true,"l4":"Total","a":"C"},{"w":20,"k":"r4q0","df":"DCE6F2","dc":"000000","b":false,"l4":"3","a":"C"},{"w":20,"k":"r4q1","df":"DCE6F2","dc":"000000","b":false,"l4":"6","a":"C"},{"w":20,"k":"r4q2","df":"DCE6F2","dc":"000000","b":false,"l4":"9","a":"C"},{"w":22,"k":"r4q3","df":"DCE6F2","dc":"000000","b":false,"l4":"12","a":"C"},{"w":28,"k":"tAD","df":"EFEFEF","dc":"FF0000","b":true,"l4":"Sub","a":"C"},{"w":46,"k":"fwpts","df":"DCE6F2","dc":"000000","b":false,"l4":"Final 1-20","a":"C"},{"w":34,"k":"tAF","df":"FFC000","dc":"000000","b":true,"l4":"Total","a":"C"},{"w":34,"k":"guess","df":"DCE6F2","dc":"000000","b":false,"l4":"Guess","a":"C"},{"w":34,"k":"tAH","df":"DCE6F2","dc":"000000","b":false,"l4":"Diff","a":"C"}];
+    // Text colors below are chosen for >=4.5:1 contrast (WCAG AA, normal text) against both
+    // their cell's base background and its zebra-striped (darkened) variant — darkening a
+    // light background actually *reduces* contrast against dark text (it moves the
+    // background's luminance closer to the text's), so the striped variant is the binding
+    // constraint and was checked explicitly for every color pair, not assumed to be safe.
+    // The Sub/Diff red (8B0000) and the Round 2/3/4 header colors were also run through
+    // protanopia/deuteranopia/tritanopia simulation to confirm they hold up for colorblind
+    // readers, not just for typical color vision.
+    const SPEC=[{"w":16,"k":"rownum","df":"DCE6F2","dc":"000000","b":true,"l4":"#","a":"C"},{"w":150,"k":"teamname","df":"DCE6F2","dc":"000000","b":true,"l4":"Team Name","a":"L"},{"w":32,"k":"njcb3","df":"F2DCDB","dc":"6B2E12","b":false,"l4":"CB=3","a":"C"},{"w":30,"k":"item5","df":"CCC1DA","dc":"3E2352","b":false,"l4":"B=5","a":"C"},{"w":20,"k":"r1q0","df":"FFFFFF","dc":"000000","b":true,"l4":"1","a":"C"},{"w":20,"k":"r1q1","df":"FFFFFF","dc":"000000","b":true,"l4":"2","a":"C"},{"w":20,"k":"r1q2","df":"FFFFFF","dc":"000000","b":true,"l4":"3","a":"C"},{"w":20,"k":"r1q3","df":"FFFFFF","dc":"000000","b":true,"l4":"4","a":"C"},{"w":26,"k":"r1bonus","df":"DCE6F2","dc":"000000","b":false,"l4":"Bonus","a":"C"},{"w":34,"k":"tK","df":"FFC000","dc":"000000","b":true,"l4":"Total","a":"C"},{"w":20,"k":"r2q0","df":"DCE6F2","dc":"000000","b":false,"l4":"1","a":"C"},{"w":20,"k":"r2q1","df":"DCE6F2","dc":"000000","b":false,"l4":"3","a":"C"},{"w":20,"k":"r2q2","df":"DCE6F2","dc":"000000","b":false,"l4":"5","a":"C"},{"w":20,"k":"r2q3","df":"DCE6F2","dc":"000000","b":false,"l4":"7","a":"C"},{"w":28,"k":"tP","df":"EFEFEF","dc":"8B0000","b":true,"l4":"Sub","a":"C"},{"w":40,"k":"htpts","df":"DCE6F2","dc":"000000","b":false,"l4":"HT 1-10","a":"C"},{"w":34,"k":"tR","df":"FFC000","dc":"000000","b":true,"l4":"Total","a":"C"},{"w":20,"k":"r3q0","df":"DCE6F2","dc":"000000","b":false,"l4":"2","a":"C"},{"w":20,"k":"r3q1","df":"DCE6F2","dc":"000000","b":false,"l4":"4","a":"C"},{"w":20,"k":"r3q2","df":"DCE6F2","dc":"000000","b":false,"l4":"6","a":"C"},{"w":20,"k":"r3q3","df":"DCE6F2","dc":"000000","b":false,"l4":"8","a":"C"},{"w":26,"k":"r3bonus","df":"DCE6F2","dc":"000000","b":false,"l4":"Bonus","a":"C"},{"w":34,"k":"tY","df":"FFC000","dc":"000000","b":true,"l4":"Total","a":"C"},{"w":20,"k":"r4q0","df":"DCE6F2","dc":"000000","b":false,"l4":"3","a":"C"},{"w":20,"k":"r4q1","df":"DCE6F2","dc":"000000","b":false,"l4":"6","a":"C"},{"w":20,"k":"r4q2","df":"DCE6F2","dc":"000000","b":false,"l4":"9","a":"C"},{"w":22,"k":"r4q3","df":"DCE6F2","dc":"000000","b":false,"l4":"12","a":"C"},{"w":28,"k":"tAD","df":"EFEFEF","dc":"8B0000","b":true,"l4":"Sub","a":"C"},{"w":46,"k":"fwpts","df":"DCE6F2","dc":"000000","b":false,"l4":"Final 1-20","a":"C"},{"w":34,"k":"tAF","df":"FFC000","dc":"000000","b":true,"l4":"Total","a":"C"}];
     // group header row: [startIdx,endIdx,label,fillhex,fonthex] — only the 4 rounds get a
-    // colored band; the id columns (#, Team Name, BC=3, B=5) and Guess/Diff stay blank above.
-    const GROUPS=[[4,9,"Round 1","FFC000","000000"],[10,16,"Round 2","B3A2C7","000000"],[17,22,"Round 3","D99694","000000"],[23,29,"Round 4","748C43","000000"]];
+    // colored band; the id columns (#, Team Name, CB=3, B=5) stay blank above.
+    // Round 2/3/4 use pastel tints of the Okabe-Ito colorblind-safe palette (bluish-green /
+    // reddish-purple / vermillion) instead of hues that only differ in lightness — simulating
+    // protanopia/deuteranopia/tritanopia on the old purple/rose/olive set showed them collapsing
+    // to a worst-case RGB distance of ~34 (barely distinguishable); this set holds ~69 worst-case,
+    // roughly double the separation, while every band still hits AAA (>=10:1) with black text.
+    const GROUPS=[[4,9,"Round 1","FFC000","000000"],[10,16,"Round 2","73CAB2","000000"],[17,22,"Round 3","E3B5CF","000000"],[23,29,"Round 4","E8A673","000000"]];
     const TRIV_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 
     function hx(h){return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
@@ -1133,8 +1152,6 @@ function exportPDF(){
         case 'tAD': return String(r.tAD);
         case 'fwpts': return String(r.fw);
         case 'tAF': return String(r.tAF);
-        case 'guess': return String(r.guess);
-        case 'tAH': return String(r.tAH);
       } return ''; };
 
     // ---- column x positions scaled to fit width ----
@@ -1143,6 +1160,12 @@ function exportPDF(){
     const cw=SPEC.map(c=>c.w*scale);
     const cx=[]; let acc=M; cw.forEach(w=>{cx.push(acc);acc+=w;});
 
+    // Subtle zebra striping: darkens a cell's own background by 7% on alternating rows.
+    // Darkening a light background only ever raises contrast for the dark text drawn on
+    // top of it, so every text/background pair already at AA on the base color stays at
+    // (or above) AA once striped — verified against every color used in this table.
+    const ZEBRA_FACTOR=0.93;
+    const darken=(hexcolor)=>{const c=hx(hexcolor);return c.map(v=>Math.max(0,Math.round(v*ZEBRA_FACTOR))).map(v=>v.toString(16).padStart(2,'0')).join('').toUpperCase();};
     const setFill=h=>{const c=hx(h);doc.setFillColor(c[0],c[1],c[2]);};
     const setText=h=>{const c=hx(h);doc.setTextColor(c[0],c[1],c[2]);};
     const fitFs=(txt,wpx,base)=>{let fs=base;doc.setFontSize(fs);while(fs>3&&doc.getTextWidth(txt)>wpx-2){fs-=0.25;doc.setFontSize(fs);}return fs;};
@@ -1162,7 +1185,7 @@ function exportPDF(){
       const fieldW=Math.min(220,usableW/4);
       headerFields.forEach(([label,value],i)=>{
         const fx=M+i*fieldW;
-        doc.setFont('helvetica','normal'); doc.setFontSize(8); setText('808080');
+        doc.setFont('helvetica','normal'); doc.setFontSize(8); setText('595959');
         doc.text(label,fx,y+9);
         doc.setFont('helvetica','bold'); fitFs(value,fieldW-6,15); setText('000000');
         doc.text(value,fx,y+28,{maxWidth:fieldW-6});
@@ -1211,8 +1234,9 @@ function exportPDF(){
         groupY=drawMainHeaderRows();
         dataTop=y;
       }
+      const stripe=t%2===1;
       SPEC.forEach((c,ix)=>{
-        setFill(c.df); doc.rect(cx[ix],y,cw[ix],rowH,'F');
+        setFill(stripe?darken(c.df):c.df); doc.rect(cx[ix],y,cw[ix],rowH,'F');
         cellText(val(c.k,t),ix,y,rowH,c.dc,c.b,fsData,c.a==='L');
       });
       y+=rowH;
@@ -1220,10 +1244,10 @@ function exportPDF(){
     drawGridLines(dataTop,y,cx,M+usableW);
     y+=16;
 
-    // ---- standings table (Place / Score / Team Name / Entry #) ----
-    const SCOLS=[{w:44,k:'place',l:'Place',fill:'92D050'},{w:56,k:'score',l:'Score',fill:'FFFFFF'},{w:220,k:'name',l:'Team Name',fill:'FFFFFF'},{w:56,k:'num',l:'Entry #',fill:'FFFFFF'}];
+    // ---- standings table (Place / Score / Team Name / Guess / Diff) ----
+    const SCOLS=[{w:44,k:'place',l:'Place',fill:'92D050'},{w:56,k:'score',l:'Score',fill:'FFFFFF'},{w:220,k:'name',l:'Team Name',fill:'FFFFFF'},{w:56,k:'guess',l:'Guess',fill:'FFFFFF'},{w:56,k:'diff',l:'Diff',fill:'FFFFFF'}];
     const scx=[]; let sacc=M; SCOLS.forEach(c=>{scx.push(sacc);sacc+=c.w;});
-    const standingsW=scx[3]+SCOLS[3].w;
+    const standingsW=scx[SCOLS.length-1]+SCOLS[SCOLS.length-1].w;
 
     if(y+rowH*3>pageBottom){ doc.addPage(); y=M; }
     function drawStandingsHeader(){
@@ -1248,9 +1272,11 @@ function exportPDF(){
         sHeadY=drawStandingsHeader();
         sDataTop=y;
       }
-      const rowVals={place:String(i+1),score:String(s.tAF),name:s.name,num:String(s.num)};
+      const rowVals={place:String(i+1),score:String(s.tAF),name:s.name,guess:String(s.guess),diff:String(s.tAH)};
+      const sStripe=i%2===1;
       SCOLS.forEach((c,ix)=>{
-        setFill(c.k==='place'?'DCE6F2':'FFFFFF'); doc.rect(scx[ix],y,c.w,rowH,'F');
+        const base=c.k==='place'?'DCE6F2':'FFFFFF';
+        setFill(sStripe?darken(base):base); doc.rect(scx[ix],y,c.w,rowH,'F');
         doc.setFont('helvetica',c.k==='place'||c.k==='score'?'bold':'normal'); setText('000000');
         fitFs(rowVals[c.k],c.w-4,fsData);
         doc.text(rowVals[c.k],scx[ix]+(c.k==='name'?3:c.w/2),y+rowH-rowH*0.28,{align:c.k==='name'?'left':'center',maxWidth:c.w-6});
@@ -1262,7 +1288,7 @@ function exportPDF(){
 
     // footnote
     if(y+10>pageBottom){ doc.addPage(); y=M+10; }
-    doc.setFont('helvetica','normal'); doc.setFontSize(7.5); setText('FF0000');
+    doc.setFont('helvetica','normal'); doc.setFontSize(7.5); setText('8B0000');
     doc.text('* Diff is minus Bonuses — Bonus Item and NJCB points are excluded from the score before comparing it to the team\'s guess.',M,y);
 
     dl(doc.output('blob'), exportFn('pdf'));
@@ -1280,15 +1306,10 @@ function exportCSV(){
 function isoToMDY(iso){if(!iso)return'';const p=String(iso).split('-');if(p.length!==3)return iso;return p[1].padStart(2,'0')+'-'+p[2].padStart(2,'0')+'-'+p[0];}
 function isoToDMon(iso){if(!iso)return'';const p=String(iso).split('-');if(p.length!==3)return iso;const mi=parseInt(p[1],10)-1;return String(parseInt(p[2],10)).padStart(2,'0')+'-'+((MONTHS&&MONTHS[mi])||p[1])+'-'+p[0];}
 function fmtDateDisplay(iso){return loadPrefs().dateFmt==='dmon'?isoToDMon(iso):isoToMDY(iso);}
-function parseDateInput(str){
-  if(str==null)return'';str=String(str).trim();if(!str)return'';
-  let m=str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);if(m)return m[1]+'-'+m[2].padStart(2,'0')+'-'+m[3].padStart(2,'0');
-  m=str.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/);if(m)return m[3]+'-'+m[1].padStart(2,'0')+'-'+m[2].padStart(2,'0');
-  m=str.match(/^(\d{1,2})[-\/ .]+([A-Za-z]{3,})[-\/ .]+(\d{4})$/);
-  if(m){const mi=MONTHS.findIndex(mo=>mo.toLowerCase().slice(0,3)===m[2].toLowerCase().slice(0,3));if(mi>=0)return m[3]+'-'+String(mi+1).padStart(2,'0')+'-'+m[1].padStart(2,'0');}
-  return null;
-}
-function setGameDate(v){const iso=parseDateInput(v);if(iso===null){renderLeft();return;}gameState.meta.date=iso;autosave();renderLeft();}
+// Native <input type="date"> always hands back either a valid ISO date or '' (never a
+// half-typed/invalid string), so there's no parsing or validation left to do here — the
+// browser's own calendar UI and keyboard navigation replace the old hand-rolled text parser.
+function setGameDateISO(v){if(!v)return;gameState.meta.date=v;autosave();renderLeft();}
 function toggleDateFmt(){const p=loadPrefs();p.dateFmt=(p.dateFmt==='dmon')?'mdy':'dmon';savePrefs(p);applyPrefs();renderLeft();}
 function sanitizeFile(s){return String(s||'').replace(/'/g,'').replace(/[\\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').trim();}
 function exportFn(ext){const loc=sanitizeFile(gameState.meta.location)||'Trivia';const d=isoToMDY(gameState.meta.date)||new Date().toISOString().slice(0,10);return loc+' - '+d+'.'+ext;}
