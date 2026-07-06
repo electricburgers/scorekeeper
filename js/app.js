@@ -140,8 +140,8 @@ let collapsedSpecialWagers=new Set();
 let questionSortOrder={};
 
 function loadPrefs(){
-  try{const r=TRStore.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;if(!p.dateFmt)p.dateFmt='mdy';if(p.cbMode==null)p.cbMode=p.colorblind?1:0;if(!p.craftDrawSeconds)p.craftDrawSeconds=6;if(p.showAdjustments==null)p.showAdjustments=false;if(p.advancedOpen==null)p.advancedOpen=false;if(p.showLegacyExports==null)p.showLegacyExports=false;return p;}}catch(e){}
-  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0,dateFmt:'mdy',cbMode:0,craftDrawSeconds:6,showAdjustments:false,advancedOpen:false,showLegacyExports:false};
+  try{const r=TRStore.getItem(PREFS_KEY);if(r){const p=JSON.parse(r);if(!['hc-dark','hc-light'].includes(p.theme))p.theme=(['light','bw','hc-light'].includes(p.theme))?'hc-light':'hc-dark';if(p.sizeIndex==null)p.sizeIndex=DEFAULT_SI;if(!p.density)p.density='normal';if(p.settingsOpen==null)p.settingsOpen=false;if(p.stripeLevel==null)p.stripeLevel=0;if(!p.dateFmt)p.dateFmt='mdy';if(p.cbMode==null)p.cbMode=p.colorblind?1:0;if(!p.craftDrawSeconds)p.craftDrawSeconds=6;if(p.showAdjustments==null)p.showAdjustments=false;if(p.advancedOpen==null)p.advancedOpen=false;if(p.showLegacyExports==null)p.showLegacyExports=false;if(p.unlockEventDetails==null)p.unlockEventDetails=false;return p;}}catch(e){}
+  return{theme:'hc-dark',sizeIndex:DEFAULT_SI,density:'normal',settingsOpen:false,stripeLevel:0,dateFmt:'mdy',cbMode:0,craftDrawSeconds:6,showAdjustments:false,advancedOpen:false,showLegacyExports:false,unlockEventDetails:false};
 }
 function savePrefs(p){TRStore.setItem(PREFS_KEY,JSON.stringify(p));}
 function applyPrefs(){
@@ -169,6 +169,7 @@ function applyPrefs(){
   const advBtn=document.getElementById('advToggleBtn'),advGroup=document.getElementById('advancedGroup');
   if(advBtn&&advGroup){advBtn.classList.toggle('open',!!p.advancedOpen);advBtn.setAttribute('aria-expanded',String(!!p.advancedOpen));advGroup.classList.toggle('open',!!p.advancedOpen);}
   const legToggle=document.getElementById('legacyExportToggle');if(legToggle){legToggle.classList.toggle('active',!!p.showLegacyExports);legToggle.textContent=p.showLegacyExports?'Shown':'Hidden';}
+  const unlockToggle=document.getElementById('unlockEventDetailsToggle');if(unlockToggle){unlockToggle.classList.toggle('active',!!p.unlockEventDetails);unlockToggle.textContent=p.unlockEventDetails?'Unlocked':'Locked';}
   const vl=document.getElementById('versionLabel');if(vl)vl.textContent='Scorekeeper '+APP_VERSION;
 }
 function setTheme(t){if(!['hc-dark','hc-light'].includes(t))t='hc-dark';const p=loadPrefs();p.theme=t;savePrefs(p);applyPrefs();}
@@ -176,6 +177,7 @@ function toggleTheme(){const p=loadPrefs();setTheme(p.theme==='hc-dark'?'hc-ligh
 function toggleAdjSetting(){const p=loadPrefs();p.showAdjustments=!p.showAdjustments;savePrefs(p);applyPrefs();renderLeft();}
 function toggleAdvancedSettings(){const p=loadPrefs();p.advancedOpen=!p.advancedOpen;savePrefs(p);applyPrefs();}
 function toggleLegacyExports(){const p=loadPrefs();p.showLegacyExports=!p.showLegacyExports;savePrefs(p);applyPrefs();renderLeft();}
+function toggleUnlockEventDetails(){const p=loadPrefs();p.unlockEventDetails=!p.unlockEventDetails;savePrefs(p);applyPrefs();renderLeft();}
 function setCbMode(v){const p=loadPrefs();p.cbMode=parseInt(v,10)||0;savePrefs(p);applyPrefs();}
 
 function closeCvMenu(){
@@ -399,12 +401,15 @@ function renderLeft(){
 
   const quizIdInvalid=!gs&&!isQuizIdValid(gameState.meta.quizId);
   const locInvalid=!gs&&!isLocationValid(gameState.meta.location);
+  // Once scoring starts, Event Details normally locks (so it can't drift mid-game) — but a
+  // typo can still happen, so the "Edit Locked Fields" setting lets the host reopen just these.
+  const metaLocked=gs&&!loadPrefs().unlockEventDetails;
   h+=`<div class="section ${collapsedSections.has('sec-meta')?'collapsed':''}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
-    <div class="field"><label>Date</label><input type="date" class="date-native" value="${esc(gameState.meta.date||'')}" ${gs?'disabled':''} onchange="setGameDateISO(this.value)"></div>
-    <div class="field${quizIdInvalid?' field-invalid':''}"><label>Quiz ID</label><input type="text" value="${esc(gameState.meta.quizId)}" placeholder="e.g. ABC-123 or ABC123" ${gs?'disabled':''} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid?'<span class="guess-warn">&#9888; format: ABC-123 or ABC123</span>':''}</div>
-    <div class="field full${locInvalid?' field-invalid':''}"><label>Location</label><input type="text" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${gs?'disabled':''} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid?'<span class="guess-warn">&#9888; required</span>':''}</div>
-    <div class="field"><label>Craft Partner</label><input type="text" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery" ${gs?'disabled':''} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
-    <div class="field"><label>Partner Town</label><input type="text" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town" ${gs?'disabled':''} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
+    <div class="field"><label>Date</label><input type="date" class="date-native" value="${esc(gameState.meta.date||'')}" ${metaLocked?'disabled':''} onchange="setGameDateISO(this.value)"></div>
+    <div class="field${quizIdInvalid?' field-invalid':''}"><label>Quiz ID</label><input type="text" value="${esc(gameState.meta.quizId)}" placeholder="e.g. ABC-123 or ABCD1234" ${metaLocked?'disabled':''} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid?'<span class="guess-warn">&#9888; format: ABC-123, ABC123, ABCD-1234 or ABCD1234</span>':''}</div>
+    <div class="field full${locInvalid?' field-invalid':''}"><label>Location</label><input type="text" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked?'disabled':''} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid?'<span class="guess-warn">&#9888; required</span>':''}</div>
+    <div class="field"><label>Craft Partner</label><input type="text" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery" ${metaLocked?'disabled':''} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
+    <div class="field"><label>Partner Town</label><input type="text" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town" ${metaLocked?'disabled':''} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
     <div class="field full"><label>Bonus Item (+5)</label><input type="text" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
     <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea" rows="2" placeholder="Server / bartender names to shout out" onchange="gameState.meta.staffNames=this.value;autosave();">${esc(gameState.meta.staffNames||'')}</textarea></div>
   </div></div></div>`;
@@ -623,7 +628,7 @@ function renderBQ(ri){
   const blockCls='question-block'+(beer?' beer-round':'')+(isCollapsedBQ?' bq-collapsed':'');
   const bqStyle=BONUS_Q_STYLE[ri]||{emoji:'',cls:''};
   const bqKey='b'+ri;
-  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5 \u2014 Bonus</span>${badge}</div><span class="bonus-subtitle">0\u20134 CORRECT \u00D7 5 PTS</span></div></div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[bqKey]?' active':''}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order">\u21ba Reset<br>Sort</button></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
+  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5 - BONUS (0-4 CORRECT \u00D7 5 PTS)</span>${badge}</div></div></div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[bqKey]?' active':''}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order">\u21ba Reset<br>Sort</button></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
   const bqEntryOrder=gameState.teams.map((_,i)=>i);
   let bqTeamOrder=questionSortOrder[bqKey]?questionSortOrder[bqKey].filter(ti=>ti<gameState.teams.length):bqEntryOrder;
   if(questionSortOrder[bqKey]){
@@ -660,14 +665,13 @@ function renderSpecialWager(type){
   const data=isFinal?gameState.finalWager:gameState.halftime;
   const max=isFinal?20:10;
   const sectionCls=isFinal?'special-section final-wager':'special-section';
-  const titleMain=isFinal?'\uD83C\uDFAF Q5 \u2014 Final Wager':'\u23F8 Q5 \u2014 Bonus Wager';
-  const titleSub=isFinal?'1\u201320 pts, win or lose':'1\u201310 pts, win or lose';
+  const titleMain=isFinal?'\uD83C\uDFAF Q5 - BONUS WAGER (1-20 pts, win or lose)':'\u23F8 Q5 - BONUS WAGER (1-10 pts, win or lose)';
   const wSet=isFinal?'setFW':'setHW', cSet=isFinal?'setFC':'setHC', iSet=isFinal?'setFWInput':'setHWInput';
   const beer=isSpecialBeerRound(type);
   const swN=gameState.teams.length;let swDone=0;for(let ti=0;ti<swN;ti++){const d=data[ti];if(d&&d.wager!=null&&d.wager!==''&&d.correct!=null)swDone++;}
   let swBadge='';if(swN){if(beer)swBadge='<span class="q-badge q-beer">\uD83C\uDF7A Beer Round!</span>';else if(swDone===swN)swBadge='<span class="q-badge q-complete">\u2713 Done</span>';else swBadge=`<span class="q-badge q-remaining">${swN-swDone} left</span>`;}
   const swCollapsed=collapsedSpecialWagers.has(type);
-  let h=`<div class="${sectionCls}${beer?' beer-round':''}${swCollapsed?' sw-collapsed':''}" id="swblock-${type}"><div class="sw-header" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3>${titleMain}<span class="sw-range">${titleSub}</span></h3>${swBadge}</div>`;
+  let h=`<div class="${sectionCls}${beer?' beer-round':''}${swCollapsed?' sw-collapsed':''}" id="swblock-${type}"><div class="sw-header" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3>${titleMain}</h3>${swBadge}</div>`;
   if(beer)h+=`<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
   h+=`<div class="sw-body">`;
   gameState.teams.forEach((t,ti)=>{
@@ -962,7 +966,7 @@ function markAll(ri,qi,correct){
   if(correct&&!wasBeer)checkBeerRound(ri,qi);
 }
 // Accepts "ABC-123" or "ABC123": 3 letters, optional dash, 3 digits.
-function isQuizIdValid(v){return /^[A-Za-z]{3}-?\d{3}$/.test((v||'').trim());}
+function isQuizIdValid(v){const s=(v||'').trim();return /^[A-Za-z]{3}-?\d{3}$/.test(s)||/^[A-Za-z]{4}-?\d{4}$/.test(s);}
 function isLocationValid(v){return !!(v||'').trim();}
 
 // Guard: before the very first scoring action, a valid Quiz ID + Location must be set and
@@ -970,7 +974,7 @@ function isLocationValid(v){return !!(v||'').trim();}
 function canScore(){
   if(gameState.gameStarted)return true;
   if(!isQuizIdValid(gameState.meta.quizId)||!isLocationValid(gameState.meta.location)){
-    alert('Please enter a valid Quiz ID (format ABC-123 or ABC123) and a Location in Event Details before scoring begins.');
+    alert('Please enter a valid Quiz ID (format ABC-123, ABC123, ABCD-1234 or ABCD1234) and a Location in Event Details before scoring begins.');
     const sec=document.getElementById('sec-meta');
     if(sec){if(sec.classList.contains('collapsed'))sec.classList.remove('collapsed');sec.scrollIntoView({behavior:'smooth',block:'start'});}
     renderLeft();

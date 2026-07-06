@@ -23,6 +23,10 @@
      and button fills can stay at full brand saturation without dragging text below AAA. */
   --txt-cyan:#00ffff;--txt-magenta:#ff72d8;--txt-red:#ff8282;--txt-orange:#ffaa00;
   --accent-cyan-solid:#00ffff;--danger-solid-bg:#a52c2c;
+  /* Beer Round highlight: dark theme's own accent-gold already hits 15:1 on bg-card-alt, so no
+     background change is needed here — see the hc-light override below for why light theme
+     needs one. */
+  --beer-bg:var(--bg-card-alt);--beer-border:#ffee00;
 }
 [data-theme="hc-light"]{
   --bg-primary:#f5f5f5;--bg-card:#fff;--bg-card-alt:#f0f0f0;--bg-input:#e8e8e8;--bg-hover:#dcdcdc;
@@ -40,6 +44,12 @@
   --badge-gold-fg:#55420e;--badge-green-fg:#0a500a;
   --txt-cyan:#004b64;--txt-magenta:#8c0040;--txt-red:#900000;--txt-orange:#723300;
   --accent-cyan-solid:#006081;--danger-solid-bg:#b60000;
+  /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
+     background this dark — anything as light as --bg-card-alt forces the border down to a
+     muddy, muted brown-olive to pass at all. Rather than accept that duller color, give the
+     Beer Round card its own barely-there warm cream background (still ~17:1 for the existing
+     black team-name text) so the border can be a real golden yellow instead. */
+  --beer-bg:#f1e7d0;--beer-border:#9f7804;
 }
 [data-theme="hc-light"] .header{background:linear-gradient(180deg,var(--bg-primary) 60%,transparent)!important}
 /* COLOR VISION MODES — independent of theme.
@@ -65,12 +75,16 @@
   --item-border:#ff66cc;--item-fill-checked:#ff66cc;
   --njcb-border:#00cc88;--njcb-fill-checked:#00cc88;
   --badge-gold-fg:#ff96fc;--accent-cyan-solid:#00cc88;
+  /* The pink/magenta gold-substitute already clears 7:1 on the normal --bg-card-alt (unlike
+     real gold), so beer round doesn't need the special cream background here. */
+  --beer-bg:var(--bg-card-alt);--beer-border:#ff66cc;
 }
 [data-theme="hc-light"][data-cb="2"]{
   --accent-gold:#c2007a;--accent-cyan:#008060;
   --item-border:#e0008e;--item-fill-checked:#e0008e;
   --njcb-border:#008564;--njcb-fill-checked:#008564;
   --badge-gold-fg:#880056;--txt-cyan:#004f3b;--accent-cyan-solid:#00654c;
+  --beer-bg:var(--bg-card-alt);--beer-border:#c2007a;
 }
 
 [data-density="compact"]{--row-pad:4px}
@@ -338,11 +352,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .question-block{background:var(--bg-card-alt);border:1px solid var(--border-strong);border-left:3px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
 .question-block.q-active{border-left-color:var(--accent-cyan)}
 .question-block.q-done{border-left-color:var(--accent-green);opacity:.82}
-/* Beer Round wins over q-done green. Uses --badge-gold-fg, not --accent-gold: the raw accent
-   fails the 3:1 non-text contrast requirement against --bg-card-alt in the light theme
-   (~1.8:1) — badge-gold-fg is the same gold family already tuned per-theme for AA-safe use
-   on this surface. */
-.question-block.beer-round{border-left-color:var(--badge-gold-fg)!important;opacity:1!important}
+/* Beer Round wins over q-done green. Uses --beer-border on --beer-bg (not --accent-gold on the
+   normal --bg-card-alt): the raw accent only clears 3:1 against a background this warm/dark —
+   see the --beer-bg definitions above for why. */
+.question-block.beer-round{background:var(--beer-bg)!important;border-left-color:var(--beer-border)!important;opacity:1!important}
 
 /* Differentiate the Q1/Q2/Q5-Bonus header from the team-answer rows in the body below, which
    otherwise share the question-block's own --bg-card-alt and blend together. */
@@ -451,7 +464,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .beer-stripe{display:flex;align-items:center;gap:6px;padding:5px 12px 6px;background:rgba(255,238,0,.07);border-bottom:1px solid rgba(255,238,0,.18)}
 .beer-stripe-icon{font-size:1.05rem}
 .beer-stripe-text{font-family:var(--font-display);font-size:.75rem;font-weight:700;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:1.2px}
-.special-section.beer-round{border-color:var(--badge-gold-fg)!important}
+.special-section.beer-round{background:var(--beer-bg)!important;border-color:var(--beer-border)!important}
 .special-section.beer-round h3{color:var(--badge-gold-fg)!important}
 
 /* SPECIAL WAGER SECTIONS */
@@ -531,8 +544,6 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .bonus-choice-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green);color:var(--text-primary)}
 .bonus-choice-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red);color:var(--text-primary)}
 
-/* forces "0–4 CORRECT × 5 PTS" onto its own line under "Q5 — Bonus" on mobile */
-.bonus-subtitle{font-size:.84rem;font-weight:700;color:var(--text-secondary);letter-spacing:.4px;text-transform:uppercase}
 .question-title.bonus-title{flex-direction:column;align-items:flex-start;gap:4px}
 .bonus-title-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 /* Round 1/3 bonus title colors — reuses the same tokens the rl-1/rl-3 round badges already
@@ -555,7 +566,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .special-section .sw-body{margin-top:8px}
 
 /* Beer round — full gold border so it reads at a glance (no size change) */
-.question-block.beer-round{border-color:var(--badge-gold-fg)!important}
+.question-block.beer-round{border-color:var(--beer-border)!important}
 
 /* CRAFT BEER PRIZE winner — tap a name in the scoreboard to toggle */
 .sr-name-clickable{cursor:pointer}
@@ -777,9 +788,6 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* session-info: restaurant staff free-text box */
 .meta-textarea{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;line-height:1.35;outline:none;resize:vertical;min-height:2.6rem;transition:var(--transition)}
 .meta-textarea:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,.13)}
-
-/* special-wager points-range on its own line under the title */
-.sw-range{display:block;font-size:.92rem;font-weight:600;color:var(--text-secondary);text-transform:none;letter-spacing:0;margin-top:4px}
 
 /* settings: version label + Claude disclaimer */
 .settings-meta{display:flex;flex-direction:column;gap:2px;grid-column:1/-1;margin-top:4px}
