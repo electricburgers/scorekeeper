@@ -21,7 +21,7 @@ const MONTHS=['January','February','March','April','May','June','July','August',
 const ROUND_WAGERS=[[1,2,3,4],[1,3,5,7],[2,4,6,8],[3,6,9,12]];
 const ROUND_COLORS=['rl-1','rl-2','rl-3','rl-4'];
 const BONUS_ROUNDS=new Set([0,2]);
-const APP_VERSION='v12.0'; // #Version Number — bump this manually when you release a new build
+const APP_VERSION='v13.0'; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON=`{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":20,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -310,20 +310,20 @@ function finalResultsRows(){
 function renderFinalResults(){
   if(!gameState.teams.length)return'<p class="fr-note">Add teams and score the game to see final results.</p>';
   const rows=finalResultsRows();
-  let h='<table class="final-table"><thead><tr><th>Place</th><th>Team</th><th>Score</th><th>| DIFF | / GUESS *</th></tr></thead><tbody>';
+  let h='<table class="final-table"><thead><tr><th>Place</th><th>Team</th><th>Score</th><th class="fr-guess-h">Guess</th><th class="fr-diff-h">Diff *</th></tr></thead><tbody>';
   rows.forEach(r=>{
     const medal=r.place===1?' fr-gold':r.place===2?' fr-silver':r.place===3?' fr-bronze':'';
     const diffSigned=r.diffSign>0?'+'+r.diff:r.diffSign<0?'-'+r.diff:r.diff;
-    const guessDiff=r.guess==null?'\u2014':`| ${diffSigned} | / ${r.guess}`;
     h+=`<tr class="${r.tie?'fr-tie':''}${medal}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to audit score" onclick="openAudit(${r.index})">`+
        `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>`+
        `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie?` <span class="fr-tiebadge${r.tieWinner?' fr-win':''}">${r.tieWinner?'\u2713 closer':'tie'}</span>`:''}</td>`+
        `<td class="fr-score" data-label="Score">${r.score}</td>`+
-       `<td class="fr-guessdiff${r.tieWinner?' fr-diff-win':''}" data-label="| DIFF | / GUESS *">${guessDiff}</td>`+
+       `<td class="fr-guess" data-label="Guess">${r.guess==null?'\u2014':r.guess}</td>`+
+       `<td class="fr-diff${r.tieWinner?' fr-diff-win':''}" data-label="Diff *">${r.guess==null?'\u2014':diffSigned}</td>`+
        `</tr>`;
   });
   h+='</tbody></table>';
-  h+='<details class="fr-details"><summary>&gt; Details *</summary>'+
+  h+='<details class="fr-details"><summary>&gt; Diff Details *</summary>'+
      '<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Ties are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>).</p>'+
      '<p class="fr-note">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team\'s score before it\'s compared to their guess, for every team. A <strong>+</strong> means the guess came in over the actual score, a <strong>\u2212</strong> means it came in under.</p>'+
      '</details>';
@@ -456,7 +456,7 @@ function renderLeft(){
     h+=`</div></div>`;
   }
 
-  h+=`<div class="section ${collapsedSections.has('sec-final')?'collapsed':''}" id="sec-final"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-final')"><h2>\uD83C\uDFC1 Final Results <span class="round-badge rb-partial">ascending</span></h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
+  h+=`<div class="section ${collapsedSections.has('sec-final')?'collapsed':''}" id="sec-final"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-final')"><h2>\uD83C\uDFC1 Final Results</h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
 
   h+=`<div class="section ${collapsedSections.has('sec-craftprize')?'collapsed':''}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><h2>\uD83C\uDF7A Craft Prize Drawing</h2><span class="chevron">\u25BC</span></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
 
@@ -625,10 +625,14 @@ function renderBQ(ri){
     else badge=`<span class="q-badge q-badge-lg q-remaining">${n-subDone} left</span>`;
   }
   const isCollapsedBQ=collapsedBonusQuestions.has('b'+ri);
-  const blockCls='question-block'+(beer?' beer-round':'')+(isCollapsedBQ?' bq-collapsed':'');
+  let blockCls='question-block';
+  if(beer)blockCls+=' beer-round';
+  else if(n>0&&subDone===n)blockCls+=' q-done';
+  else if(subDone>0)blockCls+=' q-active';
+  if(isCollapsedBQ)blockCls+=' bq-collapsed';
   const bqStyle=BONUS_Q_STYLE[ri]||{emoji:'',cls:''};
   const bqKey='b'+ri;
-  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5 - BONUS (0-4 \u00D7 5 PTS)</span>${badge}</div></div></div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[bqKey]?' active':''}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order">\u21ba Reset<br>Sort</button></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
+  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5: BONUS (0-4 \u00D7 5)</span>${badge}</div></div></div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[bqKey]?' active':''}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order">\u21ba Reset<br>Sort</button></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
   const bqEntryOrder=gameState.teams.map((_,i)=>i);
   let bqTeamOrder=questionSortOrder[bqKey]?questionSortOrder[bqKey].filter(ti=>ti<gameState.teams.length):bqEntryOrder;
   if(questionSortOrder[bqKey]){
@@ -654,8 +658,9 @@ function renderBQ(ri){
       <div class="bonus-right"><div class="bonus-choice">${choices}</div>
       ${ptsHtml}</div></div>`;
   });
-  // Lives inside .q-body (like the per-question banter) so collapsing this block hides it too.
-  h+=renderBanter(beer?'beer':'next',`bq-${ri}-${beer?'beer':'next'}`,{sm:true});
+  // Only a Beer Round gets banter here — "next question" doesn't fit since a bonus question
+  // is immediately followed by a new round, not another question.
+  if(beer)h+=renderBanter('beer',`bq-${ri}-beer`,{sm:true});
   return h+`</div></div>`;
 }
 
@@ -665,7 +670,7 @@ function renderSpecialWager(type){
   const data=isFinal?gameState.finalWager:gameState.halftime;
   const max=isFinal?20:10;
   const sectionCls=isFinal?'special-section final-wager':'special-section';
-  const titleMain=isFinal?'\uD83C\uDFAF Q5 - BONUS WAGER (1-20)':'\u23F8 Q5 - BONUS WAGER (1-10)';
+  const titleMain=isFinal?'\uD83C\uDFAF Q5: BONUS WAGER (1-20)':'\u23F8 Q5: BONUS WAGER (1-10)';
   const wSet=isFinal?'setFW':'setHW', cSet=isFinal?'setFC':'setHC', iSet=isFinal?'setFWInput':'setHWInput';
   const beer=isSpecialBeerRound(type);
   const swN=gameState.teams.length;let swDone=0;for(let ti=0;ti<swN;ti++){const d=data[ti];if(d&&d.wager!=null&&d.wager!==''&&d.correct!=null)swDone++;}
@@ -695,8 +700,9 @@ function renderSpecialWager(type){
       ${pts}
     </div>`;
   });
-  // Lives inside .sw-body so it collapses along with the rest when the chevron is toggled.
-  h+=renderBanter(beer?'beer':'next',`sw-${type}-${beer?'beer':'next'}`,{sm:true});
+  // Only a Beer Round gets banter here — "next question" doesn't fit since this wager is
+  // immediately followed by a new round (or Final Results), not another question.
+  if(beer)h+=renderBanter('beer',`sw-${type}-beer`,{sm:true});
   return h+`</div></div>`;
 }
 function toggleSpecialWager(type){
