@@ -746,15 +746,16 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    width (full-width on phones, wide on desktop) rather than the viewport. */
 @container scorecol (max-width:600px){
   /* Headers stay visible, laid out with the same 3-column + wrapped-4th-row grid as the
-     tbody rows below, so "Place/Team/Score" sit over their own stacked columns. */
+     tbody rows below, so "Place/Team/Score" sit over their own stacked columns. Guess/Diff
+     get no header of their own — each value now labels itself inline (see fr-guess/fr-diff
+     ::before below), so a header for them would just repeat what's already on the number. */
   .final-table thead{display:block}
-  .final-table thead tr{display:grid;grid-template-columns:2.75rem minmax(0,1fr) auto;column-gap:10px;row-gap:2px;padding:6px 11px;border-bottom:1px solid var(--border)}
+  .final-table thead tr{display:grid;grid-template-columns:2.75rem minmax(0,1fr) auto;column-gap:10px;padding:6px 11px;border-bottom:1px solid var(--border)}
   .final-table thead th{padding:0;border-bottom:none}
   .final-table thead th:nth-child(1){grid-column:1;grid-row:1;text-align:left}
   .final-table thead th:nth-child(2){grid-column:2;grid-row:1;text-align:left}
   .final-table thead th:nth-child(3){grid-column:3;grid-row:1;text-align:right}
-  .final-table thead th:nth-child(4){grid-column:2/3;grid-row:2;text-align:right;padding-right:4px}
-  .final-table thead th:nth-child(5){grid-column:3/4;grid-row:2;text-align:right;padding-left:4px;border-left:1px solid var(--border)}
+  .final-table thead th:nth-child(4),.final-table thead th:nth-child(5){display:none}
   .final-table,.final-table tbody{display:block;width:100%}
   .final-table tr{
     display:grid;
@@ -770,13 +771,17 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   }
   .final-table tbody tr:last-child{border-bottom:none}
   .final-table td{display:block;border-bottom:none;padding:0;text-align:left}
-  /* row 1: place · team · score, all on one line. Guess and Diff sit as their own pair,
-     right-justified under Score, close together with a divider between them. */
+  /* row 1: place · team · score. Row 2: Guess/Diff as a close-together pair with a divider,
+     each one prefixed with its own mini-label (via ::before) so the number reads on its own
+     without needing to look back up at a header. */
   .final-table td.fr-place{grid-column:1;grid-row:1;font-size:1rem}
   .final-table td.fr-name {grid-column:2;grid-row:1;font-size:.95rem;white-space:normal;overflow-wrap:break-word;line-height:1.25}
   .final-table td.fr-score{grid-column:3;grid-row:1;text-align:right;font-size:1.1rem}
   .final-table td.fr-guess{grid-column:2/3;grid-row:2;text-align:right;white-space:nowrap;font-size:.78rem;color:var(--text-secondary);padding-right:4px}
   .final-table td.fr-diff{grid-column:3/4;grid-row:2;text-align:right;white-space:nowrap;font-size:.78rem;color:var(--text-secondary);padding-left:4px;border-left:1px solid var(--border)}
+  .final-table td.fr-guess::before,.final-table td.fr-diff::before{color:var(--text-muted);font-weight:700}
+  .final-table td.fr-guess::before{content:"G "}
+  .final-table td.fr-diff::before{content:"D "}
   /* tie badge: let it wrap under the name instead of pushing width */
   .final-table td.fr-name .fr-tiebadge{margin-left:0;margin-top:3px}
 }
