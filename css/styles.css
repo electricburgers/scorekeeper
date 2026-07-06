@@ -3,9 +3,9 @@
 
 :root,[data-theme="hc-dark"]{
   --bg-primary:#000;--bg-card:#0d0d0d;--bg-card-alt:#141414;--bg-input:#1c1c1c;--bg-hover:#242424;
-  --border:#2e2e2e;--border-light:#404040;--text-primary:#fff;--text-secondary:#ccc;--text-muted:#aeaeae;
+  --border:#2e2e2e;--border-light:#404040;--border-strong:#5c5c5c;--text-primary:#fff;--text-secondary:#ccc;--text-muted:#aeaeae;
   --accent-cyan:#00ffff;--accent-magenta:#ff44aa;--accent-gold:#ffee00;--accent-green:#44ff44;
-  --accent-red:#ff4444;--accent-orange:#ffaa00;--shadow:0 4px 24px rgba(0,0,0,.8);
+  --accent-red:#ff4444;--accent-orange:#ffaa00;--shadow:0 4px 24px rgba(0,0,0,.8);--shadow-lg:0 16px 48px rgba(0,0,0,.85),0 2px 10px rgba(0,0,0,.7);
   --row-stripe:rgba(255,255,255,.055);--radius:8px;--radius-lg:12px;
   --font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;
   --transition:.18s ease;--row-pad:8px;
@@ -26,9 +26,9 @@
 }
 [data-theme="hc-light"]{
   --bg-primary:#f5f5f5;--bg-card:#fff;--bg-card-alt:#f0f0f0;--bg-input:#e8e8e8;--bg-hover:#dcdcdc;
-  --border:#b0b0b0;--border-light:#949494;--text-primary:#000;--text-secondary:#2a2a2a;--text-muted:#454545;
+  --border:#b0b0b0;--border-light:#949494;--border-strong:#8a8a8a;--text-primary:#000;--text-secondary:#2a2a2a;--text-muted:#454545;
   --accent-cyan:#006688;--accent-magenta:#bb0055;--accent-gold:#e0b123;--accent-green:#10a710;
-  --accent-red:#cc0000;--accent-orange:#994400;--shadow:0 4px 24px rgba(0,0,0,.12);
+  --accent-red:#cc0000;--accent-orange:#994400;--shadow:0 4px 24px rgba(0,0,0,.12);--shadow-lg:0 16px 48px rgba(0,0,0,.28),0 2px 10px rgba(0,0,0,.18);
   --row-stripe:rgba(0,0,0,.048);
   --btn-idle-bg:#e8e8e8;--btn-correct-bg:#8ee89a;--btn-incorrect-bg:#eeaaaa;--btn-used-bg:#f0f0f0;
   --pts-pos-bg:#0c7a0c;--pts-pos-border:#0a6a0a;--pts-pos-fg:#fff;
@@ -115,7 +115,7 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 /* Overlay, not in-flow: .header is position:sticky (a valid containing block for an
    absolutely-positioned child), so this floats above the app instead of pushing the
    scoreboard down every time it opens. */
-.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow);z-index:150;max-height:calc(100vh - 80px);overflow-y:auto;animation:slideDown .18s ease}
+.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - 80px);overflow-y:auto;animation:slideDown .18s ease}
 .settings-panel.settings-visible{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border)}
 .settings-controls{display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
@@ -124,7 +124,7 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    Padding + line-height keep the tappable area comfortably above the ~44px touch-target
    guideline; color/background reuse the same input/button token pair used everywhere else
    in the app, so contrast is already covered by the existing design system. */
-.settings-close-chevron{grid-column:1/-1;justify-self:center;width:100%;max-width:240px;margin-top:6px;padding:12px 10px;font-size:1.3rem;line-height:1;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-primary);cursor:pointer;transition:var(--transition);touch-action:manipulation}
+.settings-close-chevron{grid-column:1/-1;width:100%;margin-top:6px;padding:12px 10px;font-size:1.3rem;line-height:1;text-align:center;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-primary);cursor:pointer;transition:var(--transition);touch-action:manipulation}
 .settings-close-chevron:hover{background:var(--bg-hover)}
 
 /* ADVANCED SETTINGS — collapsible group holding the rarer controls (point adjustments,
@@ -228,7 +228,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sr-score{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);margin-left:8px;flex-shrink:0}
 
 /* SECTIONS */
-.section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden}
+/* --border-strong (not --border) so every top-level container (Event Details, Teams, Round N,
+   Final Results, etc.) has an edge that's >=3:1 against --bg-primary in every theme — --border
+   alone was only ~1.5-2:1 against the page background, i.e. not a real visual boundary. */
+.section{background:var(--bg-card);border:1px solid var(--border-strong);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden}
 /* Subtle default background (distinct from .section-body's bg-card) so a clickable header
    reads as its own control at a glance, not just on hover. --bg-card-alt vs --text-primary is
    >=18:1 in both themes, so this never threatens the header text's own AA contrast. */
@@ -249,7 +252,7 @@ input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,
    dark theme's input background) — this is the standards-based fix, not a filter/invert hack. */
 [data-theme="hc-dark"] input[type="date"]{color-scheme:dark}
 [data-theme="hc-light"] input[type="date"]{color-scheme:light}
-.date-native{cursor:pointer}
+.date-native{cursor:pointer;width:auto;max-width:170px}
 input:disabled{opacity:.5;cursor:not-allowed}
 input[list]{padding-right:26px;background-image:linear-gradient(45deg,transparent 50%,var(--text-muted) 50%),linear-gradient(135deg,var(--text-muted) 50%,transparent 50%);background-position:calc(100% - 16px) 55%,calc(100% - 11px) 55%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
 input[list]::-webkit-calendar-picker-indicator{opacity:0}
@@ -263,7 +266,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .field.field-invalid input{border-color:var(--accent-orange);box-shadow:0 0 0 2px rgba(255,170,0,.18)}
 
 /* TEAM ENTRY */
-.team-entry{display:grid;grid-template-columns:1fr 4.5rem auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+/* align-items:start (not center): the name column's stacked label+input+checks is taller than
+   the guess column's label+input, so a "center" row would offset the Guess label below Team N
+   instead of level with it. */
+.team-entry{display:grid;grid-template-columns:1fr 4.5rem auto;gap:8px;align-items:start;padding:10px 0;border-bottom:1px solid var(--border)}
 .team-entry.has-adj{grid-template-columns:1fr 4.5rem auto auto}
 .team-entry:last-of-type{border-bottom:none}
 .team-name-cell{display:flex;flex-direction:column;gap:7px;min-width:0}
@@ -298,7 +304,8 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .guess-warn{display:block;font-size:.58rem;font-weight:700;color:var(--txt-orange);letter-spacing:.3px;margin-top:2px}
 
 /* PER-TEAM ADJ */
-.adj-wrap{display:flex;flex-direction:column;align-items:center;gap:5px}
+.adj-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;align-self:center}
+.remove-team{align-self:center}
 .adj-chip{font-family:var(--font-display);font-size:.72rem;font-weight:700;padding:5px 7px;border-radius:6px;border:1px solid var(--border);background:var(--bg-input);color:var(--text-muted);cursor:pointer;transition:var(--transition);white-space:nowrap;min-width:34px;text-align:center;line-height:1}
 .adj-chip:hover{background:var(--bg-hover);border-color:var(--border-light);color:var(--text-primary)}
 .adj-chip.adj-active{color:var(--txt-orange);border-color:var(--accent-orange);background:rgba(255,170,0,.1)}
@@ -320,12 +327,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .rl-2{background:rgba(255,68,170,.13);color:var(--txt-magenta)}
 .rl-3{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .rl-4{background:rgba(255,170,0,.13);color:var(--txt-orange)}
-.round-badge{font-family:var(--font-body);font-size:1rem;font-weight:700;padding:2px 8px;border-radius:4px;border:1px solid currentColor}
+/* line-height:1 keeps the taller 1rem badge from adding extra height to its header row —
+   without it, a header with a badge (e.g. Final Results' "ascending") ends up a few px taller
+   than a plain header with none (e.g. Craft Prize Drawing). */
+.round-badge{font-family:var(--font-body);font-size:1rem;line-height:1;font-weight:700;padding:1px 8px;border-radius:4px;border:1px solid currentColor}
 .round-badge.rb-partial{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .round-badge.rb-done{background:rgba(68,255,68,.1);color:var(--badge-green-fg)}
 
 /* QUESTION BLOCKS — collapsible */
-.question-block{background:var(--bg-card-alt);border:1px solid var(--border);border-left:3px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+.question-block{background:var(--bg-card-alt);border:1px solid var(--border-strong);border-left:3px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
 .question-block.q-active{border-left-color:var(--accent-cyan)}
 .question-block.q-done{border-left-color:var(--accent-green);opacity:.82}
 /* Beer Round wins over q-done green. Uses --badge-gold-fg, not --accent-gold: the raw accent
@@ -350,7 +360,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .mark-all-btn{font-family:var(--font-body);font-size:.68rem;font-weight:700;padding:4px 10px;border-radius:5px;cursor:pointer;border:1px solid var(--border-light);background:var(--bg-input);color:var(--text-primary);transition:var(--transition);text-transform:none;letter-spacing:0;text-align:center;line-height:1.3}
 .mark-all-btn:hover{background:var(--bg-hover);border-color:var(--accent-cyan);color:var(--text-primary)}
 .mark-all-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
-.q-badge{font-family:var(--font-body);font-size:1rem;font-weight:700;padding:2px 9px;border-radius:4px;border:1px solid currentColor}
+.q-badge{font-family:var(--font-body);font-size:1rem;line-height:1;font-weight:700;padding:1px 9px;border-radius:4px;border:1px solid currentColor}
 .q-badge.q-remaining{background:rgba(255,238,0,.13);color:var(--badge-gold-fg)}
 .q-badge.q-complete{background:rgba(68,255,68,.1);color:var(--badge-green-fg)}
 /* Beer Round badge is always golden yellow — it previously reused .q-complete's green,
@@ -411,34 +421,31 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .result-btn.correct-sel{background:var(--bg-card);border:2px solid var(--accent-green);color:var(--badge-green-fg)}
 .result-btn.incorrect-sel{background:var(--bg-card);border:2px solid var(--accent-red);color:var(--txt-red)}
 
-/* STANDINGS */
+/* STANDINGS — deliberately mirrors .final-table's look (full-width, left-aligned name,
+   right-aligned score, real <thead>) rather than a narrow centered block: same idea, same
+   visual language, minus the Place column. */
 .standings-block{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:8px}
-@media(min-width:901px){.standings-block{max-width:420px}}
-/* Chevron first (left, matching the Q1/Q2 question-header pattern), title takes remaining
-   space, sort buttons hug the right edge. */
-.standings-title-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
-.standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:.5px;flex:1 1 auto;min-width:0}
-.standings-sort-btns{display:flex;gap:4px;align-items:center;flex-shrink:0}
+/* Whole row (chevron + title) is the collapse toggle, like a question header's q-header-left. */
+.standings-title-row{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:.5px}
+.standings-chevron{transition:transform .25s;flex-shrink:0}
+.standings-block.collapsed .standings-collapsible{display:none}
+.standings-block.collapsed .standings-chevron{transform:rotate(-90deg)}
+/* Banter, sort buttons, and the table are all inside this wrapper so they collapse together. */
+.standings-collapsible{margin-top:8px}
+.standings-sort-btns{display:flex;gap:4px;align-items:center;margin-bottom:6px}
 .standings-sort-btn{font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .standings-sort-btn.active{background:var(--badge-gold-fg);color:var(--on-badge);border-color:var(--badge-gold-fg)}
-/* Collapse chevron for "Scores — Before Halftime/Final Wager" */
-.standings-collapse-btn{background:none;border:1px solid var(--border);border-radius:var(--radius);color:var(--text-muted);cursor:pointer;font-size:.85rem;line-height:1;padding:5px 7px;transition:var(--transition);flex-shrink:0;display:flex;align-items:center}
-.standings-collapse-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
-.standings-collapse-btn .chevron{display:inline-block;transition:transform .25s}
-.standings-block.collapsed .standings-rows{display:none}
-.standings-block.collapsed .standings-collapse-btn .chevron{transform:rotate(-90deg)}
-/* Table layout (not flex): every row's name column and score column share the SAME computed
-   width across the whole block, so names right-align to one shared edge and scores left-align
-   to another — real vertical column alignment, not just each row centered independently. The
-   table itself shrink-wraps to its content and centers via margin:auto, giving the "narrower,
-   centered container" look instead of a full-bleed block. */
-.standings-rows{display:table;margin:0 auto;max-width:100%}
-.standings-row{display:table-row;cursor:pointer;transition:var(--transition)}
+.standings-table{width:100%;border-collapse:collapse;font-size:.86rem}
+.standings-table th,.standings-table td{padding:7px 8px;border-bottom:1px solid var(--border)}
+.standings-table thead th{color:var(--text-muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;text-align:left}
+.standings-table thead th:last-child{text-align:right}
+.standings-table tbody tr:last-child td{border-bottom:none}
+.standings-row{cursor:pointer;transition:var(--transition)}
 .standings-row:nth-child(even){background:var(--row-stripe)}
-.standings-name{display:table-cell;font-weight:600;font-size:.82rem;text-align:right;vertical-align:middle;max-width:12rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:var(--row-pad) 10px var(--row-pad) 4px;border-bottom:1px solid var(--border)}
-.standings-pts{display:table-cell;font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);text-align:left;vertical-align:middle;padding:var(--row-pad) 4px var(--row-pad) 10px;border-bottom:1px solid var(--border)}
-.standings-row:last-child .standings-name,.standings-row:last-child .standings-pts{border-bottom:none}
+.standings-name{text-align:left;font-weight:600}
+.standings-pts{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);text-align:right}
 
 /* BEER STRIPE — for Q5 bonus and special wager beer rounds */
 .beer-stripe{display:flex;align-items:center;gap:6px;padding:5px 12px 6px;background:rgba(255,238,0,.07);border-bottom:1px solid rgba(255,238,0,.18)}
@@ -553,8 +560,8 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* CRAFT BEER PRIZE winner — tap a name in the scoreboard to toggle */
 .sr-name-clickable{cursor:pointer}
 .sr-name-clickable:hover{color:var(--badge-gold-fg)}
-.score-row.cb-prize{border:1px solid var(--accent-gold);border-radius:8px;background:rgba(255,238,0,.08);margin-left:0;margin-right:0}
-.cb-tag{font-family:var(--font-body);font-size:.58rem;font-weight:700;color:var(--badge-gold-fg);background:rgba(255,238,0,.14);border:1px solid rgba(255,238,0,.35);border-radius:4px;padding:1px 5px;margin-left:5px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle}
+.score-row.cb-prize{border:1px solid var(--badge-gold-fg);border-radius:8px;background:rgba(255,238,0,.08);margin-left:0;margin-right:0}
+.cb-tag{font-family:var(--font-body);font-size:.58rem;font-weight:700;color:var(--badge-gold-fg);background:rgba(255,238,0,.14);border:1px solid var(--badge-gold-fg);border-radius:4px;padding:1px 5px;margin-left:5px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle}
 /* .cb-tag can sit on a team row that is ALSO gold-tinted (.score-row.cb-prize), compounding
    the tint darker than badge-gold-fg was tuned for — bump brightness for that one case. */
 [data-theme="hc-dark"][data-cb="2"] .score-row.cb-prize .cb-tag{color:#ffb3ff}
@@ -713,7 +720,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    Uses the scorecol container query so it follows the score column's real
    width (full-width on phones, wide on desktop) rather than the viewport. */
 @container scorecol (max-width:600px){
-  .final-table thead{display:none}
+  /* Headers stay visible, laid out with the same 3-column + wrapped-4th-row grid as the
+     tbody rows below, so "Place/Team/Score" sit over their own stacked columns. */
+  .final-table thead{display:block}
+  .final-table thead tr{display:grid;grid-template-columns:2.75rem minmax(0,1fr) auto;column-gap:10px;row-gap:2px;padding:6px 11px;border-bottom:1px solid var(--border)}
+  .final-table thead th{padding:0;border-bottom:none}
+  .final-table thead th:nth-child(1){grid-column:1;grid-row:1;text-align:left}
+  .final-table thead th:nth-child(2){grid-column:2;grid-row:1;text-align:left}
+  .final-table thead th:nth-child(3){grid-column:3;grid-row:1;text-align:right}
+  .final-table thead th:nth-child(4){grid-column:1/4;grid-row:2;text-align:right}
   .final-table,.final-table tbody{display:block;width:100%}
   .final-table tr{
     display:grid;

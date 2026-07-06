@@ -293,7 +293,10 @@ function finalResultsRows(){
     const hasG=!(t.scoreGuess===''||t.scoreGuess==null);
     const guess=hasG?parseInt(t.scoreGuess,10):null;
     const diff=hasG?Math.abs((score-bonuses)-guess):null;
-    return {index:i,name:t.name||('Team '+(i+1)),score,guess,diff};
+    // >0 = guess came in over the actual score, <0 = under, 0 = exact — display-only, the
+    // tie-break sort above always uses the unsigned diff.
+    const diffSign=hasG?Math.sign(guess-(score-bonuses)):0;
+    return {index:i,name:t.name||('Team '+(i+1)),score,guess,diff,diffSign};
   });
   const byPlace=rows.slice().sort((a,b)=> b.score-a.score || dv(a)-dv(b) || a.index-b.index);
   byPlace.forEach((r,idx)=>{r.place=idx+1;});
@@ -308,7 +311,8 @@ function renderFinalResults(){
   let h='<table class="final-table"><thead><tr><th>Place</th><th>Team</th><th>Score</th><th>| DIFF |* / GUESS</th></tr></thead><tbody>';
   rows.forEach(r=>{
     const medal=r.place===1?' fr-gold':r.place===2?' fr-silver':r.place===3?' fr-bronze':'';
-    const guessDiff=r.guess==null?'\u2014':`| ${r.diff} | / ${r.guess}`;
+    const diffSigned=r.diffSign>0?'+'+r.diff:r.diffSign<0?'-'+r.diff:r.diff;
+    const guessDiff=r.guess==null?'\u2014':`| ${diffSigned} | / ${r.guess}`;
     h+=`<tr class="${r.tie?'fr-tie':''}${medal}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to audit score" onclick="openAudit(${r.index})">`+
        `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>`+
        `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie?` <span class="fr-tiebadge${r.tieWinner?' fr-win':''}">${r.tieWinner?'\u2713 closer':'tie'}</span>`:''}</td>`+
@@ -318,7 +322,7 @@ function renderFinalResults(){
   });
   h+='</tbody></table>';
   h+='<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Ties are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>).</p>';
-  h+='<p class="fr-note">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team\'s score before it\'s compared to their guess, for every team.</p>';
+  h+='<p class="fr-note">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team\'s score before it\'s compared to their guess, for every team. A <strong>+</strong> means the guess came in over the actual score, a <strong>\u2212</strong> means it came in under.</p>';
   return h;
 }
 function usedW(ti,ri){const u=[];for(let qi=0;qi<4;qi++){const a=gameState.rounds[ri].questions[qi][ti];if(a&&a.wager!==undefined)u.push({qi,wager:a.wager});}return u;}
@@ -337,10 +341,13 @@ function renderStandings(type){
   const btns=[['entry','Entry'],['random','🎲 Random'],[`asc`,'\u2191 Asc'],['desc','\u2193 Desc']].map(([m,lbl])=>
     `<button class="standings-sort-btn${mode===m?' active':''}" onclick="setStandingsSort('${type}','${m}')">${lbl}</button>`).join('');
   const isCollapsed=collapsedStandings.has(type);
-  let h=`<div class="standings-block${isCollapsed?' collapsed':''}">`+renderBanter('scores','sc-'+type,{sm:true})+
-    `<div class="standings-title-row"><button class="standings-collapse-btn" onclick="toggleStandingsCollapse('${type}')" title="${isCollapsed?'Expand':'Collapse'}" aria-label="${isCollapsed?'Expand':'Collapse'} ${esc(label)}"><span class="chevron">\u25BC</span></button><span class="standings-title">${label}</span><div class="standings-sort-btns">${btns}</div></div><div class="standings-rows">`;
-  list.forEach(t=>{h+=`<div class="standings-row" role="button" tabindex="0" title="${esc(t.name)} — tap to audit score" onclick="openAudit(${t.ti})"><span class="standings-name ta-name-clickable">${esc(t.name)}</span><span class="standings-pts">${t.pts}</span></div>`;});
-  return h+'</div></div>';
+  let h=`<div class="standings-block${isCollapsed?' collapsed':''}">`+
+    `<div class="standings-title-row" role="button" tabindex="0" onclick="toggleStandingsCollapse('${type}')" title="${isCollapsed?'Expand':'Collapse'}" aria-label="${isCollapsed?'Expand':'Collapse'} ${esc(label)}"><span class="chevron standings-chevron">\u25BC</span><span class="standings-title">${label}</span></div>`+
+    `<div class="standings-collapsible">`+renderBanter('scores','sc-'+type,{sm:true})+
+    `<div class="standings-sort-btns">${btns}</div>`+
+    `<table class="standings-table"><thead><tr><th>Team</th><th>Score</th></tr></thead><tbody>`;
+  list.forEach(t=>{h+=`<tr class="standings-row" role="button" tabindex="0" title="${esc(t.name)} — tap to audit score" onclick="openAudit(${t.ti})"><td class="standings-name ta-name-clickable">${esc(t.name)}</td><td class="standings-pts">${t.pts}</td></tr>`;});
+  return h+'</tbody></table></div></div>';
 }
 function toggleStandingsCollapse(type){
   if(collapsedStandings.has(type))collapsedStandings.delete(type);
@@ -460,7 +467,7 @@ function renderLeft(){
   m.scrollTop=sy;
   if(wy)window.scrollTo(0,wy);
   // Re-assert after layout settles (fonts/container-queries) — same value, so no visible motion.
-  requestAnimationFrame(()=>{m.scrollTop=sy;if(wy)window.scrollTo(0,wy);});
+  requestAnimationFrame(()=>{m.scrollTop=sy;if(wy)window.scrollTo(0,wy);refreshPointerHover();});
 }
 
 function qScored(ri,qi){const n=gameState.teams.length;let done=0;for(let ti=0;ti<n;ti++){const a=gameState.rounds[ri].questions[qi][ti];if(a&&a.wager!==undefined&&a.correct!==undefined)done++;}return{done,total:n};}
@@ -642,6 +649,8 @@ function renderBQ(ri){
       <div class="bonus-right"><div class="bonus-choice">${choices}</div>
       ${ptsHtml}</div></div>`;
   });
+  // Lives inside .q-body (like the per-question banter) so collapsing this block hides it too.
+  h+=renderBanter(beer?'beer':'next',`bq-${ri}-${beer?'beer':'next'}`,{sm:true});
   return h+`</div></div>`;
 }
 
@@ -682,6 +691,8 @@ function renderSpecialWager(type){
       ${pts}
     </div>`;
   });
+  // Lives inside .sw-body so it collapses along with the rest when the chevron is toggled.
+  h+=renderBanter(beer?'beer':'next',`sw-${type}-${beer?'beer':'next'}`,{sm:true});
   return h+`</div></div>`;
 }
 function toggleSpecialWager(type){
@@ -708,7 +719,7 @@ function renderSB(){
     <button class="sort-btn ${scoreSortMode==='desc'?'active':''}" onclick="setSortMode('desc')">\u2193 Desc</button>
   </div><div class="sort-mode-label">${sortModeLabel()}</div>${buildScores()}`;
   body.scrollTop=sy;
-  requestAnimationFrame(()=>{body.scrollTop=sy;});
+  requestAnimationFrame(()=>{body.scrollTop=sy;refreshPointerHover();});
 }
 
 function buildScores(){
@@ -1491,6 +1502,22 @@ function trivInjectTemplate(templateBytes, gs){
 function fn(ext){return`trivia-${gameState.meta.quizId||'NOID'}-${gameState.meta.date||new Date().toISOString().slice(0,10)}.${ext}`;}
 function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();}
 function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''}
+
+/* Re-render replaces whole subtrees via innerHTML on almost every tap. Browsers only
+   recompute which element is "under the pointer" (and thus its :hover state / cursor) on an
+   actual mousemove event — they don't re-run hit-testing just because the DOM changed. So if
+   the mouse is sitting still when a click swaps in a brand-new element at that same spot, it
+   can keep showing the default arrow until the mouse physically moves again. Tracking the last
+   real pointer position and replaying a synthetic mousemove after each render forces the
+   browser to re-evaluate hover/cursor immediately against the new DOM. */
+let __lastPointerXY=null;
+document.addEventListener('mousemove',e=>{__lastPointerXY=[e.clientX,e.clientY];});
+function refreshPointerHover(){
+  if(!__lastPointerXY)return;
+  const [x,y]=__lastPointerXY;
+  const el=document.elementFromPoint(x,y);
+  if(el)el.dispatchEvent(new MouseEvent('mousemove',{bubbles:true,cancelable:true,clientX:x,clientY:y}));
+}
 
 // DRAG HANDLE
 (function(){
