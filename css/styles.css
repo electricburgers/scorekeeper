@@ -267,6 +267,7 @@ input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,
 [data-theme="hc-dark"] input[type="date"]{color-scheme:dark}
 [data-theme="hc-light"] input[type="date"]{color-scheme:light}
 .date-native{cursor:pointer;width:auto;max-width:170px}
+.quiz-id-input{width:auto;max-width:130px}
 input:disabled{opacity:.5;cursor:not-allowed}
 input[list]{padding-right:26px;background-image:linear-gradient(45deg,transparent 50%,var(--text-muted) 50%),linear-gradient(135deg,var(--text-muted) 50%,transparent 50%);background-position:calc(100% - 16px) 55%,calc(100% - 11px) 55%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
 input[list]::-webkit-calendar-picker-indicator{opacity:0}
@@ -331,7 +332,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .adj-val{min-width:2rem;height:1.5rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:.75rem}
 .adj-val.pos{color:var(--badge-green-fg)}
 .adj-val.neg{color:var(--txt-red)}
-.remove-team button{width:1.5rem;height:1.5rem;border-radius:50%;border:1px solid var(--border);background:none;color:var(--text-muted);font-size:.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.remove-team button{width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--border);background:none;color:var(--text-muted);font-size:1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .remove-team button:hover{background:rgba(255,68,68,.15);border-color:var(--accent-red);color:var(--txt-red)}
 
 #addTeamBtn{margin-top:10px;width:100%;padding:8px;font-family:var(--font-display);text-transform:uppercase;letter-spacing:1px}
@@ -590,8 +591,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .cp-intro{font-size:.78rem;color:var(--text-secondary);margin-bottom:6px;font-style:italic}
 .cp-flash{font-family:var(--font-display);font-size:1.3rem;font-weight:800;text-align:center;padding:14px 8px;color:var(--badge-gold-fg);background:rgba(255,238,0,.08);border:2px dashed var(--accent-gold);border-radius:var(--radius);animation:cpPulse .22s ease-in-out infinite alternate}
 @keyframes cpPulse{from{opacity:.75;transform:scale(.99)}to{opacity:1;transform:scale(1.01)}}
+/* Trophy+name+"won!" are one flowing text span (not separate flex items) so a long team name
+   wraps onto a second line on its own, with "won!" following right after it — the Clear
+   button is the only other flex item, so it stays put on the first line instead of also
+   wrapping to its own row. */
 .cp-winner{font-size:.9rem;margin:8px 0 6px;color:var(--text-primary);display:flex;align-items:center;flex-wrap:wrap;gap:10px}
-.cp-clear-btn{font-size:.7rem;padding:4px 10px}
+.cp-winner-text{flex:1;min-width:0}
+.cp-clear-btn{font-size:.9rem;line-height:1;padding:5px 9px;border-radius:var(--radius);flex-shrink:0}
 .cp-script-label{display:block;font-size:.66rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
 
@@ -692,8 +698,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    rather than being spread out to match the other columns' full padding. */
 .final-table th.fr-guess-h,.final-table td.fr-guess{padding-right:4px}
 .final-table th.fr-diff-h,.final-table td.fr-diff{padding-left:4px;border-left:1px solid var(--border)}
-.final-table td.fr-guess{color:var(--text-secondary);font-weight:600}
-.final-table td.fr-diff{color:var(--text-secondary);font-weight:600}
+/* Monospace: every digit is the same width, so the Guess/Diff numbers (and the mobile G/D
+   labels next to them) line up consistently instead of drifting with proportional-font kerning. */
+.final-table td.fr-guess{color:var(--text-secondary);font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.final-table td.fr-diff{color:var(--text-secondary);font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .final-table tbody tr:last-child td{border-bottom:none}
 .final-table tbody tr:nth-child(even):not(.fr-tie):not(.fr-gold):not(.fr-silver):not(.fr-bronze){background:var(--row-stripe)}
 .final-table tr.fr-tie{background:rgba(255,221,0,.13)}
@@ -750,7 +758,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
      get no header of their own — each value now labels itself inline (see fr-guess/fr-diff
      ::before below), so a header for them would just repeat what's already on the number. */
   .final-table thead{display:block}
-  .final-table thead tr{display:grid;grid-template-columns:2.75rem minmax(0,1fr) auto;column-gap:10px;padding:6px 11px;border-bottom:1px solid var(--border)}
+  .final-table thead tr{display:grid;grid-template-columns:2.75rem minmax(0,1fr) 3.2rem;column-gap:10px;padding:6px 11px;border-bottom:1px solid var(--border)}
   .final-table thead th{padding:0;border-bottom:none}
   .final-table thead th:nth-child(1){grid-column:1;grid-row:1;text-align:left}
   .final-table thead th:nth-child(2){grid-column:2;grid-row:1;text-align:left}
@@ -763,7 +771,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
        "auto" column sizes to that ONE row's own content, and "1st" vs "10th" end up with
        different column widths and misaligned team names. A fixed width is shared by every
        row's grid uniformly, so the team-name column always starts at the same x position. */
-    grid-template-columns:2.75rem minmax(0,1fr) auto;
+    grid-template-columns:2.75rem minmax(0,1fr) 3.2rem;
     column-gap:10px;row-gap:3px;
     align-items:center;
     padding:9px 11px;
@@ -777,11 +785,17 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .final-table td.fr-place{grid-column:1;grid-row:1;font-size:1rem}
   .final-table td.fr-name {grid-column:2;grid-row:1;font-size:.95rem;white-space:normal;overflow-wrap:break-word;line-height:1.25}
   .final-table td.fr-score{grid-column:3;grid-row:1;text-align:right;font-size:1.1rem}
-  .final-table td.fr-guess{grid-column:2/3;grid-row:2;text-align:right;white-space:nowrap;font-size:.78rem;color:var(--text-secondary);padding-right:4px}
-  .final-table td.fr-diff{grid-column:3/4;grid-row:2;text-align:right;white-space:nowrap;font-size:.78rem;color:var(--text-secondary);padding-left:4px;border-left:1px solid var(--border)}
+  /* Negative margin pulls Guess in against the grid's column-gap (which row 1's Team/Score
+     still needs) so the G/D pair reads as one close-together unit instead of two numbers
+     spaced as far apart as Team and Score are. The divider lives on the ::before itself
+     (not the td's own border) so it sits right next to "D", not at the fixed column's left
+     edge — a border on the td would leave a gap that grows or shrinks with the diff value's
+     own digit count, since the td is wider than short values like "+4" need. */
+  .final-table td.fr-guess{grid-column:2/3;grid-row:2;text-align:right;white-space:nowrap;font-size:.78rem;color:var(--text-secondary);padding-right:4px;margin-right:-10px}
+  .final-table td.fr-diff{grid-column:3/4;grid-row:2;text-align:right;white-space:nowrap;font-size:.78rem;color:var(--text-secondary)}
   .final-table td.fr-guess::before,.final-table td.fr-diff::before{color:var(--text-muted);font-weight:700}
   .final-table td.fr-guess::before{content:"G "}
-  .final-table td.fr-diff::before{content:"D "}
+  .final-table td.fr-diff::before{content:"D ";border-left:1px solid var(--border);padding-left:4px;margin-left:2px}
   /* tie badge: let it wrap under the name instead of pushing width */
   .final-table td.fr-name .fr-tiebadge{margin-left:0;margin-top:3px}
 }
