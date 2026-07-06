@@ -696,6 +696,14 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .fr-tiebadge.fr-win{background:var(--badge-green-fg)}
 .fr-diff-win{color:var(--badge-green-fg)!important;font-weight:800!important}
 .fr-note{font-size:.72rem;color:var(--text-muted);margin-top:9px;line-height:1.45}
+/* Collapsed by default so the tie-break/Diff explanation doesn't eat vertical space every time
+   Final Results is open — <details>/<summary> gets keyboard support and toggling for free. */
+.fr-details{margin-top:9px}
+.fr-details summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;font-size:.72rem;font-weight:700;color:var(--text-muted);padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition)}
+.fr-details summary::-webkit-details-marker{display:none}
+.fr-details summary:hover{background:var(--bg-hover);color:var(--text-primary)}
+.fr-details[open] summary{margin-bottom:6px}
+.fr-details .fr-note:first-of-type{margin-top:0}
 
 /* ── Final results podium medals (1st/2nd/3rd) ──
    The 4px accent bar is baked into the row background gradient so it renders

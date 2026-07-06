@@ -310,7 +310,7 @@ function finalResultsRows(){
 function renderFinalResults(){
   if(!gameState.teams.length)return'<p class="fr-note">Add teams and score the game to see final results.</p>';
   const rows=finalResultsRows();
-  let h='<table class="final-table"><thead><tr><th>Place</th><th>Team</th><th>Score</th><th>| DIFF |* / GUESS</th></tr></thead><tbody>';
+  let h='<table class="final-table"><thead><tr><th>Place</th><th>Team</th><th>Score</th><th>| DIFF | / GUESS *</th></tr></thead><tbody>';
   rows.forEach(r=>{
     const medal=r.place===1?' fr-gold':r.place===2?' fr-silver':r.place===3?' fr-bronze':'';
     const diffSigned=r.diffSign>0?'+'+r.diff:r.diffSign<0?'-'+r.diff:r.diff;
@@ -319,12 +319,14 @@ function renderFinalResults(){
        `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>`+
        `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie?` <span class="fr-tiebadge${r.tieWinner?' fr-win':''}">${r.tieWinner?'\u2713 closer':'tie'}</span>`:''}</td>`+
        `<td class="fr-score" data-label="Score">${r.score}</td>`+
-       `<td class="fr-guessdiff${r.tieWinner?' fr-diff-win':''}" data-label="| DIFF |* / GUESS">${guessDiff}</td>`+
+       `<td class="fr-guessdiff${r.tieWinner?' fr-diff-win':''}" data-label="| DIFF | / GUESS *">${guessDiff}</td>`+
        `</tr>`;
   });
   h+='</tbody></table>';
-  h+='<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Ties are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>).</p>';
-  h+='<p class="fr-note">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team\'s score before it\'s compared to their guess, for every team. A <strong>+</strong> means the guess came in over the actual score, a <strong>\u2212</strong> means it came in under.</p>';
+  h+='<details class="fr-details"><summary>&gt; Details *</summary>'+
+     '<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Ties are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>).</p>'+
+     '<p class="fr-note">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team\'s score before it\'s compared to their guess, for every team. A <strong>+</strong> means the guess came in over the actual score, a <strong>\u2212</strong> means it came in under.</p>'+
+     '</details>';
   return h;
 }
 function usedW(ti,ri){const u=[];for(let qi=0;qi<4;qi++){const a=gameState.rounds[ri].questions[qi][ti];if(a&&a.wager!==undefined)u.push({qi,wager:a.wager});}return u;}
@@ -333,14 +335,12 @@ function preWagerTotal(ti,type){let t=roundSub(ti,0)+roundSub(ti,1);if(type==='f
 function renderStandings(type){
   if(!gameState.teams.length)return'';
   const label=type==='halftime'?'Scores \u2014 Before Halftime Wager':'Scores \u2014 Before Final Wager';
-  const mode=standingsSortMode[type]||'desc';
+  const mode=standingsSortMode[type]||'entry';
   const base=gameState.teams.map((t,ti)=>({ti,name:t.name||'Team '+(ti+1),pts:preWagerTotal(ti,type)}));
   let list;
-  if(mode==='entry')list=base;
-  else if(mode==='asc')list=base.slice().sort((a,b)=>a.pts-b.pts);
-  else if(mode==='random'){const ro=standingsRandomOrder[type];list=(ro&&ro.length===base.length)?ro.map(ti=>base[ti]):base;}
-  else list=base.slice().sort((a,b)=>b.pts-a.pts);
-  const btns=[['entry','Entry'],['random','🎲 Random'],[`asc`,'\u2191 Asc'],['desc','\u2193 Desc']].map(([m,lbl])=>
+  if(mode==='random'){const ro=standingsRandomOrder[type];list=(ro&&ro.length===base.length)?ro.map(ti=>base[ti]):base;}
+  else list=base;
+  const btns=[['entry','Entry'],['random','🎲 Random']].map(([m,lbl])=>
     `<button class="standings-sort-btn${mode===m?' active':''}" onclick="setStandingsSort('${type}','${m}')">${lbl}</button>`).join('');
   const isCollapsed=collapsedStandings.has(type);
   let h=`<div class="standings-block${isCollapsed?' collapsed':''}">`+
@@ -628,7 +628,7 @@ function renderBQ(ri){
   const blockCls='question-block'+(beer?' beer-round':'')+(isCollapsedBQ?' bq-collapsed':'');
   const bqStyle=BONUS_Q_STYLE[ri]||{emoji:'',cls:''};
   const bqKey='b'+ri;
-  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5 - BONUS (0-4 CORRECT \u00D7 5 PTS)</span>${badge}</div></div></div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[bqKey]?' active':''}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order">\u21ba Reset<br>Sort</button></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
+  let h=`<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5 - BONUS (0-4 \u00D7 5 PTS)</span>${badge}</div></div></div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[bqKey]?' active':''}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order">\u21ba Reset<br>Sort</button></div></div>${beer?'<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>':''}<div class="q-body">`;
   const bqEntryOrder=gameState.teams.map((_,i)=>i);
   let bqTeamOrder=questionSortOrder[bqKey]?questionSortOrder[bqKey].filter(ti=>ti<gameState.teams.length):bqEntryOrder;
   if(questionSortOrder[bqKey]){
@@ -665,7 +665,7 @@ function renderSpecialWager(type){
   const data=isFinal?gameState.finalWager:gameState.halftime;
   const max=isFinal?20:10;
   const sectionCls=isFinal?'special-section final-wager':'special-section';
-  const titleMain=isFinal?'\uD83C\uDFAF Q5 - BONUS WAGER (1-20 pts, win or lose)':'\u23F8 Q5 - BONUS WAGER (1-10 pts, win or lose)';
+  const titleMain=isFinal?'\uD83C\uDFAF Q5 - BONUS WAGER (1-20)':'\u23F8 Q5 - BONUS WAGER (1-10)';
   const wSet=isFinal?'setFW':'setHW', cSet=isFinal?'setFC':'setHC', iSet=isFinal?'setFWInput':'setHWInput';
   const beer=isSpecialBeerRound(type);
   const swN=gameState.teams.length;let swDone=0;for(let ti=0;ti<swN;ti++){const d=data[ti];if(d&&d.wager!=null&&d.wager!==''&&d.correct!=null)swDone++;}
@@ -903,7 +903,7 @@ function renderCraftPrizeBlock(){
         <button onclick="setCraftDrawSeconds(${Math.min(30,secs+1)})" ${(drawing||secs>=30)?'disabled style="opacity:.3;cursor:default"':''} aria-label="Increase drumroll seconds">+</button>
       </div></div>
     </div>
-    <div class="cp-note">Top ${excludeN} place${excludeN>1?'s':''} ${excludeN>1?'are':'is'} excluded — there's only one craft beer prize</div>`;
+    <div class="cp-note">Top ${excludeN} place${excludeN>1?'s':''} ${excludeN>1?'are':'is'} excluded: ${esc(ranked().slice(0,excludeN).map(r=>r.name).join(', '))}</div>`;
   if(drawing){
     h+=`<div class="cp-intro">🎙️ Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName||'')}</div>`;
   }else{
