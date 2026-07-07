@@ -605,6 +605,17 @@ function resetBonusQuestionSort(ri){
   delete questionSortOrder['b'+ri];
   renderAll();
 }
+function sortSpecialWager(type){
+  const key='sw-'+type;
+  const data=type==='final'?gameState.finalWager:gameState.halftime;
+  const answered=(ti)=>{const d=data[ti];return !!(d&&d.wager!=null&&d.wager!==''&&d.correct!=null);};
+  questionSortOrder[key]=gameState.teams.map((_,ti)=>ti).sort((a,b)=>{const aa=answered(a)?1:0,bb=answered(b)?1:0;return aa-bb||a-b;});
+  renderAll();
+}
+function resetSpecialWagerSort(type){
+  delete questionSortOrder['sw-'+type];
+  renderAll();
+}
 function toggleBonusQ(ri){
   const key='b'+ri;
   if(collapsedBonusQuestions.has(key))collapsedBonusQuestions.delete(key);
@@ -680,10 +691,17 @@ function renderSpecialWager(type){
   const swN=gameState.teams.length;let swDone=0;for(let ti=0;ti<swN;ti++){const d=data[ti];if(d&&d.wager!=null&&d.wager!==''&&d.correct!=null)swDone++;}
   let swBadge='';if(swN){if(beer)swBadge='<span class="q-badge q-beer">\uD83C\uDF7A Beer Round!</span>';else if(swDone===swN)swBadge='<span class="q-badge q-complete">\u2713 Done</span>';else swBadge=`<span class="q-badge q-remaining">${swN-swDone} left</span>`;}
   const swCollapsed=collapsedSpecialWagers.has(type);
-  let h=`<div class="${sectionCls}${beer?' beer-round':''}${swCollapsed?' sw-collapsed':''}" id="swblock-${type}"><div class="sw-header" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3>${titleMain}</h3>${swBadge}</div>`;
+  const swKey='sw-'+type;
+  let h=`<div class="${sectionCls}${beer?' beer-round':''}${swCollapsed?' sw-collapsed':''}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3>${titleMain}</h3>${swBadge}</div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[swKey]?' active':''}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order">\u21BA Reset<br>Sort</button></div></div>`;
   if(beer)h+=`<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
   h+=`<div class="sw-body">`;
-  gameState.teams.forEach((t,ti)=>{
+  const swEntryOrder=gameState.teams.map((_,i)=>i);
+  let swTeamOrder=questionSortOrder[swKey]?questionSortOrder[swKey].filter(ti=>ti<gameState.teams.length):swEntryOrder;
+  if(questionSortOrder[swKey]){
+    swEntryOrder.forEach(ti=>{if(!swTeamOrder.includes(ti))swTeamOrder.push(ti);});
+  }
+  swTeamOrder.forEach(ti=>{
+    const t=gameState.teams[ti];
     const d=data[ti]||{};
     const w=d.wager!=null&&d.wager!==''?+d.wager:null;
     let pts=`<span class="ta-pts pts-zero">\u2014</span>`;

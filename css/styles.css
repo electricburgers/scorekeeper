@@ -558,10 +558,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    is still meaningful — kept so existing markup referencing the class still resolves. */
 .q-badge.q-badge-lg{padding:3px 10px}
 
-/* SPECIAL WAGER collapse (R2 Bonus Wager / R4 Final Wager) */
-.sw-header{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+/* SPECIAL WAGER collapse (R2 Bonus Wager / R4 Final Wager) — the collapse toggle and the
+   Sort/Reset buttons are separate flex children (sw-header-left/q-header-right) so tapping
+   a button doesn't also collapse the section. */
+.sw-header{display:flex;align-items:center;gap:8px;user-select:none}
+.sw-header-left{display:flex;align-items:center;gap:8px;cursor:pointer;flex:1;min-width:0}
 .sw-header h3{margin-bottom:0!important}
-.sw-header:hover{opacity:.85}
+.sw-header-left:hover{opacity:.85}
 .sw-header .q-chevron{transition:transform .25s}
 .special-section.sw-collapsed .q-chevron{transform:rotate(-90deg)}
 .special-section.sw-collapsed .sw-body{display:none}
@@ -665,6 +668,18 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .team-entry.has-adj{grid-template-columns:1fr 3.5rem auto auto}
   .check-label{font-size:.72rem;padding:5px 8px;gap:5px}
   .check-box{width:20px;height:20px}
+
+  /* Q1-4 / Q5 Bonus / Q5 Wager headers: title + badge + two Sort/Reset buttons don't fit on
+     one line at phone widths — the desktop-sized 1rem "Done"/"Beer Round!" badge alone was
+     squeezing the title down to a handful of px. Wrap the button cluster onto its own row
+     so it gets the full row width instead of fighting the title for space. The button cluster
+     wrapping to its own row already frees up enough width that nothing here needs to shrink
+     below the badge's own size — one shared .8rem (not three separate step-downs) keeps the
+     badge and the Sort/Reset buttons reading as one control cluster at every FONT_SIZES step,
+     down to the 12px floor. */
+  .q-header,.sw-header{flex-wrap:wrap}
+  .q-header-right{flex-basis:100%;justify-content:flex-end;margin-left:0;margin-top:2px}
+  .q-badge,.round-badge,.mark-all-btn{font-size:.8rem}
 }
 
 @media(max-width:480px){
