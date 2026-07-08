@@ -75,6 +75,17 @@ const ROUND_WAGERS = [
 ];
 const ROUND_COLORS = ["rl-1", "rl-2", "rl-3", "rl-4"];
 const BONUS_ROUNDS = new Set([0, 2]);
+// Round 2's halftime wager and Round 4's final wager already get a fun emoji + their own
+// accent color (⏸ magenta, 🎯 orange) via renderSpecialWager — this gives Round 1 and Round 3's
+// bonus question the same treatment, reusing the color each round is already tagged with
+// elsewhere (rl-1 cyan, rl-3 gold) so it's consistent rather than a brand-new color choice.
+// Declared up here (not next to renderBQ where it's used) because the very first render on a
+// brand-new session — no saved game to resume — runs synchronously at script-parse time, before
+// a `const` declared further down the file would be out of its temporal dead zone.
+const BONUS_Q_STYLE = {
+  0: { emoji: "🎁", cls: "bq-r1" },
+  2: { emoji: "🍀", cls: "bq-r3" },
+};
 const APP_VERSION = "v13.2"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
@@ -1152,8 +1163,8 @@ function renderWQ(ri, qi) {
       </div>
     </div>
     <div class="q-header-right">
-      <button class="mark-all-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button>
-      <button class="mark-all-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order">\u21ba Reset<br>Sort</button>
+      <button class="q-sort-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195 Sort</button>
+      <button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">\u21ba Reset</button>
     </div>
   </div>`;
 
@@ -1297,14 +1308,6 @@ function toggleBonusQ(ri) {
   if (el) el.classList.toggle("bq-collapsed");
 }
 
-// Round 2's halftime wager and Round 4's final wager already get a fun emoji + their own
-// accent color (\u23F8 magenta, \uD83C\uDFAF orange) via renderSpecialWager \u2014 this gives Round 1 and Round 3's
-// bonus question the same treatment, reusing the color each round is already tagged with
-// elsewhere (rl-1 cyan, rl-3 gold) so it's consistent rather than a brand-new color choice.
-const BONUS_Q_STYLE = {
-  0: { emoji: "\uD83C\uDF81", cls: "bq-r1" },
-  2: { emoji: "\uD83C\uDF40", cls: "bq-r3" },
-};
 function renderBQ(ri) {
   const n = gameState.teams.length;
   let subDone = 0;
@@ -1330,7 +1333,7 @@ function renderBQ(ri) {
   if (isCollapsedBQ) blockCls += " bq-collapsed";
   const bqStyle = BONUS_Q_STYLE[ri] || { emoji: "", cls: "" };
   const bqKey = "b" + ri;
-  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5: BONUS (0-4 \u00D7 5)</span>${badge}</div></div></div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order">\u21ba Reset<br>Sort</button></div></div>${beer ? '<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>' : ""}<div class="q-body">`;
+  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5: BONUS (0-4 \u00D7 5)</span>${badge}</div></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195 Sort</button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">\u21ba Reset</button></div></div>${beer ? '<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>' : ""}<div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
     ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
@@ -1407,7 +1410,7 @@ function renderSpecialWager(type) {
   }
   const swCollapsed = collapsedSpecialWagers.has(type);
   const swKey = "sw-" + type;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3>${titleMain}</h3>${swBadge}</div><div class="q-header-right"><button class="mark-all-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)">\u2195 Sort<br>by Answer</button><button class="mark-all-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order">\u21BA Reset<br>Sort</button></div></div>`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3>${titleMain}</h3>${swBadge}</div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195 Sort</button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">\u21BA Reset</button></div></div>`;
   if (beer)
     h += `<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
   h += `<div class="sw-body">`;
@@ -2221,6 +2224,10 @@ function loadFromFile(e) {
       gameState = migrateState(data);
       autosave();
       renderAll();
+      document.getElementById("resumeBanner")?.classList.remove("show");
+      document
+        .getElementById("settingsPanel")
+        ?.classList.remove("settings-visible");
     } catch (err) {
       alert("Couldn\u2019t load this save: " + err.message);
       console.error("loadFromFile render error:", err);
