@@ -86,7 +86,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v13.2"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v14.0"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -110,6 +110,7 @@ const BANTER = {
     "That's the answer, folks. Stay with me, here's the next.",
     "Locked in? Good. Pencils ready for the next question.",
     "Nicely played, everybody. Onward to the next.",
+    "That one's in the books. Bartender, a round of consolation for the wrong answers.",
   ],
   round: [
     "That round's in the books — great work! Stretch those brains, the next round's coming up.",
@@ -119,6 +120,9 @@ const BANTER = {
     "Round done, and you made it look easy. Give yourselves a hand.",
     "Nice work this round. Quick breather, then we dive back in.",
     "That round had some teeth — you survived it! Onto the next.",
+    "Done and dusted. Remember: it's not about what you know, it's about what your teammate refused to write down.",
+    "Round finished! If you're winning, act humble. If you're losing, act like it's strategy.",
+    "Wagers are scored! Fortunes were made and lost on that one.",
   ],
   scores: [
     "Alright, let's see where everybody stands — here come the scores!",
@@ -128,6 +132,8 @@ const BANTER = {
     "Updated scores coming at you — and there's still plenty of trivia left.",
     "Scoreboard time! Whether you're leading or climbing, the night is young.",
     "Here come the numbers — don't get comfortable, this can still swing.",
+    "Scores are in for that one. No lead is safe, folks.",
+    "Let's see those totals. Remember: the team in last place statistically buys the best snacks.",
   ],
   beer: [
     "EVERYONE got that one — beer round, people! Beautifully done, whole room.",
@@ -144,6 +150,8 @@ const BANTER = {
     "A lot of folks zigged when they should've zagged on that one.",
     "That one's gonna stick with you now — that's how it sticks for next time.",
     "Rough one for the room — totally understandable, here's how it shakes out.",
+    "Brutal! If your table got that one, order something fancy — you've earned it.",
+    "A lot of red on my sheet for that one. It was a toughie — shake it off!",
   ],
   everyonewrong: [
     "Okay, that one got EVERYBODY — don't feel bad, it got the whole room!",
@@ -349,7 +357,11 @@ function toggleAdvancedSettings() {
   const p = loadPrefs();
   p.advancedOpen = !p.advancedOpen;
   savePrefs(p);
-  applyPrefs();
+  toggleClassPreserveScroll(
+    document.getElementById("settingsPanel"),
+    document.getElementById("advToggleBtn"),
+    () => applyPrefs(),
+  );
 }
 function toggleLegacyExports() {
   const p = loadPrefs();
@@ -729,6 +741,25 @@ function ranked() {
     }))
     .sort((a, b) => b.total - a.total);
 }
+// Dense ("1223") ranking: teams with an equal total share the same place, and the next distinct
+// total takes the very next place — no numbers get skipped for however many teams just tied
+// (three teams tied for 5th -> the next team is 6th, not 8th) — instead of every row just
+// getting its array position + 1, which used to hand two exactly-tied teams two different
+// numbers (e.g. 7 and 8) for no reason other than array order — confusing on its own, and
+// outright backwards once you sort the scoreboard ascending, since the tie's arbitrary "7 vs 8"
+// split doesn't track score order at all.
+function rankMap() {
+  const rk = ranked();
+  const rm = {};
+  let place = 0,
+    prevTotal = null;
+  rk.forEach((r) => {
+    if (prevTotal === null || r.total !== prevTotal) place++;
+    rm[r.index] = place;
+    prevTotal = r.total;
+  });
+  return rm;
+}
 function ordinal(n) {
   const s = ["th", "st", "nd", "rd"],
     v = n % 100;
@@ -757,8 +788,17 @@ function finalResultsRows() {
   const byPlace = rows
     .slice()
     .sort((a, b) => b.score - a.score || dv(a) - dv(b) || a.index - b.index);
-  byPlace.forEach((r, idx) => {
-    r.place = idx + 1;
+  // Place NUMBER is by score alone, dense ranking (equal scores share a place, the next distinct
+  // score takes the very next place with no numbers skipped). The diff tie-break above only
+  // decides display ORDER within a tied group (closer guess listed first) and the "✓ closer"
+  // badge — it must never split a real tie into two different place numbers, nor skip place
+  // numbers just because a tied group had more than one team in it.
+  let place = 0,
+    prevScore = null;
+  byPlace.forEach((r) => {
+    if (prevScore === null || r.score !== prevScore) place++;
+    r.place = place;
+    prevScore = r.score;
   });
   const cnt = {};
   rows.forEach((r) => {
@@ -858,7 +898,7 @@ function renderStandings(type) {
     .join("");
   const isCollapsed = collapsedStandings.has(type);
   let h =
-    `<div class="standings-block${isCollapsed ? " collapsed" : ""}">` +
+    `<div class="standings-block${isCollapsed ? " collapsed" : ""}" id="standings-${type}">` +
     `<div class="standings-title-row" role="button" tabindex="0" onclick="toggleStandingsCollapse('${type}')" title="${isCollapsed ? "Expand" : "Collapse"}" aria-label="${isCollapsed ? "Expand" : "Collapse"} ${esc(label)}"><span class="chevron standings-chevron">\u25BC</span><span class="standings-title">${label}</span></div>` +
     `<div class="standings-collapsible">` +
     renderBanter("scores", "sc-" + type, { sm: true }) +
@@ -872,7 +912,18 @@ function renderStandings(type) {
 function toggleStandingsCollapse(type) {
   if (collapsedStandings.has(type)) collapsedStandings.delete(type);
   else collapsedStandings.add(type);
-  renderLeft();
+  const el = document.getElementById("standings-" + type);
+  toggleClassPreserveScroll(document.getElementById("mainContent"), el, () => {
+    if (!el) return;
+    const nowCollapsed = el.classList.toggle("collapsed");
+    const row = el.querySelector(".standings-title-row");
+    const label = row?.querySelector(".standings-title")?.textContent || "";
+    if (row) {
+      const verb = nowCollapsed ? "Expand" : "Collapse";
+      row.title = verb + " " + label;
+      row.setAttribute("aria-label", verb + " " + label);
+    }
+  });
 }
 
 function setSortMode(mode) {
@@ -968,8 +1019,8 @@ function renderLeft() {
     <div class="field"><label>Date</label><input type="date" class="date-native" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"></div>
     <div class="field${quizIdInvalid ? " field-invalid" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; format: AB-123, ABC-123, ABCD-1234 (with or without hyphen)</span>' : ""}</div>
     <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
-    <div class="field"><label>Craft Partner</label><input type="text" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
-    <div class="field"><label>Partner Town</label><input type="text" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
+    <div class="field"><label>Craft Partner</label><input type="text" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
+    <div class="field"><label>Partner Town</label><input type="text" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
     <div class="field full"><label>Bonus Item (+5)</label><input type="text" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
     <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea" rows="2" placeholder="Server / bartender names to shout out" onchange="gameState.meta.staffNames=this.value;autosave();">${esc(gameState.meta.staffNames || "")}</textarea></div>
   </div></div></div>`;
@@ -1243,7 +1294,9 @@ function toggleQuestion(ri, qi) {
   if (collapsedQuestions.has(key)) collapsedQuestions.delete(key);
   else collapsedQuestions.add(key);
   const el = document.getElementById("qblock-" + ri + "-" + qi);
-  if (el) el.classList.toggle("q-collapsed");
+  toggleClassPreserveScroll(document.getElementById("mainContent"), el, () => {
+    if (el) el.classList.toggle("q-collapsed");
+  });
 }
 function sortQuestion(ri, qi) {
   const key = ri + "-" + qi;
@@ -1305,7 +1358,9 @@ function toggleBonusQ(ri) {
   if (collapsedBonusQuestions.has(key)) collapsedBonusQuestions.delete(key);
   else collapsedBonusQuestions.add(key);
   const el = document.getElementById("bqblock-" + ri);
-  if (el) el.classList.toggle("bq-collapsed");
+  toggleClassPreserveScroll(document.getElementById("mainContent"), el, () => {
+    if (el) el.classList.toggle("bq-collapsed");
+  });
 }
 
 function renderBQ(ri) {
@@ -1458,7 +1513,9 @@ function toggleSpecialWager(type) {
   if (collapsedSpecialWagers.has(type)) collapsedSpecialWagers.delete(type);
   else collapsedSpecialWagers.add(type);
   const el = document.getElementById("swblock-" + type);
-  if (el) el.classList.toggle("sw-collapsed");
+  toggleClassPreserveScroll(document.getElementById("mainContent"), el, () => {
+    if (el) el.classList.toggle("sw-collapsed");
+  });
 }
 function renderHT() {
   return renderSpecialWager("halftime");
@@ -1468,12 +1525,18 @@ function renderFW() {
 }
 
 function toggleSidebar() {
+  // A just-finished drag of the edge tab (see the drag IIFE near the bottom of this file)
+  // fires a click on release — swallow that one so dragging the tab doesn't also open/close it.
+  if (suppressNextEdgeTabClick) {
+    suppressNextEdgeTabClick = false;
+    return;
+  }
   const sb = document.getElementById("sidebar");
-  sb.classList.toggle("minimized");
-  document.body.classList.toggle(
-    "sidebar-minimized",
-    sb.classList.contains("minimized"),
-  );
+  const open = sb.classList.toggle("open");
+  document.getElementById("sidebarBackdrop")?.classList.toggle("show", open);
+  document
+    .getElementById("sidebarEdgeTab")
+    ?.setAttribute("aria-expanded", String(open));
 }
 
 function renderSB() {
@@ -1496,11 +1559,7 @@ function renderSB() {
 function buildScores() {
   if (!gameState.teams.length)
     return '<div class="scores-list" style="color:var(--text-muted);padding:12px;">Add teams to begin.</div>';
-  const rk = ranked();
-  const rm = {};
-  rk.forEach((t, i) => {
-    rm[t.index] = i + 1;
-  });
+  const rm = rankMap();
   const order = getDisplayOrder();
   let h = '<div class="scores-list">';
   order.forEach((ti) => {
@@ -1552,77 +1611,132 @@ function toggleCraftPrize(ti) {
 }
 
 // CRAFT PRIZE RANDOMIZER — drumroll + name-flash + spoken winner script. Only ever one winner.
-const DRUM_START_DUR = 2.03,
-  DRUM_END_DUR = 3.9;
-let drumStartAudio = null,
-  drumEndAudio = null;
-function getDrumAudio() {
-  if (!drumStartAudio) {
-    drumStartAudio = new Audio("data:audio/mp3;base64," + DRUM_START_B64);
-    drumEndAudio = new Audio("data:audio/mp3;base64," + DRUM_END_B64);
-  }
-  return { start: drumStartAudio, end: drumEndAudio };
+//
+// All three drumroll segments (intro, looping middle, end stinger) are decoded once as Web Audio
+// AudioBuffers and scheduled together on one AudioContext clock, rather than the previous approach
+// of two plain <audio> elements (intro/end) plus a separately-timed Web Audio loop, all glued
+// together with setTimeout. That mixed approach had two real bugs, and together they're exactly
+// why the drumroll would "stop in the middle": (1) the AudioContext for the loop was only ever
+// created inside a setTimeout callback firing ~2s after the button click — late enough that some
+// browsers no longer treat it as covered by the original click's autoplay-gesture unlock, so the
+// loop could silently produce no sound at all; and (2) decodeAudioData is asynchronous, so even
+// when it did work there was an audible gap at the intro→loop seam while the loop clip finished
+// decoding mid-countdown. Decoding all three clips once at page load, resuming the context
+// inside the click gesture (and waiting for it to actually be running before queuing sources),
+// and scheduling every segment's start/stop time on that one clock fixes all of it: the click
+// pays no decode cost, playback starts as soon as the output is live, and each segment is
+// sample-accurately queued back-to-back with zero gap, immune to any main-thread jank.
+let drumCtx = null;
+let drumBuffersPromise = null; // Promise<{start,loop,end}> AudioBuffers — decoded once, cached
+let drumActiveSources = [];
+function getDrumCtx() {
+  if (!drumCtx)
+    drumCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return drumCtx;
 }
-// The loop clip is played via the Web Audio API instead of <audio loop> — HTMLMediaElement's
-// built-in loop attribute re-buffers on every repeat, which produces an audible gap/click each
-// time it restarts. AudioBufferSourceNode decodes the whole clip once and loops it sample-accurately.
-let drumAudioCtx = null,
-  drumLoopBuffer = null,
-  drumLoopSource = null;
-function getDrumAudioCtx() {
-  if (!drumAudioCtx)
-    drumAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return drumAudioCtx;
-}
-function getDrumLoopBuffer() {
-  if (drumLoopBuffer) return Promise.resolve(drumLoopBuffer);
-  const ctx = getDrumAudioCtx();
-  const bin = atob(DRUM_LOOP_B64);
+function decodeDrumClip(ctx, b64) {
+  const bin = atob(b64);
   const bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return ctx.decodeAudioData(bytes.buffer).then((buf) => {
-    drumLoopBuffer = buf;
-    return buf;
-  });
+  return ctx.decodeAudioData(bytes.buffer);
 }
-function startDrumLoop() {
-  const ctx = getDrumAudioCtx();
-  if (ctx.state === "suspended") ctx.resume();
-  getDrumLoopBuffer().then((buf) => {
-    stopDrumLoop();
-    const src = ctx.createBufferSource();
-    src.buffer = buf;
-    src.loop = true;
-    src.connect(ctx.destination);
-    src.start(0);
-    drumLoopSource = src;
-  });
+function getDrumBuffers() {
+  const ctx = getDrumCtx();
+  if (!drumBuffersPromise) {
+    drumBuffersPromise = Promise.all([
+      decodeDrumClip(ctx, DRUM_START_B64),
+      decodeDrumClip(ctx, DRUM_LOOP_B64),
+      decodeDrumClip(ctx, DRUM_END_B64),
+    ]).then(
+      ([start, loop, end]) => ({ start, loop, end }),
+      (err) => {
+        drumBuffersPromise = null; // don't cache a failed decode — let the next draw retry
+        throw err;
+      },
+    );
+  }
+  return drumBuffersPromise;
 }
-function stopDrumLoop() {
-  if (!drumLoopSource) return;
-  try {
-    drumLoopSource.stop();
-  } catch (e) {}
-  try {
-    drumLoopSource.disconnect();
-  } catch (e) {}
-  drumLoopSource = null;
+// Warm-up: decode the ~540KB of embedded drum audio now, at page load, instead of on the first
+// draw-button click — that decode (base64 → bytes → decodeAudioData × 3) is where the audible
+// startup delay came from. The AudioContext stays suspended until a user gesture, but
+// decodeAudioData works fine on a suspended context, so the buffers are ready before any click.
+getDrumBuffers().catch(() => {});
+// Schedules the full intro -> looping-middle -> end-stinger sequence starting at ctx.currentTime,
+// with the middle looped exactly until totalSec and the end stinger picking up the instant it
+// stops — every boundary is an absolute AudioContext time, not a JS timer, so nothing can drift
+// or leave a silent gap even if the tab is busy or backgrounded mid-countdown.
+function scheduleDrumroll(totalSec) {
+  const ctx = getDrumCtx();
+  // resume() must be kicked off synchronously here, while we're still inside the button-click
+  // gesture (autoplay unlock), and scheduling must WAIT for it: queuing sources while the
+  // context is still spinning up lets startAt lapse before output actually begins, which clips
+  // the intro's first beats and mangles the absolute-time intro→loop seam — the "choppy start".
+  // This also revives a context the browser suspended after an earlier draw (backgrounded tab,
+  // iOS audio interruption), which previously left the whole drumroll silent or bunched-up.
+  const running =
+    ctx.state === "running" ? Promise.resolve() : ctx.resume();
+  return Promise.all([getDrumBuffers(), running]).then(([bufs]) => {
+    const startAt = ctx.currentTime + 0.05;
+    const loopAt = startAt + Math.min(bufs.start.duration, totalSec);
+    const endAt = startAt + totalSec;
+    const sources = [];
+
+    const introSrc = ctx.createBufferSource();
+    introSrc.buffer = bufs.start;
+    introSrc.connect(ctx.destination);
+    introSrc.start(startAt);
+    introSrc.stop(loopAt);
+    sources.push(introSrc);
+
+    if (loopAt < endAt) {
+      const loopSrc = ctx.createBufferSource();
+      loopSrc.buffer = bufs.loop;
+      loopSrc.loop = true;
+      loopSrc.connect(ctx.destination);
+      loopSrc.start(loopAt);
+      loopSrc.stop(endAt);
+      sources.push(loopSrc);
+    }
+
+    const endSrc = ctx.createBufferSource();
+    endSrc.buffer = bufs.end;
+    endSrc.connect(ctx.destination);
+    endSrc.start(endAt);
+    sources.push(endSrc);
+
+    drumActiveSources.push(...sources);
+  });
 }
 function stopAllDrumAudio() {
-  stopDrumLoop();
-  if (!drumStartAudio) return;
-  [drumStartAudio, drumEndAudio].forEach((a) => {
+  drumActiveSources.forEach((src) => {
     try {
-      a.pause();
-      a.currentTime = 0;
+      src.stop();
+    } catch (e) {}
+    try {
+      src.disconnect();
     } catch (e) {}
   });
+  drumActiveSources = [];
 }
 function clearCraftDrawTimers() {
   craftDrawTimeouts.forEach((id) => clearTimeout(id));
   craftDrawTimeouts = [];
   if (craftDrawState && craftDrawState.flashTimer)
     clearInterval(craftDrawState.flashTimer);
+  if (craftDrawState && craftDrawState.countdownTimer)
+    clearInterval(craftDrawState.countdownTimer);
+}
+// Elapsed/remaining/progress for the drumroll countdown UI, derived from a wall-clock
+// timestamp (not a tick counter) so it stays accurate even if the tab was briefly backgrounded.
+function craftCountdownState() {
+  if (!craftDrawState || !craftDrawState.active) return null;
+  const elapsed = performance.now() - craftDrawState.startedAt;
+  const remaining = Math.max(0, craftDrawState.totalMs - elapsed);
+  return {
+    remaining,
+    pct: Math.min(100, (elapsed / craftDrawState.totalMs) * 100),
+  };
 }
 function craftPrizeScript(ti) {
   const t = gameState.teams[ti];
@@ -1673,20 +1787,23 @@ function startCraftPrizeDraw() {
     );
     return;
   }
-  const { start, end } = getDrumAudio();
   const prefs = loadPrefs();
   const totalMs = Math.max(3, Math.min(30, prefs.craftDrawSeconds || 6)) * 1000;
   craftDrawState = {
     active: true,
     pool,
     displayName: gameState.teams[pool[0]].name || "Team " + (pool[0] + 1),
+    startedAt: performance.now(),
+    totalMs,
   };
   clearCraftDrawTimers();
   stopAllDrumAudio();
-  try {
-    start.currentTime = 0;
-    start.play();
-  } catch (e) {}
+  // Intro, loop, and end stinger are all scheduled here, up front, on the AudioContext's own
+  // clock (see scheduleDrumroll) — not re-triggered later by separate setTimeouts — so the whole
+  // sequence plays back gaplessly regardless of what the main thread is doing in the meantime.
+  scheduleDrumroll(totalMs / 1000).catch((err) => {
+    console.error("Craft prize drumroll audio failed to play:", err);
+  });
   craftDrawState.flashTimer = setInterval(() => {
     const ti = pool[Math.floor(Math.random() * pool.length)];
     const name = gameState.teams[ti]?.name || "Team " + (ti + 1);
@@ -1697,23 +1814,21 @@ function startCraftPrizeDraw() {
     if (el) el.textContent = name;
     else renderLeft();
   }, 110);
-  // Loop plays for the entire countdown, starting once the intro clip's natural runtime ends.
-  const loopStartAt = Math.min(DRUM_START_DUR * 1000, totalMs);
-  craftDrawTimeouts.push(
-    setTimeout(() => {
-      stopAllDrumAudio();
-      startDrumLoop();
-    }, loopStartAt),
-  );
-  // End stinger only fires once the timer has fully elapsed — never overlaps the loop.
+  // Countdown UI ticks independently of the name-flash so the host can glance at exactly how
+  // far into the drumroll they are while manually raising the volume and talking over it.
+  craftDrawState.countdownTimer = setInterval(() => {
+    const st = craftCountdownState();
+    if (!st) return;
+    const numEl = document.getElementById("cpCountdownNum");
+    if (numEl) numEl.textContent = Math.ceil(st.remaining / 1000) + "s";
+    const barEl = document.getElementById("cpCountdownBar");
+    if (barEl) barEl.style.width = st.pct + "%";
+  }, 100);
+  // Winner selection/game-state still runs off a plain JS timer (it's not audio), timed to land
+  // exactly when the audio's end stinger is scheduled to start.
   craftDrawTimeouts.push(
     setTimeout(() => {
       clearCraftDrawTimers();
-      stopAllDrumAudio();
-      try {
-        end.currentTime = 0;
-        end.play();
-      } catch (e) {}
       const winnerTi = pool[Math.floor(Math.random() * pool.length)];
       gameState.teams.forEach((t) => {
         t.craftPrize = false;
@@ -1777,7 +1892,12 @@ function renderCraftPrizeBlock() {
         .join(", "),
     )}</div>`;
   if (drawing) {
-    h += `<div class="cp-intro">🎙️ Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName || "")}</div>`;
+    const st = craftCountdownState() || { remaining: craftDrawState.totalMs, pct: 0 };
+    h += `<div class="cp-intro">🎙️ Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName || "")}</div>
+    <div class="cp-countdown">
+      <div class="cp-countdown-track"><div class="cp-countdown-fill" id="cpCountdownBar" style="width:${st.pct}%"></div></div>
+      <div class="cp-countdown-num" id="cpCountdownNum">${Math.ceil(st.remaining / 1000)}s</div>
+    </div>`;
   } else {
     h += `<button class="btn btn-accent cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>🥁 Choose Craft Prize Winner</button>`;
   }
@@ -2073,11 +2193,7 @@ function buildAudit(ti) {
   const t = gameState.teams[ti];
   if (!t) return "";
   const name = esc(t.name || "Team " + (ti + 1));
-  const rk = ranked();
-  const rm = {};
-  rk.forEach((r, i) => {
-    rm[r.index] = i + 1;
-  });
+  const rm = rankMap();
   const rank = rm[ti];
   let h = `<div class="audit-head"><h2>${name}<span class="aud-sub">Score audit \u2014 rank #${rank} of ${gameState.teams.length} \u00B7 ${esc(gameState.meta.location || "")}${gameState.meta.quizId ? " \u00B7 Quiz " + esc(gameState.meta.quizId) : ""}</span></h2><button class="audit-close" onclick="closeAudit()">\u2715 Close</button></div>`;
   h += `<div class="audit-body">`;
@@ -2185,11 +2301,31 @@ function buildAudit(ti) {
   h += `</div>`;
   return h;
 }
+// Collapse/expand toggles below only flip a CSS class (no re-render), so the browser reflows
+// in place — normally invisible. But if the collapse shrinks the page enough that the OLD
+// scrollTop no longer fits, the browser silently clamps scrollTop to the new max, which reads
+// as an odd jump to some unrelated spot rather than a smooth adjustment. Recording the toggled
+// element's own viewport position before/after and correcting scrollTop by the same delta keeps
+// it visually anchored either way — a real no-op in the common case, and a clean settle (instead
+// of a random-feeling clamp) when the container did shrink out from under the old scroll offset.
+function toggleClassPreserveScroll(scrollEl, anchorEl, mutate) {
+  if (!scrollEl || !anchorEl) {
+    mutate();
+    return;
+  }
+  const before = anchorEl.getBoundingClientRect().top;
+  mutate();
+  const after = anchorEl.getBoundingClientRect().top;
+  const delta = after - before;
+  if (delta) scrollEl.scrollTop += delta;
+}
 function toggleSection(id) {
   if (collapsedSections.has(id)) collapsedSections.delete(id);
   else collapsedSections.add(id);
   const el = document.getElementById(id);
-  if (el) el.classList.toggle("collapsed");
+  toggleClassPreserveScroll(document.getElementById("mainContent"), el, () => {
+    if (el) el.classList.toggle("collapsed");
+  });
 }
 
 function saveToFile() {
@@ -2252,11 +2388,7 @@ function loadSampleGame() {
 }
 
 function buildRows() {
-  const rk = ranked();
-  const rm = {};
-  rk.forEach((t, i) => {
-    rm[t.index] = i + 1;
-  });
+  const rm = rankMap();
   return gameState.teams.map((team, ti) => {
     const r = {};
     r.Date = isoToMDY(gameState.meta.date);
@@ -3661,10 +3793,80 @@ function refreshPointerHover() {
   if (saved) sidebar.style.width = saved + "px";
 })();
 
+// EDGE TAB DRAG — lets the host reposition the mobile Scores pull-tab vertically (e.g. away
+// from a spot their thumb naturally rests, or from under a notch/camera cutout).
+let suppressNextEdgeTabClick = false;
+(function () {
+  const wrap = document.getElementById("sidebarEdgeTabWrap");
+  if (!wrap) return;
+  let dragging = false,
+    moved = false,
+    startY = 0,
+    startPct = 50;
+  function currentTopPct() {
+    const t = parseFloat(wrap.style.top);
+    return isNaN(t) ? 50 : t;
+  }
+  function clampPct(pct) {
+    return Math.max(8, Math.min(92, pct));
+  }
+  function onDown(e) {
+    dragging = true;
+    moved = false;
+    startY = e.touches ? e.touches[0].clientY : e.clientY;
+    startPct = currentTopPct();
+  }
+  function onMove(e) {
+    if (!dragging) return;
+    let y;
+    if (e.touches) {
+      if (!e.touches[0]) return; // touch already lifted
+      y = e.touches[0].clientY;
+    } else {
+      if (typeof e.buttons !== "undefined" && e.buttons === 0) {
+        onUp();
+        return;
+      }
+      y = e.clientY;
+    }
+    const deltaY = y - startY;
+    if (!moved && Math.abs(deltaY) < 6) return; // small threshold so a plain tap still opens the drawer
+    moved = true;
+    e.preventDefault();
+    const pct = clampPct(startPct + (deltaY / window.innerHeight) * 100);
+    wrap.style.top = pct + "%";
+  }
+  function onUp() {
+    if (!dragging) return;
+    dragging = false;
+    if (moved) {
+      suppressNextEdgeTabClick = true;
+      // Safety net: some browsers suppress the synthetic click after a touch drag entirely
+      // (rather than firing one for toggleSidebar to consume) — self-clear so a stuck flag
+      // can't eat one unrelated future tap on the tab.
+      setTimeout(() => {
+        suppressNextEdgeTabClick = false;
+      }, 400);
+      TRStore.setItem("trivRev6_edgeTabTop", currentTopPct());
+    }
+  }
+  wrap.addEventListener("mousedown", onDown);
+  document.addEventListener("mousemove", onMove);
+  document.addEventListener("mouseup", onUp);
+  wrap.addEventListener("touchstart", onDown, { passive: true });
+  document.addEventListener("touchmove", onMove, { passive: false });
+  document.addEventListener("touchend", onUp);
+  document.addEventListener("touchcancel", onUp);
+  const saved = TRStore.getItem("trivRev6_edgeTabTop");
+  if (saved) wrap.style.top = clampPct(parseFloat(saved)) + "%";
+})();
+
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
     const o = document.getElementById("auditOverlay");
     if (o && o.classList.contains("show")) closeAudit();
+    const sb = document.getElementById("sidebar");
+    if (sb && sb.classList.contains("open")) toggleSidebar();
   }
 });
 

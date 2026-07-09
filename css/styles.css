@@ -130,6 +130,12 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    absolutely-positioned child), so this floats above the app instead of pushing the
    scoreboard down every time it opens. */
 .settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - 80px);overflow-y:auto;animation:slideDown .18s ease}
+/* Deployed-panel-over-page shadows: a plain dark shadow disappears against this app's
+   near-black dark background, so it gets its own pale glow to read as "floating above" the
+   page instead; light mode already has a light background to contrast against, so it just
+   gets a stronger/darker version of the normal shadow instead of a glow. */
+[data-theme="hc-dark"] .settings-panel{box-shadow:0 16px 48px rgba(255,255,255,.14),0 2px 10px rgba(255,255,255,.09)}
+[data-theme="hc-light"] .settings-panel{box-shadow:0 16px 48px rgba(0,0,0,.32),0 2px 10px rgba(0,0,0,.22)}
 .settings-panel.settings-visible{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border)}
 .settings-controls{display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
@@ -202,14 +208,46 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 body.col-resizing{cursor:col-resize!important;user-select:none!important}
 body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 
+/* Base (desktop-hidden) state for the mobile drawer's edge tab + backdrop — declared here,
+   before the @media block below, so that block's display:flex/block override actually wins at
+   narrow widths instead of losing to this display:none on source-order (same selector
+   specificity either way, so whichever comes LAST in the file wins — these must come first). */
+.sidebar-backdrop{display:none}
+/* Wrap owns the fixed positioning/drag so the "SCORES" label and the pill button move
+   together as one unit; the button itself is just an inline-flex pill inside it. */
+.sidebar-edge-tab-wrap{display:none;position:fixed;top:50%;left:0;transform:translateY(-50%);z-index:230;flex-direction:column;align-items:flex-start;gap:3px;touch-action:none}
+.sidebar-edge-label{font-family:var(--font-display);font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:var(--text-secondary);background:var(--bg-card);border:1px solid var(--border-strong);border-left:none;border-radius:0 6px 6px 0;padding:2px 8px 2px 6px;text-transform:uppercase;pointer-events:none;box-shadow:2px 0 8px rgba(0,0,0,.25);white-space:nowrap}
+.sidebar-edge-tab{display:flex;align-items:center;gap:2px;padding:12px 10px 12px 8px;border:1px solid var(--border-strong);border-left:none;border-radius:0 var(--radius-lg) var(--radius-lg) 0;background:var(--accent-cyan-solid);color:var(--on-accent-cyan);box-shadow:4px 0 16px rgba(0,0,0,.35);font-size:1.05rem;line-height:1;cursor:pointer;touch-action:manipulation}
+.sidebar-edge-tab .edge-tab-chevron{font-size:.8rem;transition:transform .28s ease}
+/* Chevron points left at rest (toward where the drawer will slide out from) and flips to
+   point right — back toward closing — once the drawer is open. */
+.sidebar-edge-tab[aria-expanded="true"] .edge-tab-chevron{transform:rotate(180deg)}
+
 @media(max-width:900px){
+  /* The Scores panel used to dock to the bottom of the screen as a sheet you'd pull open —
+     awkward on a phone because it either ate half the screen or sat as a thin bar you had to
+     keep re-expanding, and it pushed the whole page up to reserve space for it whether you
+     were using it or not. It's now a drawer that slides in from the left edge and overlays the
+     page instead of displacing it, closer to a standard mobile nav drawer: a slim always-visible
+     edge tab opens it, a backdrop (or the header itself) closes it, and the main content never
+     needs reserved padding for it since it's never part of the layout flow. */
   .app-layout{flex-direction:column;height:auto;overflow:visible}
   .drag-handle{display:none}
-  .col-right{position:fixed;bottom:0;left:0;right:0;top:auto;width:auto!important;min-width:0;max-width:none;height:auto;max-height:50vh;border-left:none;border-top:2px solid var(--accent-cyan);box-shadow:0 -4px 20px rgba(0,0,0,.6);z-index:200;padding-bottom:env(safe-area-inset-bottom)}
-  .col-right.minimized{max-height:calc(44px + env(safe-area-inset-bottom))}
-  .col-right.minimized .sidebar-body{display:none}
-  .col-left{padding-bottom:calc(54vh + 48px)}
-  body.sidebar-minimized .col-left{padding-bottom:64px}
+  .col-right{position:fixed;top:0;left:0;bottom:0;right:auto;width:min(85vw,340px)!important;min-width:0;max-width:none;height:auto;max-height:none;border-left:none;border-right:1px solid var(--border-strong);box-shadow:6px 0 28px rgba(0,0,0,.55);z-index:250;transform:translateX(-100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom);padding-top:env(safe-area-inset-top)}
+  .col-right.open{transform:translateX(0)}
+  .col-left{padding-bottom:40px}
+
+  .sidebar-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:240}
+  .sidebar-backdrop.show{opacity:1;pointer-events:auto}
+
+  .sidebar-edge-tab-wrap{display:flex}
+
+  /* Slide-out drawer shadow — same "floating over the page" treatment as .settings-panel
+     (see that rule for why dark mode needs a pale glow instead of a plain dark shadow).
+     Scoped inside this media query so it never touches the desktop docked column, which
+     isn't floating above anything and keeps its plain border instead. */
+  [data-theme="hc-dark"] .col-right.open{box-shadow:6px 0 28px rgba(255,255,255,.14),2px 0 10px rgba(255,255,255,.09)}
+  [data-theme="hc-light"] .col-right.open{box-shadow:6px 0 28px rgba(0,0,0,.38),2px 0 10px rgba(0,0,0,.26)}
 }
 
 /* SIDEBAR */
@@ -217,7 +255,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sidebar-header:hover{background:var(--bg-hover)}
 .sidebar-header h3{font-family:var(--font-display);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--txt-cyan)}
 .sidebar-toggle{font-size:1rem;color:var(--text-muted);transition:transform .3s}
-.col-right.minimized .sidebar-toggle{transform:rotate(180deg)}
+.col-right.open .sidebar-toggle{transform:rotate(180deg)}
 .sidebar-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;overflow-anchor:none}
 
 .sort-controls{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -284,8 +322,8 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* align-items:start (not center): the name column's stacked label+input+checks is taller than
    the guess column's label+input, so a "center" row would offset the Guess label below Team N
    instead of level with it. */
-.team-entry{display:grid;grid-template-columns:1fr 4.5rem auto;gap:8px;align-items:start;padding:10px 0;border-bottom:1px solid var(--border)}
-.team-entry.has-adj{grid-template-columns:1fr 4.5rem auto auto}
+.team-entry{display:grid;grid-template-columns:1fr 5.4rem auto;gap:8px;align-items:start;padding:10px 0;border-bottom:1px solid var(--border)}
+.team-entry.has-adj{grid-template-columns:1fr 5.4rem auto auto}
 .team-entry:last-of-type{border-bottom:none}
 .team-name-cell{display:flex;flex-direction:column;gap:7px;min-width:0}
 .team-number{font-family:var(--font-display);font-size:.66rem;color:var(--text-muted);letter-spacing:1px}
@@ -606,6 +644,12 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .cp-intro{font-size:.78rem;color:var(--text-secondary);margin-bottom:6px;font-style:italic}
 .cp-flash{font-family:var(--font-display);font-size:1.3rem;font-weight:800;text-align:center;padding:14px 8px;color:var(--badge-gold-fg);background:rgba(255,238,0,.08);border:2px dashed var(--accent-gold);border-radius:var(--radius);animation:cpPulse .22s ease-in-out infinite alternate}
 @keyframes cpPulse{from{opacity:.75;transform:scale(.99)}to{opacity:1;transform:scale(1.01)}}
+/* Drumroll countdown — lets the host glance at exactly how far into the drumroll they are
+   while manually raising the volume and talking over it, rather than guessing. */
+.cp-countdown{display:flex;align-items:center;gap:10px;margin-top:8px}
+.cp-countdown-track{flex:1;height:10px;border-radius:6px;background:var(--bg-input);border:1px solid var(--border);overflow:hidden}
+.cp-countdown-fill{height:100%;background:var(--accent-cyan-solid);transition:width .1s linear}
+.cp-countdown-num{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--txt-cyan);min-width:2.8rem;text-align:right;font-variant-numeric:tabular-nums}
 /* Trophy+name+"won!" are one flowing text span (not separate flex items) so a long team name
    wraps onto a second line on its own, with "won!" following right after it — the Clear
    button is the only other flex item, so it stays put on the first line instead of also
@@ -676,8 +720,8 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 
   /* team-setup grid */
   .meta-grid{grid-template-columns:1fr}
-  .team-entry{grid-template-columns:1fr 3.5rem auto;gap:5px}
-  .team-entry.has-adj{grid-template-columns:1fr 3.5rem auto auto}
+  .team-entry{grid-template-columns:1fr 4.3rem auto;gap:5px}
+  .team-entry.has-adj{grid-template-columns:1fr 4.3rem auto auto}
   .check-label{font-size:.72rem;padding:5px 8px;gap:5px}
   .check-box{width:20px;height:20px}
 
