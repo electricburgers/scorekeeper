@@ -534,8 +534,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .ta-result{display:flex;gap:.2rem;flex-shrink:0}
 .result-btn{min-width:2.6rem;min-height:2.6rem;border:1px solid var(--border);border-radius:6px;background:var(--btn-idle-bg);font-size:1.1rem;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation;color:var(--text-secondary)}
 .result-btn:hover:not(.correct-sel):not(.incorrect-sel){background:var(--bg-hover)}
-.result-btn.correct-sel{background:var(--bg-card);border:2px solid var(--accent-green);color:var(--badge-green-fg)}
-.result-btn.incorrect-sel{background:var(--bg-card);border:2px solid var(--accent-red);color:var(--txt-red)}
+/* Same fill tokens as .wager-btn.correct/.incorrect (not a neutral --bg-card) so a selected
+   ✓/✕ reads consistently with the colored wager buttons elsewhere in the same round instead of
+   looking like a different, more muted control. */
+.result-btn.correct-sel{background:var(--btn-correct-bg);border:2px solid var(--accent-green);color:var(--badge-green-fg)}
+.result-btn.incorrect-sel{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red);color:var(--txt-red)}
 
 /* STANDINGS — deliberately mirrors .final-table's look (full-width, left-aligned name,
    right-aligned score, real <thead>) rather than a narrow centered block: same idea, same
@@ -545,6 +548,12 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .standings-title-row{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
 .standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:.5px}
 .standings-chevron{transition:transform .25s;flex-shrink:0}
+/* Desktop: drop the chevron icon entirely — the whole title row is still the click target
+   (title-row's own role="button"/onclick are untouched), so collapsing still works with just
+   the row itself as the affordance instead of needing the icon too. */
+@media(min-width:901px){
+  .standings-chevron{display:none}
+}
 .standings-block.collapsed .standings-collapsible{display:none}
 .standings-block.collapsed .standings-chevron{transform:rotate(-90deg)}
 /* Banter, sort buttons, and the table are all inside this wrapper so they collapse together. */
