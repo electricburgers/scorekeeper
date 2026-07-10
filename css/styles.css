@@ -282,21 +282,31 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      strip that's visible at all times, not just while something is freshly deployed). */
   [data-theme="hc-dark"] .mobile-scores-peek{box-shadow:0 -3px 12px rgba(255,255,255,.07)}
   [data-theme="hc-light"] .mobile-scores-peek{box-shadow:0 -3px 12px rgba(0,0,0,.14)}
-  .msp-grip{grid-column:1;justify-self:start;width:4px;height:26px;border-radius:2px;background:var(--text-muted)}
+  /* Column 1 is left empty on purpose — an unfilled 1fr grid track still reserves the same
+     width as column 3's chevron, which is what keeps column 2 centered against the full strip
+     rather than just the leftover space; it doesn't need visible content of its own to do that. */
   .msp-label{grid-column:2;justify-self:center;display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:.95rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--txt-cyan);white-space:nowrap}
-  /* As big as the strip can comfortably hold — this is now the sheet's one and only visual
-     affordance (no ticker alongside it to share the row with), so it can afford to dominate. */
-  .msp-chevron{grid-column:3;justify-self:end;font-size:1.9rem;line-height:1;color:var(--text-muted);transition:transform .28s ease}
+  /* Matches .section-header .chevron's size (1.1rem) so every collapse/expand chevron in the
+     app reads as the same size/scale of control, rather than this one dominating the row. */
+  .msp-chevron{grid-column:3;justify-self:end;font-size:1.1rem;line-height:1;color:var(--text-muted);transition:transform .28s ease}
   /* Points up while collapsed (the sheet is below, waiting to rise) and flips to point down —
      back toward where it collapses to — once deployed. */
   .mobile-scores-peek[aria-expanded="true"] .msp-chevron{transform:rotate(180deg)}
 }
 
 /* SIDEBAR */
-.sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-card-alt)}
+/* Grid (not flex+space-between) so the title is centered against the FULL header width, not
+   just the space left over after the chevron — same 3-column trick used by .mobile-scores-peek
+   (empty 1fr on the left balances the chevron's own 1fr on the right, no visible left-side
+   content needed for the centering to work). */
+.sidebar-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 14px;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-card-alt)}
 .sidebar-header:hover{background:var(--bg-hover)}
-.sidebar-header h3{font-family:var(--font-display);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--txt-cyan)}
-.sidebar-toggle{font-size:1rem;color:var(--text-muted);transition:transform .3s}
+.sidebar-header h3{grid-column:2;justify-self:center;font-family:var(--font-display);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--txt-cyan)}
+.sidebar-toggle{grid-column:3;justify-self:end;font-size:.7rem;color:var(--text-muted);transition:transform .3s}
+/* Base glyph (▲) points up while docked; rotating 180deg once deployed (.open) turns it into a
+   down-pointing arrow — same up-when-docked/down-when-deployed convention as the peek strip's
+   own chevron, just kept on this header instead of swapped for a plain ▼ + no rotation, so the
+   flip is still an animated transition rather than an instant swap. */
 .col-right.open .sidebar-toggle{transform:rotate(180deg)}
 .sidebar-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;overflow-anchor:none}
 
