@@ -86,7 +86,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v14.0"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v14.2"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -300,6 +300,9 @@ function applyPrefs() {
   if (dt) dt.textContent = DENSITY_LABELS[dn] || "Normal";
   const panel = document.getElementById("settingsPanel");
   if (panel) panel.classList.toggle("settings-visible", !!p.settingsOpen);
+  document
+    .getElementById("settingsBackdrop")
+    ?.classList.toggle("show", !!p.settingsOpen);
   const stb = document.getElementById("settingsToggleBtn");
   if (stb) stb.classList.toggle("active", !!p.settingsOpen);
   const sl = p.stripeLevel ?? 0;
@@ -847,7 +850,7 @@ function renderFinalResults() {
   });
   h += "</tbody></table>";
   h +=
-    '<details class="fr-details"><summary>&gt; Diff Details *</summary>' +
+    '<details class="fr-details"><summary>&gt; Diff *</summary>' +
     '<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Ties are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>).</p>' +
     "<p class=\"fr-note\">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team's score before it's compared to their guess, for every team. A <strong>+</strong> means the guess came in over the actual score, a <strong>\u2212</strong> means it came in under.</p>" +
     "</details>";
@@ -1525,18 +1528,22 @@ function renderFW() {
 }
 
 function toggleSidebar() {
-  // A just-finished drag of the edge tab (see the drag IIFE near the bottom of this file)
-  // fires a click on release — swallow that one so dragging the tab doesn't also open/close it.
-  if (suppressNextEdgeTabClick) {
-    suppressNextEdgeTabClick = false;
+  // A just-finished swipe on the peek strip or the sheet's grab handle (see the drag IIFE near
+  // the bottom of this file) fires a click on release — swallow that one so the drag doesn't
+  // also re-toggle right back.
+  if (suppressNextSheetClick) {
+    suppressNextSheetClick = false;
     return;
   }
   const sb = document.getElementById("sidebar");
   const open = sb.classList.toggle("open");
   document.getElementById("sidebarBackdrop")?.classList.toggle("show", open);
-  document
-    .getElementById("sidebarEdgeTab")
-    ?.setAttribute("aria-expanded", String(open));
+  const peek = document.getElementById("mobileScoresPeek");
+  if (peek) {
+    peek.setAttribute("aria-expanded", String(open));
+    peek.setAttribute("aria-label", open ? "Close scores" : "Open scores");
+    peek.classList.toggle("msp-hidden", open);
+  }
 }
 
 function renderSB() {
@@ -1903,7 +1910,7 @@ function renderCraftPrizeBlock() {
   }
   if (winner && !drawing) {
     const wname = gameState.teams[winner.ti]?.name || "Team " + (winner.ti + 1);
-    h += `<div class="cp-winner"><span class="cp-winner-text">🏆 <strong>${esc(wname)}</strong> won!</span><button class="btn btn-danger cp-clear-btn" onclick="clearCraftPrizeWinner()" title="Clear the winner and run the drawing again" aria-label="Clear the winner">✕</button></div>
+    h += `<div class="cp-winner"><span class="cp-winner-text">🏆 <strong>${esc(wname)}</strong> won!</span><button class="btn btn-danger cp-clear-btn" onclick="clearCraftPrizeWinner()" title="Clear the winner and run the drawing again" aria-label="Clear the winner">✕<span class="cp-clear-label"> Clear</span></button></div>
       <label class="cp-script-label">Winner Announcement Script</label>
       <textarea class="cp-script" onchange="updateCraftScript(this.value)">${esc(winner.script)}</textarea>`;
   }
@@ -2364,6 +2371,7 @@ function loadFromFile(e) {
       document
         .getElementById("settingsPanel")
         ?.classList.remove("settings-visible");
+      document.getElementById("settingsBackdrop")?.classList.remove("show");
     } catch (err) {
       alert("Couldn\u2019t load this save: " + err.message);
       console.error("loadFromFile render error:", err);
@@ -2373,10 +2381,7 @@ function loadFromFile(e) {
   e.target.value = "";
 }
 function loadSampleGame() {
-  if (
-    checkGameStarted() &&
-    !confirm("Load the sample game? This replaces your current session.")
-  )
+  if (!confirm("Load the sample game? This replaces your current session."))
     return;
   gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
   autosave();
@@ -2385,6 +2390,7 @@ function loadSampleGame() {
   document
     .getElementById("settingsPanel")
     ?.classList.remove("settings-visible");
+  document.getElementById("settingsBackdrop")?.classList.remove("show");
 }
 
 function buildRows() {
@@ -3793,31 +3799,24 @@ function refreshPointerHover() {
   if (saved) sidebar.style.width = saved + "px";
 })();
 
-// EDGE TAB DRAG — lets the host reposition the mobile Scores pull-tab vertically (e.g. away
-// from a spot their thumb naturally rests, or from under a notch/camera cutout).
-let suppressNextEdgeTabClick = false;
-(function () {
-  const wrap = document.getElementById("sidebarEdgeTabWrap");
-  if (!wrap) return;
+// BOTTOM SHEET DRAG — swipe the peek strip up to open the sheet, or swipe the open sheet's own
+// grab handle down to close it, in addition to plain tapping either one. A small movement
+// threshold tells a real swipe apart from a tap, and firing the toggle the instant that
+// threshold is crossed (rather than waiting for release) makes it feel like a direct-manipulation
+// drag instead of a delayed gesture recognizer.
+let suppressNextSheetClick = false;
+function bindSheetDrag(el, directionUp, onTrigger) {
+  if (!el) return;
   let dragging = false,
-    moved = false,
-    startY = 0,
-    startPct = 50;
-  function currentTopPct() {
-    const t = parseFloat(wrap.style.top);
-    return isNaN(t) ? 50 : t;
-  }
-  function clampPct(pct) {
-    return Math.max(8, Math.min(92, pct));
-  }
+    triggered = false,
+    startY = 0;
   function onDown(e) {
     dragging = true;
-    moved = false;
+    triggered = false;
     startY = e.touches ? e.touches[0].clientY : e.clientY;
-    startPct = currentTopPct();
   }
   function onMove(e) {
-    if (!dragging) return;
+    if (!dragging || triggered) return;
     let y;
     if (e.touches) {
       if (!e.touches[0]) return; // touch already lifted
@@ -3830,36 +3829,44 @@ let suppressNextEdgeTabClick = false;
       y = e.clientY;
     }
     const deltaY = y - startY;
-    if (!moved && Math.abs(deltaY) < 6) return; // small threshold so a plain tap still opens the drawer
-    moved = true;
-    e.preventDefault();
-    const pct = clampPct(startPct + (deltaY / window.innerHeight) * 100);
-    wrap.style.top = pct + "%";
+    const crossed = directionUp ? deltaY < -10 : deltaY > 10;
+    if (!crossed) return;
+    triggered = true;
+    dragging = false;
+    // Fire the toggle FIRST, while the suppress flag is still false — onTrigger() calls
+    // toggleSidebar() directly, and that function's own suppress-check would otherwise see the
+    // flag we're about to set and swallow this very call, making the drag a no-op. Only AFTER
+    // the real toggle has happened do we arm the flag, so the browser's own trailing 'click'
+    // event (fired on release for elements with an onclick, like the peek strip) gets swallowed
+    // instead of re-toggling right back.
+    onTrigger();
+    suppressNextSheetClick = true;
+    // Safety net: some browsers suppress the synthetic click after a touch drag entirely
+    // (rather than firing one for toggleSidebar to consume) — self-clear so a stuck flag
+    // can't eat one unrelated future tap.
+    setTimeout(() => {
+      suppressNextSheetClick = false;
+    }, 400);
   }
   function onUp() {
-    if (!dragging) return;
     dragging = false;
-    if (moved) {
-      suppressNextEdgeTabClick = true;
-      // Safety net: some browsers suppress the synthetic click after a touch drag entirely
-      // (rather than firing one for toggleSidebar to consume) — self-clear so a stuck flag
-      // can't eat one unrelated future tap on the tab.
-      setTimeout(() => {
-        suppressNextEdgeTabClick = false;
-      }, 400);
-      TRStore.setItem("trivRev6_edgeTabTop", currentTopPct());
-    }
   }
-  wrap.addEventListener("mousedown", onDown);
+  el.addEventListener("mousedown", onDown);
   document.addEventListener("mousemove", onMove);
   document.addEventListener("mouseup", onUp);
-  wrap.addEventListener("touchstart", onDown, { passive: true });
-  document.addEventListener("touchmove", onMove, { passive: false });
+  el.addEventListener("touchstart", onDown, { passive: true });
+  document.addEventListener("touchmove", onMove, { passive: true });
   document.addEventListener("touchend", onUp);
   document.addEventListener("touchcancel", onUp);
-  const saved = TRStore.getItem("trivRev6_edgeTabTop");
-  if (saved) wrap.style.top = clampPct(parseFloat(saved)) + "%";
-})();
+}
+bindSheetDrag(document.getElementById("mobileScoresPeek"), true, () => {
+  if (!document.getElementById("sidebar")?.classList.contains("open"))
+    toggleSidebar();
+});
+bindSheetDrag(document.getElementById("sheetGrabHandle"), false, () => {
+  if (document.getElementById("sidebar")?.classList.contains("open"))
+    toggleSidebar();
+});
 
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {

@@ -53,6 +53,7 @@
     <button class="settings-close-chevron" onclick="toggleSettings()" aria-label="Close settings" title="Close settings">^</button>
   </div>
 </div>
+<div class="settings-backdrop" id="settingsBackdrop" onclick="toggleSettings()"></div>
 
 <input type="file" id="fileLoadInput" accept=".json" onchange="loadFromFile(event)">
 
@@ -471,12 +472,14 @@
 <div class="app-layout">
   <div class="col-left" id="mainContent"></div>
   <div class="drag-handle" id="dragHandle"></div>
-  <div class="sidebar-edge-tab-wrap" id="sidebarEdgeTabWrap">
-    <span class="sidebar-edge-label" aria-hidden="true">Scores</span>
-    <button type="button" class="sidebar-edge-tab" id="sidebarEdgeTab" onclick="toggleSidebar()" aria-label="Open scores" aria-expanded="false" aria-controls="sidebar"><span class="edge-tab-chevron" aria-hidden="true">‹</span>📊</button>
-  </div>
   <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+  <div class="mobile-scores-peek" id="mobileScoresPeek" role="button" tabindex="0" aria-label="Open scores" aria-expanded="false" aria-controls="sidebar" onclick="toggleSidebar()">
+    <span class="msp-grip" aria-hidden="true"></span>
+    <span class="msp-label"><span aria-hidden="true">📊</span> Scores</span>
+    <span class="msp-chevron" aria-hidden="true">▲</span>
+  </div>
   <div class="col-right" id="sidebar">
+    <div class="sheet-grab-handle" id="sheetGrabHandle" aria-hidden="true"></div>
     <div class="sidebar-header" role="button" tabindex="0" onclick="toggleSidebar()">
       <h3>📊 Scores</h3>
       <span class="sidebar-toggle">▼</span>

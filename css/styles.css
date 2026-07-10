@@ -133,9 +133,12 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 /* Deployed-panel-over-page shadows: a plain dark shadow disappears against this app's
    near-black dark background, so it gets its own pale glow to read as "floating above" the
    page instead; light mode already has a light background to contrast against, so it just
-   gets a stronger/darker version of the normal shadow instead of a glow. */
-[data-theme="hc-dark"] .settings-panel{box-shadow:0 16px 48px rgba(255,255,255,.14),0 2px 10px rgba(255,255,255,.09)}
-[data-theme="hc-light"] .settings-panel{box-shadow:0 16px 48px rgba(0,0,0,.32),0 2px 10px rgba(0,0,0,.22)}
+   gets a stronger/darker version of the normal shadow instead of a glow. Zero x/y offset
+   (blur-only) so the halo spreads evenly on all four sides instead of pooling underneath.
+   Opacity/blur bumped up from the first pass (was .16/.10 and .32/.24) — still theme-aware,
+   just a clearly more visible halo in both themes. */
+[data-theme="hc-dark"] .settings-panel{box-shadow:0 0 52px rgba(255,255,255,.30),0 0 16px rgba(255,255,255,.20)}
+[data-theme="hc-light"] .settings-panel{box-shadow:0 0 52px rgba(0,0,0,.46),0 0 16px rgba(0,0,0,.34)}
 .settings-panel.settings-visible{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border)}
 .settings-controls{display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
@@ -208,46 +211,85 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 body.col-resizing{cursor:col-resize!important;user-select:none!important}
 body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 
-/* Base (desktop-hidden) state for the mobile drawer's edge tab + backdrop — declared here,
-   before the @media block below, so that block's display:flex/block override actually wins at
-   narrow widths instead of losing to this display:none on source-order (same selector
+/* Base (desktop-hidden) state for the mobile bottom sheet's peek strip + backdrop — declared
+   here, before the @media block below, so that block's display:flex/block override actually
+   wins at narrow widths instead of losing to this display:none on source-order (same selector
    specificity either way, so whichever comes LAST in the file wins — these must come first). */
 .sidebar-backdrop{display:none}
-/* Wrap owns the fixed positioning/drag so the "SCORES" label and the pill button move
-   together as one unit; the button itself is just an inline-flex pill inside it. */
-.sidebar-edge-tab-wrap{display:none;position:fixed;top:50%;left:0;transform:translateY(-50%);z-index:230;flex-direction:column;align-items:flex-start;gap:3px;touch-action:none}
-.sidebar-edge-label{font-family:var(--font-display);font-size:.6rem;font-weight:700;letter-spacing:1.5px;color:var(--text-secondary);background:var(--bg-card);border:1px solid var(--border-strong);border-left:none;border-radius:0 6px 6px 0;padding:2px 8px 2px 6px;text-transform:uppercase;pointer-events:none;box-shadow:2px 0 8px rgba(0,0,0,.25);white-space:nowrap}
-.sidebar-edge-tab{display:flex;align-items:center;gap:2px;padding:12px 10px 12px 8px;border:1px solid var(--border-strong);border-left:none;border-radius:0 var(--radius-lg) var(--radius-lg) 0;background:var(--accent-cyan-solid);color:var(--on-accent-cyan);box-shadow:4px 0 16px rgba(0,0,0,.35);font-size:1.05rem;line-height:1;cursor:pointer;touch-action:manipulation}
-.sidebar-edge-tab .edge-tab-chevron{font-size:.8rem;transition:transform .28s ease}
-/* Chevron points left at rest (toward where the drawer will slide out from) and flips to
-   point right — back toward closing — once the drawer is open. */
-.sidebar-edge-tab[aria-expanded="true"] .edge-tab-chevron{transform:rotate(180deg)}
+.mobile-scores-peek{display:none}
+
+/* Settings backdrop dims the page behind the dropdown exactly like the scores drawer's own
+   backdrop dims the page behind it — same rgba/opacity/transition values, reused rather than
+   invented fresh. Unlike the scores backdrop this isn't gated to a mobile media query: the
+   settings dropdown itself opens at every viewport width, so its dimming does too. z-index
+   190 sits below .header's own 200 (not above it) so the header bar and the panel it contains
+   — both already inside that same stacking context — stay crisp on top of the dim instead of
+   being darkened along with the rest of the page. */
+.settings-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:190}
+.settings-backdrop.show{opacity:1;pointer-events:auto}
 
 @media(max-width:900px){
-  /* The Scores panel used to dock to the bottom of the screen as a sheet you'd pull open —
-     awkward on a phone because it either ate half the screen or sat as a thin bar you had to
-     keep re-expanding, and it pushed the whole page up to reserve space for it whether you
-     were using it or not. It's now a drawer that slides in from the left edge and overlays the
-     page instead of displacing it, closer to a standard mobile nav drawer: a slim always-visible
-     edge tab opens it, a backdrop (or the header itself) closes it, and the main content never
-     needs reserved padding for it since it's never part of the layout flow. */
+  /* Bottom sheet with a persistent "peek" strip: a slim bar stays docked to the bottom of the
+     screen at all times, showing a live top-3 ticker so scores are glanceable without opening
+     anything. Tapping it (or the grab handle once open) slides up a full sheet with the sort
+     controls and complete list, overlaying the page instead of displacing it — the main content
+     never needs reserved padding for it since it's never part of the layout flow. */
   .app-layout{flex-direction:column;height:auto;overflow:visible}
   .drag-handle{display:none}
-  .col-right{position:fixed;top:0;left:0;bottom:0;right:auto;width:min(85vw,340px)!important;min-width:0;max-width:none;height:auto;max-height:none;border-left:none;border-right:1px solid var(--border-strong);box-shadow:6px 0 28px rgba(0,0,0,.55);z-index:250;transform:translateX(-100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom);padding-top:env(safe-area-inset-top)}
-  .col-right.open{transform:translateX(0)}
+  .col-right{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom)}
+  .col-right.open{transform:translateY(0)}
   .col-left{padding-bottom:40px}
 
   .sidebar-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:240}
   .sidebar-backdrop.show{opacity:1;pointer-events:auto}
 
-  .sidebar-edge-tab-wrap{display:flex}
+  /* Grab handle at the very top of the open sheet — a dedicated drag target for swipe-down-to-
+     close, kept separate from .sidebar-header so dragging it doesn't also fire the header's own
+     tap-to-close handler. --text-muted (not --border-strong, which only measures ~2.9:1 against
+     --bg-card in dark mode — under the WCAG 1.4.11 3:1 floor for a meaningful UI component) is
+     reused instead: it's the same token already used for every collapse chevron in the app, and
+     it clears >=3:1 non-text contrast against --bg-card in both themes. */
+  .sheet-grab-handle{width:100%;padding:8px 0 4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:none;cursor:grab}
+  .sheet-grab-handle::after{content:'';width:36px;height:4px;border-radius:2px;background:var(--text-muted)}
 
-  /* Slide-out drawer shadow — same "floating over the page" treatment as .settings-panel
-     (see that rule for why dark mode needs a pale glow instead of a plain dark shadow).
-     Scoped inside this media query so it never touches the desktop docked column, which
-     isn't floating above anything and keeps its plain border instead. */
-  [data-theme="hc-dark"] .col-right.open{box-shadow:6px 0 28px rgba(255,255,255,.14),2px 0 10px rgba(255,255,255,.09)}
-  [data-theme="hc-light"] .col-right.open{box-shadow:6px 0 28px rgba(0,0,0,.38),2px 0 10px rgba(0,0,0,.26)}
+  /* Halo shadow above the sheet — same theme-aware treatment as .settings-panel (dark mode
+     needs a pale glow to read as "floating" against its near-black background; light mode gets
+     a stronger plain shadow). Zero offset so it reads on all sides, not just pooling below,
+     matching the settings panel's own halo values exactly rather than inventing new opacities. */
+  [data-theme="hc-dark"] .col-right.open{box-shadow:0 0 40px rgba(255,255,255,.16),0 0 10px rgba(255,255,255,.10)}
+  [data-theme="hc-light"] .col-right.open{box-shadow:0 0 40px rgba(0,0,0,.32),0 0 10px rgba(0,0,0,.24)}
+
+  /* PEEK STRIP — always-visible bottom bar (hidden only while the sheet itself is open). Sits
+     below the open sheet in z-order (245 < 250) but that only matters for the brief cross-fade,
+     since .msp-hidden removes it from hit-testing and paint the instant the sheet opens.
+     3-column grid (not flex) so the centered label is centered against the FULL strip width,
+     not just the space left over after the chevron — a flex row with the chevron as a trailing
+     item would visually off-center the middle content toward the left. touch-action:none since
+     there's no inner horizontal-scrolling content anymore to carve out an exception for (see the
+     removed mini ticker) — all touch movement here is the JS swipe-up-to-open gesture's alone. */
+  .mobile-scores-peek{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;position:fixed;left:0;right:0;bottom:0;z-index:245;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--bg-card);border-top:1px solid var(--border-strong);cursor:pointer;touch-action:none;transition:opacity .18s ease,transform .18s ease}
+  /* Delay ONLY on the hide-transition (this class is the destination state when the sheet
+     OPENS, so its own transition value — not the base rule's — is what the browser uses for
+     that direction): the peek stays fully visible for .26s first, long enough for the chevron's
+     .28s rotation below to actually play out, THEN fades away over .16s. Without this delay the
+     opacity fade and the rotation would run simultaneously and the flip would be lost in the
+     wash before it's even halfway done. Closing (this class removed) still uses the base rule's
+     un-delayed transition, so the strip reappears immediately rather than after a matching lag. */
+  .mobile-scores-peek.msp-hidden{opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .16s ease .26s,transform .16s ease .26s}
+  /* Subtle shadow on the collapsed strip — deliberately much quieter than the settings panel's
+     halo (this sits flush against the screen's own edges, so only the top edge separating it
+     from the page content needs any separation at all; a full glow would be overkill for a
+     strip that's visible at all times, not just while something is freshly deployed). */
+  [data-theme="hc-dark"] .mobile-scores-peek{box-shadow:0 -3px 12px rgba(255,255,255,.07)}
+  [data-theme="hc-light"] .mobile-scores-peek{box-shadow:0 -3px 12px rgba(0,0,0,.14)}
+  .msp-grip{grid-column:1;justify-self:start;width:4px;height:26px;border-radius:2px;background:var(--text-muted)}
+  .msp-label{grid-column:2;justify-self:center;display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:.95rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--txt-cyan);white-space:nowrap}
+  /* As big as the strip can comfortably hold — this is now the sheet's one and only visual
+     affordance (no ticker alongside it to share the row with), so it can afford to dominate. */
+  .msp-chevron{grid-column:3;justify-self:end;font-size:1.9rem;line-height:1;color:var(--text-muted);transition:transform .28s ease}
+  /* Points up while collapsed (the sheet is below, waiting to rise) and flips to point down —
+     back toward where it collapses to — once deployed. */
+  .mobile-scores-peek[aria-expanded="true"] .msp-chevron{transform:rotate(180deg)}
 }
 
 /* SIDEBAR */
@@ -655,8 +697,18 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    button is the only other flex item, so it stays put on the first line instead of also
    wrapping to its own row. */
 .cp-winner{font-size:.9rem;margin:8px 0 6px;color:var(--text-primary);display:flex;align-items:center;flex-wrap:wrap;gap:10px}
-.cp-winner-text{flex:1;min-width:0}
+/* flex:0 1 auto (not flex:1): the text takes only its own natural width so the Clear button
+   sits right next to "won!" instead of being pushed out to the far right edge of the card at
+   every viewport width. flex-wrap on .cp-winner above still lets the button drop to its own
+   line if a long team name eats the whole row's width, so it never ends up stranded. */
+.cp-winner-text{flex:0 1 auto;min-width:0}
 .cp-clear-btn{font-size:.9rem;line-height:1;padding:5px 9px;border-radius:var(--radius);flex-shrink:0}
+/* "Clear" label text is desktop-only (icon-only "✕" on mobile keeps the button compact there);
+   the closer positioning above, though, applies everywhere. */
+.cp-clear-label{display:none}
+@media(min-width:901px){
+  .cp-clear-label{display:inline}
+}
 .cp-script-label{display:block;font-size:.66rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
 
@@ -823,8 +875,12 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 
 /* ── Final results mobile layout: stack overflow cells onto a second row ──
    Uses the scorecol container query so it follows the score column's real
-   width (full-width on phones, wide on desktop) rather than the viewport. */
-@container scorecol (max-width:600px){
+   width (full-width on phones, wide on desktop) rather than the viewport.
+   Threshold deliberately much narrower than the 600px used elsewhere in this file (e.g. the
+   team-answer/bonus-row breakpoint above): Score/Guess/Diff stay as normal single-row table
+   columns across ordinary phone widths, only dropping to the stacked 2-row layout once the
+   column genuinely can't fit them anymore. */
+@container scorecol (max-width:340px){
   /* Headers stay visible, laid out with the same 3-column + wrapped-4th-row grid as the
      tbody rows below, so "Place/Team/Score" sit over their own stacked columns. Guess/Diff
      get no header of their own — each value now labels itself inline (see fr-guess/fr-diff
