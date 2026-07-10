@@ -680,6 +680,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .sw-header{display:flex;align-items:center;gap:8px;user-select:none}
 .sw-header-left{display:flex;align-items:center;gap:8px;cursor:pointer;flex:1;min-width:0}
 .sw-header h3{margin-bottom:0!important}
+/* "Q5" + its Done/Beer/remaining badge stay on their own top line, with the "BONUS WAGER
+   (1-10/1-20)" range label always on a second line beneath — a fixed two-line layout at
+   every width, rather than shrinking the font to force it onto one line (that made the text
+   too small to read on a phone). Both lines inherit the h3's own font-size/color/weight, so
+   neither line reads any smaller than the section title always has. */
+.sw-title{display:flex;flex-direction:column;gap:2px;min-width:0}
+.sw-title-row{display:flex;align-items:center;gap:8px}
 .sw-header-left:hover{opacity:.85}
 .sw-header .q-chevron{transition:transform .25s}
 .special-section.sw-collapsed .q-chevron{transform:rotate(-90deg)}
@@ -689,6 +696,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 
 /* Beer round — full gold border so it reads at a glance (no size change) */
 .question-block.beer-round{border-color:var(--beer-border)!important}
+
+/* Craft Prize Drawing — same --beer-bg/--beer-border tokens as a Beer Round question block,
+   applied to the whole section (not just the winner announcement) so the section itself
+   reads as beer-branded at a glance. .section-header keeps its own opaque --bg-card-alt
+   fill (same as a Beer Round question's own header), so only the body area picks up the
+   golden tint underneath it. */
+#sec-craftprize{background:var(--beer-bg);border-color:var(--beer-border)}
 
 /* CRAFT BEER PRIZE winner — tap a name in the scoreboard to toggle */
 .sr-name-clickable{cursor:pointer}
@@ -721,10 +735,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    wraps onto a second line on its own, with "won!" following right after it — the Clear
    button is the only other flex item, so it stays put on the first line instead of also
    wrapping to its own row. */
-/* Same --beer-bg/--beer-border tokens as a Beer Round question block — the craft prize is
-   the same beer-branded prize, so its winner announcement gets the same golden treatment
-   rather than a separately-invented color (and inherits the same AA-checked contrast). */
-.cp-winner{font-size:.9rem;margin:8px 0 6px;color:var(--text-primary);display:flex;align-items:center;flex-wrap:wrap;gap:10px;background:var(--beer-bg);border:2px solid var(--beer-border);border-radius:var(--radius);padding:10px 12px}
+.cp-winner{font-size:.9rem;margin:8px 0 6px;color:var(--text-primary);display:flex;align-items:center;flex-wrap:wrap;gap:10px}
 /* flex:0 1 auto (not flex:1): the text takes only its own natural width so the Clear button
    sits right next to "won!" instead of being pushed out to the far right edge of the card at
    every viewport width. flex-wrap on .cp-winner above still lets the button drop to its own
@@ -817,18 +828,6 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .q-header-right{flex-basis:100%;justify-content:flex-end;margin-left:0;margin-top:2px}
   .q-badge,.round-badge{font-size:.8rem}
   .q-sort-btn,.q-reset-btn{font-size:.78rem;padding:7px 12px}
-
-  /* R2/R4 "Q5: BONUS WAGER (1-10/1-20)" title + its Done/Beer/remaining badge sit on one
-     row (.sw-header-left) that's no longer fighting Sort/Reset for space (those already
-     moved to their own row above), but the title text itself is long enough that at phone
-     widths it still line-wraps mid-word — e.g. "(1-20)" alone drops to a second line and
-     collides with the badge. Shrinking the title via cqw instead of letting it wrap keeps
-     the whole "icon + label + range + badge" cluster on one line at every width down to the
-     12px FONT_SIZES floor; nowrap+min-width:0 is what makes the shrink take effect instead
-     of the browser just overflowing the fixed-size text. */
-  .sw-header-left{min-width:0}
-  .sw-header-left h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(.62rem,3.4cqw,.88rem)}
-  .sw-header-left .q-badge{flex-shrink:0;font-size:clamp(.58rem,2.6cqw,.8rem);padding:1px 7px}
 }
 
 @media(max-width:480px){
