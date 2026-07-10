@@ -23,10 +23,13 @@
      and button fills can stay at full brand saturation without dragging text below AAA. */
   --txt-cyan:#00ffff;--txt-magenta:#ff72d8;--txt-red:#ff8282;--txt-orange:#ffaa00;
   --accent-cyan-solid:#00ffff;--danger-solid-bg:#a52c2c;
-  /* Beer Round highlight: dark theme's own accent-gold already hits 15:1 on bg-card-alt, so no
-     background change is needed here — see the hc-light override below for why light theme
-     needs one. */
-  --beer-bg:var(--bg-card-alt);--beer-border:#ffee00;
+  /* Beer Round highlight: a solid dark amber-brown (not a see-through gold rgba — this is a
+     literal container background, not a layer stacked over other content) so the whole
+     question/wager block reads as "golden" at a glance instead of just its border. Chosen
+     dark enough that every text color already used inside a beer-round block (white, cyan,
+     magenta, muted gray, and the gold badge/border itself) still clears WCAG AA against it —
+     see the contrast check run when this was added. */
+  --beer-bg:#2a2410;--beer-border:#ffee00;
 }
 [data-theme="hc-light"]{
   --bg-primary:#f5f5f5;--bg-card:#fff;--bg-card-alt:#f0f0f0;--bg-input:#e8e8e8;--bg-hover:#dcdcdc;
@@ -147,8 +150,8 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    Padding + line-height keep the tappable area comfortably above the ~44px touch-target
    guideline; color/background reuse the same input/button token pair used everywhere else
    in the app, so contrast is already covered by the existing design system. */
-.settings-close-chevron{grid-column:1/-1;width:100%;margin-top:6px;padding:12px 10px;font-size:1.3rem;line-height:1;text-align:center;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-primary);cursor:pointer;transition:var(--transition);touch-action:manipulation}
-.settings-close-chevron:hover{background:var(--bg-hover)}
+.settings-close-btn{grid-column:1/-1;width:100%;margin-top:6px;padding:12px 10px;font-family:var(--font-display);font-size:.8rem;font-weight:700;letter-spacing:1.5px;line-height:1;text-align:center;text-transform:uppercase;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-primary);cursor:pointer;transition:var(--transition);touch-action:manipulation}
+.settings-close-btn:hover{background:var(--bg-hover)}
 
 /* ADVANCED SETTINGS — collapsible group holding the rarer controls (point adjustments,
    legacy CSV/XLSM export) so the default settings list stays short. */
@@ -267,7 +270,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      item would visually off-center the middle content toward the left. touch-action:none since
      there's no inner horizontal-scrolling content anymore to carve out an exception for (see the
      removed mini ticker) — all touch movement here is the JS swipe-up-to-open gesture's alone. */
-  .mobile-scores-peek{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;position:fixed;left:0;right:0;bottom:0;z-index:245;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--bg-card);border-top:1px solid var(--border-strong);cursor:pointer;touch-action:none;transition:opacity .18s ease,transform .18s ease}
+  .mobile-scores-peek{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;position:fixed;left:0;right:0;bottom:0;z-index:245;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--bg-card);border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;cursor:pointer;touch-action:none;transition:opacity .18s ease,transform .18s ease}
   /* Delay ONLY on the hide-transition (this class is the destination state when the sheet
      OPENS, so its own transition value — not the base rule's — is what the browser uses for
      that direction): the peek stays fully visible for .26s first, long enough for the chevron's
@@ -301,8 +304,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    content needed for the centering to work). */
 .sidebar-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 14px;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-card-alt)}
 .sidebar-header:hover{background:var(--bg-hover)}
-.sidebar-header h3{grid-column:2;justify-self:center;font-family:var(--font-display);font-size:.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--txt-cyan)}
-.sidebar-toggle{grid-column:3;justify-self:end;font-size:.7rem;color:var(--text-muted);transition:transform .3s}
+.sidebar-header h3{grid-column:2;justify-self:center;font-family:var(--font-display);font-size:.95rem;text-transform:uppercase;letter-spacing:1px;color:var(--txt-cyan)}
+/* Matches .msp-chevron's size (1.1rem) so the arrow reads the same whether the sheet is
+   docked (peek strip) or deployed (this header) — was .7rem, visibly smaller than every
+   other collapse/expand chevron in the app. */
+.sidebar-toggle{grid-column:3;justify-self:end;font-size:1.1rem;color:var(--text-muted);transition:transform .3s}
 /* Base glyph (▲) points up while docked; rotating 180deg once deployed (.open) turns it into a
    down-pointing arrow — same up-when-docked/down-when-deployed convention as the peek strip's
    own chevron, just kept on this header instead of swapped for a plain ▼ + no rotation, so the
@@ -715,7 +721,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    wraps onto a second line on its own, with "won!" following right after it — the Clear
    button is the only other flex item, so it stays put on the first line instead of also
    wrapping to its own row. */
-.cp-winner{font-size:.9rem;margin:8px 0 6px;color:var(--text-primary);display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+/* Same --beer-bg/--beer-border tokens as a Beer Round question block — the craft prize is
+   the same beer-branded prize, so its winner announcement gets the same golden treatment
+   rather than a separately-invented color (and inherits the same AA-checked contrast). */
+.cp-winner{font-size:.9rem;margin:8px 0 6px;color:var(--text-primary);display:flex;align-items:center;flex-wrap:wrap;gap:10px;background:var(--beer-bg);border:2px solid var(--beer-border);border-radius:var(--radius);padding:10px 12px}
 /* flex:0 1 auto (not flex:1): the text takes only its own natural width so the Clear button
    sits right next to "won!" instead of being pushed out to the far right edge of the card at
    every viewport width. flex-wrap on .cp-winner above still lets the button drop to its own
@@ -808,6 +817,18 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .q-header-right{flex-basis:100%;justify-content:flex-end;margin-left:0;margin-top:2px}
   .q-badge,.round-badge{font-size:.8rem}
   .q-sort-btn,.q-reset-btn{font-size:.78rem;padding:7px 12px}
+
+  /* R2/R4 "Q5: BONUS WAGER (1-10/1-20)" title + its Done/Beer/remaining badge sit on one
+     row (.sw-header-left) that's no longer fighting Sort/Reset for space (those already
+     moved to their own row above), but the title text itself is long enough that at phone
+     widths it still line-wraps mid-word — e.g. "(1-20)" alone drops to a second line and
+     collides with the badge. Shrinking the title via cqw instead of letting it wrap keeps
+     the whole "icon + label + range + badge" cluster on one line at every width down to the
+     12px FONT_SIZES floor; nowrap+min-width:0 is what makes the shrink take effect instead
+     of the browser just overflowing the fixed-size text. */
+  .sw-header-left{min-width:0}
+  .sw-header-left h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(.62rem,3.4cqw,.88rem)}
+  .sw-header-left .q-badge{flex-shrink:0;font-size:clamp(.58rem,2.6cqw,.8rem);padding:1px 7px}
 }
 
 @media(max-width:480px){
