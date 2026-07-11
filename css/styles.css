@@ -241,7 +241,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .drag-handle{display:none}
   .col-right{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom)}
   .col-right.open{transform:translateY(0)}
-  .col-left{padding-bottom:40px}
+  /* Extra bottom padding (not just the 40px other viewports get) so the last section clears
+     the fixed peek strip with visible breathing room once scrolled all the way down — the
+     strip floats on top of this padding rather than being part of the scrollable flow, so
+     without the extra room the last box's bottom edge sits flush against the strip's top. */
+  .col-left{padding-bottom:88px}
 
   .sidebar-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:240}
   .sidebar-backdrop.show{opacity:1;pointer-events:auto}
@@ -270,7 +274,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      item would visually off-center the middle content toward the left. touch-action:none since
      there's no inner horizontal-scrolling content anymore to carve out an exception for (see the
      removed mini ticker) — all touch movement here is the JS swipe-up-to-open gesture's alone. */
-  .mobile-scores-peek{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;position:fixed;left:0;right:0;bottom:0;z-index:245;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--bg-card);border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;cursor:pointer;touch-action:none;transition:opacity .18s ease,transform .18s ease}
+  /* left/right inset (not edge-to-edge) matches .col-left's own 16px side padding, so the
+     strip reads as the same width as the section boxes stacked above it instead of a wider
+     full-bleed bar. */
+  .mobile-scores-peek{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;position:fixed;left:16px;right:16px;bottom:0;z-index:245;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--bg-card);border-top:1px solid var(--border-strong);border-left:1px solid var(--border-strong);border-right:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;cursor:pointer;touch-action:none;transition:opacity .18s ease,transform .18s ease}
   /* Delay ONLY on the hide-transition (this class is the destination state when the sheet
      OPENS, so its own transition value — not the base rule's — is what the browser uses for
      that direction): the peek stays fully visible for .26s first, long enough for the chevron's
@@ -428,8 +435,8 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .adj-val{min-width:2rem;height:1.5rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:.75rem}
 .adj-val.pos{color:var(--badge-green-fg)}
 .adj-val.neg{color:var(--txt-red)}
-.remove-team button{width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--border);background:none;color:var(--text-muted);font-size:1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.remove-team button:hover{background:rgba(255,68,68,.15);border-color:var(--accent-red);color:var(--txt-red)}
+.remove-team button{width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--accent-red);background:none;color:var(--txt-red);font-size:1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.remove-team button:hover{background:rgba(255,68,68,.15)}
 
 #addTeamBtn{margin-top:10px;width:100%;padding:8px;font-family:var(--font-display);text-transform:uppercase;letter-spacing:1px}
 
