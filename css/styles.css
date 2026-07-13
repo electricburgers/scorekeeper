@@ -506,6 +506,14 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 
 .q-body{padding:0 10px 8px}
 
+/* PER-QUESTION CORRECT/INCORRECT STATS — reuses the same fg/bg/border token pairs as
+   .ta-pts .pts-pos/.pts-neg (already contrast-checked per theme and per colorblind mode)
+   so this reads as the same "correct vs incorrect" language used everywhere else in the app. */
+.q-stats-row{display:flex;flex-wrap:wrap;gap:6px;padding:2px 0 8px}
+.q-stat{font-family:var(--font-body);font-size:.76rem;font-weight:700;padding:3px 9px;border-radius:6px;line-height:1.3;white-space:nowrap}
+.q-stat-correct{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
+.q-stat-incorrect{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
+
 /* TEAM ANSWER ROWS */
 .team-answer{display:flex;align-items:center;gap:.35rem;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);flex-wrap:nowrap;margin-left:-10px;margin-right:-10px;min-height:3.2rem}
 .team-answer:last-child{border-bottom:none}
