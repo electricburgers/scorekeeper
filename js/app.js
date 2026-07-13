@@ -1198,10 +1198,10 @@ function scoreBreakdown(dataObj, n) {
 }
 function renderQStatsRow(s) {
   if (!s.done) return "";
-  return `<div class="q-stats-row">
-    <span class="q-stat q-stat-correct">Correct: ${s.correct}/${s.done} (${s.correctPct}%)</span>
-    <span class="q-stat q-stat-incorrect">Incorrect: ${s.incorrect}/${s.done} (${s.incorrectPct}%)</span>
-  </div>`;
+  return `<span class="q-stats-row">
+    <span class="q-stat q-stat-correct">✓ ${s.correct}/${s.done} (${s.correctPct}%)</span>
+    <span class="q-stat q-stat-incorrect">✗ ${s.incorrect}/${s.done} (${s.incorrectPct}%)</span>
+  </span>`;
 }
 function renderWQ(ri, qi) {
   const wagers = ROUND_WAGERS[ri];
@@ -1243,16 +1243,14 @@ function renderWQ(ri, qi) {
       </div>
     </div>
     <div class="q-header-right">
-      <button class="q-sort-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195 Sort</button>
-      <button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">\u21ba Reset</button>
+      ${renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length))}
+      <button class="q-sort-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195<span class="btn-label"> Sort</span></button>
+      <button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">\u21ba<span class="btn-label"> Reset</span></button>
     </div>
   </div>`;
 
   // Body (collapsible)
   h += `<div class="q-body">`;
-  h += renderQStatsRow(
-    scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length),
-  );
   const entryOrder = gameState.teams.map((_, i) => i);
   let teamOrder = questionSortOrder[qKey]
     ? questionSortOrder[qKey].filter((ti) => ti < gameState.teams.length)
@@ -1420,7 +1418,7 @@ function renderBQ(ri) {
   if (isCollapsedBQ) blockCls += " bq-collapsed";
   const bqStyle = BONUS_Q_STYLE[ri] || { emoji: "", cls: "" };
   const bqKey = "b" + ri;
-  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195 Sort</button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">\u21ba Reset</button></div></div>${beer ? '<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>' : ""}<div class="q-body">`;
+  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195<span class="btn-label"> Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">\u21ba<span class="btn-label"> Reset</span></button></div></div>${beer ? '<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>' : ""}<div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
     ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
@@ -1496,11 +1494,10 @@ function renderSpecialWager(type) {
   }
   const swCollapsed = collapsedSpecialWagers.has(type);
   const swKey = "sw-" + type;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">${titleIcon} Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195 Sort</button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">\u21BA Reset</button></div></div>`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">${titleIcon} Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${renderQStatsRow(scoreBreakdown(data, swN))}<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195<span class="btn-label"> Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">\u21BA<span class="btn-label"> Reset</span></button></div></div>`;
   if (beer)
     h += `<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
   h += `<div class="sw-body">`;
-  h += renderQStatsRow(scoreBreakdown(data, swN));
   const swEntryOrder = gameState.teams.map((_, i) => i);
   let swTeamOrder = questionSortOrder[swKey]
     ? questionSortOrder[swKey].filter((ti) => ti < gameState.teams.length)
