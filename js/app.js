@@ -86,7 +86,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v15.6"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v15.8"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -572,6 +572,22 @@ function clearSaved() {
   }
 })();
 
+// Keeps --header-h in sync with the real rendered height of .header, which .mini-progress
+// (see styles.css) uses on mobile to sit just below it instead of underneath it. A
+// ResizeObserver (not a one-time measurement) because the header's height isn't fixed — it
+// changes with font-size settings and with the safe-area inset on notched phones.
+(function () {
+  const headerEl = document.querySelector(".header");
+  if (!headerEl) return;
+  const sync = () =>
+    document.documentElement.style.setProperty(
+      "--header-h",
+      headerEl.offsetHeight + "px",
+    );
+  new ResizeObserver(sync).observe(headerEl);
+  sync();
+})();
+
 function resumeSession() {
   const s = loadSaved();
   if (s) gameState = migrateState(s);
@@ -1013,6 +1029,10 @@ function renderLeft() {
   const gs = checkGameStarted();
   let h = "";
 
+  // Only shows once scoring has actually begun — before that there's no "current round" to
+  // report, and showing it during team setup would just be clutter above Event Details.
+  if (gs) h += renderMiniProgress();
+
   const quizIdInvalid = !gs && !isQuizIdValid(gameState.meta.quizId);
   const locInvalid = !gs && !isLocationValid(gameState.meta.location);
   // Once scoring starts, Event Details normally locks (so it can't drift mid-game) — but a
@@ -1158,6 +1178,42 @@ function roundProgress(ri) {
 function round1Complete() {
   const rp = roundProgress(0);
   return rp.total > 0 && rp.done === rp.total;
+}
+
+// Which round the host is presumably actively working on: the first one that isn't fully
+// scored yet. Based on scoring state, not scroll position — so it reads the same regardless
+// of where in the page the host has scrolled to (e.g. up to check Teams, or ahead to Final
+// Results), which is simpler and more useful than trying to detect "what's on screen".
+function currentProgressSummary() {
+  if (!gameState.teams.length) return null;
+  for (let ri = 0; ri < 4; ri++) {
+    const rp = roundProgress(ri);
+    if (rp.done < rp.total) return { ri, done: rp.done, total: rp.total };
+  }
+  return { ri: null, done: 0, total: 0 };
+}
+function jumpToSection(id) {
+  collapsedSections.delete(id);
+  renderAll();
+  requestAnimationFrame(() => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+function renderMiniProgress() {
+  const s = currentProgressSummary();
+  if (!s) return "";
+  if (s.ri == null) {
+    return `<div class="mini-progress mp-complete" role="button" tabindex="0" onclick="jumpToSection('sec-final')">
+      <span class="mp-label">✓ All 4 rounds scored — jump to Final Results</span>
+    </div>`;
+  }
+  const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
+  return `<div class="mini-progress" role="button" tabindex="0" onclick="jumpToSection('sec-r${s.ri + 1}')">
+    <span class="mp-round ${ROUND_COLORS[s.ri]}">Round ${s.ri + 1}</span>
+    <span class="mp-count">${s.done}/${s.total} scored</span>
+    <div class="mp-bar"><div class="mp-fill" style="width:${pct}%"></div></div>
+    <span class="mp-pct">${pct}%</span>
+  </div>`;
 }
 
 function qVerdict(ri, qi) {

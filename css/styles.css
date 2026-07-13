@@ -98,7 +98,12 @@
 [data-theme="hc-light"][data-stripe="1"]{--row-stripe:rgba(0,0,0,.09)}
 [data-theme="hc-light"][data-stripe="2"]{--row-stripe:rgba(0,0,0,.16)}
 
-html{font-size:16px;overflow-x:hidden;max-width:100%}
+/* overflow-x lives on body only, not html: with both elements declaring it, the CSS overflow-
+   propagation rules split scrolling ambiguously between html and body instead of the browser
+   treating the viewport as one scroll container — which breaks position:sticky (.header,
+   .mini-progress) on mobile, where the document itself is what scrolls. Leaving it on body
+   only lets body's overflow propagate to the viewport as the single, well-defined scroller. */
+html{font-size:16px;max-width:100%}
 /* touch-action:manipulation app-wide: without it, two rapid taps on rapidly re-rendered
    controls (e.g. the standings Random button, which replaces its own DOM node on every tap)
    can be read by mobile browsers as a double-tap-to-zoom gesture instead of two clicks. */
@@ -214,6 +219,24 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 body.col-resizing{cursor:col-resize!important;user-select:none!important}
 body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 
+/* MINI PROGRESS BAR — shows which round the host is currently working through so they don't
+   have to scroll back up to find it. It's the first child of .col-left (rendered by JS, not
+   static markup) so on desktop, where .col-left is its own scrolling pane, position:sticky
+   pins it to that pane's own top edge. On mobile .col-left isn't a scroll container (the
+   document is), so the sticky context bubbles up to the page — there it needs to sit below
+   the always-sticky .header instead of underneath it, hence the --header-h offset swapped in
+   by the media query below (kept in sync by a ResizeObserver in app.js, since the header's
+   rendered height varies with font-size settings and notch safe-area insets). */
+.mini-progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;padding:8px 12px;margin:0 -16px 10px;background:var(--bg-card-alt);border-bottom:1px solid var(--border-strong);cursor:pointer;transition:var(--transition);touch-action:manipulation}
+.mini-progress:hover{background:var(--bg-hover)}
+.mp-round{font-family:var(--font-display);font-weight:700;flex-shrink:0}
+.mp-count{font-family:var(--font-body);font-size:.8rem;font-weight:600;color:var(--text-secondary);white-space:nowrap}
+.mp-bar{flex:1;height:6px;border-radius:3px;background:var(--bg-input);overflow:hidden;min-width:40px}
+.mp-fill{height:100%;background:var(--accent-cyan-solid);border-radius:3px;transition:width .25s ease}
+.mp-pct{font-family:var(--font-display);font-size:.8rem;font-weight:700;color:var(--text-secondary);flex-shrink:0;min-width:2.4em;text-align:right}
+.mini-progress.mp-complete{justify-content:center}
+.mp-label{font-family:var(--font-body);font-size:.82rem;font-weight:700;color:var(--badge-green-fg)}
+
 /* Base (desktop-hidden) state for the mobile bottom sheet's peek strip + backdrop — declared
    here, before the @media block below, so that block's display:flex/block override actually
    wins at narrow widths instead of losing to this display:none on source-order (same selector
@@ -238,6 +261,14 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      controls and complete list, overlaying the page instead of displacing it — the main content
      never needs reserved padding for it since it's never part of the layout flow. */
   .app-layout{flex-direction:column;height:auto;overflow:visible}
+  /* .col-left keeps overflow-y:auto from the desktop rule above, but on mobile its height is
+     never clipped (app-layout is height:auto here) so it never actually scrolls internally —
+     the document does. Left as overflow-y:auto anyway, .col-left still counts as a "scroll
+     container" for position:sticky purposes and hijacks .mini-progress's containing block away
+     from the real (document-level) scroller, so it visually never sticks. overflow:visible
+     (both axes, not just -y, to dodge the same x/y overflow auto-promotion this fixes at the
+     html/body level above) hands that back to the document, matching .header's behavior. */
+  .col-left{overflow:visible}
   .drag-handle{display:none}
   .col-right{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom)}
   .col-right.open{transform:translateY(0)}
@@ -246,6 +277,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      strip floats on top of this padding rather than being part of the scrollable flow, so
      without the extra room the last box's bottom edge sits flush against the strip's top. */
   .col-left{padding-bottom:88px}
+  /* .col-left is no longer its own scroll container here (the document is), so
+     .mini-progress's sticky context bubbles up to the same one .header already uses — it
+     needs to sit below the header's actual rendered height instead of top:0, or the two
+     would overlap once both are stuck. */
+  .mini-progress{top:var(--header-h,64px)}
 
   .sidebar-backdrop{display:block;position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .28s ease;z-index:240}
   .sidebar-backdrop.show{opacity:1;pointer-events:auto}
