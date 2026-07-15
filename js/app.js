@@ -1116,7 +1116,7 @@ function renderLeft() {
   h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><h2>\uD83C\uDF7A Craft Prize Drawing</h2><span class="chevron">\u25BC</span></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
 
   h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><h2>Export &amp; Data</h2><span class="chevron">▼</span></div><div class="section-body">
-    <div class="export-bar">${loadPrefs().showLegacyExports ? '<button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 XLSM</button>' : ""}<button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button><a class="btn" href="https://form.jotform.com/261746701455055" target="_blank" rel="noopener noreferrer">\uD83D\uDD17 JD Upload Form</a></div>
+    <div class="export-bar">${loadPrefs().showLegacyExports ? '<button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 XLSM</button>' : ""}<button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button><a class="btn" href="hhttps://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer">\uD83D\uDD17 JD Upload Form</a></div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="startNewGame();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?'))startNewGame();">\uD83D\uDDD1 Clear Session</button></div>
   </div></div>`;
@@ -1196,7 +1196,9 @@ function jumpToSection(id) {
   collapsedSections.delete(id);
   renderAll();
   requestAnimationFrame(() => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
 function renderMiniProgress() {
@@ -1763,8 +1765,7 @@ function scheduleDrumroll(totalSec) {
   // the intro's first beats and mangles the absolute-time intro→loop seam — the "choppy start".
   // This also revives a context the browser suspended after an earlier draw (backgrounded tab,
   // iOS audio interruption), which previously left the whole drumroll silent or bunched-up.
-  const running =
-    ctx.state === "running" ? Promise.resolve() : ctx.resume();
+  const running = ctx.state === "running" ? Promise.resolve() : ctx.resume();
   return Promise.all([getDrumBuffers(), running]).then(([bufs]) => {
     const startAt = ctx.currentTime + 0.05;
     const loopAt = startAt + Math.min(bufs.start.duration, totalSec);
@@ -1981,7 +1982,10 @@ function renderCraftPrizeBlock() {
         .join(", "),
     )}</div>`;
   if (drawing) {
-    const st = craftCountdownState() || { remaining: craftDrawState.totalMs, pct: 0 };
+    const st = craftCountdownState() || {
+      remaining: craftDrawState.totalMs,
+      pct: 0,
+    };
     h += `<div class="cp-intro">🎙️ Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName || "")}</div>
     <div class="cp-countdown">
       <div class="cp-countdown-track"><div class="cp-countdown-fill" id="cpCountdownBar" style="width:${st.pct}%"></div></div>
