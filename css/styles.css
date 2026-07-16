@@ -88,6 +88,10 @@
   --njcb-border:#008564;--njcb-fill-checked:#008564;
   --badge-gold-fg:#880056;--txt-cyan:#004f3b;--accent-cyan-solid:#00654c;
   --beer-bg:var(--bg-card-alt);--beer-border:#c2007a;
+  /* #c2007a is too dark for black text at small sizes here (~3.6:1, under the 4.5:1 AA floor
+     for normal text — the base #000 only clears AA on LARGE text, e.g. the question timer's
+     own big countdown digits). White text clears 5.9:1 on this same background. */
+  --on-accent-gold:#fff;
 }
 
 [data-density="compact"]{--row-pad:4px}
@@ -254,14 +258,27 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    cluster rather than being pulled apart to the widget's edges. No box-shadow on the shared
    rule — only .qtimer-desktop gets one (see below); the collapsed mobile peek-strip copy
    doesn't need the extra visual weight since it's not overlaying anything. */
-.qtimer{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--bg-card-alt)}
+.qtimer{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;background:var(--bg-card-alt)}
 .qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border-radius:6px;transition:background-color .2s ease,color .2s ease}
-.qtimer-btns{display:flex;gap:6px;flex-shrink:0}
+.qtimer-btns,.qtimer-steppers{display:flex;gap:6px;flex-shrink:0}
 .qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
 .qtimer-btn:hover{background:var(--bg-hover)}
 .qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
-.qtimer-btn.qtimer-pause{background:var(--accent-orange);border-color:var(--accent-orange);color:var(--on-accent-gold)}
+/* ±30s nudges: same button look, just narrower — a short numeric label doesn't need Start/
+   Reset's wider padding, and this keeps the whole widget's button row from getting crowded. */
+.qtimer-btn.qtimer-step{padding:5px 8px;font-size:.75rem}
+/* Pause: reuses --accent-gold/--on-accent-gold (NOT --accent-orange, which paired with
+   --on-accent-gold's fixed black text goes near-illegible in light theme — #994400 is dark
+   brown, not the bright amber the dark theme's #ffaa00 might suggest). --accent-gold is the
+   token this app already swaps correctly per color-vision mode too (tritanopia-safe pink,
+   etc.), and --on-accent-gold gets one override (light+tritanopia) below to stay >=4.5:1 there
+   as well — see the hc-light[data-cb="2"] block near the top of the file. */
+.qtimer-btn.qtimer-pause{background:var(--accent-gold);border-color:var(--accent-gold);color:var(--on-accent-gold)}
 .qtimer-btn.qtimer-pause:hover{filter:brightness(1.1)}
+/* Reset: neutral while idle (nothing to reset), solid red once a timer is actually running or
+   paused — same --danger-solid-bg/#fff pairing already used for .q-reset-btn elsewhere. */
+.qtimer-btn.qtimer-reset-active{background:var(--danger-solid-bg);border-color:var(--danger-solid-bg);color:#fff}
+.qtimer-btn.qtimer-reset-active:hover{filter:brightness(1.15)}
 
 /* Flashing states — background/text reuse the app's own already-AAA-paired solid tokens
    (--accent-gold/--on-accent-gold, --danger-solid-bg/#fff) rather than inventing new colors, so
@@ -589,7 +606,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    for solid-fill buttons (e.g. .btn-accent, .mark-all-btn.active before this) — those are
    already verified >=4.5:1 in every theme × color-vision combination, so reusing them here
    keeps this AA-compliant for free instead of introducing new colors to re-verify. */
-.q-sort-btn,.q-reset-btn{font-family:var(--font-body);font-size:.72rem;font-weight:700;height:1.8rem;padding:0 11px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation;display:inline-flex;align-items:center;justify-content:center}
+.q-sort-btn,.q-reset-btn{font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation;display:inline-flex;align-items:center;justify-content:center}
 .q-sort-btn{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .q-sort-btn:hover{filter:brightness(1.1)}
 .q-sort-btn.active{box-shadow:0 0 0 2px var(--on-accent-cyan) inset}
@@ -619,9 +636,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    theme and per colorblind mode) so this reads as the same "correct vs incorrect" language
    used everywhere else in the app. height matches .q-sort-btn/.q-reset-btn exactly (same value,
    same flex-centering technique) so the whole .q-header-right row reads as one consistent
-   height instead of the pills looking slightly squat next to the buttons. */
+   height — kept compact on purpose (vertical space here is at a premium with many question
+   blocks stacked on the page), so both this and the buttons are sized down together rather
+   than growing either one to match the other. */
 .q-stats-row{display:contents}
-.q-stat{font-family:var(--font-body);font-size:.72rem;font-weight:700;height:1.8rem;padding:0 8px;border-radius:6px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
+.q-stat{font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 6px;border-radius:6px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
 .q-stat-correct{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
 .q-stat-incorrect{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
 
@@ -974,11 +993,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   /* Icon is the button's whole visible content now that its label is hidden, so it gets its
      own larger font-size (not the .78rem sized for the old icon+text pairing) to actually
      read at a glance instead of looking lost in the middle of a same-sized tap target. */
-  .q-sort-btn,.q-reset-btn{font-size:1.35rem;line-height:1;padding:0;width:clamp(2.2rem,9cqw,2.6rem);height:clamp(2.2rem,9cqw,2.6rem);display:inline-flex;align-items:center;justify-content:center}
-  /* height matches .q-sort-btn/.q-reset-btn's own clamp exactly, same reasoning as the
-     desktop rule above — width isn't matched (unlike the buttons) since the pill's text
+  .q-sort-btn,.q-reset-btn{font-size:1.1rem;line-height:1;padding:0;width:clamp(1.9rem,7.5cqw,2.3rem);height:clamp(1.9rem,7.5cqw,2.3rem);display:inline-flex;align-items:center;justify-content:center}
+  /* height matches .q-sort-btn/.q-reset-btn's own (now smaller) clamp exactly, same reasoning
+     as the desktop rule above — width isn't matched (unlike the buttons) since the pill's text
      content needs to stay readable rather than being squeezed into a square. */
-  .q-stat{font-size:.74rem;height:clamp(2.2rem,9cqw,2.6rem);padding:0 7px}
+  .q-stat{font-size:.7rem;height:clamp(1.9rem,7.5cqw,2.3rem);padding:0 6px}
 }
 
 @media(max-width:480px){

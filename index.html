@@ -481,6 +481,10 @@
     </div>
     <div class="qtimer qtimer-mobile" role="group" aria-label="Question timer">
       <span class="qtimer-display" aria-live="off">03:00</span>
+      <div class="qtimer-steppers">
+        <button type="button" class="qtimer-btn qtimer-step" onclick="bumpQTimer(-30)" aria-label="Subtract 30 seconds">−30</button>
+        <button type="button" class="qtimer-btn qtimer-step" onclick="bumpQTimer(30)" aria-label="Add 30 seconds">+30</button>
+      </div>
       <div class="qtimer-btns">
         <button type="button" class="qtimer-btn qtimer-toggle" onclick="toggleQTimer()">▶ Start</button>
         <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled>↺</button>
@@ -496,6 +500,10 @@
     <div class="sidebar-body" id="sidebarBody"></div>
     <div class="qtimer qtimer-desktop" role="group" aria-label="Question timer">
       <span class="qtimer-display" aria-live="off">03:00</span>
+      <div class="qtimer-steppers">
+        <button type="button" class="qtimer-btn qtimer-step" onclick="bumpQTimer(-30)" aria-label="Subtract 30 seconds">−30s</button>
+        <button type="button" class="qtimer-btn qtimer-step" onclick="bumpQTimer(30)" aria-label="Add 30 seconds">+30s</button>
+      </div>
       <div class="qtimer-btns">
         <button type="button" class="qtimer-btn qtimer-toggle" onclick="toggleQTimer()">▶ Start</button>
         <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled>↺ Reset</button>

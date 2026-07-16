@@ -4046,7 +4046,9 @@ function renderQtControls() {
     b.classList.toggle("qtimer-pause", qtState === "running");
   });
   document.querySelectorAll(".qtimer-reset").forEach((b) => {
-    b.disabled = qtState === "idle";
+    const active = qtState !== "idle";
+    b.disabled = !active;
+    b.classList.toggle("qtimer-reset-active", active);
   });
 }
 function toggleQTimer() {
@@ -4070,6 +4072,28 @@ function resetQTimer() {
   qtSetDisplayText(fmtQt(qtDurationSec));
   qtSetDisplayClass(null);
   renderQtControls();
+}
+// ±30s stepper: nudges whichever clock is live right now — the remaining time while running or
+// paused, or the not-yet-started base duration while idle (clamped to the same 1-15 min range
+// as the Settings field, so idle nudges can't produce a duration Settings couldn't also set).
+// Running/paused nudges are intentionally NOT clamped — going negative is exactly the existing
+// "time's up" overflow the display already supports, and a host who taps +30 a bunch of times
+// mid-question should just get more time, not hit an arbitrary ceiling.
+function bumpQTimer(deltaSec) {
+  if (qtState === "running") {
+    qtEndEpoch += deltaSec * 1000;
+  } else if (qtState === "paused") {
+    qtRemainMs += deltaSec * 1000;
+  } else {
+    qtDurationSec = Math.max(
+      QT_MIN_MIN * 60,
+      Math.min(QT_MAX_MIN * 60, qtDurationSec + deltaSec),
+    );
+    qtSetDisplayText(fmtQt(qtDurationSec));
+    qtSetDisplayClass(null);
+    return;
+  }
+  tickQTimer();
 }
 function setQtDuration(mins) {
   const n = Math.max(QT_MIN_MIN, Math.min(QT_MAX_MIN, parseInt(mins, 10) || QT_DEFAULT_MIN));
