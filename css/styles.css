@@ -128,7 +128,17 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    the old "drag handle pokes through the settings panel" bug, or settings opening underneath an
    already-expanded scores sheet on mobile. .settings-backdrop (a sibling, not a header child)
    needs its own bump to match, see below. */
-.header{position:sticky;top:0;z-index:260;background:var(--bg-primary);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
+/* transform:translateZ(0) forces this sticky header onto its own GPU compositing layer — the
+   same iOS Safari sticky-positioning fix already used on .mini-progress/.audit-head/
+   .settings-panel-head below, just not yet applied here. Regular Safari tabs mostly get away
+   without it because the address bar collapsing/expanding on scroll forces a viewport resize
+   (and with it a sticky recalculation) on nearly every scroll tick, which papers over the
+   underlying glitch. An installed standalone PWA has no address bar to collapse — the viewport
+   height never changes, so that recalculation never fires, and the header is left stuck in
+   whatever position it last (mis)computed instead of self-correcting. Promoting it to its own
+   layer keeps its position tracked independently instead of depending on that browser-chrome
+   side effect to paper over it. */
+.header{position:sticky;top:0;z-index:260;background:var(--bg-primary);padding:calc(10px + env(safe-area-inset-top)) 16px 10px;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* flex-wrap here (not on .toolbar) means Save/Load/Gear wrap onto a new line as one group
    under the logo when they don't fit — .toolbar itself no longer wraps its own buttons
    individually, so it's all-or-nothing instead of one icon peeling off at a time. */
