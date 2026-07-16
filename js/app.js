@@ -858,13 +858,25 @@ function finalResultsRows() {
     prevScore = r.score;
     prevDiff = d;
   });
+  // .tie/.tieWinner are about the SCORE alone (not the compound place key above) — they flag
+  // "this team's score was tied with another's" so the host can see at a glance where the
+  // guess tiebreak actually did work, even though the place numbers are now always distinct.
+  // .tieWinner marks whoever had the closest guess in that tied group (the one who got the
+  // better place out of it); everyone else in the group just gets the plain "tie" badge.
   const cnt = {};
   rows.forEach((r) => {
-    const key = r.score + "|" + dv(r);
-    cnt[key] = (cnt[key] || 0) + 1;
+    cnt[r.score] = (cnt[r.score] || 0) + 1;
+  });
+  const minD = {};
+  rows.forEach((r) => {
+    if (cnt[r.score] > 1) {
+      const d = dv(r);
+      if (minD[r.score] === undefined || d < minD[r.score]) minD[r.score] = d;
+    }
   });
   rows.forEach((r) => {
-    r.tie = cnt[r.score + "|" + dv(r)] > 1;
+    r.tie = cnt[r.score] > 1;
+    r.tieWinner = r.tie && dv(r) === minD[r.score];
   });
   return byPlace
     .slice()
@@ -890,16 +902,16 @@ function renderFinalResults() {
     h +=
       `<tr class="${r.tie ? "fr-tie" : ""}${medal}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to audit score" onclick="openAudit(${r.index})">` +
       `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>` +
-      `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie ? ` <span class="fr-tiebadge">tie</span>` : ""}</td>` +
+      `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie ? ` <span class="fr-tiebadge${r.tieWinner ? " fr-win" : ""}">${r.tieWinner ? "\u2713 closer" : "tie"}</span>` : ""}</td>` +
       `<td class="fr-score" data-label="Score">${r.score}</td>` +
       `<td class="fr-guess" data-label="Guess">${r.guess == null ? "\u2014" : r.guess}</td>` +
-      `<td class="fr-diff" data-label="Diff *">${r.guess == null ? "\u2014" : diffSigned}</td>` +
+      `<td class="fr-diff${r.tieWinner ? " fr-diff-win" : ""}" data-label="Diff *">${r.guess == null ? "\u2014" : diffSigned}</td>` +
       `</tr>`;
   });
   h += "</tbody></table>";
   h +=
     '<details class="fr-details"><summary>&gt; Diff *</summary>' +
-    '<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Equal scores are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place. Only a team tied on BOTH score and Diff shares a place, marked <strong>tie</strong>.</p>' +
+    '<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Equal scores are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>, with the rest of that tied group marked <strong>tie</strong>). A team tied on BOTH score and Diff shares a place number outright.</p>' +
     "<p class=\"fr-note\">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team's score before it's compared to their guess, for every team. A <strong>+</strong> means the guess came in over the actual score, a <strong>\u2212</strong> means it came in under.</p>" +
     "</details>";
   return h;

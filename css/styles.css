@@ -1043,7 +1043,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .final-table tbody tr:nth-child(even):not(.fr-tie):not(.fr-gold):not(.fr-silver):not(.fr-bronze){background:var(--row-stripe)}
 .final-table tr.fr-tie{background:rgba(255,221,0,.13)}
 .final-table tr.fr-tie td{border-bottom-color:var(--accent-gold)}
+/* .fr-tiebadge flags a SCORE-only tie (place numbers themselves are always distinct now — see
+   finalResultsRows()) so the host can still see at a glance where a tied score existed and how
+   the guess tiebreak resolved it: the closer guess gets the green "win" variant, the rest of
+   that tied group gets the plain gold "tie" badge. */
 .fr-tiebadge{display:inline-block;font-size:.62rem;padding:1px 7px;border-radius:999px;background:var(--badge-gold-fg);color:var(--on-badge);margin-left:6px;vertical-align:middle;font-weight:700}
+.fr-tiebadge.fr-win{background:var(--badge-green-fg)}
+.fr-diff-win{color:var(--badge-green-fg)!important;font-weight:800!important}
 .fr-note{font-size:.72rem;color:var(--text-muted);margin-top:9px;line-height:1.45}
 /* Collapsed by default so the tie-break/Diff explanation doesn't eat vertical space every time
    Final Results is open — <details>/<summary> gets keyboard support and toggling for free. */
