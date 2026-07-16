@@ -352,7 +352,8 @@ function applyPrefs() {
     timerToggle.classList.toggle("active", !!p.showTimer);
     timerToggle.textContent = p.showTimer ? "Shown" : "Hidden";
   }
-  if (p.showTimer) document.documentElement.removeAttribute("data-timer-hidden");
+  if (p.showTimer)
+    document.documentElement.removeAttribute("data-timer-hidden");
   else document.documentElement.setAttribute("data-timer-hidden", "1");
   const stepperToggle = document.getElementById("timerSteppersToggle");
   if (stepperToggle) {
@@ -367,7 +368,8 @@ function applyPrefs() {
     pulseToggle.classList.toggle("active", !!p.timerPulse);
     pulseToggle.textContent = p.timerPulse ? "Shown" : "Hidden";
   }
-  if (p.timerPulse) document.documentElement.removeAttribute("data-timer-no-pulse");
+  if (p.timerPulse)
+    document.documentElement.removeAttribute("data-timer-no-pulse");
   else document.documentElement.setAttribute("data-timer-no-pulse", "1");
   const vl = document.getElementById("versionLabel");
   if (vl) vl.textContent = "Scorekeeper " + APP_VERSION;
@@ -850,7 +852,10 @@ function ranked() {
         guessDiff,
       };
     })
-    .sort((a, b) => b.total - a.total || a.guessDiff - b.guessDiff || a.index - b.index);
+    .sort(
+      (a, b) =>
+        b.total - a.total || a.guessDiff - b.guessDiff || a.index - b.index,
+    );
 }
 // Dense ("1223") ranking on the (total, guessDiff) tie-broken order above: teams tied on BOTH
 // total score and guess-closeness share a place, and the next genuinely-distinct team takes the
@@ -865,7 +870,8 @@ function rankMap() {
     prevTotal = null,
     prevDiff = null;
   rk.forEach((r) => {
-    if (prevTotal === null || r.total !== prevTotal || r.guessDiff !== prevDiff) place++;
+    if (prevTotal === null || r.total !== prevTotal || r.guessDiff !== prevDiff)
+      place++;
     rm[r.index] = place;
     prevTotal = r.total;
     prevDiff = r.guessDiff;
@@ -2339,7 +2345,13 @@ function auditGuessDiff(ti, score) {
   const diff = hasG ? Math.abs(score - bonuses - guess) : null;
   const diffSign = hasG ? Math.sign(guess - (score - bonuses)) : 0;
   const diffTxt =
-    diff == null ? "—" : diffSign > 0 ? "+" + diff : diffSign < 0 ? "-" + diff : diff;
+    diff == null
+      ? "—"
+      : diffSign > 0
+        ? "+" + diff
+        : diffSign < 0
+          ? "-" + diff
+          : diff;
   return (
     `<div class="aud-stats">` +
     `<div class="aud-stat"><span class="aud-stat-n">${guess == null ? "—" : guess}</span><span class="aud-stat-pct">Score Guess</span></div>` +
@@ -2512,7 +2524,7 @@ function buildAudit(ti) {
   if (run !== gt)
     h += `<div class="aud-note">Note: running figure (${run}) and grand total (${gt}) differ \u2014 if you see this, take a screenshot.</div>`;
   else
-    h += `<div class="aud-note">Tip: each round shows that question's wager, whether it was marked correct or incorrect, and the team's running score. To fix a wrong wager, close this and tap the wager button in the round itself.</div>`;
+    h += `<div class="aud-note">Tip: each round shows that question's wager, whether it was marked correct or incorrect, and the team's running score. To fix a wrong wager, close this and tap the wager button in the round itself. </br> </br> Diff is minus Bonuses — Bonus Item (+5) and NJCB (+3) are stripped from a team's score before it's compared to their guess, for every team. A + means the guess came in over the actual score, a − means it came in under.</div>`;
   h += `</div>`;
   return h;
 }
@@ -2616,8 +2628,7 @@ function loadPrefsFromFile(e) {
       data = JSON.parse(ev.target.result);
     } catch (err) {
       alert(
-        "Bad JSON — this file isn’t a valid preferences file: " +
-          err.message,
+        "Bad JSON — this file isn’t a valid preferences file: " + err.message,
       );
       return;
     }
@@ -4210,7 +4221,11 @@ function qtSetDisplayClass(cls) {
 function renderQtControls() {
   document.querySelectorAll(".qtimer-toggle").forEach((b) => {
     b.textContent =
-      qtState === "running" ? "⏸ Pause" : qtState === "paused" ? "▶ Resume" : "▶ Start";
+      qtState === "running"
+        ? "⏸ Pause"
+        : qtState === "paused"
+          ? "▶ Resume"
+          : "▶ Start";
     b.classList.toggle("qtimer-pause", qtState === "running");
   });
   document.querySelectorAll(".qtimer-reset").forEach((b) => {
@@ -4270,7 +4285,10 @@ function bumpQTimer(deltaSec) {
 // duration it started with, same as changing this while a real countdown is in progress
 // shouldn't retroactively change it.
 function setQtDurationSec(sec) {
-  const n = Math.max(QT_MIN_SEC, Math.min(QT_MAX_SEC, parseInt(sec, 10) || QT_DEFAULT_SEC));
+  const n = Math.max(
+    QT_MIN_SEC,
+    Math.min(QT_MAX_SEC, parseInt(sec, 10) || QT_DEFAULT_SEC),
+  );
   qtDurationSec = n;
   const p = loadPrefs();
   p.qtDurationSec = n;
@@ -4285,7 +4303,13 @@ function tickQTimer() {
     (qtState === "running" ? qtEndEpoch - Date.now() : qtRemainMs) / 1000;
   qtSetDisplayText(fmtQt(remainSec));
   qtSetDisplayClass(
-    remainSec < 0 ? "qt-over" : remainSec <= 30 ? "qt-crit" : remainSec <= 60 ? "qt-warn" : null,
+    remainSec < 0
+      ? "qt-over"
+      : remainSec <= 30
+        ? "qt-crit"
+        : remainSec <= 60
+          ? "qt-warn"
+          : null,
   );
 }
 setInterval(tickQTimer, 200);
