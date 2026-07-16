@@ -249,8 +249,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* QUESTION TIMER — one shared look for the desktop and mobile copies of the widget (see
    .qtimer-desktop / .qtimer-mobile below for where each one actually sits). Kept visually out
    of the way of the scoring UI on purpose: it never overlaps game content, only the scores
-   list/peek strip it's docked against — see the placement rules further down. */
-.qtimer{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-card-alt);box-shadow:var(--shadow-lg)}
+   list/peek strip it's docked against — see the placement rules further down. Centered (not
+   space-between) so the countdown and its Start/Reset buttons read as one centered control
+   cluster rather than being pulled apart to the widget's edges. No box-shadow on the shared
+   rule — only .qtimer-desktop gets one (see below); the collapsed mobile peek-strip copy
+   doesn't need the extra visual weight since it's not overlaying anything. */
+.qtimer{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--bg-card-alt)}
 .qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border-radius:6px;transition:background-color .2s ease,color .2s ease}
 .qtimer-btns{display:flex;gap:6px;flex-shrink:0}
 .qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
@@ -274,11 +278,17 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .qtimer-display.qt-warn,.qtimer-display.qt-crit{animation:none}
 }
 
-/* Desktop: pinned to the bottom of the scores column, overlaying .sidebar-body rather than
-   sitting below it — the extra padding-bottom on .scores-list (its CSS rule, further down)
-   reserves room so the last team row can still scroll up clear of it, and every row above that
-   scrolls BEHIND the timer as the list scrolls, rather than the timer displacing the list. */
-.qtimer-desktop{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:10px 12px;border-top:1px solid var(--border-strong)}
+/* Pinned to the bottom of the scores column (#sidebar / .col-right), overlaying .scores-list
+   rather than sitting below it — the extra padding-bottom on .scores-list (its CSS rule,
+   further down) reserves room so the last team row can still scroll up clear of it, and every
+   row above that scrolls BEHIND the timer as the list scrolls, rather than the timer
+   displacing the list. This same element and rule is what's visible on mobile once the scores
+   sheet is expanded (#sidebar is shared across breakpoints, only repositioned/resized by the
+   mobile media query below) — flush against the sheet's own bottom edge, so there's no gap
+   between the sheet and the timer, and it only carries a drop shadow while a real overlay like
+   this actually needs the separation; the collapsed mobile dock copy (.qtimer-mobile) doesn't
+   get one. */
+.qtimer-desktop{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:10px 12px;border-top:1px solid var(--border-strong);box-shadow:var(--shadow-lg)}
 
 /* Settings backdrop dims the page behind the dropdown exactly like the scores drawer's own
    backdrop dims the page behind it — same rgba/opacity/transition values, reused rather than
@@ -308,11 +318,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .drag-handle{display:none}
   .col-right{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom)}
   .col-right.open{transform:translateY(0)}
-  /* The desktop overlay timer only makes sense pinned to .scores-list's own bottom edge, which
-     no longer needs to clear anything here — the mobile timer lives in .mobile-bottom-dock
-     instead (below), so the extra reserve .scores-list carries for it on desktop is dropped. */
-  .qtimer-desktop{display:none}
-  .scores-list{padding-bottom:8px}
+  /* .qtimer-desktop stays visible here (no display:none override) — expanding the scores
+     sheet on mobile should still show the timer, not hide it; it's the same #sidebar element
+     as the desktop sidebar, just repositioned/resized by this media query, so it naturally
+     shows once .col-right.open slides the whole sheet (timer included) into view. */
   /* Extra bottom padding (not just the 40px other viewports get) so the last section clears
      the fixed peek strip + timer dock with visible breathing room once scrolled all the way
      down — the dock floats on top of this padding rather than being part of the scrollable
@@ -378,11 +387,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   [data-theme="hc-light"] .mobile-scores-peek{box-shadow:0 -3px 12px rgba(0,0,0,.14)}
 
   /* Mobile timer — same widget as the desktop copy (.qtimer base rule) but full-width, rounded
-     to match the strip above it, with its own drop shadow rather than sharing the peek's. */
+     to match the strip above it. No drop shadow here (unlike .qtimer-desktop): this collapsed
+     copy sits next to the peek strip rather than overlaying scrollable content, so it doesn't
+     need the extra separation — the shadow only shows up once the scores sheet is expanded and
+     the (shared) .qtimer-desktop instance takes over. */
   .qtimer-mobile{display:flex;border-radius:var(--radius-lg);padding:8px 10px}
   .qtimer-mobile .qtimer-display{font-size:1.3rem}
-  [data-theme="hc-dark"] .qtimer-mobile{box-shadow:0 -3px 12px rgba(255,255,255,.07),var(--shadow-lg)}
-  [data-theme="hc-light"] .qtimer-mobile{box-shadow:0 -3px 12px rgba(0,0,0,.14),var(--shadow-lg)}
   /* Column 1 is left empty on purpose — an unfilled 1fr grid track still reserves the same
      width as column 3's chevron, which is what keeps column 2 centered against the full strip
      rather than just the leftover space; it doesn't need visible content of its own to do that. */
@@ -579,7 +589,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    for solid-fill buttons (e.g. .btn-accent, .mark-all-btn.active before this) — those are
    already verified >=4.5:1 in every theme × color-vision combination, so reusing them here
    keeps this AA-compliant for free instead of introducing new colors to re-verify. */
-.q-sort-btn,.q-reset-btn{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:6px 11px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
+.q-sort-btn,.q-reset-btn{font-family:var(--font-body);font-size:.72rem;font-weight:700;height:1.8rem;padding:0 11px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation;display:inline-flex;align-items:center;justify-content:center}
 .q-sort-btn{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .q-sort-btn:hover{filter:brightness(1.1)}
 .q-sort-btn.active{box-shadow:0 0 0 2px var(--on-accent-cyan) inset}
@@ -607,9 +617,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    direct flex items of .q-header-right instead of adding an extra nesting level. Reuses the
    same fg/bg/border token pairs as .ta-pts .pts-pos/.pts-neg (already contrast-checked per
    theme and per colorblind mode) so this reads as the same "correct vs incorrect" language
-   used everywhere else in the app. */
+   used everywhere else in the app. height matches .q-sort-btn/.q-reset-btn exactly (same value,
+   same flex-centering technique) so the whole .q-header-right row reads as one consistent
+   height instead of the pills looking slightly squat next to the buttons. */
 .q-stats-row{display:contents}
-.q-stat{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:5px 8px;border-radius:6px;line-height:1.2;white-space:nowrap}
+.q-stat{font-family:var(--font-body);font-size:.72rem;font-weight:700;height:1.8rem;padding:0 8px;border-radius:6px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
 .q-stat-correct{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
 .q-stat-incorrect{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
 
@@ -761,19 +773,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .stepper input.sw-input::placeholder{color:var(--text-muted);font-weight:400}
 .stepper input.sw-input:focus{background:var(--bg-hover);box-shadow:none}
 
-/* R2/R4 BONUS WAGER entry: dropdown (1-10 / 1-20) + a typed-number fallback, replacing the
-   old +/- stepper — a tap-once dropdown is faster for the common case, the number input still
-   takes any value in range for hosts who'd rather type. Kept as its own .wager-pick class
-   (not a rename of .stepper) since .stepper/.sw-input are also reused, unrelated, by the
-   Craft Draw panel's "Exclude Top"/"Drumroll" fields above. */
-.wager-pick{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.wager-pick .sw-select{height:1.9rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0 4px;cursor:pointer;touch-action:manipulation}
-.wager-pick .sw-select:hover{background:var(--bg-hover)}
-.wager-pick .sw-select:focus{background:var(--bg-hover);outline:2px solid var(--accent-cyan-solid);outline-offset:1px}
-.wager-pick .sw-input{width:2.8rem;height:1.9rem;text-align:center;background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0;outline:none;box-shadow:none;-moz-appearance:textfield;appearance:textfield}
-.wager-pick .sw-input::-webkit-outer-spin-button,.wager-pick .sw-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.wager-pick .sw-input::placeholder{color:var(--text-muted);font-weight:400;font-size:.66rem}
-.wager-pick .sw-input:focus{background:var(--bg-hover);box-shadow:none;outline:2px solid var(--accent-cyan-solid);outline-offset:1px}
+/* R2/R4 BONUS WAGER entry: a single dropdown (1-10 / 1-20), replacing the old +/- stepper —
+   one tap sets the wager, no separate typed field. Kept as its own .sw-select class (not a
+   rename of .stepper/.sw-input) since those are also reused, unrelated, by the Craft Draw
+   panel's "Exclude Top"/"Drumroll" fields above. text-align-last centers the CLOSED box's
+   selected value — the only part of a native <select> that's reliably style-able; the open
+   option list's own alignment is left to the browser/OS. */
+.sw-select{height:1.9rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0 4px;text-align:center;text-align-last:center;cursor:pointer;touch-action:manipulation;flex-shrink:0}
+.sw-select:hover{background:var(--bg-hover)}
+.sw-select:focus{background:var(--bg-hover);outline:2px solid var(--accent-cyan-solid);outline-offset:1px}
 
 /* BONUS submitted / zero-correct state (R1 & R3) */
 .stepper-val.unset{color:var(--text-muted);font-size:.85rem}
@@ -921,7 +929,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .ta-name{flex:0 0 100%;width:100%;min-width:0;overflow-wrap:break-word;font-size:.82rem;padding-left:2px;padding-right:0;line-height:1.3}
   .ta-name-clickable::after{display:none}
   /* push the control cluster to the right edge of its own line */
-  .team-answer>.ta-wagers,.bonus-row>.bonus-right,.special-wager-row>.wager-pick{margin-left:auto}
+  .team-answer>.ta-wagers,.bonus-row>.bonus-right,.special-wager-row>.sw-select{margin-left:auto}
 
   /* wager / result buttons: clamp so they can't balloon past the column */
   .wager-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
@@ -937,9 +945,8 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .stepper button{width:clamp(1.6rem,7cqw,1.9rem);height:clamp(1.6rem,7cqw,1.9rem)}
   .stepper-val{width:clamp(1.8rem,8cqw,2.2rem);min-width:0}
 
-  /* R2/R4 wager dropdown + typed fallback */
-  .wager-pick .sw-select{width:clamp(3.4rem,15cqw,4.4rem);min-width:0;font-size:clamp(.82rem,3.6cqw,1rem)}
-  .wager-pick .sw-input{width:clamp(2rem,9cqw,2.6rem);min-width:0}
+  /* R2/R4 wager dropdown */
+  .sw-select{width:clamp(3.4rem,15cqw,4.4rem);min-width:0;font-size:clamp(.82rem,3.6cqw,1rem)}
 
   /* team-setup grid */
   .meta-grid{grid-template-columns:1fr}
@@ -968,7 +975,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
      own larger font-size (not the .78rem sized for the old icon+text pairing) to actually
      read at a glance instead of looking lost in the middle of a same-sized tap target. */
   .q-sort-btn,.q-reset-btn{font-size:1.35rem;line-height:1;padding:0;width:clamp(2.2rem,9cqw,2.6rem);height:clamp(2.2rem,9cqw,2.6rem);display:inline-flex;align-items:center;justify-content:center}
-  .q-stat{font-size:.74rem;padding:5px 7px}
+  /* height matches .q-sort-btn/.q-reset-btn's own clamp exactly, same reasoning as the
+     desktop rule above — width isn't matched (unlike the buttons) since the pill's text
+     content needs to stay readable rather than being squeezed into a square. */
+  .q-stat{font-size:.74rem;height:clamp(2.2rem,9cqw,2.6rem);padding:0 7px}
 }
 
 @media(max-width:480px){

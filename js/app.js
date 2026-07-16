@@ -772,31 +772,46 @@ function grandTotal(ti) {
   t += gameState.teams[ti]?.adjustment || 0;
   return t;
 }
+// Teams level on total score are broken by Score Guess closeness (the same "closer guess wins
+// the tie" rule the Final Results table already uses) — a team with no guess sorts last within
+// its tied group (Infinity), same as there. Two teams that are ALSO tied on guess-closeness (or
+// both have no guess at all) are a genuine, unbreakable tie and stay grouped for rankMap()
+// below; a.index as the final fallback just keeps the sort stable/deterministic.
 function ranked() {
   return gameState.teams
-    .map((t, i) => ({
-      index: i,
-      name: t.name || "Team " + (i + 1),
-      total: grandTotal(i),
-    }))
-    .sort((a, b) => b.total - a.total);
+    .map((t, i) => {
+      const total = grandTotal(i);
+      const bonuses = (t.bonusItem ? 5 : 0) + (t.njcb ? 3 : 0);
+      const hasGuess = !(t.scoreGuess === "" || t.scoreGuess == null);
+      const guessDiff = hasGuess
+        ? Math.abs(total - bonuses - parseInt(t.scoreGuess, 10))
+        : Infinity;
+      return {
+        index: i,
+        name: t.name || "Team " + (i + 1),
+        total,
+        guessDiff,
+      };
+    })
+    .sort((a, b) => b.total - a.total || a.guessDiff - b.guessDiff || a.index - b.index);
 }
-// Dense ("1223") ranking: teams with an equal total share the same place, and the next distinct
-// total takes the very next place — no numbers get skipped for however many teams just tied
-// (three teams tied for 5th -> the next team is 6th, not 8th) — instead of every row just
-// getting its array position + 1, which used to hand two exactly-tied teams two different
-// numbers (e.g. 7 and 8) for no reason other than array order — confusing on its own, and
-// outright backwards once you sort the scoreboard ascending, since the tie's arbitrary "7 vs 8"
-// split doesn't track score order at all.
+// Dense ("1223") ranking on the (total, guessDiff) tie-broken order above: teams tied on BOTH
+// total score and guess-closeness share a place, and the next genuinely-distinct team takes the
+// very next place — no numbers get skipped for however many teams just tied. A closer guess now
+// resolves a tied total into its own next place instead of sharing one (three teams "tied" for
+// 5th by score alone, but one guessed closer, place as 5th/6th/6th instead of 5th/5th/5th) — no
+// more than one team can hold 1st/2nd/etc. unless their guesses were ALSO tied.
 function rankMap() {
   const rk = ranked();
   const rm = {};
   let place = 0,
-    prevTotal = null;
+    prevTotal = null,
+    prevDiff = null;
   rk.forEach((r) => {
-    if (prevTotal === null || r.total !== prevTotal) place++;
+    if (prevTotal === null || r.total !== prevTotal || r.guessDiff !== prevDiff) place++;
     rm[r.index] = place;
     prevTotal = r.total;
+    prevDiff = r.guessDiff;
   });
   return rm;
 }
@@ -1553,8 +1568,7 @@ function renderSpecialWager(type) {
   const titleIcon = isFinal ? "\uD83C\uDFAF" : "\u23F8";
   const titleSub = isFinal ? "BONUS WAGER (1-20)" : "BONUS WAGER (1-10)";
   const wSet = isFinal ? "setFW" : "setHW",
-    cSet = isFinal ? "setFC" : "setHC",
-    iSet = isFinal ? "setFWInput" : "setHWInput";
+    cSet = isFinal ? "setFC" : "setHC";
   const beer = isSpecialBeerRound(type);
   const swN = gameState.teams.length;
   let swDone = 0;
@@ -1600,13 +1614,9 @@ function renderSpecialWager(type) {
       selOpts += `<option value="${n}"${w === n ? " selected" : ""}>${n}</option>`;
     }
     const selectHtml = `<select class="sw-select" aria-label="Wager amount (1\u2013${max})" onchange="${wSet}(${ti},this.value)">${selOpts}</select>`;
-    const valHtml = `<input type="number" class="sw-input" inputmode="numeric" min="1" max="${max}" value="${w != null ? w : ""}" placeholder="or type" aria-label="Type wager amount (1\u2013${max})" onchange="${iSet}(${ti},this.value)" onfocus="this.select()">`;
     h += `<div class="special-wager-row">
       <span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 tap to audit score" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
-      <div class="wager-pick">
-        ${selectHtml}
-        ${valHtml}
-      </div>
+      ${selectHtml}
       <div class="ta-result">
         <button class="result-btn ${d.correct === true ? "correct-sel" : ""}" onclick="${cSet}(${ti},true)" aria-label="Mark correct">\u2713${d.correct === true ? '<span class="wager-badge bg-correct">\u2705</span>' : ""}</button>
         <button class="result-btn ${d.correct === false ? "incorrect-sel" : ""}" onclick="${cSet}(${ti},false)" aria-label="Mark incorrect">\u2717${d.correct === false ? '<span class="wager-badge bg-incorrect">\u2715</span>' : ""}</button>
@@ -2234,40 +2244,6 @@ function setFC(ti, v) {
   /* need a wager first */ const c = d.correct;
   if (c === v) delete d.correct;
   else d.correct = v;
-  gameState.gameStarted = true;
-  autosave();
-  renderAll();
-}
-
-// Manual typed entry for the special wagers (works alongside the sw-select dropdown)
-function setHWInput(ti, raw) {
-  if (!canScore()) return;
-  if (!gameState.halftime[ti]) gameState.halftime[ti] = {};
-  const s = ("" + raw).trim();
-  if (s === "" || parseInt(s, 10) === 0) {
-    delete gameState.halftime[ti].wager;
-  } else {
-    let v = parseInt(s, 10);
-    if (!isNaN(v)) {
-      gameState.halftime[ti].wager = Math.max(1, Math.min(10, v));
-    }
-  }
-  gameState.gameStarted = true;
-  autosave();
-  renderAll();
-}
-function setFWInput(ti, raw) {
-  if (!canScore()) return;
-  if (!gameState.finalWager[ti]) gameState.finalWager[ti] = {};
-  const s = ("" + raw).trim();
-  if (s === "" || parseInt(s, 10) === 0) {
-    delete gameState.finalWager[ti].wager;
-  } else {
-    let v = parseInt(s, 10);
-    if (!isNaN(v)) {
-      gameState.finalWager[ti].wager = Math.max(1, Math.min(20, v));
-    }
-  }
   gameState.gameStarted = true;
   autosave();
   renderAll();
