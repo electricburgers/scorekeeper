@@ -410,7 +410,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .settings-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:255}
 .settings-backdrop.show{opacity:1;pointer-events:auto}
 
-@media(max-width:900px){
+/* 768px (was 900px) — 900 was flipping ordinary laptop/small-desktop windows into the mobile
+   bottom-sheet layout well before they actually ran out of room for the two-column game+scores
+   view (col-left's own 300px min-width plus the 380px sidebar and 6px drag handle only need
+   ~690px, so 900 was giving up ~200px of usable desktop width for no reason). 768 lines up with
+   the standard tablet-portrait cutoff instead. */
+@media(max-width:768px){
   /* Bottom sheet with a persistent "peek" strip: a slim bar stays docked to the bottom of the
      screen at all times, showing a live top-3 ticker so scores are glanceable without opening
      anything. Tapping it (or the grab handle once open) slides up a full sheet with the sort
@@ -469,12 +474,14 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .sheet-grab-handle{width:100%;padding:8px 0 4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:none;cursor:grab}
   .sheet-grab-handle::after{content:'';width:36px;height:4px;border-radius:2px;background:var(--text-muted)}
 
-  /* Halo shadow above the sheet — same theme-aware treatment as .settings-panel (dark mode
-     needs a pale glow to read as "floating" against its near-black background; light mode gets
-     a stronger plain shadow). Zero offset so it reads on all sides, not just pooling below,
-     matching the settings panel's own halo values exactly rather than inventing new opacities. */
-  [data-theme="hc-dark"] .col-right.open{box-shadow:0 0 40px rgba(255,255,255,.16),0 0 10px rgba(255,255,255,.10)}
-  [data-theme="hc-light"] .col-right.open{box-shadow:0 0 40px rgba(0,0,0,.32),0 0 10px rgba(0,0,0,.24)}
+  /* Shadow on the sheet's 3 exposed sides (top/left/right — bottom is flush against the screen
+     edge, so a shadow there would never be visible anyway). Three separate directional layers
+     (not one 0/0-offset blur) so each side gets pushed outward into its own small margin instead
+     of a symmetric halo whose blur mostly bled past the narrow 8px inset and off the edge of the
+     screen, leaving next to nothing visible. Dark mode needs a pale glow to read as "floating"
+     against its near-black background; light mode gets a stronger plain shadow. */
+  [data-theme="hc-dark"] .col-right.open{box-shadow:0 -4px 16px rgba(255,255,255,.22),4px 0 16px rgba(255,255,255,.16),-4px 0 16px rgba(255,255,255,.16)}
+  [data-theme="hc-light"] .col-right.open{box-shadow:0 -4px 16px rgba(0,0,0,.30),4px 0 16px rgba(0,0,0,.22),-4px 0 16px rgba(0,0,0,.22)}
 
   /* BOTTOM DOCK — a single fixed, rounded card holding the peek strip and the question timer
      stacked top-to-bottom (a border divider between them, not a gap), so the two read as one
@@ -490,11 +497,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   /* 8px inset (was 16px) — see the matching .col-right comment above for why: this now lines up
      with the deployed sheet's own width instead of sitting noticeably narrower than it. */
   .mobile-bottom-dock{display:flex;flex-direction:column;position:fixed;left:8px;right:8px;bottom:0;z-index:245;background:var(--bg-card);border:1px solid var(--border-strong);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
-  /* All-sides halo (blur-only, no offset) — same values as .col-right.open's own halo below, so
-     the docked and deployed scores panels read as the same "floating above everything" surface
-     rather than the docked one only getting a lighter top-edge-only shadow. */
-  [data-theme="hc-dark"] .mobile-bottom-dock{box-shadow:0 0 40px rgba(255,255,255,.16),0 0 10px rgba(255,255,255,.10)}
-  [data-theme="hc-light"] .mobile-bottom-dock{box-shadow:0 0 40px rgba(0,0,0,.32),0 0 10px rgba(0,0,0,.24)}
+  /* Same 3-directional shadow (top/left/right, no bottom) as .col-right.open above, so the
+     docked and deployed scores panels read as the same "floating above everything" surface. */
+  [data-theme="hc-dark"] .mobile-bottom-dock{box-shadow:0 -4px 16px rgba(255,255,255,.22),4px 0 16px rgba(255,255,255,.16),-4px 0 16px rgba(255,255,255,.16)}
+  [data-theme="hc-light"] .mobile-bottom-dock{box-shadow:0 -4px 16px rgba(0,0,0,.30),4px 0 16px rgba(0,0,0,.22),-4px 0 16px rgba(0,0,0,.22)}
   /* PEEK STRIP — always-visible top row of the dock (hidden only while the sheet itself is
      open). 3-column grid (not flex) so the centered label is centered against the FULL row
      width, not just the space left over after the chevron — a flex row with the chevron as a
@@ -833,7 +839,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* Desktop: drop the chevron icon entirely — the whole title row is still the click target
    (title-row's own role="button"/onclick are untouched), so collapsing still works with just
    the row itself as the affordance instead of needing the icon too. */
-@media(min-width:901px){
+@media(min-width:769px){
   .standings-chevron{display:none}
 }
 .standings-block.collapsed .standings-collapsible{display:none}
@@ -1036,7 +1042,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* "Clear" label text is desktop-only (icon-only "✕" on mobile keeps the button compact there);
    the closer positioning above, though, applies everywhere. */
 .cp-clear-label{display:none}
-@media(min-width:901px){
+@media(min-width:769px){
   .cp-clear-label{display:inline}
 }
 .cp-script-label{display:block;font-size:.66rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
@@ -1059,11 +1065,27 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    flashing transparent for an instant. Promoting it to its own layer keeps it composited
    independently instead of waiting on the rest of the modal's repaint. */
 .audit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg-card);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:2;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* Drop shadow under the header so it visibly separates from the audit body scrolling beneath it
+   instead of relying on the 1px border alone — both share the same --bg-card background, so
+   without this the header edge all but disappears once content is scrolled up under it. Dark
+   mode needs a pale glow (a dark shadow is invisible against this app's near-black surfaces);
+   light mode gets a plain downward shadow. */
+[data-theme="hc-dark"] .audit-head{box-shadow:0 6px 12px -4px rgba(255,255,255,.18)}
+[data-theme="hc-light"] .audit-head{box-shadow:0 6px 12px -4px rgba(0,0,0,.30)}
 .audit-head h2{font-family:var(--font-display);font-size:1.05rem;color:var(--txt-cyan);text-transform:uppercase;letter-spacing:1px;line-height:1.2;word-break:break-word}
 .audit-head .aud-sub{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:3px}
 .audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--border);background:var(--bg-input);color:var(--text-primary);border-radius:var(--radius);padding:7px 12px;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
 .audit-close:hover{background:var(--bg-hover);border-color:var(--border-light)}
 .audit-body{padding:12px 14px 18px}
+/* Mobile default: the two columns' markup is just two sequential <div>s (no grid), so column 1
+   (Extras through Halftime Bonus) and column 2 (Round 3 through Final Wager) simply stack in
+   that same order — visually identical to before columns existed. */
+@media(min-width:769px){
+  /* Desktop only: lay the two halves of the round-by-round breakdown side by side instead of
+     one long scrolling column — Grand Total and everything after it (Guess/Diff, overall stats,
+     the closing note) live outside .aud-columns entirely, so they stay full-width under both. */
+  .aud-columns{display:grid;grid-template-columns:1fr 1fr;gap:0 12px;align-items:start}
+}
 .aud-round{margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 .aud-round-h{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-card-alt);font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .aud-line{display:flex;align-items:center;gap:8px;padding:6px 12px;border-top:1px solid var(--border);font-size:.85rem}
@@ -1087,8 +1109,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* Overall correct/incorrect breakdown across the 16 regular round questions, shown right under
    Grand Total — two side-by-side stat tiles rather than one line so each count and its
    percentage stay legible at the same sizes .aud-total already uses. */
-.aud-stats{display:flex;gap:8px;margin-top:8px}
-.aud-stat{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 8px;border-radius:var(--radius);background:var(--bg-card-alt);border:1px solid var(--border)}
+/* flex-wrap: the Guess/Diff row can grow past 2 tiles (Bonus Item/NJCB/Adjusted Score are
+   inserted between Guess and Diff whenever a team has one of those bonuses), so this needs to
+   fold onto a second line on narrow screens instead of squeezing 4 tiles into one. */
+.aud-stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.aud-stat{flex:1;min-width:70px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 8px;border-radius:var(--radius);background:var(--bg-card-alt);border:1px solid var(--border)}
 .aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
 .aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
 .aud-stat-correct .aud-stat-n{color:var(--badge-green-fg)}

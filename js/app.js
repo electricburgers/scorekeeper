@@ -86,7 +86,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v16.8"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v16.9"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -2361,8 +2361,9 @@ function auditGuessDiff(ti, score) {
   const bonuses = (t.bonusItem ? 5 : 0) + (t.njcb ? 3 : 0);
   const hasG = !(t.scoreGuess === "" || t.scoreGuess == null);
   const guess = hasG ? parseInt(t.scoreGuess, 10) : null;
-  const diff = hasG ? Math.abs(score - bonuses - guess) : null;
-  const diffSign = hasG ? Math.sign(guess - (score - bonuses)) : 0;
+  const adjusted = score - bonuses;
+  const diff = hasG ? Math.abs(adjusted - guess) : null;
+  const diffSign = hasG ? Math.sign(guess - adjusted) : 0;
   const diffTxt =
     diff == null
       ? "—"
@@ -2371,9 +2372,21 @@ function auditGuessDiff(ti, score) {
         : diffSign < 0
           ? "-" + diff
           : diff;
+  // Bonus Item/NJCB stat boxes only render when a team actually has one — otherwise "score" and
+  // "adjusted" are identical and calling that out would just be noise. Spelled out as separate
+  // -5/-3 boxes (not a single combined "-8") so the host can see exactly which bonus applied,
+  // matching how Extras lists them individually earlier in the audit.
+  let bonusStats = "";
+  if (t.bonusItem)
+    bonusStats += `<div class="aud-stat aud-stat-wrong"><span class="aud-stat-n">-5</span><span class="aud-stat-pct">Bonus Item</span></div>`;
+  if (t.njcb)
+    bonusStats += `<div class="aud-stat aud-stat-wrong"><span class="aud-stat-n">-3</span><span class="aud-stat-pct">NJCB</span></div>`;
+  if (bonuses)
+    bonusStats += `<div class="aud-stat"><span class="aud-stat-n">${adjusted}</span><span class="aud-stat-pct">Adjusted Score</span></div>`;
   return (
     `<div class="aud-stats">` +
     `<div class="aud-stat"><span class="aud-stat-n">${guess == null ? "—" : guess}</span><span class="aud-stat-pct">Score Guess</span></div>` +
+    bonusStats +
     `<div class="aud-stat"><span class="aud-stat-n">${diffTxt}</span><span class="aud-stat-pct">Diff</span></div>` +
     `</div>`
   );
@@ -2526,34 +2539,39 @@ function buildAudit(ti) {
   const item = t.bonusItem ? 5 : 0,
     nj = t.njcb ? 3 : 0,
     adj = t.adjustment || 0;
+  let col1 = "";
   if (item || nj || adj) {
-    h += `<div class="aud-round"><div class="aud-round-h"><span class="round-label rl-3">Extras</span></div>`;
+    col1 += `<div class="aud-round"><div class="aud-round-h"><span class="round-label rl-3">Extras</span></div>`;
     if (item)
-      h += `<div class="aud-line"><span class="aud-q">+5</span><span class="aud-res aud-correct">Bonus item brought</span><span class="aud-p pos">+5</span></div>`;
+      col1 += `<div class="aud-line"><span class="aud-q">+5</span><span class="aud-res aud-correct">Bonus item brought</span><span class="aud-p pos">+5</span></div>`;
     if (nj)
-      h += `<div class="aud-line"><span class="aud-q">+3</span><span class="aud-res aud-correct">NJCB Member Card shown</span><span class="aud-p pos">+3</span></div>`;
+      col1 += `<div class="aud-line"><span class="aud-q">+3</span><span class="aud-res aud-correct">NJCB Member Card shown</span><span class="aud-p pos">+3</span></div>`;
     if (adj)
-      h += `<div class="aud-line"><span class="aud-q">${adj > 0 ? "+" : ""}${adj}</span><span class="aud-res">Manual adjustment</span><span class="aud-p ${adj > 0 ? "pos" : "neg"}">${adj > 0 ? "+" : ""}${adj}</span></div>`;
+      col1 += `<div class="aud-line"><span class="aud-q">${adj > 0 ? "+" : ""}${adj}</span><span class="aud-res">Manual adjustment</span><span class="aud-p ${adj > 0 ? "pos" : "neg"}">${adj > 0 ? "+" : ""}${adj}</span></div>`;
     run += item + nj + adj;
-    h += `</div>`;
+    col1 += `</div>`;
   }
 
-  h += roundBlock(0, "Round 1", "rl-1");
-  h += roundBlock(1, "Round 2", "rl-2");
-  h += wagerBlock(
+  // Two-column desktop layout: column 1 runs through Halftime Bonus, column 2 picks up at
+  // Round 3 \u2014 Grand Total and everything after it (Guess/Diff, overall stats, note) stays
+  // full-width below both columns rather than living inside either one.
+  col1 += roundBlock(0, "Round 1", "rl-1");
+  col1 += roundBlock(1, "Round 2", "rl-2");
+  col1 += wagerBlock(
     gameState.halftime[ti],
     "Halftime Bonus",
     "rl-2",
     "win or lose, 1\u201310",
   );
-  h += roundBlock(2, "Round 3", "rl-3");
-  h += roundBlock(3, "Round 4", "rl-4");
-  h += wagerBlock(
+  let col2 = roundBlock(2, "Round 3", "rl-3");
+  col2 += roundBlock(3, "Round 4", "rl-4");
+  col2 += wagerBlock(
     gameState.finalWager[ti],
     "Final Wager",
     "rl-4",
     "win or lose, 1\u201320",
   );
+  h += `<div class="aud-columns"><div class="aud-col">${col1}</div><div class="aud-col">${col2}</div></div>`;
 
   const gt = grandTotal(ti);
   h += `<div class="aud-total"><span>Grand Total</span><span class="val">${gt}</span></div>`;
