@@ -973,7 +973,7 @@ function renderFinalResults() {
   });
   h += "</tbody></table>";
   h +=
-    '<details class="fr-details"><summary>&gt; Diff *</summary>' +
+    '<details class="fr-details"><summary>Diff *</summary>' +
     '<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Equal scores are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>, with the rest of that tied group marked <strong>tie</strong>). A team tied on BOTH score and Diff shares a place number outright.</p>' +
     "<p class=\"fr-note\">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team's score before it's compared to their guess, for every team. A <strong>+</strong> means the guess came in over the actual score, a <strong>\u2212</strong> means it came in under.</p>" +
     "</details>";
