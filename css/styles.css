@@ -160,6 +160,12 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    just a clearly more visible halo in both themes. */
 [data-theme="hc-dark"] .settings-panel{box-shadow:0 0 52px rgba(255,255,255,.30),0 0 16px rgba(255,255,255,.20)}
 [data-theme="hc-light"] .settings-panel{box-shadow:0 0 52px rgba(0,0,0,.46),0 0 16px rgba(0,0,0,.34)}
+/* Text-selection highlight (click-drag over labels/inputs on desktop) defaults to the browser's
+   own gray/blue, which reads as a flat light-gray smear against this panel's own dark surface.
+   --bg-hover is already "a lighter version of the button background" everywhere else in the
+   app (buttons rest at --bg-card, brighten to --bg-hover on hover/interaction), so reusing it
+   here keeps the selection color part of the same palette instead of an OS-default gray. */
+.settings-panel ::selection{background:var(--bg-hover);color:var(--text-primary)}
 .settings-panel.settings-visible{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border)}
 .settings-controls{display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
@@ -320,13 +326,19 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    every theme x color-vision-mode combination this app already supports (dark/light x off/
    red-green/blue-yellow) stays correct for free: --accent-gold becomes the tritanopia-safe pink
    substitute under data-cb="2", --danger-solid-bg becomes the deuteranopia/protanopia-safe
-   orange substitute under data-cb="1", etc. The pulse dips brightness hard (down to .55, not a
-   subtle .88) and cycles quickly (1.2s/.9s) so it reads as an urgent alert at a glance instead
-   of a barely-there shimmer.  */
-.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);animation:qtFlash 1.2s ease-in-out infinite}
-.qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;animation:qtFlash .9s ease-in-out infinite}
+   orange substitute under data-cb="1", etc.
+   The brightness floor (.75, not a near-black .55) is a hard WCAG floor, not a stylistic
+   choice: at the darkest point of the pulse, --on-accent-gold's #000 text sits on top of
+   --accent-gold, and the worst combination this app ships — dark theme + tritanopia mode,
+   where --accent-gold becomes #ff66cc — only clears 4.5:1 (AA) against black text down to
+   ~.73 brightness; every other theme/color-vision pairing has more headroom than that one.
+   .75 keeps a safety margin above that floor in every combination. --danger-solid-bg/#fff
+   (qt-crit) has no such ceiling — white text on a darkening red only gains contrast — so it
+   isn't the binding constraint here. */
+.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);animation:qtFlash 2s ease-in-out infinite}
+.qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;animation:qtFlash 1.5s ease-in-out infinite}
 .qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff}
-@keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.55)}}
+@keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.75)}}
 @media(prefers-reduced-motion:reduce){
   .qtimer-display.qt-warn,.qtimer-display.qt-crit{animation:none}
 }
@@ -520,14 +532,18 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Subtle default background (distinct from .section-body's bg-card) so a clickable header
    reads as its own control at a glance, not just on hover. --bg-card-alt vs --text-primary is
    >=18:1 in both themes, so this never threatens the header text's own AA contrast. */
-.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;transition:var(--transition);border-left:3px solid transparent;background:var(--bg-card-alt)}
+/* border-left is 6px from the start (transparent, matching .round-complete's own width below) —
+   not the 3px it used to be, growing to 6px only once complete. That width JUMP shifted this
+   header's own content by the same 3px the moment a round finished scoring; keeping the width
+   constant and only ever swapping the COLOR means completing a round never moves anything. */
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;transition:var(--transition);border-left:6px solid transparent;background:var(--bg-card-alt)}
 .section-header:hover{background:var(--bg-hover)}
 .section-header h2{font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 .section-header .chevron{transition:transform .3s;color:var(--text-muted);font-size:1.1rem;flex-shrink:0}
 .section.collapsed .section-body{display:none}
 .section.collapsed .chevron{transform:rotate(-90deg)}
 .section-body{padding:0 14px 14px}
-.section.round-complete>.section-header{border-left-width:6px;border-left-color:var(--accent-green)}
+.section.round-complete>.section-header{border-left-color:var(--accent-green)}
 
 label{display:block;font-size:.72rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
 input[type="text"],input[type="number"],input[type="date"]{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;outline:none;transition:var(--transition)}
@@ -621,14 +637,17 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .round-badge.rb-done{background:rgba(68,255,68,.1);color:var(--badge-green-fg)}
 
 /* QUESTION BLOCKS — collapsible */
-.question-block{background:var(--bg-card-alt);border:1px solid var(--border-strong);border-left:3px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+/* border-left is 6px from the start (transparent) rather than growing from 3px once a question
+   goes q-active/q-done/beer-round — a width change there shifted the header/team-answer content
+   inside by that same few px right when a question finished, which read as "things moving" on
+   mobile. Every state below now only ever swaps the border-left COLOR, never its width. */
+.question-block{background:var(--bg-card-alt);border:1px solid var(--border-strong);border-left:6px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
 .question-block.q-active{border-left-color:var(--accent-cyan)}
-/* Thicker than q-active's 3px so "everyone's answered" reads at a glance, not just on close look. */
-.question-block.q-done{border-left-width:6px;border-left-color:var(--accent-green);opacity:.82}
+.question-block.q-done{border-left-color:var(--accent-green);opacity:.82}
 /* Beer Round wins over q-done green. Uses --beer-border on --beer-bg (not --accent-gold on the
    normal --bg-card-alt): the raw accent only clears 3:1 against a background this warm/dark —
-   see the --beer-bg definitions above for why. Also thicker, like q-done, so it's obvious at a glance. */
-.question-block.beer-round{background:var(--beer-bg)!important;border-left-width:6px!important;border-left-color:var(--beer-border)!important;opacity:1!important}
+   see the --beer-bg definitions above for why. */
+.question-block.beer-round{background:var(--beer-bg)!important;border-left-color:var(--beer-border)!important;opacity:1!important}
 
 /* Differentiate the Q1/Q2/Q5-Bonus header from the team-answer rows in the body below, which
    otherwise share the question-block's own --bg-card-alt and blend together. */
