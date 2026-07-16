@@ -86,7 +86,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v16.0"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v16.1"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -254,8 +254,13 @@ function loadPrefs() {
       if (p.advancedOpen == null) p.advancedOpen = false;
       if (p.showLegacyExports == null) p.showLegacyExports = false;
       if (p.unlockEventDetails == null) p.unlockEventDetails = false;
-      if (!p.qtDurationMin) p.qtDurationMin = 3;
+      // qtDurationSec replaces the old whole-minutes-only qtDurationMin now that the base
+      // duration is set from a 30-second-increment dropdown in Settings — migrate an existing
+      // saved qtDurationMin rather than resetting it.
+      if (!p.qtDurationSec)
+        p.qtDurationSec = p.qtDurationMin ? p.qtDurationMin * 60 : 180;
       if (p.showTimer == null) p.showTimer = true;
+      if (p.showTimerSteppers == null) p.showTimerSteppers = false;
       return p;
     }
   } catch (e) {}
@@ -272,8 +277,9 @@ function loadPrefs() {
     advancedOpen: false,
     showLegacyExports: false,
     unlockEventDetails: false,
-    qtDurationMin: 3,
+    qtDurationSec: 180,
     showTimer: true,
+    showTimerSteppers: false,
   };
 }
 function savePrefs(p) {
@@ -346,10 +352,18 @@ function applyPrefs() {
   }
   if (p.showTimer) document.documentElement.removeAttribute("data-timer-hidden");
   else document.documentElement.setAttribute("data-timer-hidden", "1");
+  const stepperToggle = document.getElementById("timerSteppersToggle");
+  if (stepperToggle) {
+    stepperToggle.classList.toggle("active", !!p.showTimerSteppers);
+    stepperToggle.textContent = p.showTimerSteppers ? "Shown" : "Hidden";
+  }
+  if (p.showTimerSteppers)
+    document.documentElement.setAttribute("data-timer-steppers", "1");
+  else document.documentElement.removeAttribute("data-timer-steppers");
   const vl = document.getElementById("versionLabel");
   if (vl) vl.textContent = "Scorekeeper " + APP_VERSION;
-  const qtm = document.getElementById("qtMinInput");
-  if (qtm && document.activeElement !== qtm) qtm.value = p.qtDurationMin;
+  const qts = document.getElementById("qtDurationSelect");
+  if (qts && document.activeElement !== qts) qts.value = p.qtDurationSec;
 }
 function setTheme(t) {
   if (!["hc-dark", "hc-light"].includes(t)) t = "hc-dark";
@@ -396,6 +410,13 @@ function toggleUnlockEventDetails() {
 function toggleTimerVisible() {
   const p = loadPrefs();
   p.showTimer = !p.showTimer;
+  savePrefs(p);
+  applyPrefs();
+  syncQtimerH();
+}
+function toggleTimerSteppers() {
+  const p = loadPrefs();
+  p.showTimerSteppers = !p.showTimerSteppers;
   savePrefs(p);
   applyPrefs();
   syncQtimerH();
@@ -4045,10 +4066,10 @@ document.addEventListener("keydown", function (e) {
    matching each .qtimer-* class rather than a single id. It ticks on its own short interval
    instead of going through renderAll(), so the big score sheet never re-renders just because a
    second passed. No sound — visual state only (flashing background, not a full render). */
-const QT_MIN_MIN = 1,
-  QT_MAX_MIN = 15,
-  QT_DEFAULT_MIN = 3;
-let qtDurationSec = QT_DEFAULT_MIN * 60,
+const QT_MIN_SEC = 60,
+  QT_MAX_SEC = 900,
+  QT_DEFAULT_SEC = 180;
+let qtDurationSec = QT_DEFAULT_SEC,
   qtEndEpoch = 0,
   qtRemainMs = 0,
   qtState = "idle"; // idle | running | paused
@@ -4105,12 +4126,13 @@ function resetQTimer() {
   qtSetDisplayClass(null);
   renderQtControls();
 }
-// ±30s stepper: nudges whichever clock is live right now — the remaining time while running or
+// Optional +/-30s stepper buttons (Advanced Settings > Timer Stepper Buttons, hidden by
+// default): nudges whichever clock is live right now — the remaining time while running or
 // paused, or the not-yet-started base duration while idle (clamped to the same 1-15 min range
-// as the Settings field, so idle nudges can't produce a duration Settings couldn't also set).
-// Running/paused nudges are intentionally NOT clamped — going negative is exactly the existing
-// "time's up" overflow the display already supports, and a host who taps +30 a bunch of times
-// mid-question should just get more time, not hit an arbitrary ceiling.
+// as the Settings dropdown, so idle nudges can't produce a duration Settings couldn't also
+// set). Running/paused nudges are intentionally NOT clamped — going negative is exactly the
+// existing "time's up" overflow the display already supports, and a host who taps +30 a bunch
+// of times mid-question should just get more time, not hit an arbitrary ceiling.
 function bumpQTimer(deltaSec) {
   if (qtState === "running") {
     qtEndEpoch += deltaSec * 1000;
@@ -4118,8 +4140,8 @@ function bumpQTimer(deltaSec) {
     qtRemainMs += deltaSec * 1000;
   } else {
     qtDurationSec = Math.max(
-      QT_MIN_MIN * 60,
-      Math.min(QT_MAX_MIN * 60, qtDurationSec + deltaSec),
+      QT_MIN_SEC,
+      Math.min(QT_MAX_SEC, qtDurationSec + deltaSec),
     );
     qtSetDisplayText(fmtQt(qtDurationSec));
     qtSetDisplayClass(null);
@@ -4127,14 +4149,19 @@ function bumpQTimer(deltaSec) {
   }
   tickQTimer();
 }
-function setQtDuration(mins) {
-  const n = Math.max(QT_MIN_MIN, Math.min(QT_MAX_MIN, parseInt(mins, 10) || QT_DEFAULT_MIN));
-  qtDurationSec = n * 60;
+// Settings > Question Timer: a 30-second-increment dropdown (1:00-15:00) sets the base
+// duration used the next time the timer is started fresh from idle. Only takes effect
+// immediately if idle — a timer already running or paused keeps counting down on the
+// duration it started with, same as changing this while a real countdown is in progress
+// shouldn't retroactively change it.
+function setQtDurationSec(sec) {
+  const n = Math.max(QT_MIN_SEC, Math.min(QT_MAX_SEC, parseInt(sec, 10) || QT_DEFAULT_SEC));
+  qtDurationSec = n;
   const p = loadPrefs();
-  p.qtDurationMin = n;
+  p.qtDurationSec = n;
   savePrefs(p);
-  const inp = document.getElementById("qtMinInput");
-  if (inp && document.activeElement !== inp) inp.value = n;
+  const sel = document.getElementById("qtDurationSelect");
+  if (sel && document.activeElement !== sel) sel.value = n;
   if (qtState === "idle") qtSetDisplayText(fmtQt(qtDurationSec));
 }
 function tickQTimer() {
@@ -4149,10 +4176,12 @@ function tickQTimer() {
 setInterval(tickQTimer, 200);
 (function initQTimer() {
   const p = loadPrefs();
-  qtDurationSec =
-    Math.max(QT_MIN_MIN, Math.min(QT_MAX_MIN, p.qtDurationMin || QT_DEFAULT_MIN)) * 60;
-  const inp = document.getElementById("qtMinInput");
-  if (inp) inp.value = qtDurationSec / 60;
+  qtDurationSec = Math.max(
+    QT_MIN_SEC,
+    Math.min(QT_MAX_SEC, p.qtDurationSec || QT_DEFAULT_SEC),
+  );
+  const sel = document.getElementById("qtDurationSelect");
+  if (sel) sel.value = qtDurationSec;
   qtSetDisplayText(fmtQt(qtDurationSec));
   renderQtControls();
 })();

@@ -106,7 +106,14 @@
    treating the viewport as one scroll container — which breaks position:sticky (.header,
    .mini-progress) on mobile, where the document itself is what scrolls. Leaving it on body
    only lets body's overflow propagate to the viewport as the single, well-defined scroller. */
-html{font-size:16px;max-width:100%}
+/* background here too (not just on body): iOS Safari's rubber-band overscroll bounce on a
+   position:fixed + -webkit-overflow-scrolling:touch container (e.g. .audit-overlay, the Score
+   Audit modal's own scroller) can momentarily reveal whatever's painted behind the fixed
+   element's edge during the bounce — if html itself has no background, that's the browser's
+   default transparent/white canvas showing through, which read as "the header goes transparent
+   while scrolling" in Score Audit on mobile. Matching body's own --bg-primary here closes that
+   gap so an overscroll bounce reveals more of the same dark background instead. */
+html{font-size:16px;max-width:100%;background:var(--bg-primary)}
 /* touch-action:manipulation app-wide: without it, two rapid taps on rapidly re-rendered
    controls (e.g. the standings Random button, which replaces its own DOM node on every tap)
    can be read by mobile browsers as a double-tap-to-zoom gesture instead of two clicks. */
@@ -177,8 +184,6 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
 .settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
-.settings-controls .qt-min-input{width:3.4rem;text-align:center;padding:5px 6px}
-.qt-min-suffix{font-size:.78rem;color:var(--text-muted);font-weight:600}
 @media(max-width:600px){
   .settings-panel.settings-visible{grid-template-columns:1fr}
   .settings-row{padding:10px 2px;gap:10px}
@@ -264,8 +269,20 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Advanced Settings > Timer Widget: Hidden. Set on <html> by applyPrefs() in app.js. Hides both
    copies of the widget (desktop and mobile) with one rule rather than duplicating it per class. */
 [data-timer-hidden] .qtimer{display:none}
-.qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border-radius:6px;transition:background-color .2s ease,color .2s ease}
-.qtimer-btns,.qtimer-steppers{display:flex;gap:6px;flex-shrink:0}
+/* position:relative + isolation:isolate turn this into a self-contained stacking context for
+   the ::before pulse layer below — the pseudo-element's negative z-index stays scoped to just
+   this element instead of potentially escaping behind unrelated ancestors elsewhere on the
+   page. border is reserved (transparent) at rest, at the same 3px warn/crit will use, with
+   padding trimmed by that same 3px on each side (5px/10px -> 2px/7px) so the box's overall
+   rendered size never changes when a state adds a visible stroke — only the split between
+   border and padding does. */
+.qtimer-display{position:relative;isolation:isolate;font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:2px 7px;border:3px solid transparent;border-radius:6px;transition:background-color .2s ease,color .2s ease}
+.qtimer-btns{display:flex;gap:6px;flex-shrink:0}
+/* +/-30s nudge buttons — Advanced Settings > Timer Stepper Buttons, hidden by default (see
+   [data-timer-steppers] below, set on <html> by applyPrefs() in app.js) since most hosts drive
+   the countdown from Start/Pause/Reset alone; shown for hosts who want fine control mid-timer. */
+.qtimer-steppers{display:none;gap:6px;flex-shrink:0}
+[data-timer-steppers] .qtimer-steppers{display:flex}
 .qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
 .qtimer-btn:hover{background:var(--bg-hover)}
 .qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -273,8 +290,6 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    alongside it in .qtimer — doesn't visibly shift width as the label cycles between Start/
    Pause/Resume. */
 .qtimer-btn.qtimer-toggle{min-width:5.8rem;text-align:center}
-/* ±30s nudges: same button look, just narrower — a short numeric label doesn't need Start/
-   Reset's wider padding, and this keeps the whole widget's button row from getting crowded. */
 .qtimer-btn.qtimer-step{padding:5px 8px;font-size:.75rem}
 /* Pause: reuses --accent-gold/--on-accent-gold (NOT --accent-orange, which paired with
    --on-accent-gold's fixed black text goes near-illegible in light theme — #994400 is dark
@@ -285,23 +300,37 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-btn.qtimer-pause{background:var(--accent-gold);border-color:var(--accent-gold);color:var(--on-accent-gold)}
 .qtimer-btn.qtimer-pause:hover{filter:brightness(1.1)}
 /* Reset: neutral while idle (nothing to reset), solid red once a timer is actually running or
-   paused — same --danger-solid-bg/#fff pairing already used for .q-reset-btn elsewhere. */
+   paused — same --danger-solid-bg/#fff pairing already used for .q-reset-btn elsewhere. Icon-
+   only (no "Reset" label) and a fixed equal width/height — rather than sizing to its content
+   like every other .qtimer-btn — so the docked and deployed copies of the widget render this
+   button identically instead of the deployed one being a wider text+icon pill. Font-size bumped
+   up from the shared .8rem base so the glyph reads clearly at this smaller square size. */
+.qtimer-btn.qtimer-reset{width:2rem;height:2rem;min-height:2rem;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:1.15rem;line-height:1}
 .qtimer-btn.qtimer-reset-active{background:var(--danger-solid-bg);border-color:var(--danger-solid-bg);color:#fff}
 .qtimer-btn.qtimer-reset-active:hover{filter:brightness(1.15)}
 
-/* Flashing states — background/text reuse the app's own already-AAA-paired solid tokens
-   (--accent-gold/--on-accent-gold, --danger-solid-bg/#fff) rather than inventing new colors, so
-   every theme x color-vision-mode combination this app already supports (dark/light x off/
-   red-green/blue-yellow) stays correct for free: --accent-gold becomes the tritanopia-safe pink
-   substitute under data-cb="2", --danger-solid-bg becomes the deuteranopia/protanopia-safe
-   orange substitute under data-cb="1", etc. The pulse only varies brightness (not hue or the
-   text color), so contrast never dips meaningfully below the resting state's own ratio. */
-.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);animation:qtFlash 1s ease-in-out infinite}
-.qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;animation:qtFlash .7s ease-in-out infinite}
+/* Flashing states. The stroke (border-color, set directly on .qtimer-display) is a solid,
+   non-animated color — it reads as a steady "1 minute left" / "30 seconds left" alert frame.
+   The actual pulsing fill lives on a ::before layer instead of .qtimer-display's own
+   background: filter:brightness() dims EVERYTHING it's applied to, so animating it on the
+   element itself would pulse the border right along with the fill; putting the animated fill
+   on a separate inset layer (sized to the padding box only, per absolute-positioning-in-a-
+   padding-box rules, so it never overlaps the border pixels) keeps the border static while
+   that layer keeps pulsing behind the digits. Colors reuse the app's own already-AAA-paired
+   solid tokens (--accent-gold/--on-accent-gold, --danger-solid-bg/#fff) rather than inventing
+   new ones, so every theme x color-vision-mode combination this app already supports (dark/
+   light x off/red-green/blue-yellow) stays correct for free: --accent-gold becomes the
+   tritanopia-safe pink substitute under data-cb="2", --danger-solid-bg becomes the
+   deuteranopia/protanopia-safe orange substitute under data-cb="1", etc. */
+.qtimer-display::before{content:"";position:absolute;inset:0;border-radius:3px;z-index:-1}
+.qtimer-display.qt-warn{border-color:var(--accent-gold);color:var(--on-accent-gold)}
+.qtimer-display.qt-warn::before{background:var(--accent-gold);animation:qtFlash 3s ease-in-out infinite}
+.qtimer-display.qt-crit{border-color:var(--danger-solid-bg);color:#fff}
+.qtimer-display.qt-crit::before{background:var(--danger-solid-bg);animation:qtFlash 2.2s ease-in-out infinite}
 .qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff}
 @keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.88)}}
 @media(prefers-reduced-motion:reduce){
-  .qtimer-display.qt-warn,.qtimer-display.qt-crit{animation:none}
+  .qtimer-display.qt-warn::before,.qtimer-display.qt-crit::before{animation:none}
 }
 
 /* Pinned to the bottom of the scores column (#sidebar / .col-right), overlaying .scores-list
@@ -925,11 +954,19 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* Top/bottom padding include the safe-area insets so the modal's own sticky .audit-head (below)
    clears the Dynamic Island on notched phones, and the scrollable content at the very bottom
    clears the Home Bar, instead of both sitting flush against the physical screen edges. */
-.audit-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);align-items:flex-start;justify-content:center;padding:calc(20px + env(safe-area-inset-top)) 10px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch}
+/* overscroll-behavior:contain: keeps a rubber-band bounce at the top/bottom of this scroller
+   contained to itself instead of chaining into the page behind it, which is the other half of
+   the "transparent while scrolling on mobile" fix alongside html's own background above. */
+.audit-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);align-items:flex-start;justify-content:center;padding:calc(20px + env(safe-area-inset-top)) 10px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .audit-overlay.show{display:flex}
 .audit-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:680px;box-shadow:var(--shadow);margin:auto;animation:auditPop .18s ease-out}
 @keyframes auditPop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.audit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg-card);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:2}
+/* transform:translateZ(0) forces this sticky element onto its own GPU compositing layer — iOS
+   Safari has a long-standing bug where a position:sticky element inside a
+   -webkit-overflow-scrolling:touch container can repaint a frame late during momentum scroll,
+   flashing transparent for an instant. Promoting it to its own layer keeps it composited
+   independently instead of waiting on the rest of the modal's repaint. */
+.audit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg-card);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:2;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .audit-head h2{font-family:var(--font-display);font-size:1.05rem;color:var(--txt-cyan);text-transform:uppercase;letter-spacing:1px;line-height:1.2;word-break:break-word}
 .audit-head .aud-sub{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:3px}
 .audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--border);background:var(--bg-input);color:var(--text-primary);border-radius:var(--radius);padding:7px 12px;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
