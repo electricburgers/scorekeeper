@@ -5,6 +5,14 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v16.8 - 2026-07-16
+- Collapse the mobile scores sheet down to the docked panel's own height (instead of sliding fully offscreen) so it fades away right where the peek strip/timer are, instead of briefly overlapping them.
+- Recenter the timer's reset icon, which sat visibly low in its button.
+- Add a sticky "Settings" header in the mobile settings panel, and fix touch-scrolling inside it (especially with Advanced Settings expanded).
+- Fix the round-progress bar occasionally detaching from the top and scrolling away with the page on mobile.
+- Remove the whole-row hover highlight in Final Results and rely on the magnifying glass alone as the hover cue.
+- Fix the Score Audit correct/incorrect breakdown to include the Round 1/3 Beer Round bonus answers and the Round 2/4 Halftime/Final wagers (26 questions total), not just the 16 regular round questions.
+
 ## v16.7 - 2026-07-16
 - Hide the stray native file-picker button that was rendering on the main page (missing display:none on the new App Preferences file input).
 - Widen the mobile docked scores peek strip and narrow the deployed scores sheet so their widths match instead of the sheet flaring out wider when opened.

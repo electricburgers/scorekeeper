@@ -150,7 +150,11 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 /* Overlay, not in-flow: .header is position:sticky (a valid containing block for an
    absolutely-positioned child), so this floats above the app instead of pushing the
    scoreboard down every time it opens. */
-.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - 80px);overflow-y:auto;animation:slideDown .18s ease}
+/* -webkit-overflow-scrolling/overscroll-behavior: same touch-scroll fix as .audit-overlay below —
+   without it, a touch-drag started inside this panel on iOS Safari can fail to scroll the panel
+   at all (or chain into scrolling the page behind it) once the panel's content is taller than the
+   viewport, e.g. with Advanced Settings expanded. */
+.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - 80px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:slideDown .18s ease}
 /* Deployed-panel-over-page shadows: a plain dark shadow disappears against this app's
    near-black dark background, so it gets its own pale glow to read as "floating above" the
    page instead; light mode already has a light background to contrast against, so it just
@@ -190,8 +194,21 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
 .settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
+/* Hidden by default (desktop's multi-column grid rarely needs to scroll, so a heading here would
+   just be dead weight) — shown only in the mobile single-column layout below, where Advanced
+   Settings expanding can push the panel well past the viewport height and the "Theme" row
+   scrolling out of view is the only remaining clue you're still inside Settings. */
+.settings-panel-head{display:none}
 @media(max-width:600px){
   .settings-panel.settings-visible{grid-template-columns:1fr}
+  /* grid-column:1/-1 spans the single-column layout's full width. position:sticky (relative to
+     .settings-panel, which is this element's own scrolling ancestor) pins it in place as the
+     rows beneath scroll past. Negative margin cancels .settings-panel's own 10px/16px padding so
+     the bar bleeds edge-to-edge instead of floating with a gap on both sides; the 16px bottom
+     margin restores breathing room before the first row starts. transform:translateZ(0) is the
+     same GPU-layer-promotion fix as .audit-head/.mini-progress elsewhere in this file, for the
+     same iOS Safari sticky-inside-a-touch-scroller bug. */
+  .settings-panel-head{display:block;grid-column:1/-1;position:sticky;top:0;margin:-10px -16px 16px;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong);font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt-cyan);z-index:2;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
   .settings-row{padding:10px 2px;gap:10px}
   .settings-row .size-label{font-size:.78rem}
   .settings-controls .settings-btn{padding:7px 12px;font-size:.85rem}
@@ -251,7 +268,14 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    state's row of spans, as long as every one of those spans shares the same font-size (see
    .mp-round/.mp-label below, both explicitly .95rem for this reason). Without that, the two
    states render at different heights and the sticky bar visibly resizes when a round finishes. */
-.mini-progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;padding:8px 12px;margin:0 -16px 10px;background:var(--bg-card-alt);border-bottom:1px solid var(--border-strong);cursor:pointer;transition:var(--transition);touch-action:manipulation;line-height:1.3}
+/* transform:translateZ(0) forces this onto its own GPU compositing layer — same iOS Safari
+   sticky-positioning bug as .audit-head below, except here it's worse than a late-repaint flash:
+   this bar is torn down and rebuilt (a fresh DOM node, via renderAll's innerHTML swap) on nearly
+   every interaction, and replacing an un-promoted sticky element mid-momentum-scroll can make
+   Safari lose track of its stuck position entirely until another scroll event nudges it back —
+   it visibly scrolls away with the rest of the page instead of staying pinned. Promoting it to
+   its own layer keeps that position tracked independently of the surrounding reflow/repaint. */
+.mini-progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;padding:8px 12px;margin:0 -16px 10px;background:var(--bg-card-alt);border-bottom:1px solid var(--border-strong);cursor:pointer;transition:var(--transition);touch-action:manipulation;line-height:1.3;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* Halo shadow (blur-only, no offset, so it reads on all sides) — same theme-aware treatment as
    .settings-panel/.col-right.open: dark mode needs a pale glow to read as "floating above" its
    own near-black background, light mode gets a plain shadow instead. Scaled down from those
@@ -324,7 +348,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    like every other .qtimer-btn — so the docked and deployed copies of the widget render this
    button identically instead of the deployed one being a wider text+icon pill. Font-size bumped
    up from the shared .8rem base so the glyph reads clearly at this smaller square size. */
-.qtimer-btn.qtimer-reset{width:2rem;height:2rem;min-height:2rem;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:1.15rem;line-height:1}
+/* The ↺ glyph's own ink sits almost entirely above its baseline (negligible descent), so
+   centering the line box (align-items:center) still leaves the visible glyph looking low —
+   asymmetric bottom padding (vs even 0 all around) shifts the centered content up ~3px to
+   compensate for that glyph-specific baseline skew, without touching the button's own size. */
+.qtimer-btn.qtimer-reset{width:2rem;height:2rem;min-height:2rem;padding:0 0 6px;display:inline-flex;align-items:center;justify-content:center;font-size:1.15rem;line-height:1}
 .qtimer-btn.qtimer-reset-active{background:var(--danger-solid-bg);border-color:var(--danger-solid-bg);color:#fff}
 .qtimer-btn.qtimer-reset-active:hover{filter:brightness(1.15)}
 
@@ -402,8 +430,18 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      docked peek strip's own 8px inset below (see .mobile-bottom-dock) — before this they were
      16px apart (0 vs 16px), so opening the sheet visibly "flared out" wider than the strip it
      opened from instead of reading as a continuation of it. */
-  .col-right{position:fixed;left:8px;right:8px;bottom:0;top:auto;width:auto!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom)}
-  .col-right.open{transform:translateY(0)}
+  /* Closed transform stops at "100% minus the docked panel's own height" (--mobile-dock-h, kept
+     in sync by a ResizeObserver in app.js) instead of a full 100% — sliding all the way off
+     screen would keep a shrinking sliver of the sheet visibly overlapping the dock (peek strip +
+     timer) it's supposed to reveal for the last stretch of the animation. Stopping exactly at the
+     dock's own height means the sheet is the same size/position as the dock right as it
+     disappears (opacity, delayed so it stays fully solid while sliding and only fades right at
+     the end — same delayed-fade convention as .mobile-scores-peek.msp-hidden below), instead of
+     visibly overlapping itself while collapsing. pointer-events:none once closed so this
+     now-invisible box (still sitting exactly over the dock) doesn't swallow taps meant for the
+     peek strip/timer underneath it. */
+  .col-right{position:fixed;left:8px;right:8px;bottom:0;top:auto;width:auto!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(calc(100% - var(--mobile-dock-h,97px)));opacity:0;pointer-events:none;transition:transform .28s ease,opacity .12s ease .16s;padding-bottom:env(safe-area-inset-bottom)}
+  .col-right.open{transform:translateY(0);opacity:1;pointer-events:auto;transition:transform .28s ease,opacity .16s ease}
   /* .qtimer-desktop stays visible here (no display:none override) — expanding the scores
      sheet on mobile should still show the timer, not hide it; it's the same #sidebar element
      as the desktop sidebar, just repositioned/resized by this media query, so it naturally
@@ -872,13 +910,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .ta-name-clickable:hover::after{opacity:1}
 
 /* FULLY CLICKABLE ROWS (standings + final results) — the whole row is the audit target, not
-   just the name text, so the hover cue (border highlight + background tint) and the
-   magnifying glass both need to react to hovering anywhere in the row, not only the name. */
+   just the name text, so the magnifying glass needs to react to hovering anywhere in the row,
+   not only the name. */
 .standings-row,.final-table tbody tr{cursor:pointer;transition:var(--transition)}
 /* Outline instead of a background swap: the row's fill stays put on hover, and the outline
    color (--accent-cyan-solid) is >=4.3:1 against every theme/color-vision surface it sits on
-   here, unlike the old inset box-shadow (--border-light was only ~1.8–2.7:1). */
-.standings-row:hover,.final-table tbody tr:hover{outline:2px solid var(--accent-cyan-solid);outline-offset:-2px}
+   here, unlike the old inset box-shadow (--border-light was only ~1.8–2.7:1). Standings-only —
+   Final Results dropped the whole-row outline (it read as a distracting box around already-
+   colorful medal/tiebreak rows) and relies on the magnifying glass alone as its hover cue. */
+.standings-row:hover{outline:2px solid var(--accent-cyan-solid);outline-offset:-2px}
 .standings-row:hover .ta-name-clickable,.final-table tbody tr:hover .ta-name-clickable{color:var(--txt-cyan);text-decoration:underline}
 .standings-row:hover .ta-name-clickable::after,.final-table tbody tr:hover .ta-name-clickable::after{opacity:1}
 
