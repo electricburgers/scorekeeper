@@ -398,7 +398,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      html/body level above) hands that back to the document, matching .header's behavior. */
   .col-left{overflow:visible}
   .drag-handle{display:none}
-  .col-right{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom)}
+  /* left/right insets (not full-bleed 0/0) so the deployed sheet's width roughly matches the
+     docked peek strip's own 8px inset below (see .mobile-bottom-dock) — before this they were
+     16px apart (0 vs 16px), so opening the sheet visibly "flared out" wider than the strip it
+     opened from instead of reading as a continuation of it. */
+  .col-right{position:fixed;left:8px;right:8px;bottom:0;top:auto;width:auto!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom)}
   .col-right.open{transform:translateY(0)}
   /* .qtimer-desktop stays visible here (no display:none override) — expanding the scores
      sheet on mobile should still show the timer, not hide it; it's the same #sidebar element
@@ -445,7 +449,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      attention. Out of the way of the game content in .col-left the same way the peek strip
      always was, via that column's own reserved bottom padding above, not by overlapping it.
      overflow:hidden clips both children to the dock's own rounded top corners. */
-  .mobile-bottom-dock{display:flex;flex-direction:column;position:fixed;left:16px;right:16px;bottom:0;z-index:245;background:var(--bg-card);border:1px solid var(--border-strong);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  /* 8px inset (was 16px) — see the matching .col-right comment above for why: this now lines up
+     with the deployed sheet's own width instead of sitting noticeably narrower than it. */
+  .mobile-bottom-dock{display:flex;flex-direction:column;position:fixed;left:8px;right:8px;bottom:0;z-index:245;background:var(--bg-card);border:1px solid var(--border-strong);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
   /* All-sides halo (blur-only, no offset) — same values as .col-right.open's own halo below, so
      the docked and deployed scores panels read as the same "floating above everything" surface
      rather than the docked one only getting a lighter top-edge-only shadow. */
@@ -852,7 +858,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
 .export-prompt.show{display:block}
 .export-prompt p{margin-bottom:6px;color:var(--badge-gold-fg);font-weight:600;font-size:.85rem}
-#fileLoadInput{display:none}
+#fileLoadInput,#prefsLoadInput{display:none}
 
 
 

@@ -5,6 +5,10 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v16.7 - 2026-07-16
+- Hide the stray native file-picker button that was rendering on the main page (missing display:none on the new App Preferences file input).
+- Widen the mobile docked scores peek strip and narrow the deployed scores sheet so their widths match instead of the sheet flaring out wider when opened.
+
 ## v16.6 - 2026-07-16
 - Move Session Data save/load back to the header toolbar; keep only App Preferences in Advanced Settings.
 - Add the final score guess and its difference below Grand Total in Score Audit.
