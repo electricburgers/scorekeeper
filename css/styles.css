@@ -171,6 +171,8 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
 .settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
+.settings-controls .qt-min-input{width:3.4rem;text-align:center;padding:5px 6px}
+.qt-min-suffix{font-size:.78rem;color:var(--text-muted);font-weight:600}
 @media(max-width:600px){
   .settings-panel.settings-visible{grid-template-columns:1fr}
   .settings-row{padding:10px 2px;gap:10px}
@@ -211,7 +213,7 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 /* LAYOUT */
 .app-layout{display:flex;height:calc(100vh - 60px);overflow:hidden}
 .col-left{flex:1;min-width:300px;padding:0 16px 40px;overflow-y:auto;overflow-x:hidden;max-width:100%;container-type:inline-size;container-name:scorecol;overflow-anchor:none}
-.col-right{width:380px;min-width:200px;max-width:60vw;height:100%;overflow-y:auto;background:var(--bg-card);display:flex;flex-direction:column;flex-shrink:0;border-left:1px solid var(--border)}
+.col-right{position:relative;width:380px;min-width:200px;max-width:60vw;height:100%;overflow-y:auto;background:var(--bg-card);display:flex;flex-direction:column;flex-shrink:0;border-left:1px solid var(--border)}
 .drag-handle{position:relative;width:6px;flex-shrink:0;height:100%;background:var(--border);cursor:col-resize;z-index:101;transition:background .15s}
 .drag-handle:hover,.drag-handle.dragging{background:var(--accent-cyan)}
 .drag-handle::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:32px;border-radius:1px;background:var(--text-muted);opacity:.5}
@@ -242,7 +244,41 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    wins at narrow widths instead of losing to this display:none on source-order (same selector
    specificity either way, so whichever comes LAST in the file wins — these must come first). */
 .sidebar-backdrop{display:none}
-.mobile-scores-peek{display:none}
+.mobile-bottom-dock{display:none}
+
+/* QUESTION TIMER — one shared look for the desktop and mobile copies of the widget (see
+   .qtimer-desktop / .qtimer-mobile below for where each one actually sits). Kept visually out
+   of the way of the scoring UI on purpose: it never overlaps game content, only the scores
+   list/peek strip it's docked against — see the placement rules further down. */
+.qtimer{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg-card-alt);box-shadow:var(--shadow-lg)}
+.qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border-radius:6px;transition:background-color .2s ease,color .2s ease}
+.qtimer-btns{display:flex;gap:6px;flex-shrink:0}
+.qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
+.qtimer-btn:hover{background:var(--bg-hover)}
+.qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
+.qtimer-btn.qtimer-pause{background:var(--accent-orange);border-color:var(--accent-orange);color:var(--on-accent-gold)}
+.qtimer-btn.qtimer-pause:hover{filter:brightness(1.1)}
+
+/* Flashing states — background/text reuse the app's own already-AAA-paired solid tokens
+   (--accent-gold/--on-accent-gold, --danger-solid-bg/#fff) rather than inventing new colors, so
+   every theme x color-vision-mode combination this app already supports (dark/light x off/
+   red-green/blue-yellow) stays correct for free: --accent-gold becomes the tritanopia-safe pink
+   substitute under data-cb="2", --danger-solid-bg becomes the deuteranopia/protanopia-safe
+   orange substitute under data-cb="1", etc. The pulse only varies brightness (not hue or the
+   text color), so contrast never dips meaningfully below the resting state's own ratio. */
+.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);animation:qtFlash 1s ease-in-out infinite}
+.qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;animation:qtFlash .7s ease-in-out infinite}
+.qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff}
+@keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.88)}}
+@media(prefers-reduced-motion:reduce){
+  .qtimer-display.qt-warn,.qtimer-display.qt-crit{animation:none}
+}
+
+/* Desktop: pinned to the bottom of the scores column, overlaying .sidebar-body rather than
+   sitting below it — the extra padding-bottom on .scores-list (its CSS rule, further down)
+   reserves room so the last team row can still scroll up clear of it, and every row above that
+   scrolls BEHIND the timer as the list scrolls, rather than the timer displacing the list. */
+.qtimer-desktop{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:10px 12px;border-top:1px solid var(--border-strong)}
 
 /* Settings backdrop dims the page behind the dropdown exactly like the scores drawer's own
    backdrop dims the page behind it — same rgba/opacity/transition values, reused rather than
@@ -272,11 +308,16 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .drag-handle{display:none}
   .col-right{position:fixed;left:0;right:0;bottom:0;top:auto;width:100%!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(100%);transition:transform .28s ease;padding-bottom:env(safe-area-inset-bottom)}
   .col-right.open{transform:translateY(0)}
+  /* The desktop overlay timer only makes sense pinned to .scores-list's own bottom edge, which
+     no longer needs to clear anything here — the mobile timer lives in .mobile-bottom-dock
+     instead (below), so the extra reserve .scores-list carries for it on desktop is dropped. */
+  .qtimer-desktop{display:none}
+  .scores-list{padding-bottom:8px}
   /* Extra bottom padding (not just the 40px other viewports get) so the last section clears
-     the fixed peek strip with visible breathing room once scrolled all the way down — the
-     strip floats on top of this padding rather than being part of the scrollable flow, so
-     without the extra room the last box's bottom edge sits flush against the strip's top. */
-  .col-left{padding-bottom:88px}
+     the fixed peek strip + timer dock with visible breathing room once scrolled all the way
+     down — the dock floats on top of this padding rather than being part of the scrollable
+     flow, so without the extra room the last box's bottom edge sits flush against its top. */
+  .col-left{padding-bottom:150px}
   /* .col-left is no longer its own scroll container here (the document is), so
      .mini-progress's sticky context bubbles up to the same one .header already uses — it
      needs to sit below the header's actual rendered height instead of top:0, or the two
@@ -302,9 +343,16 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   [data-theme="hc-dark"] .col-right.open{box-shadow:0 0 40px rgba(255,255,255,.16),0 0 10px rgba(255,255,255,.10)}
   [data-theme="hc-light"] .col-right.open{box-shadow:0 0 40px rgba(0,0,0,.32),0 0 10px rgba(0,0,0,.24)}
 
-  /* PEEK STRIP — always-visible bottom bar (hidden only while the sheet itself is open). Sits
-     below the open sheet in z-order (245 < 250) but that only matters for the brief cross-fade,
-     since .msp-hidden removes it from hit-testing and paint the instant the sheet opens.
+  /* BOTTOM DOCK — a fixed-position stack holding the peek strip and the question timer, in
+     that order top-to-bottom, so the timer sits UNDER the "Scores" strip (closer to the true
+     screen edge) rather than competing with it for the same row. The whole dock sits below the
+     open sheet in z-order (245 < 250): opening the sheet ("sliding up" the scores) visually
+     covers the dock — including the timer — the same way it already covers the peek strip,
+     so the timer never fights the full scores list for attention. Out of the way of the game
+     content in .col-left the same way the peek strip always was, via that column's own
+     reserved bottom padding above, not by overlapping it. */
+  .mobile-bottom-dock{display:flex;flex-direction:column;gap:8px;position:fixed;left:16px;right:16px;bottom:0;z-index:245;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  /* PEEK STRIP — always-visible bottom bar (hidden only while the sheet itself is open).
      3-column grid (not flex) so the centered label is centered against the FULL strip width,
      not just the space left over after the chevron — a flex row with the chevron as a trailing
      item would visually off-center the middle content toward the left. touch-action:none since
@@ -312,8 +360,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      removed mini ticker) — all touch movement here is the JS swipe-up-to-open gesture's alone. */
   /* left/right inset (not edge-to-edge) matches .col-left's own 16px side padding, so the
      strip reads as the same width as the section boxes stacked above it instead of a wider
-     full-bleed bar. */
-  .mobile-scores-peek{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;position:fixed;left:16px;right:16px;bottom:0;z-index:245;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--bg-card);border-top:1px solid var(--border-strong);border-left:1px solid var(--border-strong);border-right:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;cursor:pointer;touch-action:none;transition:opacity .18s ease,transform .18s ease}
+     full-bleed bar — inherited from the dock's own left/right:16px now, not set here. */
+  .mobile-scores-peek{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 14px;background:var(--bg-card);border-top:1px solid var(--border-strong);border-left:1px solid var(--border-strong);border-right:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;cursor:pointer;touch-action:none;transition:opacity .18s ease,transform .18s ease}
   /* Delay ONLY on the hide-transition (this class is the destination state when the sheet
      OPENS, so its own transition value — not the base rule's — is what the browser uses for
      that direction): the peek stays fully visible for .26s first, long enough for the chevron's
@@ -328,6 +376,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      strip that's visible at all times, not just while something is freshly deployed). */
   [data-theme="hc-dark"] .mobile-scores-peek{box-shadow:0 -3px 12px rgba(255,255,255,.07)}
   [data-theme="hc-light"] .mobile-scores-peek{box-shadow:0 -3px 12px rgba(0,0,0,.14)}
+
+  /* Mobile timer — same widget as the desktop copy (.qtimer base rule) but full-width, rounded
+     to match the strip above it, with its own drop shadow rather than sharing the peek's. */
+  .qtimer-mobile{display:flex;border-radius:var(--radius-lg);padding:8px 10px}
+  .qtimer-mobile .qtimer-display{font-size:1.3rem}
+  [data-theme="hc-dark"] .qtimer-mobile{box-shadow:0 -3px 12px rgba(255,255,255,.07),var(--shadow-lg)}
+  [data-theme="hc-light"] .qtimer-mobile{box-shadow:0 -3px 12px rgba(0,0,0,.14),var(--shadow-lg)}
   /* Column 1 is left empty on purpose — an unfilled 1fr grid track still reserves the same
      width as column 3's chevron, which is what keeps column 2 centered against the full strip
      rather than just the leftover space; it doesn't need visible content of its own to do that. */
@@ -365,7 +420,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sort-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid);box-shadow:0 0 6px rgba(0,255,255,.3)}
 .sort-mode-label{padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0}
 
-.scores-list{padding:8px 12px;flex:1;overflow-y:auto}
+/* padding-bottom reserves room for .qtimer-desktop (see LAYOUT above), which overlays this
+   list's bottom edge — without it the last row would be permanently stranded behind the timer
+   with no way to scroll it into view, since .scores-list (not .sidebar-body) is the element
+   that actually scrolls. --qtimer-h is kept in sync with the timer's real rendered height by a
+   ResizeObserver in app.js. */
+.scores-list{padding:8px 12px;flex:1;overflow-y:auto;padding-bottom:calc(8px + var(--qtimer-h,4.6rem))}
 .score-row{display:flex;align-items:center;padding:var(--row-pad) 12px;border-bottom:1px solid var(--border);margin-left:-12px;margin-right:-12px}
 .score-row:last-child{border-bottom:none}
 .score-row:nth-child(even){background:var(--row-stripe)}
@@ -701,6 +761,20 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .stepper input.sw-input::placeholder{color:var(--text-muted);font-weight:400}
 .stepper input.sw-input:focus{background:var(--bg-hover);box-shadow:none}
 
+/* R2/R4 BONUS WAGER entry: dropdown (1-10 / 1-20) + a typed-number fallback, replacing the
+   old +/- stepper — a tap-once dropdown is faster for the common case, the number input still
+   takes any value in range for hosts who'd rather type. Kept as its own .wager-pick class
+   (not a rename of .stepper) since .stepper/.sw-input are also reused, unrelated, by the
+   Craft Draw panel's "Exclude Top"/"Drumroll" fields above. */
+.wager-pick{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.wager-pick .sw-select{height:1.9rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0 4px;cursor:pointer;touch-action:manipulation}
+.wager-pick .sw-select:hover{background:var(--bg-hover)}
+.wager-pick .sw-select:focus{background:var(--bg-hover);outline:2px solid var(--accent-cyan-solid);outline-offset:1px}
+.wager-pick .sw-input{width:2.8rem;height:1.9rem;text-align:center;background:var(--bg-card);border:1px solid var(--border-light);border-radius:6px;color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0;outline:none;box-shadow:none;-moz-appearance:textfield;appearance:textfield}
+.wager-pick .sw-input::-webkit-outer-spin-button,.wager-pick .sw-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.wager-pick .sw-input::placeholder{color:var(--text-muted);font-weight:400;font-size:.66rem}
+.wager-pick .sw-input:focus{background:var(--bg-hover);box-shadow:none;outline:2px solid var(--accent-cyan-solid);outline-offset:1px}
+
 /* BONUS submitted / zero-correct state (R1 & R3) */
 .stepper-val.unset{color:var(--text-muted);font-size:.85rem}
 .bonus-pts.submitted-zero{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border);font-size:1.05rem;font-weight:800}
@@ -847,7 +921,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .ta-name{flex:0 0 100%;width:100%;min-width:0;overflow-wrap:break-word;font-size:.82rem;padding-left:2px;padding-right:0;line-height:1.3}
   .ta-name-clickable::after{display:none}
   /* push the control cluster to the right edge of its own line */
-  .team-answer>.ta-wagers,.bonus-row>.bonus-right,.special-wager-row>.stepper{margin-left:auto}
+  .team-answer>.ta-wagers,.bonus-row>.bonus-right,.special-wager-row>.wager-pick{margin-left:auto}
 
   /* wager / result buttons: clamp so they can't balloon past the column */
   .wager-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
@@ -862,6 +936,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .stepper input.sw-input{width:clamp(2rem,9cqw,2.6rem);min-width:0}
   .stepper button{width:clamp(1.6rem,7cqw,1.9rem);height:clamp(1.6rem,7cqw,1.9rem)}
   .stepper-val{width:clamp(1.8rem,8cqw,2.2rem);min-width:0}
+
+  /* R2/R4 wager dropdown + typed fallback */
+  .wager-pick .sw-select{width:clamp(3.4rem,15cqw,4.4rem);min-width:0;font-size:clamp(.82rem,3.6cqw,1rem)}
+  .wager-pick .sw-input{width:clamp(2rem,9cqw,2.6rem);min-width:0}
 
   /* team-setup grid */
   .meta-grid{grid-template-columns:1fr}

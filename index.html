@@ -30,6 +30,7 @@
     <div class="settings-row"><span class="size-label">Row Density</span><div class="settings-controls"><button class="settings-btn" id="densityToggle" onclick="toggleDensity()">Normal</button></div></div>
     <div class="settings-row"><span class="size-label">Row Zebra Stripes</span><div class="settings-controls"><button class="settings-btn" id="stripeToggle" onclick="toggleStripe()">Subtle</button></div></div>
     <div class="settings-row"><span class="size-label">Date Format</span><div class="settings-controls"><button class="settings-btn" id="dateFmtToggle" onclick="toggleDateFmt()">MM-DD-YYYY</button></div></div>
+    <div class="settings-row"><span class="size-label">Question Timer</span><div class="settings-controls qt-set-controls"><input type="number" id="qtMinInput" class="qt-min-input" inputmode="numeric" min="1" max="15" step="1" value="3" aria-label="Question timer minutes" onchange="setQtDuration(this.value)"><span class="qt-min-suffix">min</span></div></div>
     <div class="settings-row"><span class="size-label">Sample Data</span><div class="settings-controls"><button class="settings-btn" onclick="loadSampleGame()" title="Load a real completed game so you can explore the app">🧪 Try Example</button></div></div>
     <div class="settings-row"><span class="size-label">Color Vision</span><div class="settings-controls">
       <div class="cv-select" id="cbSelect">
@@ -473,9 +474,18 @@
   <div class="col-left" id="mainContent"></div>
   <div class="drag-handle" id="dragHandle"></div>
   <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
-  <div class="mobile-scores-peek" id="mobileScoresPeek" role="button" tabindex="0" aria-label="Open scores" aria-expanded="false" aria-controls="sidebar" onclick="toggleSidebar()">
-    <span class="msp-label"><span aria-hidden="true">📊</span> Scores</span>
-    <span class="msp-chevron" aria-hidden="true">▲</span>
+  <div class="mobile-bottom-dock" id="mobileBottomDock">
+    <div class="mobile-scores-peek" id="mobileScoresPeek" role="button" tabindex="0" aria-label="Open scores" aria-expanded="false" aria-controls="sidebar" onclick="toggleSidebar()">
+      <span class="msp-label"><span aria-hidden="true">📊</span> Scores</span>
+      <span class="msp-chevron" aria-hidden="true">▲</span>
+    </div>
+    <div class="qtimer qtimer-mobile" role="group" aria-label="Question timer">
+      <span class="qtimer-display" aria-live="off">03:00</span>
+      <div class="qtimer-btns">
+        <button type="button" class="qtimer-btn qtimer-toggle" onclick="toggleQTimer()">▶ Start</button>
+        <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled>↺</button>
+      </div>
+    </div>
   </div>
   <div class="col-right" id="sidebar">
     <div class="sheet-grab-handle" id="sheetGrabHandle" aria-hidden="true"></div>
@@ -484,6 +494,13 @@
       <span class="sidebar-toggle">▲</span>
     </div>
     <div class="sidebar-body" id="sidebarBody"></div>
+    <div class="qtimer qtimer-desktop" role="group" aria-label="Question timer">
+      <span class="qtimer-display" aria-live="off">03:00</span>
+      <div class="qtimer-btns">
+        <button type="button" class="qtimer-btn qtimer-toggle" onclick="toggleQTimer()">▶ Start</button>
+        <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled>↺ Reset</button>
+      </div>
+    </div>
   </div>
 </div>
 

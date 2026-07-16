@@ -254,6 +254,7 @@ function loadPrefs() {
       if (p.advancedOpen == null) p.advancedOpen = false;
       if (p.showLegacyExports == null) p.showLegacyExports = false;
       if (p.unlockEventDetails == null) p.unlockEventDetails = false;
+      if (!p.qtDurationMin) p.qtDurationMin = 3;
       return p;
     }
   } catch (e) {}
@@ -270,6 +271,7 @@ function loadPrefs() {
     advancedOpen: false,
     showLegacyExports: false,
     unlockEventDetails: false,
+    qtDurationMin: 3,
   };
 }
 function savePrefs(p) {
@@ -337,6 +339,8 @@ function applyPrefs() {
   }
   const vl = document.getElementById("versionLabel");
   if (vl) vl.textContent = "Scorekeeper " + APP_VERSION;
+  const qtm = document.getElementById("qtMinInput");
+  if (qtm && document.activeElement !== qtm) qtm.value = p.qtDurationMin;
 }
 function setTheme(t) {
   if (!["hc-dark", "hc-light"].includes(t)) t = "hc-dark";
@@ -570,6 +574,23 @@ function clearSaved() {
     gameState = freshState();
     renderAll();
   }
+})();
+
+// Keeps --qtimer-h in sync with the real rendered height of the desktop question timer, which
+// .scores-list (see styles.css) reserves as bottom padding so the last team row can always
+// scroll clear of the timer instead of being permanently stranded behind it. A ResizeObserver
+// (not a one-time measurement) because the timer's height isn't fixed — it changes with
+// font-size settings and with row-density/text-size changes elsewhere in Settings.
+(function () {
+  const qtEl = document.querySelector(".qtimer-desktop");
+  if (!qtEl) return;
+  const sync = () =>
+    document.documentElement.style.setProperty(
+      "--qtimer-h",
+      qtEl.offsetHeight + "px",
+    );
+  new ResizeObserver(sync).observe(qtEl);
+  sync();
 })();
 
 // Keeps --header-h in sync with the real rendered height of .header, which .mini-progress
@@ -1574,15 +1595,17 @@ function renderSpecialWager(type) {
       const p = d.correct ? w : -w;
       pts = `<span class="ta-pts ${p > 0 ? "pts-pos" : p < 0 ? "pts-neg" : "pts-nil"}">${p > 0 ? "+" : ""}${p}</span>`;
     }
-    const valHtml = `<input type="number" class="sw-input" inputmode="numeric" min="1" max="${max}" value="${w != null ? w : ""}" placeholder="\u2014" onchange="${iSet}(${ti},this.value)" onfocus="this.select()">`;
-    const canDec = w != null && w > 1,
-      canInc = w == null || w < max;
+    let selOpts = `<option value=""${w == null ? " selected" : ""}>\u2014</option>`;
+    for (let n = 1; n <= max; n++) {
+      selOpts += `<option value="${n}"${w === n ? " selected" : ""}>${n}</option>`;
+    }
+    const selectHtml = `<select class="sw-select" aria-label="Wager amount (1\u2013${max})" onchange="${wSet}(${ti},this.value)">${selOpts}</select>`;
+    const valHtml = `<input type="number" class="sw-input" inputmode="numeric" min="1" max="${max}" value="${w != null ? w : ""}" placeholder="or type" aria-label="Type wager amount (1\u2013${max})" onchange="${iSet}(${ti},this.value)" onfocus="this.select()">`;
     h += `<div class="special-wager-row">
       <span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 tap to audit score" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
-      <div class="stepper">
-        <button onclick="${wSet}(${ti},${w != null ? Math.max(1, w - 1) : 1})" ${!canDec ? 'disabled style="opacity:.3;cursor:default"' : ""}>\u2212</button>
+      <div class="wager-pick">
+        ${selectHtml}
         ${valHtml}
-        <button onclick="${wSet}(${ti},${w != null ? Math.min(max, w + 1) : 1})" ${!canInc ? 'disabled style="opacity:.3;cursor:default"' : ""}>+</button>
       </div>
       <div class="ta-result">
         <button class="result-btn ${d.correct === true ? "correct-sel" : ""}" onclick="${cSet}(${ti},true)" aria-label="Mark correct">\u2713${d.correct === true ? '<span class="wager-badge bg-correct">\u2705</span>' : ""}</button>
@@ -2172,7 +2195,11 @@ function clearB(ri, ti) {
 function setHW(ti, v) {
   if (!canScore()) return;
   if (!gameState.halftime[ti]) gameState.halftime[ti] = {};
-  gameState.halftime[ti].wager = Math.max(1, Math.min(10, +v || 1));
+  if (("" + v).trim() === "") {
+    delete gameState.halftime[ti].wager;
+  } else {
+    gameState.halftime[ti].wager = Math.max(1, Math.min(10, +v || 1));
+  }
   gameState.gameStarted = true;
   autosave();
   renderAll();
@@ -2191,7 +2218,11 @@ function setHC(ti, v) {
 function setFW(ti, v) {
   if (!canScore()) return;
   if (!gameState.finalWager[ti]) gameState.finalWager[ti] = {};
-  gameState.finalWager[ti].wager = Math.max(1, Math.min(20, +v || 1));
+  if (("" + v).trim() === "") {
+    delete gameState.finalWager[ti].wager;
+  } else {
+    gameState.finalWager[ti].wager = Math.max(1, Math.min(20, +v || 1));
+  }
   gameState.gameStarted = true;
   autosave();
   renderAll();
@@ -2208,7 +2239,7 @@ function setFC(ti, v) {
   renderAll();
 }
 
-// Manual typed entry for the special wagers (works alongside the +/- steppers)
+// Manual typed entry for the special wagers (works alongside the sw-select dropdown)
 function setHWInput(ti, raw) {
   if (!canScore()) return;
   if (!gameState.halftime[ti]) gameState.halftime[ti] = {};
@@ -3996,6 +4027,102 @@ document.addEventListener("keydown", function (e) {
     document.body.appendChild(n),
   );
   if (document.readyState !== "loading") document.body.appendChild(n);
+})();
+
+/* ============ QUESTION TIMER ============
+   A standalone per-question countdown — the host starts/pauses/resets it manually, independent
+   of gameState (not saved/resumed with the session, same as craftDrawState above). There are
+   two DOM copies of the widget (desktop: bottom of the scores sidebar; mobile: docked under the
+   scores peek strip — see index.html/styles.css), kept in sync by operating on every element
+   matching each .qtimer-* class rather than a single id. It ticks on its own short interval
+   instead of going through renderAll(), so the big score sheet never re-renders just because a
+   second passed. No sound — visual state only (flashing background, not a full render). */
+const QT_MIN_MIN = 1,
+  QT_MAX_MIN = 15,
+  QT_DEFAULT_MIN = 3;
+let qtDurationSec = QT_DEFAULT_MIN * 60,
+  qtEndEpoch = 0,
+  qtRemainMs = 0,
+  qtState = "idle"; // idle | running | paused
+
+function fmtQt(totalSec) {
+  const neg = totalSec < 0;
+  totalSec = Math.abs(Math.round(totalSec));
+  const m = Math.floor(totalSec / 60),
+    s = totalSec % 60;
+  return (neg ? "−" : "") + (m < 10 ? "0" : "") + m + ":" + (s < 10 ? "0" : "") + s;
+}
+function qtSetDisplayText(txt) {
+  document.querySelectorAll(".qtimer-display").forEach((d) => {
+    d.textContent = txt;
+  });
+}
+function qtSetDisplayClass(cls) {
+  document.querySelectorAll(".qtimer-display").forEach((d) => {
+    d.classList.remove("qt-warn", "qt-crit", "qt-over");
+    if (cls) d.classList.add(cls);
+  });
+}
+function renderQtControls() {
+  document.querySelectorAll(".qtimer-toggle").forEach((b) => {
+    b.textContent =
+      qtState === "running" ? "⏸ Pause" : qtState === "paused" ? "▶ Resume" : "▶ Start";
+    b.classList.toggle("qtimer-pause", qtState === "running");
+  });
+  document.querySelectorAll(".qtimer-reset").forEach((b) => {
+    b.disabled = qtState === "idle";
+  });
+}
+function toggleQTimer() {
+  if (qtState === "running") {
+    qtRemainMs = qtEndEpoch - Date.now();
+    qtState = "paused";
+  } else if (qtState === "paused") {
+    qtEndEpoch = Date.now() + qtRemainMs;
+    qtState = "running";
+  } else {
+    qtEndEpoch = Date.now() + qtDurationSec * 1000;
+    qtState = "running";
+  }
+  renderQtControls();
+  tickQTimer();
+}
+function resetQTimer() {
+  qtState = "idle";
+  qtEndEpoch = 0;
+  qtRemainMs = 0;
+  qtSetDisplayText(fmtQt(qtDurationSec));
+  qtSetDisplayClass(null);
+  renderQtControls();
+}
+function setQtDuration(mins) {
+  const n = Math.max(QT_MIN_MIN, Math.min(QT_MAX_MIN, parseInt(mins, 10) || QT_DEFAULT_MIN));
+  qtDurationSec = n * 60;
+  const p = loadPrefs();
+  p.qtDurationMin = n;
+  savePrefs(p);
+  const inp = document.getElementById("qtMinInput");
+  if (inp && document.activeElement !== inp) inp.value = n;
+  if (qtState === "idle") qtSetDisplayText(fmtQt(qtDurationSec));
+}
+function tickQTimer() {
+  if (qtState !== "running" && qtState !== "paused") return;
+  const remainSec =
+    (qtState === "running" ? qtEndEpoch - Date.now() : qtRemainMs) / 1000;
+  qtSetDisplayText(fmtQt(remainSec));
+  qtSetDisplayClass(
+    remainSec < 0 ? "qt-over" : remainSec <= 30 ? "qt-crit" : remainSec <= 60 ? "qt-warn" : null,
+  );
+}
+setInterval(tickQTimer, 200);
+(function initQTimer() {
+  const p = loadPrefs();
+  qtDurationSec =
+    Math.max(QT_MIN_MIN, Math.min(QT_MAX_MIN, p.qtDurationMin || QT_DEFAULT_MIN)) * 60;
+  const inp = document.getElementById("qtMinInput");
+  if (inp) inp.value = qtDurationSec / 60;
+  qtSetDisplayText(fmtQt(qtDurationSec));
+  renderQtControls();
 })();
 
 // Register the service worker so the app keeps working with no signal after it's been opened once.
