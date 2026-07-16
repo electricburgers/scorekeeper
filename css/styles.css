@@ -241,6 +241,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    by the media query below (kept in sync by a ResizeObserver in app.js, since the header's
    rendered height varies with font-size settings and notch safe-area insets). */
 .mini-progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;padding:8px 12px;margin:0 -16px 10px;background:var(--bg-card-alt);border-bottom:1px solid var(--border-strong);cursor:pointer;transition:var(--transition);touch-action:manipulation}
+/* Halo shadow (blur-only, no offset, so it reads on all sides) — same theme-aware treatment as
+   .settings-panel/.col-right.open: dark mode needs a pale glow to read as "floating above" its
+   own near-black background, light mode gets a plain shadow instead. Scaled down from those
+   bigger panels since this is a slim bar, not a full overlay. */
+[data-theme="hc-dark"] .mini-progress{box-shadow:0 0 24px rgba(255,255,255,.18),0 0 8px rgba(255,255,255,.12)}
+[data-theme="hc-light"] .mini-progress{box-shadow:0 0 24px rgba(0,0,0,.28),0 0 8px rgba(0,0,0,.20)}
 .mini-progress:hover{background:var(--bg-hover)}
 .mp-round{font-family:var(--font-display);font-weight:700;flex-shrink:0}
 .mp-count{font-family:var(--font-body);font-size:.8rem;font-weight:600;color:var(--text-secondary);white-space:nowrap}
@@ -276,7 +282,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    padding trimmed by that same 3px on each side (5px/10px -> 2px/7px) so the box's overall
    rendered size never changes when a state adds a visible stroke — only the split between
    border and padding does. */
-.qtimer-display{position:relative;isolation:isolate;font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:2px 7px;border:3px solid transparent;border-radius:6px;transition:background-color .2s ease,color .2s ease}
+.qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border-radius:6px;transition:background-color .2s ease,color .2s ease}
 .qtimer-btns{display:flex;gap:6px;flex-shrink:0}
 /* +/-30s nudge buttons — Advanced Settings > Timer Stepper Buttons, hidden by default (see
    [data-timer-steppers] below, set on <html> by applyPrefs() in app.js) since most hosts drive
@@ -309,28 +315,20 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-btn.qtimer-reset-active{background:var(--danger-solid-bg);border-color:var(--danger-solid-bg);color:#fff}
 .qtimer-btn.qtimer-reset-active:hover{filter:brightness(1.15)}
 
-/* Flashing states. The stroke (border-color, set directly on .qtimer-display) is a solid,
-   non-animated color — it reads as a steady "1 minute left" / "30 seconds left" alert frame.
-   The actual pulsing fill lives on a ::before layer instead of .qtimer-display's own
-   background: filter:brightness() dims EVERYTHING it's applied to, so animating it on the
-   element itself would pulse the border right along with the fill; putting the animated fill
-   on a separate inset layer (sized to the padding box only, per absolute-positioning-in-a-
-   padding-box rules, so it never overlaps the border pixels) keeps the border static while
-   that layer keeps pulsing behind the digits. Colors reuse the app's own already-AAA-paired
-   solid tokens (--accent-gold/--on-accent-gold, --danger-solid-bg/#fff) rather than inventing
-   new ones, so every theme x color-vision-mode combination this app already supports (dark/
-   light x off/red-green/blue-yellow) stays correct for free: --accent-gold becomes the
-   tritanopia-safe pink substitute under data-cb="2", --danger-solid-bg becomes the
-   deuteranopia/protanopia-safe orange substitute under data-cb="1", etc. */
-.qtimer-display::before{content:"";position:absolute;inset:0;border-radius:3px;z-index:-1}
-.qtimer-display.qt-warn{border-color:var(--accent-gold);color:var(--on-accent-gold)}
-.qtimer-display.qt-warn::before{background:var(--accent-gold);animation:qtFlash 3s ease-in-out infinite}
-.qtimer-display.qt-crit{border-color:var(--danger-solid-bg);color:#fff}
-.qtimer-display.qt-crit::before{background:var(--danger-solid-bg);animation:qtFlash 2.2s ease-in-out infinite}
+/* Flashing states — background/text reuse the app's own already-AAA-paired solid tokens
+   (--accent-gold/--on-accent-gold, --danger-solid-bg/#fff) rather than inventing new colors, so
+   every theme x color-vision-mode combination this app already supports (dark/light x off/
+   red-green/blue-yellow) stays correct for free: --accent-gold becomes the tritanopia-safe pink
+   substitute under data-cb="2", --danger-solid-bg becomes the deuteranopia/protanopia-safe
+   orange substitute under data-cb="1", etc. The pulse dips brightness hard (down to .55, not a
+   subtle .88) and cycles quickly (1.2s/.9s) so it reads as an urgent alert at a glance instead
+   of a barely-there shimmer.  */
+.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);animation:qtFlash 1.2s ease-in-out infinite}
+.qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;animation:qtFlash .9s ease-in-out infinite}
 .qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff}
-@keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.88)}}
+@keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.55)}}
 @media(prefers-reduced-motion:reduce){
-  .qtimer-display.qt-warn::before,.qtimer-display.qt-crit::before{animation:none}
+  .qtimer-display.qt-warn,.qtimer-display.qt-crit{animation:none}
 }
 
 /* Pinned to the bottom of the scores column (#sidebar / .col-right), overlaying .scores-list
@@ -425,8 +423,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      always was, via that column's own reserved bottom padding above, not by overlapping it.
      overflow:hidden clips both children to the dock's own rounded top corners. */
   .mobile-bottom-dock{display:flex;flex-direction:column;position:fixed;left:16px;right:16px;bottom:0;z-index:245;background:var(--bg-card);border:1px solid var(--border-strong);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
-  [data-theme="hc-dark"] .mobile-bottom-dock{box-shadow:0 -3px 12px rgba(255,255,255,.07)}
-  [data-theme="hc-light"] .mobile-bottom-dock{box-shadow:0 -3px 12px rgba(0,0,0,.14)}
+  /* All-sides halo (blur-only, no offset) — same values as .col-right.open's own halo below, so
+     the docked and deployed scores panels read as the same "floating above everything" surface
+     rather than the docked one only getting a lighter top-edge-only shadow. */
+  [data-theme="hc-dark"] .mobile-bottom-dock{box-shadow:0 0 40px rgba(255,255,255,.16),0 0 10px rgba(255,255,255,.10)}
+  [data-theme="hc-light"] .mobile-bottom-dock{box-shadow:0 0 40px rgba(0,0,0,.32),0 0 10px rgba(0,0,0,.24)}
   /* PEEK STRIP — always-visible top row of the dock (hidden only while the sheet itself is
      open). 3-column grid (not flex) so the centered label is centered against the FULL row
      width, not just the space left over after the chevron — a flex row with the chevron as a
@@ -1094,11 +1095,20 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .final-table tbody tr:nth-child(even):not(.fr-tie):not(.fr-gold):not(.fr-silver):not(.fr-bronze){background:var(--row-stripe)}
 .final-table tr.fr-tie{background:rgba(255,221,0,.13)}
 .final-table tr.fr-tie td{border-bottom-color:var(--accent-gold)}
+/* Light theme: the generic translucent yellow above reads as a muddy mustard-brown once
+   blended over this theme's light card background, so the tied row instead matches the timer
+   pause button's own solid fill exactly — same --accent-gold/--on-accent-gold pair, same look. */
+[data-theme="hc-light"] .final-table tr.fr-tie{background:var(--accent-gold);color:var(--on-accent-gold)}
 /* .fr-tiebadge flags a SCORE-only tie (place numbers themselves are always distinct now — see
    finalResultsRows()) so the host can still see at a glance where a tied score existed and how
    the guess tiebreak resolved it: the closer guess gets the green "win" variant, the rest of
-   that tied group gets the plain gold "tie" badge. */
-.fr-tiebadge{display:inline-block;font-size:.62rem;padding:1px 7px;border-radius:999px;background:var(--badge-gold-fg);color:var(--on-badge);margin-left:6px;vertical-align:middle;font-weight:700}
+   that tied group gets the plain gold "tie" badge. Sized up from the original .62rem/1px 7px so
+   it reads clearly rather than disappearing next to the team name. */
+.fr-tiebadge{display:inline-block;font-size:.74rem;padding:2px 9px;border-radius:999px;background:var(--badge-gold-fg);color:var(--on-badge);margin-left:6px;vertical-align:middle;font-weight:700}
+/* Same pause-button match as the row background above, applied to the plain "tie" chip too.
+   Declared BEFORE .fr-win below (same specificity, so source order decides) — the "closer"
+   .fr-win variant must still win and stay green, a different signal from "the current yellow". */
+[data-theme="hc-light"] .fr-tiebadge{background:var(--accent-gold);color:var(--on-accent-gold)}
 .fr-tiebadge.fr-win{background:var(--badge-green-fg)}
 .fr-diff-win{color:var(--badge-green-fg)!important;font-weight:800!important}
 .fr-note{font-size:.72rem;color:var(--text-muted);margin-top:9px;line-height:1.45}
