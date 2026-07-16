@@ -129,9 +129,8 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    already-expanded scores sheet on mobile. .settings-backdrop (a sibling, not a header child)
    needs its own bump to match, see below. */
 .header{position:sticky;top:0;z-index:260;background:var(--bg-primary);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
-/* flex-wrap here (not on .toolbar) means Save/Load/Gear wrap onto a new line as one group
-   under the logo when they don't fit — .toolbar itself no longer wraps its own buttons
-   individually, so it's all-or-nothing instead of one icon peeling off at a time. */
+/* flex-wrap here (not on .toolbar) means the toolbar wraps onto a new line as one group under
+   the logo when it doesn't fit, rather than wrapping its own buttons individually. */
 .header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:8px}
 .logo{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--accent-cyan);text-transform:uppercase;letter-spacing:2px}
 .logo span{color:var(--accent-magenta)}
@@ -246,7 +245,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    the always-sticky .header instead of underneath it, hence the --header-h offset swapped in
    by the media query below (kept in sync by a ResizeObserver in app.js, since the header's
    rendered height varies with font-size settings and notch safe-area insets). */
-.mini-progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;padding:8px 12px;margin:0 -16px 10px;background:var(--bg-card-alt);border-bottom:1px solid var(--border-strong);cursor:pointer;transition:var(--transition);touch-action:manipulation}
+/* line-height fixed at 1.3 (not "normal", which is font-metric-dependent) so the .mp-complete
+   state — a single .mp-label span — resolves to exactly the same line-box height as the normal
+   state's row of spans, as long as every one of those spans shares the same font-size (see
+   .mp-round/.mp-label below, both explicitly .95rem for this reason). Without that, the two
+   states render at different heights and the sticky bar visibly resizes when a round finishes. */
+.mini-progress{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:8px;padding:8px 12px;margin:0 -16px 10px;background:var(--bg-card-alt);border-bottom:1px solid var(--border-strong);cursor:pointer;transition:var(--transition);touch-action:manipulation;line-height:1.3}
 /* Halo shadow (blur-only, no offset, so it reads on all sides) — same theme-aware treatment as
    .settings-panel/.col-right.open: dark mode needs a pale glow to read as "floating above" its
    own near-black background, light mode gets a plain shadow instead. Scaled down from those
@@ -254,13 +258,15 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 [data-theme="hc-dark"] .mini-progress{box-shadow:0 0 24px rgba(255,255,255,.18),0 0 8px rgba(255,255,255,.12)}
 [data-theme="hc-light"] .mini-progress{box-shadow:0 0 24px rgba(0,0,0,.28),0 0 8px rgba(0,0,0,.20)}
 .mini-progress:hover{background:var(--bg-hover)}
-.mp-round{font-family:var(--font-display);font-weight:700;flex-shrink:0}
+.mp-round{font-family:var(--font-display);font-weight:700;font-size:.95rem;flex-shrink:0}
 .mp-count{font-family:var(--font-body);font-size:.8rem;font-weight:600;color:var(--text-secondary);white-space:nowrap}
 .mp-bar{flex:1;height:6px;border-radius:3px;background:var(--bg-input);overflow:hidden;min-width:40px}
 .mp-fill{height:100%;background:var(--accent-cyan-solid);border-radius:3px;transition:width .25s ease}
 .mp-pct{font-family:var(--font-display);font-size:.8rem;font-weight:700;color:var(--text-secondary);flex-shrink:0;min-width:2.4em;text-align:right}
 .mini-progress.mp-complete{justify-content:center}
-.mp-label{font-family:var(--font-body);font-size:.82rem;font-weight:700;color:var(--badge-green-fg)}
+/* Same .95rem as .mp-round above — see the line-height comment on .mini-progress for why these
+   two need to match. */
+.mp-label{font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--badge-green-fg)}
 
 /* Base (desktop-hidden) state for the mobile bottom sheet's peek strip + backdrop — declared
    here, before the @media block below, so that block's display:flex/block override actually
@@ -289,6 +295,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    rendered size never changes when a state adds a visible stroke — only the split between
    border and padding does. */
 .qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border-radius:6px;transition:background-color .2s ease,color .2s ease}
+/* Reserves the minus sign's width at all times (opacity, not display:none, so the layout space
+   stays even while hidden) — the countdown going negative then only reveals a glyph already
+   sitting in its slot instead of widening the whole display. */
+.qt-sign{opacity:0}
+.qtimer-display.qt-neg .qt-sign{opacity:1}
 .qtimer-btns{display:flex;gap:6px;flex-shrink:0}
 /* +/-30s nudge buttons — Advanced Settings > Timer Stepper Buttons, hidden by default (see
    [data-timer-steppers] below, set on <html> by applyPrefs() in app.js) since most hosts drive
@@ -342,6 +353,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 @media(prefers-reduced-motion:reduce){
   .qtimer-display.qt-warn,.qtimer-display.qt-crit{animation:none}
 }
+/* Advanced Settings > Timer Pulse: Hidden. Set on <html> by applyPrefs() in app.js. The warn/
+   crit background/text colors still apply (they're the actual "time's low" signal) — this only
+   drops the flashing animation for hosts who find it distracting. */
+[data-timer-no-pulse] .qtimer-display.qt-warn,[data-timer-no-pulse] .qtimer-display.qt-crit{animation:none}
 
 /* Pinned to the bottom of the scores column (#sidebar / .col-right), overlaying .scores-list
    rather than sitting below it — the extra padding-bottom on .scores-list (its CSS rule,
@@ -1027,6 +1042,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .aud-subline .sub{font-family:var(--font-display);color:var(--text-primary)}
 .aud-total{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:rgba(0,255,255,.08);border:1px solid var(--accent-cyan);border-radius:var(--radius);font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:1px}
 .aud-total .val{font-size:1.5rem;color:var(--txt-cyan)}
+/* Overall correct/incorrect breakdown across the 16 regular round questions, shown right under
+   Grand Total — two side-by-side stat tiles rather than one line so each count and its
+   percentage stay legible at the same sizes .aud-total already uses. */
+.aud-stats{display:flex;gap:8px;margin-top:8px}
+.aud-stat{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 8px;border-radius:var(--radius);background:var(--bg-card-alt);border:1px solid var(--border)}
+.aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
+.aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
+.aud-stat-correct .aud-stat-n{color:var(--badge-green-fg)}
+.aud-stat-wrong .aud-stat-n{color:var(--txt-red)}
 .aud-note{font-size:.72rem;color:var(--text-muted);margin-top:10px;line-height:1.4}
 
 /* ── Scoring rows reflow based on the CONTENT COLUMN's own width, not the
@@ -1146,6 +1170,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    .fr-win variant must still win and stay green, a different signal from "the current yellow". */
 [data-theme="hc-light"] .fr-tiebadge{background:var(--accent-gold);color:var(--on-accent-gold)}
 .fr-tiebadge.fr-win{background:var(--badge-green-fg)}
+/* Light theme's --badge-green-fg (#0a500a) is a dark green tuned for use as TEXT on light
+   surfaces elsewhere (aud-correct, mp-label, etc.) — as a solid pill background behind the
+   black text the hc-light rule above already applies to every .fr-tiebadge, it only clears
+   ~2.2:1, well under the 4.5:1 AA floor for normal text. Reuses the same green/white pairing
+   already vetted for positive point deltas (--pts-pos-bg/--pts-pos-fg, colorblind-aware via its
+   own [data-cb] overrides) instead of inventing a new color. */
+[data-theme="hc-light"] .fr-tiebadge.fr-win{background:var(--pts-pos-bg);color:var(--pts-pos-fg)}
 .fr-diff-win{color:var(--badge-green-fg)!important;font-weight:800!important}
 .fr-note{font-size:.72rem;color:var(--text-muted);margin-top:9px;line-height:1.45}
 /* Collapsed by default so the tie-break/Diff explanation doesn't eat vertical space every time

@@ -5,6 +5,15 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v16.5 - 2026-07-16
+- Fix the sticky round-progress bar changing height as its text changes between "in progress" and "all rounds scored".
+- Reserve space for the timer's minus sign so it stops jumping in width once the countdown goes past 0:00.
+- Add a Timer Pulse toggle in Advanced Settings to turn off the timer's low-time flashing.
+- Add a way to save/load just app preferences (theme, size, timer settings, etc.) separately from a full game session.
+- Move Session Data and App Preferences save/load buttons from the header into Advanced Settings.
+- Lighten the "closer" tiebreaker badge's green on Final Results so its text passes WCAG AA.
+- Add an overall correct/incorrect breakdown (count + percentage) under Grand Total in Score Audit.
+
 ## v15.6 - 2026-07-13
 - Add a live correct/incorrect breakdown (count + percentage) for each question and for the halftime/final wager, updating in real time as teams are graded.
 
