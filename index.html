@@ -19,6 +19,8 @@
   <div class="header-top">
     <div class="logo">Score <span>Keeper</span></div>
     <div class="toolbar">
+      <button onclick="saveToFile()">💾 Save</button>
+      <button onclick="triggerLoadFile()">📂 Load</button>
       <button class="settings-toggle-btn" id="settingsToggleBtn" onclick="toggleSettings()" title="Display settings" aria-label="Display settings">⚙️</button>
     </div>
   </div>
@@ -50,7 +52,6 @@
       <div class="settings-row"><span class="size-label">Timer Widget</span><div class="settings-controls"><button class="settings-btn" id="timerVisibleToggle" onclick="toggleTimerVisible()" title="Show or hide the question countdown timer widget">Shown</button></div></div>
       <div class="settings-row"><span class="size-label">Timer Stepper Buttons</span><div class="settings-controls"><button class="settings-btn" id="timerSteppersToggle" onclick="toggleTimerSteppers()" title="Show the -30/+30 second nudge buttons on the timer widget">Hidden</button></div></div>
       <div class="settings-row"><span class="size-label">Timer Pulse</span><div class="settings-controls"><button class="settings-btn" id="timerPulseToggle" onclick="toggleTimerPulse()" title="Flash the timer background when time is running low">Shown</button></div></div>
-      <div class="settings-row"><span class="size-label">Session Data</span><div class="settings-controls"><button class="settings-btn" onclick="saveToFile()" title="Save the whole game session (teams, scores, event details) to a file">💾 Save</button><button class="settings-btn" onclick="triggerLoadFile()" title="Load a game session file, replacing the current session">📂 Load</button></div></div>
       <div class="settings-row"><span class="size-label">App Preferences</span><div class="settings-controls"><button class="settings-btn" onclick="savePrefsToFile()" title="Save just these settings (not team/score data) to a file">💾 Save</button><button class="settings-btn" onclick="triggerLoadPrefsFile()" title="Load a settings file, replacing these preferences">📂 Load</button></div></div>
     </div>
     <span class="settings-meta"><span class="settings-version" id="versionLabel"></span><span class="settings-disclaimer">⚠️ Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></span>

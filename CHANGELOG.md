@@ -5,6 +5,11 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v16.6 - 2026-07-16
+- Move Session Data save/load back to the header toolbar; keep only App Preferences in Advanced Settings.
+- Add the final score guess and its difference below Grand Total in Score Audit.
+- Restyle the timer's Pause button as a gold outline instead of a solid gold fill.
+
 ## v16.5 - 2026-07-16
 - Fix the sticky round-progress bar changing height as its text changes between "in progress" and "all rounds scored".
 - Reserve space for the timer's minus sign so it stops jumping in width once the countdown goes past 0:00.

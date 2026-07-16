@@ -129,8 +129,9 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    already-expanded scores sheet on mobile. .settings-backdrop (a sibling, not a header child)
    needs its own bump to match, see below. */
 .header{position:sticky;top:0;z-index:260;background:var(--bg-primary);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
-/* flex-wrap here (not on .toolbar) means the toolbar wraps onto a new line as one group under
-   the logo when it doesn't fit, rather than wrapping its own buttons individually. */
+/* flex-wrap here (not on .toolbar) means Save/Load/Gear wrap onto a new line as one group
+   under the logo when they don't fit — .toolbar itself no longer wraps its own buttons
+   individually, so it's all-or-nothing instead of one icon peeling off at a time. */
 .header-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;row-gap:8px}
 .logo{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--accent-cyan);text-transform:uppercase;letter-spacing:2px}
 .logo span{color:var(--accent-magenta)}
@@ -314,14 +315,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    Pause/Resume. */
 .qtimer-btn.qtimer-toggle{min-width:5.8rem;text-align:center}
 .qtimer-btn.qtimer-step{padding:5px 8px;font-size:.75rem}
-/* Pause: reuses --accent-gold/--on-accent-gold (NOT --accent-orange, which paired with
-   --on-accent-gold's fixed black text goes near-illegible in light theme — #994400 is dark
-   brown, not the bright amber the dark theme's #ffaa00 might suggest). --accent-gold is the
-   token this app already swaps correctly per color-vision mode too (tritanopia-safe pink,
-   etc.), and --on-accent-gold gets one override (light+tritanopia) below to stay >=4.5:1 there
-   as well — see the hc-light[data-cb="2"] block near the top of the file. */
-.qtimer-btn.qtimer-pause{background:var(--accent-gold);border-color:var(--accent-gold);color:var(--on-accent-gold)}
-.qtimer-btn.qtimer-pause:hover{filter:brightness(1.1)}
+/* Pause: a solid gold fill read as too loud next to the rest of the widget — just an outline in
+   --accent-gold (the token this app already swaps per color-vision mode) instead. */
+.qtimer-btn.qtimer-pause{border-color:var(--accent-gold)}
 /* Reset: neutral while idle (nothing to reset), solid red once a timer is actually running or
    paused — same --danger-solid-bg/#fff pairing already used for .q-reset-btn elsewhere. Icon-
    only (no "Reset" label) and a fixed equal width/height — rather than sizing to its content
