@@ -264,6 +264,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
 .qtimer-btn:hover{background:var(--bg-hover)}
 .qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
+/* Fixed width sized to the longest label ("▶ Resume") so the button — and everything centered
+   alongside it in .qtimer — doesn't visibly shift width as the label cycles between Start/
+   Pause/Resume. */
+.qtimer-btn.qtimer-toggle{min-width:5.8rem;text-align:center}
 /* ±30s nudges: same button look, just narrower — a short numeric label doesn't need Start/
    Reset's wider padding, and this keeps the whole widget's button row from getting crowded. */
 .qtimer-btn.qtimer-step{padding:5px 8px;font-size:.75rem}
@@ -1040,8 +1044,6 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .final-table tr.fr-tie{background:rgba(255,221,0,.13)}
 .final-table tr.fr-tie td{border-bottom-color:var(--accent-gold)}
 .fr-tiebadge{display:inline-block;font-size:.62rem;padding:1px 7px;border-radius:999px;background:var(--badge-gold-fg);color:var(--on-badge);margin-left:6px;vertical-align:middle;font-weight:700}
-.fr-tiebadge.fr-win{background:var(--badge-green-fg)}
-.fr-diff-win{color:var(--badge-green-fg)!important;font-weight:800!important}
 .fr-note{font-size:.72rem;color:var(--text-muted);margin-top:9px;line-height:1.45}
 /* Collapsed by default so the tie-break/Diff explanation doesn't eat vertical space every time
    Final Results is open — <details>/<summary> gets keyboard support and toggling for free. */

@@ -843,32 +843,28 @@ function finalResultsRows() {
   const byPlace = rows
     .slice()
     .sort((a, b) => b.score - a.score || dv(a) - dv(b) || a.index - b.index);
-  // Place NUMBER is by score alone, dense ranking (equal scores share a place, the next distinct
-  // score takes the very next place with no numbers skipped). The diff tie-break above only
-  // decides display ORDER within a tied group (closer guess listed first) and the "✓ closer"
-  // badge — it must never split a real tie into two different place numbers, nor skip place
-  // numbers just because a tied group had more than one team in it.
+  // Place NUMBER is dense on the (score, diff) compound key — same rule as the sidebar's
+  // rankMap(): a closer guess resolves a tied score into its own next place instead of sharing
+  // one, so no more than one team can hold 1st/2nd/etc. unless their guesses were ALSO tied.
+  // Only a genuinely unbreakable tie (same score AND same diff, or both teams with no guess at
+  // all) still shares a place number and gets the "tie" badge below.
   let place = 0,
-    prevScore = null;
+    prevScore = null,
+    prevDiff = null;
   byPlace.forEach((r) => {
-    if (prevScore === null || r.score !== prevScore) place++;
+    const d = dv(r);
+    if (prevScore === null || r.score !== prevScore || d !== prevDiff) place++;
     r.place = place;
     prevScore = r.score;
+    prevDiff = d;
   });
   const cnt = {};
   rows.forEach((r) => {
-    cnt[r.score] = (cnt[r.score] || 0) + 1;
-  });
-  const minD = {};
-  rows.forEach((r) => {
-    if (cnt[r.score] > 1) {
-      const d = dv(r);
-      if (minD[r.score] === undefined || d < minD[r.score]) minD[r.score] = d;
-    }
+    const key = r.score + "|" + dv(r);
+    cnt[key] = (cnt[key] || 0) + 1;
   });
   rows.forEach((r) => {
-    r.tie = cnt[r.score] > 1;
-    r.tieWinner = r.tie && dv(r) === minD[r.score];
+    r.tie = cnt[r.score + "|" + dv(r)] > 1;
   });
   return byPlace
     .slice()
@@ -894,16 +890,16 @@ function renderFinalResults() {
     h +=
       `<tr class="${r.tie ? "fr-tie" : ""}${medal}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to audit score" onclick="openAudit(${r.index})">` +
       `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>` +
-      `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie ? ` <span class="fr-tiebadge${r.tieWinner ? " fr-win" : ""}">${r.tieWinner ? "\u2713 closer" : "tie"}</span>` : ""}</td>` +
+      `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie ? ` <span class="fr-tiebadge">tie</span>` : ""}</td>` +
       `<td class="fr-score" data-label="Score">${r.score}</td>` +
       `<td class="fr-guess" data-label="Guess">${r.guess == null ? "\u2014" : r.guess}</td>` +
-      `<td class="fr-diff${r.tieWinner ? " fr-diff-win" : ""}" data-label="Diff *">${r.guess == null ? "\u2014" : diffSigned}</td>` +
+      `<td class="fr-diff" data-label="Diff *">${r.guess == null ? "\u2014" : diffSigned}</td>` +
       `</tr>`;
   });
   h += "</tbody></table>";
   h +=
     '<details class="fr-details"><summary>&gt; Diff *</summary>' +
-    '<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Ties are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>).</p>' +
+    '<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Equal scores are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place. Only a team tied on BOTH score and Diff shares a place, marked <strong>tie</strong>.</p>' +
     "<p class=\"fr-note\">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team's score before it's compared to their guess, for every team. A <strong>+</strong> means the guess came in over the actual score, a <strong>\u2212</strong> means it came in under.</p>" +
     "</details>";
   return h;
@@ -996,14 +992,17 @@ function getDisplayOrder() {
   const n = gameState.teams.length;
   if (scoreSortMode === "random" && randomOrder && randomOrder.length === n)
     return randomOrder.slice();
-  if (scoreSortMode === "asc")
-    return gameState.teams
-      .map((_, i) => i)
-      .sort((a, b) => grandTotal(a) - grandTotal(b));
-  if (scoreSortMode === "desc")
-    return gameState.teams
-      .map((_, i) => i)
-      .sort((a, b) => grandTotal(b) - grandTotal(a));
+  if (scoreSortMode === "asc" || scoreSortMode === "desc") {
+    // Sorts by rankMap()'s own place number (already tie-broken by score then guess-closeness)
+    // rather than grandTotal alone — otherwise a tied pair could land in an order that
+    // contradicts their #1/#2 rank badges, and Ascending's "dramatic reveal" could end on the
+    // 2nd-place team instead of the actual winner.
+    const rm = rankMap();
+    const order = gameState.teams.map((_, i) => i);
+    order.sort((a, b) => rm[a] - rm[b] || a - b);
+    if (scoreSortMode === "asc") order.reverse();
+    return order;
+  }
   return gameState.teams.map((_, i) => i);
 }
 function sortModeLabel() {
