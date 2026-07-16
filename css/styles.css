@@ -54,7 +54,6 @@
      black team-name text) so the border can be a real golden yellow instead. */
   --beer-bg:#f1e7d0;--beer-border:#9f7804;
 }
-[data-theme="hc-light"] .header{background:linear-gradient(180deg,var(--bg-primary) 60%,transparent)!important}
 /* COLOR VISION MODES — independent of theme.
    1 = red-green (deuteranopia/protanopia): swaps green/red pass-fail colors for blue/orange.
    2 = blue-yellow (tritanopia): keeps green/red (tritanopes see these fine) but swaps the
@@ -115,11 +114,14 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg-primary)}::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:3px}
 
 /* HEADER */
-/* z-index kept above .drag-handle (101) and every other app-layout child: .header creates its
-   own stacking context, so a lower value here would let the resize handle's higher z-index win
-   and paint over the settings overlay (which lives inside .header) wherever their boxes overlap
-   on screen — that's the "drag handle pokes through the settings panel" bug. */
-.header{position:sticky;top:0;z-index:200;background:linear-gradient(180deg,var(--bg-primary) 60%,transparent);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
+/* z-index kept above .drag-handle (101) and every other app-layout child, AND above the mobile
+   scores sheet (.col-right.open, 250) and bottom timer dock (.mobile-bottom-dock, 245): .header
+   creates its own stacking context, so a lower value here would let those paint over the
+   settings panel (which lives inside .header) wherever their boxes overlap on screen — either
+   the old "drag handle pokes through the settings panel" bug, or settings opening underneath an
+   already-expanded scores sheet on mobile. .settings-backdrop (a sibling, not a header child)
+   needs its own bump to match, see below. */
+.header{position:sticky;top:0;z-index:260;background:var(--bg-primary);padding:calc(10px + env(safe-area-inset-top)) 16px 10px}
 /* flex-wrap here (not on .toolbar) means Save/Load/Gear wrap onto a new line as one group
    under the logo when they don't fit — .toolbar itself no longer wraps its own buttons
    individually, so it's all-or-nothing instead of one icon peeling off at a time. */
@@ -259,6 +261,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    rule — only .qtimer-desktop gets one (see below); the collapsed mobile peek-strip copy
    doesn't need the extra visual weight since it's not overlaying anything. */
 .qtimer{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;background:var(--bg-card-alt)}
+/* Advanced Settings > Timer Widget: Hidden. Set on <html> by applyPrefs() in app.js. Hides both
+   copies of the widget (desktop and mobile) with one rule rather than duplicating it per class. */
+[data-timer-hidden] .qtimer{display:none}
 .qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border-radius:6px;transition:background-color .2s ease,color .2s ease}
 .qtimer-btns,.qtimer-steppers{display:flex;gap:6px;flex-shrink:0}
 .qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
@@ -308,17 +313,23 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    mobile media query below) — flush against the sheet's own bottom edge, so there's no gap
    between the sheet and the timer, and it only carries a drop shadow while a real overlay like
    this actually needs the separation; the collapsed mobile dock copy (.qtimer-mobile) doesn't
-   get one. */
-.qtimer-desktop{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:10px 12px;border-top:1px solid var(--border-strong);box-shadow:var(--shadow-lg)}
+   get one. Extra bottom padding via env(safe-area-inset-bottom): this element is positioned
+   absolute, so it's placed relative to #sidebar's padding BOX edge and ignores #sidebar's own
+   padding-bottom entirely — without its own inset here, the mobile expanded sheet's Start/Reset
+   buttons render flush against the true screen edge, under the iPhone Home Bar. */
+.qtimer-desktop{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--border-strong);box-shadow:var(--shadow-lg)}
 
 /* Settings backdrop dims the page behind the dropdown exactly like the scores drawer's own
    backdrop dims the page behind it — same rgba/opacity/transition values, reused rather than
    invented fresh. Unlike the scores backdrop this isn't gated to a mobile media query: the
-   settings dropdown itself opens at every viewport width, so its dimming does too. z-index
-   190 sits below .header's own 200 (not above it) so the header bar and the panel it contains
-   — both already inside that same stacking context — stay crisp on top of the dim instead of
-   being darkened along with the rest of the page. */
-.settings-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:190}
+   settings dropdown itself opens at every viewport width, so its dimming does too. z-index 255
+   sits below .header's own 260 (not above it) so the header bar and the panel it contains —
+   both already inside that same stacking context — stay crisp on top of the dim instead of
+   being darkened along with the rest of the page. It also sits above the mobile scores sheet
+   (.col-right.open, 250) and bottom timer dock (245), so opening settings while the scores
+   sheet is expanded dims (and the header/panel still render above) the sheet too, rather than
+   the sheet poking through undimmed. */
+.settings-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:255}
 .settings-backdrop.show{opacity:1;pointer-events:auto}
 
 @media(max-width:900px){
@@ -373,25 +384,30 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   [data-theme="hc-dark"] .col-right.open{box-shadow:0 0 40px rgba(255,255,255,.16),0 0 10px rgba(255,255,255,.10)}
   [data-theme="hc-light"] .col-right.open{box-shadow:0 0 40px rgba(0,0,0,.32),0 0 10px rgba(0,0,0,.24)}
 
-  /* BOTTOM DOCK — a fixed-position stack holding the peek strip and the question timer, in
-     that order top-to-bottom, so the timer sits UNDER the "Scores" strip (closer to the true
-     screen edge) rather than competing with it for the same row. The whole dock sits below the
-     open sheet in z-order (245 < 250): opening the sheet ("sliding up" the scores) visually
-     covers the dock — including the timer — the same way it already covers the peek strip,
-     so the timer never fights the full scores list for attention. Out of the way of the game
-     content in .col-left the same way the peek strip always was, via that column's own
-     reserved bottom padding above, not by overlapping it. */
-  .mobile-bottom-dock{display:flex;flex-direction:column;gap:8px;position:fixed;left:16px;right:16px;bottom:0;z-index:245;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
-  /* PEEK STRIP — always-visible bottom bar (hidden only while the sheet itself is open).
-     3-column grid (not flex) so the centered label is centered against the FULL strip width,
-     not just the space left over after the chevron — a flex row with the chevron as a trailing
-     item would visually off-center the middle content toward the left. touch-action:none since
-     there's no inner horizontal-scrolling content anymore to carve out an exception for (see the
-     removed mini ticker) — all touch movement here is the JS swipe-up-to-open gesture's alone. */
-  /* left/right inset (not edge-to-edge) matches .col-left's own 16px side padding, so the
-     strip reads as the same width as the section boxes stacked above it instead of a wider
-     full-bleed bar — inherited from the dock's own left/right:16px now, not set here. */
-  .mobile-scores-peek{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 14px;background:var(--bg-card);border-top:1px solid var(--border-strong);border-left:1px solid var(--border-strong);border-right:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;cursor:pointer;touch-action:none;transition:opacity .18s ease,transform .18s ease}
+  /* BOTTOM DOCK — a single fixed, rounded card holding the peek strip and the question timer
+     stacked top-to-bottom (a border divider between them, not a gap), so the two read as one
+     cohesive control rather than two separate boxes. The dock itself now owns the
+     background/border/radius/shadow that each piece used to carry on its own; the peek strip
+     and timer inside are flush, borderless rows separated by .qtimer-mobile's own border-top.
+     The whole dock sits below the open sheet in z-order (245 < 250): opening the sheet
+     ("sliding up" the scores) visually covers the dock — including the timer — the same way it
+     already covered the peek strip, so the timer never fights the full scores list for
+     attention. Out of the way of the game content in .col-left the same way the peek strip
+     always was, via that column's own reserved bottom padding above, not by overlapping it.
+     overflow:hidden clips both children to the dock's own rounded top corners. */
+  .mobile-bottom-dock{display:flex;flex-direction:column;position:fixed;left:16px;right:16px;bottom:0;z-index:245;background:var(--bg-card);border:1px solid var(--border-strong);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
+  [data-theme="hc-dark"] .mobile-bottom-dock{box-shadow:0 -3px 12px rgba(255,255,255,.07)}
+  [data-theme="hc-light"] .mobile-bottom-dock{box-shadow:0 -3px 12px rgba(0,0,0,.14)}
+  /* PEEK STRIP — always-visible top row of the dock (hidden only while the sheet itself is
+     open). 3-column grid (not flex) so the centered label is centered against the FULL row
+     width, not just the space left over after the chevron — a flex row with the chevron as a
+     trailing item would visually off-center the middle content toward the left. touch-action:
+     none since there's no inner horizontal-scrolling content anymore to carve out an exception
+     for (see the removed mini ticker) — all touch movement here is the JS swipe-up-to-open
+     gesture's alone. Background/border/radius/shadow all live on .mobile-bottom-dock itself now
+     (the shared card this and the timer both sit inside), so this is just a flush, borderless
+     row. */
+  .mobile-scores-peek{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 14px;cursor:pointer;touch-action:none;transition:opacity .18s ease,transform .18s ease}
   /* Delay ONLY on the hide-transition (this class is the destination state when the sheet
      OPENS, so its own transition value — not the base rule's — is what the browser uses for
      that direction): the peek stays fully visible for .26s first, long enough for the chevron's
@@ -400,19 +416,14 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      wash before it's even halfway done. Closing (this class removed) still uses the base rule's
      un-delayed transition, so the strip reappears immediately rather than after a matching lag. */
   .mobile-scores-peek.msp-hidden{opacity:0;pointer-events:none;transform:translateY(8px);transition:opacity .16s ease .26s,transform .16s ease .26s}
-  /* Subtle shadow on the collapsed strip — deliberately much quieter than the settings panel's
-     halo (this sits flush against the screen's own edges, so only the top edge separating it
-     from the page content needs any separation at all; a full glow would be overkill for a
-     strip that's visible at all times, not just while something is freshly deployed). */
-  [data-theme="hc-dark"] .mobile-scores-peek{box-shadow:0 -3px 12px rgba(255,255,255,.07)}
-  [data-theme="hc-light"] .mobile-scores-peek{box-shadow:0 -3px 12px rgba(0,0,0,.14)}
 
-  /* Mobile timer — same widget as the desktop copy (.qtimer base rule) but full-width, rounded
-     to match the strip above it. No drop shadow here (unlike .qtimer-desktop): this collapsed
-     copy sits next to the peek strip rather than overlaying scrollable content, so it doesn't
-     need the extra separation — the shadow only shows up once the scores sheet is expanded and
-     the (shared) .qtimer-desktop instance takes over. */
-  .qtimer-mobile{display:flex;border-radius:var(--radius-lg);padding:8px 10px}
+  /* Mobile timer — same widget as the desktop copy (.qtimer base rule) but full-width, flush
+     against the dock's own rounded card. A border-top divider (not its own box) is what
+     visually separates it from the peek strip above, so the two read as one cohesive card —
+     scores on top, timer below — rather than two stacked boxes. No drop shadow of its own
+     (unlike .qtimer-desktop): the dock already carries the shadow for the whole card. Hidden
+     entirely when the timer is turned off in Advanced Settings, via [data-timer-hidden] below. */
+  .qtimer-mobile{display:flex;border-top:1px solid var(--border);padding:8px 10px}
   .qtimer-mobile .qtimer-display{font-size:1.3rem}
   /* Column 1 is left empty on purpose — an unfilled 1fr grid track still reserves the same
      width as column 3's chevron, which is what keeps column 2 centered against the full strip
@@ -911,7 +922,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
 
 /* SCORE AUDIT MODAL */
-.audit-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);align-items:flex-start;justify-content:center;padding:20px 10px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+/* Top/bottom padding include the safe-area insets so the modal's own sticky .audit-head (below)
+   clears the Dynamic Island on notched phones, and the scrollable content at the very bottom
+   clears the Home Bar, instead of both sitting flush against the physical screen edges. */
+.audit-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);align-items:flex-start;justify-content:center;padding:calc(20px + env(safe-area-inset-top)) 10px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch}
 .audit-overlay.show{display:flex}
 .audit-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:680px;box-shadow:var(--shadow);margin:auto;animation:auditPop .18s ease-out}
 @keyframes auditPop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}

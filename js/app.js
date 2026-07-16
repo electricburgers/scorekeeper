@@ -255,6 +255,7 @@ function loadPrefs() {
       if (p.showLegacyExports == null) p.showLegacyExports = false;
       if (p.unlockEventDetails == null) p.unlockEventDetails = false;
       if (!p.qtDurationMin) p.qtDurationMin = 3;
+      if (p.showTimer == null) p.showTimer = true;
       return p;
     }
   } catch (e) {}
@@ -272,6 +273,7 @@ function loadPrefs() {
     showLegacyExports: false,
     unlockEventDetails: false,
     qtDurationMin: 3,
+    showTimer: true,
   };
 }
 function savePrefs(p) {
@@ -337,6 +339,13 @@ function applyPrefs() {
     unlockToggle.classList.toggle("active", !!p.unlockEventDetails);
     unlockToggle.textContent = p.unlockEventDetails ? "Unlocked" : "Locked";
   }
+  const timerToggle = document.getElementById("timerVisibleToggle");
+  if (timerToggle) {
+    timerToggle.classList.toggle("active", !!p.showTimer);
+    timerToggle.textContent = p.showTimer ? "Shown" : "Hidden";
+  }
+  if (p.showTimer) document.documentElement.removeAttribute("data-timer-hidden");
+  else document.documentElement.setAttribute("data-timer-hidden", "1");
   const vl = document.getElementById("versionLabel");
   if (vl) vl.textContent = "Scorekeeper " + APP_VERSION;
   const qtm = document.getElementById("qtMinInput");
@@ -383,6 +392,13 @@ function toggleUnlockEventDetails() {
   savePrefs(p);
   applyPrefs();
   renderLeft();
+}
+function toggleTimerVisible() {
+  const p = loadPrefs();
+  p.showTimer = !p.showTimer;
+  savePrefs(p);
+  applyPrefs();
+  syncQtimerH();
 }
 function setCbMode(v) {
   const p = loadPrefs();
@@ -580,17 +596,22 @@ function clearSaved() {
 // .scores-list (see styles.css) reserves as bottom padding so the last team row can always
 // scroll clear of the timer instead of being permanently stranded behind it. A ResizeObserver
 // (not a one-time measurement) because the timer's height isn't fixed — it changes with
-// font-size settings and with row-density/text-size changes elsewhere in Settings.
+// font-size settings and with row-density/text-size changes elsewhere in Settings. Also called
+// directly from toggleTimerVisible(): a display:none element reports 0 here, so hiding the
+// timer collapses that reserved padding back down instead of leaving a gap behind it.
+function syncQtimerH() {
+  const qtEl = document.querySelector(".qtimer-desktop");
+  if (!qtEl) return;
+  document.documentElement.style.setProperty(
+    "--qtimer-h",
+    qtEl.offsetHeight + "px",
+  );
+}
 (function () {
   const qtEl = document.querySelector(".qtimer-desktop");
   if (!qtEl) return;
-  const sync = () =>
-    document.documentElement.style.setProperty(
-      "--qtimer-h",
-      qtEl.offsetHeight + "px",
-    );
-  new ResizeObserver(sync).observe(qtEl);
-  sync();
+  new ResizeObserver(syncQtimerH).observe(qtEl);
+  syncQtimerH();
 })();
 
 // Keeps --header-h in sync with the real rendered height of .header, which .mini-progress
