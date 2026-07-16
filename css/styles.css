@@ -720,11 +720,23 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .wager-badge.bg-incorrect{background:var(--danger-solid-bg);color:#fff;font-size:1.05rem;font-weight:900}
 
 /* SCORE PILL */
-.ta-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;min-width:3.4rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
+/* width (not min-width): the placeholder em-dash ("—", shown before a team is scored) needs
+   more room than any real value ("+5".."+20", "✓ 0") does at the same font/padding, so a
+   min-width floor sized to the real values let the dash render WIDER than them — and since this
+   pill sits inside a right-anchored cluster (.ta-wagers/.bonus-right, margin-left:auto) on
+   narrow layouts, that width difference shifted the wager/choice buttons before it every time a
+   team went from unscored to scored. A fixed width sized to the dash's own need instead keeps
+   every state — placeholder included — exactly the same size, so nothing moves on first score. */
+.ta-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;width:3.7rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
 .pts-pos{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
 .pts-neg{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
 .pts-nil{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
-.pts-zero{color:var(--text-muted);min-width:3.4rem;text-align:center;font-weight:700;opacity:.7}
+/* No width here (unlike the old rule) — .pts-zero + .ta-pts/.bonus-pts is a 2-class selector,
+   which would outrank the container-query's plain .ta-pts/.bonus-pts override below (1 class)
+   and pin the placeholder to the un-clamped 3.7rem while every scored state used the clamped
+   value, reintroducing the exact same shift-on-first-score bug this pill was just fixed for.
+   Width comes from .ta-pts/.bonus-pts alone now, so every state resolves it the same way. */
+.pts-zero{color:var(--text-muted);text-align:center;font-weight:700;opacity:.7}
 
 /* RESULT BUTTONS */
 .ta-result{display:flex;gap:.2rem;flex-shrink:0}
@@ -797,10 +809,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .stepper-val{width:2.2rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem}
 .sw-val{width:2.8rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-primary)}
 .sw-val.unset{color:var(--text-muted);font-size:.85rem}
-.bonus-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;min-width:3.4rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
+/* Same fixed-width reasoning as .ta-pts above — see that comment. */
+.bonus-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;width:3.7rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
 .bonus-pts.pts-pos{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
 .bonus-pts.pts-nil{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
-.bonus-pts.pts-zero{color:var(--text-muted);min-width:3.4rem;text-align:center;font-weight:700;opacity:.7}
+/* No width here — same reasoning as the generic .pts-zero rule above: it comes from .bonus-pts
+   alone so every state (including this one) resolves the container-query override identically. */
+.bonus-pts.pts-zero{color:var(--text-muted);text-align:center;font-weight:700;opacity:.7}
 
 /* EXPORT */
 .export-bar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0}
@@ -1011,8 +1026,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .result-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
   .bonus-choice-btn{width:clamp(1.7rem,7.5cqw,2.2rem);height:clamp(1.7rem,7.5cqw,2.2rem);font-size:.92rem}
 
-  /* score pill */
-  .ta-pts,.bonus-pts{min-width:clamp(2.6rem,13cqw,3.4rem);font-size:1rem;padding:4px 6px}
+  /* score pill — width (not min-width), same reasoning as the base rule: a floor sized to the
+     real scored values let the "—" placeholder render wider than them, shifting the buttons
+     before it. Bumped up from clamp(2.6rem,13cqw,3.4rem) to comfortably fit the dash too. */
+  .ta-pts,.bonus-pts{width:clamp(2.9rem,14cqw,3.7rem);font-size:1rem;padding:4px 6px}
 
   /* bonus steppers (sw-val / sw-input) */
   .sw-val{width:clamp(2rem,9cqw,2.6rem);min-width:0}
