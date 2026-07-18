@@ -1059,22 +1059,30 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
 
 /* SCORE AUDIT MODAL */
-/* Top/bottom padding include the safe-area insets so the modal's own sticky .audit-head (below)
-   clears the Dynamic Island on notched phones, and the scrollable content at the very bottom
-   clears the Home Bar, instead of both sitting flush against the physical screen edges. */
+/* Bottom padding includes the safe-area inset so the scrollable content at the very bottom
+   clears the Home Bar instead of sitting flush against the physical screen edge. The top has
+   none: any top padding on this scrolling container pushes .audit-head's stuck position down
+   by that same amount (sticky "top:0" locks to the padding edge, not the true viewport edge),
+   leaving a gap above the header that the content scrolling underneath pokes through during
+   scroll. The resting top gap instead comes from .audit-modal's own margin-top below, which
+   doesn't affect where a descendant sticks. */
 /* overscroll-behavior:contain: keeps a rubber-band bounce at the top/bottom of this scroller
    contained to itself instead of chaining into the page behind it, which is the other half of
    the "transparent while scrolling on mobile" fix alongside html's own background above. */
-.audit-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);align-items:flex-start;justify-content:center;padding:calc(20px + env(safe-area-inset-top)) 10px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.audit-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);align-items:flex-start;justify-content:center;padding:0 10px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .audit-overlay.show{display:flex}
-.audit-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:680px;box-shadow:var(--shadow);margin:auto;animation:auditPop .18s ease-out}
+.audit-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:680px;box-shadow:var(--shadow);margin:20px auto 0;animation:auditPop .18s ease-out}
 @keyframes auditPop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 /* transform:translateZ(0) forces this sticky element onto its own GPU compositing layer — iOS
    Safari has a long-standing bug where a position:sticky element inside a
    -webkit-overflow-scrolling:touch container can repaint a frame late during momentum scroll,
    flashing transparent for an instant. Promoting it to its own layer keeps it composited
    independently instead of waiting on the rest of the modal's repaint. */
-.audit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg-card);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:2;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* padding-top carries the Dynamic Island clearance directly (same approach as .header above),
+   instead of the removed .audit-overlay top padding — that way the header still clears the
+   notch, but by growing its own box rather than by an ancestor's padding, so top:0 sticks it
+   flush with no gap for content to show through underneath. */
+.audit-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:calc(14px + env(safe-area-inset-top)) 16px 14px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg-card);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:2;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* Drop shadow under the header so it visibly separates from the audit body scrolling beneath it
    instead of relying on the 1px border alone — both share the same --bg-card background, so
    without this the header edge all but disappears once content is scrolled up under it. Dark
