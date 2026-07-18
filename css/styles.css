@@ -1127,15 +1127,26 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* Overall correct/incorrect breakdown across the 16 regular round questions, shown right under
    Grand Total — two side-by-side stat tiles rather than one line so each count and its
    percentage stay legible at the same sizes .aud-total already uses. */
-/* flex-wrap: the Guess/Diff row can grow past 2 tiles (Bonus Item/NJCB/Adjusted Score are
-   inserted between Guess and Diff whenever a team has one of those bonuses), so this needs to
-   fold onto a second line on narrow screens instead of squeezing 4 tiles into one. */
-.aud-stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.aud-stats{display:flex;margin-top:8px}
 .aud-stat{flex:1;min-width:70px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 8px;border-radius:var(--radius);background:var(--bg-card-alt);border:1px solid var(--border)}
 .aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
 .aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
 .aud-stat-correct .aud-stat-n{color:var(--badge-green-fg)}
 .aud-stat-wrong .aud-stat-n{color:var(--txt-red)}
+/* Single-card, vertical-rule layout for stat rows that hold 2+ related figures (Adjusted
+   Score/Diff/Score Guess, multiple bonus deductions, correct/incorrect) — one bordered card
+   with equal-width grid columns and a divider between cells instead of separate bordered tiles,
+   so the numbers read as one connected breakdown rather than a scattered row of boxes. */
+.aud-grid{display:grid;margin-top:8px;background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.aud-grid-2{grid-template-columns:repeat(2,1fr)}
+.aud-grid-3{grid-template-columns:repeat(3,1fr)}
+.aud-cell{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 8px}
+/* Inset top/bottom so the divider doesn't touch the card's rounded corners. */
+.aud-cell:not(:last-child)::after{content:"";position:absolute;top:14px;bottom:14px;right:0;width:1px;background:var(--border)}
+.aud-cell .aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
+.aud-cell .aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
+.aud-cell.aud-stat-correct .aud-stat-n{color:var(--badge-green-fg)}
+.aud-cell.aud-stat-wrong .aud-stat-n{color:var(--txt-red)}
 .aud-note{font-size:.72rem;color:var(--text-muted);margin-top:10px;line-height:1.4}
 
 /* ── Scoring rows reflow based on the CONTENT COLUMN's own width, not the
