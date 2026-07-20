@@ -1038,6 +1038,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .cp-countdown-track{flex:1;height:10px;border-radius:6px;background:var(--bg-input);border:1px solid var(--border);overflow:hidden}
 .cp-countdown-fill{height:100%;background:var(--accent-cyan-solid);transition:width .1s linear}
 .cp-countdown-num{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--txt-cyan);min-width:2.8rem;text-align:right;font-variant-numeric:tabular-nums}
+.cp-manual-end-btn{width:100%;margin-top:8px}
+.cp-horn-btn{font-size:.9rem;line-height:1;padding:5px 9px;border-radius:var(--radius);flex-shrink:0}
+/* Faded, disabled preview of the manual Stop Drumroll / Play Horn controls shown before the draw
+   starts, so the host knows they're available without having to press Choose Craft Prize Winner
+   first to discover them. */
+.cp-manual-preview{display:flex;gap:8px;margin-top:8px}
+.cp-preview-btn{flex:1;opacity:.35;cursor:not-allowed}
 /* Trophy+name+"won!" are one flowing text span (not separate flex items) so a long team name
    wraps onto a second line on its own, with "won!" following right after it — the Clear
    button is the only other flex item, so it stays put on the first line instead of also
