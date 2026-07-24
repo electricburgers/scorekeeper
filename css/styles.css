@@ -181,6 +181,21 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    here keeps the selection color part of the same palette instead of an OS-default gray. */
 .settings-panel ::selection{background:var(--bg-hover);color:var(--text-primary)}
 .settings-panel.settings-visible{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
+/* Above the mobile breakpoint, keep Settings a narrow single column anchored under the gear icon
+   it opens from, rather than a band spanning the whole window. The auto-fill grid above turned a
+   1200px-wide panel into five columns of settings flowing left-to-right, each row stretched so
+   its label and its control sat at opposite ends — hard to scan, and nothing like the vertical
+   list the same panel is on a phone. 440px comfortably fits the longest label/control pair
+   ("Legacy Exports (CSV / XLSM)" plus its toggle) on one line, and the panel's existing
+   max-height/overflow-y absorbs the extra height that stacking the rows creates. Starting at
+   601px (where the mobile single-column rule below leaves off) means every width now gets the
+   same one-column list; only the panel's width differs. */
+@media(min-width:601px){
+  .settings-panel{left:auto;right:16px;width:min(440px,calc(100vw - 32px))}
+  /* .settings-advanced-group is qualified by .settings-panel purely for specificity — its own
+     auto-fill rule is declared later in this file and would otherwise win the tie. */
+  .settings-panel.settings-visible,.settings-panel .settings-advanced-group{grid-template-columns:1fr}
+}
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border)}
 .settings-controls{display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
 @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
