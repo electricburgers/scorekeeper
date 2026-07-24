@@ -86,7 +86,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v16.21"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v16.22"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -628,6 +628,10 @@ let beerRoundToasted = new Set();
 // Craft prize randomizer (transient — not persisted across reload)
 let craftDrawState = null,
   craftDrawTimeouts = [];
+// Whether the host has opened the drawing flow. The section shows nothing but a single
+// "Choose Craft Prize Winner" button until this is true, so none of the draw's machinery —
+// audio included — is reachable without an explicit tap.
+let craftFlowOpen = false;
 
 function autosave() {
   TRStore.setItem(STORAGE_KEY, JSON.stringify(gameState));
@@ -746,6 +750,7 @@ function startNewGame() {
   clearCraftDrawTimers();
   stopAllDrumAudio();
   craftDrawState = null;
+  craftFlowOpen = false;
   document.getElementById("resumeBanner").classList.remove("show");
   renderAll();
 }
@@ -1858,171 +1863,172 @@ function toggleCraftPrize(ti) {
 
 // CRAFT PRIZE RANDOMIZER — drumroll + name-flash + spoken winner script. Only ever one winner.
 //
-// All three drumroll segments (intro, looping middle, end stinger) are decoded once as Web Audio
-// AudioBuffers and scheduled together on one AudioContext clock, rather than the previous approach
-// of two plain <audio> elements (intro/end) plus a separately-timed Web Audio loop, all glued
-// together with setTimeout. That mixed approach had two real bugs, and together they're exactly
-// why the drumroll would "stop in the middle": (1) the AudioContext for the loop was only ever
-// created inside a setTimeout callback firing ~2s after the button click — late enough that some
-// browsers no longer treat it as covered by the original click's autoplay-gesture unlock, so the
-// loop could silently produce no sound at all; and (2) decodeAudioData is asynchronous, so even
-// when it did work there was an audible gap at the intro→loop seam while the loop clip finished
-// decoding mid-countdown. Decoding all three clips once at page load, resuming the context
-// inside the click gesture (and waiting for it to actually be running before queuing sources),
-// and scheduling every segment's start/stop time on that one clock fixes all of it: the click
-// pays no decode cost, playback starts as soon as the output is live, and each segment is
-// sample-accurately queued back-to-back with zero gap, immune to any main-thread jank.
-let drumCtx = null;
-let drumBuffersPromise = null; // Promise<{start,loop,end}> AudioBuffers — decoded once, cached
-let drumActiveSources = [];
-let drumGainNode = null; // shared gain stage every drum source routes through, so a manual stop
-// can fade the output down instead of cutting it off mid-sample
-function getDrumCtx() {
-  if (!drumCtx)
-    drumCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return drumCtx;
-}
-function getDrumGain(ctx) {
-  if (!drumGainNode) {
-    drumGainNode = ctx.createGain();
-    drumGainNode.connect(ctx.destination);
-  }
-  return drumGainNode;
-}
-// Resets the shared gain to full volume, cancelling any fade left over from an earlier manual
-// stop — called before any new audio (a fresh drumroll or an on-demand horn) starts playing.
-function resetDrumGain(ctx) {
-  const gain = getDrumGain(ctx);
-  gain.gain.cancelScheduledValues(ctx.currentTime);
-  gain.gain.setValueAtTime(1, ctx.currentTime);
-  return gain;
-}
-function decodeDrumClip(ctx, b64) {
-  const bin = atob(b64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return ctx.decodeAudioData(bytes.buffer);
-}
-function getDrumBuffers() {
-  const ctx = getDrumCtx();
-  if (!drumBuffersPromise) {
-    drumBuffersPromise = Promise.all([
-      decodeDrumClip(ctx, DRUM_START_B64),
-      decodeDrumClip(ctx, DRUM_LOOP_B64),
-      decodeDrumClip(ctx, DRUM_END_B64),
-      decodeDrumClip(ctx, DRUM_HORN_B64),
-    ]).then(
-      ([start, loop, end, horn]) => ({ start, loop, end, horn }),
-      (err) => {
-        drumBuffersPromise = null; // don't cache a failed decode — let the next draw retry
-        throw err;
-      },
+// AUDIO POLICY — the app must never take the device's audio session until the host asks for it.
+// The host runs this on the same iPad they play background music from, and iOS hands the audio
+// session to whichever app most recently claimed it: the moment this tab claims one, their music
+// ducks or stops every time the tab takes focus. Claiming happens far earlier than most code
+// assumes — merely constructing an AudioContext is enough on iOS, even suspended, and so is a
+// silent priming .play(). The previous implementation did exactly that: it built an AudioContext
+// and decoded ~1.1MB of drum audio into it at page load as a warm-up, so simply opening the
+// scorekeeper stole audio priority from the music app.
+//
+// So the rules here are:
+//   * No Web Audio API at all — no AudioContext, no decodeAudioData, no gain nodes.
+//   * Exactly one plain <audio> element, constructed lazily the first time the host taps the
+//     drumroll button, reused for every clip and every draw thereafter.
+//   * The first .play() of a draw runs synchronously inside that tap's own click handler, with
+//     nothing awaited before it, so iOS counts it as a direct user gesture. Every later call in
+//     the sequence (intro -> loop -> stinger, and the manual horn) targets that same already-
+//     unlocked element, which iOS permits from a timer.
+//   * Nothing anywhere else in the app plays audio. Grep for playDrumClip: these functions are
+//     the only callers, and they are only ever reached from a craft-prize button.
+//
+// The tradeoff versus the old AudioContext scheduling is that segment boundaries are now ordinary
+// media-element transitions rather than sample-accurate ones, so the intro->loop seam can show a
+// few ms of slop. That is worth it to leave the host's music alone.
+
+// The four clips ship base64-encoded in this bundle (DRUM_*_B64, top of file). They become blob:
+// URLs on first use — a synchronous string decode, not an audio API call, so building one costs
+// nothing on the audio session. Object URLs rather than data: URIs because the element re-parses
+// its src on every swap, and re-parsing a 440KB data: URI is slow enough to be audible at the
+// intro->loop seam.
+const DRUM_CLIPS = {
+  start: { b64: DRUM_START_B64, type: "audio/mpeg" },
+  loop: { b64: DRUM_LOOP_B64, type: "audio/wav" },
+  end: { b64: DRUM_END_B64, type: "audio/mpeg" },
+  horn: { b64: DRUM_HORN_B64, type: "audio/wav" },
+};
+let drumAudio = null; // the one reusable <audio> element — built on the first drumroll tap
+let drumClipUrls = {}; // clip name -> blob: URL, built on demand and kept for the session
+let drumSeq = null; // the running intro->loop sequence, or null when nothing is sequenced
+let drumFadeTimer = null;
+
+function drumClipUrl(name) {
+  if (!drumClipUrls[name]) {
+    const clip = DRUM_CLIPS[name];
+    const bin = atob(clip.b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    drumClipUrls[name] = URL.createObjectURL(
+      new Blob([bytes], { type: clip.type }),
     );
   }
-  return drumBuffersPromise;
+  return drumClipUrls[name];
 }
-// Warm-up: decode the ~540KB of embedded drum audio now, at page load, instead of on the first
-// draw-button click — that decode (base64 → bytes → decodeAudioData × 3) is where the audible
-// startup delay came from. The AudioContext stays suspended until a user gesture, but
-// decodeAudioData works fine on a suspended context, so the buffers are ready before any click.
-getDrumBuffers().catch(() => {});
-// Schedules the full intro -> looping-middle -> end-stinger sequence starting at ctx.currentTime,
-// with the middle looped exactly until totalSec and the end stinger picking up the instant it
-// stops — every boundary is an absolute AudioContext time, not a JS timer, so nothing can drift
-// or leave a silent gap even if the tab is busy or backgrounded mid-countdown.
-function scheduleDrumroll(totalSec) {
-  const ctx = getDrumCtx();
-  // resume() must be kicked off synchronously here, while we're still inside the button-click
-  // gesture (autoplay unlock), and scheduling must WAIT for it: queuing sources while the
-  // context is still spinning up lets startAt lapse before output actually begins, which clips
-  // the intro's first beats and mangles the absolute-time intro→loop seam — the "choppy start".
-  // This also revives a context the browser suspended after an earlier draw (backgrounded tab,
-  // iOS audio interruption), which previously left the whole drumroll silent or bunched-up.
-  const running = ctx.state === "running" ? Promise.resolve() : ctx.resume();
-  return Promise.all([getDrumBuffers(), running]).then(([bufs]) => {
-    const gain = resetDrumGain(ctx);
-    const startAt = ctx.currentTime + 0.05;
-    const loopAt = startAt + Math.min(bufs.start.duration, totalSec);
-    const endAt = startAt + totalSec;
-    const sources = [];
-
-    const introSrc = ctx.createBufferSource();
-    introSrc.buffer = bufs.start;
-    introSrc.connect(gain);
-    introSrc.start(startAt);
-    introSrc.stop(loopAt);
-    sources.push(introSrc);
-
-    if (loopAt < endAt) {
-      const loopSrc = ctx.createBufferSource();
-      loopSrc.buffer = bufs.loop;
-      loopSrc.loop = true;
-      loopSrc.connect(gain);
-      loopSrc.start(loopAt);
-      loopSrc.stop(endAt);
-      sources.push(loopSrc);
-    }
-
-    const endSrc = ctx.createBufferSource();
-    endSrc.buffer = bufs.end;
-    endSrc.connect(gain);
-    endSrc.start(endAt);
-    sources.push(endSrc);
-
-    drumActiveSources.push(...sources);
-  });
+// Builds the single reusable element the first time a clip is actually played. preload="none"
+// and the absence of a src keep it completely inert — no fetch, no decode, no audio session —
+// right up until playDrumClip points it at a clip.
+function getDrumAudio() {
+  if (!drumAudio) {
+    drumAudio = new Audio();
+    drumAudio.preload = "none";
+  }
+  return drumAudio;
+}
+// Points the one element at a clip and starts it. Deliberately synchronous end to end: the first
+// call of any draw runs inside a click handler, and an await/.then() before .play() would spend
+// the user-gesture credit iOS grants that handler and leave the drumroll silent.
+function playDrumClip(name, loop) {
+  const a = getDrumAudio();
+  const url = drumClipUrl(name);
+  a.onended = null;
+  a.loop = !!loop;
+  a.volume = 1;
+  if (a.src !== url) a.src = url;
+  // A just-assigned src already starts at zero; this matters when the same clip is replayed
+  // (tapping Play Horn twice), which would otherwise resume from where the last play ended.
+  try {
+    a.currentTime = 0;
+  } catch (e) {}
+  const p = a.play();
+  if (p && p.catch)
+    p.catch((err) => {
+      console.error("Craft prize audio failed to play:", name, err);
+    });
+  return a;
+}
+// Starts intro -> looping middle. Called straight from the draw button's click handler: the
+// intro's .play() below is the gesture-blessed call that unlocks the element for everything
+// after it. The end stinger is not queued here — startCraftPrizeDraw fires it from the same
+// timer that picks the winner, so the two always land together.
+function startDrumrollAudio(totalSec) {
+  cancelDrumFade();
+  drumSeq = { active: true, startedAt: Date.now(), totalMs: totalSec * 1000 };
+  const a = playDrumClip("start", false);
+  // Hand off to the looping middle when the intro actually ends rather than on a timer guessing
+  // its length, and only if the draw hasn't already run out the clock on a short countdown.
+  a.onended = () => {
+    if (!drumSeq || !drumSeq.active) return;
+    if (Date.now() - drumSeq.startedAt >= drumSeq.totalMs) return;
+    playDrumClip("loop", true);
+  };
+  // Decode the loop clip's blob URL now, on this tap and after playback is already under way,
+  // so the intro->loop swap isn't paying a 440KB base64 decode partway through the drumroll.
+  drumClipUrl("loop");
+}
+// The end stinger, fired by the draw's finish timer on the element the opening tap unlocked —
+// iOS keeps an element playable once a gesture has started it, so this needs no gesture of its
+// own. DRUM_END_B64 has a drum tail baked in, which reads as a natural loop->stinger transition.
+function playDrumrollEnd() {
+  if (drumSeq) drumSeq.active = false;
+  playDrumClip("end", false);
+}
+// The horn-only clip, for the manual "Play Horn" control, so the host can time the horn to a
+// staff member physically revealing the winning paper instead of waiting out the drumroll. This
+// is a separate drum-free recording — DRUM_END_B64's drum tail sounds wrong played on its own.
+// Always reached from a click handler, so this is another direct-gesture .play().
+function playVictoryHornSound() {
+  cancelDrumFade();
+  if (drumSeq) drumSeq.active = false;
+  playDrumClip("horn", false);
 }
 function stopAllDrumAudio() {
-  drumActiveSources.forEach((src) => {
-    try {
-      src.stop();
-    } catch (e) {}
-    try {
-      src.disconnect();
-    } catch (e) {}
-  });
-  drumActiveSources = [];
+  cancelDrumFade();
+  drumSeq = null;
+  // Never construct the element just to stop it — this is called from startNewGame and from
+  // clearing a winner, neither of which should bring an audio element into existence.
+  if (!drumAudio) return;
+  drumAudio.onended = null;
+  try {
+    drumAudio.pause();
+  } catch (e) {}
+  drumAudio.loop = false;
+  drumAudio.volume = 1;
 }
-// Fades the drum output to silence over fadeSec (instead of stopAllDrumAudio's instant cut),
-// then hard-stops the now-inaudible sources and restores full volume for whatever plays next —
-// used by the manual "Stop Drumroll" control so the loop winds down smoothly instead of clipping
-// off mid-beat.
+function cancelDrumFade() {
+  if (drumFadeTimer) {
+    clearInterval(drumFadeTimer);
+    drumFadeTimer = null;
+  }
+  if (drumAudio) drumAudio.volume = 1;
+}
+// Winds the drum loop down over fadeSec instead of cutting it off mid-beat — used by the manual
+// "Stop Drumroll" control. iOS Safari ignores writes to HTMLMediaElement.volume (playback volume
+// there belongs to the hardware buttons alone), so probe whether the write took and fall back to
+// an immediate stop rather than sitting through a "fade" that stays at full volume.
 function fadeOutDrumAudio(fadeSec) {
-  const ctx = getDrumCtx();
-  const gain = getDrumGain(ctx);
-  const now = ctx.currentTime;
-  gain.gain.cancelScheduledValues(now);
-  gain.gain.setValueAtTime(gain.gain.value, now);
-  gain.gain.linearRampToValueAtTime(0, now + fadeSec);
-  setTimeout(
-    () => {
-      stopAllDrumAudio();
-      resetDrumGain(ctx);
-    },
-    fadeSec * 1000 + 30,
-  );
-}
-// Plays the horn-only clip (DRUM_HORN_B64) on its own, independent of scheduleDrumroll — used
-// for the manual "Play Horn" control so the host can time the horn to a staff member physically
-// revealing the winning paper, instead of waiting for the drumroll's own scheduled end. This is a
-// separate, drum-free recording from the one scheduleDrumroll uses for the automatic full-length
-// ending (DRUM_END_B64 still has some drum tail baked in, which reads fine as a natural
-// loop→stinger transition but sounds wrong played on its own).
-function playVictoryHornSound() {
-  const ctx = getDrumCtx();
-  const running = ctx.state === "running" ? Promise.resolve() : ctx.resume();
-  return Promise.all([getDrumBuffers(), running])
-    .then(([bufs]) => {
-      const gain = resetDrumGain(ctx);
-      const src = ctx.createBufferSource();
-      src.buffer = bufs.horn;
-      src.connect(gain);
-      src.start(ctx.currentTime + 0.02);
-      drumActiveSources.push(src);
-    })
-    .catch((err) => {
-      console.error("Victory horn failed to play:", err);
-    });
+  const a = drumAudio;
+  if (!a || a.paused) {
+    stopAllDrumAudio();
+    return;
+  }
+  if (drumSeq) drumSeq.active = false;
+  a.onended = null;
+  a.volume = 0.5;
+  const canFade = Math.abs(a.volume - 0.5) < 0.01;
+  a.volume = 1;
+  if (!canFade) {
+    stopAllDrumAudio();
+    return;
+  }
+  const steps = 20;
+  let i = 0;
+  if (drumFadeTimer) clearInterval(drumFadeTimer);
+  drumFadeTimer = setInterval(() => {
+    i++;
+    a.volume = Math.max(0, 1 - i / steps);
+    if (i >= steps) stopAllDrumAudio(); // clears drumFadeTimer via cancelDrumFade
+  }, (fadeSec * 1000) / steps);
 }
 function clearCraftDrawTimers() {
   craftDrawTimeouts.forEach((id) => clearTimeout(id));
@@ -2103,12 +2109,11 @@ function startCraftPrizeDraw() {
   };
   clearCraftDrawTimers();
   stopAllDrumAudio();
-  // Intro, loop, and end stinger are all scheduled here, up front, on the AudioContext's own
-  // clock (see scheduleDrumroll) — not re-triggered later by separate setTimeouts — so the whole
-  // sequence plays back gaplessly regardless of what the main thread is doing in the meantime.
-  scheduleDrumroll(totalMs / 1000).catch((err) => {
-    console.error("Craft prize drumroll audio failed to play:", err);
-  });
+  // THE audio gesture. Everything above this line is synchronous, and startDrumrollAudio calls
+  // .play() synchronously too, so this whole path is still inside the button's click handler —
+  // which is what makes iOS treat it as a user gesture and what unlocks the element for the
+  // loop/stinger swaps that follow. Do not put anything asynchronous in front of it.
+  startDrumrollAudio(totalMs / 1000);
   craftDrawState.flashTimer = setInterval(() => {
     const ti = pool[Math.floor(Math.random() * pool.length)];
     const name = gameState.teams[ti]?.name || "Team " + (ti + 1);
@@ -2129,10 +2134,12 @@ function startCraftPrizeDraw() {
     const barEl = document.getElementById("cpCountdownBar");
     if (barEl) barEl.style.width = st.pct + "%";
   }, 100);
-  // Winner selection/game-state still runs off a plain JS timer (it's not audio), timed to land
-  // exactly when the audio's end stinger is scheduled to start.
+  // The end stinger and the winner selection share one timer so the reveal and the sound land
+  // together. Audio first: finalizeCraftPrizeWinner does a full re-render, and the stinger
+  // shouldn't wait behind it. "Stop Drumroll" clears this timer, which correctly cancels both.
   craftDrawTimeouts.push(
     setTimeout(() => {
+      playDrumrollEnd();
       finalizeCraftPrizeWinner(pool);
     }, totalMs),
   );
@@ -2174,11 +2181,12 @@ function stopDrumrollOnly() {
 // picks and commits the winner and plays the end-stinger clip, so the horn lands exactly when
 // the host wants the reveal. Once a winner already exists, it just replays the horn on demand.
 function playCraftVictoryHorn() {
-  if (craftDrawState && craftDrawState.active) {
-    const pool = craftDrawState.pool;
-    finalizeCraftPrizeWinner(pool);
-  }
+  const pool =
+    craftDrawState && craftDrawState.active ? craftDrawState.pool : null;
+  // Horn first: this runs inside the button's click handler, and finalizeCraftPrizeWinner below
+  // does a full re-render — no reason to make the reveal wait behind it.
   playVictoryHornSound();
+  if (pool) finalizeCraftPrizeWinner(pool);
 }
 function clearCraftPrizeWinner() {
   if (!gameState.craftPrizeWinner) return;
@@ -2197,6 +2205,13 @@ function clearCraftPrizeWinner() {
   autosave();
   renderAll();
 }
+// Opens the drawing flow. Purely a UI reveal — it deliberately does NOT touch audio, warm
+// anything up, or construct the <audio> element; see the AUDIO POLICY note above. The first and
+// only thing that starts audio is the drumroll button inside the flow this reveals.
+function openCraftPrizeFlow() {
+  craftFlowOpen = true;
+  renderLeft();
+}
 function renderCraftPrizeBlock() {
   const n = gameState.teams.length;
   if (!n)
@@ -2207,6 +2222,13 @@ function renderCraftPrizeBlock() {
   const secs = prefs.craftDrawSeconds || 6;
   const drawing = !!(craftDrawState && craftDrawState.active);
   const winner = gameState.craftPrizeWinner;
+  // Until the host opts in, the section is just this one button — same accent styling as the
+  // drumroll button it opens, so it reads identically in every theme. A draw already running or
+  // a winner already picked (e.g. restored from autosave) opens the flow on its own, so a
+  // reload never hides a result behind the gate.
+  if (!craftFlowOpen && !drawing && !winner) {
+    return `<button class="btn btn-accent cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>🍺 Choose Craft Prize Winner</button>`;
+  }
   let h = `<div class="cp-config">
       <div class="cp-field"><span class="cp-field-label">Exclude Top</span><div class="stepper">
         <button onclick="setExcludeTopN(${Math.max(1, excludeN - 1)})" ${drawing || excludeN <= 1 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Decrease excluded places">−</button>
@@ -2243,7 +2265,8 @@ function renderCraftPrizeBlock() {
       }
     }
   } else {
-    h += `<button class="btn btn-accent cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>🥁 Choose Craft Prize Winner</button>`;
+    // The only control in the app that starts audio — see startCraftPrizeDraw's gesture note.
+    h += `<button class="btn btn-accent cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>🥁 Start Drumroll</button>`;
     if (prefs.craftManualEnd && !winner) {
       // Previewed here, faded and disabled, so the host knows these controls exist before the
       // drumroll is even running — rather than only discovering them once a draw is underway.
