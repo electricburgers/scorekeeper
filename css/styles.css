@@ -1415,6 +1415,19 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .banter-group{margin-bottom:6px}
 .banter-group:last-child{margin-bottom:0}
 
+/* thank-the-staff prompt, sits under the halftime wager — orange rule instead of the banter
+   magenta so it reads as a to-do rather than another line to riff on */
+.staff-thanks{margin:10px 0 8px}
+.staff-thanks .banter{border-left-color:var(--accent-orange);margin-bottom:6px}
+/* .banter-text is a flex row (it vertically centres one short line); this line carries inline
+   markup for the names, which flex would blow apart into separate columns — so lay it out as
+   normal text instead. */
+.staff-thanks .banter-text{display:block}
+.staff-thanks-names{color:var(--txt-orange);font-weight:700}
+.staff-thanks-missing{color:var(--text-muted)}
+.staff-thanks-edit{display:block}
+.staff-thanks-edit-label{display:block;font-family:var(--font-display);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:3px}
+
 /* round header: wagers label forced onto its own row (h2 is flex-wrap) */
 /* round header: forced line break, then wager label sized to its text (not full width) */
 .round-break{flex-basis:100%;height:0}

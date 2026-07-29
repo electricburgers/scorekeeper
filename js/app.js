@@ -72,7 +72,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v16.27"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v16.30"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -244,6 +244,79 @@ function cycleBanter(key, cat) {
       '"]',
   );
   if (el) el.textContent = arr[next];
+}
+
+/* ── THANK THE STAFF ────────────────────────────────────────────────
+   Shown right after the halftime wager — the one real pause in the night, and the point where
+   the room still has drinks left to order. {names} is filled from Event Details → Restaurant
+   Staff; when that's empty the line still reads fine, it just goes generic. Rewrite these
+   freely, but keep the {names} token — it's the whole reason the block exists. */
+const STAFF_THANKS = [
+  "Halftime's in the books — and none of it happens without {names}. Give them a hand, and remember: they are the only people in this room who can bring you another drink.",
+  "Round of applause for {names}! They've been dodging your elbows all night carrying a full tray — tip them like your next drink depends on it. It does.",
+  "Quick shoutout to the real MVPs tonight: {names}. Not one correct wager between them, but every glass in here is full — take care of them on the way out.",
+];
+const STAFF_THANKS_FALLBACK = "your servers and bartenders tonight";
+const STAFF_THANKS_KEY = "staff-thanks";
+/* Builds the line as HTML (not text) so the names can be emphasised — they're the part the
+   host actually has to read off. Index lives in banterState, so a line the host refreshed to
+   survives the re-render that fires on every score tap, same as the banter lines nearby. */
+function staffThanksHtml() {
+  const raw = (gameState.meta.staffNames || "").trim();
+  const names = raw
+    ? `<strong class="staff-thanks-names">${esc(raw)}</strong>`
+    : `<em class="staff-thanks-missing">${STAFF_THANKS_FALLBACK}</em>`;
+  let i = banterState[STAFF_THANKS_KEY];
+  if (i == null || i < 0 || i >= STAFF_THANKS.length) {
+    i = Math.floor(Math.random() * STAFF_THANKS.length);
+    banterState[STAFF_THANKS_KEY] = i;
+  }
+  // esc() first, then substitute: escaping leaves the {names} token alone, so the only markup
+  // that survives into the line is the bit built above.
+  return esc(STAFF_THANKS[i]).replace("{names}", names);
+}
+function cycleStaffThanks() {
+  if (STAFF_THANKS.length < 2) return;
+  let cur = banterState[STAFF_THANKS_KEY] ?? -1,
+    next = cur;
+  while (next === cur) {
+    next = Math.floor(Math.random() * STAFF_THANKS.length);
+  }
+  banterState[STAFF_THANKS_KEY] = next;
+  const el = document.getElementById("staffThanksLine");
+  if (el) el.innerHTML = staffThanksHtml();
+}
+/* Two boxes write this one field — Event Details and the halftime block. Push the value into
+   the other box and re-word the line in place rather than calling renderLeft(): a full render
+   mid-typing would take the caret with it. The box that's being typed in is skipped, since
+   assigning .value to a focused textarea moves the cursor to the end. */
+function setStaffNames(v) {
+  gameState.meta.staffNames = v;
+  autosave();
+  document.querySelectorAll(".staff-names-input").forEach((el) => {
+    if (el !== document.activeElement && el.value !== v) el.value = v;
+  });
+  const line = document.getElementById("staffThanksLine");
+  if (line) line.innerHTML = staffThanksHtml();
+}
+/* The editor is deliberately not gated behind the Event Details lock: the point of putting it
+   here is that a host who never filled the names in can add them mid-game without scrolling
+   back up, and it's free text that no score depends on. */
+function renderStaffThanks() {
+  if (!gameState.teams.length) return "";
+  return (
+    `<div class="staff-thanks" id="staffThanksBlock">` +
+    `<div class="banter banter-sm">` +
+    `<div class="banter-main">` +
+    `<span class="banter-cat">🙏 Thank the Staff</span>` +
+    `<div class="banter-text" id="staffThanksLine">${staffThanksHtml()}</div>` +
+    `</div>` +
+    `<button class="banter-refresh" type="button" onclick="cycleStaffThanks()" title="New line" aria-label="Refresh staff thank-you line">🔄</button>` +
+    `</div>` +
+    `<label class="staff-thanks-edit"><span class="staff-thanks-edit-label">Staff names — same field as Event Details</span>` +
+    `<textarea class="meta-textarea staff-names-input" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></label>` +
+    `</div>`
+  );
 }
 const FONT_SIZES = [12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 30],
   DEFAULT_SI = 3;
@@ -1267,7 +1340,7 @@ function renderLeft() {
     <div class="field"><label>Craft Partner</label><input type="text" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
     <div class="field"><label>Partner Town</label><input type="text" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
     <div class="field full"><label>Bonus Item (+5)</label><input type="text" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
-    <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea" rows="2" placeholder="Server / bartender names to shout out" onchange="gameState.meta.staffNames=this.value;autosave();">${esc(gameState.meta.staffNames || "")}</textarea></div>
+    <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
   </div></div></div>`;
 
   const missingGuessCount = !gs
@@ -1326,7 +1399,8 @@ function renderLeft() {
     }
     h += `<div class="section ${collapsedSections.has("sec-r" + rn) ? "collapsed" : ""} ${rComplete ? "round-complete" : ""}" id="sec-r${rn}"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-r${rn}')"><h2><span>Round ${rn}</span>${rpBadge}<span class="round-break"></span><span class="round-label ${ROUND_COLORS[ri]} round-wager-label">Wagers: ${ROUND_WAGERS[ri].join(", ")}</span></h2><span class="chevron">▼</span></div><div class="section-body">`;
     for (let qi = 0; qi < 4; qi++) h += renderWQ(ri, qi);
-    if (ri === 1) h += renderStandings("halftime") + renderHT();
+    if (ri === 1)
+      h += renderStandings("halftime") + renderHT() + renderStaffThanks();
     else if (ri === 3) h += renderStandings("final") + renderFW();
     if (BONUS_ROUNDS.has(ri)) h += renderBQ(ri);
     if (ri < 3) h += renderBanter("round", "rbot-" + ri, {}); // outro after every round except the last
@@ -2048,6 +2122,33 @@ function fadeClipUrl(sec) {
   };
   return fadeClip.url;
 }
+// Declares this page's audio as "ambient" — it mixes with whatever else the device is playing
+// rather than taking the audio session for itself. Without this, iOS gives any page that plays
+// audio an exclusive "playback" session, and the host's music app is paused the instant the
+// drumroll starts. That is the same failure the AUDIO POLICY above is written against, reached by
+// a different route: the policy stops the app claiming a session before it is asked to, and this
+// stops the session it does eventually take from being an exclusive one. The two are complements,
+// not alternatives — neither one alone keeps the music playing.
+//
+// Set once, ahead of any playback, and never per-play: the type is a property of the page, not of
+// a clip. Assigning it is a declaration of intent rather than a claim on the session — no element
+// is constructed and nothing is decoded — so unlike a priming .play() it is safe to do at load,
+// which is also the only place it can be done early enough to cover the first roll.
+//
+// Feature-detected, since the Audio Session API is recent WebKit only; everywhere else this is a
+// no-op and playback is unaffected. If iOS still interrupts the music with the type set to
+// ambient, that is the platform's call to make and not something the page can override.
+let ambientSessionRequested = false;
+function useAmbientAudioSession() {
+  if (ambientSessionRequested) return;
+  ambientSessionRequested = true;
+  try {
+    if ("audioSession" in navigator) navigator.audioSession.type = "ambient";
+  } catch (e) {
+    // A partial implementation can reject the assignment. Nothing to fall back to, and nothing
+    // worth blocking playback over — the drumroll still runs, it just may duck other audio.
+  }
+}
 // Builds the single reusable element the first time a clip is actually played. preload="none"
 // and the absence of a src keep it completely inert — no fetch, no decode, no audio session —
 // right up until playDrumClip points it at a clip.
@@ -2107,6 +2208,24 @@ function cueDrumClip(name) {
   const arm = () => {
     el.src = drumClipUrl(name);
     el.load(); // buffer it now, while the roll still has seconds left to run
+    // Then play it once, muted, and rewind. Buffering alone is not enough: an element's first
+    // play after a src swap blocks for ~10ms inside play() itself, and that time would be spent
+    // with the roll still running over the top of the incoming clip. Playing it through once
+    // muted takes that cost now, seconds before the host can possibly need it, and leaves the
+    // element able to start in a fraction of a millisecond when it is actually cued. It is
+    // inaudible, and it is not a preload of playback in the sense the AUDIO POLICY forbids —
+    // it happens only after the host has already tapped the drumroll and started the audio.
+    el.muted = true;
+    const cool = () => {
+      el.pause();
+      try {
+        el.currentTime = 0;
+      } catch (e) {}
+      el.muted = false;
+    };
+    const w = el.play();
+    if (w && w.then) w.then(cool, cool);
+    else cool();
   };
   const p = el.play();
   if (p && p.then)
@@ -2119,14 +2238,32 @@ function cueDrumClip(name) {
 }
 // Hands playback over from the roll to an already-cued clip. The roll is left running until the
 // incoming clip reports that it is actually producing sound ("playing"), so the two overlap by a
-// few milliseconds rather than leaving a gap between them — and the cued clips open with an 8ms
-// ramp-in, so that overlap sums to roughly constant level instead of a bump. Together with the
-// clips starting at the roll's own level, the handover is heard as the roll simply beginning to
-// die away. Falls back to the old same-element swap if the cue was never unlocked.
-function handOverToCue(name) {
+// fraction of a millisecond rather than leaving a gap between them — and the cued clips open with
+// an 8ms ramp-in, so that overlap sums to roughly constant level instead of a bump. Together with
+// the clips starting at the roll's own level, the handover is heard as the roll simply beginning
+// to die away. Falls back to the same-element swap if the cue was never unlocked.
+//
+// `after` runs once the handover has completed, and exists to keep the caller's re-render off the
+// main thread until then. "playing" is delivered as a task, so ANY synchronous work queued ahead
+// of it — including a setTimeout(…, 0) — runs first and holds the event off for as long as it
+// takes. A full renderLeft() there cost 11-19ms, all of it spent with the roll still playing over
+// the incoming clip. Handing the render back through this callback makes the ordering explicit
+// instead of racing it.
+function handOverToCue(name, after) {
+  let pending = after;
+  // Always hand the caller's re-render to a later task. Running it inline would put ~10ms of
+  // layout work inside the "playing" handler, i.e. in the middle of the handover itself, which
+  // is exactly the window where the roll and the incoming clip are both audible.
+  const finish = () => {
+    if (!pending) return;
+    const fn = pending;
+    pending = null;
+    setTimeout(fn, 0);
+  };
   const el = drumCues[name];
   if (!el || el.src === drumClipUrl("silent")) {
     playDrumClip(name);
+    finish();
     return;
   }
   const stopRoll = () => {
@@ -2135,11 +2272,19 @@ function handOverToCue(name) {
         drumAudio.pause();
       } catch (e) {}
     }
+    finish();
   };
   el.addEventListener("playing", stopRoll, { once: true });
-  try {
-    el.currentTime = 0;
-  } catch (e) {}
+  // Insurance against being cued while the warm-up play in cueDrumClip is still in flight, which
+  // would otherwise hand over to a muted element and drop the fade entirely.
+  el.muted = false;
+  // Only seek when it would actually move — a redundant seek on a paused element still puts it
+  // through the seeking/seeked cycle before it will report itself as playing.
+  if (el.currentTime) {
+    try {
+      el.currentTime = 0;
+    } catch (e) {}
+  }
   const p = el.play();
   if (p && p.catch)
     p.catch((err) => {
@@ -2147,9 +2292,11 @@ function handOverToCue(name) {
       // An AbortError means the cue was deliberately stopped (a new draw, or the winner being
       // cleared mid-fade); anything else means it was refused, so fall back to swapping on the
       // main element rather than leaving the host with a roll that never winds down.
-      if (err && err.name === "AbortError") return;
-      playDrumClip(name);
+      if (!(err && err.name === "AbortError")) playDrumClip(name);
+      finish();
     });
+  // Safety net: never strand the caller's UI update if "playing" somehow never arrives.
+  setTimeout(finish, 400);
 }
 // Starts the drumroll. Called straight from the draw button's click handler: the .play() below
 // is the gesture-blessed call that unlocks the element for the roll itself, and the two cueDrumClip
@@ -2157,6 +2304,10 @@ function handOverToCue(name) {
 // simply runs until the draw's finish timer cues the finale, which is what keeps the roll
 // perfectly continuous however long the countdown is.
 function startDrumrollAudio() {
+  // Belt and braces — this normally ran at load, but the session type has to be in place before
+  // the first play whatever the load order was, and once set the call is a no-op. A synchronous
+  // property write spends no gesture credit, so it is safe ahead of the .play() below.
+  useAmbientAudioSession();
   playDrumClip("roll");
   // Cue both clips a running roll can hand off to. This has to happen on this tap — it needs the
   // gesture — but it runs after playback is already under way so the roll never waits on it.
@@ -2166,8 +2317,8 @@ function startDrumrollAudio() {
 // The automatic reveal, fired by the draw's finish timer. Hands the roll over to the horn with the
 // roll already fading out underneath it (see DRUM_FINALE_B64), because one element cannot overlap
 // two clips itself and cutting the roll dead at the horn sounded choppy.
-function playDrumrollFinale() {
-  handOverToCue("finale");
+function playDrumrollFinale(after) {
+  handOverToCue("finale", after);
 }
 // The horn on its own, for the manual "Play Horn" button. That button is only ever reached once
 // the roll has already been faded out by "Stop Drumroll", or after a winner is settled — there is
@@ -2193,12 +2344,13 @@ function stopAllDrumAudio() {
 // control, over whatever length the Settings crossfade slider is set to. Hands over to the fade
 // tail rather than ramping the element's volume, because iOS ignores volume writes entirely and a
 // scripted gain fade does nothing at all on an iPad.
-function fadeOutDrumAudio() {
+function fadeOutDrumAudio(after) {
   if (!drumAudio || drumAudio.paused) {
     stopAllDrumAudio();
+    if (after) after();
     return;
   }
-  handOverToCue("fade");
+  handOverToCue("fade", after);
 }
 function clearCraftDrawTimers() {
   craftDrawTimeouts.forEach((id) => clearTimeout(id));
@@ -2305,12 +2457,20 @@ function startCraftPrizeDraw() {
     if (barEl) barEl.style.width = st.pct + "%";
   }, 100);
   // The finale and the winner selection share one timer so the reveal and the sound land together.
-  // Audio first: finalizeCraftPrizeWinner does a full re-render, and the horn shouldn't wait
-  // behind it. "Stop Drumroll" clears this timer, which correctly cancels both.
+  // Audio first, and the winner deferred by a task rather than run inline: finalizeCraftPrizeWinner
+  // does a full renderAll(), and the roll is stopped by the finale's own "playing" event, which
+  // cannot be dispatched while that render owns the main thread. Running it inline held the event
+  // off for ~10ms and left the roll overlapping the horn for that long. A frame's delay on the
+  // winner appearing is invisible; the overlap was not. "Stop Drumroll" clears this timer, which
+  // correctly cancels both halves.
   craftDrawTimeouts.push(
     setTimeout(() => {
-      playDrumrollFinale();
-      finalizeCraftPrizeWinner(pool);
+      // Stop the name-flash and countdown intervals before the handover, not after. They repaint
+      // every ~100ms, and one landing inside the handover window blocks the main thread for long
+      // enough to leave the roll audible over the horn. finalizeCraftPrizeWinner clears them
+      // again, harmlessly.
+      clearCraftDrawTimers();
+      playDrumrollFinale(() => finalizeCraftPrizeWinner(pool));
     }, totalMs),
   );
   renderLeft();
@@ -2339,10 +2499,14 @@ function finalizeCraftPrizeWinner(pool) {
 // clearCraftDrawTimers below also cancels the timer that would otherwise fire the horn on schedule.
 function stopDrumrollOnly() {
   if (!craftDrawState || !craftDrawState.active) return;
-  fadeOutDrumAudio();
+  // State first, because the repaint below can run synchronously on the fallback path and would
+  // otherwise draw the pre-stop UI. The repaint is then handed to fadeOutDrumAudio rather than
+  // run here, so it lands after the handover instead of blocking the event that drives it (see
+  // handOverToCue). A frame's delay on the button swapping to "Play Horn" is invisible; the delay
+  // it was costing the audio was not.
   clearCraftDrawTimers();
   craftDrawState.audioStopped = true;
-  renderLeft();
+  fadeOutDrumAudio(renderLeft);
 }
 // Manual "Play Horn" — while a draw is paused (roll already faded out via stopDrumrollOnly),
 // picks and commits the winner and plays the horn, so the reveal lands exactly when the host
@@ -4699,3 +4863,8 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
 if (document.readyState === "loading")
   window.addEventListener("DOMContentLoaded", () => applyPrefs());
 else applyPrefs();
+
+// Mark this page's audio as mixable before anything can play. Deliberately at load and not inside
+// the drumroll tap: it has to be in force ahead of the first play to have any effect, and unlike
+// building or priming an audio element it takes nothing from the device's audio session.
+useAmbientAudioSession();
