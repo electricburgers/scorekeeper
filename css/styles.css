@@ -1068,6 +1068,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    first to discover them. */
 .cp-manual-preview{display:flex;gap:8px;margin-top:8px}
 .cp-preview-btn{flex:1;opacity:.35;cursor:not-allowed}
+/* Plain .btn, not accent: handing the pool to an outside app is the side door, and it shouldn't
+   compete with Start Drumroll for the eye. Full width so it reads as its own row under the
+   Play Horn preview rather than a stray chip. */
+.cp-eligible-btn{width:100%;margin-top:8px}
 /* Trophy+name+"won!" are one flowing text span (not separate flex items) so a long team name
    wraps onto a second line on its own, with "won!" following right after it — the Clear
    button is the only other flex item, so it stays put on the first line instead of also
