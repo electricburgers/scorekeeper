@@ -72,7 +72,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v16.36"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v16.37"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -1577,8 +1577,8 @@ function renderWQ(ri, qi) {
   const beer = isBeerRound(ri, qi);
   const qKey = ri + "-" + qi;
   const isCollapsed = collapsedQuestions.has(qKey);
-  // Per-Question Result Buttons (Advanced Settings): wager taps only pick the amount, and a
-  // separate ✓/✗ pair (like the halftime/final wager rows) calls the result — see setQC/cycleW.
+  // Per-Question Result Buttons (Advanced Settings): shows/hides the live correct/incorrect
+  // tally next to Sort/Reset below — see renderQStatsRow.
   const qResultToggle = !!loadPrefs().qResultToggle;
 
   // Block-level state class
@@ -1614,7 +1614,7 @@ function renderWQ(ri, qi) {
       </div>
     </div>
     <div class="q-header-right">
-      ${renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length))}
+      ${qResultToggle ? renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length)) : ""}
       <button class="q-sort-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195<span class="btn-label"> Sort</span></button>
       <button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">\u21ba<span class="btn-label"> Reset</span></button>
     </div>
@@ -1675,16 +1675,9 @@ function renderWQ(ri, qi) {
       } else if (isSel && ans.correct === false) {
         cls += " incorrect";
         badge = '<span class="wager-badge bg-incorrect">\u2715</span>';
-      } else if (isSel) cls += " selected";
-      else if (isUsed) cls += " used";
+      } else if (isUsed) cls += " used";
       h += `<button class="${cls}" onclick="cycleW(${ri},${qi},${ti},${w})" ${isUsed ? "disabled" : ""}>${w}${badge}</button>`;
     });
-    if (qResultToggle) {
-      h += `<div class="ta-result">
-        <button class="result-btn ${ans.correct === true ? "correct-sel" : ""}" onclick="setQC(${ri},${qi},${ti},true)" ${!hasW ? "disabled" : ""} aria-label="Mark correct">\u2713${ans.correct === true ? '<span class="wager-badge bg-correct">\u2705</span>' : ""}</button>
-        <button class="result-btn ${ans.correct === false ? "incorrect-sel" : ""}" onclick="setQC(${ri},${qi},${ti},false)" ${!hasW ? "disabled" : ""} aria-label="Mark incorrect">\u2717${ans.correct === false ? '<span class="wager-badge bg-incorrect">\u2715</span>' : ""}</button>
-      </div>`;
-    }
     h += `</div>${ptsHtml}</div>`;
   });
   // Banter lives inside .q-body (not after it) so collapsing the question via CSS
@@ -2799,20 +2792,15 @@ function cycleW(ri, qi, ti, w) {
   if (!canScore()) return;
   const q = gameState.rounds[ri].questions[qi];
   const a = q[ti] || {};
-  // Per-Question Result Buttons (Advanced Settings) splits wager selection from the
-  // correct/incorrect call — that's what setQC's ✓/✗ buttons are for — so a wager tap here
-  // only ever selects or deselects the amount, it never touches a.correct.
-  const resultToggle = !!loadPrefs().qResultToggle;
   if (a.wager === w) {
     // same wager re-clicked: correct -> incorrect -> fully cleared (remove the slot entirely)
-    if (!resultToggle && a.correct === true) a.correct = false;
+    if (a.correct === true) a.correct = false;
     else delete q[ti];
   } else {
     // blocked duplicate returns without ever creating an empty slot
     if (usedW(ti, ri).find((u) => u.wager === w && u.qi !== qi)) return;
     a.wager = w;
-    if (resultToggle) delete a.correct;
-    else a.correct = true;
+    a.correct = true;
     q[ti] = a;
   }
   const wasBeer = beerRoundToasted.has(ri + "-" + qi);
@@ -2829,21 +2817,6 @@ function cycleW(ri, qi, ti, w) {
   setTimeout(() => {
     lastAction = null;
   }, 900);
-}
-// Explicit correct/incorrect setter for Per-Question Result Buttons mode — mirrors setHC/setFC's
-// tap-again-to-unselect behavior so all three "mark the result" controls in the app act the same.
-function setQC(ri, qi, ti, v) {
-  if (!canScore()) return;
-  const q = gameState.rounds[ri].questions[qi];
-  const a = q[ti];
-  if (!a || a.wager === undefined) return;
-  const c = a.correct;
-  if (c === v) delete a.correct;
-  else a.correct = v;
-  gameState.gameStarted = true;
-  autosave();
-  renderAll();
-  checkBeerRound(ri, qi);
 }
 function markAll(ri, qi, correct) {
   if (!canScore()) return;
