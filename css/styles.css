@@ -656,10 +656,16 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 [role="button"]{outline:none}
 .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .meta-grid .full{grid-column:1/-1}
-/* Required-before-scoring fields (Quiz ID, Location) — same visual language as the
+/* Required-before-scoring fields (Location) — same visual language as the
    team guess-missing state so both validation cues read consistently. */
 .field.field-invalid>label{color:var(--txt-orange)}
 .field.field-invalid input{border-color:var(--accent-orange);box-shadow:0 0 0 2px rgba(255,170,0,.18)}
+/* Quiz ID is free-entry — it's never blocking, just hinted: orange when it doesn't match the
+   usual format, green once it does. */
+.field.field-warn>label{color:var(--txt-orange)}
+.field.field-warn input{border-color:var(--accent-orange);box-shadow:0 0 0 2px rgba(255,170,0,.18)}
+.field.field-good input{border-color:var(--accent-green);box-shadow:0 0 0 2px rgba(68,255,68,.18)}
+.guess-good{display:block;font-size:.58rem;font-weight:700;color:var(--badge-green-fg);letter-spacing:.3px;margin-top:2px}
 
 /* TEAM ENTRY */
 /* align-items:start (not center): the name column's stacked label+input+checks is taller than

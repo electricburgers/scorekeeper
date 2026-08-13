@@ -97,43 +97,39 @@ Legend: **Platform** = Desktop / Mobile / Both.
 
 ## Export & Data
 
-34. **(Both)** Export CSV — file downloads named `<Location> - <Date>.csv` and opens with all
-    expected columns populated.
-35. **(Both)** Export PDF — the scoresheet PDF downloads, and the printed "** DIFF is minus
+34. **(Both)** Export PDF — the scoresheet PDF downloads, and the printed "** DIFF is minus
     Bonuses" note is visible near the DIFF column header.
-36. **(Both)** Export XLSM and open in a spreadsheet app — the DIFF (AH) column computes
-    correctly per row and matches the in-app `|Diff|*` values (bonuses excluded).
-37. **(Both)** Export XLSX (backup format) — file downloads without throwing a console error.
-38. **(Both)** Click "🔗 JD Upload Form" — it opens `form.jotform.com/261746701455055` in a
+35. **(Both)** Export XLSX (backup format) — file downloads without throwing a console error.
+36. **(Both)** Click "🔗 JD Upload Form" — it opens `form.jotform.com/261746701455055` in a
     new tab; the Scorekeeper app tab remains open and unaffected.
-39. **(Both)** After any export, confirm the "Export complete. Clear session?" prompt appears
+37. **(Both)** After any export, confirm the "Export complete. Clear session?" prompt appears
     and both "Yes" and "No" behave correctly.
 
 ## Settings & Themes
 
-40. **(Both)** Toggle Dark → Light → High-Contrast Dark → High-Contrast Light and confirm no
+38. **(Both)** Toggle Dark → Light → High-Contrast Dark → High-Contrast Light and confirm no
     section (Event Details, Teams, Rounds, Final Results, Craft Prize, Export) has
     unreadable/invisible text in any theme.
-41. **(Both)** Adjust font size (A−/A/A+) — layout doesn't break or overlap at either extreme.
-42. **(Both)** Toggle Density (Normal/Compact) — spacing changes without clipping content.
-43. **(Both)** Enable Color Vision mode (deuteranopia/tritanopia) — pass/fail score colors
+39. **(Both)** Adjust font size (A−/A/A+) — layout doesn't break or overlap at either extreme.
+40. **(Both)** Toggle Density (Normal/Compact) — spacing changes without clipping content.
+41. **(Both)** Enable Color Vision mode (deuteranopia/tritanopia) — pass/fail score colors
     remain distinguishable.
 
 ## PWA / Safe-Area & Responsive Layout (Mobile-focused)
 
-44. **(Mobile)** Install the app to the home screen on an iPhone with a Dynamic Island/notch
+42. **(Mobile)** Install the app to the home screen on an iPhone with a Dynamic Island/notch
     — the header (Score Keeper title, Save/Load/Settings buttons) is not clipped by the
     notch.
-45. **(Mobile)** With the Scores sidebar minimized, confirm the "📊 SCORES ▲" bar is fully
+43. **(Mobile)** With the Scores sidebar minimized, confirm the "📊 SCORES ▲" bar is fully
     visible above the home-indicator area, not partially clipped.
-46. **(Mobile)** Expand the Scores sidebar to its max height (50vh) and scroll — content
+44. **(Mobile)** Expand the Scores sidebar to its max height (50vh) and scroll — content
     scrolls internally without the page double-scrolling.
-47. **(Mobile)** Rotate the device/viewport between portrait and landscape — layout
+45. **(Mobile)** Rotate the device/viewport between portrait and landscape — layout
     reflows without leaving dead space or clipped controls.
-48. **(Desktop)** Resize the browser window down to ~900px width — the layout switches from
+46. **(Desktop)** Resize the browser window down to ~900px width — the layout switches from
     the two-column desktop layout to the stacked mobile layout at the expected breakpoint.
-49. **(Desktop)** Drag the column resize handle between the main content and the Scores
+47. **(Desktop)** Drag the column resize handle between the main content and the Scores
     sidebar — the sidebar resizes smoothly and respects its min/max width.
-50. **(Both)** Reload the page mid-session — the "Saved session found" resume banner appears,
+48. **(Both)** Reload the page mid-session — the "Saved session found" resume banner appears,
     and clicking Resume restores all team scores, Event Details, and Craft Prize state
     exactly as left.

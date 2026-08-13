@@ -72,7 +72,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v16.38"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v16.41"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -348,7 +348,6 @@ function loadPrefs() {
       if (!p.craftDrawSeconds) p.craftDrawSeconds = 6;
       if (p.showAdjustments == null) p.showAdjustments = false;
       if (p.advancedOpen == null) p.advancedOpen = false;
-      if (p.showLegacyExports == null) p.showLegacyExports = false;
       if (p.unlockEventDetails == null) p.unlockEventDetails = false;
       // qtDurationSec replaces the old whole-minutes-only qtDurationMin now that the base
       // duration is set from a 30-second-increment dropdown in Settings — migrate an existing
@@ -374,7 +373,6 @@ function loadPrefs() {
     craftDrawSeconds: 6,
     showAdjustments: false,
     advancedOpen: false,
-    showLegacyExports: false,
     unlockEventDetails: false,
     qtDurationSec: 180,
     showTimer: true,
@@ -434,11 +432,6 @@ function applyPrefs() {
     advBtn.classList.toggle("open", !!p.advancedOpen);
     advBtn.setAttribute("aria-expanded", String(!!p.advancedOpen));
     advGroup.classList.toggle("open", !!p.advancedOpen);
-  }
-  const legToggle = document.getElementById("legacyExportToggle");
-  if (legToggle) {
-    legToggle.classList.toggle("active", !!p.showLegacyExports);
-    legToggle.textContent = p.showLegacyExports ? "Shown" : "Hidden";
   }
   const unlockToggle = document.getElementById("unlockEventDetailsToggle");
   if (unlockToggle) {
@@ -516,13 +509,6 @@ function toggleAdvancedSettings() {
     document.getElementById("advToggleBtn"),
     () => applyPrefs(),
   );
-}
-function toggleLegacyExports() {
-  const p = loadPrefs();
-  p.showLegacyExports = !p.showLegacyExports;
-  savePrefs(p);
-  applyPrefs();
-  renderLeft();
 }
 function toggleUnlockEventDetails() {
   const p = loadPrefs();
@@ -1342,14 +1328,18 @@ function renderLeft() {
   // report, and showing it during team setup would just be clutter above Event Details.
   if (gs) h += renderMiniProgress();
 
-  const quizIdInvalid = !gs && !isQuizIdValid(gameState.meta.quizId);
+  // Quiz ID is free-entry — never blocks scoring, just hinted: a soft warning when it doesn't
+  // match the usual format, a green confirmation once it does. An empty field shows neither.
+  const quizIdEntered = !!(gameState.meta.quizId || "").trim();
+  const quizIdGood = quizIdEntered && isQuizIdValid(gameState.meta.quizId);
+  const quizIdWarn = quizIdEntered && !quizIdGood;
   const locInvalid = !gs && !isLocationValid(gameState.meta.location);
   // Once scoring starts, Event Details normally locks (so it can't drift mid-game) — but a
   // typo can still happen, so the "Edit Locked Fields" setting lets the host reopen just these.
   const metaLocked = gs && !loadPrefs().unlockEventDetails;
   h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
     <div class="field"><label>Date</label><input type="date" class="date-native" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"></div>
-    <div class="field${quizIdInvalid ? " field-invalid" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; format: AB-123, ABC-123, ABCD-1234 (with or without hyphen)</span>' : ""}</div>
+    <div class="field${quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? '<span class="guess-good">&#10003; looks good</span>' : ""}</div>
     <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
     <div class="field"><label>Craft Partner</label><input type="text" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
     <div class="field"><label>Partner Town</label><input type="text" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
@@ -1424,7 +1414,7 @@ function renderLeft() {
   h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><h2>\uD83C\uDF7A Craft Prize Drawing</h2><span class="chevron">\u25BC</span></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
 
   h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><h2>Export &amp; Data</h2><span class="chevron">▼</span></div><div class="section-body">
-    <div class="export-bar">${loadPrefs().showLegacyExports ? '<button class="btn" onclick="exportCSV()">\uD83D\uDCCA CSV</button><button class="btn" onclick="exportXLSX()">\uD83D\uDCD7 XLSM</button>' : ""}<button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button><a class="btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer">\uD83D\uDD17 JD Upload Form</a></div>
+    <div class="export-bar"><button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button><a class="btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer">\uD83D\uDD17 JD Upload Form</a></div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="startNewGame();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?'))startNewGame();">\uD83D\uDDD1 Clear Session</button></div>
   </div></div>`;
@@ -2822,32 +2812,22 @@ function markAll(ri, qi, correct) {
   renderAll();
   if (correct && !wasBeer) checkBeerRound(ri, qi);
 }
-// Accepts "ABC-123" or "ABC123": 3 letters, optional dash, 3 digits.
-// Accepts "ABCD-1234" or "ABCD1234": 4 letters, optional dash, 4 digits.
-// Accepts "AB-123" or "AB123": 2 letters, optional dash, 3 digits.
+// Accepts 1-5 letters, optional dash, 1-4 digits (e.g. "AB-123", "ABCDE1234").
 function isQuizIdValid(v) {
   const s = (v || "").trim();
-  return (
-    /^[A-Za-z]{3}-?\d{3}$/.test(s) ||
-    /^[A-Za-z]{4}-?\d{4}$/.test(s) ||
-    /^[A-Za-z]{2}-?\d{3}$/.test(s)
-  );
+  return /^[A-Za-z]{1,5}-?\d{1,4}$/.test(s);
 }
 function isLocationValid(v) {
   return !!(v || "").trim();
 }
 
-// Guard: before the very first scoring action, a valid Quiz ID + Location must be set and
-// every team must have a guess entered. After the game has started once, this check is bypassed.
+// Guard: before the very first scoring action, a Location must be set and every team must have
+// a guess entered. Quiz ID is free-entry and never blocks — it only shows a format hint.
+// After the game has started once, this check is bypassed.
 function canScore() {
   if (gameState.gameStarted) return true;
-  if (
-    !isQuizIdValid(gameState.meta.quizId) ||
-    !isLocationValid(gameState.meta.location)
-  ) {
-    alert(
-      "Please enter a valid Quiz ID (format ABC-123, ABC123, ABCD-1234 or ABCD1234) and a Location in Event Details before scoring begins.",
-    );
+  if (!isLocationValid(gameState.meta.location)) {
+    alert("Please enter a Location in Event Details before scoring begins.");
     const sec = document.getElementById("sec-meta");
     if (sec) {
       if (sec.classList.contains("collapsed"))
@@ -4154,25 +4134,6 @@ function exportPDF() {
   }
 }
 
-function exportCSV() {
-  const rows = buildRows(),
-    cols = expCols();
-  let csv = cols.join(",") + "\n";
-  rows.forEach((r) => {
-    csv +=
-      cols
-        .map((c) => {
-          const v = r[c];
-          if (v == null || v === "") return "";
-          const s = "" + v;
-          return /[,"\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
-        })
-        .join(",") + "\n";
-  });
-  dl(new Blob([csv], { type: "text/csv" }), exportFn("csv"));
-  document.getElementById("exportPrompt").classList.add("show");
-}
-
 // ---- date formatting (display in app + export) ----
 // MM-DD-YYYY everywhere. There used to be a Settings toggle offering DD-Mon-YYYY as well, but
 // nobody used it, so the alternate format and its chooser are gone rather than carried forever.
@@ -4321,32 +4282,6 @@ function exportXLSXBackup() {
   }
 }
 
-function exportXLSX() {
-  try {
-    if (typeof fflate === "undefined") {
-      alert("Zip library not loaded \u2014 cannot build XLSX.");
-      return;
-    }
-    if (typeof TRIVIA_TEMPLATE_B64 === "undefined") {
-      alert("Template not embedded.");
-      return;
-    }
-    const bytes = trivB64ToBytes(TRIVIA_TEMPLATE_B64);
-    const out = trivInjectTemplate(bytes, gameState);
-    const name = exportFn("xlsm");
-    dl(
-      new Blob([out], {
-        type: "application/vnd.ms-excel.sheet.macroEnabled.12",
-      }),
-      name,
-    );
-    document.getElementById("exportPrompt").classList.add("show");
-  } catch (e) {
-    alert("XLSX export failed: " + (e && e.message ? e.message : e));
-  }
-}
-
-// ===== Official template injection (produces JD's exact workbook with this game's data) =====
 function trivB64ToBytes(b64) {
   const bin = atob(b64),
     len = bin.length,
@@ -4354,239 +4289,16 @@ function trivB64ToBytes(b64) {
   for (let i = 0; i < len; i++) u[i] = bin.charCodeAt(i);
   return u;
 }
-function trivCol(c) {
-  let s = "";
-  while (c > 0) {
-    const r = (c - 1) % 26;
-    s = String.fromCharCode(65 + r) + s;
-    c = (c - r - 1) / 26;
-  }
-  return s;
-}
 function trivEsc(t) {
   return String(t)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 }
-function trivFind(xml, ref) {
-  let m = xml.match(new RegExp('<c r="' + ref + '"[^>]*?/>'));
-  if (m) return { i: m.index, len: m[0].length, el: m[0] };
-  m = xml.match(new RegExp('<c r="' + ref + '"[^>]*?>[\\s\\S]*?</c>'));
-  if (m) return { i: m.index, len: m[0].length, el: m[0] };
-  return null;
-}
 function trivStyle(el) {
   const m = el.match(/ s="(\d+)"/);
   return m ? ' s="' + m[1] + '"' : "";
 }
-function trivSpl(xml, f, nw) {
-  return xml.slice(0, f.i) + nw + xml.slice(f.i + f.len);
-}
-function trivBool(xml, ref, val) {
-  const f = trivFind(xml, ref);
-  if (!f) return xml;
-  return trivSpl(
-    xml,
-    f,
-    '<c r="' +
-      ref +
-      '"' +
-      trivStyle(f.el) +
-      ' t="b"><v>' +
-      (val ? 1 : 0) +
-      "</v></c>",
-  );
-}
-function trivNum(xml, ref, num) {
-  const f = trivFind(xml, ref);
-  if (!f) return xml;
-  return trivSpl(
-    xml,
-    f,
-    '<c r="' + ref + '"' + trivStyle(f.el) + "><v>" + num + "</v></c>",
-  );
-}
-function trivStr(xml, ref, text) {
-  const f = trivFind(xml, ref);
-  if (!f) return xml;
-  return trivSpl(
-    xml,
-    f,
-    '<c r="' +
-      ref +
-      '"' +
-      trivStyle(f.el) +
-      ' t="inlineStr"><is><t xml:space="preserve">' +
-      trivEsc(text) +
-      "</t></is></c>",
-  );
-}
-function trivFormula(xml, ref, formula) {
-  const f = trivFind(xml, ref);
-  if (!f) return xml;
-  return trivSpl(
-    xml,
-    f,
-    '<c r="' +
-      ref +
-      '"' +
-      trivStyle(f.el) +
-      "><f>" +
-      trivEsc(formula) +
-      "</f></c>",
-  );
-}
-function trivDateSerial(d) {
-  if (!d) return null;
-  const t = Date.parse(d + "T00:00:00Z");
-  if (isNaN(t)) return null;
-  return Math.floor((t - Date.parse("1899-12-30T00:00:00Z")) / 86400000);
-}
-var TRIV_PCOLS = [4, 6, 8, 10],
-  TRIV_XC123 = [28, 30, 32, 34],
-  TRIV_XC4 = [29, 31, 33, 35];
-var TRIV_WAGERS = [
-  [1, 2, 3, 4],
-  [1, 3, 5, 7],
-  [2, 4, 6, 8],
-  [3, 6, 9, 12],
-];
-var TRIV_RSHEET = {
-  0: "xl/worksheets/sheet2.xml",
-  1: "xl/worksheets/sheet3.xml",
-  2: "xl/worksheets/sheet4.xml",
-  3: "xl/worksheets/sheet5.xml",
-};
-function trivInjectTemplate(templateBytes, gs) {
-  const files = fflate.unzipSync(templateBytes);
-  const dec = new TextDecoder("utf-8"),
-    enc = new TextEncoder();
-  const get = (n) => dec.decode(files[n]),
-    put = (n, s) => {
-      files[n] = enc.encode(s);
-    };
-  // MASTER (sheet1): location, quiz#, date, and per-team name/guess/NJCB/item
-  let x = get("xl/worksheets/sheet1.xml");
-  if (gs.meta.location) x = trivStr(x, "C2", gs.meta.location);
-  if (gs.meta.quizId) x = trivStr(x, "N2", gs.meta.quizId);
-  const dtxt = isoToMDY(gs.meta.date);
-  if (dtxt) x = trivStr(x, "G2", dtxt);
-  gs.teams.forEach((tm, t) => {
-    const r = t + 5;
-    if (tm.name) x = trivStr(x, "B" + r, tm.name);
-    if (tm.scoreGuess !== "" && tm.scoreGuess != null)
-      x = trivNum(x, "AG" + r, parseInt(tm.scoreGuess, 10));
-    x = trivBool(x, "AW" + r, !!tm.njcb);
-    x = trivBool(x, "AY" + r, !!tm.bonusItem);
-  });
-  // Rewrite the DIFF column (AH) so every row is an independent formula (no shared "si"
-  // attrs, no cached value) — rows AH6:AH44 in the stock template share a formula whose
-  // dependent rows only carry `<f t="shared" si="13"/>` with no formula text, which many
-  // non-Excel readers fail to expand, leaving DIFF blank/zero. DIFF is minus Bonuses: it
-  // hand-sums the round/wager point columns and deliberately omits C (NJCB, AX=AW*3) and
-  // D (Bonus Item, AZ=AY*5), matching the stock master formula at AH6.
-  for (let r = 5; r <= 44; r++)
-    x = trivFormula(
-      x,
-      "AH" + r,
-      "SUM(E" +
-        r +
-        ":H" +
-        r +
-        ")+J" +
-        r +
-        "+L" +
-        r +
-        "+M" +
-        r +
-        "+N" +
-        r +
-        "+O" +
-        r +
-        "+Q" +
-        r +
-        "+S" +
-        r +
-        "+T" +
-        r +
-        "+U" +
-        r +
-        "+V" +
-        r +
-        "+X" +
-        r +
-        "+Z" +
-        r +
-        "+AA" +
-        r +
-        "+AB" +
-        r +
-        "+AC" +
-        r +
-        "+AE" +
-        r +
-        "-AG" +
-        r,
-    );
-  put("xl/worksheets/sheet1.xml", x);
-  // Round sheets: per-question correct/incorrect toggles + bonus / wager net points
-  for (let ri = 0; ri < 4; ri++) {
-    let xr = get(TRIV_RSHEET[ri]);
-    const xcols = ri === 3 ? TRIV_XC4 : TRIV_XC123,
-      wmap = {};
-    TRIV_WAGERS[ri].forEach((w, k) => {
-      wmap[w] = k;
-    });
-    gs.teams.forEach((tm, t) => {
-      const r = t + 4,
-        qs = gs.rounds[ri].questions;
-      for (let qi = 0; qi < 4; qi++) {
-        const a = qs[qi][t];
-        if (!a || a.wager === undefined) continue;
-        const k = wmap[a.wager];
-        if (k === undefined) continue;
-        const pc = trivCol(TRIV_PCOLS[k]),
-          xc = trivCol(xcols[k]);
-        if (a.correct === true) {
-          xr = trivBool(xr, pc + r, true);
-          xr = trivBool(xr, xc + r, false);
-        } else if (a.correct === false) {
-          xr = trivBool(xr, pc + r, false);
-          xr = trivBool(xr, xc + r, true);
-        }
-      }
-      if (ri === 0 || ri === 2) {
-        const c = gs.rounds[ri].bonus[t];
-        if (c != null) xr = trivNum(xr, "M" + r, c * 5);
-      } else {
-        const d = (ri === 1 ? gs.halftime : gs.finalWager)[t];
-        if (d && d.wager != null && d.wager !== "" && d.correct != null)
-          xr = trivNum(xr, "N" + r, d.correct ? +d.wager : -d.wager);
-      }
-    });
-    put(TRIV_RSHEET[ri], xr);
-  }
-  // force Excel to recalc on open, and drop calcChain so cached blanks can't linger
-  let wb = get("xl/workbook.xml");
-  wb = wb.replace(
-    /<calcPr calcId="(\d+)"\/>/,
-    '<calcPr calcId="$1" fullCalcOnLoad="1"/>',
-  );
-  put("xl/workbook.xml", wb);
-  delete files["xl/calcChain.xml"];
-  let ct = get("[Content_Types].xml");
-  ct = ct.replace(
-    '<Override PartName="/xl/calcChain.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.calcChain+xml"/>',
-    "",
-  );
-  put("[Content_Types].xml", ct);
-  let rels = get("xl/_rels/workbook.xml.rels");
-  rels = rels.replace(/<Relationship Id="rId9"[^>]*calcChain[^>]*\/>/, "");
-  put("xl/_rels/workbook.xml.rels", rels);
-  return fflate.zipSync(files, { level: 6 });
-}
-
 function fn(ext) {
   return `trivia-${gameState.meta.quizId || "NOID"}-${gameState.meta.date || new Date().toISOString().slice(0, 10)}.${ext}`;
 }
