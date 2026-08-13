@@ -1391,10 +1391,8 @@ function renderLeft() {
       <div class="remove-team"><button onclick="removeTeam(${i})" title="Remove team" aria-label="Remove team ${i + 1}">\u2715</button></div>
     </div>`;
   });
-  if (gameState.teams.length < MAX_TEAMS && !round1Complete())
+  if (gameState.teams.length < MAX_TEAMS)
     h += `<button class="btn" id="addTeamBtn" onclick="addTeam()">+ Add Team</button>`;
-  else if (round1Complete())
-    h += `<p class="fr-note">Round 1 is scored — teams are locked in for the rest of the game.</p>`;
   h += `</div></div>`;
 
   for (let ri = 0; ri < 4; ri++) {
@@ -1483,13 +1481,6 @@ function roundProgress(ri) {
   }
   return { done, total };
 }
-// Once Round 1 is fully scored, teams are locked in — adding one later would leave it with
-// no Round 1 (or bonus) answers, which would silently skew every score/rank after it.
-function round1Complete() {
-  const rp = roundProgress(0);
-  return rp.total > 0 && rp.done === rp.total;
-}
-
 // Which round the host is presumably actively working on: the first one that isn't fully
 // scored yet. Based on scoring state, not scroll position — so it reads the same regardless
 // of where in the page the host has scrolled to (e.g. up to check Teams, or ahead to Final
@@ -2736,7 +2727,7 @@ function renderCraftPrizeBlock() {
 }
 
 function addTeam() {
-  if (gameState.teams.length >= MAX_TEAMS || round1Complete()) return;
+  if (gameState.teams.length >= MAX_TEAMS) return;
   gameState.teams.push(freshTeam(""));
   autosave();
   renderAll();
