@@ -1,6 +1,6 @@
 const STORAGE_KEY = "trivRev6_session",
   PREFS_KEY = "trivRev6_prefs",
-  MAX_TEAMS = 50;
+  MAX_TEAMS = 100;
 /* Storage shim. Chromium throws "SecurityError: localStorage is not available for opaque
    origins" when the page is opened straight off disk (file:// is an opaque origin). Firefox
    permits it, which is why this app persists in Firefox but not in Chrome from file://.
@@ -72,7 +72,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v16.42"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v16.44"; // #Version Number — bump this manually when you release a new build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2026-06-25","location":"Rebel Sheep Wine Co","quizId":"IMS-008","craftPartner":"Man Skirt Brewing","craftPartnerTown":"Hackettstown ","bonusItem":"Any Fishing Lure","staffNames":"Lorenzo, Sarah, Chris, Dana"},"teams":[{"name":"Blue Crest","scoreGuess":102,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Any Given Thursday","scoreGuess":92,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Mario's Angels","scoreGuess":120,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Man's Hubris","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Fenton Stables","scoreGuess":120,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Drum Roll Please","scoreGuess":107,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Hidden Haven","scoreGuess":23,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"We Know Nothings","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Salty Dogs","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sweat","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":3,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true}}],"bonus":{"0":3,"1":4,"2":4,"3":3,"4":3,"5":4,"6":2,"7":3,"8":4,"9":4}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":7,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":1,"correct":false},"3":{"wager":1,"correct":false},"4":{"wager":5,"correct":true},"5":{"wager":1,"correct":false},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":1,"correct":false}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":5,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":4,"correct":true}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":false}},{"0":{"wager":2,"correct":false},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":8,"correct":false}}],"bonus":{"0":1,"1":0,"2":2,"3":1,"4":2,"5":1,"6":1,"7":3,"8":1,"9":2}},{"questions":[{"0":{"wager":3,"correct":false},"1":{"wager":6,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":3,"correct":false}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":6,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":false},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":true}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":10,"correct":true},"2":{"wager":10,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":8,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":false},"1":{"wager":20,"correct":false},"2":{"wager":20,"correct":false},"3":{"wager":20,"correct":false},"4":{"wager":20,"correct":false},"5":{"wager":18,"correct":false},"6":{"wager":20,"correct":false},"7":{"wager":20,"correct":false},"8":{"wager":20,"correct":false},"9":{"wager":20,"correct":false}},"gameStarted":true}`;
 
@@ -1347,10 +1347,12 @@ function renderLeft() {
     <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
   </div>${metaLocked ? `<p class="fr-note">&#128274; Locked once scoring starts, so it can't drift mid-game. Typo? <a href="#" onclick="event.preventDefault();toggleUnlockEventDetails();">Unlock to fix it</a>.</p>` : ""}</div></div>`;
 
-  const missingGuessCount = !gs
-    ? gameState.teams.filter((t) => t.scoreGuess === "" || t.scoreGuess == null)
-        .length
-    : 0;
+  // Flagged the whole game, not just before scoring starts — a guess left blank stops blocking
+  // anything once scoring begins, but it still silently shows as "—" in Final Results, which
+  // reads as a display bug rather than a data-entry gap if the host was never told.
+  const missingGuessCount = gameState.teams.filter(
+    (t) => t.scoreGuess === "" || t.scoreGuess == null,
+  ).length;
   h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2><span class="chevron">▼</span></div><div class="section-body">`;
   const showAdj = !!loadPrefs().showAdjustments;
   gameState.teams.forEach((t, i) => {
@@ -1369,7 +1371,7 @@ function renderLeft() {
           </label>
         </div>
       </div>
-      <div class="team-guess-cell${!gs && (t.scoreGuess === "" || t.scoreGuess == null) ? " guess-missing" : ""}"><label>Guess</label><input type="number" min="1" max="146" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-146" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${!gs && (t.scoreGuess === "" || t.scoreGuess == null) ? '<span class=\"guess-warn\">&#9888; required</span>' : ""}</div>
+      <div class="team-guess-cell${t.scoreGuess === "" || t.scoreGuess == null ? " guess-missing" : ""}"><label>Guess</label><input type="number" min="1" max="146" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-146" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class=\"guess-warn\">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
       ${
         showAdj
           ? `<div class="adj-wrap">
@@ -2650,7 +2652,7 @@ function renderCraftPrizeBlock() {
   // a winner already picked (e.g. restored from autosave) opens the flow on its own, so a
   // reload never hides a result behind the gate.
   if (!craftFlowOpen && !drawing && !winner) {
-    return `<button class="btn btn-accent cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>🍺 Choose Craft Prize Winner</button>`;
+    return `<button class="btn btn-accent cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>🍺 Choose Craft Prize Winner</button>${poolLeft <= 0 ? `<p class="fr-note">No teams left to draw from — top ${excludeN} place${excludeN > 1 ? "s" : ""} excluded covers everyone entered. Add a team, or open this to lower Exclude Top.</p>` : ""}`;
   }
   let h = `<div class="cp-config">
       <div class="cp-field"><span class="cp-field-label">Exclude Top</span><div class="stepper">
@@ -2691,6 +2693,8 @@ function renderCraftPrizeBlock() {
   } else {
     // The only control in the app that starts audio — see startCraftPrizeDraw's gesture note.
     h += `<button class="btn btn-accent cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>🥁 Start Drumroll</button>`;
+    if (!winner && poolLeft <= 0)
+      h += `<p class="fr-note">No teams left in the eligible pool — lower Exclude Top above, or add another team.</p>`;
     if (prefs.craftManualEnd && !winner) {
       // Previewed here, faded and disabled, so the host knows these controls exist before the
       // drumroll is even running — rather than only discovering them once a draw is underway.
@@ -2736,7 +2740,12 @@ function reindexAfterRemoval(map, ti) {
 }
 function removeTeam(ti) {
   const name = gameState.teams[ti]?.name || "Team " + (ti + 1);
-  if (!confirm('Remove "' + name + '"?')) return;
+  const msg = checkGameStarted()
+    ? 'Remove "' +
+      name +
+      '"? This also deletes every round, bonus, and wager score already entered for them — it can’t be undone.'
+    : 'Remove "' + name + '"?';
+  if (!confirm(msg)) return;
   gameState.teams.splice(ti, 1);
   const newAdj = new Set();
   adjOpenTeams.forEach((i) => {
@@ -3200,8 +3209,10 @@ function saveToFile() {
   a.click();
 }
 function triggerLoadFile() {
-  if (confirm("Replace current session?"))
-    document.getElementById("fileLoadInput").click();
+  const msg = gameState.teams.length
+    ? "Replace current session? This wipes every team, score, and Event Details field currently entered — it can’t be undone."
+    : "Replace current session?";
+  if (confirm(msg)) document.getElementById("fileLoadInput").click();
 }
 function loadFromFile(e) {
   const f = e.target.files[0];
@@ -3276,8 +3287,10 @@ function loadPrefsFromFile(e) {
   e.target.value = "";
 }
 function loadSampleGame() {
-  if (!confirm("Load the sample game? This replaces your current session."))
-    return;
+  const msg = gameState.teams.length
+    ? "Load the sample game? This wipes every team, score, and Event Details field currently entered — it can’t be undone."
+    : "Load the sample game? This replaces your current session.";
+  if (!confirm(msg)) return;
   gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
   autosave();
   renderAll();
