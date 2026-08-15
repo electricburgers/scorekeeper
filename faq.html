@@ -268,6 +268,19 @@
       .faq-a strong {
         color: var(--text-primary);
       }
+      /* In-body cross-reference links ("see Score Audit above", etc.) had no color rule of
+         their own, so they fell back to the browser's default link blue/visited-purple —
+         low contrast against this page's dark background, same issue already fixed for the
+         app's "Unlock to fix it" link. --txt-cyan is the same AAA(7:1) text-safe token used
+         there and for .faq-a code above, defined for every theme AND color-vision combination
+         in css/styles.css, so this is guaranteed AA everywhere without a color pick of its own. */
+      .faq-a a {
+        color: var(--txt-cyan);
+        text-decoration: underline;
+      }
+      .faq-a a:hover {
+        opacity: 0.8;
+      }
       .faq-a .tag-adv {
         display: inline-block;
         font-size: 0.68rem;
@@ -1094,10 +1107,8 @@
             <p>
               The <strong>Exclude Top</strong> stepper sets how many of the
               top-placed teams sit out the drawing (top finishers already have
-              bragging rights; the craft prize is for everyone else). It scales
-              with your roster — you can exclude at most N−1 of the N teams in
-              the game, so one team is always left in the pool no matter how
-              large or small the game is.
+              won gift cards; the craft prize is for everyone else). It scales
+              with your roster.
             </p>
           </div>
         </details>
@@ -1826,7 +1837,7 @@
       </section>
 
       <div class="faq-footer">
-        Scorekeeper — <span id="faqVersion"></span> · FAQ v1.0 (Aug 2026)
+        Scorekeeper — <span id="faqVersion"></span> · FAQ v1.1 (Aug 2026)
       </div>
     </div>
 
@@ -1867,7 +1878,7 @@
       // can never end up opening an empty lightbox.
       document.addEventListener("click", function (e) {
         const img = e.target.closest(
-          ".faq-shot-pair .faq-shot img, .faq-shot-trio .faq-shot img",
+          ".faq-shot-pair .faq-shot img, .faq-shot-trio .faq-shot img"
         );
         if (img) openFaqLightbox(img);
       });
