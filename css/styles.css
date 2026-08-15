@@ -654,6 +654,14 @@ input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,
 [data-theme="hc-dark"] input[type="date"]{color-scheme:dark}
 [data-theme="hc-light"] input[type="date"]{color-scheme:light}
 .date-native{cursor:pointer;width:auto;max-width:170px}
+/* The native input stays fully functional (click/keyboard/picker all still hit it) — only its
+   own text is made transparent so our fixed-format span can show through in its place. The span
+   has pointer-events:none so every click still lands on the input underneath it. */
+.date-native-wrap{position:relative;display:inline-block;max-width:170px}
+.date-native-wrap .date-native{color:transparent}
+.date-native-wrap .date-display-text{position:absolute;left:10px;top:0;bottom:0;display:flex;align-items:center;pointer-events:none;font-family:var(--font-body);font-size:.9rem;color:var(--text-primary);white-space:nowrap}
+.date-native-wrap .date-display-text.is-placeholder{color:var(--text-muted)}
+.date-native-wrap .date-native:disabled ~ .date-display-text{opacity:.5}
 .quiz-id-input{width:auto;max-width:130px}
 input:disabled{opacity:.5;cursor:not-allowed}
 input[list]{padding-right:26px;background-image:linear-gradient(45deg,transparent 50%,var(--text-muted) 50%),linear-gradient(135deg,var(--text-muted) 50%,transparent 50%);background-position:calc(100% - 16px) 55%,calc(100% - 11px) 55%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
