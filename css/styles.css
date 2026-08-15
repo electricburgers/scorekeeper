@@ -1318,6 +1318,14 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 [data-theme="hc-light"] .fr-tiebadge.fr-win{background:var(--pts-pos-bg);color:var(--pts-pos-fg)}
 .fr-diff-win{color:var(--badge-green-fg)!important;font-weight:800!important}
 .fr-note{font-size:.72rem;color:var(--text-muted);margin-top:9px;line-height:1.45}
+/* Links inside a note (e.g. Event Details' "Unlock to fix it") had no color rule of their own,
+   so they fell back to the browser default blue/purple — on hc-dark's near-black background
+   that read as low-contrast, and visited-purple in particular clears nowhere near AA. --txt-cyan
+   is the same AAA(7:1) text-safe token already used for clickable text elsewhere (e.g.
+   .ta-name-clickable), defined for every theme/color-vision combination, so this link is
+   guaranteed AA in all of them without a color pick of its own. */
+.fr-note a{color:var(--txt-cyan);text-decoration:underline}
+.fr-note a:hover{opacity:.8}
 /* Collapsed by default so the tie-break/Diff explanation doesn't eat vertical space every time
    Final Results is open — <details>/<summary> gets keyboard support and toggling for free. */
 .fr-details{margin-top:9px}
