@@ -359,11 +359,6 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qt-sign{opacity:0}
 .qtimer-display.qt-neg .qt-sign{opacity:1}
 .qtimer-btns{display:flex;gap:6px;flex-shrink:0}
-/* +/-30s nudge buttons — Advanced Settings > Timer Stepper Buttons, hidden by default (see
-   [data-timer-steppers] below, set on <html> by applyPrefs() in app.js) since most hosts drive
-   the countdown from Start/Pause/Reset alone; shown for hosts who want fine control mid-timer. */
-.qtimer-steppers{display:none;gap:6px;flex-shrink:0}
-[data-timer-steppers] .qtimer-steppers{display:flex}
 .qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
 .qtimer-btn:hover{background:var(--bg-hover)}
 .qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
@@ -371,7 +366,14 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    alongside it in .qtimer — doesn't visibly shift width as the label cycles between Start/
    Pause/Resume. */
 .qtimer-btn.qtimer-toggle{min-width:5.8rem;text-align:center}
-.qtimer-btn.qtimer-step{padding:5px 8px;font-size:.75rem}
+/* +/-30s nudge buttons — Advanced Settings > Timer Stepper Buttons, hidden by default (see
+   [data-timer-steppers] below, set on <html> by applyPrefs() in app.js) since most hosts drive
+   the countdown from Start/Pause/Reset alone; shown for hosts who want fine control mid-timer.
+   Each button sits directly in .qtimer's own flex row now (−30 before .qtimer-display, +30
+   after it) rather than sharing a wrapper, so the two visually flank the countdown instead of
+   both landing on the same side of it. */
+.qtimer-btn.qtimer-step{display:none;padding:5px 8px;font-size:.75rem}
+[data-timer-steppers] .qtimer-btn.qtimer-step{display:inline-block}
 /* Pause: a solid gold fill read as too loud next to the rest of the widget — just an outline in
    --accent-gold (the token this app already swaps per color-vision mode) instead. */
 .qtimer-btn.qtimer-pause{border-color:var(--accent-gold)}
