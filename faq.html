@@ -352,6 +352,56 @@
           grid-template-columns: 1fr;
         }
       }
+      /* Paired/trio screenshots are the ones meant to be compared side by side, so only those
+         invite a closer look — a click opens the same image full-size instead of squinting at
+         a half- or third-width thumbnail. Single full-width shots elsewhere are already as big
+         as the page allows, so they're left alone (plain img, no pointer cursor). */
+      .faq-shot-pair .faq-shot img,
+      .faq-shot-trio .faq-shot img {
+        cursor: zoom-in;
+      }
+
+      .faq-lightbox {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 500;
+        background: rgba(0, 0, 0, 0.85);
+        padding: 40px 20px;
+        align-items: center;
+        justify-content: center;
+      }
+      .faq-lightbox.show {
+        display: flex;
+      }
+      .faq-lightbox img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-lg);
+      }
+      .faq-lightbox-close {
+        position: fixed;
+        top: max(16px, env(safe-area-inset-top));
+        right: max(16px, env(safe-area-inset-right));
+        width: 2.4rem;
+        height: 2.4rem;
+        border: 1px solid var(--border-light);
+        border-radius: 50%;
+        background: var(--bg-card);
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+      }
+      .faq-lightbox-close:hover {
+        background: var(--bg-hover);
+      }
 
       .faq-footer {
         max-width: 900px;
@@ -1780,6 +1830,22 @@
       </div>
     </div>
 
+    <div
+      class="faq-lightbox"
+      id="faqLightbox"
+      onclick="if(event.target===this)closeFaqLightbox()"
+    >
+      <button
+        type="button"
+        class="faq-lightbox-close"
+        onclick="closeFaqLightbox()"
+        aria-label="Close"
+      >
+        ✕
+      </button>
+      <img id="faqLightboxImg" src="" alt="" />
+    </div>
+
     <script>
       // Version label, read the same way the main app's Settings panel does.
       try {
@@ -1793,6 +1859,33 @@
           })
           .catch(function () {});
       } catch (e) {}
+
+      // Lightbox for paired/trio screenshots — event delegation on the whole page rather than
+      // an onclick per <img> so every current and future .faq-shot-pair/.faq-shot-trio image
+      // gets this for free, and a broken image (already swapped for a placeholder by
+      // faqShotFallback before this ever fires, since that removes the <img> node entirely)
+      // can never end up opening an empty lightbox.
+      document.addEventListener("click", function (e) {
+        const img = e.target.closest(
+          ".faq-shot-pair .faq-shot img, .faq-shot-trio .faq-shot img",
+        );
+        if (img) openFaqLightbox(img);
+      });
+      function openFaqLightbox(img) {
+        const lb = document.getElementById("faqLightbox");
+        const lbImg = document.getElementById("faqLightboxImg");
+        lbImg.src = img.src;
+        lbImg.alt = img.alt || "";
+        lb.classList.add("show");
+        document.addEventListener("keydown", faqLightboxEscHandler);
+      }
+      function closeFaqLightbox() {
+        document.getElementById("faqLightbox").classList.remove("show");
+        document.removeEventListener("keydown", faqLightboxEscHandler);
+      }
+      function faqLightboxEscHandler(e) {
+        if (e.key === "Escape") closeFaqLightbox();
+      }
 
       function faqShotFallback(img, caption) {
         var wrap = img.closest(".faq-shot");
