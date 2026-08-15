@@ -331,6 +331,27 @@
           grid-template-columns: 1fr;
         }
       }
+      /* Three-up Color Vision comparison (Off / Red-Green / Blue-Yellow) — same idea as
+         faq-shot-pair, one more column, one more breakpoint before it drops to one-per-row. */
+      .faq-shot-trio {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin: 10px 0;
+      }
+      .faq-shot-trio .faq-shot {
+        margin: 0;
+      }
+      @media (max-width: 700px) {
+        .faq-shot-trio {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 420px) {
+        .faq-shot-trio {
+          grid-template-columns: 1fr;
+        }
+      }
 
       .faq-footer {
         max-width: 900px;
@@ -822,8 +843,10 @@
           <div class="faq-a">
             <p>
               Yes, both are Advanced Settings toggles — see
-              <a href="#tips">Timer Widget, Steppers, and Pulse</a> in Tips
-              &amp; Tricks for the full rundown of what each one controls.
+              <strong>Timer Widget</strong> and
+              <strong>Timer Stepper Buttons</strong> in
+              <a href="#tips">Tips &amp; Tricks</a> for the full rundown of what
+              each one controls.
             </p>
           </div>
         </details>
@@ -983,6 +1006,13 @@
               Tap the team's name — see <a href="#tips">Score Audit</a> in Tips
               &amp; Tricks.
             </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/score-audit.png"
+                alt="The Score Audit modal open for one team, showing the round-by-round breakdown and Guess/Diff tiles"
+                onerror="faqShotFallback(this,'Score Audit modal — full round-by-round breakdown for one team')"
+              />
+            </div>
           </div>
         </details>
       </section>
@@ -1037,6 +1067,24 @@
               <strong>Clear</strong> button next to the result lets you reset
               and redraw a winner.
             </p>
+            <div class="faq-shot-pair">
+              <div class="faq-shot">
+                <img
+                  src="screenshots/craft-prize-drumroll.png"
+                  alt="The Craft Prize drumroll actively playing"
+                  onerror="faqShotFallback(this,'Drumroll running')"
+                />
+                <div class="faq-shot-caption">Drumroll running</div>
+              </div>
+              <div class="faq-shot">
+                <img
+                  src="screenshots/craft-prize-winner.png"
+                  alt="The Craft Prize winner banner after the drumroll finishes, with the Clear button"
+                  onerror="faqShotFallback(this,'Finished — winning team announced')"
+                />
+                <div class="faq-shot-caption">Finished — winner announced</div>
+              </div>
+            </div>
           </div>
         </details>
       </section>
@@ -1079,6 +1127,70 @@
                 and untouched.
               </li>
             </ul>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What does the XLSX export actually look like?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              The company's official scoresheet template, opened in a
+              spreadsheet app — Location/Date/Quiz #/Host filled into its
+              header, and every team's wagers and totals filled into their rows.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/xlsx-export.png"
+                alt="The exported XLSX scoresheet opened in a spreadsheet app, showing the filled-in header and team rows"
+                onerror="faqShotFallback(this,'The exported XLSX scoresheet, opened')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What does the PDF export actually look like?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              A printable scoresheet built from scratch by the app itself — same
+              Location/Date/Quiz #/Host header as the XLSX, plus full standings.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/pdf-export.png"
+                alt="The exported PDF scoresheet, showing the header and standings"
+                onerror="faqShotFallback(this,'The exported PDF scoresheet')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What is the JD Upload Form link?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              A link straight the JD's results-submission form, opened in a new
+              tab — the Scorekeeper tab itself stays open behind it.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/jd-upload-form.png"
+                alt="The JD Upload Form page open in a new browser tab"
+                onerror="faqShotFallback(this,'The JD Upload Form, open in its own tab')"
+              />
+            </div>
           </div>
         </details>
 
@@ -1362,6 +1474,32 @@
               pass/fail meaning for red-green or blue-yellow color vision. See
               <a href="#settings">Settings</a> above.
             </p>
+            <div class="faq-shot-trio">
+              <div class="faq-shot">
+                <img
+                  src="screenshots/color-vision-off.png"
+                  alt="Scorekeeper with Color Vision set to Off"
+                  onerror="faqShotFallback(this,'Color Vision: Off')"
+                />
+                <div class="faq-shot-caption">Off</div>
+              </div>
+              <div class="faq-shot">
+                <img
+                  src="screenshots/color-vision-red-green.png"
+                  alt="Scorekeeper with Color Vision set to Red-Green"
+                  onerror="faqShotFallback(this,'Color Vision: Red-Green')"
+                />
+                <div class="faq-shot-caption">Red-Green</div>
+              </div>
+              <div class="faq-shot">
+                <img
+                  src="screenshots/color-vision-blue-yellow.png"
+                  alt="Scorekeeper with Color Vision set to Blue-Yellow"
+                  onerror="faqShotFallback(this,'Color Vision: Blue-Yellow')"
+                />
+                <div class="faq-shot-caption">Blue-Yellow</div>
+              </div>
+            </div>
           </div>
         </details>
       </section>
@@ -1473,49 +1611,106 @@
 
         <details class="faq-item">
           <summary>
-            <span class="tag-adv">Advanced</span><br />Timer Widget, Steppers,
-            and Pulse<span class="faq-q-arrow">▶</span>
+            <span class="tag-adv">Advanced</span><br />Timer Widget<span
+              class="faq-q-arrow"
+              >▶</span
+            >
           </summary>
           <div class="faq-a">
             <p>
-              Three independent toggles for the on-screen question countdown:
-              <strong>Timer Widget</strong> shows or hides it entirely,
-              <strong>Timer Stepper Buttons</strong> adds −30/+30 nudge buttons
-              for adjusting time on the fly, and
-              <strong>Timer Pulse</strong> flashes the timer's background when
-              time is running low.
+              Shows or hides the on-screen question countdown entirely. See
+              <a href="#question-timer">Question Timer</a> above for what it
+              does while it's shown.
             </p>
           </div>
         </details>
 
         <details class="faq-item">
           <summary>
-            <span class="tag-adv">Advanced</span><br />Per-Question Result
+            <span class="tag-adv">Advanced</span><br />Timer Stepper
             Buttons<span class="faq-q-arrow">▶</span>
           </summary>
           <div class="faq-a">
             <p>
-              Adds a live correct/incorrect tally next to each question's
-              Sort/Reset buttons, so you can see at a glance how a question is
-              trending without scrolling through every team's row.
+              Adds −30/+30 nudge buttons to the timer widget for adjusting time
+              on the fly — while idle they clamp to the same 1–15 minute range
+              as the Settings duration dropdown; while running or paused they're
+              unclamped, so tapping +30 repeatedly just keeps adding time.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/timer-stepper-buttons.png"
+                alt="The question timer widget with the -30/+30 stepper buttons visible"
+                onerror="faqShotFallback(this,'Timer widget with the −30/+30 stepper buttons showing')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="tag-adv">Advanced</span><br />Timer Pulse<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Flashes the timer's background when time is running low, on top of
+              the color shift that already happens either way — see
+              <a href="#question-timer">Question Timer</a> above.
             </p>
           </div>
         </details>
 
         <details class="faq-item">
           <summary>
-            <span class="tag-adv">Advanced</span><br />Manual Drumroll Control
-            &amp; Drumroll Crossfade<span class="faq-q-arrow">▶</span>
+            <span class="tag-adv">Advanced</span><br />Per-Question Percentage
+            Correct Labels<span class="faq-q-arrow">▶</span>
           </summary>
           <div class="faq-a">
             <p>
-              <strong>Manual Drumroll Control</strong> adds buttons to stop the
-              Craft Prize drumroll early and play the victory horn on demand —
-              useful when a staff member is revealing the winner from a stack of
-              papers rather than the app's own random draw timing.
-              <strong>Drumroll Crossfade</strong> is a slider (0.2s–3.0s)
-              controlling how gradually the roll winds down when you press Stop
-              Drumroll.
+              Adds a live correct/incorrect percentage next to each question's
+              Sort/Reset buttons — e.g. "✓ 3/5 (60%)" — so you can see at a
+              glance how a question is trending without scrolling through every
+              team's row.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="tag-adv">Advanced</span><br />Manual Drumroll
+            Control<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Adds buttons to stop the Craft Prize drumroll early and play the
+              victory horn on demand — useful when a staff member is revealing
+              the winner from a stack of papers rather than the app's own random
+              draw timing.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/manual-drumroll-control.png"
+                alt="The Craft Prize drawing with the Manual Drumroll Control's Stop Drumroll and Play Victory Horn buttons visible"
+                onerror="faqShotFallback(this,'Manual Drumroll Control — Stop Drumroll / Play Victory Horn buttons')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="tag-adv">Advanced</span><br />Drumroll Crossfade<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              A slider (0.2s–3.0s) controlling how gradually the roll winds down
+              when you press Stop Drumroll.
             </p>
           </div>
         </details>
