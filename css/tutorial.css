@@ -1,0 +1,40 @@
+/* TUTORIAL MODE — spotlight overlay + callout bubble.
+   Kept in its own file (like tutorial.js) so the whole feature is one clean diff to add or
+   remove. Reuses the app's existing tokens (--bg-card, --border-strong, --shadow-lg, --txt-cyan)
+   so the callout reads as part of the app, not a bolted-on widget, and sits at z-index 600 —
+   above .audit-overlay's 500, the highest the app already stacks. */
+
+.tutorial-bar{position:fixed;background:rgba(0,0,0,.35);z-index:600;pointer-events:none;transition:top .18s ease,bottom .18s ease,left .18s ease,right .18s ease}
+/* Four bars framing a rectangular hole around the current target, rather than a single
+   clip-path/mask cutout — simpler and more robust cross-browser, and matches how this app
+   already builds everything else out of plain absolutely-positioned divs. No div ever covers
+   the hole itself, so the real element underneath stays natively clickable — no z-index games,
+   no pointer-events juggling on the target. */
+.tutorial-bar-top{top:0;left:0;right:0}
+.tutorial-bar-bottom{left:0;right:0;bottom:0}
+.tutorial-bar-left{left:0}
+.tutorial-bar-right{right:0}
+/* The top/bottom bars are full-bleed dimming, so their own edges have to clear the notch/home
+   bar the same way v17.6 fixed for Settings — otherwise the callout can end up anchored partly
+   under the Dynamic Island or home indicator on exactly the phones that fix was for. */
+.tutorial-bar-top{padding-top:env(safe-area-inset-top)}
+.tutorial-bar-bottom{padding-bottom:env(safe-area-inset-bottom)}
+
+.tutorial-ring{position:fixed;z-index:600;border:2px solid var(--txt-cyan);border-radius:8px;box-shadow:0 0 0 3px rgba(0,255,255,.25);pointer-events:none;transition:top .18s ease,left .18s ease,width .18s ease,height .18s ease}
+
+.tutorial-callout{position:fixed;z-index:601;max-width:320px;background:var(--bg-card);border:1px solid var(--border-strong);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:14px 16px;font-size:.88rem;line-height:1.45;color:var(--text-primary);transition:top .18s ease,left .18s ease}
+.tutorial-callout-step{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--txt-cyan);margin-bottom:6px}
+.tutorial-callout-text{margin-bottom:12px}
+.tutorial-callout-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tutorial-callout-nav{display:flex;align-items:center;gap:8px}
+.tutorial-callout-hint{font-size:.72rem;color:var(--text-muted);font-style:italic}
+.tutorial-callout-next{font-family:var(--font-body);font-size:.8rem;font-weight:700;padding:6px 14px;border:1px solid var(--accent-cyan);border-radius:var(--radius);background:transparent;color:var(--txt-cyan);cursor:pointer}
+.tutorial-callout-next:hover{background:rgba(0,255,255,.1)}
+.tutorial-callout-back{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:6px 10px;border:1px solid var(--border-strong);border-radius:var(--radius);background:transparent;color:var(--text-secondary);cursor:pointer}
+.tutorial-callout-back:hover{background:var(--bg-hover);color:var(--text-primary)}
+.tutorial-callout-skip{font-size:.72rem;color:var(--text-muted);text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;font-family:var(--font-body)}
+.tutorial-callout-skip:hover{color:var(--text-primary)}
+
+.tutorial-firstrun{background:var(--bg-card);border:1px solid var(--accent-cyan);border-radius:var(--radius-lg);padding:16px;margin:0 16px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between}
+.tutorial-firstrun p{margin:0;color:var(--txt-cyan);font-weight:600;flex:1;min-width:200px}
+.tutorial-firstrun .btn-row{display:flex;gap:8px;flex-shrink:0}
