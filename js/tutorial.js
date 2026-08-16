@@ -335,7 +335,7 @@ const Tutorial = (function () {
         // The whole row — all four wager amounts plus the points box on the right, so the host
         // can see a score land there as they go, not just the buttons themselves.
         target: '.team-answer[data-ta="0-0-0"]',
-        text: `Tap any of the four wager amounts — whichever one it actually was. Tap the same one again to cycle it: correct, then incorrect, then cleared entirely. Since it really was correct, tap it once more to land back on correct — then Next appears. Try the whole cycle on Q1 for "${team0Name()}".`,
+        text: `Tap any of the four wager amounts. Tap the same one again to cycle it: correct, then incorrect, then cleared entirely. Let's say the team got it correct, tap it once more to land back on correct — then Next appears. Try the whole cycle on Q1 for "${team0Name()}".`,
         advance: "confirm",
         waitHint: "Cycle through the states and land back on correct — Next shows up once you do",
         fill: () => {
