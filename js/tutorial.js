@@ -40,6 +40,7 @@ const Tutorial = (function () {
   let repositionRaf = null;
   let advancing = false; // guards checkOnClickDone against scheduling more than one advance
   let origCraftDrawSeconds = null; // real saved drumroll length, restored on exit
+  let origCraftManualEnd = null; // real saved Manual Drumroll Control setting, restored on exit
   let sawSectionCollapsed = false; // tracks the collapse->expand sequence for that practice step
   let r1CycleSeen = null; // tracks correct->incorrect->cleared->back-to-correct on one question
   let auditOpened = false; // real click on a team name to open the Score Audit modal
@@ -228,7 +229,7 @@ const Tutorial = (function () {
   //     click that opens something worth exploring, like the Score Audit), but the tour never
   //     auto-advances the instant done() goes true: it only reveals a Next/Done button, and the
   //     host reviews what they typed (or plays around with what just opened) and taps it
-  //     themselves. waitHint/doneLabel on the step override the default "type here"/"Done →"
+  //     themselves. waitHint/doneLabel on the step override the default "type here"/"Next →"
   //     copy for steps where that phrasing doesn't fit (e.g. a click-triggered one).
   //     alwaysShowDone: true renders that Done button from the very start of the step too,
   //     just disabled until done() goes true — for the free-text fields, where a host typing a
@@ -254,14 +255,14 @@ const Tutorial = (function () {
       },
       {
         target: ".quiz-id-input",
-        text: "Type a Quiz ID — the format is usually something like ABC-012. Tap Done once you're happy with it.",
+        text: "Type a Quiz ID — the format is usually something like ABC-012. Tap Next once you're happy with it.",
         advance: "confirm",
         alwaysShowDone: true,
         done: () => !!(gameState.meta.quizId || "").trim(),
       },
       {
         target: 'input[placeholder="Who\'s hosting"]',
-        text: "Now type your own name in Host Name, then tap Done.",
+        text: "Now type your own name in Host Name, then tap Next.",
         advance: "confirm",
         alwaysShowDone: true,
         done: () => !!(gameState.meta.hostName || "").trim(),
@@ -298,7 +299,7 @@ const Tutorial = (function () {
         // events over. The labels wrap both and are what real taps land on.
         target: "label.item-check:has(#bi0)",
         targetEnd: "label.njcb-check:has(#nj0)",
-        text: "Check one or both of these boxes if a team has brought them — try it for your Demo Team. Tap Done when you're done choosing.",
+        text: "Check one or both of these boxes if a team has brought them — try it for your Demo Team. Tap Next when you're done choosing.",
         // 'confirm' rather than 'on-click' here on purpose: there are two boxes, and checking
         // the first one shouldn't immediately whisk the host past the second before they get a
         // chance to check that one too.
@@ -334,10 +335,9 @@ const Tutorial = (function () {
         // The whole row — all four wager amounts plus the points box on the right, so the host
         // can see a score land there as they go, not just the buttons themselves.
         target: '.team-answer[data-ta="0-0-0"]',
-        text: `Tap any of the four wager amounts — whichever one it actually was. Tap the same one again to cycle it: correct, then incorrect, then cleared entirely. Since it really was correct, tap it once more to land back on correct — then Done appears. Try the whole cycle on Q1 for "${team0Name()}".`,
+        text: `Tap any of the four wager amounts — whichever one it actually was. Tap the same one again to cycle it: correct, then incorrect, then cleared entirely. Since it really was correct, tap it once more to land back on correct — then Next appears. Try the whole cycle on Q1 for "${team0Name()}".`,
         advance: "confirm",
-        doneLabel: "Done →",
-        waitHint: "Cycle through the states and land back on correct — Done shows up once you do",
+        waitHint: "Cycle through the states and land back on correct — Next shows up once you do",
         fill: () => {
           r1CycleSeen = { correct: false, incorrect: false, cleared: false };
         },
@@ -389,7 +389,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r1",
-        text: "Nicely done — that's every scoring move there is. Now I'll fill in the rest of Round 1 for the other teams. Take a look around before tapping Next.",
+        text: "Now I'll fill in the rest of Round 1 for the other teams. Take a look around before tapping Next.",
         advance: "manual",
         fill: (ready) => {
           document.getElementById("auditOverlay")?.classList.remove("show");
@@ -425,8 +425,12 @@ const Tutorial = (function () {
       {
         target: "#qblock-1-1 .q-sort-btn",
         calloutPosition: "above",
-        text: "Tap ↕ Sort — it moves the still-unanswered teams to the top, so you always know who's left without scanning the whole row. Tap it again to re-sort as more come in, or ↺ Reset to go back to entry order.",
-        advance: "on-click",
+        text: "Tap ↕ Sort — it moves the still-unanswered teams to the top, so you always know who's left without scanning the whole row. Tap it again to re-sort as more come in, or ↺ Reset to go back to entry order. Tap Next when you're ready to move on.",
+        // 'confirm' rather than 'on-click' here on purpose — the host might want to tap Sort a
+        // few times (and try Reset) to get a feel for it, not get whisked away the instant it
+        // sorts once.
+        advance: "confirm",
+        waitHint: "Tap ↕ Sort to continue",
         done: () => !!questionSortOrder["1-1"],
       },
       {
@@ -568,15 +572,19 @@ const Tutorial = (function () {
         advance: "manual",
       },
       {
-        target: "#sec-export",
-        text: "Every export lives in Export & Data. Tap 📕 PDF — it downloads a real scoresheet for this practice game.",
+        target: 'button[onclick="exportPDF()"]',
+        text: "Every export lives in Export & Data. Tap 📕 PDF — it downloads a real scoresheet for this practice game. If the tap doesn't seem to register, Next is right here too.",
         advance: "on-click",
+        // fallbackNext: this listener is the only thing that notices the tap (exporting doesn't
+        // touch gameState or call any hooked render function, unlike almost every other step),
+        // so if it ever doesn't fire — the button getting rebuilt by some unrelated render
+        // between fill() wiring it and the host's tap, for instance — the host would otherwise
+        // be stuck with no way to move on. Next is always available here as a way out either
+        // way; the real tap still advances on its own the instant it's detected.
+        fallbackNext: true,
         fill: () => {
           pdfExportClicked = false;
           const b = document.querySelector('button[onclick="exportPDF()"]');
-          // Exporting doesn't touch gameState or call any hooked render function, so nothing
-          // would otherwise trigger checkOnClickDone() afterwards — call it directly here, same
-          // as the JD Upload Form step below.
           if (b)
             b.addEventListener(
               "click",
@@ -591,8 +599,9 @@ const Tutorial = (function () {
       },
       {
         target: 'a[href="https://app.jotform.com/261954293403156"]',
-        text: "Now tap 🔗 JD Upload Form. You'll see a new tab open — take a look, then come back to this tab to finish up.",
+        text: "Now tap 🔗 JD Upload Form. You'll see a new tab open — take a look, then come back to this tab to finish up. If the tap doesn't seem to register, Next is right here too.",
         advance: "on-click",
+        fallbackNext: true, // same reasoning as the PDF step above
         fill: () => {
           // The app's own "Export complete. Clear session?" prompt appeared after that PDF tap
           // — dismiss it here rather than leaving two prompts competing for attention while this
@@ -602,8 +611,6 @@ const Tutorial = (function () {
           const a = document.querySelector(
             'a[href="https://app.jotform.com/261954293403156"]',
           );
-          // Opening a new tab doesn't touch gameState or call any hooked render function either
-          // — same reasoning as the PDF step above.
           if (a)
             a.addEventListener(
               "click",
@@ -742,6 +749,12 @@ const Tutorial = (function () {
     const p = loadPrefs();
     origCraftDrawSeconds = p.craftDrawSeconds;
     p.craftDrawSeconds = 6;
+    // Manual Drumroll Control adds Stop Drumroll/Play Horn buttons alongside Start Drumroll —
+    // real, useful for a host, but extra controls the drumroll step's single on-click detection
+    // doesn't expect the host to reach for instead. Forced off for the tour regardless of the
+    // host's real setting; restored on exit either way.
+    origCraftManualEnd = !!p.craftManualEnd;
+    p.craftManualEnd = false;
     savePrefs(p);
     renderAll();
     goToStep(0);
@@ -776,11 +789,13 @@ const Tutorial = (function () {
     if (opts && opts.keepCurrent) snapshot = snapshotAppState();
     restoreAppState(snapshot);
     snapshot = null;
-    if (origCraftDrawSeconds != null) {
+    if (origCraftDrawSeconds != null || origCraftManualEnd != null) {
       const p = loadPrefs();
-      p.craftDrawSeconds = origCraftDrawSeconds;
+      if (origCraftDrawSeconds != null) p.craftDrawSeconds = origCraftDrawSeconds;
+      if (origCraftManualEnd != null) p.craftManualEnd = origCraftManualEnd;
       savePrefs(p);
       origCraftDrawSeconds = null;
+      origCraftManualEnd = null;
     }
     active = false;
     stepIndex = -1;
@@ -894,14 +909,18 @@ const Tutorial = (function () {
     if (!dom) ensureOverlay();
     const all = steps();
     const step = currentStep();
-    const showNext = step.advance !== "on-click" && stepReady;
+    // fallbackNext: shows Next from the very start regardless of advance mode or stepReady —
+    // for 'on-click' steps whose detection depends on a listener that isn't 100% guaranteed to
+    // land (e.g. a step's target getting rebuilt by some unrelated render between fill() wiring
+    // the listener and the host's tap, orphaning it) — see the PDF/JD Upload steps. The real
+    // click, if it IS detected, still auto-advances as normal; this only guarantees the host is
+    // never stuck if it isn't.
+    const showNext = (step.advance !== "on-click" && stepReady) || step.fallbackNext;
     // alwaysShowDone renders the button from the very start of the step (disabled until
     // stepReady) instead of hiding it behind a hint — see the STEP TABLE note above.
     const showDisabledDone = !showNext && step.advance === "confirm" && step.alwaysShowDone;
     const showBack = stepIndex > 0;
-    const nextLabel = step.last
-      ? "Close Tutorial"
-      : step.doneLabel || (step.advance === "confirm" ? "Done →" : "Next →");
+    const nextLabel = step.last ? "Close Tutorial" : step.doneLabel || "Next →";
     dom.callout.innerHTML =
       `<div class="tutorial-callout-step">Step ${stepIndex + 1} of ${all.length}</div>` +
       `<div class="tutorial-callout-text">${esc(step.text)}</div>` +
@@ -917,7 +936,7 @@ const Tutorial = (function () {
           : step.advance === "on-click"
             ? `<span class="tutorial-callout-hint">Tap the highlighted button to continue</span>`
             : step.advance === "confirm"
-              ? `<span class="tutorial-callout-hint">${step.waitHint || "Type in the field and hit Done when you're finished"}</span>`
+              ? `<span class="tutorial-callout-hint">${step.waitHint || "Type in the field and hit Next when you're finished"}</span>`
               : `<span class="tutorial-callout-hint">One moment…</span>`) +
       `</div>` +
       // Nothing left to skip on the last step — Skip Tour there would just be a second,
