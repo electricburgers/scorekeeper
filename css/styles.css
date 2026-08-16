@@ -168,7 +168,15 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    without it, a touch-drag started inside this panel on iOS Safari can fail to scroll the panel
    at all (or chain into scrolling the page behind it) once the panel's content is taller than the
    viewport, e.g. with Advanced Settings expanded. */
-.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px;border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - 80px);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:slideDown .18s ease}
+/* The 80px headroom in max-height is a flat guess at "how tall .header already is above this
+   panel's top:100% anchor" — on a notched/Dynamic-Island phone the header is taller than that
+   (its own top padding grows by env(safe-area-inset-top), see .header above), so the same flat
+   80px left too much max-height and let the panel's bottom run past the visible viewport, under
+   the home-indicator area. Subtracting safe-area-inset-top here keeps the panel shrinking in step
+   with the header that pushes it down. safe-area-inset-bottom is subtracted too so the panel's
+   own bottom edge — and the close button that lives at the very end of its scrollable content —
+   stays above the home indicator instead of running under it. */
+.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - 80px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:slideDown .18s ease}
 /* Deployed-panel-over-page shadows: a plain dark shadow disappears against this app's
    near-black dark background, so it gets its own pale glow to read as "floating above" the
    page instead; light mode already has a light background to contrast against, so it just
