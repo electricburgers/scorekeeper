@@ -296,8 +296,11 @@ const Tutorial = (function () {
         // events over. The labels wrap both and are what real taps land on.
         target: "label.item-check:has(#bi0)",
         targetEnd: "label.njcb-check:has(#nj0)",
-        text: "Check one or both of these boxes if a team has brought them — try it for your Demo Team.",
-        advance: "on-click",
+        text: "Check one or both of these boxes if a team has brought them — try it for your Demo Team. Tap Done when you're done choosing.",
+        // 'confirm' rather than 'on-click' here on purpose: there are two boxes, and checking
+        // the first one shouldn't immediately whisk the host past the second before they get a
+        // chance to check that one too.
+        advance: "confirm",
         // The checkboxes' own onchange calls renderSB(), which is already hooked (see
         // installHooks below), so nothing extra needs to be wired up here for the check to run.
         done: () => !!(gameState.teams[0]?.bonusItem || gameState.teams[0]?.njcb),
@@ -353,6 +356,7 @@ const Tutorial = (function () {
         text: `Scroll down to the Q5 Bonus Question at the bottom of Round 1 — how many of the 4 sub-answers did "${team0Name()}" get right? Tap a number, worth 5 points each. Notice each team's points for the question show up on the right side of their row. Tap Next once you've picked one.`,
         advance: "confirm",
         waitHint: "Tap a number to continue",
+        doneLabel: "Next →",
         done: () => gameState.rounds[0].bonus[0] != null,
       },
       {
@@ -380,7 +384,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r1",
-        text: "Nicely done — that's every scoring move there is. Now I'll fill in the rest of Round 1 for the other teams, so the standings start looking real. Take a look around before tapping Next.",
+        text: "Nicely done — that's every scoring move there is. Now I'll fill in the rest of Round 1 for the other teams. Take a look around before tapping Next.",
         advance: "manual",
         fill: (ready) => {
           document.getElementById("auditOverlay")?.classList.remove("show");
@@ -406,7 +410,7 @@ const Tutorial = (function () {
       {
         target: "#qblock-1-1 .q-header-right",
         calloutPosition: "above",
-        text: "Watch Q2: I'll answer just two teams and leave the rest blank. Tap Next, then try it out.",
+        text: "Watch Q2: I'll answer just two teams and leave the rest blank. With a full room of teams, scanning every row to see who's left gets tedious fast — that's what ↕ Sort is for. Tap Next, then try it out.",
         advance: "manual",
         fill: (ready) => {
           partialFillTeams(1, 1, [0, 2]);
@@ -1057,18 +1061,37 @@ const Tutorial = (function () {
     }
     // The callout is always clamped fully inside the viewport — never anchored purely off the
     // target's (possibly off-screen) rect the way the ring/bars are. calloutPosition:"above"
-    // forces the callout above the target regardless of space below — for steps that spotlight
-    // a header/button with the content the host actually needs to watch sitting right beneath
-    // it (e.g. the Sort demo), where the callout landing below would cover exactly that.
-    const fitsBelow = !!r && step.calloutPosition !== "above" && vh - r.bottom > 180;
-    let top = onScreen
-      ? fitsBelow
-        ? r.bottom + pad + 10
-        : Math.max(10, r.top - pad - 10 - 160)
-      : vh / 2 - 90;
-    let left = onScreen ? r.left : vw / 2 - 160;
+    // prefers the callout above the target — for steps that spotlight a header/button with
+    // content the host actually needs to watch sitting right beneath it (e.g. the Sort demo),
+    // where the callout landing below would cover exactly that.
+    //
+    // Measures the callout's REAL rendered height rather than guessing one: a fixed guess here
+    // used to be shorter than the callout could actually get (longer step text, or the Back
+    // button's row growing it), so "prefer above" could still compute a top that left the
+    // callout's real bottom edge overlapping the ring — which is exactly what made the Sort
+    // button unreachable. renderCallout() already ran before this (same afterRender() sequence
+    // that calls reposition()), so the callout's content — and therefore its real height — is
+    // already current.
+    const calloutH = dom.callout.offsetHeight || 170;
+    const gap = pad + 10;
+    let top, left;
+    if (onScreen) {
+      const spaceBelow = vh - r.bottom - gap;
+      const spaceAbove = r.top - gap;
+      const preferAbove = step.calloutPosition === "above";
+      if (preferAbove && spaceAbove >= calloutH) top = r.top - gap - calloutH;
+      else if (!preferAbove && spaceBelow >= calloutH) top = r.bottom + gap;
+      // Neither preferred side actually fits the real height — use whichever side has more
+      // room instead of blindly clamping to the preferred one and risking an overlap anyway.
+      else if (spaceBelow >= spaceAbove) top = r.bottom + gap;
+      else top = r.top - gap - calloutH;
+      left = r.left;
+    } else {
+      top = vh / 2 - calloutH / 2;
+      left = vw / 2 - 160;
+    }
     dom.callout.style.bottom = "auto";
-    dom.callout.style.top = Math.min(Math.max(10, top), vh - 60) + "px";
+    dom.callout.style.top = Math.min(Math.max(10, top), vh - calloutH - 10) + "px";
     dom.callout.style.left = Math.min(Math.max(10, left), vw - 336) + "px";
   }
 
