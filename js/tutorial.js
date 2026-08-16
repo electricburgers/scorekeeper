@@ -274,16 +274,18 @@ const Tutorial = (function () {
       },
       {
         target: '.team-entry:first-child input[type="text"]',
-        text: "Type a name for your team, then tap Done.",
+        text: "Type a name for your team, then tap Next.",
         advance: "confirm",
         alwaysShowDone: true,
+        doneLabel: "Next →",
         done: () => !!(gameState.teams[0]?.name || "").trim(),
       },
       {
         target: '.team-entry:first-child input[type="number"]',
-        text: "And a score guess — every team needs a final score guess before scoring can begin. Tap Done once it's in.",
+        text: "And a score guess — every team needs a final score guess before scoring can begin. Tap Next once it's in.",
         advance: "confirm",
         alwaysShowDone: true,
+        doneLabel: "Next →",
         done: () => {
           const t = gameState.teams[0];
           return !!t && t.scoreGuess !== "" && t.scoreGuess != null;
@@ -329,9 +331,12 @@ const Tutorial = (function () {
         },
       },
       {
-        target: '.team-answer[data-ta="0-0-0"] .wager-btn:nth-child(1)',
-        text: `Tap the same wager amount repeatedly to cycle it: correct, then incorrect, then cleared entirely. Since it really was correct, tap it once more to land back on correct — then Done appears. Try the whole cycle on Q1 for "${team0Name()}".`,
+        // The whole row — all four wager amounts plus the points box on the right, so the host
+        // can see a score land there as they go, not just the buttons themselves.
+        target: '.team-answer[data-ta="0-0-0"]',
+        text: `Tap any of the four wager amounts — whichever one it actually was. Tap the same one again to cycle it: correct, then incorrect, then cleared entirely. Since it really was correct, tap it once more to land back on correct — then Done appears. Try the whole cycle on Q1 for "${team0Name()}".`,
         advance: "confirm",
+        doneLabel: "Done →",
         waitHint: "Cycle through the states and land back on correct — Done shows up once you do",
         fill: () => {
           r1CycleSeen = { correct: false, incorrect: false, cleared: false };
@@ -426,7 +431,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r2",
-        text: "I'll fill in the rest of Round 2.",
+        text: "I'll fill in Questions 1-4 for Round 2 — we've still got the halftime wager, standings, and the Final Wager ahead to cover.",
         advance: "manual",
         fill: (ready) => {
           autoFillRound(1);
@@ -439,15 +444,11 @@ const Tutorial = (function () {
         advance: "manual",
       },
       {
-        target: "#staffThanksBlock",
-        text: "Right after the halftime wager, there's a shout-out to the bar staff — a good moment for the room to say thanks while there's still a pause in the action.",
-        advance: "manual",
-      },
-      {
         target: "#swblock-halftime .sw-header",
         targetEnd: '#swblock-halftime .special-wager-row:first-child',
-        text: `Halftime is Round 2's Q5 — each team wagers 1-10 points on a single question. Pick an amount for "${team0Name()}", then mark it right or wrong, then hit Done.`,
+        text: `Halftime is Round 2's Q5 — each team wagers 1-10 points on a single question. Pick an amount for "${team0Name()}", then mark it right or wrong, then hit Next.`,
         advance: "confirm",
+        doneLabel: "Next →",
         waitHint: "Pick a wager and a result to continue",
         done: () => {
           const d = gameState.halftime[0];
@@ -462,6 +463,11 @@ const Tutorial = (function () {
           autoFillSpecialWager("halftime", 0);
           ready();
         },
+      },
+      {
+        target: "#staffThanksBlock",
+        text: "Right after the halftime wager, there's a shout-out to the bar staff — a good moment for the room to say thanks while there's still a pause in the action.",
+        advance: "manual",
       },
       {
         target: "#sec-r3",
@@ -551,7 +557,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-craftprize",
-        text: "Here you can exclude the top teams who've already won gift cards and see who isn't included in the drawing, and set how long you want the drumroll to run. Let's try it out now: tap Start Drumroll.",
+        text: "Here you can exclude the top teams who've already won gift cards and see who isn't included in the drawing, and set how long you want the drumroll to run. Let's check it out: tap Start Drumroll.",
         advance: "on-click",
         done: () => !!gameState.craftPrizeWinner,
       },
