@@ -41,7 +41,7 @@ const Tutorial = (function () {
   let advancing = false; // guards checkOnClickDone against scheduling more than one advance
   let origCraftDrawSeconds = null; // real saved drumroll length, restored on exit
   let sawSectionCollapsed = false; // tracks the collapse->expand sequence for that practice step
-  let r1CycleSeen = null; // tracks correct->incorrect->cleared->incorrect-again on one question
+  let r1CycleSeen = null; // tracks correct->incorrect->cleared->back-to-correct on one question
   let auditOpened = false; // real click on a team name to open the Score Audit modal
   let pdfExportClicked = false; // real click on Export PDF, tracked via a listener (see below)
   let jdUploadClicked = false; // real click on the JD Upload Form link — opens in a new tab, so
@@ -95,6 +95,13 @@ const Tutorial = (function () {
   function plausibleCorrect() {
     return Math.random() < 0.72;
   }
+  // The first unused wager for this team/round — shared by every fill helper below so none of
+  // them ever hand out a wager amount a team has already spent on another question this round.
+  function nextUnusedWager(ri, ti) {
+    return ROUND_WAGERS[ri].find(
+      (w) => !usedW(ti, ri).some((u) => u.wager === w),
+    );
+  }
   // skipCell: a single {ti, qi} slot to leave alone — used only for Round 1, where the host
   // hand-scores Q1 for their own team (through the full correct/incorrect/clear cycle) and this
   // only has to fill in that one skipped slot's teammates, the same team's other 3 questions.
@@ -137,6 +144,33 @@ const Tutorial = (function () {
       cSet(ti, plausibleCorrect());
     });
   }
+  // Marks every team correct on one question, no matter what — the only way to guarantee the
+  // Beer Round banner actually appears (isBeerRound() requires every team's answer to be
+  // correct) rather than leaving it to the usual ~72% chance and maybe never showing up at all.
+  function forceBeerRound(ri, qi) {
+    gameState.teams.forEach((_, ti) => {
+      if (gameState.rounds[ri].questions[qi][ti]?.wager != null) return;
+      // Picking nextUnusedWager() straight would hand every team the same lowest amount, since
+      // nothing's used yet this early in the round — shuffle towards the higher wagers instead
+      // so the forced beer round doesn't look suspiciously uniform.
+      const preferred = [7, 5, 3].sort(() => Math.random() - 0.5);
+      const w = preferred.find((x) => !usedW(ti, ri).some((u) => u.wager === x)) ?? nextUnusedWager(ri, ti);
+      if (w == null) return;
+      cycleW(ri, qi, ti, w); // 1st tap: correct
+    });
+  }
+  // Answers a question for only the given team indices — used to demonstrate the Sort button
+  // with a realistic "some teams answered, some didn't" spread rather than the tidy top-to-
+  // bottom fills every other auto-fill does.
+  function partialFillTeams(ri, qi, tis) {
+    tis.forEach((ti) => {
+      if (gameState.rounds[ri].questions[qi][ti]?.wager != null) return;
+      const w = nextUnusedWager(ri, ti);
+      if (w == null) return;
+      cycleW(ri, qi, ti, w);
+      if (!plausibleCorrect()) cycleW(ri, qi, ti, w);
+    });
+  }
   // Forces two of the auto-filled teams to land on the exact same total (via the real manual
   // adjustment field grandTotal() already reads — this doesn't fake any answers) so Final
   // Results visibly demonstrates its "closer guess wins" tie-break rule instead of that only
@@ -167,6 +201,11 @@ const Tutorial = (function () {
       const t = gameState.teams[gameState.teams.length - 1];
       t.name = PRACTICE_TEAMS[i];
       t.scoreGuess = 60 + Math.floor(Math.random() * 60);
+      // Varied on purpose (independent coin flips, not "half get one, half get the other") so
+      // the roster ends up with a realistic mix: some teams with neither bonus, some with one,
+      // a couple maybe with both — not a tidy, unrealistic pattern.
+      t.bonusItem = Math.random() < 0.5;
+      t.njcb = Math.random() < 0.4;
       renderAll();
       i++;
       setTimeout(step, 220);
@@ -191,28 +230,40 @@ const Tutorial = (function () {
   //     host reviews what they typed (or plays around with what just opened) and taps it
   //     themselves. waitHint/doneLabel on the step override the default "type here"/"Done →"
   //     copy for steps where that phrasing doesn't fit (e.g. a click-triggered one).
+  //     alwaysShowDone: true renders that Done button from the very start of the step too,
+  //     just disabled until done() goes true — for the free-text fields, where a host typing a
+  //     typo-prone value benefits from seeing the control is coming, not having it pop in.
+  //   target/targetEnd — target is a selector (or a function returning one, for steps that
+  //     follow the spotlight across a sequence of elements). targetEnd, when present, unions
+  //     the two elements' rects into one spotlight box spanning both — e.g. a section's header
+  //     together with one specific row below it, without the whole section in between.
+  //   calloutPosition: "above" — forces the callout above the target even when there'd be room
+  //     to place it below, for steps where the host needs to watch content sitting just below
+  //     the target itself (e.g. the Sort demo) that the callout would otherwise cover.
   function steps() {
     return [
       {
-        target: ".logo",
-        text: "Welcome to Scorekeeper! This is a short practice run with 5 fake teams — nothing here touches your real game. Let's fill out a night start to finish, hands-on.",
+        target: null,
+        text: "Welcome to Scorekeeper! This is a short practice run with 5 fake teams. Let's fill out a night start to finish.",
         advance: "manual",
       },
       {
         target: "#sec-meta",
-        text: "Every game starts with Event Details — I've pre-filled the date, location, and craft partner for practice. Quiz ID and Host Name are left for you to fill in, since every real game needs those typed by hand.",
+        text: "Every game starts with Event Details — I've pre-filled the date, location, and craft partner for practice. Quiz ID and Host Name are left for you to fill in.",
         advance: "manual",
       },
       {
         target: ".quiz-id-input",
-        text: "Type a Quiz ID — any format works (the hint is just advisory). Tap Done once you're happy with it.",
+        text: "Type a Quiz ID — the format is usually something like ABC-012. Tap Done once you're happy with it.",
         advance: "confirm",
+        alwaysShowDone: true,
         done: () => !!(gameState.meta.quizId || "").trim(),
       },
       {
         target: 'input[placeholder="Who\'s hosting"]',
         text: "Now type your own name in Host Name, then tap Done.",
         advance: "confirm",
+        alwaysShowDone: true,
         done: () => !!(gameState.meta.hostName || "").trim(),
       },
       {
@@ -225,31 +276,34 @@ const Tutorial = (function () {
         target: '.team-entry:first-child input[type="text"]',
         text: "Type a name for your team, then tap Done.",
         advance: "confirm",
+        alwaysShowDone: true,
         done: () => !!(gameState.teams[0]?.name || "").trim(),
       },
       {
         target: '.team-entry:first-child input[type="number"]',
         text: "And a score guess — every team needs a final score guess before scoring can begin. Tap Done once it's in.",
         advance: "confirm",
+        alwaysShowDone: true,
         done: () => {
           const t = gameState.teams[0];
           return !!t && t.scoreGuess !== "" && t.scoreGuess != null;
         },
       },
       {
-        // The label, not the bare checkbox — #bi0 itself is visually covered by its own
-        // styled .check-box span (that's what's actually drawn), so a spotlight/click sized
-        // around the native input alone would sit on a box the span intercepts pointer events
-        // over. The label wraps both and is what real taps land on.
+        // The labels, not the bare checkboxes — #bi0/#nj0 themselves are visually covered by
+        // their own styled .check-box span (that's what's actually drawn), so a spotlight/click
+        // sized around a native input alone would sit on a box the span intercepts pointer
+        // events over. The labels wrap both and are what real taps land on.
         target: "label.item-check:has(#bi0)",
-        text: "Check the +5 Bonus box if your team brought tonight's bonus item — try it for your own team.",
+        targetEnd: "label.njcb-check:has(#nj0)",
+        text: "Check one or both of these boxes if a team has brought them — try it for your Demo Team.",
         advance: "on-click",
-        // The checkbox's own onchange calls renderSB(), which is already hooked (see
+        // The checkboxes' own onchange calls renderSB(), which is already hooked (see
         // installHooks below), so nothing extra needs to be wired up here for the check to run.
-        done: () => !!gameState.teams[0]?.bonusItem,
+        done: () => !!(gameState.teams[0]?.bonusItem || gameState.teams[0]?.njcb),
       },
       {
-        target: "#addTeamBtn",
+        target: "#sec-teams",
         text: "I'll add the rest of your teams, guesses included — every team needs one before scoring starts.",
         advance: "manual",
         fill: (ready) => addTeamsSequentially(ready),
@@ -273,44 +327,187 @@ const Tutorial = (function () {
       },
       {
         target: '.team-answer[data-ta="0-0-0"] .wager-btn:nth-child(1)',
-        text: `Tap the same wager amount repeatedly to cycle it: correct, then incorrect, then cleared entirely, then select it again and mark it wrong once more. Run the whole cycle on Q1 for "${team0Name()}".`,
-        advance: "on-click",
+        text: `Tap the same wager amount repeatedly to cycle it: correct, then incorrect, then cleared entirely. Since it really was correct, tap it once more to land back on correct — then Done appears. Try the whole cycle on Q1 for "${team0Name()}".`,
+        advance: "confirm",
+        waitHint: "Cycle through the states and land back on correct — Done shows up once you do",
         fill: () => {
-          r1CycleSeen = { correct: false, incorrect: false, cleared: false, incorrectAgain: false };
+          r1CycleSeen = { correct: false, incorrect: false, cleared: false };
         },
         done: () => {
           const a = gameState.rounds[0].questions[0][0];
           if (a && a.correct === true) r1CycleSeen.correct = true;
-          else if (a && a.correct === false) {
-            if (r1CycleSeen.cleared) r1CycleSeen.incorrectAgain = true;
-            else r1CycleSeen.incorrect = true;
-          } else if (!a && r1CycleSeen.correct) {
-            r1CycleSeen.cleared = true;
-          }
-          return (
+          else if (a && a.correct === false) r1CycleSeen.incorrect = true;
+          else if (!a && r1CycleSeen.correct) r1CycleSeen.cleared = true;
+          return !!(
             r1CycleSeen.correct &&
             r1CycleSeen.incorrect &&
             r1CycleSeen.cleared &&
-            r1CycleSeen.incorrectAgain
+            a &&
+            a.correct === true
           );
         },
       },
       {
-        target: '.team-answer[data-ta="0-0-0"] .ta-name-clickable',
-        text: `Tap "${team0Name()}"'s name to open the Score Audit — a full point-by-point breakdown for that team.`,
-        // 'confirm' rather than 'on-click' here on purpose: the audit is worth actually reading,
-        // not something to blow straight past the instant it opens — this waits for the tap,
-        // then leaves it open and lets the host look around, tapping Next whenever they're ready.
+        target: "#bqblock-0 .q-header",
+        targetEnd: "#bqblock-0 .bonus-row:first-child",
+        text: `Scroll down to the Q5 Bonus Question at the bottom of Round 1 — how many of the 4 sub-answers did "${team0Name()}" get right? Tap a number, worth 5 points each. Notice each team's points for the question show up on the right side of their row. Tap Next once you've picked one.`,
         advance: "confirm",
-        waitHint: "Tap the highlighted name to open the Score Audit",
-        doneLabel: "Next →",
+        waitHint: "Tap a number to continue",
+        done: () => gameState.rounds[0].bonus[0] != null,
+      },
+      {
+        // Starts on the ⚙️ gear icon; once the host actually taps it open, follows the
+        // spotlight onto the theme toggle inside. toggleSettings() doesn't call any hooked
+        // render function (it only flips a class via applyPrefs()), so nothing would otherwise
+        // notice the panel opened and move the spotlight — the listener in fill() below does.
+        target: () => (loadPrefs().settingsOpen ? "#themeToggle" : "#settingsToggleBtn"),
+        text: "Tap the ⚙️ gear icon to open Settings — one more thing worth trying in there: Light and Dark mode. Flip it a few times, then tap Next once you've settled on the one you like.",
+        advance: "manual",
+        fill: (ready) => {
+          const gear = document.getElementById("settingsToggleBtn");
+          if (gear) gear.addEventListener("click", () => reposition(), { once: true });
+          ready();
+        },
+      },
+      {
+        target: "#cbSelect",
+        text: "There's also a Color Vision mode here, for red-green or blue-yellow color blindness — take a look and pick one if it helps, or leave it Off. Tap Next when you're ready to keep going.",
+        advance: "manual",
+        fill: (ready) => {
+          if (!loadPrefs().settingsOpen) toggleSettings();
+          ready();
+        },
+      },
+      {
+        target: "#sec-r1",
+        text: "Nicely done — that's every scoring move there is. Now I'll fill in the rest of Round 1 for the other teams, so the standings start looking real. Take a look around before tapping Next.",
+        advance: "manual",
+        fill: (ready) => {
+          document.getElementById("auditOverlay")?.classList.remove("show");
+          if (loadPrefs().settingsOpen) toggleSettings();
+          autoFillRound(0, { ti: 0, qi: 0 });
+          ready();
+        },
+      },
+      {
+        target: "#sec-r2",
+        text: "Scroll down to Round 2 — same tap-to-pick-and-mark mechanic you just used, only the wager amounts change (1, 3, 5, 7 here). I'll fill in everyone's Q1.",
+        advance: "manual",
+        fill: (ready) => {
+          forceBeerRound(1, 0);
+          ready();
+        },
+      },
+      {
+        target: "#qblock-1-0 .q-badge.q-beer",
+        text: "That badge is a Beer Round — it shows up whenever every single team gets a question right. Purely for fun; no extra points, just a nice moment to call out.",
+        advance: "manual",
+      },
+      {
+        target: "#qblock-1-1 .q-header-right",
+        calloutPosition: "above",
+        text: "Watch Q2: I'll answer just two teams and leave the rest blank. Tap Next, then try it out.",
+        advance: "manual",
+        fill: (ready) => {
+          partialFillTeams(1, 1, [0, 2]);
+          ready();
+        },
+      },
+      {
+        target: "#qblock-1-1 .q-sort-btn",
+        calloutPosition: "above",
+        text: "Tap ↕ Sort — it moves the still-unanswered teams to the top, so you always know who's left without scanning the whole row. Tap it again to re-sort as more come in, or ↺ Reset to go back to entry order.",
+        advance: "on-click",
+        done: () => !!questionSortOrder["1-1"],
+      },
+      {
+        target: "#sec-r2",
+        text: "I'll fill in the rest of Round 2.",
+        advance: "manual",
+        fill: (ready) => {
+          autoFillRound(1);
+          ready();
+        },
+      },
+      {
+        target: "#standings-halftime",
+        text: "Scroll down to just before the end of Round 2 — halftime is right after Round 2's Question 5, and right before it you'll see the current standings. Read them out so every team knows where they stand and how much they can afford to risk, since a halftime wager can cost points if it's wrong.",
+        advance: "manual",
+      },
+      {
+        target: "#staffThanksBlock",
+        text: "Right after the halftime wager, there's a shout-out to the bar staff — a good moment for the room to say thanks while there's still a pause in the action.",
+        advance: "manual",
+      },
+      {
+        target: "#swblock-halftime .sw-header",
+        targetEnd: '#swblock-halftime .special-wager-row:first-child',
+        text: `Halftime is Round 2's Q5 — each team wagers 1-10 points on a single question. Pick an amount for "${team0Name()}", then mark it right or wrong, then hit Done.`,
+        advance: "confirm",
+        waitHint: "Pick a wager and a result to continue",
+        done: () => {
+          const d = gameState.halftime[0];
+          return !!(d && d.wager != null && d.correct != null);
+        },
+      },
+      {
+        target: "#swblock-halftime",
+        text: "I'll fill in the rest of the halftime wagers.",
+        advance: "manual",
+        fill: (ready) => {
+          autoFillSpecialWager("halftime", 0);
+          ready();
+        },
+      },
+      {
+        target: "#sec-r3",
+        text: "Head down to Round 3 — same mechanic again, wagers 2, 4, 6, 8, plus another 0-4 Bonus Question worth 5 points each. I'll fill it in.",
+        advance: "manual",
+        fill: (ready) => {
+          autoFillRound(2);
+          ready();
+        },
+      },
+      {
+        target: "#sec-r4",
+        text: "And down to Round 4 — wagers 3, 6, 9, 12. Same as before Round 2's halftime wager, there's a standings block right before the Final Wager too, worth reading out — then players can bet up to 20 points there, versus just 10 at halftime. I'll fill it all in.",
+        advance: "manual",
+        fill: (ready) => {
+          autoFillRound(3);
+          autoFillSpecialWager("final");
+          forceTieBreakDemo();
+          renderAll();
+          ready();
+        },
+      },
+      {
+        target: "#sec-final",
+        text: "Final Results — ranked standings, guess-vs-actual, and a tie-break note when two teams land on the same score: whichever guessed closer to their real total ranks higher.",
+        advance: "manual",
+        // Defensive: Craft Prize Drawing starts collapsed (see start(), below) and its own step
+        // further down is what deliberately opens it — this just re-asserts that collapsed
+        // state one more time on the way there, in case it ever got toggled open along the way.
+        fill: (ready) => {
+          collapsedSections.add("sec-craftprize");
+          ready();
+        },
+      },
+      {
+        // The team's row in the Final Results table, not Round 1 Q1 — this step comes after
+        // the whole game is scored, so the audit is naturally reached from the standings the
+        // host is already looking at. openAudit(0) is baked into the row's own onclick
+        // regardless of where that team lands in the ranking, so this is stable no matter the
+        // final order.
+        target: '#sec-final tr[onclick="openAudit(0)"] .ta-name-clickable',
+        text: `Tap "${team0Name()}"'s name in the standings to open the Score Audit — a full point-by-point breakdown of exactly where every point came from.`,
+        advance: "on-click",
         fill: () => {
           auditOpened = false;
           // openAudit() only toggles a class on the modal directly — no hooked render function
           // runs, so nothing would otherwise re-check done() after the tap (same reasoning as
           // the section-header step above).
           const nameEl = document.querySelector(
-            '.team-answer[data-ta="0-0-0"] .ta-name-clickable',
+            '#sec-final tr[onclick="openAudit(0)"] .ta-name-clickable',
           );
           if (nameEl)
             nameEl.addEventListener(
@@ -337,94 +534,6 @@ const Tutorial = (function () {
         done: () => !document.getElementById("auditOverlay")?.classList.contains("show"),
       },
       {
-        target: "#bqblock-0 .bonus-row:first-child .bonus-choice-btn:nth-child(1)",
-        text: `Round 1 also has a Bonus Question (shown as Q5) — how many of the 4 sub-answers did "${team0Name()}" get right? Tap a number, worth 5 points each.`,
-        advance: "on-click",
-        done: () => gameState.rounds[0].bonus[0] != null,
-      },
-      {
-        target: "#themeToggle",
-        text: "One more thing worth trying: Light and Dark mode, right here in Settings. Flip it a few times, then tap Next once you've settled on the one you like.",
-        advance: "manual",
-        fill: (ready) => {
-          if (!loadPrefs().settingsOpen) toggleSettings();
-          ready();
-        },
-      },
-      {
-        target: "#cbSelect",
-        text: "There's also a Color Vision mode here, for red-green or blue-yellow color blindness — take a look and pick one if it helps, or leave it Off. Tap Next when you're ready to keep going.",
-        advance: "manual",
-        fill: (ready) => {
-          if (!loadPrefs().settingsOpen) toggleSettings();
-          ready();
-        },
-      },
-      {
-        target: "#sec-r1",
-        text: "Nicely done — that's every scoring move there is. Now I'll fill in the rest of Round 1, including the Bonus Question at the bottom (up to 4×5 points), so the standings start looking real.",
-        advance: "manual",
-        fill: (ready) => {
-          document.getElementById("auditOverlay")?.classList.remove("show");
-          if (loadPrefs().settingsOpen) toggleSettings();
-          autoFillRound(0, { ti: 0, qi: 0 });
-          ready();
-        },
-      },
-      {
-        target: '#swblock-halftime .special-wager-row:first-child',
-        text: `At halftime, each team wagers 1-10 points on a single question. Pick an amount, then mark it right or wrong for ${team0Name()}.`,
-        advance: "on-click",
-        done: () => {
-          const d = gameState.halftime[0];
-          return !!(d && d.wager != null && d.correct != null);
-        },
-      },
-      {
-        target: "#swblock-halftime",
-        text: "I'll fill in the rest of the halftime wagers.",
-        advance: "manual",
-        fill: (ready) => {
-          autoFillSpecialWager("halftime", 0);
-          ready();
-        },
-      },
-      {
-        target: "#sec-r2",
-        text: "Round 2 is the same tap-to-pick-and-mark mechanic you just used — only the wager amounts change (1, 3, 5, 7 here). I'll fill it in.",
-        advance: "manual",
-        fill: (ready) => {
-          autoFillRound(1);
-          ready();
-        },
-      },
-      {
-        target: "#sec-r3",
-        text: "Round 3 — same mechanic again, wagers 2, 4, 6, 8, plus another Bonus Question.",
-        advance: "manual",
-        fill: (ready) => {
-          autoFillRound(2);
-          ready();
-        },
-      },
-      {
-        target: "#sec-r4",
-        text: "Round 4 — wagers 3, 6, 9, 12 — plus the Final Wager at the end, which uses the same pick-an-amount-then-mark-it mechanic as halftime (1-20 this time).",
-        advance: "manual",
-        fill: (ready) => {
-          autoFillRound(3);
-          autoFillSpecialWager("final");
-          forceTieBreakDemo();
-          renderAll();
-          ready();
-        },
-      },
-      {
-        target: "#sec-final",
-        text: "Final Results — ranked standings, guess-vs-actual, and a tie-break note when two teams land on the same score (two of your practice teams did, on purpose, so you can see it: whichever guessed closer to their real total ranks higher).",
-        advance: "manual",
-      },
-      {
         target: "#sec-craftprize",
         text: "The Craft Prize drawing runs a drumroll and picks a winner from the eligible teams. Let's open it.",
         advance: "manual",
@@ -437,13 +546,19 @@ const Tutorial = (function () {
         },
       },
       {
-        target: ".cp-draw-btn",
-        text: "This step needs a real tap, on purpose — audio can only start from an actual tap, not something the tour can trigger for you. Tap Start Drumroll.",
+        target: "#sec-craftprize",
+        text: "Here you can exclude the top teams who've already won gift cards and see who isn't included in the drawing, and set how long you want the drumroll to run. Let's try it out now: tap Start Drumroll.",
         advance: "on-click",
         done: () => !!gameState.craftPrizeWinner,
       },
       {
-        target: 'button[onclick="exportPDF()"]',
+        target: ".cp-winner",
+        targetEnd: ".cp-script",
+        text: "There's your winner — and right below it, a ready-to-read announcement script with the craft partner's name and town already filled in. Didn't mean to pick that team? Tap ✕ Clear to wipe the choice and draw again.",
+        advance: "manual",
+      },
+      {
+        target: "#sec-export",
         text: "Every export lives in Export & Data. Tap 📕 PDF — it downloads a real scoresheet for this practice game.",
         advance: "on-click",
         fill: () => {
@@ -466,7 +581,7 @@ const Tutorial = (function () {
       },
       {
         target: 'a[href="https://app.jotform.com/261954293403156"]',
-        text: "Now tap 🔗 JD Upload Form — it opens in a new tab, which is where a finished scoresheet actually gets turned in.",
+        text: "Now tap 🔗 JD Upload Form. You'll see a new tab open — take a look, then come back to this tab to finish up.",
         advance: "on-click",
         fill: () => {
           // The app's own "Export complete. Clear session?" prompt appeared after that PDF tap
@@ -493,7 +608,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-export .btn-danger",
-        text: "That's a full game. Tap Finish and keep playing around with this practice one for as long as you like — nothing bad happens. 🗑 Clear Session below is the way to wipe it and start a brand new real game whenever you're ready.",
+        text: "That's a full game. Feel free to keep playing around with this one — tap Close Tutorial whenever you're ready. 🗑 Clear Session, all the way down at the bottom of the page, is the way to wipe this game and start a brand new one.",
         advance: "manual",
         last: true,
       },
@@ -585,6 +700,18 @@ const Tutorial = (function () {
   // ── ENGINE ───────────────────────────────────────────────────────────────────────────────
   function start() {
     if (active) return;
+    // Same "are you sure" pattern loadSampleGame() already uses for the same reason: starting
+    // the tour swaps in a throwaway practice game, and while that's safely reversible via Skip
+    // (the real one comes right back), finishing the tour normally instead keeps the practice
+    // game as the live session — so a host with real, unsaved work in progress could genuinely
+    // lose it if they don't realize that going in.
+    if (
+      gameState.teams.length &&
+      !confirm(
+        "Starting the tutorial clears your current game in progress and starts a fresh practice one. Skipping the tour brings your real game back, but finishing it normally keeps the practice game instead — export or save first if you need to keep this one. Continue?",
+      )
+    )
+      return;
     if (loadPrefs().settingsOpen) closeSettingsPanel();
     snapshot = snapshotAppState();
     installHooks();
@@ -674,15 +801,15 @@ const Tutorial = (function () {
     }
     stepIndex = i;
     advancing = false; // this step hasn't scheduled its own advance yet
-    stepReady = false; // Next/Done stays hidden until fill() (if any) says it's ready
+    stepReady = false; // Next/Done stays hidden (or disabled) until fill() (if any) says ready
     const step = all[i];
     const markReady = () => {
       stepReady = true;
       renderCallout();
     };
     if (step.fill) step.fill(markReady);
-    // 'type' steps show their Done button as soon as done() is already true — relevant on
-    // arrival mainly when navigating Back to a text field the host already filled in.
+    // 'confirm' steps show their Done button as soon as done() is already true — relevant on
+    // arrival mainly when navigating Back to a field the host already filled in.
     else if (step.advance === "confirm") stepReady = !!(step.done && step.done());
     else stepReady = true;
     renderCallout();
@@ -715,9 +842,9 @@ const Tutorial = (function () {
         setTimeout(() => goToStep(stepIndex + 1), 500); // let the tap's own feedback land first
       }
     } else if (step.advance === "confirm") {
-      // Text fields are typo-prone, so 'type' steps never auto-advance — this only reveals or
-      // hides the Done button as the field's content changes; the host still has to tap it,
-      // same as any other step, giving them a chance to fix a typo before moving on.
+      // Text fields are typo-prone, so 'confirm' steps never auto-advance — this only
+      // reveals/enables the Done button as the field's content changes; the host still has to
+      // tap it, same as any other step, giving them a chance to fix a typo before moving on.
       const ready = step.done();
       if (ready !== stepReady) {
         stepReady = ready;
@@ -758,7 +885,13 @@ const Tutorial = (function () {
     const all = steps();
     const step = currentStep();
     const showNext = step.advance !== "on-click" && stepReady;
+    // alwaysShowDone renders the button from the very start of the step (disabled until
+    // stepReady) instead of hiding it behind a hint — see the STEP TABLE note above.
+    const showDisabledDone = !showNext && step.advance === "confirm" && step.alwaysShowDone;
     const showBack = stepIndex > 0;
+    const nextLabel = step.last
+      ? "Close Tutorial"
+      : step.doneLabel || (step.advance === "confirm" ? "Done →" : "Next →");
     dom.callout.innerHTML =
       `<div class="tutorial-callout-step">Step ${stepIndex + 1} of ${all.length}</div>` +
       `<div class="tutorial-callout-text">${esc(step.text)}</div>` +
@@ -768,14 +901,20 @@ const Tutorial = (function () {
         ? `<button class="tutorial-callout-back" onclick="Tutorial.back()">← Back</button>`
         : "") +
       (showNext
-        ? `<button class="tutorial-callout-next" onclick="Tutorial.next()">${step.last ? "Finish" : step.doneLabel || (step.advance === "confirm" ? "Done →" : "Next →")}</button>`
-        : step.advance === "on-click"
-          ? `<span class="tutorial-callout-hint">Tap the highlighted button to continue</span>`
-          : step.advance === "confirm"
-            ? `<span class="tutorial-callout-hint">${step.waitHint || "Type in the highlighted field to continue"}</span>`
-            : `<span class="tutorial-callout-hint">One moment…</span>`) +
+        ? `<button class="tutorial-callout-next" onclick="Tutorial.next()">${nextLabel}</button>`
+        : showDisabledDone
+          ? `<button class="tutorial-callout-next" disabled>${nextLabel}</button>`
+          : step.advance === "on-click"
+            ? `<span class="tutorial-callout-hint">Tap the highlighted button to continue</span>`
+            : step.advance === "confirm"
+              ? `<span class="tutorial-callout-hint">${step.waitHint || "Type in the field and hit Done when you're finished"}</span>`
+              : `<span class="tutorial-callout-hint">One moment…</span>`) +
       `</div>` +
-      `<button class="tutorial-callout-skip" onclick="Tutorial.skip()">Skip tour</button>` +
+      // Nothing left to skip on the last step — Skip Tour there would just be a second,
+      // confusing way to do the same thing Close Tutorial already does.
+      (step.last
+        ? ""
+        : `<button class="tutorial-callout-skip" onclick="Tutorial.skip()">Skip tour</button>`) +
       `</div>`;
   }
   // A step's target is usually a fixed selector, but some steps point at different elements
@@ -786,6 +925,10 @@ const Tutorial = (function () {
   function stepTarget(step) {
     return typeof step.target === "function" ? step.target() : step.target;
   }
+  function stepTargetEnd(step) {
+    if (!step.targetEnd) return null;
+    return typeof step.targetEnd === "function" ? step.targetEnd() : step.targetEnd;
+  }
   // Waits a beat before measuring on mobile — spotlighting anything inside the sidebar sheet
   // needs toggleSidebar() first, and that panel animates open over ~280ms (see .col-right's
   // transition in styles.css); measuring immediately would grab a mid-transition rect.
@@ -795,7 +938,8 @@ const Tutorial = (function () {
     // nothing to open or wait on. None of the current steps target it, but future ones (e.g.
     // spotlighting live standings) would need exactly this.
     const mobile = window.matchMedia("(max-width: 900px)").matches;
-    const target = document.querySelector(stepTarget(step));
+    const sel = stepTarget(step);
+    const target = sel ? document.querySelector(sel) : null;
     const inSidebar = target && !!target.closest("#sidebar");
     if (mobile && inSidebar && !sidebarOpenedByTour) {
       toggleSidebar();
@@ -821,8 +965,13 @@ const Tutorial = (function () {
   }
   function doReposition(step) {
     if (!dom) ensureOverlay();
-    const el = document.querySelector(stepTarget(step));
-    if (!el) {
+    // target: null is deliberate — a purely narrative step (the welcome step) with nothing to
+    // spotlight. Distinct from "not rendered yet", which retries; a null target never will
+    // resolve to an element, so retrying it would loop forever.
+    const hasTarget = step.target !== null && step.target !== undefined;
+    const sel = hasTarget ? stepTarget(step) : null;
+    const el = sel ? document.querySelector(sel) : null;
+    if (hasTarget && !el) {
       // Target not on screen yet (e.g. a render is still catching up) — try again next frame
       // rather than leaving the spotlight stranded on a stale rect.
       requestAnimationFrame(() => reposition());
@@ -836,7 +985,22 @@ const Tutorial = (function () {
     // feedback loop — inside a nested scrollable container (the Settings panel, which has its
     // own overflow-y:auto) that stranded the callout off-screen and made the page feel stuck.
     // Leaving the view entirely under the host's control avoids that outright.
-    const r = el.getBoundingClientRect();
+    let r = el ? el.getBoundingClientRect() : null;
+    // Some steps spotlight two adjacent elements as one box (e.g. a section header together
+    // with one specific row below it) via targetEnd — union the two rects rather than the
+    // whole section in between, which would sweep in every other team's row too.
+    const endSel = el ? stepTargetEnd(step) : null;
+    if (endSel) {
+      const elEnd = document.querySelector(endSel);
+      if (elEnd) {
+        const r2 = elEnd.getBoundingClientRect();
+        const top = Math.min(r.top, r2.top);
+        const left = Math.min(r.left, r2.left);
+        const right = Math.max(r.right, r2.right);
+        const bottom = Math.max(r.bottom, r2.bottom);
+        r = { top, left, right, bottom, width: right - left, height: bottom - top };
+      }
+    }
     const pad = 6;
     const vw = window.innerWidth,
       vh = window.innerHeight;
@@ -849,8 +1013,10 @@ const Tutorial = (function () {
     // ever bring it back; that's what "stuck off-screen" actually was. So: only draw a cutout
     // around the target when it's actually on screen, and always clamp the callout itself
     // (Next/Back/Skip) into the visible viewport regardless — the host can never lose access to
-    // the controls, even while the thing being described is still scrolled out of view.
-    const onScreen = r.bottom > 0 && r.top < vh && r.right > 0 && r.left < vw;
+    // the controls, even while the thing being described is still scrolled out of view. A
+    // no-target step reuses this exact same "nothing to cut a hole around" path, landing the
+    // callout dead center.
+    const onScreen = !!r && r.bottom > 0 && r.top < vh && r.right > 0 && r.left < vw;
     if (onScreen) {
       dom.ring.style.display = "";
       dom.top.style.display = dom.bottom.style.display = dom.left.style.display = dom.right.style.display = "";
@@ -890,9 +1056,13 @@ const Tutorial = (function () {
       dom.bottom.style.bottom = "0";
     }
     // The callout is always clamped fully inside the viewport — never anchored purely off the
-    // target's (possibly off-screen) rect the way the ring/bars are.
+    // target's (possibly off-screen) rect the way the ring/bars are. calloutPosition:"above"
+    // forces the callout above the target regardless of space below — for steps that spotlight
+    // a header/button with the content the host actually needs to watch sitting right beneath
+    // it (e.g. the Sort demo), where the callout landing below would cover exactly that.
+    const fitsBelow = !!r && step.calloutPosition !== "above" && vh - r.bottom > 180;
     let top = onScreen
-      ? vh - r.bottom > 180
+      ? fitsBelow
         ? r.bottom + pad + 10
         : Math.max(10, r.top - pad - 10 - 160)
       : vh / 2 - 90;

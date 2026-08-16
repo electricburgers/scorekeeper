@@ -4,7 +4,7 @@
    so the callout reads as part of the app, not a bolted-on widget, and sits at z-index 600 —
    above .audit-overlay's 500, the highest the app already stacks. */
 
-.tutorial-bar{position:fixed;background:rgba(0,0,0,.35);z-index:600;pointer-events:none;transition:top .18s ease,bottom .18s ease,left .18s ease,right .18s ease}
+.tutorial-bar{position:fixed;background:rgba(0,0,0,.16);z-index:600;pointer-events:none;transition:top .18s ease,bottom .18s ease,left .18s ease,right .18s ease}
 /* Four bars framing a rectangular hole around the current target, rather than a single
    clip-path/mask cutout — simpler and more robust cross-browser, and matches how this app
    already builds everything else out of plain absolutely-positioned divs. No div ever covers
@@ -30,6 +30,8 @@
 .tutorial-callout-hint{font-size:.72rem;color:var(--text-muted);font-style:italic}
 .tutorial-callout-next{font-family:var(--font-body);font-size:.8rem;font-weight:700;padding:6px 14px;border:1px solid var(--accent-cyan);border-radius:var(--radius);background:transparent;color:var(--txt-cyan);cursor:pointer}
 .tutorial-callout-next:hover{background:rgba(0,255,255,.1)}
+.tutorial-callout-next:disabled{opacity:.35;cursor:not-allowed;color:var(--text-muted);border-color:var(--border-strong)}
+.tutorial-callout-next:disabled:hover{background:transparent}
 .tutorial-callout-back{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:6px 10px;border:1px solid var(--border-strong);border-radius:var(--radius);background:transparent;color:var(--text-secondary);cursor:pointer}
 .tutorial-callout-back:hover{background:var(--bg-hover);color:var(--text-primary)}
 .tutorial-callout-skip{font-size:.72rem;color:var(--text-muted);text-decoration:underline;cursor:pointer;background:none;border:none;padding:0;font-family:var(--font-body)}
