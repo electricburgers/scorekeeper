@@ -576,7 +576,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-craftprize",
-        text: "The Craft Prize drawing runs a drumroll and picks a winner from the eligible teams. Let's open it.",
+        text: `The Craft Prize drawing runs a drumroll and picks a random winner from the eligible teams. Let's check it out. ${tapWordCap()} Next.`,
         advance: "manual",
         fill: (ready) => {
           // Starts collapsed, same as a real game — expand it here, right when the tour
@@ -588,19 +588,19 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-craftprize",
-        text: `Here you can exclude the top teams who've already won gift cards and see who isn't included in the drawing, and set how long you want the drumroll to run. Let's check it out: ${tapWord()} Start Drumroll.`,
+        text: `Here you can exclude the top teams who've already won gift cards and see who isn't included in the drawing. You can also set how long you want the drumroll to run. Let's try it: ${tapWord()} Start Drumroll.`,
         advance: "on-click",
         done: () => !!gameState.craftPrizeWinner,
       },
       {
         target: ".cp-winner",
         targetEnd: ".cp-script",
-        text: `There's your winner — and right below it, a ready-to-read announcement script with the craft partner's name and town already filled in. Didn't mean to pick that team? ${tapWordCap()} ✕ Clear to wipe the choice and draw again.`,
+        text: `There's your winner — and right below it, a ready-to-read announcement script with the craft partner's name and town filled in. You can ${tapWord()} ✕ Clear to wipe the choice and draw again.`,
         advance: "manual",
       },
       {
         target: 'button[onclick="exportPDF()"]',
-        text: `Every export lives in Export & Data. ${tapWordCap()} 📕 PDF — it downloads a real scoresheet for this practice game. Then ${tapWord()} Next when you're ready.`,
+        text: `The ways to submit your game live in Export & Data. ${tapWordCap()} 📕 PDF — it downloads a PDF scoresheet. Then ${tapWord()} Next when you're ready.`,
         advance: "manual",
         // fallbackNext: this listener is the only thing that notices the tap (exporting doesn't
         // touch gameState or call any hooked render function, unlike almost every other step),
@@ -611,12 +611,12 @@ const Tutorial = (function () {
       },
       {
         target: 'a[href="https://app.jotform.com/261954293403156"]',
-        text: `Now ${tapWord()} 🔗 JD Upload Form. You'll see a new tab open — take a look, then come back to this tab to finish up. ${tapWordCap()} Next when you're ready.`,
+        text: `Now ${tapWord()} 🔗 JD Upload Form. You'll see a new tab open. This is where you'll go to upload your scoresheet. Take a look, then come back to this tab to finish up. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
       },
       {
         target: "#sec-export .btn-danger",
-        text: `That's a full game! The app has other features but that's enough for now. Feel free to keep playing around. ${tapWordCap()} Close Tutorial to dismiss this box. To wipe this Tutorial game and start a brand new one ${tapWord()} 🗑 Clear Session, down at the bottom in Export & Data.`,
+        text: `That's a full game! Feel free to keep playing around. ${tapWordCap()} Close Tutorial to dismiss this box. To wipe this Tutorial game and start a brand new one ${tapWord()} 🗑 Clear Session in Export & Data.`,
         advance: "manual",
         last: true,
       },
