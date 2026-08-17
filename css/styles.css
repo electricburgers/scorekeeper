@@ -111,11 +111,11 @@
    .mini-progress) on mobile, where the document itself is what scrolls. Leaving it on body
    only lets body's overflow propagate to the viewport as the single, well-defined scroller. */
 /* background here too (not just on body): iOS Safari's rubber-band overscroll bounce on a
-   position:fixed + -webkit-overflow-scrolling:touch container (e.g. .audit-overlay, the Score
-   Audit modal's own scroller) can momentarily reveal whatever's painted behind the fixed
+   position:fixed + -webkit-overflow-scrolling:touch container (e.g. .audit-overlay, the Team
+   Report modal's own scroller) can momentarily reveal whatever's painted behind the fixed
    element's edge during the bounce — if html itself has no background, that's the browser's
    default transparent/white canvas showing through, which read as "the header goes transparent
-   while scrolling" in Score Audit on mobile. Matching body's own --bg-primary here closes that
+   while scrolling" in Team Report on mobile. Matching body's own --bg-primary here closes that
    gap so an overscroll bounce reveals more of the same dark background instead. */
 html{font-size:16px;max-width:100%;background:var(--bg-primary)}
 /* touch-action:manipulation app-wide: without it, two rapid taps on rapidly re-rendered
@@ -1120,7 +1120,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .cp-script-label{display:block;font-size:.66rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
 
-/* SCORE AUDIT MODAL */
+/* TEAM REPORT MODAL (formerly "Score Audit") */
 /* Bottom padding includes the safe-area inset so the scrollable content at the very bottom
    clears the Home Bar instead of sitting flush against the physical screen edge. The top has
    none: any top padding on this scrolling container pushes .audit-head's stuck position down
@@ -1280,7 +1280,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .standings-name{min-width:0}
   .standings-pts{min-width:clamp(2rem,9vw,2.5rem)}
 
-  /* ── score audit modal rows (body-level overlay) ── */
+  /* ── team report modal rows (body-level overlay) ── */
   .aud-wager{width:4.2rem;font-size:.72rem;min-width:0}
   .aud-res{font-size:.74rem;min-width:0}
   .aud-q{min-width:0;width:2rem}

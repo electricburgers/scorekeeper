@@ -43,7 +43,7 @@ const Tutorial = (function () {
   let origCraftManualEnd = null; // real saved Manual Drumroll Control setting, restored on exit
   let sawSectionCollapsed = false; // tracks the collapse->expand sequence for that practice step
   let r1CycleSeen = null; // tracks correct->incorrect->cleared->back-to-correct on one question
-  let auditOpened = false; // real click on a team name to open the Score Audit modal
+  let auditOpened = false; // real click on a team name to open the Team Report modal
   let pdfExportClicked = false; // real click on Export PDF, tracked via a listener (see below)
   let jdUploadClicked = false; // real click on the JD Upload Form link — opens in a new tab, so
   // there's no in-page state change to poll for the way every other on-click step has
@@ -244,7 +244,7 @@ const Tutorial = (function () {
   //     host's explicit action; nothing further to click. Reserved for button/checkbox-style
   //     taps where there's nothing to double-check afterward.
   //   'confirm' — a real action is required (typing into a typo-prone free-text field, or a
-  //     click that opens something worth exploring, like the Score Audit), but the tour never
+  //     click that opens something worth exploring, like the Team Report), but the tour never
   //     auto-advances the instant done() goes true: it only reveals a Next/Done button, and the
   //     host reviews what they typed (or plays around with what just opened) and taps it
   //     themselves. waitHint/doneLabel on the step override the default "type here"/"Next →"
@@ -263,27 +263,27 @@ const Tutorial = (function () {
     return [
       {
         target: null,
-        text: "Welcome to Scorekeeper! This is a tutorial with five teams. Let's fill out a night start to finish.",
+        text: "Welcome to the Scorekeeper tutorial! Let's go through a game from start to finish.",
         advance: "manual",
       },
       {
         target: "#sec-meta",
-        text: "Every game starts with Event Details — I've pre-filled the date, location, craft partner, bonus item, and restaurant staff. Quiz ID and Host Name are left for you to fill in.",
+        text: "Every game starts with Event Details — I've pre-filled the date, location, craft partner, bonus item, and restaurant staff. You'll fill in Quiz ID and Host Name next.",
         advance: "manual",
       },
       {
         target: ".quiz-id-input",
-        calloutPosition: "above",
-        text: `Type a Quiz ID — the format is usually something like ABC-012. ${tapWordCap()} Next once you're done.`,
-        advance: "confirm",
+        calloutPosition: "below",
+        text: `Type a Quiz ID — the format is generally ABC-012. ${tapWordCap()} Next once you're done.`,
+        advance: "manual",
         alwaysShowDone: true,
         done: () => !!(gameState.meta.quizId || "").trim(),
       },
       {
         target: 'input[placeholder="Who\'s hosting"]',
-        calloutPosition: "above",
-        text: `Now type your own name in Host Name, then ${tapWord()} Next.`,
-        advance: "confirm",
+        calloutPosition: "below",
+        text: `Type your name in Host Name, then ${tapWord()} Next.`,
+        advance: "manual",
         alwaysShowDone: true,
         done: () => !!(gameState.meta.hostName || "").trim(),
       },
@@ -294,7 +294,7 @@ const Tutorial = (function () {
         // notice the panel opened and move the spotlight — the listener in fill() below does.
         target: () =>
           loadPrefs().settingsOpen ? "#themeToggle" : "#settingsToggleBtn",
-        text: `${tapWordCap()} the ⚙️ gear icon to open Settings. There's Light and Dark modes. Flip between them a few times, then ${tapWord()} Next once you've settled on the one you like.`,
+        text: `${tapWordCap()} the ⚙️ gear icon to open Settings. There's Light and Dark modes. Flip between them a few times, then ${tapWord()} Next once you've settled on one you like.`,
         advance: "manual",
         fill: (ready) => {
           const gear = document.getElementById("settingsToggleBtn");
@@ -325,16 +325,16 @@ const Tutorial = (function () {
       },
       {
         target: '.team-entry:first-child input[type="text"]',
-        text: `Type a name for your team, then ${tapWord()} Next.`,
-        advance: "confirm",
+        text: `Enter a name for your team, then ${tapWord()} Next.`,
+        advance: "manual",
         alwaysShowDone: true,
         doneLabel: "Next →",
         done: () => !!(gameState.teams[0]?.name || "").trim(),
       },
       {
         target: '.team-entry:first-child input[type="number"]',
-        text: `Add a score guess from 1-146 — every team needs a final score guess before scoring can begin. ${tapWordCap()} Next once it's in.`,
-        advance: "confirm",
+        text: `Add a Final Score Guess from 1-146 — every team needs a Final Score Guess before scoring can begin. ${tapWordCap()} Next once it's in.`,
+        advance: "manual",
         alwaysShowDone: true,
         doneLabel: "Next →",
         done: () => {
@@ -349,7 +349,7 @@ const Tutorial = (function () {
         // events over. The labels wrap both and are what real taps land on.
         target: "label.item-check:has(#bi0)",
         targetEnd: "label.njcb-check:has(#nj0)",
-        text: `Check one or both of these boxes if a team has brought them — try it for your Tutorial Team. ${tapWordCap()} Next when you're done.`,
+        text: `Check one or both of these Bonus boxes if a team has brought them — try it for ${team0Name()}. ${tapWordCap()} Next when you're done.`,
         // 'confirm' rather than 'on-click' here on purpose: there are two boxes, and checking
         // the first one shouldn't immediately whisk the host past the second before they get a
         // chance to check that one too.
@@ -361,13 +361,13 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-teams",
-        text: "I'll add the rest of the teams and guesses.",
+        text: "I'll add the rest of the teams and guesses for this tutorial.",
         advance: "manual",
         fill: (ready) => addTeamsSequentially(ready),
       },
       {
         target: "#sec-r1 .section-header",
-        text: `Every section header collapses and expands the section — handy once a round or question is fully scored and you want it out of the way. ${tapWordCap()} Round 1's header to collapse it, then ${tapWord()} it again to bring it back.`,
+        text: `Every section header collapses and expands the section below it — handy once a round or question is completed to get it out of the way. ${tapWordCap()} Round 1's header to collapse it, then ${tapWord()} it again to bring it back.`,
         advance: "on-click",
         fill: () => {
           sawSectionCollapsed = false;
@@ -387,7 +387,7 @@ const Tutorial = (function () {
         // The whole row — all four wager amounts plus the points box on the right, so the host
         // can see a score land there as they go, not just the buttons themselves.
         target: '.team-answer[data-ta="0-0-0"]',
-        text: `Practice Scoring: ${tapWordCap()} any of the four wager amounts. ${tapWordCap()} the same one again to cycle it: correct, then incorrect, then cleared. Let's say the team got it correct, ${tapWord()} it once more to land back on correct. Try the whole cycle on Q1 for "${team0Name()}".`,
+        text: `Practicing Scoring: ${tapWordCap()} any of the four wager amounts. ${tapWordCap()} the same one again to cycle it among: correct, then incorrect, then cleared. Let's say ${team0Name()} got it correct, ${tapWord()} it once more to land back on correct.`,
         advance: "confirm",
         waitHint:
           "Cycle through the states and land back on correct — Next shows up once you do",
@@ -411,7 +411,7 @@ const Tutorial = (function () {
       {
         target: "#bqblock-0 .q-header",
         targetEnd: "#bqblock-0 .bonus-row:first-child",
-        text: `Scroll down to the Q5 Bonus at the end of Round 1. Score this Question for "${team0Name()}". ${tapWordCap()} a number showing how many parts they got right, each part is worth 5 points each. Each team's total points for the question show up on the right side. ${tapWordCap()} Next once you've picked one.`,
+        text: `Scroll down to the Q5 Bonus at the end of Round 1. Score this question for "${team0Name()}". Each part is worth 5 points. The total points for the question show up on the right. ${tapWordCap()} Next once you've picked one.`,
         advance: "confirm",
         waitHint: `${tapWordCap()} a number to continue`,
         doneLabel: "Next →",
@@ -429,7 +429,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r2",
-        text: "Scroll down to Round 2. Everything's the same, only the wager amounts change (1, 3, 5, 7 here). I'll fill in everyone's Q1.",
+        text: "Scroll down to Round 2. Everything's the same, only the wager amounts change (1, 3, 5, 7). I'll fill in everyone's Q1.",
         advance: "manual",
         fill: (ready) => {
           forceBeerRound(1, 0);
@@ -438,13 +438,13 @@ const Tutorial = (function () {
       },
       {
         target: "#qblock-1-0 .q-badge.q-beer",
-        text: "Beer Round shows up whenever every team gets a question right. It's a fun moment to call out.",
+        text: "The Beer Round badge shows up when every team correctly answers the question. It's a fun moment to call out.",
         advance: "manual",
       },
       {
         target: "#qblock-1-1 .q-header-right",
         calloutPosition: "above",
-        text: `Now, watch Q2: I'll answer just two teams and leave the rest blank. With a full room of teams, scanning every row to find a specific team to score gets tedious. That's what ↕ Sort is for. ${tapWordCap()} Next, then try it out.`,
+        text: `For Q2, I'll fill in answers only for two teams. With a full room of teams, scanning every row to find a specific team to score gets tedious. That's what ↕ Sort is for. ${tapWordCap()} Next, then we'll try it out.`,
         advance: "manual",
         fill: (ready) => {
           partialFillTeams(1, 1, [0, 2]);
@@ -454,7 +454,7 @@ const Tutorial = (function () {
       {
         target: "#qblock-1-1 .q-sort-btn",
         calloutPosition: "above",
-        text: `${tapWordCap()} ↕ Sort — it moves the still-unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or ↺ Reset to go back to entry order. ${tapWordCap()} Next when you're ready to move on.`,
+        text: `${tapWordCap()} ↕ Sort — it shifts the still-unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or ↺ Reset to go back to entry order. ${tapWordCap()} Next when you're ready to move on.`,
         // 'confirm' rather than 'on-click' here on purpose — the host might want to tap Sort a
         // few times (and try Reset) to get a feel for it, not get whisked away the instant it
         // sorts once.
@@ -473,7 +473,7 @@ const Tutorial = (function () {
       },
       {
         target: "#standings-halftime",
-        text: "Scroll down to just before the end of Round 2 and you'll see the Before Halftime Wager Standings. Read them out so teams know how many points they want to bet for the Q5 Halftime Wager.",
+        text: "Scroll down to just before the end of Round 2 and you'll see the Before Halftime Wager Standings. Read them out so teams know how many points they want to bet for the Halftime Wager.",
         advance: "manual",
       },
       {
@@ -490,7 +490,7 @@ const Tutorial = (function () {
       },
       {
         target: "#swblock-halftime",
-        text: `I'll fill in the rest of the halftime wagers. Click ${tapWord()} to continue.`,
+        text: `I'll fill in the rest of the halftime wagers.`,
         advance: "manual",
         fill: (ready) => {
           autoFillSpecialWager("halftime", 0);
@@ -499,12 +499,12 @@ const Tutorial = (function () {
       },
       {
         target: "#staffThanksBlock",
-        text: "Right after the Q5 Halftime Wager, there's a shout-out to the bar staff — a good moment for the room to thank them.",
+        text: "Right after the Halftime Wager, there's a shout-out to the staff — a good moment for the room to thank them. It pulls the names entered in Event Details.",
         advance: "manual",
       },
       {
         target: "#sec-r3",
-        text: "Scroll down to Round 3. Here wagers are 2, 4, 6, and 8, plus another 0-4 Bonus Question. I'll fill it all in.",
+        text: "Scroll down to Round 3. Here the wagers are 2, 4, 6, and 8, plus another multi-part Bonus Question. I'll fill it all in.",
         advance: "manual",
         fill: (ready) => {
           autoFillRound(2);
@@ -513,7 +513,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r4",
-        text: "Lastly we're at Round 4. Just like Round 2, there's the Before Final Wager Standings to read out. For the final question of the night, players can bet up to 20 points. I'll fill it all in.",
+        text: "Scroll to Round 4. Just like Round 2, there's a Before Final Wager Standings to read out. For the final question of the night, players can bet up to 20 points. I'll fill it all in before we head to Final Results.",
         advance: "manual",
         fill: (ready) => {
           autoFillRound(3);
@@ -525,7 +525,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-final",
-        text: "The Final Results display end-game results from last place to 1st, teams' score guess-vs-actual score, and a tie-break note: whoever guessed closer to their final total ranks higher on the standings.",
+        text: "The Final Results displays scores in ascending order, teams' guess-vs-actual score, and any tie-break notes: whoever guessed closer to their final total ranks higher on the standings.",
         advance: "manual",
         // Defensive: Craft Prize Drawing starts collapsed (see start(), below) and its own step
         // further down is what deliberately opens it — this just re-asserts that collapsed
@@ -542,7 +542,7 @@ const Tutorial = (function () {
         // regardless of where that team lands in the ranking, so this is stable no matter the
         // final order.
         target: '#sec-final tr[onclick="openAudit(0)"] .ta-name-clickable',
-        text: `Score Audit: ${tapWordCap()} "${team0Name()}"'s name in the standings (or anywhere during a real game) to open a report detailing every point. Useful in case a team asks you about a specific question.`,
+        text: `${tapWordCap()} "${team0Name()}"'s name in Final Results (or anywhere during a real game) to open a Team Report detailing every point. Useful in case a team asks you about a specific question.`,
         advance: "on-click",
         fill: () => {
           auditOpened = false;
@@ -582,7 +582,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-craftprize",
-        text: `The Craft Prize Drawing plays a drumroll and picks a random winner. Let's check it out. ${tapWordCap()} Next.`,
+        text: `The Craft Prize Drawing plays a drumroll and picks a random winner. Let's check it out.`,
         advance: "manual",
         fill: (ready) => {
           // Starts collapsed, same as a real game — expand it here, right when the tour
@@ -594,14 +594,14 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-craftprize",
-        text: `Here you can exclude the top teams who've already won gift cards and verify who isn't included in the drawing. You can also set how long the drumroll plays. Try it out: ${tapWord()} Start Drumroll.`,
+        text: `Here you can exclude the top teams who've already won gift cards. The excluded names are listed to verify who isn't included in the random drawing. You can also set the drumroll duration. Try it out: ${tapWord()} Start Drumroll.`,
         advance: "on-click",
         done: () => !!gameState.craftPrizeWinner,
       },
       {
         target: ".cp-winner",
         targetEnd: ".cp-script",
-        text: `There's your winner! And right below it, a ready-to-read announcement with the craft partner's name and town filled in. You can ${tapWord()} ✕ Clear to wipe the choice and draw again.`,
+        text: `There's the Craft Prize Drawing winner! And right below it, a ready-to-read announcement with the craft partner's name and town filled in. You can ${tapWord()} ✕ Clear to wipe the choice and draw again.`,
         advance: "manual",
       },
       {
@@ -617,12 +617,12 @@ const Tutorial = (function () {
       },
       {
         target: 'a[href="https://app.jotform.com/261954293403156"]',
-        text: `Now ${tapWord()} 🔗 JD Upload Form. A new tab opens. This is where you upload your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
+        text: `When you ${tapWord()} 🔗 JD Upload Form, a new tab opens to where you upload your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
       },
       {
         target: "#sec-export .btn-danger",
-        text: `That's a full game! Feel free to keep playing around. ${tapWordCap()} Close Tutorial to dismiss this box. To clear this Tutorial and start a new game ${tapWord()} 🗑 Clear Session in Export & Data.`,
+        text: `That's a full game! Feel free to keep playing around or check out the FAQ in Settings. ${tapWordCap()} Close Tutorial to dismiss this box. To clear this Tutorial and start a new game ${tapWord()} 🗑 Clear Session in Export & Data.`,
         advance: "manual",
         last: true,
       },
