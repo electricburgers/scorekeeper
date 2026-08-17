@@ -41,6 +41,10 @@ const Tutorial = (function () {
   let advancing = false; // guards checkOnClickDone against scheduling more than one advance
   let origCraftDrawSeconds = null; // real saved drumroll length, restored on exit
   let origCraftManualEnd = null; // real saved Manual Drumroll Control setting, restored on exit
+  let origQtState = null; // real Question Timer's idle/running/paused state, restored on exit
+  let origQtDurationSec = null; // real Question Timer's configured duration, restored on exit
+  let origQtEndEpoch = 0; // real Question Timer's absolute end time (if running), restored on exit
+  let origQtRemainMs = 0; // real Question Timer's frozen remaining time (if paused), restored on exit
   let sawSectionCollapsed = false; // tracks the collapse->expand sequence for that practice step
   let r1CycleSeen = null; // tracks correct->incorrect->cleared->back-to-correct on one question
   let auditOpened = false; // real click on a team name to open the Team Report modal
@@ -409,6 +413,29 @@ const Tutorial = (function () {
         },
       },
       {
+        // Right after the host scores their first real question — a natural pause to show
+        // where the Question Timer lives before autofill takes over the rest of Round 1.
+        // start() above already forced it to a clean idle state at the true 3-minute default,
+        // so this reliably demonstrates that default regardless of any real customized setting.
+        target: () => (isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop"),
+        text: `Every question also gets its own Question Timer, defaulting to 3 minutes — this is where it lives. ${tapWordCap()} ▶ Start to see it count down.`,
+        advance: "on-click",
+        // toggleQTimer() only flips module-level timer state and updates the qtimer-* elements
+        // directly — it never calls a hooked render function, so nothing would otherwise
+        // re-check done() after the tap (same reasoning as the section-header/Team-Report steps
+        // above).
+        fill: () => {
+          const btn = document.querySelector(
+            `${isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop"} .qtimer-toggle`,
+          );
+          if (btn)
+            btn.addEventListener("click", () => checkOnClickDone(), {
+              once: true,
+            });
+        },
+        done: () => qtState === "running",
+      },
+      {
         target: "#bqblock-0 .q-header",
         targetEnd: "#bqblock-0 .bonus-row:first-child",
         text: `Scroll down to the Q5 Bonus at the end of Round 1. Score this question for "${team0Name()}". Each part is worth 5 points. The total points for the question show up on the right. ${tapWordCap()} Next once you've picked one.`,
@@ -605,6 +632,24 @@ const Tutorial = (function () {
         advance: "manual",
       },
       {
+        // One last look at the Question Timer before wrapping up — by now it's been running
+        // (or overflowed past 0:00) since Round 1, a real demonstration of elapsed time rather
+        // than a fresh countdown.
+        target: () => (isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop"),
+        text: `Before we wrap up, let's revisit the Question Timer — see how much time has elapsed since Round 1, then ${tapWord()} ↺ Reset to bring it back to 3:00 for the next real question.`,
+        advance: "on-click",
+        fill: () => {
+          const btn = document.querySelector(
+            `${isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop"} .qtimer-reset`,
+          );
+          if (btn)
+            btn.addEventListener("click", () => checkOnClickDone(), {
+              once: true,
+            });
+        },
+        done: () => qtState === "idle",
+      },
+      {
         target: 'button[onclick="exportPDF()"]',
         text: `Next let's look at Export & Data. If you ${tapWord()} 📕 PDF, it downloads a PDF scoresheet — ready to send to JD. Then ${tapWord()} Next when you're ready.`,
         advance: "manual",
@@ -789,6 +834,17 @@ const Tutorial = (function () {
     origCraftManualEnd = !!p.craftManualEnd;
     p.craftManualEnd = false;
     savePrefs(p);
+    // Same reasoning as the drumroll length above: the Question Timer isn't part of gameState
+    // either, so a real countdown mid-flight — or a duration the host customized in Settings —
+    // would otherwise carry straight into the tour's own timer steps untouched. Snapshot it and
+    // force a clean idle state at the true 3-minute default; the host's real timer is restored
+    // byte-for-byte on exit.
+    origQtState = qtState;
+    origQtDurationSec = qtDurationSec;
+    origQtEndEpoch = qtEndEpoch;
+    origQtRemainMs = qtRemainMs;
+    qtDurationSec = QT_DEFAULT_SEC;
+    resetQTimer();
     renderAll();
     goToStep(0);
   }
@@ -830,6 +886,28 @@ const Tutorial = (function () {
       savePrefs(p);
       origCraftDrawSeconds = null;
       origCraftManualEnd = null;
+    }
+    if (origQtState != null) {
+      // Byte-for-byte restore, not a fresh reset: qtEndEpoch/qtRemainMs are exactly what they
+      // were the moment the tour started, so a real timer that was running keeps reflecting
+      // genuine elapsed wall-clock time (as if the tour had never touched it) instead of losing
+      // or gaining time relative to what the host actually experienced.
+      qtState = origQtState;
+      qtDurationSec = origQtDurationSec;
+      qtEndEpoch = origQtEndEpoch;
+      qtRemainMs = origQtRemainMs;
+      qtSetDisplayText(
+        fmtQt(
+          qtState === "running"
+            ? (qtEndEpoch - Date.now()) / 1000
+            : qtState === "paused"
+              ? qtRemainMs / 1000
+              : qtDurationSec,
+        ),
+      );
+      qtSetDisplayClass(null); // tickQTimer()'s own setInterval recomputes warn/crit/over next tick
+      renderQtControls();
+      origQtState = null;
     }
     active = false;
     stepIndex = -1;
