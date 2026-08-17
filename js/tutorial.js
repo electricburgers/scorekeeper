@@ -273,7 +273,7 @@ const Tutorial = (function () {
       },
       {
         target: ".quiz-id-input",
-        calloutPosition: "below",
+        calloutPosition: "above",
         text: `Type a Quiz ID — the format is generally ABC-012. ${tapWordCap()} Next once you're done.`,
         advance: "manual",
         alwaysShowDone: true,
@@ -281,7 +281,7 @@ const Tutorial = (function () {
       },
       {
         target: 'input[placeholder="Who\'s hosting"]',
-        calloutPosition: "below",
+        calloutPosition: "above",
         text: `Type your name in Host Name, then ${tapWord()} Next.`,
         advance: "manual",
         alwaysShowDone: true,
@@ -606,7 +606,7 @@ const Tutorial = (function () {
       },
       {
         target: 'button[onclick="exportPDF()"]',
-        text: `Next let's look at Export & Data. If you ${tapWord()} 📕 PDF, it downloads a PDF scoresheet. Then ${tapWord()} Next when you're ready.`,
+        text: `Next let's look at Export & Data. If you ${tapWord()} 📕 PDF, it downloads a PDF scoresheet — ready to send to JD. Then ${tapWord()} Next when you're ready.`,
         advance: "manual",
         // fallbackNext: this listener is the only thing that notices the tap (exporting doesn't
         // touch gameState or call any hooked render function, unlike almost every other step),
