@@ -417,8 +417,9 @@ const Tutorial = (function () {
         // where the Question Timer lives before autofill takes over the rest of Round 1.
         // start() above already forced it to a clean idle state at the true 3-minute default,
         // so this reliably demonstrates that default regardless of any real customized setting.
-        target: () => (isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop"),
-        text: `Every question also gets its own Question Timer, defaulting to 3 minutes — this is where it lives. ${tapWordCap()} ▶ Start to see it count down.`,
+        target: () =>
+          isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop",
+        text: `You'll have this Question Timer available. It defaults to 3 minutes. This is where it lives. ${tapWordCap()} ▶ Start to begin the countdown. We'll come back to it near the end.`,
         advance: "on-click",
         // toggleQTimer() only flips module-level timer state and updates the qtimer-* elements
         // directly — it never calls a hooked render function, so nothing would otherwise
@@ -635,7 +636,8 @@ const Tutorial = (function () {
         // One last look at the Question Timer before wrapping up — by now it's been running
         // (or overflowed past 0:00) since Round 1, a real demonstration of elapsed time rather
         // than a fresh countdown.
-        target: () => (isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop"),
+        target: () =>
+          isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop",
         text: `Before we wrap up, let's revisit the Question Timer — see how much time has elapsed since Round 1, then ${tapWord()} ↺ Reset to bring it back to 3:00 for the next real question.`,
         advance: "on-click",
         fill: () => {
