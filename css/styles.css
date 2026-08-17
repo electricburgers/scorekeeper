@@ -284,10 +284,15 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .size-label{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 .sep{width:1px;height:18px;background:var(--border-light);margin:0 2px;flex-shrink:0}
 
-.resume-banner{background:var(--bg-card);border:1px solid var(--accent-gold);border-radius:var(--radius-lg);padding:16px;margin:0 16px 12px;display:none}
+.resume-banner{position:relative;background:var(--bg-card);border:1px solid var(--accent-gold);border-radius:var(--radius-lg);padding:16px;margin:0 16px 12px;display:none}
 .resume-banner.show{display:block}
-.resume-banner p{margin-bottom:12px;color:var(--badge-gold-fg);font-weight:600}
+.resume-banner p{margin:0 28px 12px 0;color:var(--badge-gold-fg);font-weight:600}
 .resume-banner .btn-row{display:flex;gap:8px}
+/* Escape hatch for a host who ignores Resume/New Game and heads straight for the tutorial or a
+   practice game instead — dismisses the banner without touching the saved session in storage,
+   same effect resumeSession()/startNewGame() have on it, just without the decision. */
+.resume-banner-close{position:absolute;top:10px;right:10px;width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--border-light);background:none;color:var(--text-secondary);font-size:.9rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);touch-action:manipulation}
+.resume-banner-close:hover{background:var(--bg-hover);color:var(--text-primary)}
 
 /* LAYOUT */
 .app-layout{display:flex;height:calc(100vh - 60px);overflow:hidden}
