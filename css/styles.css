@@ -1366,6 +1366,12 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 [data-theme="hc-light"] .fr-tiebadge.fr-win{background:var(--pts-pos-bg);color:var(--pts-pos-fg)}
 .fr-diff-win{color:var(--badge-green-fg)!important;font-weight:800!important}
 .fr-note{font-size:.72rem;color:var(--text-muted);margin-top:9px;line-height:1.45}
+/* Event Details' "Locked once scoring starts" note (see metaLocked in app.js) is now always
+   rendered, not conditionally included — same fix, same reasoning, as .mini-progress.mp-pending
+   above: omitting it outright until the first score landed meant Teams/Round 1/everything below
+   Event Details jumped down the moment it popped in. visibility:hidden reserves its real height
+   the whole time and drops it from tab order/hit-testing on its own while pending. */
+.fr-note.fr-note-pending{visibility:hidden}
 /* Links inside a note (e.g. Event Details' "Unlock to fix it") had no color rule of their own,
    so they fell back to the browser default blue/purple — on hc-dark's near-black background
    that read as low-contrast, and visited-purple in particular clears nowhere near AA. --txt-cyan

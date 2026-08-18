@@ -371,7 +371,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r1 .section-header",
-        text: `Every section header collapses and expands the section below it. Handy once a round or question is completed to get it out of the way. ${tapWordCap()} Round 1's header to collapse it, then ${tapWord()} it again to bring it back.`,
+        text: `Let's head to Round 1. Every section header collapses and expands the section below it. Handy once a round or question is completed to get it out of the way. ${tapWordCap()} Round 1's header to collapse it, then ${tapWord()} it again to bring it back.`,
         advance: "on-click",
         fill: () => {
           sawSectionCollapsed = false;
@@ -419,7 +419,7 @@ const Tutorial = (function () {
         // so this reliably demonstrates that default regardless of any real customized setting.
         target: () =>
           isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop",
-        text: `You'll have this Question Timer available. It defaults to 3 minutes. This is where it lives. ${tapWordCap()} ▶ to begin the countdown. We'll come back to it near the end.`,
+        text: `The Question Timer is here. ${tapWordCap()} ▶ to start a countdown. We'll come back to it at the end.`,
         advance: "on-click",
         // toggleQTimer() only flips module-level timer state and updates the qtimer-* elements
         // directly — it never calls a hooked render function, so nothing would otherwise
@@ -439,7 +439,7 @@ const Tutorial = (function () {
       {
         target: "#bqblock-0 .q-header",
         targetEnd: "#bqblock-0 .bonus-row:first-child",
-        text: `Scroll down to the Q5 Bonus at the end of Round 1. Score this question for "${team0Name()}". Each part is worth 5 points. The total points show up on the right. ${tapWordCap()} Next once you've scored them.`,
+        text: `Scroll down to the Q5 Bonus at the end of Round 1. Score this question for ${team0Name()}. Each part is worth 5 points. The total points show up on the right. ${tapWordCap()} Next once you've scored them.`,
         advance: "confirm",
         waitHint: `${tapWordCap()} a number to continue`,
         doneLabel: "Next →",
@@ -470,7 +470,10 @@ const Tutorial = (function () {
         advance: "manual",
       },
       {
-        target: "#qblock-1-1 .q-header-right",
+        // The whole card (header + every team row), not just the header-right strip — the step's
+        // own text talks about "scanning every row", so the spotlight should actually show every
+        // row while saying that, not just the Sort/Reset corner those rows are about to justify.
+        target: "#qblock-1-1",
         calloutPosition: "above",
         text: `For Q2, I'll fill in answers only for two teams. With a full room of teams, scanning every row to find a specific team to score gets tedious. ${tapWordCap()} Next, then we'll try out Sorting.`,
         advance: "manual",
@@ -480,7 +483,11 @@ const Tutorial = (function () {
         },
       },
       {
+        // targetEnd unions Sort with Reset — the step already talks the host through both
+        // buttons ("Sort... or ↺ Reset to go back to entry order"), so the spotlight now covers
+        // both instead of leaving Reset unspotlighted while the text describes it.
         target: "#qblock-1-1 .q-sort-btn",
+        targetEnd: "#qblock-1-1 .q-reset-btn",
         calloutPosition: "above",
         text: `${tapWordCap()} ↕ Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or ↺ Reset to go back to entry order. ${tapWordCap()} Next when you're ready to move on.`,
         // 'confirm' rather than 'on-click' here on purpose — the host might want to tap Sort a
@@ -653,7 +660,7 @@ const Tutorial = (function () {
       },
       {
         target: 'button[onclick="exportPDF()"]',
-        text: `Next let's look at Export & Data. If you ${tapWord()} 📕 PDF, it downloads a PDF scoresheet — ready to send to JD. Then ${tapWord()} Next when you're ready.`,
+        text: `Export & Data is at the bottom. 📕 PDF downloads a scoresheet that's ready to send to JD. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
         // fallbackNext: this listener is the only thing that notices the tap (exporting doesn't
         // touch gameState or call any hooked render function, unlike almost every other step),
@@ -664,7 +671,7 @@ const Tutorial = (function () {
       },
       {
         target: 'a[href="https://app.jotform.com/261954293403156"]',
-        text: `When you ${tapWord()} 🔗 JD Upload Form, a new tab opens to where you upload your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
+        text: `🔗 JD Upload Form sends you to where you submit your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
       },
       {
