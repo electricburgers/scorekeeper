@@ -365,13 +365,13 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-teams",
-        text: "I'll add the rest of the teams and guesses for this tutorial.",
+        text: "I'll add the rest of the teams and guesses.",
         advance: "manual",
         fill: (ready) => addTeamsSequentially(ready),
       },
       {
         target: "#sec-r1 .section-header",
-        text: `Every section header collapses and expands the section below it — handy once a round or question is completed to get it out of the way. ${tapWordCap()} Round 1's header to collapse it, then ${tapWord()} it again to bring it back.`,
+        text: `Every section header collapses and expands the section below it. Handy once a round or question is completed to get it out of the way. ${tapWordCap()} Round 1's header to collapse it, then ${tapWord()} it again to bring it back.`,
         advance: "on-click",
         fill: () => {
           sawSectionCollapsed = false;
@@ -391,7 +391,7 @@ const Tutorial = (function () {
         // The whole row — all four wager amounts plus the points box on the right, so the host
         // can see a score land there as they go, not just the buttons themselves.
         target: '.team-answer[data-ta="0-0-0"]',
-        text: `Practicing Scoring: ${tapWordCap()} any of the four wager amounts. ${tapWordCap()} the same one again to cycle it among: correct, then incorrect, then cleared. Let's say ${team0Name()} got it correct, ${tapWord()} it once more to land back on correct.`,
+        text: `${tapWordCap()} any of the four wager amounts. ${tapWordCap()} the same one again to cycle it through: correct, then incorrect, then cleared. Let's say ${team0Name()} got it correct, ${tapWord()} it again to land back on correct. Then ${tapWord()} Next.`,
         advance: "confirm",
         waitHint:
           "Cycle through the states and land back on correct — Next shows up once you do",
@@ -439,7 +439,7 @@ const Tutorial = (function () {
       {
         target: "#bqblock-0 .q-header",
         targetEnd: "#bqblock-0 .bonus-row:first-child",
-        text: `Scroll down to the Q5 Bonus at the end of Round 1. Score this question for "${team0Name()}". Each part is worth 5 points. The total points for the question show up on the right. ${tapWordCap()} Next once you've picked one.`,
+        text: `Scroll down to the Q5 Bonus at the end of Round 1. Score this question for "${team0Name()}". Each part is worth 5 points. The total points show up on the right. ${tapWordCap()} Next once you've scored them.`,
         advance: "confirm",
         waitHint: `${tapWordCap()} a number to continue`,
         doneLabel: "Next →",
@@ -466,13 +466,13 @@ const Tutorial = (function () {
       },
       {
         target: "#qblock-1-0 .q-badge.q-beer",
-        text: "The Beer Round badge shows up when every team correctly answers the question. It's a fun moment to call out.",
+        text: "The Beer Round badge shows up when every team correctly answers a question. It's a fun moment to call out.",
         advance: "manual",
       },
       {
         target: "#qblock-1-1 .q-header-right",
         calloutPosition: "above",
-        text: `For Q2, I'll fill in answers only for two teams. With a full room of teams, scanning every row to find a specific team to score gets tedious. That's what ↕ Sort is for. ${tapWordCap()} Next, then we'll try it out.`,
+        text: `For Q2, I'll fill in answers only for two teams. With a full room of teams, scanning every row to find a specific team to score gets tedious. ${tapWordCap()} Next, then we'll try out Sorting.`,
         advance: "manual",
         fill: (ready) => {
           partialFillTeams(1, 1, [0, 2]);
@@ -482,7 +482,7 @@ const Tutorial = (function () {
       {
         target: "#qblock-1-1 .q-sort-btn",
         calloutPosition: "above",
-        text: `${tapWordCap()} ↕ Sort — it shifts the still-unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or ↺ Reset to go back to entry order. ${tapWordCap()} Next when you're ready to move on.`,
+        text: `${tapWordCap()} ↕ Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or ↺ Reset to go back to entry order. ${tapWordCap()} Next when you're ready to move on.`,
         // 'confirm' rather than 'on-click' here on purpose — the host might want to tap Sort a
         // few times (and try Reset) to get a feel for it, not get whisked away the instant it
         // sorts once.
@@ -492,7 +492,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r2",
-        text: "I'll fill in Q1-4 for Round 2. We'll cover the Before Halftime Wager scores and the Halftime Wager next.",
+        text: "I'll fill the rest of Round 2. Next, we'll cover the Before Halftime Wager scores and the Halftime Wager.",
         advance: "manual",
         fill: (ready) => {
           autoFillRound(1);
