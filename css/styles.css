@@ -362,13 +362,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Advanced Settings > Timer Widget: Hidden. Set on <html> by applyPrefs() in app.js. Hides both
    copies of the widget (desktop and mobile) with one rule rather than duplicating it per class. */
 [data-timer-hidden] .qtimer{display:none}
-/* position:relative + isolation:isolate turn this into a self-contained stacking context for
-   the ::before pulse layer below — the pseudo-element's negative z-index stays scoped to just
-   this element instead of potentially escaping behind unrelated ancestors elsewhere on the
-   page. border is reserved (transparent) at rest, at the same 3px warn/crit will use, with
-   padding trimmed by that same 3px on each side (5px/10px -> 2px/7px) so the box's overall
-   rendered size never changes when a state adds a visible stroke — only the split between
-   border and padding does. */
+/* No border at rest — idle is just the plain padded/rounded box. warn/crit/over each add their
+   own halo-ring border (see those rules further down), so the box grows slightly the moment an
+   alert state kicks in; that small "pop" is read as part of the alert rather than a glitch. */
 .qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border-radius:6px;transition:background-color .2s ease,color .2s ease}
 /* Reserves the minus sign's width at all times (opacity, not display:none, so the layout space
    stays even while hidden) — the countdown going negative then only reveals a glyph already
@@ -379,10 +375,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
 .qtimer-btn:hover{background:var(--bg-hover)}
 .qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
-/* Fixed width sized to the longest label ("▶ Resume") so the button — and everything centered
-   alongside it in .qtimer — doesn't visibly shift width as the label cycles between Start/
-   Pause/Resume. */
-.qtimer-btn.qtimer-toggle{min-width:5.8rem;text-align:center}
+/* Icon-only (▶/⏸, no "Start"/"Pause"/"Resume" label) — same fixed square treatment as
+   .qtimer-reset below, so the toggle button never changes size as its icon cycles between
+   Start/Pause/Resume. The accessible name (what the icon alone can't convey) comes from
+   aria-label, kept in sync with the icon by renderQtControls() in app.js. */
+.qtimer-btn.qtimer-toggle{width:2rem;height:2rem;min-height:2rem;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:1.1rem;line-height:1}
 /* +/-30s nudge buttons — Advanced Settings > Timer Stepper Buttons, hidden by default (see
    [data-timer-steppers] below, set on <html> by applyPrefs() in app.js) since most hosts drive
    the countdown from Start/Pause/Reset alone; shown for hosts who want fine control mid-timer.
@@ -391,29 +388,45 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    both landing on the same side of it. */
 .qtimer-btn.qtimer-step{display:none;padding:5px 8px;font-size:.75rem}
 [data-timer-steppers] .qtimer-btn.qtimer-step{display:inline-block}
-/* Pause: a solid gold fill read as too loud next to the rest of the widget — just an outline in
-   --accent-gold (the token this app already swaps per color-vision mode) instead. */
-.qtimer-btn.qtimer-pause{border-color:var(--accent-gold)}
-/* Reset: neutral while idle (nothing to reset), solid red once a timer is actually running or
-   paused — same --danger-solid-bg/#fff pairing already used for .q-reset-btn elsewhere. Icon-
-   only (no "Reset" label) and a fixed equal width/height — rather than sizing to its content
-   like every other .qtimer-btn — so the docked and deployed copies of the widget render this
-   button identically instead of the deployed one being a wider text+icon pill. Font-size bumped
-   up from the shared .8rem base so the glyph reads clearly at this smaller square size. */
+/* Only the control that's actually "live" right now gets the bold treatment — same halo-ring
+   language as .qtimer-display above (a --bg-primary ring separating a solid fill from the
+   --bg-card-alt bar behind it), reusing the same already-AAA-paired tokens. Start (idle) and
+   Reset (idle) stay the plain neutral .qtimer-btn outline — nothing to signal yet. */
+/* Pause: shown while the countdown is actually running — solid gold fill + halo ring, same
+   --accent-gold/--on-accent-gold pairing qt-warn uses. */
+.qtimer-btn.qtimer-pause{background:var(--accent-gold);border:2px solid var(--bg-primary);color:var(--on-accent-gold)}
+.qtimer-btn.qtimer-pause:hover{filter:brightness(1.15)}
+/* Resume: shown while paused — a ring only, no fill. Paused isn't as urgent as "running and
+   about to expire", so it gets the gold outline without the loud solid fill Pause/Reset-active
+   carry; --text-primary already clears AAA against the unchanged --bg-card fill underneath. */
+.qtimer-btn.qtimer-resume{border:2px solid var(--accent-gold);color:var(--text-primary)}
+/* Reset: neutral while idle (nothing to reset), solid red + halo ring once a timer is actually
+   running or paused — same --danger-solid-bg/#fff pairing already used for .q-reset-btn
+   elsewhere. Icon-only (no "Reset" label) and a fixed equal width/height — rather than sizing to
+   its content like every other .qtimer-btn — so the docked and deployed copies of the widget
+   render this button identically instead of the deployed one being a wider text+icon pill.
+   Font-size bumped up from the shared .8rem base so the glyph reads clearly at this smaller
+   square size. */
 /* The ↺ glyph's own ink sits almost entirely above its baseline (negligible descent), so
    centering the line box (align-items:center) still leaves the visible glyph looking low —
    asymmetric bottom padding (vs even 0 all around) shifts the centered content up ~3px to
    compensate for that glyph-specific baseline skew, without touching the button's own size. */
 .qtimer-btn.qtimer-reset{width:2rem;height:2rem;min-height:2rem;padding:0 0 6px;display:inline-flex;align-items:center;justify-content:center;font-size:1.15rem;line-height:1}
-.qtimer-btn.qtimer-reset-active{background:var(--danger-solid-bg);border-color:var(--danger-solid-bg);color:#fff}
+.qtimer-btn.qtimer-reset-active{background:var(--danger-solid-bg);border:2px solid var(--bg-primary);color:#fff}
 .qtimer-btn.qtimer-reset-active:hover{filter:brightness(1.15)}
 
-/* Flashing states — background/text reuse the app's own already-AAA-paired solid tokens
+/* Alert states — background/text reuse the app's own already-AAA-paired solid tokens
    (--accent-gold/--on-accent-gold, --danger-solid-bg/#fff) rather than inventing new colors, so
    every theme x color-vision-mode combination this app already supports (dark/light x off/
    red-green/blue-yellow) stays correct for free: --accent-gold becomes the tritanopia-safe pink
    substitute under data-cb="2", --danger-solid-bg becomes the deuteranopia/protanopia-safe
    orange substitute under data-cb="1", etc.
+   Each state also gets a border in --bg-primary — the page's own base color, one step darker
+   (light theme: lighter) than the --bg-card-alt bar the badge sits on — so it reads as a ring
+   cut into the bar rather than a flat patch flush with it. Needs no contrast check of its own:
+   border/non-text contrast (WCAG 1.4.11) only asks for 3:1 against what's adjacent, and
+   --bg-primary vs --bg-card-alt is already the app's own foundational surface split. Thickness
+   escalates with urgency (3px warn, 4px crit/over) as a second, color-independent signal.
    The brightness floor (.75, not a near-black .55) is a hard WCAG floor, not a stylistic
    choice: at the darkest point of the pulse, --on-accent-gold's #000 text sits on top of
    --accent-gold, and the worst combination this app ships — dark theme + tritanopia mode,
@@ -421,18 +434,22 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    ~.73 brightness; every other theme/color-vision pairing has more headroom than that one.
    .75 keeps a safety margin above that floor in every combination. --danger-solid-bg/#fff
    (qt-crit) has no such ceiling — white text on a darkening red only gains contrast — so it
-   isn't the binding constraint here. */
-.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);animation:qtFlash 2s ease-in-out infinite}
-.qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;animation:qtFlash 1.5s ease-in-out infinite}
-.qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff}
+   isn't the binding constraint here.
+   Only qt-crit still pulses — qt-warn's color/border change already reads as "time is short"
+   on its own, and flashing two different states at two different speeds (2s vs 1.5s previously)
+   read as more agitated than the countdown actually warrants. qt-crit's own cycle is slowed to
+   2.9s (from 1.5s) for the same reason, with the .75 floor left untouched. */
+.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);border:3px solid var(--bg-primary)}
+.qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;border:4px solid var(--bg-primary);animation:qtFlash 2.9s ease-in-out infinite}
+.qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff;border:4px solid var(--bg-primary)}
 @keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.75)}}
 @media(prefers-reduced-motion:reduce){
-  .qtimer-display.qt-warn,.qtimer-display.qt-crit{animation:none}
+  .qtimer-display.qt-crit{animation:none}
 }
-/* Advanced Settings > Timer Pulse: Hidden. Set on <html> by applyPrefs() in app.js. The warn/
-   crit background/text colors still apply (they're the actual "time's low" signal) — this only
+/* Advanced Settings > Timer Pulse: Hidden. Set on <html> by applyPrefs() in app.js. The crit
+   background/text/border still apply (they're the actual "time's nearly up" signal) — this only
    drops the flashing animation for hosts who find it distracting. */
-[data-timer-no-pulse] .qtimer-display.qt-warn,[data-timer-no-pulse] .qtimer-display.qt-crit{animation:none}
+[data-timer-no-pulse] .qtimer-display.qt-crit{animation:none}
 
 /* Pinned to the bottom of the scores column (#sidebar / .col-right), overlaying .scores-list
    rather than sitting below it — the extra padding-bottom on .scores-list (its CSS rule,

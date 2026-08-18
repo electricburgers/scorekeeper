@@ -419,7 +419,7 @@ const Tutorial = (function () {
         // so this reliably demonstrates that default regardless of any real customized setting.
         target: () =>
           isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop",
-        text: `You'll have this Question Timer available. It defaults to 3 minutes. This is where it lives. ${tapWordCap()} ▶ Start to begin the countdown. We'll come back to it near the end.`,
+        text: `You'll have this Question Timer available. It defaults to 3 minutes. This is where it lives. ${tapWordCap()} ▶ to begin the countdown. We'll come back to it near the end.`,
         advance: "on-click",
         // toggleQTimer() only flips module-level timer state and updates the qtimer-* elements
         // directly — it never calls a hooked render function, so nothing would otherwise
