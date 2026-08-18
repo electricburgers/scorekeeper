@@ -492,7 +492,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r2",
-        text: "I'll fill in Q1-4 for Round 2. We'll cover the Before Halftime Wager Standings and the Halftime Wager next.",
+        text: "I'll fill in Q1-4 for Round 2. We'll cover the Before Halftime Wager scores and the Halftime Wager next.",
         advance: "manual",
         fill: (ready) => {
           autoFillRound(1);
@@ -501,13 +501,13 @@ const Tutorial = (function () {
       },
       {
         target: "#standings-halftime",
-        text: "Scroll down to just before the end of Round 2 and you'll see the Before Halftime Wager Standings. Read them out so teams know how many points they want to bet for the Halftime Wager.",
+        text: "Scroll down to just before the end of Round 2 and you'll see the Before Halftime Wager scores. Read them out so teams know how many points to bet for the Halftime Wager.",
         advance: "manual",
       },
       {
         target: "#swblock-halftime .sw-header",
         targetEnd: "#swblock-halftime .special-wager-row:first-child",
-        text: `Round 2's Q5 is the first time teams put their points on the line. Pick an amount from 1 to 10 for "${team0Name()}", mark it right or wrong, then ${tapWord()} Next.`,
+        text: `Round 2's Q5 is the first time teams put their points on the line. Pick an amount from 1 to 10 for ${team0Name()}, mark it right or wrong, then ${tapWord()} Next.`,
         advance: "confirm",
         doneLabel: "Next →",
         waitHint: "Pick a wager and a result to continue",
@@ -541,7 +541,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r4",
-        text: "Scroll to Round 4. Just like Round 2, there's a Before Final Wager Standings to read out. For the final question of the night, players can bet up to 20 points. I'll fill it all in before we head to Final Results.",
+        text: "Scroll to Round 4. Just like Round 2, there's Before Final Wager scores to read out. For the final question of the night, players can bet up to 20 points. I'll fill it all in before we head down to Final Results.",
         advance: "manual",
         fill: (ready) => {
           autoFillRound(3);
@@ -553,7 +553,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-final",
-        text: "The Final Results displays scores in ascending order, teams' guess-vs-actual score, and any tie-break notes: whoever guessed closer to their final total ranks higher on the standings.",
+        text: "Final Results displays scores in ascending order, teams' guess-vs-actual score, and any tie-breakers; whoever guessed closer to their final total ranks higher on the standings.",
         advance: "manual",
         // Defensive: Craft Prize Drawing starts collapsed (see start(), below) and its own step
         // further down is what deliberately opens it — this just re-asserts that collapsed
@@ -570,7 +570,7 @@ const Tutorial = (function () {
         // regardless of where that team lands in the ranking, so this is stable no matter the
         // final order.
         target: '#sec-final tr[onclick="openAudit(0)"] .ta-name-clickable',
-        text: `${tapWordCap()} "${team0Name()}"'s name in Final Results (or anywhere during a real game) to open a Team Report detailing every point. Useful in case a team asks you about a specific question.`,
+        text: `${tapWordCap()} ${team0Name()}'s name in Final Results (or anywhere during a real game) to open a Team Report detailing every point. Useful in case a team asks you about a specific question.`,
         advance: "on-click",
         fill: () => {
           auditOpened = false;
@@ -622,7 +622,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-craftprize",
-        text: `Here you can exclude the top teams who've already won gift cards. The excluded names are listed to verify who isn't included in the random drawing. You can also set the drumroll duration. Try it out: ${tapWord()} Start Drumroll.`,
+        text: `Here you can exclude the top teams who've already won gift cards. The names are listed to verify who isn't included in the  drawing. You can also set the drumroll duration. Try it out: ${tapWord()} Start Drumroll.`,
         advance: "on-click",
         done: () => !!gameState.craftPrizeWinner,
       },
@@ -638,7 +638,7 @@ const Tutorial = (function () {
         // than a fresh countdown.
         target: () =>
           isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop",
-        text: `Before we wrap up, let's revisit the Question Timer — see how much time has elapsed since Round 1, then ${tapWord()} ↺ Reset to bring it back to 3:00 for the next real question.`,
+        text: `Before we wrap up, let's revisit the Question Timer to see how much time has elapsed since Round 1. ${tapWordCap()} ↺ to reset it back to 3:00 for the next question.`,
         advance: "on-click",
         fill: () => {
           const btn = document.querySelector(
@@ -668,7 +668,10 @@ const Tutorial = (function () {
         advance: "manual",
       },
       {
-        target: "#sec-export .btn-danger",
+        // target: null — no spotlight on Clear Session itself; this closing step just narrates
+        // where it lives, so the callout lands dead center on the page instead (same no-target
+        // path the welcome step uses — see the comment on that path in doReposition()).
+        target: null,
         text: `That's a full game! Feel free to keep playing around or check out the FAQ in Settings. ${tapWordCap()} Close Tutorial to dismiss this box. To clear this Tutorial and start a new game ${tapWord()} 🗑 Clear Session in Export & Data.`,
         advance: "manual",
         last: true,

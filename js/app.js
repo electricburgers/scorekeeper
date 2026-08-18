@@ -72,7 +72,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: "🎁", cls: "bq-r1" },
   2: { emoji: "🍀", cls: "bq-r3" },
 };
-const APP_VERSION = "v18.12"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.13"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 18, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":114,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":119,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":105,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":150,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":115,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":131,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":95,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":61,"bonusItem":false,"njcb":true,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":false}}],"bonus":{"0":4,"1":3,"2":4,"3":3,"4":3,"5":2,"6":4,"7":1,"8":4,"9":3,"10":2}},{"questions":[{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":5,"correct":false},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":5,"correct":false},"6":{"wager":5,"correct":true},"7":{"wager":5,"correct":false},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":7,"correct":false},"1":{"wager":7,"correct":false},"2":{"wager":7,"correct":false},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":false}}],"bonus":{}},{"questions":[{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":false}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":false},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":8,"correct":true}}],"bonus":{"0":4,"1":2,"2":4,"3":2,"4":2,"5":4,"6":3,"7":3,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":9,"correct":true},"10":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":12,"correct":false},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":false},"10":{"wager":12,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":false},"1":{"wager":4,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":4,"correct":false},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true},"10":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":20,"correct":true},"2":{"wager":15,"correct":true},"3":{"wager":15,"correct":false},"4":{"wager":15,"correct":false},"5":{"wager":20,"correct":true},"6":{"wager":20,"correct":true},"7":{"wager":18,"correct":true},"8":{"wager":18,"correct":true},"9":{"wager":20,"correct":false},"10":{"wager":18,"correct":false}},"gameStarted":true}`;
@@ -1341,9 +1341,14 @@ function renderLeft() {
   const gs = checkGameStarted();
   let h = "";
 
-  // Only shows once scoring has actually begun — before that there's no "current round" to
-  // report, and showing it during team setup would just be clutter above Event Details.
-  if (gs) h += renderMiniProgress();
+  // Only VISIBLE once scoring has actually begun — before that there's no "current round" to
+  // report, and showing it during team setup would just be clutter above Event Details. Still
+  // rendered (just visibility:hidden via .mp-pending) rather than omitted outright once teams
+  // exist, though: omitting it entirely until the first score landed was making Event Details
+  // and everything below it jump down the moment that first badge popped in. Reserving the same
+  // real markup — not a guessed placeholder height — the whole time guarantees the space it
+  // claims once visible is exactly the space already held for it.
+  h += renderMiniProgress(gs);
 
   // Quiz ID's format is free-entry — it never blocks scoring, just hinted: a soft warning
   // when it doesn't match the usual pattern, a green confirmation once it does. Being EMPTY
@@ -1519,16 +1524,22 @@ function jumpToSection(id) {
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
-function renderMiniProgress() {
+// visible: false renders the exact same markup the real, scored-at-least-once state uses (never
+// a guessed/simplified placeholder) but with the .mp-pending class, which visibility:hidden's
+// the whole thing while still letting it claim its real layout height — see the call site in
+// renderLeft() for why. visibility:hidden also drops it out of tab order/the accessibility tree
+// on its own, so no extra aria-hidden/tabindex handling is needed for the pending state.
+function renderMiniProgress(visible) {
   const s = currentProgressSummary();
   if (!s) return "";
+  const pendingCls = visible ? "" : " mp-pending";
   if (s.ri == null) {
-    return `<div class="mini-progress mp-complete" role="button" tabindex="0" onclick="jumpToSection('sec-final')">
+    return `<div class="mini-progress mp-complete${pendingCls}" role="button" tabindex="0" onclick="jumpToSection('sec-final')">
       <span class="mp-label">✓ All 4 rounds scored — jump to Final Results</span>
     </div>`;
   }
   const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
-  return `<div class="mini-progress" role="button" tabindex="0" onclick="jumpToSection('sec-r${s.ri + 1}')">
+  return `<div class="mini-progress${pendingCls}" role="button" tabindex="0" onclick="jumpToSection('sec-r${s.ri + 1}')">
     <span class="mp-round ${ROUND_COLORS[s.ri]}">Round ${s.ri + 1}</span>
     <span class="mp-count">${s.done}/${s.total} scored</span>
     <div class="mp-bar"><div class="mp-fill" style="width:${pct}%"></div></div>
@@ -2684,7 +2695,15 @@ function renderCraftPrizeBlock() {
   // manual controls, since the host reaches for it at unpredictable moments and a button that
   // moves or vanishes is worse than one extra row. It stays live after a winner is picked so a
   // re-draw needs no re-copy.
-  const eligibleBtn = `<button class="btn cp-eligible-btn" onclick="copyCraftEligible(this)" title="Copy the craft partner, its town, then the eligible team names — one per line, top places already excluded — to paste into a separate drumroll or name-picker app">📋 Copy Prize Eligible List</button>`;
+  // Gated on the same Advanced Settings > Manual Drumroll Control pref (prefs.craftManualEnd)
+  // that unlocks Stop Drumroll/Play Horn below — this button exists for the same "I'm handing
+  // the draw to an outside app" workflow those controls serve, so a host who hasn't opted into
+  // manual control shouldn't see a button for it either. Gating it here, at the one place
+  // eligibleBtn is built, means every render site below (drawing/pre-draw/winner) picks up the
+  // gate for free instead of needing its own prefs.craftManualEnd check.
+  const eligibleBtn = prefs.craftManualEnd
+    ? `<button class="btn cp-eligible-btn" onclick="copyCraftEligible(this)" title="Copy the craft partner, its town, then the eligible team names — one per line, top places already excluded — to paste into a separate drumroll or name-picker app">📋 Copy Prize Eligible List</button>`
+    : "";
   // Until the host opts in, the section is just this one button — same accent styling as the
   // drumroll button it opens, so it reads identically in every theme. A draw already running or
   // a winner already picked (e.g. restored from autosave) opens the flow on its own, so a

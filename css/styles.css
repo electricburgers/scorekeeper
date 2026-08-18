@@ -339,6 +339,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .mp-fill{height:100%;background:var(--accent-cyan-solid);border-radius:3px;transition:width .25s ease}
 .mp-pct{font-family:var(--font-display);font-size:.8rem;font-weight:700;color:var(--text-secondary);flex-shrink:0;min-width:2.4em;text-align:right}
 .mini-progress.mp-complete{justify-content:center}
+/* Rendered with real content before the first score lands (see renderLeft() in app.js), just
+   invisible — reserves its actual height so Event Details and everything below it don't jump
+   down the moment scoring starts and the bar switches to visible. visibility (not display:none)
+   is what keeps the space claimed; it also removes the bar from tab order/hit-testing on its own
+   while pending, so no extra aria-hidden/pointer-events handling is needed here. */
+.mini-progress.mp-pending{visibility:hidden}
 /* Same .95rem as .mp-round above — see the line-height comment on .mini-progress for why these
    two need to match. */
 .mp-label{font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--badge-green-fg)}
