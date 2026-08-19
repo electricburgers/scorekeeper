@@ -298,7 +298,7 @@ const Tutorial = (function () {
         // notice the panel opened and move the spotlight — the listener in fill() below does.
         target: () =>
           loadPrefs().settingsOpen ? "#themeToggle" : "#settingsToggleBtn",
-        text: `${tapWordCap()} the ⚙️ gear icon to open Settings. There's Light and Dark modes. Flip between them a few times, then ${tapWord()} Next once you've settled on one you like.`,
+        text: `${tapWordCap()} the ⚙️ gear icon in the top right to open Settings. There's Light and Dark modes. Flip between them a few times, then ${tapWord()} Next once you've settled on one you like.`,
         advance: "manual",
         fill: (ready) => {
           const gear = document.getElementById("settingsToggleBtn");
@@ -318,7 +318,7 @@ const Tutorial = (function () {
       },
       {
         target: "#addTeamBtn",
-        text: `${tapWordCap()} + Add Team to add your first team.`,
+        text: `Scroll down to Teams. ${tapWordCap()} + Add Team to add your first team.`,
         advance: "on-click",
         // Settings may still be open from the Color Vision step just before this one — close it
         // here rather than leaving it open through the whole Teams section.
@@ -371,7 +371,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-r1 .section-header",
-        text: `Let's head to Round 1. Every section header collapses and expands the section below it. Handy once a round or question is completed to get it out of the way. ${tapWordCap()} Round 1's header to collapse it, then ${tapWord()} it again to bring it back.`,
+        text: `Scroll down to Round 1. Every section header collapses and expands the section below it. Handy once a round or question is completed to get it out of the way. ${tapWordCap()} Round 1's header to collapse it, then ${tapWord()} it again to bring it back.`,
         advance: "on-click",
         fill: () => {
           sawSectionCollapsed = false;
@@ -560,7 +560,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-final",
-        text: "Final Results displays scores in ascending order, teams' guess-vs-actual score, and any tie-breakers; whoever guessed closer to their final total ranks higher on the standings.",
+        text: "Scroll down to Final Results. It displays scores in ascending order, teams' guess-vs-actual score, and any tie-breakers; whoever guessed closer to their final total ranks higher on the standings.",
         advance: "manual",
         // Defensive: Craft Prize Drawing starts collapsed (see start(), below) and its own step
         // further down is what deliberately opens it — this just re-asserts that collapsed
@@ -617,7 +617,7 @@ const Tutorial = (function () {
       },
       {
         target: "#sec-craftprize",
-        text: `The Craft Prize Drawing plays a drumroll and picks a random winner. Let's check it out.`,
+        text: `Scroll down to the Craft Prize Drawing. It plays a drumroll and picks a random winner. Let's check it out.`,
         advance: "manual",
         fill: (ready) => {
           // Starts collapsed, same as a real game — expand it here, right when the tour
@@ -660,7 +660,7 @@ const Tutorial = (function () {
       },
       {
         target: 'button[onclick="exportPDF()"]',
-        text: `Export & Data is at the bottom. 📕 PDF downloads a scoresheet that's ready to send to JD. ${tapWordCap()} Next when you're ready.`,
+        text: `Scroll down to Export & Data at the bottom. 📕 PDF downloads a scoresheet that's ready to send to JD. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
         // fallbackNext: this listener is the only thing that notices the tap (exporting doesn't
         // touch gameState or call any hooked render function, unlike almost every other step),
