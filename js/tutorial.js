@@ -679,7 +679,7 @@ const Tutorial = (function () {
         // where it lives, so the callout lands dead center on the page instead (same no-target
         // path the welcome step uses — see the comment on that path in doReposition()).
         target: null,
-        text: `That's a full game! Feel free to keep playing around or check out the FAQ in Settings. ${tapWordCap()} Close Tutorial to dismiss this box. To clear this Tutorial and start a new game ${tapWord()} 🗑 Clear Session in Export & Data.`,
+        text: `That's a full game! Feel free to keep playing around or check out the FAQ in Settings. To clear this Tutorial and start a new game, ${tapWord()} 🗑 Clear Session in Export & Data. ${tapWordCap()} Close Tutorial to close this box.`,
         advance: "manual",
         last: true,
       },

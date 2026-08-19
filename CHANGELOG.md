@@ -5,8 +5,8 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
-## v18.16 - 2026-08-19
-- Rewrite the project's git history to consolidate every commit under one pseudonymous identity, replacing the real name/email that early commits (and a handful of ancient, already-superseded page-title revisions) had carried since the project's first commit. No code or behavior changes — a repository-housekeeping release.
+## v18.17 - 2026-08-19
+- Reorder the tutorial's closing step so the Clear Session instruction comes first and "Tap Close Tutorial to close this box" is the last line, instead of the close-box instruction sitting in the middle ahead of Clear Session.
 
 ## v18.15 - 2026-08-19
 - Add scroll-direction cues to the tutorial's Teams, Round 1, Final Results, Craft Prize Drawing, and Export & Data steps, so each tooltip tells the host to scroll down to that section before it starts explaining what's there. Note in the step introducing it that the ⚙️ gear icon sits in the top right.
