@@ -803,16 +803,18 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 [data-theme="hc-dark"] .sr-rank.sr-rank-3{background:#6b3d15;color:#fff;border:2px solid #d68a42}
 .sr-name{flex:1;font-weight:600;font-size:.85rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* Subtle 1st/2nd/3rd podium tint across the whole row container — same idea as Final Results'
-   .fr-gold/.fr-silver/.fr-bronze row wash. Gold uses color-mix() on --accent-gold rather than a
-   hand-picked rgba: it's the one already-cv-aware token in this trio (see the .sr-rank comment
-   above), so it inherits whatever the token resolves to per theme/color-vision-mode for free
-   instead of needing its own hardcoded [data-cb] copies. Silver/bronze are plain fixed tints,
-   same scope reasoning as the ranks themselves. Both this and .score-row:nth-child(even) above
-   are 2 class-level selectors (equal specificity), so declaring these after it in the file is
-   what lets a podium row's tint win over the plain zebra stripe when that row is also even. */
-.score-row.sr-rank-1{background:color-mix(in srgb,var(--accent-gold) 16%,transparent)}
+   .fr-gold/.fr-silver/.fr-bronze row wash. All three (gold included) are plain fixed, muted
+   tints now, same as each other — color-mix() on the full-saturation --accent-gold read as too
+   vividly yellow next to silver/bronze's own muted tones, so gold's row wash trades cv-awareness
+   here for matching its siblings' restraint; the #1 badge itself (.sr-rank.sr-rank-1 above) is
+   still the vivid, cv-aware --accent-gold — this tint is only the soft background behind it.
+   These and .score-row:nth-child(even) above are all 2 class-level selectors (equal
+   specificity), so declaring these after it in the file is what lets a podium row's tint win
+   over the plain zebra stripe when that row is also even. */
+.score-row.sr-rank-1{background:rgba(200,175,90,.16)}
 .score-row.sr-rank-2{background:rgba(200,202,215,.14)}
 .score-row.sr-rank-3{background:rgba(210,130,55,.16)}
+[data-theme="hc-light"] .score-row.sr-rank-1{background:rgba(150,120,40,.20)}
 [data-theme="hc-light"] .score-row.sr-rank-2{background:rgba(140,140,155,.20)}
 [data-theme="hc-light"] .score-row.sr-rank-3{background:rgba(180,100,40,.20)}
 .sr-score{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);margin-left:8px;flex-shrink:0}
