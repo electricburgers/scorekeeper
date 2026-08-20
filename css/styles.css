@@ -168,15 +168,29 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    without it, a touch-drag started inside this panel on iOS Safari can fail to scroll the panel
    at all (or chain into scrolling the page behind it) once the panel's content is taller than the
    viewport, e.g. with Advanced Settings expanded. */
-/* The 80px headroom in max-height is a flat guess at "how tall .header already is above this
-   panel's top:100% anchor" — on a notched/Dynamic-Island phone the header is taller than that
-   (its own top padding grows by env(safe-area-inset-top), see .header above), so the same flat
-   80px left too much max-height and let the panel's bottom run past the visible viewport, under
-   the home-indicator area. Subtracting safe-area-inset-top here keeps the panel shrinking in step
-   with the header that pushes it down. safe-area-inset-bottom is subtracted too so the panel's
-   own bottom edge — and the close button that lives at the very end of its scrollable content —
-   stays above the home indicator instead of running under it. */
-.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - 80px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:slideDown .18s ease}
+/* max-height used to subtract a flat 80px guess at "how tall .header already is above this
+   panel's top:100% anchor", plus env(safe-area-inset-top) on top of that guess for notched
+   phones. The guess undershot on any phone where the header runs taller than 80px+inset for a
+   reason that isn't the notch — .header-top wrapping Save/Load/⚙️ onto their own line under the
+   logo when they don't fit one row (see .header-top above), or a bumped-up Size setting growing
+   the header's own font. An undershoot means too much max-height, not too little: the panel is
+   let grow taller than the space actually left below the header, so its bottom — the last
+   Advanced Settings rows, the CLOSE button — renders past the bottom of the viewport with no
+   internal scrollbar (the panel isn't "full" by its own oversized max-height) and no page scroll
+   either (the panel is an absolute overlay, not part of document flow), leaving it permanently
+   unreachable. --header-h (see .mini-progress's use of it above) is kept in sync with the
+   header's real rendered offsetHeight for exactly this set of reasons already, so reuse it here
+   instead of re-guessing; it already bakes in safe-area-inset-top since that's baked into the
+   header's own padding. The 8px matches this panel's own margin-top gap below the header, and
+   safe-area-inset-bottom is still subtracted so the panel's bottom edge — and the CLOSE button at
+   the end of its scrollable content — stays above the home indicator instead of running under
+   it. */
+/* overflow-x:hidden is load-bearing, not decorative: setting overflow-y to anything but visible
+   makes the UA compute an unset overflow-x as auto instead (CSS Overflow §3), so without this the
+   panel was silently horizontally scrollable on mobile whenever a row's content ran wide — see
+   the .settings-row/.settings-controls flex-wrap rules in the mobile breakpoint below, which stop
+   that content from running wide in the first place; this stays as the hard backstop. */
+.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - var(--header-h,80px) - 8px - env(safe-area-inset-bottom));overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:slideDown .18s ease}
 /* Deployed-panel-over-page shadows: a plain dark shadow disappears against this app's
    near-black dark background, so it gets its own pale glow to read as "floating above" the
    page instead; light mode already has a light background to contrast against, so it just
@@ -258,6 +272,14 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
   .settings-row .size-label{font-size:.78rem}
   .settings-controls .settings-btn{padding:7px 12px;font-size:.85rem}
   .settings-meta{padding-top:8px}
+  /* .settings-controls is flex-shrink:0 by design (the slider needs its fixed 120px), and a few
+     rows pack two buttons into it ("Copy"+"TXT", "Save"+"Load") or pair it with a long label
+     ("Craft Prize Eligible List", "Per-Question Percentage Correct Labels"). At the panel's fixed
+     440px on tablet/desktop that combination fits on one line; the mobile panel is only as wide
+     as the viewport minus margins, so the same combination can run past it. Wrapping instead of
+     refusing to shrink is what the overflow-x:hidden backstop above was silently clipping. */
+  .settings-row{flex-wrap:wrap}
+  .settings-controls{flex-wrap:wrap;justify-content:flex-end}
 }
 .theme-select{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
 .theme-select:hover{background-color:var(--bg-hover)}
