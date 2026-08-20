@@ -211,7 +211,7 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    scrolling middle between an anchored header and footer (the same header/scroll/footer split
    .col-right's mobile scores sheet already uses — see .scores-list further down). Above that
    breakpoint display:contents removes both wrapper boxes from layout entirely, so their children
-   (the settings rows, the advanced group, .settings-meta, .settings-close-btn) become direct
+   (the settings rows, the advanced group, .settings-meta) become direct
    children of the grid above exactly as if the wrappers weren't there — this rule exists purely
    to keep the desktop/tablet grid identical to before the wrappers were added. */
 .settings-panel-body,.settings-panel-foot{display:contents}
@@ -241,13 +241,6 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .settings-range:focus-visible{outline:2px solid var(--accent-cyan);outline-offset:2px}
 .settings-range-val{font-family:var(--font-display);font-size:.78rem;font-weight:700;color:var(--txt-cyan);min-width:2.7rem;text-align:right;font-variant-numeric:tabular-nums}
 @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-/* Closing affordance at the bottom of the overlay, in addition to re-tapping the gear icon.
-   Padding + line-height keep the tappable area comfortably above the ~44px touch-target
-   guideline; color/background reuse the same input/button token pair used everywhere else
-   in the app, so contrast is already covered by the existing design system. */
-.settings-close-btn{grid-column:1/-1;width:100%;margin-top:6px;padding:12px 10px;font-family:var(--font-display);font-size:.8rem;font-weight:700;letter-spacing:1.5px;line-height:1;text-align:center;text-transform:uppercase;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-primary);cursor:pointer;transition:var(--transition);touch-action:manipulation}
-.settings-close-btn:hover{background:var(--bg-hover)}
-
 /* ADVANCED SETTINGS — collapsible group holding the rarer controls (point adjustments,
    legacy CSV/XLSM export) so the default settings list stays short. */
 .settings-advanced-toggle-row{grid-column:1/-1;margin-top:2px}
@@ -296,19 +289,18 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
   .settings-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;grid-column:1/-1;flex-shrink:0;margin:-10px -16px 16px;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong)}
   .settings-panel-title{font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt-cyan)}
   /* X close button — same circular affordance as .resume-banner-close, reused here for visual
-     consistency. A second way to close Settings alongside the CLOSE button anchored at the
-     bottom of the footer below: with the panel now capped at max-height and scrolling only in
-     the middle, the header is always on screen the instant Settings opens, so this is reachable
-     without scrolling down first. */
+     consistency. With the panel now capped at max-height and scrolling only in the middle, the
+     header is always on screen the instant Settings opens, so this is reachable without
+     scrolling down first. */
   .settings-x-btn{width:1.7rem;height:1.7rem;flex-shrink:0;border-radius:50%;border:1px solid var(--border-light);background:none;color:var(--text-secondary);font-size:.85rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);touch-action:manipulation}
   .settings-x-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
   .settings-row{padding:10px 2px;gap:10px}
   .settings-row .size-label{font-size:.78rem}
   .settings-controls .settings-btn{padding:7px 12px;font-size:.85rem}
-  /* Footer divider — the panel-foot's border-top now does the job .settings-meta's own
-     padding-top used to (visually separating the version/disclaimer block from the settings
-     rows above); moved to the wrapper since it also has to separate the anchored CLOSE button
-     from the scrolling body above it, not just .settings-meta specifically. */
+  /* Footer divider — the panel-foot's border-top does the job .settings-meta's own padding-top
+     used to (visually separating the version/disclaimer block from the scrolling settings rows
+     above); moved to the wrapper since it separates the whole anchored footer from the body,
+     not just .settings-meta specifically. */
   .settings-panel-foot{border-top:1px solid var(--border-strong);margin-top:2px;padding-top:8px}
   .settings-meta{padding-top:0}
   /* .settings-controls is flex-shrink:0 by design (the slider needs its fixed 120px), and a few
