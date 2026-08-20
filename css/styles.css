@@ -413,8 +413,14 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 /* Escape hatch for a host who ignores Resume/New Game and heads straight for the tutorial or a
    practice game instead — dismisses the banner without touching the saved session in storage,
    same effect resumeSession()/startNewGame() have on it, just without the decision. */
-.resume-banner-close{position:absolute;top:10px;right:10px;width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--border-light);background:none;color:var(--text-secondary);font-size:.9rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);touch-action:manipulation}
-.resume-banner-close:hover{background:var(--bg-hover);color:var(--text-primary)}
+/* Border/icon red (same --accent-red/--txt-red pair as .remove-team button/.audit-close) so
+   this dismiss X reads with the same "closes/discards something" signal every other X in the
+   app now carries, instead of the old neutral gray. X_ICON_SVG (app.js) replaces the Unicode ✕
+   glyph here too, for the same centering/consistency reasons as everywhere else it was swapped. */
+.resume-banner-close{position:absolute;top:10px;right:10px;width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--accent-red);background:none;color:var(--txt-red);line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);touch-action:manipulation}
+.resume-banner-close svg{width:.85rem;height:.85rem;display:block}
+.resume-banner-close svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
+.resume-banner-close:hover{background:rgba(255,68,68,.15)}
 
 /* LAYOUT */
 .app-layout{display:flex;height:calc(100vh - 60px);overflow:hidden}
@@ -1408,8 +1414,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    modal titled "Team Report" already reads as close without needing the word spelled out too.
    display:flex/square-ish padding replace the old text button's asymmetric 7px/12px, which was
    sized for a line of text and would otherwise leave the lone icon looking off-balance. */
-.audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--border);background:var(--bg-input);color:var(--text-primary);border-radius:var(--radius);padding:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
-.audit-close:hover{background:var(--bg-hover);border-color:var(--border-light)}
+/* Border/icon red (same --accent-red/--txt-red pair as .remove-team button) now that it's just
+   an X with no "Close" text next to it to carry the "this dismisses something" signal on its
+   own — red reads as that affordance the way a plain neutral-gray X didn't as clearly. */
+.audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--accent-red);background:var(--bg-input);color:var(--txt-red);border-radius:var(--radius);padding:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
+.audit-close:hover{background:rgba(255,68,68,.15)}
 .audit-body{padding:12px 14px 18px}
 /* Mobile default: the two columns' markup is just two sequential <div>s (no grid), so column 1
    (Extras through Halftime Bonus) and column 2 (Round 3 through Final Wager) simply stack in
@@ -1438,7 +1447,12 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .aud-subline .lbl{color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px}
 .aud-subline .run{font-family:var(--font-display);color:var(--txt-cyan);font-size:.95rem}
 .aud-subline .sub{font-family:var(--font-display);color:var(--text-primary)}
-.aud-total{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:rgba(0,255,255,.08);border:1px solid var(--accent-cyan);border-radius:var(--radius);font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+/* justify-content:center (not the old space-between) + a fixed gap: space-between pushed the
+   label to the box's left edge and the score to its right edge, however wide the audit panel
+   happened to be — reading as two unrelated ends of a bar rather than one "label: value" pair.
+   Centering them as a group with a moderate gap keeps them visually paired without butting
+   them right up against each other. */
+.aud-total{display:flex;align-items:center;justify-content:center;gap:20px;padding:13px 16px;background:rgba(0,255,255,.08);border:1px solid var(--accent-cyan);border-radius:var(--radius);font-family:var(--font-display);font-weight:700;text-transform:uppercase;letter-spacing:1px}
 .aud-total .val{font-size:1.5rem;color:var(--txt-cyan)}
 /* Overall correct/incorrect breakdown across the 16 regular round questions, shown right under
    Grand Total — two side-by-side stat tiles rather than one line so each count and its
