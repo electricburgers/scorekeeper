@@ -207,6 +207,14 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    here keeps the selection color part of the same palette instead of an OS-default gray. */
 .settings-panel ::selection{background:var(--bg-hover);color:var(--text-primary)}
 .settings-panel.settings-visible{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
+/* .settings-panel-body/.settings-panel-foot exist only so the mobile breakpoint below can pin a
+   scrolling middle between an anchored header and footer (the same header/scroll/footer split
+   .col-right's mobile scores sheet already uses — see .scores-list further down). Above that
+   breakpoint display:contents removes both wrapper boxes from layout entirely, so their children
+   (the settings rows, the advanced group, .settings-meta, .settings-close-btn) become direct
+   children of the grid above exactly as if the wrappers weren't there — this rule exists purely
+   to keep the desktop/tablet grid identical to before the wrappers were added. */
+.settings-panel-body,.settings-panel-foot{display:contents}
 /* Above the mobile breakpoint, keep Settings a narrow single column anchored under the gear icon
    it opens from, rather than a band spanning the whole window. The auto-fill grid above turned a
    1200px-wide panel into five columns of settings flowing left-to-right, each row stretched so
@@ -259,19 +267,50 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    scrolling out of view is the only remaining clue you're still inside Settings. */
 .settings-panel-head{display:none}
 @media(max-width:600px){
-  .settings-panel.settings-visible{grid-template-columns:1fr}
-  /* grid-column:1/-1 spans the single-column layout's full width. position:sticky (relative to
-     .settings-panel, which is this element's own scrolling ancestor) pins it in place as the
-     rows beneath scroll past. Negative margin cancels .settings-panel's own 10px/16px padding so
-     the bar bleeds edge-to-edge instead of floating with a gap on both sides; the 16px bottom
-     margin restores breathing room before the first row starts. transform:translateZ(0) is the
-     same GPU-layer-promotion fix as .audit-head/.mini-progress elsewhere in this file, for the
-     same iOS Safari sticky-inside-a-touch-scroller bug. */
-  .settings-panel-head{display:block;grid-column:1/-1;position:sticky;top:0;margin:-10px -16px 16px;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong);font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt-cyan);z-index:2;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+  /* SCOREBOARD LAYOUT: below 600px the panel adopts the same anchored-header/scrolling-middle/
+     anchored-footer split as .col-right's mobile scores sheet (header/.scores-list/timer,
+     further down) instead of being one long scrolling column with a sticky heading bar. The
+     panel itself becomes the flex column (grid-template-columns from the desktop rule no longer
+     applies once display is flex, not grid) and is capped at its existing max-height (still
+     tracked via --header-h, see the base rule above); .settings-panel-head and
+     .settings-panel-foot are flex-shrink:0 so they hold their place at the top/bottom, and
+     .settings-panel-body — display:contents above 600px — becomes the one flexed, scrolling
+     middle (min-height:0 is required here or a flex child won't shrink below its content's
+     natural height and would just push the footer off the bottom instead of scrolling).
+     overflow-y:hidden on the panel itself hands scrolling to the body alone, so the header/footer
+     never scroll out of view with the rows between them. */
+  .settings-panel.settings-visible{display:flex;flex-direction:column;overflow-y:hidden}
+  /* overflow-x:hidden is load-bearing here too, same reasoning as the panel's own rule above it
+     in the file: setting overflow-y to anything but visible makes the UA compute an unset
+     overflow-x as auto instead, which would silently reopen the horizontal-scroll bug that rule
+     exists to close — now on this element, since it's the one actually scrolling. */
+  .settings-panel-body{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  .settings-panel-foot{display:block;flex-shrink:0}
+  /* grid-column:1/-1 spans the single-column layout's full width. Negative margin cancels
+     .settings-panel's own 10px/16px padding so the bar bleeds edge-to-edge instead of floating
+     with a gap on both sides; the 16px bottom margin restores breathing room before the first row
+     starts. No position:sticky here any more — the flex column above pins this in place by
+     layout, not by scroll-tracking, so the iOS sticky-in-a-touch-scroller workarounds that used
+     to live on this rule (transform:translateZ(0) etc., still needed on .mini-progress/.audit-head
+     elsewhere in this file) aren't needed here either. */
+  .settings-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;grid-column:1/-1;flex-shrink:0;margin:-10px -16px 16px;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong)}
+  .settings-panel-title{font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt-cyan)}
+  /* X close button — same circular affordance as .resume-banner-close, reused here for visual
+     consistency. A second way to close Settings alongside the CLOSE button anchored at the
+     bottom of the footer below: with the panel now capped at max-height and scrolling only in
+     the middle, the header is always on screen the instant Settings opens, so this is reachable
+     without scrolling down first. */
+  .settings-x-btn{width:1.7rem;height:1.7rem;flex-shrink:0;border-radius:50%;border:1px solid var(--border-light);background:none;color:var(--text-secondary);font-size:.85rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);touch-action:manipulation}
+  .settings-x-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
   .settings-row{padding:10px 2px;gap:10px}
   .settings-row .size-label{font-size:.78rem}
   .settings-controls .settings-btn{padding:7px 12px;font-size:.85rem}
-  .settings-meta{padding-top:8px}
+  /* Footer divider — the panel-foot's border-top now does the job .settings-meta's own
+     padding-top used to (visually separating the version/disclaimer block from the settings
+     rows above); moved to the wrapper since it also has to separate the anchored CLOSE button
+     from the scrolling body above it, not just .settings-meta specifically. */
+  .settings-panel-foot{border-top:1px solid var(--border-strong);margin-top:2px;padding-top:8px}
+  .settings-meta{padding-top:0}
   /* .settings-controls is flex-shrink:0 by design (the slider needs its fixed 120px), and a few
      rows pack two buttons into it ("Copy"+"TXT", "Save"+"Load") or pair it with a long label
      ("Craft Prize Eligible List", "Per-Question Percentage Correct Labels"). At the panel's fixed
