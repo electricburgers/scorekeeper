@@ -14,6 +14,15 @@
   --font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;
   --transition:.18s ease;--row-pad:8px;
   --btn-idle-bg:#1c1c1c;--btn-correct-bg:#0d2e0d;--btn-incorrect-bg:#2e0d0d;--btn-used-bg:#141414;
+  /* Correct-badge square (.wager-badge.bg-correct, app.js's CORRECT_BADGE_SVG) — opaque and
+     theme-independent (same value for hc-dark and hc-light, no override in the light block below)
+     since the badge floats over whatever wager-button color is underneath and needs to read as
+     its own solid chip either way, not blend into a per-theme wash the way --btn-correct-bg does.
+     #0c7a0c is the exact hex already used as --pts-pos-bg in hc-light — reused here rather than
+     inventing a new green — and white on it clears ~5.5:1 (AA). #0067c5 is likewise hc-light's
+     existing cb1 --pts-pos-bg; white clears ~5.6:1. Tritanopia (cb2) doesn't change green per the
+     COLOR VISION MODES rule below, so there's no cb2 override — only [data-cb="1"] further down. */
+  --correct-badge-bg:#0c7a0c;--correct-badge-fg:#fff;
   --pts-pos-bg:rgba(68,255,68,.18);--pts-pos-border:rgba(68,255,68,.55);--pts-pos-fg:#8dff8d;
   --pts-neg-bg:rgba(255,68,68,.2);--pts-neg-border:rgba(255,68,68,.6);--pts-neg-fg:#ffa3a3;
   --pts-nil-bg:rgba(255,255,255,.06);--pts-nil-border:rgba(255,255,255,.12);
@@ -91,6 +100,10 @@
   --pts-neg-bg:#b35900;--pts-neg-border:#9c4e00;--pts-neg-fg:#fff;
   --badge-green-fg:#004585;--txt-red:#6d3600;--danger-solid-bg:#8c4600;
 }
+/* Unlike the theme-qualified blocks above/below, --correct-badge-bg isn't split per theme in the
+   first place (see its definition up top) — it's the same fixed blue in cb1 regardless of which
+   theme is active too, so one plain [data-cb="1"] rule covers both instead of two duplicates. */
+[data-cb="1"]{--correct-badge-bg:#0067c5}
 [data-theme="hc-dark"][data-cb="2"]{
   --accent-gold:#ff66cc;--accent-cyan:#00cc88;
   --item-border:#ff66cc;--item-fill-checked:#ff66cc;
@@ -752,14 +765,35 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .score-row:last-child{border-bottom:none}
 .score-row:nth-child(even){background:var(--row-stripe)}
 .sr-rank{font-family:var(--font-display);font-weight:800;font-size:1.15rem;width:2.2rem;height:2.2rem;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:8px;background:#e8e8e8;color:#000;border:1px solid #b0b0b0}
-.sr-rank-1{background:#ffe066;color:#000;border:2px solid #c8900a}
-.sr-rank-2{background:#d8d8dc;color:#000;border:2px solid #888898}
-.sr-rank-3{background:#e8b98a;color:#000;border:2px solid #8b4510}
+/* .score-row now carries this same rank class too (see buildScores in app.js), so the badge
+   colors below are scoped to .sr-rank specifically — an unscoped .sr-rank-1 would otherwise also
+   paint the whole row. #1's gold uses --accent-gold/--on-accent-gold (both text and border share
+   the latter, so the ring is always exactly as legible as the text sitting next to it) instead of
+   its old hardcoded hex: that pair already carries its own [data-cb] tritanopia-safe pink swap —
+   audited elsewhere in this file down to AA at the worst combination it ships (dark theme +
+   tritanopia) — so the actual winner's badge now follows Settings > Color Vision like every other
+   gold element in the app already does, instead of silently staying gold regardless of the mode.
+   #2/#3 keep their original fixed silver/bronze — runners-up, not "the winning team". */
+.sr-rank.sr-rank-1{background:var(--accent-gold);color:var(--on-accent-gold);border:2px solid var(--on-accent-gold)}
+.sr-rank.sr-rank-2{background:#d8d8dc;color:#000;border:2px solid #888898}
+.sr-rank.sr-rank-3{background:#e8b98a;color:#000;border:2px solid #8b4510}
 [data-theme="hc-dark"] .sr-rank{background:#3a3a3a;color:#fff;border:1px solid #555}
-[data-theme="hc-dark"] .sr-rank-1{background:#6e5600;color:#fff;border:2px solid #ffd700}
-[data-theme="hc-dark"] .sr-rank-2{background:#55555f;color:#fff;border:2px solid #c8c8d0}
-[data-theme="hc-dark"] .sr-rank-3{background:#6b3d15;color:#fff;border:2px solid #d68a42}
-.sr-name{flex:1;font-weight:600;font-size:.85rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+[data-theme="hc-dark"] .sr-rank.sr-rank-2{background:#55555f;color:#fff;border:2px solid #c8c8d0}
+[data-theme="hc-dark"] .sr-rank.sr-rank-3{background:#6b3d15;color:#fff;border:2px solid #d68a42}
+.sr-name{flex:1;font-weight:600;font-size:.85rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-radius:5px}
+/* Subtle 1st/2nd/3rd podium tint behind the team name, same idea as Final Results' .fr-gold/
+   .fr-silver/.fr-bronze row wash (padding+matching negative margin lets the tint hug just the
+   name text as a soft pill instead of shifting the row's own layout). Gold uses color-mix() on
+   --accent-gold directly rather than a hand-picked rgba: it's the one already-cv-aware token in
+   this trio (see the .sr-rank comment above), and color-mix inherits whatever it resolves to per
+   theme/color-vision-mode for free instead of needing its own hardcoded [data-cb] copies. Silver/
+   bronze are plain fixed tints, same scope reasoning as the ranks themselves. */
+.score-row.sr-rank-1 .sr-name,.score-row.sr-rank-2 .sr-name,.score-row.sr-rank-3 .sr-name{padding:2px 6px;margin:-2px -6px}
+.score-row.sr-rank-1 .sr-name{background:color-mix(in srgb,var(--accent-gold) 16%,transparent)}
+.score-row.sr-rank-2 .sr-name{background:rgba(200,202,215,.14)}
+.score-row.sr-rank-3 .sr-name{background:rgba(210,130,55,.16)}
+[data-theme="hc-light"] .score-row.sr-rank-2 .sr-name{background:rgba(140,140,155,.20)}
+[data-theme="hc-light"] .score-row.sr-rank-3 .sr-name{background:rgba(180,100,40,.20)}
 .sr-score{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);margin-left:8px;flex-shrink:0}
 
 /* SECTIONS */
@@ -1006,15 +1040,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .wager-badge{position:absolute;top:-8px;right:-5px;width:1.3rem;height:1.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:900;line-height:1;padding-bottom:1px;pointer-events:none}
 /* .bg-correct's own square is drawn by CORRECT_BADGE_SVG (app.js), not this circle — it's a
    rounded square rather than the emoji-style circle .bg-incorrect below keeps, which is why it
-   gets no background/padding-bottom of its own. rect/path are colored via --btn-correct-bg/
-   --badge-green-fg instead of currentColor: that exact pair is already used together as a solid
-   fill and its text on it (.wager-btn.correct, .result-btn.correct-sel) and independently
-   audited at >=4.5:1 in every theme x color-vision-mode combination, so the badge inherits that
-   contrast instead of needing its own check. */
+   gets no background/padding-bottom of its own. rect/path are colored via --correct-badge-bg/
+   --correct-badge-fg (see their definitions up top) rather than currentColor: a solid, vivid
+   green square (not the dark --btn-correct-bg wash the button underneath already uses) with a
+   white check reads as its own badge instead of blending into the button, and clears >=4.5:1 AA
+   in every theme x color-vision-mode combination this app ships. */
 .wager-badge.bg-correct{background:transparent;padding-bottom:0}
 .wager-badge.bg-correct svg{width:1em;height:1em;display:block}
-.wager-badge.bg-correct svg rect{fill:var(--btn-correct-bg)}
-.wager-badge.bg-correct svg path{fill:none;stroke:var(--badge-green-fg);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.wager-badge.bg-correct svg rect{fill:var(--correct-badge-bg)}
+.wager-badge.bg-correct svg path{fill:none;stroke:var(--correct-badge-fg);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
 .wager-badge.bg-incorrect{background:var(--danger-solid-bg);color:#fff;font-size:1.05rem;font-weight:900}
 
 /* SCORE PILL */
