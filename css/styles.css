@@ -551,8 +551,15 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   /* Extra bottom padding (not just the 40px other viewports get) so the last section clears
      the fixed peek strip + timer dock with visible breathing room once scrolled all the way
      down — the dock floats on top of this padding rather than being part of the scrollable
-     flow, so without the extra room the last box's bottom edge sits flush against its top. */
-  .col-left{padding-bottom:150px}
+     flow, so without the extra room the last box's bottom edge sits flush against its top.
+     This used to be a flat 150px guess at the dock's height, the same bug as the Settings
+     panel's old flat header-height guess above: the dock isn't a fixed size — Timer Stepper
+     Buttons, a larger Size setting, or a taller safe-area-inset-bottom on a notched phone can
+     all push it past 150px, and once it does, the last section's bottom edge scrolls in
+     permanently behind it with no further scroll room left to clear it. --mobile-dock-h is the
+     dock's real rendered height, already kept in sync by the same ResizeObserver in app.js that
+     .col-right's own closed-transform above relies on — reuse it here too instead of re-guessing. */
+  .col-left{padding-bottom:calc(var(--mobile-dock-h,97px) + 24px)}
   /* .col-left is no longer its own scroll container here (the document is), so
      .mini-progress's sticky context bubbles up to the same one .header already uses — it
      needs to sit below the header's actual rendered height instead of top:0, or the two
