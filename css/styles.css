@@ -792,36 +792,34 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sr-rank{font-family:var(--font-display);font-weight:800;font-size:1.15rem;width:2.2rem;height:2.2rem;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-right:8px;background:#e8e8e8;color:#000;border:1px solid #b0b0b0}
 /* .score-row now carries this same rank class too (see buildScores in app.js), so the badge
    colors below are scoped to .sr-rank specifically — an unscoped .sr-rank-1 would otherwise also
-   paint the whole row. #1's gold uses --accent-gold/--on-accent-gold (both text and border share
-   the latter, so the ring is always exactly as legible as the text sitting next to it) instead of
-   its old hardcoded hex: that pair already carries its own [data-cb] tritanopia-safe pink swap —
-   audited elsewhere in this file down to AA at the worst combination it ships (dark theme +
-   tritanopia) — so the actual winner's badge now follows Settings > Color Vision like every other
-   gold element in the app already does, instead of silently staying gold regardless of the mode.
-   #2/#3 keep their original fixed silver/bronze — runners-up, not "the winning team". */
-.sr-rank.sr-rank-1{background:var(--accent-gold);color:var(--on-accent-gold);border:2px solid var(--on-accent-gold)}
+   paint the whole row. #1 went through a fully-token-based --accent-gold/--on-accent-gold design
+   for a few builds (bright fill, dark text+border, colorblind-mode aware) but that read as too
+   saturated/neon next to #2/#3's own muted two-tone look — reverted to the same muted-fill +
+   lighter-accent-border + theme-flipped-text formula #2/#3 already use below, at the cost of the
+   automatic colorblind-mode swap that formula gave up. */
+.sr-rank.sr-rank-1{background:#ffe066;color:#000;border:2px solid #c8900a}
 .sr-rank.sr-rank-2{background:#d8d8dc;color:#000;border:2px solid #888898}
 .sr-rank.sr-rank-3{background:#e8b98a;color:#000;border:2px solid #8b4510}
 [data-theme="hc-dark"] .sr-rank{background:#3a3a3a;color:#fff;border:1px solid #555}
-/* Same var()s as the plain .sr-rank.sr-rank-1 rule above, re-declared here — not a theme-specific
-   value, but a specificity fix. .sr-rank.sr-rank-1 and [data-theme="hc-dark"] .sr-rank are equally
-   specific (2 class-level selectors each: attribute selectors count same as classes), and this
-   dark-theme generic rule sits after it in the file, so on dark theme it was winning the tie and
-   silently falling back to the plain gray badge — #1 stopped looking gold at all. Restating the
-   gold rule at the same [data-theme="hc-dark"] specificity, after this one, is what makes it win. */
-[data-theme="hc-dark"] .sr-rank.sr-rank-1{background:var(--accent-gold);color:var(--on-accent-gold);border:2px solid var(--on-accent-gold)}
+/* Dark theme's own values, not just a copy of the light ones above: a much darker, muted
+   gold-brown fill (not the pale #ffe066 light theme gets — pale would glow against this app's
+   near-black dark theme instead of reading as muted) with white text and a genuinely lighter
+   bright-gold border for definition against that darker fill, same shape as #2/#3's own
+   dark-theme rows right below. Also fixes the specificity bug from the --accent-gold era: this
+   and the plain [data-theme="hc-dark"] .sr-rank rule above are equally specific (2 class-level
+   selectors each — attribute selectors count same as classes), so this still needs to be
+   declared after it to win the tie rather than falling back to the plain gray badge. */
+[data-theme="hc-dark"] .sr-rank.sr-rank-1{background:#6e5600;color:#fff;border:2px solid #ffd700}
 [data-theme="hc-dark"] .sr-rank.sr-rank-2{background:#55555f;color:#fff;border:2px solid #c8c8d0}
 [data-theme="hc-dark"] .sr-rank.sr-rank-3{background:#6b3d15;color:#fff;border:2px solid #d68a42}
 .sr-name{flex:1;font-weight:600;font-size:.85rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* Subtle 1st/2nd/3rd podium tint across the whole row container — same idea as Final Results'
-   .fr-gold/.fr-silver/.fr-bronze row wash. All three (gold included) are plain fixed, muted
-   tints now, same as each other — color-mix() on the full-saturation --accent-gold read as too
-   vividly yellow next to silver/bronze's own muted tones, so gold's row wash trades cv-awareness
-   here for matching its siblings' restraint; the #1 badge itself (.sr-rank.sr-rank-1 above) is
-   still the vivid, cv-aware --accent-gold — this tint is only the soft background behind it.
-   These and .score-row:nth-child(even) above are all 2 class-level selectors (equal
-   specificity), so declaring these after it in the file is what lets a podium row's tint win
-   over the plain zebra stripe when that row is also even. */
+   .fr-gold/.fr-silver/.fr-bronze row wash. All three are plain fixed, muted tints, matching the
+   same muted approach the #1/#2/#3 badges themselves now use (see .sr-rank.sr-rank-1's comment
+   above) rather than a saturated color-mix() of the raw accent. These and
+   .score-row:nth-child(even) above are all 2 class-level selectors (equal specificity), so
+   declaring these after it in the file is what lets a podium row's tint win over the plain
+   zebra stripe when that row is also even. */
 .score-row.sr-rank-1{background:rgba(200,175,90,.16)}
 .score-row.sr-rank-2{background:rgba(200,202,215,.14)}
 .score-row.sr-rank-3{background:rgba(210,130,55,.16)}
