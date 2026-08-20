@@ -282,6 +282,20 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
 .settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
+/* Theme toggle's sun/moon (THEME_ICON_SUN/THEME_ICON_MOON, app.js) — see the const comment there
+   for why these replaced the old ☀️/🌑 emoji. --badge-gold-fg/--txt-cyan are this app's existing
+   "AAA(7:1) text-safe on neutral surfaces" token pair, and --bg-card (this button's own
+   background) is exactly that surface, so reusing them needs no new contrast check — and both
+   already carry their own [data-cb] swap, so the icon follows Settings > Color Vision for free. */
+#themeToggle{display:inline-flex;align-items:center;gap:4px}
+/* .8em, not 1em+: unlike a Unicode glyph, this SVG has no built-in internal padding baked into
+   its own bounding box, so it needs to render visibly SMALLER than the em square to end up the
+   same on-page size the old 🌑/☀️ emoji was. */
+#themeToggle svg{width:.8em;height:.8em;flex-shrink:0}
+#themeToggle svg circle,#themeToggle svg path{fill:currentColor}
+#themeToggle svg line{stroke:currentColor}
+#themeToggle .icon-sun{color:var(--badge-gold-fg)}
+#themeToggle .icon-moon{color:var(--txt-cyan)}
 /* Hidden by default (desktop's multi-column grid rarely needs to scroll, so a heading here would
    just be dead weight) — shown only in the mobile single-column layout below, where Advanced
    Settings expanding can push the panel well past the viewport height and the "Theme" row
@@ -778,22 +792,29 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sr-rank.sr-rank-2{background:#d8d8dc;color:#000;border:2px solid #888898}
 .sr-rank.sr-rank-3{background:#e8b98a;color:#000;border:2px solid #8b4510}
 [data-theme="hc-dark"] .sr-rank{background:#3a3a3a;color:#fff;border:1px solid #555}
+/* Same var()s as the plain .sr-rank.sr-rank-1 rule above, re-declared here — not a theme-specific
+   value, but a specificity fix. .sr-rank.sr-rank-1 and [data-theme="hc-dark"] .sr-rank are equally
+   specific (2 class-level selectors each: attribute selectors count same as classes), and this
+   dark-theme generic rule sits after it in the file, so on dark theme it was winning the tie and
+   silently falling back to the plain gray badge — #1 stopped looking gold at all. Restating the
+   gold rule at the same [data-theme="hc-dark"] specificity, after this one, is what makes it win. */
+[data-theme="hc-dark"] .sr-rank.sr-rank-1{background:var(--accent-gold);color:var(--on-accent-gold);border:2px solid var(--on-accent-gold)}
 [data-theme="hc-dark"] .sr-rank.sr-rank-2{background:#55555f;color:#fff;border:2px solid #c8c8d0}
 [data-theme="hc-dark"] .sr-rank.sr-rank-3{background:#6b3d15;color:#fff;border:2px solid #d68a42}
-.sr-name{flex:1;font-weight:600;font-size:.85rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-radius:5px}
-/* Subtle 1st/2nd/3rd podium tint behind the team name, same idea as Final Results' .fr-gold/
-   .fr-silver/.fr-bronze row wash (padding+matching negative margin lets the tint hug just the
-   name text as a soft pill instead of shifting the row's own layout). Gold uses color-mix() on
-   --accent-gold directly rather than a hand-picked rgba: it's the one already-cv-aware token in
-   this trio (see the .sr-rank comment above), and color-mix inherits whatever it resolves to per
-   theme/color-vision-mode for free instead of needing its own hardcoded [data-cb] copies. Silver/
-   bronze are plain fixed tints, same scope reasoning as the ranks themselves. */
-.score-row.sr-rank-1 .sr-name,.score-row.sr-rank-2 .sr-name,.score-row.sr-rank-3 .sr-name{padding:2px 6px;margin:-2px -6px}
-.score-row.sr-rank-1 .sr-name{background:color-mix(in srgb,var(--accent-gold) 16%,transparent)}
-.score-row.sr-rank-2 .sr-name{background:rgba(200,202,215,.14)}
-.score-row.sr-rank-3 .sr-name{background:rgba(210,130,55,.16)}
-[data-theme="hc-light"] .score-row.sr-rank-2 .sr-name{background:rgba(140,140,155,.20)}
-[data-theme="hc-light"] .score-row.sr-rank-3 .sr-name{background:rgba(180,100,40,.20)}
+.sr-name{flex:1;font-weight:600;font-size:.85rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Subtle 1st/2nd/3rd podium tint across the whole row container — same idea as Final Results'
+   .fr-gold/.fr-silver/.fr-bronze row wash. Gold uses color-mix() on --accent-gold rather than a
+   hand-picked rgba: it's the one already-cv-aware token in this trio (see the .sr-rank comment
+   above), so it inherits whatever the token resolves to per theme/color-vision-mode for free
+   instead of needing its own hardcoded [data-cb] copies. Silver/bronze are plain fixed tints,
+   same scope reasoning as the ranks themselves. Both this and .score-row:nth-child(even) above
+   are 2 class-level selectors (equal specificity), so declaring these after it in the file is
+   what lets a podium row's tint win over the plain zebra stripe when that row is also even. */
+.score-row.sr-rank-1{background:color-mix(in srgb,var(--accent-gold) 16%,transparent)}
+.score-row.sr-rank-2{background:rgba(200,202,215,.14)}
+.score-row.sr-rank-3{background:rgba(210,130,55,.16)}
+[data-theme="hc-light"] .score-row.sr-rank-2{background:rgba(140,140,155,.20)}
+[data-theme="hc-light"] .score-row.sr-rank-3{background:rgba(180,100,40,.20)}
 .sr-score{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);margin-left:8px;flex-shrink:0}
 
 /* SECTIONS */
@@ -1514,7 +1535,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    the guess tiebreak resolved it: the closer guess gets the green "win" variant, the rest of
    that tied group gets the plain gold "tie" badge. Sized up from the original .62rem/1px 7px so
    it reads clearly rather than disappearing next to the team name. */
-.fr-tiebadge{display:inline-block;font-size:.74rem;padding:2px 9px;border-radius:999px;background:var(--badge-gold-fg);color:var(--on-badge);margin-left:6px;vertical-align:middle;font-weight:700}
+/* border uses --bg-card (the base surface under every row background, tie/gold/silver/bronze
+   wash included) rather than a fixed color, so the badge always gets a visible cutout ring no
+   matter which row background it's sitting on — same "punch a border in the page's own base
+   color" trick as .qtimer-btn.qtimer-pause above, for the same reason: a gold pill was
+   disappearing into a same-hued background behind it (there, the warning pulse; here, a tied
+   row's own yellow, and worse still on a #1-place row now that .fr-gold sits under it too). */
+.fr-tiebadge{display:inline-block;font-size:.74rem;padding:2px 9px;border-radius:999px;background:var(--badge-gold-fg);color:var(--on-badge);border:2px solid var(--bg-card);margin-left:6px;vertical-align:middle;font-weight:700}
 /* Same pause-button match as the row background above, applied to the plain "tie" chip too.
    Declared BEFORE .fr-win below (same specificity, so source order decides) — the "closer"
    .fr-win variant must still win and stay green, a different signal from "the current yellow". */
