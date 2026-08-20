@@ -79,7 +79,7 @@ const BONUS_Q_STYLE = {
 // --correct-badge-bg/--correct-badge-fg already resolve to for the active theme and color-vision
 // mode.
 const CORRECT_BADGE_SVG =
-  '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="1" y="1" width="18" height="18" rx="5"></rect><path d="M5.5 10.3l3 3 6-6.6"></path></svg>';
+  '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="1" y="1" width="18" height="18" rx="5"></rect><path d="M4.5 10.3l3.5 3.5l7-7.8"></path></svg>';
 // Same reasoning as CORRECT_BADGE_SVG above, applied to the Theme toggle's own 🌑/☀️ Unicode
 // emoji: both are fixed-color platform pictographs (a literal gray moon, a literal orange sun)
 // that no CSS token could touch. .icon-sun/.icon-moon (styles.css) each set color to a token
@@ -102,9 +102,22 @@ const THEME_ICON_MOON =
 // though it's the same character. An SVG's viewBox geometry has no such metrics to fight — two
 // crossing lines drawn symmetric around (12,12) simply are centered, identically, everywhere
 // it's used.
+// Both carry a shared "icon-mark" class (styles.css) sizing/coloring them generically via
+// currentColor for every plain inline use (mini-progress label, Done badges, stat pills, Team
+// Report lines) — contexts like .wager-badge.bg-incorrect/.remove-team button that need their
+// own size still get it, since their own `svg` element selectors there are more specific than
+// the shared class and win the cascade.
 const X_ICON_SVG =
-  '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>';
-const APP_VERSION = "v18.35"; // #Version Number — bump this manually when you release a new build
+  '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>';
+// Bare checkmark (no colored square background — CORRECT_BADGE_SVG's rect is specific to that
+// one small corner badge) for every OTHER ✓ in the app: the mini-progress "all rounds scored"
+// label, round/question "Done" badges, the per-question correct/incorrect stat pills, and every
+// ✓/✗ line in the Team Report. Same rationale as X_ICON_SVG above — colored via currentColor, so
+// it always picks up whatever color token the pill/label around it already resolves to
+// (--badge-green-fg, --pts-pos-fg, etc.), instead of a fixed-color platform glyph.
+const CHECK_ICON_SVG =
+  '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg>';
+const APP_VERSION = "v18.36"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 20, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":114,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":119,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":105,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":150,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":115,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":131,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":95,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":61,"bonusItem":false,"njcb":true,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":false}}],"bonus":{"0":4,"1":3,"2":4,"3":3,"4":3,"5":2,"6":4,"7":1,"8":4,"9":3,"10":2}},{"questions":[{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":5,"correct":false},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":5,"correct":false},"6":{"wager":5,"correct":true},"7":{"wager":5,"correct":false},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":7,"correct":false},"1":{"wager":7,"correct":false},"2":{"wager":7,"correct":false},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":false}}],"bonus":{}},{"questions":[{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":false}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":false},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":8,"correct":true}}],"bonus":{"0":4,"1":2,"2":4,"3":2,"4":2,"5":4,"6":3,"7":3,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":9,"correct":true},"10":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":12,"correct":false},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":false},"10":{"wager":12,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":false},"1":{"wager":4,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":4,"correct":false},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true},"10":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":20,"correct":true},"2":{"wager":15,"correct":true},"3":{"wager":15,"correct":false},"4":{"wager":15,"correct":false},"5":{"wager":20,"correct":true},"6":{"wager":20,"correct":true},"7":{"wager":18,"correct":true},"8":{"wager":18,"correct":true},"9":{"wager":20,"correct":false},"10":{"wager":18,"correct":false}},"gameStarted":true}`;
@@ -1477,7 +1490,7 @@ function renderLeft() {
     let rpBadge = "";
     if (rp.total > 0) {
       if (rComplete)
-        rpBadge = '<span class="round-badge rb-done">\u2713 Done</span>';
+        rpBadge = `<span class="round-badge rb-done">${CHECK_ICON_SVG} Done</span>`;
       else if (rp.done > 0)
         rpBadge =
           '<span class="round-badge rb-partial">' +
@@ -1577,6 +1590,61 @@ function jumpToSection(id) {
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
+// Tapping the mini-progress bar used to just jump to the current round's section header,
+// leaving the host to scroll and expand their way to whatever's actually unscored inside it.
+// This finds the first unanswered item within that round instead — in the same order it's
+// rendered (Q1-4, then Halftime/Final Wager on round 2/4, then the Bonus Question on round 1/3)
+// — and expands both the round section AND that item's own block if either is collapsed, same
+// as jumpToSection does for a single section.
+function jumpToFirstUnanswered() {
+  const s = currentProgressSummary();
+  if (!s || s.ri == null) return jumpToSection("sec-final");
+  const ri = s.ri,
+    n = gameState.teams.length;
+  let targetId = null;
+  for (let qi = 0; qi < 4 && !targetId; qi++) {
+    let done = 0;
+    for (let ti = 0; ti < n; ti++) {
+      const a = gameState.rounds[ri].questions[qi][ti];
+      if (a && a.wager !== undefined && a.correct !== undefined) done++;
+    }
+    if (done < n) {
+      targetId = "qblock-" + ri + "-" + qi;
+      collapsedQuestions.delete(ri + "-" + qi);
+    }
+  }
+  if (!targetId && (ri === 1 || ri === 3)) {
+    const type = ri === 1 ? "halftime" : "final";
+    const store = ri === 1 ? gameState.halftime : gameState.finalWager;
+    let done = 0;
+    for (let ti = 0; ti < n; ti++) {
+      const d = store[ti];
+      if (d && d.wager != null && d.wager !== "" && d.correct != null) done++;
+    }
+    if (done < n) {
+      targetId = "swblock-" + type;
+      collapsedSpecialWagers.delete(type);
+    }
+  }
+  if (!targetId && BONUS_ROUNDS.has(ri)) {
+    let done = 0;
+    for (let ti = 0; ti < n; ti++) {
+      if (gameState.rounds[ri].bonus[ti] != null) done++;
+    }
+    if (done < n) {
+      targetId = "bqblock-" + ri;
+      collapsedBonusQuestions.delete("b" + ri);
+    }
+  }
+  const sectionId = "sec-r" + (ri + 1);
+  collapsedSections.delete(sectionId);
+  renderAll();
+  requestAnimationFrame(() => {
+    document
+      .getElementById(targetId || sectionId)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
 // visible: false renders the exact same markup the real, scored-at-least-once state uses (never
 // a guessed/simplified placeholder) but with the .mp-pending class, which visibility:hidden's
 // the whole thing while still letting it claim its real layout height — see the call site in
@@ -1588,11 +1656,11 @@ function renderMiniProgress(visible) {
   const pendingCls = visible ? "" : " mp-pending";
   if (s.ri == null) {
     return `<div class="mini-progress mp-complete${pendingCls}" role="button" tabindex="0" onclick="jumpToSection('sec-final')">
-      <span class="mp-label">✓ All 4 rounds scored — jump to Final Results</span>
+      <span class="mp-label">${CHECK_ICON_SVG} All 4 rounds scored — jump to Final Results</span>
     </div>`;
   }
   const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
-  return `<div class="mini-progress${pendingCls}" role="button" tabindex="0" onclick="jumpToSection('sec-r${s.ri + 1}')">
+  return `<div class="mini-progress${pendingCls}" role="button" tabindex="0" onclick="jumpToFirstUnanswered()">
     <span class="mp-round ${ROUND_COLORS[s.ri]}">Round ${s.ri + 1}</span>
     <span class="mp-count">${s.done}/${s.total} scored</span>
     <div class="mp-bar"><div class="mp-fill" style="width:${pct}%"></div></div>
@@ -1639,8 +1707,8 @@ function scoreBreakdown(dataObj, n) {
 function renderQStatsRow(s) {
   if (!s.done) return "";
   return `<span class="q-stats-row">
-    <span class="q-stat q-stat-correct">✓ ${s.correct}/${s.done} (${s.correctPct}%)</span>
-    <span class="q-stat q-stat-incorrect">✗ ${s.incorrect}/${s.done} (${s.incorrectPct}%)</span>
+    <span class="q-stat q-stat-correct">${CHECK_ICON_SVG} ${s.correct}/${s.done} (${s.correctPct}%)</span>
+    <span class="q-stat q-stat-incorrect">${X_ICON_SVG} ${s.incorrect}/${s.done} (${s.incorrectPct}%)</span>
   </span>`;
 }
 function renderWQ(ri, qi) {
@@ -1671,7 +1739,7 @@ function renderWQ(ri, qi) {
       : beer
         ? "🍺 Beer Round!"
         : qs.done === qs.total
-          ? "\u2713 Done"
+          ? `${CHECK_ICON_SVG} Done`
           : qs.total - qs.done + " left";
 
   let h = `<div class="${blockCls}" id="qblock-${ri}-${qi}">`;
@@ -1849,7 +1917,7 @@ function renderBQ(ri) {
       badge =
         '<span class="q-badge q-badge-lg q-beer">\uD83C\uDF7A Beer Round!</span>';
     else if (subDone === n)
-      badge = '<span class="q-badge q-badge-lg q-complete">\u2713 Done</span>';
+      badge = `<span class="q-badge q-badge-lg q-complete">${CHECK_ICON_SVG} Done</span>`;
     else
       badge = `<span class="q-badge q-badge-lg q-remaining">${n - subDone} left</span>`;
   }
@@ -1930,7 +1998,7 @@ function renderSpecialWager(type) {
     if (beer)
       swBadge = '<span class="q-badge q-beer">\uD83C\uDF7A Beer Round!</span>';
     else if (swDone === swN)
-      swBadge = '<span class="q-badge q-complete">\u2713 Done</span>';
+      swBadge = `<span class="q-badge q-complete">${CHECK_ICON_SVG} Done</span>`;
     else
       swBadge = `<span class="q-badge q-remaining">${swN - swDone} left</span>`;
   }
@@ -3184,11 +3252,11 @@ function auditQLine(ri, qi, ti) {
     pts = "\u2014";
     pcls = "none";
   } else if (a.correct) {
-    res = '<span class="aud-res aud-correct">\u2713 correct</span>';
+    res = `<span class="aud-res aud-correct">${CHECK_ICON_SVG} correct</span>`;
     pts = "+" + a.wager;
     pcls = "pos";
   } else {
-    res = '<span class="aud-res aud-wrong">\u2717 incorrect</span>';
+    res = `<span class="aud-res aud-wrong">${X_ICON_SVG} incorrect</span>`;
     pts = "0";
     pcls = "zero";
   }
@@ -3202,7 +3270,7 @@ function buildAudit(ti) {
   const name = esc(t.name || "Team " + (ti + 1));
   const rm = rankMap();
   const rank = rm[ti];
-  let h = `<div class="audit-head"><h2>${name}<span class="aud-sub">Team Report \u2014 rank #${rank} of ${gameState.teams.length} \u00B7 ${esc(gameState.meta.location || "")}${gameState.meta.quizId ? " \u00B7 Quiz " + esc(gameState.meta.quizId) : ""}</span></h2><button class="audit-close" onclick="closeAudit()">\u2715 Close</button></div>`;
+  let h = `<div class="audit-head"><h2>${name}<span class="aud-sub">Team Report \u2014 rank #${rank} of ${gameState.teams.length} \u00B7 ${esc(gameState.meta.location || "")}${gameState.meta.quizId ? " \u00B7 Quiz " + esc(gameState.meta.quizId) : ""}</span></h2><button class="audit-close" onclick="closeAudit()" aria-label="Close" title="Close">${X_ICON_SVG}</button></div>`;
   h += `<div class="audit-body">`;
 
   let run = 0;
@@ -3217,15 +3285,11 @@ function buildAudit(ti) {
         pts = "\u2014";
         pcls = "none";
       } else if (v > 0) {
-        res =
-          '<span class="aud-res aud-correct">✓ ' +
-          v +
-          " of 4 correct</span>";
+        res = `<span class="aud-res aud-correct">${CHECK_ICON_SVG} ${v} of 4 correct</span>`;
         pts = "+" + v * 5;
         pcls = "pos";
       } else {
-        res =
-          '<span class="aud-res aud-wrong">✗ 0 of 4 correct (submitted)</span>';
+        res = `<span class="aud-res aud-wrong">${X_ICON_SVG} 0 of 4 correct (submitted)</span>`;
         pts = "0";
         pcls = "zero";
       }
@@ -3252,11 +3316,11 @@ function buildAudit(ti) {
       pts = "\u2014";
       pcls = "none";
     } else if (data.correct) {
-      res = '<span class="aud-res aud-correct">\u2713 correct</span>';
+      res = `<span class="aud-res aud-correct">${CHECK_ICON_SVG} correct</span>`;
       pts = "+" + w;
       pcls = "pos";
     } else {
-      res = '<span class="aud-res aud-wrong">\u2717 incorrect</span>';
+      res = `<span class="aud-res aud-wrong">${X_ICON_SVG} incorrect</span>`;
       pts = "\u2212" + w;
       pcls = "neg";
     }

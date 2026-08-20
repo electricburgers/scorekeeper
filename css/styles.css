@@ -470,6 +470,17 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Same .95rem as .mp-round above — see the line-height comment on .mini-progress for why these
    two need to match. */
 .mp-label{font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--badge-green-fg)}
+/* Shared sizing/coloring for CHECK_ICON_SVG/X_ICON_SVG (app.js) wherever they sit inline in
+   text — the mini-progress label above, round/question "Done" badges, per-question correct/
+   incorrect stat pills, and Team Report lines. currentColor picks up whichever color token the
+   surrounding pill/label already resolves to (--badge-green-fg, --pts-pos-fg, --txt-red, etc.),
+   so this one rule works correctly in every one of those already-themed, already-colorblind-
+   aware contexts without needing its own color per place it's used. Contexts that need a
+   different size (.wager-badge.bg-incorrect, .remove-team button) target `svg` directly there,
+   which is more specific than this class and wins. */
+.icon-mark{width:.8em;height:.8em;display:inline-block;vertical-align:-.1em;flex-shrink:0}
+.icon-mark polyline{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.icon-mark line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
 
 /* Base (desktop-hidden) state for the mobile bottom sheet's peek strip + backdrop — declared
    here, before the @media block below, so that block's display:flex/block override actually
@@ -1085,7 +1096,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .wager-badge.bg-correct{background:transparent;padding-bottom:0}
 .wager-badge.bg-correct svg{width:1em;height:1em;display:block}
 .wager-badge.bg-correct svg rect{fill:var(--correct-badge-bg)}
-.wager-badge.bg-correct svg path{fill:none;stroke:var(--correct-badge-fg);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
+.wager-badge.bg-correct svg path{fill:none;stroke:var(--correct-badge-fg);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .wager-badge.bg-incorrect{background:var(--danger-solid-bg);color:#fff;font-size:1.05rem;font-weight:900}
 /* X_ICON_SVG (app.js) replaces a ✕ Unicode glyph here — this circle already centered its content
    with flex, but the glyph's own font metrics never quite landed it in the visual middle, and by
@@ -1390,7 +1401,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 [data-theme="hc-light"] .audit-head{box-shadow:0 6px 12px -4px rgba(0,0,0,.30)}
 .audit-head h2{font-family:var(--font-display);font-size:1.05rem;color:var(--txt-cyan);text-transform:uppercase;letter-spacing:1px;line-height:1.2;word-break:break-word}
 .audit-head .aud-sub{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:3px}
-.audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--border);background:var(--bg-input);color:var(--text-primary);border-radius:var(--radius);padding:7px 12px;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
+/* Icon-only now (see buildAudit in app.js) — used to read "✕ Close", but the X alone next to a
+   modal titled "Team Report" already reads as close without needing the word spelled out too.
+   display:flex/square-ish padding replace the old text button's asymmetric 7px/12px, which was
+   sized for a line of text and would otherwise leave the lone icon looking off-balance. */
+.audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--border);background:var(--bg-input);color:var(--text-primary);border-radius:var(--radius);padding:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
 .audit-close:hover{background:var(--bg-hover);border-color:var(--border-light)}
 .audit-body{padding:12px 14px 18px}
 /* Mobile default: the two columns' markup is just two sequential <div>s (no grid), so column 1
