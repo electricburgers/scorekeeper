@@ -1087,6 +1087,14 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .wager-badge.bg-correct svg rect{fill:var(--correct-badge-bg)}
 .wager-badge.bg-correct svg path{fill:none;stroke:var(--correct-badge-fg);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
 .wager-badge.bg-incorrect{background:var(--danger-solid-bg);color:#fff;font-size:1.05rem;font-weight:900}
+/* X_ICON_SVG (app.js) replaces a ✕ Unicode glyph here — this circle already centered its content
+   with flex, but the glyph's own font metrics never quite landed it in the visual middle, and by
+   a different amount than the ✕ inside .bg-correct's differently-shaped sibling or the ones on
+   other buttons entirely — reading as "inconsistent" between them even though it was the same
+   character everywhere. An SVG's geometry is centered on its own, regardless of font, so every
+   instance of this badge now lines up the same way. */
+.wager-badge.bg-incorrect svg{width:.65em;height:.65em;display:block}
+.wager-badge.bg-incorrect svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
 
 /* SCORE PILL */
 /* width (not min-width): the placeholder em-dash ("—", shown before a team is scored) needs

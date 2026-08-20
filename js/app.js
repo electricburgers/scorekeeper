@@ -93,15 +93,18 @@ const THEME_ICON_SUN =
   '<svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></svg>';
 const THEME_ICON_MOON =
   '<svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
-// Remove-team button (Feather/Lucide "x" geometry, same family as the icons above) rather than
-// the ✕ Unicode glyph this replaced — .remove-team button already centers its content with
-// flex, but a text glyph's own font metrics (its baseline, its glyph-box padding) rarely
-// land it visually centered inside a perfectly round button regardless of how the button itself
-// centers it. An SVG's viewBox geometry has no such metrics to fight — two crossing lines drawn
-// symmetric around (12,12) simply are centered, in every font the visitor's device might use.
-const REMOVE_TEAM_ICON_SVG =
+// Shared X icon (Feather/Lucide geometry, same family as the icons above) rather than a ✕/✗
+// Unicode glyph — the remove-team button and every .wager-badge.bg-incorrect badge (Q1-4,
+// bonus questions, special wager) all centered their glyph with flex already, but a text
+// glyph's own font metrics (its baseline, its glyph-box padding) rarely land it visually
+// centered regardless of how its container centers it — and different buttons' fonts/sizes can
+// land it off by a different amount each, reading as "inconsistent" between contexts even
+// though it's the same character. An SVG's viewBox geometry has no such metrics to fight — two
+// crossing lines drawn symmetric around (12,12) simply are centered, identically, everywhere
+// it's used.
+const X_ICON_SVG =
   '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>';
-const APP_VERSION = "v18.33"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.34"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 20, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":114,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":119,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":105,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":150,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":115,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":131,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":95,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":61,"bonusItem":false,"njcb":true,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":false}}],"bonus":{"0":4,"1":3,"2":4,"3":3,"4":3,"5":2,"6":4,"7":1,"8":4,"9":3,"10":2}},{"questions":[{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":5,"correct":false},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":5,"correct":false},"6":{"wager":5,"correct":true},"7":{"wager":5,"correct":false},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":7,"correct":false},"1":{"wager":7,"correct":false},"2":{"wager":7,"correct":false},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":false}}],"bonus":{}},{"questions":[{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":false}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":false},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":8,"correct":true}}],"bonus":{"0":4,"1":2,"2":4,"3":2,"4":2,"5":4,"6":3,"7":3,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":9,"correct":true},"10":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":12,"correct":false},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":false},"10":{"wager":12,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":false},"1":{"wager":4,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":4,"correct":false},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true},"10":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":20,"correct":true},"2":{"wager":15,"correct":true},"3":{"wager":15,"correct":false},"4":{"wager":15,"correct":false},"5":{"wager":20,"correct":true},"6":{"wager":20,"correct":true},"7":{"wager":18,"correct":true},"8":{"wager":18,"correct":true},"9":{"wager":20,"correct":false},"10":{"wager":18,"correct":false}},"gameStarted":true}`;
@@ -1458,7 +1461,7 @@ function renderLeft() {
       </div>`
           : ""
       }
-      <div class="remove-team"><button onclick="removeTeam(${i})" title="Remove team" aria-label="Remove team ${i + 1}">${REMOVE_TEAM_ICON_SVG}</button></div>
+      <div class="remove-team"><button onclick="removeTeam(${i})" title="Remove team" aria-label="Remove team ${i + 1}">${X_ICON_SVG}</button></div>
     </div>`;
   });
   if (gameState.teams.length < MAX_TEAMS)
@@ -1743,7 +1746,7 @@ function renderWQ(ri, qi) {
         badge = `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>`;
       } else if (isSel && ans.correct === false) {
         cls += " incorrect";
-        badge = '<span class="wager-badge bg-incorrect">\u2715</span>';
+        badge = `<span class="wager-badge bg-incorrect">${X_ICON_SVG}</span>`;
       } else if (isUsed) cls += " used";
       h += `<button class="${cls}" onclick="cycleW(${ri},${qi},${ti},${w})" ${isUsed ? "disabled" : ""}>${w}${badge}</button>`;
     });
@@ -1885,7 +1888,7 @@ function renderBQ(ri) {
           cbadge = "";
         if (isSel && k === 0) {
           cls += " incorrect";
-          cbadge = '<span class="wager-badge bg-incorrect">\u2715</span>';
+          cbadge = `<span class="wager-badge bg-incorrect">${X_ICON_SVG}</span>`;
         } else if (isSel && k > 0) {
           cls += " correct";
           cbadge = `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>`;
@@ -1970,7 +1973,7 @@ function renderSpecialWager(type) {
       ${selectHtml}
       <div class="ta-result">
         <button class="result-btn ${d.correct === true ? "correct-sel" : ""}" onclick="${cSet}(${ti},true)" aria-label="Mark correct">\u2713${d.correct === true ? `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>` : ""}</button>
-        <button class="result-btn ${d.correct === false ? "incorrect-sel" : ""}" onclick="${cSet}(${ti},false)" aria-label="Mark incorrect">\u2717${d.correct === false ? '<span class="wager-badge bg-incorrect">\u2715</span>' : ""}</button>
+        <button class="result-btn ${d.correct === false ? "incorrect-sel" : ""}" onclick="${cSet}(${ti},false)" aria-label="Mark incorrect">\u2717${d.correct === false ? `<span class="wager-badge bg-incorrect">${X_ICON_SVG}</span>` : ""}</button>
       </div>
       ${pts}
     </div>`;
@@ -3214,12 +3217,15 @@ function buildAudit(ti) {
         pts = "\u2014";
         pcls = "none";
       } else if (v > 0) {
-        res = '<span class="aud-res aud-correct">' + v + " of 4 correct</span>";
+        res =
+          '<span class="aud-res aud-correct">✓ ' +
+          v +
+          " of 4 correct</span>";
         pts = "+" + v * 5;
         pcls = "pos";
       } else {
         res =
-          '<span class="aud-res aud-wrong">0 of 4 correct (submitted)</span>';
+          '<span class="aud-res aud-wrong">✗ 0 of 4 correct (submitted)</span>';
         pts = "0";
         pcls = "zero";
       }
