@@ -117,7 +117,7 @@ const X_ICON_SVG =
 // (--badge-green-fg, --pts-pos-fg, etc.), instead of a fixed-color platform glyph.
 const CHECK_ICON_SVG =
   '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg>';
-const APP_VERSION = "v18.40"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.41"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 20, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":114,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":119,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":105,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":150,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":115,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":131,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":95,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":61,"bonusItem":false,"njcb":true,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":false}}],"bonus":{"0":4,"1":3,"2":4,"3":3,"4":3,"5":2,"6":4,"7":1,"8":4,"9":3,"10":2}},{"questions":[{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":5,"correct":false},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":5,"correct":false},"6":{"wager":5,"correct":true},"7":{"wager":5,"correct":false},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":7,"correct":false},"1":{"wager":7,"correct":false},"2":{"wager":7,"correct":false},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":false}}],"bonus":{}},{"questions":[{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":false}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":false},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":8,"correct":true}}],"bonus":{"0":4,"1":2,"2":4,"3":2,"4":2,"5":4,"6":3,"7":3,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":9,"correct":true},"10":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":12,"correct":false},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":false},"10":{"wager":12,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":false},"1":{"wager":4,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":4,"correct":false},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true},"10":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":20,"correct":true},"2":{"wager":15,"correct":true},"3":{"wager":15,"correct":false},"4":{"wager":15,"correct":false},"5":{"wager":20,"correct":true},"6":{"wager":20,"correct":true},"7":{"wager":18,"correct":true},"8":{"wager":18,"correct":true},"9":{"wager":20,"correct":false},"10":{"wager":18,"correct":false}},"gameStarted":true}`;
@@ -1402,8 +1402,22 @@ function renderAll() {
 function renderLeft() {
   const m = document.getElementById("mainContent");
   if (!m) return;
-  const sy = m.scrollTop;
-  const wy = window.scrollY || document.documentElement.scrollTop || 0;
+  let sy = m.scrollTop;
+  let wy = window.scrollY || document.documentElement.scrollTop || 0;
+  // When the host just scored a specific team's wager (cycleW sets lastAction), remember that
+  // exact row's on-screen position before this re-render. Restoring sy/wy alone assumes nothing
+  // ABOVE the scroll position changed height between renders — but a round badge's "N left"
+  // count changing width, a round or question flipping to its "Done" state, etc. all shift
+  // everything below them by a few px, which is what "the view moves" whenever a question gets
+  // scored — sy/wy end up numerically right but pointing at different content than before.
+  // Comparing this one row's before/after position and folding the difference into sy/wy below
+  // cancels that out no matter what actually caused it.
+  const anchorSel = lastAction
+    ? `[data-ta="${lastAction.ri}-${lastAction.qi}-${lastAction.ti}"]`
+    : null;
+  const anchorBefore = anchorSel
+    ? m.querySelector(anchorSel)?.getBoundingClientRect().top
+    : undefined;
   const gs = checkGameStarted();
   let h = "";
 
@@ -1518,6 +1532,17 @@ function renderLeft() {
   </div></div>`;
 
   m.innerHTML = h;
+  // Fold the anchor row's drift (if any) into sy/wy BEFORE the restores below use them, so both
+  // the synchronous restore and the rAF re-assert land on the corrected position instead of the
+  // raw pre-render one.
+  if (anchorBefore != null) {
+    const anchorAfter = m.querySelector(anchorSel)?.getBoundingClientRect().top;
+    if (anchorAfter != null) {
+      const delta = anchorAfter - anchorBefore;
+      sy += delta;
+      wy += delta;
+    }
+  }
   // Restore scroll synchronously so the browser never paints a frame scrolled to the top.
   // (Setting scrollTop forces layout while JS is still running, so no jump is ever visible.)
   m.scrollTop = sy;
@@ -1581,12 +1606,14 @@ function currentProgressSummary() {
   }
   return { ri: null, done: 0, total: 0 };
 }
-// Shared by jumpToSection/jumpToFirstUnanswered below: scrolls to id, then rings it with
-// .jump-pulse (styles.css) so it's obvious at a glance which section/question the jump actually
-// landed on, rather than the host having to spot it themselves once the scroll settles.
-function scrollToAndPulse(id) {
+// Shared by jumpToSection/jumpToFirstUnanswered below: scrolls to whatever matches selector,
+// then rings it with .jump-pulse (styles.css) so it's obvious at a glance where the jump
+// actually landed, rather than the host having to spot it themselves once the scroll settles.
+// A selector (not just an id) so callers can target a specific team's row — [data-ta="..."] —
+// as precisely as a whole section or question block — "#qblock-...".
+function scrollToAndPulse(selector) {
   requestAnimationFrame(() => {
-    const el = document.getElementById(id);
+    const el = document.querySelector(selector);
     if (!el) return;
     el.scrollIntoView({ behavior: "smooth", block: "start" });
     // Remove-then-reflow-then-add so this still restarts the animation even if the same
@@ -1606,32 +1633,38 @@ function scrollToAndPulse(id) {
 function jumpToSection(id) {
   collapsedSections.delete(id);
   renderAll();
-  scrollToAndPulse(id);
+  scrollToAndPulse("#" + id);
 }
 // Tapping the mini-progress bar used to just jump to the current round's section header,
 // leaving the host to scroll and expand their way to whatever's actually unscored inside it.
 // This finds the first unanswered item within that round instead — in the same order it's
 // rendered (Q1-4, then Halftime/Final Wager on round 2/4, then the Bonus Question on round 1/3)
 // — and expands both the round section AND that item's own block if either is collapsed, same
-// as jumpToSection does for a single section.
+// as jumpToSection does for a single section. For a regular Q1-4 question specifically, the
+// target is the exact team's row still missing a mark ([data-ta], same attribute cycleW's
+// scroll-anchor in renderLeft uses) rather than just the question block as a whole — the block
+// can hold 10+ teams, and "somewhere in here" isn't as useful a landing spot as the one row that
+// actually needs a tap. Bonus/Special Wager don't have that same per-team row id yet, so those
+// still land on their own block.
 function jumpToFirstUnanswered() {
   const s = currentProgressSummary();
   if (!s || s.ri == null) return jumpToSection("sec-final");
   const ri = s.ri,
     n = gameState.teams.length;
-  let targetId = null;
-  for (let qi = 0; qi < 4 && !targetId; qi++) {
-    let done = 0;
+  let targetSel = null;
+  for (let qi = 0; qi < 4 && !targetSel; qi++) {
+    let firstTi = -1;
     for (let ti = 0; ti < n; ti++) {
       const a = gameState.rounds[ri].questions[qi][ti];
-      if (a && a.wager !== undefined && a.correct !== undefined) done++;
+      const done = a && a.wager !== undefined && a.correct !== undefined;
+      if (!done && firstTi === -1) firstTi = ti;
     }
-    if (done < n) {
-      targetId = "qblock-" + ri + "-" + qi;
+    if (firstTi !== -1) {
+      targetSel = `[data-ta="${ri}-${qi}-${firstTi}"]`;
       collapsedQuestions.delete(ri + "-" + qi);
     }
   }
-  if (!targetId && (ri === 1 || ri === 3)) {
+  if (!targetSel && (ri === 1 || ri === 3)) {
     const type = ri === 1 ? "halftime" : "final";
     const store = ri === 1 ? gameState.halftime : gameState.finalWager;
     let done = 0;
@@ -1640,24 +1673,24 @@ function jumpToFirstUnanswered() {
       if (d && d.wager != null && d.wager !== "" && d.correct != null) done++;
     }
     if (done < n) {
-      targetId = "swblock-" + type;
+      targetSel = "#swblock-" + type;
       collapsedSpecialWagers.delete(type);
     }
   }
-  if (!targetId && BONUS_ROUNDS.has(ri)) {
+  if (!targetSel && BONUS_ROUNDS.has(ri)) {
     let done = 0;
     for (let ti = 0; ti < n; ti++) {
       if (gameState.rounds[ri].bonus[ti] != null) done++;
     }
     if (done < n) {
-      targetId = "bqblock-" + ri;
+      targetSel = "#bqblock-" + ri;
       collapsedBonusQuestions.delete("b" + ri);
     }
   }
   const sectionId = "sec-r" + (ri + 1);
   collapsedSections.delete(sectionId);
   renderAll();
-  scrollToAndPulse(targetId || sectionId);
+  scrollToAndPulse(targetSel || "#" + sectionId);
 }
 // visible: false renders the exact same markup the real, scored-at-least-once state uses (never
 // a guessed/simplified placeholder) but with the .mp-pending class, which visibility:hidden's
