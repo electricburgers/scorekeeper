@@ -403,11 +403,22 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
 .qtimer-btn:hover{background:var(--bg-hover)}
 .qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
-/* Icon-only (▶/⏸, no "Start"/"Pause"/"Resume" label) — same fixed square treatment as
+/* Icon-only (play/pause, no "Start"/"Pause"/"Resume" label) — same fixed square treatment as
    .qtimer-reset below, so the toggle button never changes size as its icon cycles between
    Start/Pause/Resume. The accessible name (what the icon alone can't convey) comes from
    aria-label, kept in sync with the icon by renderQtControls() in app.js. */
 .qtimer-btn.qtimer-toggle{width:2rem;height:2rem;min-height:2rem;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:1.1rem;line-height:1}
+/* SVG, not the ▶/⏸ text glyphs this replaced: those are Unicode symbols with their own default
+   emoji presentation on iOS/Android, which most browsers render from a fixed-color system emoji
+   font — `color` on the button (already the audited --text-primary/--on-accent-gold pairing that
+   changes with the Start/Pause/Resume state, in every theme × color-vision-mode combination) had
+   no effect on it, so the icon could end up looking mismatched against its own button fill,
+   or just illegible, depending entirely on the platform's emoji art rather than this app's
+   palette. fill:currentColor makes the icon inherit that already-audited color instead, the same
+   way the text glyph should have. width/height:1em (not a fixed rem) keeps it sized off the
+   button's own font-size exactly like the glyph was, so it still scales with the Settings > Size
+   font control. */
+.qtimer-btn.qtimer-toggle svg{width:1em;height:1em;display:block;fill:currentColor}
 /* +/-30s nudge buttons — Advanced Settings > Timer Stepper Buttons, hidden by default (see
    [data-timer-steppers] below, set on <html> by applyPrefs() in app.js) since most hosts drive
    the countdown from Start/Pause/Reset alone; shown for hosts who want fine control mid-timer.
