@@ -218,7 +218,18 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    panel was silently horizontally scrollable on mobile whenever a row's content ran wide — see
    the .settings-row/.settings-controls flex-wrap rules in the mobile breakpoint below, which stop
    that content from running wide in the first place; this stays as the hard backstop. */
-.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - var(--header-h,80px) - 8px - env(safe-area-inset-bottom));overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:slideDown .18s ease}
+/* max-height is declared twice below on purpose — 100vh first, then 100dvh. Mobile Safari's
+   100vh is the LARGEST possible viewport, as if its address bar/toolbar were already collapsed;
+   whenever that chrome is actually on screen (the normal case — it only hides once the page has
+   been scrolled), the real visible area is shorter than 100vh says, so the panel sized itself
+   taller than what was actually visible and its bottom — the footer with the version/date/
+   disclaimer — rendered off the bottom of the screen with no way to reach it, same unreachable-
+   footer failure mode as the --header-h bug above, just from the other side of the calc. 100dvh
+   tracks the ACTUAL visible viewport as the toolbar shows/hides, which is what this needed.
+   Redeclaring the property (not one calc with a fallback function) is the safe way to prefer it:
+   a browser that doesn't parse `dvh` discards that whole second declaration and simply keeps the
+   100vh one above it, rather than the whole rule breaking. */
+.settings-panel{display:none;position:absolute;top:100%;left:16px;right:16px;margin-top:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border:1px solid var(--border-strong);border-radius:var(--radius-lg);background:var(--bg-card);box-shadow:var(--shadow-lg);z-index:150;max-height:calc(100vh - var(--header-h,80px) - 8px - env(safe-area-inset-bottom));max-height:calc(100dvh - var(--header-h,80px) - 8px - env(safe-area-inset-bottom));overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:slideDown .18s ease}
 /* Deployed-panel-over-page shadows: a plain dark shadow disappears against this app's
    near-black dark background, so it gets its own pale glow to read as "floating above" the
    page instead; light mode already has a light background to contrast against, so it just
