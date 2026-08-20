@@ -956,11 +956,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .adj-val.neg{color:var(--txt-red)}
 .remove-team button{width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--accent-red);background:none;color:var(--txt-red);font-size:1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .remove-team button:hover{background:rgba(255,68,68,.15)}
-/* REMOVE_TEAM_ICON_SVG (app.js) replaces a ✕ Unicode glyph here — the button already centers
-   its content with flex, but the glyph's own font metrics never quite landed it in the visual
-   middle. An SVG's geometry is centered on its own, regardless of font. */
-.remove-team button svg{width:.85em;height:.85em;display:block}
-.remove-team button svg line{stroke:currentColor;stroke-width:2.5;stroke-linecap:round}
+/* X_ICON_SVG (app.js) replaces a ✕ Unicode glyph here — the button already centers its content
+   with flex, but the glyph's own font metrics never quite landed it in the visual middle. An
+   SVG's geometry is centered on its own, regardless of font. */
+.remove-team button svg{width:1em;height:1em;display:block}
+.remove-team button svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
 
 #addTeamBtn{margin-top:10px;width:100%;padding:8px;font-family:var(--font-display);text-transform:uppercase;letter-spacing:1px}
 
@@ -1093,8 +1093,8 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    other buttons entirely — reading as "inconsistent" between them even though it was the same
    character everywhere. An SVG's geometry is centered on its own, regardless of font, so every
    instance of this badge now lines up the same way. */
-.wager-badge.bg-incorrect svg{width:.65em;height:.65em;display:block}
-.wager-badge.bg-incorrect svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
+.wager-badge.bg-incorrect svg{width:.95em;height:.95em;display:block}
+.wager-badge.bg-incorrect svg line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
 
 /* SCORE PILL */
 /* width (not min-width): the placeholder em-dash ("—", shown before a team is scored) needs
