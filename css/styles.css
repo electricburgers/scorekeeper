@@ -472,15 +472,18 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .mp-label{font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--badge-green-fg)}
 /* Shared sizing/coloring for CHECK_ICON_SVG/X_ICON_SVG (app.js) wherever they sit inline in
    text — the mini-progress label above, round/question "Done" badges, per-question correct/
-   incorrect stat pills, and Team Report lines. currentColor picks up whichever color token the
-   surrounding pill/label already resolves to (--badge-green-fg, --pts-pos-fg, --txt-red, etc.),
-   so this one rule works correctly in every one of those already-themed, already-colorblind-
-   aware contexts without needing its own color per place it's used. Contexts that need a
-   different size (.wager-badge.bg-incorrect, .remove-team button) target `svg` directly there,
-   which is more specific than this class and wins. */
-.icon-mark{width:.8em;height:.8em;display:inline-block;vertical-align:-.1em;flex-shrink:0}
-.icon-mark polyline{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.icon-mark line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
+   incorrect stat pills, the Quiz ID "looks good" check, and Team Report lines. currentColor
+   picks up whichever color token the surrounding pill/label already resolves to
+   (--badge-green-fg, --pts-pos-fg, --txt-red, etc.), so this one rule works correctly in every
+   one of those already-themed, already-colorblind-aware contexts without needing its own color
+   per place it's used. 1em/stroke-width:4 (not the original .8em/3) — next to the questions'
+   own check/X (CORRECT_BADGE_SVG/X_ICON_SVG at .wager-badge scale), the smaller/thinner original
+   read as a different, weaker icon rather than the same mark reused consistently. Contexts that
+   need a different size (.wager-badge.bg-incorrect, .remove-team button) target `svg` directly
+   there, which is more specific than this class and wins. */
+.icon-mark{width:1em;height:1em;display:inline-block;vertical-align:-.15em;flex-shrink:0}
+.icon-mark polyline{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.icon-mark line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
 
 /* Base (desktop-hidden) state for the mobile bottom sheet's peek strip + backdrop — declared
    here, before the @media block below, so that block's display:flex/block override actually
@@ -1565,10 +1568,17 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .final-table tbody tr:nth-child(even):not(.fr-tie):not(.fr-gold):not(.fr-silver):not(.fr-bronze){background:var(--row-stripe)}
 .final-table tr.fr-tie{background:rgba(255,221,0,.13)}
 .final-table tr.fr-tie td{border-bottom-color:var(--accent-gold)}
-/* Light theme: the generic translucent yellow above reads as a muddy mustard-brown once
-   blended over this theme's light card background, so the tied row instead matches the timer
-   pause button's own solid fill exactly — same --accent-gold/--on-accent-gold pair, same look. */
-[data-theme="hc-light"] .final-table tr.fr-tie{background:var(--accent-gold);color:var(--on-accent-gold)}
+/* Light theme used to match the timer pause button's solid --accent-gold/--on-accent-gold fill
+   exactly (full-strength gold, black-or-white text depending on cb mode) — legible, but next to
+   the rest of this table it read as too bold/saturated for what's just a "these two scores
+   matched" flag. color-mix() lightens the same --accent-gold token toward white instead (a pale
+   wash, paler than the plain translucent yellow above reads as on a light card, which is why that
+   one was avoided for light theme in the first place) — still tied to whatever --accent-gold
+   currently resolves to (tritanopia's pink substitute included), no separate [data-cb] copy
+   needed. Text drops the accompanying --on-accent-gold (tuned for a FULL-strength fill, where a
+   dark magenta under tritanopia needs white) for plain --text-primary instead: every pale mix is
+   light regardless of which hue it started from, so black already clears AA against all of them. */
+[data-theme="hc-light"] .final-table tr.fr-tie{background:color-mix(in srgb,var(--accent-gold) 40%,white);color:var(--text-primary)}
 /* .fr-tiebadge flags a SCORE-only tie (place numbers themselves are always distinct now — see
    finalResultsRows()) so the host can still see at a glance where a tied score existed and how
    the guess tiebreak resolved it: the closer guess gets the green "win" variant, the rest of
