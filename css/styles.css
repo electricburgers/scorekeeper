@@ -1624,6 +1624,14 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 [data-theme="hc-light"] .final-table tr.fr-bronze .fr-place{color:#5c3010}
 /* keep the score/diff text high-contrast on the medal rows in every theme */
 .final-table tr.fr-gold .fr-score,.final-table tr.fr-silver .fr-score,.final-table tr.fr-bronze .fr-score{color:var(--text-primary)}
+/* Dark theme only: match the score number's color on medal rows back to the same aqua
+   --txt-cyan every other row's .fr-score already uses, instead of the --text-primary override
+   above. The dark-theme medal washes are translucent over this app's near-black --bg-card (see
+   the gradients above — even their most opaque end is well under full alpha), so cyan still
+   reads at high contrast here same as it does anywhere else in this app on that background;
+   light theme's much more opaque, heavier-tinted washes are the case that override was actually
+   protecting, so that one still keeps --text-primary. */
+[data-theme="hc-dark"] .final-table tr.fr-gold .fr-score,[data-theme="hc-dark"] .final-table tr.fr-silver .fr-score,[data-theme="hc-dark"] .final-table tr.fr-bronze .fr-score{color:var(--txt-cyan)}
 
 /* ── Final results mobile layout: stack overflow cells onto a second row ──
    Uses the scorecol container query so it follows the score column's real
