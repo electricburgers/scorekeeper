@@ -1004,7 +1004,17 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .wager-btn.used{background:var(--btn-used-bg);opacity:.22;cursor:not-allowed;text-decoration:line-through}
 
 .wager-badge{position:absolute;top:-8px;right:-5px;width:1.3rem;height:1.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:900;line-height:1;padding-bottom:1px;pointer-events:none}
-.wager-badge.bg-correct{background:transparent;color:#fff}
+/* .bg-correct's own square is drawn by CORRECT_BADGE_SVG (app.js), not this circle — it's a
+   rounded square rather than the emoji-style circle .bg-incorrect below keeps, which is why it
+   gets no background/padding-bottom of its own. rect/path are colored via --btn-correct-bg/
+   --badge-green-fg instead of currentColor: that exact pair is already used together as a solid
+   fill and its text on it (.wager-btn.correct, .result-btn.correct-sel) and independently
+   audited at >=4.5:1 in every theme x color-vision-mode combination, so the badge inherits that
+   contrast instead of needing its own check. */
+.wager-badge.bg-correct{background:transparent;padding-bottom:0}
+.wager-badge.bg-correct svg{width:1em;height:1em;display:block}
+.wager-badge.bg-correct svg rect{fill:var(--btn-correct-bg)}
+.wager-badge.bg-correct svg path{fill:none;stroke:var(--badge-green-fg);stroke-width:2.3;stroke-linecap:round;stroke-linejoin:round}
 .wager-badge.bg-incorrect{background:var(--danger-solid-bg);color:#fff;font-size:1.05rem;font-weight:900}
 
 /* SCORE PILL */
