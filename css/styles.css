@@ -345,8 +345,13 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
      consistency. With the panel now capped at max-height and scrolling only in the middle, the
      header is always on screen the instant Settings opens, so this is reachable without
      scrolling down first. */
-  .settings-x-btn{width:1.7rem;height:1.7rem;flex-shrink:0;border-radius:50%;border:1px solid var(--border-light);background:none;color:var(--text-secondary);font-size:.85rem;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);touch-action:manipulation}
-  .settings-x-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+  /* Border/icon red (same --accent-red/--txt-red pair as every other close/dismiss X in the
+     app — .remove-team button, .audit-close, .resume-banner-close) for the same reason: it's a
+     plain X with no label, and red is what now carries the "this closes something" signal. */
+  .settings-x-btn{width:1.7rem;height:1.7rem;flex-shrink:0;border-radius:50%;border:1px solid var(--accent-red);background:none;color:var(--txt-red);line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);touch-action:manipulation}
+  .settings-x-btn svg{width:.8rem;height:.8rem;display:block}
+  .settings-x-btn svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
+  .settings-x-btn:hover{background:rgba(255,68,68,.15)}
   .settings-row{padding:10px 2px;gap:10px}
   .settings-row .size-label{font-size:.78rem}
   .settings-controls .settings-btn{padding:7px 12px;font-size:.85rem}
@@ -1085,6 +1090,21 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 @keyframes beer-row-flash{0%{background:rgba(255,238,0,.35)}60%{background:rgba(255,238,0,.12)}100%{background:transparent}}
 .team-answer:nth-child(even).beer-flash{animation:beer-row-flash-stripe 1.1s ease-out}
 @keyframes beer-row-flash-stripe{0%{background:rgba(255,238,0,.35)}60%{background:rgba(255,238,0,.12)}100%{background:var(--row-stripe)}}
+
+/* Momentary attention ring for whatever element jumpToSection/jumpToFirstUnanswered (app.js)
+   scrolls to — a whole .section, .question-block, or special-wager block. box-shadow rather
+   than the .flash rows' background swap above: these targets already carry their own
+   background (including the Beer Round/medal gradients), and a ring reads as "look here"
+   without fighting any of that — it also automatically follows whatever border-radius the
+   actual target element already has, so it never needs its own per-target radius. Same cyan as
+   .flash above, the existing "just happened here" attention color in this app. Pulsing twice
+   (not one long fade) reads as a deliberate cue rather than a blink easy to miss mid-scroll. */
+.jump-pulse{animation:jump-pulse 1s ease-out 2}
+@keyframes jump-pulse{
+  0%{box-shadow:0 0 0 0 rgba(0,255,255,.5)}
+  70%{box-shadow:0 0 0 12px rgba(0,255,255,0)}
+  100%{box-shadow:0 0 0 0 rgba(0,255,255,0)}
+}
 
 /* WAGER BUTTONS */
 .ta-wagers{display:flex;gap:.2rem;flex-shrink:0;margin-left:auto}
