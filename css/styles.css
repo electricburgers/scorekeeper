@@ -34,6 +34,14 @@
      magenta, muted gray, and the gold badge/border itself) still clears WCAG AA against it —
      see the contrast check run when this was added. */
   --beer-bg:#2a2410;--beer-border:#ffee00;
+  /* Color Vision dropdown swatches — a static preview of the pass/fail (or accent) colors each
+     mode actually swaps to, shown next to the option regardless of which mode is currently
+     active, so picking one is an informed choice instead of a guess. Values are duplicated from
+     the [data-cb="1"]/[data-cb="2"] tokens below (dark theme) rather than referenced live,
+     since the dropdown lists all modes at once and can't borrow color from a data-cb state that
+     may not be the active one. Both colors in both pairs clear >=6:1 against --bg-card here. */
+  --cv-preview-rg-a:#3399ff;--cv-preview-rg-b:#ff8800;
+  --cv-preview-by-a:#ff66cc;--cv-preview-by-b:#00cc88;
 }
 [data-theme="hc-light"]{
   --bg-primary:#f5f5f5;--bg-card:#fff;--bg-card-alt:#f0f0f0;--bg-input:#e8e8e8;--bg-hover:#dcdcdc;
@@ -57,6 +65,13 @@
      Beer Round card its own barely-there warm cream background (still ~17:1 for the existing
      black team-name text) so the border can be a real golden yellow instead. */
   --beer-bg:#f1e7d0;--beer-border:#9f7804;
+  /* Same Color Vision dropdown swatches as the dark theme above, duplicated from the
+     [data-theme="hc-light"][data-cb="1"]/[data-cb="2"] tokens below. --cv-preview-rg-b uses the
+     darker #b35900 (the cb1 pts-neg-bg) rather than the lighter #cc6600 accent-red so the swatch
+     still clears 3:1 against --bg-hover (#dcdcdc), not just the ~4.5:1 it'd get against the
+     lighter --bg-card the accent-red value itself clears. */
+  --cv-preview-rg-a:#0067c5;--cv-preview-rg-b:#b35900;
+  --cv-preview-by-a:#c2007a;--cv-preview-by-b:#008060;
 }
 /* COLOR VISION MODES — independent of theme.
    1 = red-green (deuteranopia/protanopia): swaps green/red pass-fail colors for blue/orange.
@@ -320,20 +335,36 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    second line, and its closed box auto-sizes to the longest option ("Red-Green
    (deuteranopia/protanopia)"), which overflowed the viewport at narrower widths. This
    shows only the short label when closed and wraps the detail onto its own line in the
-   open menu, with JS-clamped left/right alignment so the menu itself never runs off-screen. */
+   open menu, with JS-computed top/left (toggleCvMenu) so the menu itself never runs
+   off-screen. position:fixed (not absolute) is load-bearing: .cv-select sits inside
+   .settings-panel/.settings-panel-body, both overflow-y:auto, and an absolutely-positioned
+   menu is still clipped by that scrollable ancestor's box even though it visually "floats"
+   above the row it opens from — cutting the menu off at the panel's bottom edge instead of
+   overlaying the rest of the page. Fixed positioning is laid out against the viewport, so it
+   escapes that clipping entirely; the JS also flips the menu above the button instead of
+   below when opening downward would run past the bottom of the viewport itself. */
 .cv-select{position:relative;display:inline-block}
 .cv-select-btn{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:var(--transition)}
 .cv-select-btn:hover{background:var(--bg-hover)}
 .cv-select-btn:focus-visible{outline:2px solid var(--accent-cyan-solid);outline-offset:2px}
 .cv-select-arrow{font-size:.6rem;color:var(--text-muted);transition:transform .15s}
 .cv-select.open .cv-select-arrow{transform:rotate(180deg)}
-.cv-select-menu{position:absolute;top:calc(100% + 4px);left:0;right:auto;min-width:100%;width:max-content;max-width:min(260px,calc(100vw - 24px));margin:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);z-index:300;list-style:none;padding:4px;display:none;max-height:60vh;overflow-y:auto}
+.cv-select-menu{position:fixed;min-width:0;width:max-content;max-width:min(260px,calc(100vw - 24px));margin:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);z-index:300;list-style:none;padding:4px;display:none;max-height:60vh;overflow-y:auto}
 .cv-select.open .cv-select-menu{display:block}
-.cv-select-menu[data-align="right"]{left:auto;right:0}
 .cv-select-menu li{padding:6px 8px;border-radius:6px;cursor:pointer;font-size:.78rem;color:var(--text-primary);display:flex;flex-direction:column;gap:1px;line-height:1.25}
 .cv-select-menu li:hover{background:var(--bg-hover)}
 .cv-select-menu li[aria-selected="true"]{font-weight:700;color:var(--txt-cyan)}
 .cv-opt-sub{font-size:.68rem;font-weight:500;color:var(--text-muted)}
+/* Swatch squares next to "Red-Green"/"Blue-Yellow" — a color preview so the label isn't just a
+   clinical name for the deficiency; see the --cv-preview-* tokens above for the values and their
+   contrast notes. aria-hidden since the option's own text already names the mode. */
+.cv-opt-main{display:inline-flex;align-items:center;gap:5px}
+.cv-swatch-pair{display:inline-flex;gap:2px}
+.cv-swatch{width:.6rem;height:.6rem;border-radius:2px;display:inline-block}
+.cv-swatch-rg-a{background:var(--cv-preview-rg-a)}
+.cv-swatch-rg-b{background:var(--cv-preview-rg-b)}
+.cv-swatch-by-a{background:var(--cv-preview-by-a)}
+.cv-swatch-by-b{background:var(--cv-preview-by-b)}
 .size-label{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 .sep{width:1px;height:18px;background:var(--border-light);margin:0 2px;flex-shrink:0}
 
