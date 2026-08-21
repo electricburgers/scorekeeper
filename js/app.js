@@ -163,6 +163,15 @@ const ICON_STOP =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>';
 const ICON_SHEET =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h8"/><path d="M8 17h8"/><path d="M12 13v8"/></svg>';
+// Alert triangle for the two warning banners (Resume, and the "autosave is off" notice). Both
+// carried a literal \u26A0\uFE0F, which is the one emoji the v18.57 sweep missed on each: the
+// Resume banner's markup in index.html was converted, but the JS that fills it in below used
+// .textContent and so overwrote the icon with the emoji again on every load, and the autosave
+// notice builds its own markup here. Same reasoning as the rest of these — an emoji is a
+// fixed-colour platform pictograph, and the autosave banner in particular draws its own amber
+// palette, which the emoji's baked-in orange-and-black never matched.
+const ICON_ALERT =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>';
 // Round 2's halftime wager and Round 4's final wager already get their own icon + accent color
 // (pause/magenta, target/orange) via renderSpecialWager — this gives Round 1 and Round 3's bonus
 // question the same treatment, reusing the color each round is already tagged with elsewhere
@@ -177,7 +186,7 @@ const BONUS_Q_STYLE = {
   0: { emoji: ICON_GIFT, cls: "bq-r1" },
   2: { emoji: ICON_CLOVER, cls: "bq-r3" },
 };
-const APP_VERSION = "v18.57"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.58"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 21, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -1044,11 +1053,14 @@ function clearSaved() {
 (function () {
   const s = loadSaved();
   if (s) {
-    document.getElementById("resumeText").textContent =
-      "\u26A0\uFE0F Saved session from " +
-      (s.meta?.date ? isoToMDY(s.meta.date) : "?") +
+    // innerHTML, not textContent: the icon is markup, and a saved location is host-entered
+    // free text, so it goes through esc() on the way in.
+    document.getElementById("resumeText").innerHTML =
+      ICON_ALERT +
+      " Saved session from " +
+      esc(s.meta?.date ? isoToMDY(s.meta.date) : "?") +
       " at " +
-      (s.meta?.location || "(no location)") +
+      esc(s.meta?.location || "(no location)") +
       ". Resume or start fresh?";
     document.getElementById("resumeBanner").classList.add("show");
   } else {
@@ -1851,7 +1863,12 @@ function currentProgressSummary() {
     const rp = roundProgress(ri);
     if (rp.done < rp.total) return { ri, done: rp.done, total: rp.total };
   }
-  return { ri: null, done: 0, total: 0 };
+  // Complete: carry the game-wide total rather than the 0/0 this used to return, so the
+  // finished bar can show the same scored/total figure the per-round bar was showing a
+  // moment earlier instead of jumping to a sentence.
+  let all = 0;
+  for (let ri = 0; ri < 4; ri++) all += roundProgress(ri).total;
+  return { ri: null, done: all, total: all };
 }
 // Shared by jumpToSection/jumpToFirstUnanswered below: scrolls to whatever matches selector,
 // then rings it with .jump-pulse (styles.css) so it's obvious at a glance where the jump
@@ -1945,7 +1962,7 @@ function renderMiniProgress(visible) {
   const pendingCls = visible ? "" : " mp-pending";
   if (s.ri == null) {
     return `<div class="mini-progress mp-complete${pendingCls}" role="button" tabindex="0" onclick="jumpToSection('sec-final')">
-      <span class="mp-label">${CHECK_ICON_SVG} All 4 rounds scored — jump to Final Results</span>
+      <span class="mp-label">${CHECK_ICON_SVG} ${s.done}/${s.total} 100% - Jump to Final Results</span>
     </div>`;
   }
   const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
@@ -3697,7 +3714,7 @@ function buildAudit(ti) {
   if (run !== gt)
     h += `<div class="aud-note">Note: running figure (${run}) and grand total (${gt}) differ \u2014 if you see this, take a screenshot.</div>`;
   else
-    h += `<div class="aud-note">Tip: each round shows that question's wager, whether it was marked correct or incorrect, and the team's running score. To fix a wrong wager, close this and tap the wager button in the round itself. </br> </br><strong>Diff Adj *</strong> is the Bonuses coming back off — Bonus Item (+5) and NJCB (+3). </br><strong>Adj. Score</strong> is the Grand Total with those stripped out. </br><strong>Diff</strong> is Adj. Score measured against the team's Score Guess — + if they guessed high, − if they guessed low, 0 if they called it exactly. </br> </br>* Every team's guess is compared on the same bonus-free footing, which is why the bonuses come off before the guess is scored.</div>`;
+    h += `<div class="aud-note">Tip: each round shows that question's wager, whether it was marked correct or incorrect, and the team's running score. To fix a wrong wager, close this and tap the wager button in the round itself. </br> </br><strong>Diff Adj</strong> is the Bonuses coming back off — Bonus Item (+5) and NJCB (+3). </br><strong>Adj. Score</strong> is the Grand Total with those stripped out. </br><strong>Diff</strong> is Adj. Score measured against the team's Score Guess. A + means they guessed high, a − means they guessed low, and 0 means they called it exactly. </br> </br>* Every team's guess is compared on the same bonus-free footing, which is why the bonuses come off before the guess is scored.</div>`;
   h += `</div>`;
   return h;
 }
@@ -5076,12 +5093,13 @@ document.addEventListener("keydown", function (e) {
   n.style.cssText =
     "position:fixed;left:50%;bottom:16px;transform:translateX(-50%);max-width:560px;z-index:9999;background:#3a2a00;color:#ffe08a;border:1px solid #7a5a00;border-radius:10px;padding:10px 40px 10px 14px;font:600 12.5px/1.45 system-ui,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.4)";
   n.innerHTML =
-    '\u26A0\uFE0F <b>Autosave is off in this browser.</b> You opened this file directly, so this browser blocks storage. The game works, but it won\u2019t survive a reload. To enable Resume &amp; saved settings, serve it locally (<code style="background:rgba(0,0,0,.3);padding:1px 4px;border-radius:4px">python3 -m http.server</code> then open <code style="background:rgba(0,0,0,.3);padding:1px 4px;border-radius:4px">localhost:8000</code>) or use Firefox.';
+    ICON_ALERT +
+    ' <b>Autosave is off in this browser.</b> You opened this file directly, so this browser blocks storage. The game works, but it won\u2019t survive a reload. To enable Resume &amp; saved settings, serve it locally (<code style="background:rgba(0,0,0,.3);padding:1px 4px;border-radius:4px">python3 -m http.server</code> then open <code style="background:rgba(0,0,0,.3);padding:1px 4px;border-radius:4px">localhost:8000</code>) or use Firefox.';
   const x = document.createElement("button");
-  x.textContent = "\u2715";
+  x.innerHTML = X_ICON_SVG;
   x.setAttribute("aria-label", "Dismiss");
   x.style.cssText =
-    "position:absolute;top:6px;right:8px;background:none;border:none;color:#ffe08a;font-size:15px;cursor:pointer;line-height:1";
+    "position:absolute;top:6px;right:8px;background:none;border:none;color:#ffe08a;font-size:15px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;padding:0";
   x.onclick = () => n.remove();
   n.appendChild(x);
   window.addEventListener("DOMContentLoaded", () =>
