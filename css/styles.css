@@ -74,8 +74,16 @@
      and the same reason, as the podium metals. They still have to be SEEN, so every value below
      clears 3:1 against all five surfaces it can render on in its own theme (worst case 4.31:1
      dark, 3.29:1 light). */
-  --tint-beer:#f5b53d;--tint-beer-2:#fff1cf;
-  --tint-drum:#e8563f;--tint-drum-2:#ffe0b8;--tint-drum-3:#c99a63;
+  /* The vivid set is declared once, on :root only, and is NOT overridden by the light theme —
+     that is deliberate. On a solid accent button both themes now render the pictograph in these
+     values, because the dark rendering is the one that actually looks like the emoji: a saturated
+     amber mug with cream foam, a red drum with a cream head. Light mode's own (darkened) tints
+     were tuned to sit on a near-white card, and on the button they came out washed out and pale.
+     --tint-* below alias these for the dark theme, so there is one source of truth per colour. */
+  --vivid-beer:#f5b53d;--vivid-beer-2:#fff1cf;
+  --vivid-drum:#e8563f;--vivid-drum-2:#ffe0b8;--vivid-drum-3:#c99a63;
+  --tint-beer:var(--vivid-beer);--tint-beer-2:var(--vivid-beer-2);
+  --tint-drum:var(--vivid-drum);--tint-drum-2:var(--vivid-drum-2);--tint-drum-3:var(--vivid-drum-3);
   --tint-trophy:#f5c542;--tint-trophy-2:#c9922a;
   --tint-mic:#cfd6dc;--tint-mic-2:#8b949c;
   --tint-heart:#ff5a72;
@@ -656,8 +664,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    swallowed by a silhouette. Taken from currentColor rather than --icon-tint directly, so the
    .btn-accent override below only has to change one property and the fill follows it. */
 .icon-tinted{color:var(--icon-tint);fill:color-mix(in srgb,currentColor 38%,transparent)}
-.icon-beer{--icon-tint:var(--tint-beer);--icon-tint-2:var(--tint-beer-2)}
-.icon-drum{--icon-tint:var(--tint-drum);--icon-tint-2:var(--tint-drum-2);--icon-tint-3:var(--tint-drum-3)}
+.icon-beer{--icon-tint:var(--tint-beer);--icon-tint-2:var(--tint-beer-2);
+  --icon-tint-acc:var(--vivid-beer);--icon-tint-acc-2:var(--vivid-beer-2)}
+.icon-drum{--icon-tint:var(--tint-drum);--icon-tint-2:var(--tint-drum-2);--icon-tint-3:var(--tint-drum-3);
+  --icon-tint-acc:var(--vivid-drum);--icon-tint-acc-2:var(--vivid-drum-2);--icon-tint-acc-3:var(--vivid-drum-3)}
 .icon-trophy{--icon-tint:var(--tint-trophy);--icon-tint-2:var(--tint-trophy-2)}
 .icon-mic{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
 .icon-heart{--icon-tint:var(--tint-heart)}
@@ -690,16 +700,43 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    drum on bright cyan, a soft salmon one on dark teal. These are decoration next to their own
    text labels, not the "visual information required to identify" the button, so 1.4.11's 3:1 is
    not the binding constraint on them the way it is on the tints themselves. */
-.btn-accent .icon-tinted{color:color-mix(in srgb,var(--icon-tint) 45%,currentColor)}
+/* Every part is pulled the SAME distance towards black, primary and secondaries alike. Mixing
+   only the primary inverted the icon: the drum's head is lighter than its shell on a card, but
+   with the shell mixed and the head left alone it came out darker than the shell on the button.
+   One shared ratio keeps every part's relative lightness.
+   Both themes use the vivid tints and mix towards black here, rather than each theme using its
+   own tints and its own foreground. That is a deliberate choice of appearance over measurement:
+   the vivid-on-black rendering is the one that reads as the emoji, and light mode's own tints
+   mixed towards white came out as a pale wash of the same shape. See the note on the light-mode
+   figures in the v18.62 changelog — these are decoration sitting beside their own text label
+   ("Start Drumroll", "Choose Craft Prize Winner"), not the information that identifies the
+   button, which is what 1.4.11 covers. */
+.btn-accent .icon-tinted,.btn-accent .icon-tinted [class^="ip-"]{
+  color:color-mix(in srgb,var(--part-tint,var(--icon-tint-acc,var(--icon-tint))) 78%,#000)}
+.btn-accent .icon-tinted .ip-2{--part-tint:var(--icon-tint-acc-2,var(--icon-tint-2,var(--icon-tint)))}
+.btn-accent .icon-tinted .ip-3{--part-tint:var(--icon-tint-acc-3,var(--icon-tint-3,var(--icon-tint)))}
 /* The Beer Round badge, its stripe and the CB Prize tag are ALREADY the beer's own colour — gold
    wash, gold text — so tinting the mug amber on top of that put amber on gold and dropped to
    2.94:1 in light blue-yellow mode, where the wash turns pink. Inheriting the badge's own
    audited colour is both the legible answer and the right one: there is nothing to correct when
    the context is already saying "beer". */
 .q-beer .icon-tinted,.beer-stripe .icon-tinted,.cb-tag .icon-tinted{color:inherit}
-/* and single-colour there: the multi-part tints have even less room against a solid fill than the
-   primary does, and one legible shape beats three barely-separable ones on a button. */
-.btn-accent .icon-tinted [class^="ip-"]{color:inherit}
+/* On a solid fill the pictographs are painted OPAQUE, not at the 38% they use on a card. At 38%
+   the button's own cyan came up through the mug and the drum shell and tinted them — the icon
+   read as a cyan object rather than an amber or red one, which is the whole thing the tints were
+   added to fix. Opaque also changes what has to clear the button: only the outer silhouette
+   touches the cyan now, so what has to be legible against it is the stroke ringing that
+   silhouette rather than every part of the icon.
+   The stroke is pulled a further 38% towards the same foreground so the interior lines survive
+   the fill instead of being swallowed by it — without that, an opaque icon is a silhouette: the
+   beer loses its two vertical ridges and the drum loses its head. It is also the stroke, not the
+   fill, that separates the icon from the button, since it rings the whole silhouette.
+   This is also why the two icons' paths are ordered back-to-front in app.js rather than in
+   Lucide's original order. Opaque fills paint over each other, so the mug body drawn last would
+   erase the ridges and foam, and the drum shell drawn after the head would take a bite out of the
+   cream oval. Translucent fills hid that; nothing about the order looked wrong until now. */
+.btn-accent .icon-tinted,.btn-accent .icon-tinted [class^="ip-"]{
+  fill:currentColor;stroke:color-mix(in srgb,currentColor 62%,#000)}
 .icon-mark polyline{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .icon-mark line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
 
