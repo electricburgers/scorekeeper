@@ -61,17 +61,6 @@ const ROUND_WAGERS = [
 ];
 const ROUND_COLORS = ["rl-1", "rl-2", "rl-3", "rl-4"];
 const BONUS_ROUNDS = new Set([0, 2]);
-// Round 2's halftime wager and Round 4's final wager already get a fun emoji + their own
-// accent color (⏸ magenta, 🎯 orange) via renderSpecialWager — this gives Round 1 and Round 3's
-// bonus question the same treatment, reusing the color each round is already tagged with
-// elsewhere (rl-1 cyan, rl-3 gold) so it's consistent rather than a brand-new color choice.
-// Declared up here (not next to renderBQ where it's used) because the very first render on a
-// brand-new session — no saved game to resume — runs synchronously at script-parse time, before
-// a `const` declared further down the file would be out of its temporal dead zone.
-const BONUS_Q_STYLE = {
-  0: { emoji: "🎁", cls: "bq-r1" },
-  2: { emoji: "🍀", cls: "bq-r3" },
-};
 // Inline SVG (rect+path, colored via .wager-badge.bg-correct svg in styles.css) rather than the
 // ✅ Unicode emoji this replaced — that glyph is a fixed-color platform pictograph on iOS/Android
 // (its own baked-in green square + white check), so no CSS color/theme/color-vision token could
@@ -137,7 +126,58 @@ const ICON_REFRESH =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M21 21v-5h-5"></path></svg>';
 const ICON_SHUFFLE =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg>';
-const APP_VERSION = "v18.56"; // #Version Number — bump this manually when you release a new build
+// The rest of the app's emoji, as drawn geometry. Same two reasons as the four above: an emoji
+// is a fixed-colour platform pictograph no theme or colour-vision token can reach, and its size
+// and baseline are the font's business rather than the layout's. Lucide geometry throughout.
+const ICON_CLIPBOARD =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>';
+const ICON_GIFT =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>';
+const ICON_CLOVER =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M16.17 7.83 2 22"/><path d="M4.02 12a2.827 2.827 0 1 1 3.81-4.17A2.827 2.827 0 1 1 12 4.02a2.827 2.827 0 1 1 4.17 3.81A2.827 2.827 0 1 1 19.98 12a2.827 2.827 0 1 1-3.81 4.17A2.827 2.827 0 1 1 12 19.98a2.827 2.827 0 1 1-4.17-3.81A2.827 2.827 0 1 1 4.02 12"/><path d="m7.83 7.83 8.34 8.34"/></svg>';
+const ICON_MIC =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>';
+const ICON_HEART =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>';
+const ICON_BEER =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/></svg>';
+const ICON_DRUM =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="9" rx="10" ry="5"/><path d="M2 9v8a10 5 0 0 0 20 0V9"/><path d="m2 2 6 6"/><path d="m22 2-6 6"/></svg>';
+const ICON_TROPHY =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
+const ICON_HORN =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>';
+const ICON_FLAG =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>';
+const ICON_BOOK =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg>';
+const ICON_LINK =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+const ICON_TRASH =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+const ICON_TARGET =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>';
+const ICON_PAUSE =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg>';
+const ICON_STOP =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>';
+const ICON_SHEET =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h8"/><path d="M8 17h8"/><path d="M12 13v8"/></svg>';
+// Round 2's halftime wager and Round 4's final wager already get their own icon + accent color
+// (pause/magenta, target/orange) via renderSpecialWager — this gives Round 1 and Round 3's bonus
+// question the same treatment, reusing the color each round is already tagged with elsewhere
+// (rl-1 cyan, rl-3 gold) so it's consistent rather than a brand-new color choice.
+// Declared up here, not next to renderBQ where it's used, because the very first render on a
+// brand-new session — no saved game to resume — runs synchronously at script-parse time, before a
+// `const` declared further down the file would be out of its temporal dead zone. It has to sit
+// BELOW the ICON_* constants for the same reason, now that it references two of them: put it back
+// above them and it reads ICON_GIFT before that line has run, which throws at parse time and
+// takes the whole script — and every later render — down with it.
+const BONUS_Q_STYLE = {
+  0: { emoji: ICON_GIFT, cls: "bq-r1" },
+  2: { emoji: ICON_CLOVER, cls: "bq-r3" },
+};
+const APP_VERSION = "v18.57"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 21, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -284,7 +324,7 @@ function renderBanter(cat, key, opts) {
   return (
     `<div class="banter${sm}">` +
     `<div class="banter-main">` +
-    (showLabel ? `<span class="banter-cat">🎤 ${esc(lbl)}</span>` : "") +
+    (showLabel ? `<span class="banter-cat">${ICON_MIC} ${esc(lbl)}</span>` : "") +
     `<div class="banter-text" data-bkey="${key}">${esc(line)}</div>` +
     `</div>` +
     `<button class="banter-refresh" type="button" onclick="cycleBanter('${key}','${cat}')" title="New line" aria-label="Refresh banter line">${ICON_REFRESH}</button>` +
@@ -374,7 +414,7 @@ function renderStaffThanks() {
     `<div class="staff-thanks" id="staffThanksBlock">` +
     `<div class="banter banter-sm">` +
     `<div class="banter-main">` +
-    `<span class="banter-cat">🙏 Thank the Staff</span>` +
+    `<span class="banter-cat">${ICON_HEART} Thank the Staff</span>` +
     `<div class="banter-text" id="staffThanksLine">${staffThanksHtml()}</div>` +
     `</div>` +
     `<button class="banter-refresh" type="button" onclick="cycleStaffThanks()" title="New line" aria-label="Refresh staff thank-you line">${ICON_REFRESH}</button>` +
@@ -1436,11 +1476,11 @@ function renderStandings(type) {
   } else list = base;
   const btns = [
     ["entry", "Entry"],
-    ["random", `${ICON_SHUFFLE}Shuffle`],
+    ["random", `${ICON_SHUFFLE}<span class="sr-only">Shuffle</span>`],
   ]
     .map(
       ([m, lbl]) =>
-        `<button class="standings-sort-btn${mode === m ? " active" : ""}" onclick="setStandingsSort('${type}','${m}')">${lbl}</button>`,
+        `<button class="standings-sort-btn${mode === m ? " active" : ""}" title="${m === "random" ? "Shuffle" : ""}" onclick="setStandingsSort('${type}','${m}')">${lbl}</button>`,
     )
     .join("");
   const isCollapsed = collapsedStandings.has(type);
@@ -1510,7 +1550,7 @@ function sortModeLabel() {
     case "desc":
       return "\u2193 Highest to lowest \u2014 leaderboard order";
     default:
-      return "\ud83d\udccb Entry order \u2014 matches your scoresheet";
+      return `${ICON_CLIPBOARD} Entry order \u2014 matches your scoresheet`;
   }
 }
 
@@ -1632,7 +1672,7 @@ function renderLeft() {
     <div class="field"><label>Partner Town</label><input type="text" aria-label="Partner Town" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
     <div class="field full"><label>Bonus Item (+5)</label><input type="text" aria-label="Bonus Item description" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
     <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" aria-label="Restaurant staff names" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
-  </div><p class="fr-note${metaLocked ? "" : " fr-note-pending"}">&#128274; Locked once scoring starts, so it can't drift mid-game. Typo? <a href="#" onclick="event.preventDefault();toggleUnlockEventDetails();">Unlock to fix it</a>.</p></div></div>`;
+  </div><p class="fr-note${metaLocked ? "" : " fr-note-pending"}"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Locked once scoring starts, so it can't drift mid-game. Typo? <a href="#" onclick="event.preventDefault();toggleUnlockEventDetails();">Unlock to fix it</a>.</p></div></div>`;
 
   // Flagged the whole game, not just before scoring starts — a guess left blank stops blocking
   // anything once scoring begins, but it still silently shows as "—" in Final Results, which
@@ -1700,14 +1740,14 @@ function renderLeft() {
     h += `</div></div>`;
   }
 
-  h += `<div class="section ${collapsedSections.has("sec-final") ? "collapsed" : ""}" id="sec-final"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-final')"><h2>\uD83C\uDFC1 Final Results</h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
+  h += `<div class="section ${collapsedSections.has("sec-final") ? "collapsed" : ""}" id="sec-final"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-final')"><h2>${ICON_FLAG} Final Results</h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
 
-  h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><h2>\uD83C\uDF7A Craft Prize Drawing</h2><span class="chevron">\u25BC</span></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
+  h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><h2>${ICON_BEER} Craft Prize Drawing</h2><span class="chevron">\u25BC</span></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
 
   h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><h2>Export &amp; Data</h2><span class="chevron">▼</span></div><div class="section-body">
-    <div class="export-bar"><button class="btn" onclick="exportXLSXBackup()">\uD83D\uDCC4 XLSX</button><button class="btn" onclick="exportPDF()">\uD83D\uDCD5 PDF</button><a class="btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer">\uD83D\uDD17 JD Upload Form</a></div>
+    <div class="export-bar"><button class="btn" onclick="exportXLSXBackup()">${ICON_SHEET} XLSX</button><button class="btn" onclick="exportPDF()">${ICON_BOOK} PDF</button><a class="btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer">${ICON_LINK} JD Upload Form</a></div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="startNewGame();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
-    <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?'))startNewGame();">\uD83D\uDDD1 Clear Session</button></div>
+    <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?'))startNewGame();">${ICON_TRASH} Clear Session</button></div>
   </div></div>`;
 
   m.innerHTML = h;
@@ -1986,7 +2026,7 @@ function renderWQ(ri, qi) {
     qs.total === 0
       ? ""
       : beer
-        ? "🍺 Beer Round!"
+        ? `${ICON_BEER} Beer Round!`
         : qs.done === qs.total
           ? `${CHECK_ICON_SVG} Done`
           : qs.total - qs.done + " left";
@@ -2164,7 +2204,7 @@ function renderBQ(ri) {
   if (n) {
     if (beer)
       badge =
-        '<span class="q-badge q-badge-lg q-beer">\uD83C\uDF7A Beer Round!</span>';
+        `<span class="q-badge q-badge-lg q-beer">${ICON_BEER} Beer Round!</span>`;
     else if (subDone === n)
       badge = `<span class="q-badge q-badge-lg q-complete">${CHECK_ICON_SVG} Done</span>`;
     else
@@ -2178,7 +2218,7 @@ function renderBQ(ri) {
   if (isCollapsedBQ) blockCls += " bq-collapsed";
   const bqStyle = BONUS_Q_STYLE[ri] || { emoji: "", cls: "" };
   const bqKey = "b" + ri;
-  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>${beer ? '<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>' : ""}<div class="q-body">`;
+  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div><div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
     ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
@@ -2235,7 +2275,7 @@ function renderSpecialWager(type) {
   const sectionCls = isFinal
     ? "special-section final-wager"
     : "special-section";
-  const titleIcon = isFinal ? "\uD83C\uDFAF" : "\u23F8";
+  const titleIcon = isFinal ? ICON_TARGET : ICON_PAUSE;
   const titleSub = isFinal ? "BONUS WAGER (1-20)" : "BONUS WAGER (1-10)";
   const wSet = isFinal ? "setFW" : "setHW",
     cSet = isFinal ? "setFC" : "setHC";
@@ -2249,7 +2289,7 @@ function renderSpecialWager(type) {
   let swBadge = "";
   if (swN) {
     if (beer)
-      swBadge = '<span class="q-badge q-beer">\uD83C\uDF7A Beer Round!</span>';
+      swBadge = `<span class="q-badge q-beer">${ICON_BEER} Beer Round!</span>`;
     else if (swDone === swN)
       swBadge = `<span class="q-badge q-complete">${CHECK_ICON_SVG} Done</span>`;
     else
@@ -2262,9 +2302,9 @@ function renderSpecialWager(type) {
   // ignoring the toggle entirely, so turning the setting Off didn't hide it here like it does
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">${titleIcon} Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">\u21BA<span class="btn-label"> Reset</span></button></div></div>`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">${titleIcon} Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>`;
   if (beer)
-    h += `<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
+    h += `<div class="beer-stripe"><span class="beer-stripe-icon">${ICON_BEER}</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
   h += `<div class="sw-body">`;
   const swEntryOrder = gameState.teams.map((_, i) => i);
   let swTeamOrder = questionSortOrder[swKey]
@@ -2344,7 +2384,7 @@ function renderSB() {
   const sy = body.scrollTop;
   body.innerHTML = `<div class="sort-controls">
     <button class="sort-btn ${scoreSortMode === "entry" ? "active" : ""}" onclick="setSortMode('entry')">Entry</button>
-    <button class="sort-btn ${scoreSortMode === "random" ? "active" : ""}" onclick="setSortMode('random')">${ICON_SHUFFLE}Shuffle</button>
+    <button class="sort-btn ${scoreSortMode === "random" ? "active" : ""}" onclick="setSortMode('random')" title="Shuffle" aria-label="Shuffle">${ICON_SHUFFLE}<span class="sr-only">Shuffle</span></button>
     <button class="sort-btn ${scoreSortMode === "asc" ? "active" : ""}" onclick="setSortMode('asc')">\u2191 Asc</button>
     <button class="sort-btn ${scoreSortMode === "desc" ? "active" : ""}" onclick="setSortMode('desc')">\u2193 Desc</button>
   </div><div class="sort-mode-label">${sortModeLabel()}</div>${buildScores()}`;
@@ -2388,7 +2428,7 @@ function buildScores() {
     if (adj) tip.push("Adj:" + (adj > 0 ? "+" : "") + adj);
     const cb = t.craftPrize ? " cb-prize" : "";
     const cbTag = t.craftPrize
-      ? ' <span class="cb-tag">\uD83C\uDF7A CB Prize</span>'
+      ? ` <span class="cb-tag">${ICON_BEER} CB Prize</span>`
       : "";
     h += `<div class="score-row${cb}${rc ? " " + rc : ""}" title="${tip.join(" | ")}"><span class="sr-rank ${rc}">${rank}</span><span class="sr-name sr-name-clickable" role="button" tabindex="0" title="Tap to set or clear the Craft Beer prize winner" onclick="toggleCraftPrize(${ti})">${esc(t.name || "Team " + (ti + 1))}${cbTag}</span><span class="sr-score">${tot}</span></div>`;
   });
@@ -3079,14 +3119,14 @@ function renderCraftPrizeBlock() {
   // eligibleBtn is built, means every render site below (drawing/pre-draw/winner) picks up the
   // gate for free instead of needing its own prefs.craftManualEnd check.
   const eligibleBtn = prefs.craftManualEnd
-    ? `<button class="btn cp-eligible-btn" onclick="copyCraftEligible(this)" title="Copy the craft partner, its town, then the eligible team names — one per line, top places already excluded — to paste into a separate drumroll or name-picker app">📋 Copy Prize Eligible List</button>`
+    ? `<button class="btn cp-eligible-btn" onclick="copyCraftEligible(this)" title="Copy the craft partner, its town, then the eligible team names — one per line, top places already excluded — to paste into a separate drumroll or name-picker app">${ICON_CLIPBOARD} Copy Prize Eligible List</button>`
     : "";
   // Until the host opts in, the section is just this one button — same accent styling as the
   // drumroll button it opens, so it reads identically in every theme. A draw already running or
   // a winner already picked (e.g. restored from autosave) opens the flow on its own, so a
   // reload never hides a result behind the gate.
   if (!craftFlowOpen && !drawing && !winner) {
-    return `<button class="btn btn-accent cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>🍺 Choose Craft Prize Winner</button>${poolLeft <= 0 ? `<p class="fr-note">No teams left to draw from — top ${excludeN} place${excludeN > 1 ? "s" : ""} excluded covers everyone entered. Add a team, or open this to lower Exclude Top.</p>` : ""}`;
+    return `<button class="btn btn-accent cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>${ICON_BEER} Choose Craft Prize Winner</button>${poolLeft <= 0 ? `<p class="fr-note">No teams left to draw from — top ${excludeN} place${excludeN > 1 ? "s" : ""} excluded covers everyone entered. Add a team, or open this to lower Exclude Top.</p>` : ""}`;
   }
   let h = `<div class="cp-config">
       <div class="cp-field"><span class="cp-field-label">Exclude Top</span><div class="stepper">
@@ -3107,9 +3147,9 @@ function renderCraftPrizeBlock() {
         .join(", "),
     )}</div>`;
   if (drawing) {
-    h += `<div class="cp-intro">🎙️ Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName || "")}</div>`;
+    h += `<div class="cp-intro">${ICON_MIC} Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName || "")}</div>`;
     if (craftDrawState.audioStopped) {
-      h += `<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Pick the winner and play the victory horn now">🎺 Play Horn</button>`;
+      h += `<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Pick the winner and play the victory horn now">${ICON_HORN} Play Horn</button>`;
     } else {
       const st = craftCountdownState() || {
         remaining: craftDrawState.totalMs,
@@ -3120,21 +3160,21 @@ function renderCraftPrizeBlock() {
       <div class="cp-countdown-num" id="cpCountdownNum">${Math.ceil(st.remaining / 1000)}s</div>
     </div>`;
       if (prefs.craftManualEnd) {
-        h += `<button class="btn btn-danger cp-manual-end-btn" onclick="stopDrumrollOnly()" title="Stop just the drumroll sound, e.g. once a staff member reveals a paper from the stack — then play the horn whenever you're ready">⏹ Stop Drumroll</button>`;
+        h += `<button class="btn btn-danger cp-manual-end-btn" onclick="stopDrumrollOnly()" title="Stop just the drumroll sound, e.g. once a staff member reveals a paper from the stack — then play the horn whenever you're ready">${ICON_STOP} Stop Drumroll</button>`;
       }
     }
     h += eligibleBtn;
   } else {
     // The only control in the app that starts audio — see startCraftPrizeDraw's gesture note.
-    h += `<button class="btn btn-accent cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>🥁 Start Drumroll</button>`;
+    h += `<button class="btn btn-accent cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>${ICON_DRUM} Start Drumroll</button>`;
     if (!winner && poolLeft <= 0)
       h += `<p class="fr-note">No teams left in the eligible pool — lower Exclude Top above, or add another team.</p>`;
     if (prefs.craftManualEnd && !winner) {
       // Previewed here, faded and disabled, so the host knows these controls exist before the
       // drumroll is even running — rather than only discovering them once a draw is underway.
       h += `<div class="cp-manual-preview">
-        <button class="btn btn-danger cp-preview-btn" disabled title="Available once the drumroll is running">⏹ Stop Drumroll</button>
-        <button class="btn btn-accent cp-preview-btn" disabled title="Available once the drumroll is running">🎺 Play Horn</button>
+        <button class="btn btn-danger cp-preview-btn" disabled title="Available once the drumroll is running">${ICON_STOP} Stop Drumroll</button>
+        <button class="btn btn-accent cp-preview-btn" disabled title="Available once the drumroll is running">${ICON_HORN} Play Horn</button>
       </div>`;
     }
     // In the winner state this row is deferred to the winner block below, so it stays under the
@@ -3143,10 +3183,10 @@ function renderCraftPrizeBlock() {
   }
   if (winner && !drawing) {
     const wname = gameState.teams[winner.ti]?.name || "Team " + (winner.ti + 1);
-    h += `<div class="cp-winner"><span class="cp-winner-text">🏆 <strong>${esc(wname)}</strong> won!</span><button class="btn btn-danger cp-clear-btn" onclick="clearCraftPrizeWinner()" title="Clear the winner and run the drawing again" aria-label="Clear the winner">✕<span class="cp-clear-label"> Clear</span></button></div>
+    h += `<div class="cp-winner"><span class="cp-winner-text">${ICON_TROPHY} <strong>${esc(wname)}</strong> won!</span><button class="btn btn-danger cp-clear-btn" onclick="clearCraftPrizeWinner()" title="Clear the winner and run the drawing again" aria-label="Clear the winner">${X_ICON_SVG}<span class="cp-clear-label"> Clear</span></button></div>
       ${
         prefs.craftManualEnd
-          ? '<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Play the victory horn on demand">🎺 Play Horn</button>'
+          ? '<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Play the victory horn on demand">${ICON_HORN} Play Horn</button>'
           : ""
       }
       ${eligibleBtn}
@@ -3607,20 +3647,23 @@ function buildAudit(ti) {
   }
 
   // Extras \u2014 bonus item and NJCB card are checked in before the game starts, so show them
-  // first; the running "total so far" in every later block includes them from the start. Kept
-  // full-width above both columns (not folded into column 1) so it doesn't unbalance column 1
-  // against column 2 \u2014 both columns start clean at Round 1 / Round 3.
+  // first; the running "total so far" in every later block includes them from the start.
+  // No value in the leading .aud-q cell the way scored rows carry a question number: the points
+  // are already stated at the end of the row, and printing "+5" at both ends of a two-item line
+  // just said the same thing twice. The label carries no verb for the same reason \u2014 "Bonus
+  // item" and "NJCB Member Card" are the things being scored, and "brought"/"shown" only restated
+  // that they are present, which the row's existence and its points already say.
   const item = t.bonusItem ? 5 : 0,
     nj = t.njcb ? 3 : 0,
     adj = t.adjustment || 0;
   if (item || nj || adj) {
     h += `<div class="aud-round"><div class="aud-round-h"><span class="round-label rl-3">Extras</span></div>`;
     if (item)
-      h += `<div class="aud-line"><span class="aud-q">+5</span><span class="aud-res aud-correct">Bonus item brought</span><span class="aud-p pos">+5</span></div>`;
+      h += `<div class="aud-line"><span class="aud-res aud-correct">Bonus item</span><span class="aud-p pos">+5</span></div>`;
     if (nj)
-      h += `<div class="aud-line"><span class="aud-q">+3</span><span class="aud-res aud-correct">NJCB Member Card shown</span><span class="aud-p pos">+3</span></div>`;
+      h += `<div class="aud-line"><span class="aud-res aud-correct">NJCB Member Card</span><span class="aud-p pos">+3</span></div>`;
     if (adj)
-      h += `<div class="aud-line"><span class="aud-q">${adj > 0 ? "+" : ""}${adj}</span><span class="aud-res">Manual adjustment</span><span class="aud-p ${adj > 0 ? "pos" : "neg"}">${adj > 0 ? "+" : ""}${adj}</span></div>`;
+      h += `<div class="aud-line"><span class="aud-res">Manual adjustment</span><span class="aud-p ${adj > 0 ? "pos" : "neg"}">${adj > 0 ? "+" : ""}${adj}</span></div>`;
     run += item + nj + adj;
     h += `</div>`;
   }

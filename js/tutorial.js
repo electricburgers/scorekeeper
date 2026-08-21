@@ -298,7 +298,7 @@ const Tutorial = (function () {
         // notice the panel opened and move the spotlight — the listener in fill() below does.
         target: () =>
           loadPrefs().settingsOpen ? "#themeToggle" : "#settingsToggleBtn",
-        text: `${tapWordCap()} the ⚙️ gear icon in the top right to open Settings. There's Light and Dark modes. Flip between them a few times, then ${tapWord()} Next once you've settled on one you like.`,
+        text: `${tapWordCap()} the gear icon in the top right to open Settings. There's Light and Dark modes. Flip between them a few times, then ${tapWord()} Next once you've settled on one you like.`,
         advance: "manual",
         fill: (ready) => {
           const gear = document.getElementById("settingsToggleBtn");
@@ -507,12 +507,12 @@ const Tutorial = (function () {
         target: "#qblock-1-1 .q-sort-btn",
         targetEnd: "#qblock-1-1 .q-reset-btn",
         calloutPosition: "above",
-        text: `${tapWordCap()} ↕ Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or ↺ Reset to go back to entry order. ${tapWordCap()} Next when you're ready to move on.`,
+        text: `${tapWordCap()} Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or ↺ Reset to go back to entry order. ${tapWordCap()} Next when you're ready to move on.`,
         // 'confirm' rather than 'on-click' here on purpose — the host might want to tap Sort a
         // few times (and try Reset) to get a feel for it, not get whisked away the instant it
         // sorts once.
         advance: "confirm",
-        waitHint: `${tapWordCap()} ↕ Sort to continue`,
+        waitHint: `${tapWordCap()} Sort to continue`,
         done: () => !!questionSortOrder["1-1"],
       },
       {
@@ -619,7 +619,7 @@ const Tutorial = (function () {
       },
       {
         target: ".audit-close",
-        text: `Take a look, then ${tapWord()} ✕ Close to dismiss it.`,
+        text: `Take a look, then ${tapWord()} Close to dismiss it.`,
         advance: "on-click",
         // closeAudit() only toggles the same class directly — same reasoning as the step that
         // opened it: nothing hooked runs on its own, so wire up a listener here too.
@@ -663,7 +663,7 @@ const Tutorial = (function () {
         // than a fresh countdown.
         target: () =>
           isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop",
-        text: `Before we wrap up, let's revisit the Question Timer to see how much time has elapsed since Round 1. ${tapWordCap()} ↺ to reset it back to 3:00 for the next question.`,
+        text: `Before we wrap up, let's revisit the Question Timer to see how much time has elapsed since Round 1. ${tapWordCap()} the reset button to put it back to 3:00 for the next question.`,
         advance: "on-click",
         fill: () => {
           const btn = document.querySelector(
@@ -678,7 +678,7 @@ const Tutorial = (function () {
       },
       {
         target: 'button[onclick="exportPDF()"]',
-        text: `Scroll down to Export & Data at the bottom. 📕 PDF downloads a scoresheet that's ready to send to JD. ${tapWordCap()} Next when you're ready.`,
+        text: `Scroll down to Export & Data at the bottom. PDF downloads a scoresheet that's ready to send to JD. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
         // fallbackNext: this listener is the only thing that notices the tap (exporting doesn't
         // touch gameState or call any hooked render function, unlike almost every other step),
@@ -689,7 +689,7 @@ const Tutorial = (function () {
       },
       {
         target: 'a[href="https://app.jotform.com/261954293403156"]',
-        text: `🔗 JD Upload Form sends you to where you submit your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
+        text: `JD Upload Form sends you to where you submit your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
       },
       {
@@ -1333,7 +1333,7 @@ const Tutorial = (function () {
     card.className = "tutorial-firstrun";
     card.id = "tutorialFirstRun";
     card.innerHTML =
-      `<p>🎓 New here? Take the tour.</p>` +
+      `<p><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> New here? Take the tour.</p>` +
       `<div class="btn-row">` +
       `<button class="btn" onclick="Tutorial.start()">Take the Tour</button>` +
       `<button class="btn" onclick="Tutorial.dismissFirstRun()">Skip</button>` +
