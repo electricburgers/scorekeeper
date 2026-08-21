@@ -117,7 +117,7 @@ const X_ICON_SVG =
 // (--badge-green-fg, --pts-pos-fg, etc.), instead of a fixed-color platform glyph.
 const CHECK_ICON_SVG =
   '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg>';
-const APP_VERSION = "v18.45"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.46"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 20, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":114,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":119,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":105,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":150,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":115,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":131,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":95,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":61,"bonusItem":false,"njcb":true,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":false}}],"bonus":{"0":4,"1":3,"2":4,"3":3,"4":3,"5":2,"6":4,"7":1,"8":4,"9":3,"10":2}},{"questions":[{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":5,"correct":false},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":5,"correct":false},"6":{"wager":5,"correct":true},"7":{"wager":5,"correct":false},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":7,"correct":false},"1":{"wager":7,"correct":false},"2":{"wager":7,"correct":false},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":false}}],"bonus":{}},{"questions":[{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":false}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":false},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":8,"correct":true}}],"bonus":{"0":4,"1":2,"2":4,"3":2,"4":2,"5":4,"6":3,"7":3,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":9,"correct":true},"10":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":12,"correct":false},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":false},"10":{"wager":12,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":false},"1":{"wager":4,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":4,"correct":false},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true},"10":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":20,"correct":true},"2":{"wager":15,"correct":true},"3":{"wager":15,"correct":false},"4":{"wager":15,"correct":false},"5":{"wager":20,"correct":true},"6":{"wager":20,"correct":true},"7":{"wager":18,"correct":true},"8":{"wager":18,"correct":true},"9":{"wager":20,"correct":false},"10":{"wager":18,"correct":false}},"gameStarted":true}`;
@@ -824,6 +824,51 @@ let collapsedSections = new Set([
 ]);
 let adjOpenTeams = new Set(),
   lastAction = null;
+// Tracks the nearest identifiable ancestor (a team's own row, or failing that the whole
+// question/bonus/special-wager/team-entry block) of whatever was just clicked inside
+// #mainContent — used by renderLeft()'s scroll anchor further down this file. Delegated +
+// capture phase (not each scoring function setting this individually, the way lastAction above
+// only covers cycleW) so EVERY scoring path is covered automatically: cycleW, markAll, bonus
+// choices, special-wager correct/incorrect, point adjustments, any future one — all of them
+// re-render through renderLeft(), and all of them can shift content the same way. Capture phase
+// runs before the click's own onclick handler (cycleW/markAll/etc., which is what actually
+// triggers the re-render), so this is always set to the right target before renderLeft() ever
+// reads it. Not document.activeElement: Safari deliberately doesn't focus a <button> on a plain
+// mouse/touch click, so that would silently miss this exact interaction on iOS, the platform
+// this was reported from.
+//
+// Declared here, at the very top of the script, rather than down next to renderLeft() itself
+// (where this used to live): the very first render on a brand-new session (no saved game — see
+// the IIFE below) runs synchronously during initial script evaluation, and that first
+// renderLeft() call reads this variable. A `let` declared later in the same script is in its
+// temporal dead zone until its own statement executes, so reading it any earlier — even from a
+// function invoked before that point — throws a ReferenceError. With this block previously
+// positioned after renderLeft()'s definition (i.e. after that first synchronous render call),
+// every brand-new session crashed on load with a blank #mainContent and never recovered, since
+// the thrown error aborted the rest of the script before this declaration (and the click
+// listener below) ever ran — leaving every future render call hitting the exact same
+// ReferenceError forever. Returning users were unaffected (their saved session skips that first
+// synchronous render, see the IIFE below), which is why this went unnoticed: it only bites the
+// very first launch, or any time storage gets cleared/evicted (e.g. iOS Safari's ~7-day
+// eviction for a PWA that sits unopened between events).
+let lastClickAnchorSel = null;
+document.addEventListener(
+  "click",
+  (e) => {
+    const el = e.target.closest(
+      "[data-ta], [data-ti], .question-block, .special-section",
+    );
+    if (!el) return;
+    lastClickAnchorSel = el.hasAttribute("data-ta")
+      ? `[data-ta="${el.getAttribute("data-ta")}"]`
+      : el.hasAttribute("data-ti")
+        ? `[data-ti="${el.getAttribute("data-ti")}"]`
+        : el.id
+          ? "#" + el.id
+          : null;
+  },
+  true,
+);
 // Track which (ri,qi) combos we've already toasted for Beer Round
 let beerRoundToasted = new Set();
 // Craft prize randomizer (transient — not persisted across reload)
@@ -1399,33 +1444,6 @@ function renderAll() {
   applyPrefs();
 }
 
-// Tracks the nearest identifiable ancestor (a team's own row, or failing that the whole
-// question/bonus/special-wager block) of whatever was just clicked inside #mainContent — used
-// by renderLeft()'s scroll anchor below. Delegated + capture phase (not each scoring function
-// setting this individually, the way lastAction below only covers cycleW) so EVERY scoring path
-// is covered automatically: cycleW, markAll, bonus choices, special-wager correct/incorrect,
-// point adjustments, any future one — all of them re-render through renderLeft(), and all of
-// them can shift content the same way. Capture phase runs before the click's own onclick handler
-// (cycleW/markAll/etc., which is what actually triggers the re-render), so this is always set to
-// the right target before renderLeft() ever reads it. Not document.activeElement: Safari
-// deliberately doesn't focus a <button> on a plain mouse/touch click, so that would silently
-// miss this exact interaction on iOS, the platform this was reported from.
-let lastClickAnchorSel = null;
-document.addEventListener(
-  "click",
-  (e) => {
-    const el = e.target.closest(
-      "[data-ta], .question-block, .special-section",
-    );
-    if (!el) return;
-    lastClickAnchorSel = el.hasAttribute("data-ta")
-      ? `[data-ta="${el.getAttribute("data-ta")}"]`
-      : el.id
-        ? "#" + el.id
-        : null;
-  },
-  true,
-);
 function renderLeft() {
   const m = document.getElementById("mainContent");
   if (!m) return;
@@ -1491,7 +1509,7 @@ function renderLeft() {
   gameState.teams.forEach((t, i) => {
     const adj = t.adjustment || 0,
       adjOpen = adjOpenTeams.has(i);
-    h += `<div class="team-entry${showAdj ? " has-adj" : ""}">
+    h += `<div class="team-entry${showAdj ? " has-adj" : ""}" data-ti="${i}">
       <div class="team-name-cell">
         <span class="team-number">Team ${i + 1}</span>
         <input type="text" value="${esc(t.name)}" placeholder="Team name" onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
