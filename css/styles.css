@@ -58,6 +58,29 @@
      back to white, where the same fills are the darker surface. */
   --check-icon-color:#000;
   --badge-gold-fg:#ffee00;--badge-green-fg:#44ff44;
+  /* PICTOGRAPH TINTS. The icons that replaced emoji are stroke-only and inherit currentColor,
+     which is right for the UI action glyphs (Sort, Reset, Refresh, Shuffle, the check and the X)
+     — those ARE the control, so they should carry the control's own audited text colour. It is
+     wrong for the pictographs: a beer that renders in whatever grey or white the surrounding
+     label happens to be does not read as a beer, and the emoji it replaced did carry a colour.
+     These give each pictograph its emoji's hue back, as a token rather than a baked-in glyph, so
+     it still follows the theme.
+     Deliberately NOT swapped by colour-vision mode, and this is the one place in the app where
+     that is the correct answer rather than an oversight. Every other colour here encodes
+     something — which team is winning, whether an answer was right — so a mode that cannot
+     distinguish two of them loses information. These encode nothing: each icon sits directly
+     beside its own text label, nothing in the app asks you to tell the beer from the clover by
+     hue, and remapping green would only stop the clover looking like a clover. Same exemption,
+     and the same reason, as the podium metals. They still have to be SEEN, so every value below
+     clears 3:1 against all five surfaces it can render on in its own theme (worst case 4.31:1
+     dark, 3.29:1 light). */
+  --tint-beer:#f5b53d;--tint-beer-2:#fff1cf;
+  --tint-drum:#e8563f;--tint-drum-2:#ffe0b8;--tint-drum-3:#c99a63;
+  --tint-trophy:#f5c542;--tint-trophy-2:#c9922a;
+  --tint-mic:#cfd6dc;--tint-mic-2:#8b949c;
+  --tint-heart:#ff5a72;
+  --tint-clipboard:#c98f52;--tint-clipboard-2:#dfe3e7;
+  --tint-book:#e0574f;
   /* AAA (7:1) text-safe variants of the brand accents, for use as TEXT on neutral surfaces
      (bg-card/bg-card-alt/bg-input) — kept separate from --accent-* so borders, focus rings,
      and button fills can stay at full brand saturation without dragging text below AAA. */
@@ -129,6 +152,15 @@
      (5.7:1 and 5.7:1). */
   --check-icon-color:#fff;
   --badge-gold-fg:#785b00;--badge-green-fg:#006a03;
+  /* Same hues as the dark set above, darkened to clear 3:1 against a near-white card rather
+     than near-black. See that block for why these are not colour-vision-swapped. */
+  --tint-beer:#a56a00;--tint-beer-2:#d9a441;
+  --tint-drum:#c0341f;--tint-drum-2:#a8703c;--tint-drum-3:#7a5330;
+  --tint-trophy:#96700a;--tint-trophy-2:#6b4f05;
+  --tint-mic:#5c6469;--tint-mic-2:#98a0a6;
+  --tint-heart:#c62741;
+  --tint-clipboard:#8a5f2c;--tint-clipboard-2:#b9a48c;
+  --tint-book:#c0332b;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
   --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
   /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
@@ -611,6 +643,53 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    no amount of measuring the pixels would have found it — it came from looking at the button.
    3 is where the pair stops looking mismatched; 3.5 overshoots and starts closing up the arc. */
 .icon-ui-reset{stroke-width:3}
+/* Each pictograph carries .icon-tinted plus its own class; the class only sets --icon-tint, so
+   the two rules below can both read it without repeating a colour.
+   These get a FILL as well as a stroke, which is the other half of looking like the emoji they
+   replaced: an emoji is a solid coloured shape, and a bare Lucide outline in the right hue still
+   reads as a line drawing. The fill is the same colour at 38% rather than 100% so the interior
+   strokes — the foam line on the mug, the tension rods on the drum — survive instead of being
+   swallowed by a silhouette. Taken from currentColor rather than --icon-tint directly, so the
+   .btn-accent override below only has to change one property and the fill follows it. */
+.icon-tinted{color:var(--icon-tint);fill:color-mix(in srgb,currentColor 38%,transparent)}
+.icon-beer{--icon-tint:var(--tint-beer);--icon-tint-2:var(--tint-beer-2)}
+.icon-drum{--icon-tint:var(--tint-drum);--icon-tint-2:var(--tint-drum-2);--icon-tint-3:var(--tint-drum-3)}
+.icon-trophy{--icon-tint:var(--tint-trophy);--icon-tint-2:var(--tint-trophy-2)}
+.icon-mic{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
+.icon-heart{--icon-tint:var(--tint-heart)}
+.icon-clipboard{--icon-tint:var(--tint-clipboard);--icon-tint-2:var(--tint-clipboard-2)}
+.icon-book{--icon-tint:var(--tint-book)}
+/* Second and third colours, for the icons whose emoji had more than one: the cream head of the
+   drum against its red shell and its wooden sticks, the foam on the beer, the trophy's darker
+   plinth, the mic's darker yoke, the pale clip on the clipboard. Each part needs fill and stroke
+   restated rather than inherited — both resolve currentColor at the element that declares them,
+   so a child that only changes `color` would still inherit the PARENT's already-resolved paint.
+   Only the primary colour is held to 3:1 against every surface: that is the icon's outline, the
+   part that says which icon this is. The secondaries are interior detail — the foam on a real
+   beer emoji is white and vanishes on a white background too — and only have to separate from
+   the primary. */
+.icon-tinted [class^="ip-"]{fill:color-mix(in srgb,currentColor 38%,transparent);stroke:currentColor}
+.icon-tinted .ip-2{color:var(--icon-tint-2,var(--icon-tint))}
+.icon-tinted .ip-3{color:var(--icon-tint-3,var(--icon-tint))}
+/* On a solid accent fill (Start Drumroll, Choose Craft Prize Winner) the tints above
+   cannot be used as-is: --accent-cyan-solid runs from #00ffff to #00654c across the six
+   theme x colour-vision combinations, so a value legible on one is invisible on another. Mixing
+   towards currentColor — which here resolves to the button's inherited --on-accent-cyan, already
+   audited against its own fill — moves each tint in whichever direction that particular fill has
+   contrast to spare, automatically and in every mode. At 60% the hue still reads: a deep brick
+   drum on bright cyan, a soft salmon one on dark teal. These are decoration next to their own
+   text labels, not the "visual information required to identify" the button, so 1.4.11's 3:1 is
+   not the binding constraint on them the way it is on the tints themselves. */
+.btn-accent .icon-tinted{color:color-mix(in srgb,var(--icon-tint) 45%,currentColor)}
+/* The Beer Round badge, its stripe and the CB Prize tag are ALREADY the beer's own colour — gold
+   wash, gold text — so tinting the mug amber on top of that put amber on gold and dropped to
+   2.94:1 in light blue-yellow mode, where the wash turns pink. Inheriting the badge's own
+   audited colour is both the legible answer and the right one: there is nothing to correct when
+   the context is already saying "beer". */
+.q-beer .icon-tinted,.beer-stripe .icon-tinted,.cb-tag .icon-tinted{color:inherit}
+/* and single-colour there: the multi-part tints have even less room against a solid fill than the
+   primary does, and one legible shape beats three barely-separable ones on a button. */
+.btn-accent .icon-tinted [class^="ip-"]{color:inherit}
 .icon-mark polyline{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .icon-mark line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
 
