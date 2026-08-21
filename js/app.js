@@ -117,7 +117,7 @@ const X_ICON_SVG =
 // (--badge-green-fg, --pts-pos-fg, etc.), instead of a fixed-color platform glyph.
 const CHECK_ICON_SVG =
   '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg>';
-const APP_VERSION = "v18.42"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.43"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 20, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":114,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":119,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":105,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":150,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":115,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":131,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":95,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":61,"bonusItem":false,"njcb":true,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":false}}],"bonus":{"0":4,"1":3,"2":4,"3":3,"4":3,"5":2,"6":4,"7":1,"8":4,"9":3,"10":2}},{"questions":[{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":5,"correct":false},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":5,"correct":false},"6":{"wager":5,"correct":true},"7":{"wager":5,"correct":false},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":7,"correct":false},"1":{"wager":7,"correct":false},"2":{"wager":7,"correct":false},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":false}}],"bonus":{}},{"questions":[{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":false}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":false},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":8,"correct":true}}],"bonus":{"0":4,"1":2,"2":4,"3":2,"4":2,"5":4,"6":3,"7":3,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":9,"correct":true},"10":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":12,"correct":false},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":false},"10":{"wager":12,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":false},"1":{"wager":4,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":4,"correct":false},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true},"10":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":20,"correct":true},"2":{"wager":15,"correct":true},"3":{"wager":15,"correct":false},"4":{"wager":15,"correct":false},"5":{"wager":20,"correct":true},"6":{"wager":20,"correct":true},"7":{"wager":18,"correct":true},"8":{"wager":18,"correct":true},"9":{"wager":20,"correct":false},"10":{"wager":18,"correct":false}},"gameStarted":true}`;
@@ -1532,6 +1532,17 @@ function renderLeft() {
   </div></div>`;
 
   m.innerHTML = h;
+  // Keeps --mini-progress-h in sync with .mini-progress's real rendered height, the same way
+  // --header-h/--mobile-dock-h already are elsewhere — used by .section/.question-block/
+  // .special-section's scroll-margin-top (styles.css) so jumpToSection/jumpToFirstUnanswered
+  // never lands a target underneath this bar, which is sticky wherever it scrolls to. A plain
+  // measurement here (not a ResizeObserver) is enough: .mini-progress is this function's own
+  // markup, entirely replaced on every call, so this already re-measures it exactly when its
+  // content (and so its height) can actually change.
+  document.documentElement.style.setProperty(
+    "--mini-progress-h",
+    (m.querySelector(".mini-progress")?.offsetHeight || 0) + "px",
+  );
   // Fold the anchor row's drift (if any) into sy/wy BEFORE the restores below use them, so both
   // the synchronous restore and the rAF re-assert land on the corrected position instead of the
   // raw pre-render one.
@@ -1609,8 +1620,6 @@ function currentProgressSummary() {
 // Shared by jumpToSection/jumpToFirstUnanswered below: scrolls to whatever matches selector,
 // then rings it with .jump-pulse (styles.css) so it's obvious at a glance where the jump
 // actually landed, rather than the host having to spot it themselves once the scroll settles.
-// A selector (not just an id) so callers can target a specific team's row — [data-ta="..."] —
-// as precisely as a whole section or question block — "#qblock-...".
 function scrollToAndPulse(selector) {
   requestAnimationFrame(() => {
     const el = document.querySelector(selector);
@@ -1640,12 +1649,10 @@ function jumpToSection(id) {
 // This finds the first unanswered item within that round instead — in the same order it's
 // rendered (Q1-4, then Halftime/Final Wager on round 2/4, then the Bonus Question on round 1/3)
 // — and expands both the round section AND that item's own block if either is collapsed, same
-// as jumpToSection does for a single section. For a regular Q1-4 question specifically, the
-// target is the exact team's row still missing a mark ([data-ta], same attribute cycleW's
-// scroll-anchor in renderLeft uses) rather than just the question block as a whole — the block
-// can hold 10+ teams, and "somewhere in here" isn't as useful a landing spot as the one row that
-// actually needs a tap. Bonus/Special Wager don't have that same per-team row id yet, so those
-// still land on their own block.
+// as jumpToSection does for a single section. Lands on the TOP of that item's own block (its
+// "X left" badge included) rather than a specific team's row inside it — .question-block/
+// .special-section's own scroll-margin-top (styles.css) keeps that badge clear of the sticky
+// header instead of landing right underneath it.
 function jumpToFirstUnanswered() {
   const s = currentProgressSummary();
   if (!s || s.ri == null) return jumpToSection("sec-final");
@@ -1653,14 +1660,13 @@ function jumpToFirstUnanswered() {
     n = gameState.teams.length;
   let targetSel = null;
   for (let qi = 0; qi < 4 && !targetSel; qi++) {
-    let firstTi = -1;
+    let done = 0;
     for (let ti = 0; ti < n; ti++) {
       const a = gameState.rounds[ri].questions[qi][ti];
-      const done = a && a.wager !== undefined && a.correct !== undefined;
-      if (!done && firstTi === -1) firstTi = ti;
+      if (a && a.wager !== undefined && a.correct !== undefined) done++;
     }
-    if (firstTi !== -1) {
-      targetSel = `[data-ta="${ri}-${qi}-${firstTi}"]`;
+    if (done < n) {
+      targetSel = "#qblock-" + ri + "-" + qi;
       collapsedQuestions.delete(ri + "-" + qi);
     }
   }

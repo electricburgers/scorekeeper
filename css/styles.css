@@ -864,7 +864,18 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* --border-strong (not --border) so every top-level container (Event Details, Teams, Round N,
    Final Results, etc.) has an edge that's >=3:1 against --bg-primary in every theme — --border
    alone was only ~1.5-2:1 against the page background, i.e. not a real visual boundary. */
-.section{background:var(--bg-card);border:1px solid var(--border-strong);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden}
+/* scroll-margin-top (also on .question-block/.special-section below) keeps whatever
+   jumpToSection/jumpToFirstUnanswered (app.js) scrolls to clear of .header AND .mini-progress —
+   both position:sticky, and on mobile (where the two stack: see .mini-progress's own comment
+   further down) they'd otherwise sit right on top of the freshly-scrolled-to element's own top
+   edge (its "X left" badge included), since scrollIntoView aligns against the scroll container's
+   edge, not around sticky content docked at it. Reuses --header-h/--mini-progress-h, already
+   tracked for the identical problem elsewhere, plus a little breathing room so it's not flush
+   against either bar. On desktop .mini-progress's sticky context is .col-left's own internal
+   scroll, not the page .header's — so --header-h isn't actually needed there — but adding it
+   anyway only costs a little extra (harmless) breathing room above the target, in exchange for
+   one rule that's correct on both layouts instead of a media-query split. */
+.section{background:var(--bg-card);border:1px solid var(--border-strong);border-radius:var(--radius-lg);margin-bottom:10px;overflow:hidden;scroll-margin-top:calc(var(--header-h,80px) + var(--mini-progress-h,0px) + 12px)}
 /* Subtle default background (distinct from .section-body's bg-card) so a clickable header
    reads as its own control at a glance, not just on hover. --bg-card-alt vs --text-primary is
    >=18:1 in both themes, so this never threatens the header text's own AA contrast. */
@@ -1013,7 +1024,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    goes q-active/q-done/beer-round — a width change there shifted the header/team-answer content
    inside by that same few px right when a question finished, which read as "things moving" on
    mobile. Every state below now only ever swaps the border-left COLOR, never its width. */
-.question-block{background:var(--bg-card-alt);border:1px solid var(--border-strong);border-left:6px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+.question-block{background:var(--bg-card-alt);border:1px solid var(--border-strong);border-left:6px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden;scroll-margin-top:calc(var(--header-h,80px) + var(--mini-progress-h,0px) + 12px)}
 .question-block.q-active{border-left-color:var(--accent-cyan)}
 .question-block.q-done{border-left-color:var(--accent-green);opacity:.82}
 /* Beer Round wins over q-done green. Uses --beer-border on --beer-bg (not --accent-gold on the
@@ -1099,17 +1110,16 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 @keyframes beer-row-flash-stripe{0%{background:rgba(255,238,0,.35)}60%{background:rgba(255,238,0,.12)}100%{background:var(--row-stripe)}}
 
 /* Momentary attention ring for whatever element jumpToSection/jumpToFirstUnanswered (app.js)
-   scrolls to — a whole .section, .question-block/special-wager block, or (most often) one
-   team's own row inside a question. box-shadow rather than the .flash rows' background swap
-   above: these targets already carry their own background (including the Beer Round/medal
-   gradients), and a ring reads as "look here" without fighting any of that. inset, specifically
-   — a team row's ancestor .question-block is overflow:hidden (it clips its own rounded corners),
-   which would silently clip an outward-spreading ring on any row; inset never needs to escape
-   the element's own box in the first place, so it can't be clipped by anything, and it still
-   reads clearly on a big .section too. Same cyan as .flash above, the existing "just happened
-   here" attention color in this app. Pulsing twice (not one long fade) reads as a deliberate cue
-   rather than a blink easy to miss mid-scroll. */
-.jump-pulse{animation:jump-pulse 1s ease-out 2}
+   scrolls to — a whole .section, .question-block, or .special-section. box-shadow rather than
+   the .flash rows' background swap above: these targets already carry their own background
+   (including the Beer Round/medal gradients), and a ring reads as "look here" without fighting
+   any of that. inset, specifically — .question-block is overflow:hidden (it clips its own
+   rounded corners), which would silently clip an outward-spreading ring; inset never needs to
+   escape the element's own box in the first place, so it can't be clipped by anything. Same cyan
+   as .flash above, the existing "just happened here" attention color in this app. Pulsing three
+   times (not one long fade) reads as a deliberate cue rather than a blink easy to miss
+   mid-scroll. */
+.jump-pulse{animation:jump-pulse 1s ease-out 3}
 @keyframes jump-pulse{
   0%{box-shadow:inset 0 0 0 3px rgba(0,255,255,.85)}
   60%{box-shadow:inset 0 0 0 3px rgba(0,255,255,.15)}
@@ -1215,7 +1225,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .special-section.beer-round h3{color:var(--badge-gold-fg)!important}
 
 /* SPECIAL WAGER SECTIONS */
-.special-section{background:var(--bg-card-alt);border:2px solid var(--accent-magenta);border-radius:var(--radius-lg);padding:12px;margin-bottom:8px}
+.special-section{background:var(--bg-card-alt);border:2px solid var(--accent-magenta);border-radius:var(--radius-lg);padding:12px;margin-bottom:8px;scroll-margin-top:calc(var(--header-h,80px) + var(--mini-progress-h,0px) + 12px)}
 .special-section h3{font-family:var(--font-display);font-size:.88rem;color:var(--txt-magenta);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .special-section.final-wager{border-color:var(--accent-orange)}
 .special-section.final-wager h3{color:var(--txt-orange)}
