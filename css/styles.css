@@ -1483,7 +1483,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .aud-p.pos{color:var(--badge-green-fg)}
 .aud-p.neg{color:var(--txt-red)}
 .aud-p.zero,.aud-p.none{color:var(--text-muted)}
-.aud-subline{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 12px;border-top:1px solid var(--border-light);background:var(--bg-input);font-size:.78rem;font-weight:700}
+/* justify-content:center + a fixed gap, for the same reason .aud-total below uses it (see the
+   comment there): space-between stranded "Subtotal" against the round box's left edge and its
+   score against the right edge, with the gap between them growing with the panel's width, so
+   the two read as unrelated ends of a bar rather than one label/value pair. */
+.aud-subline{display:flex;align-items:center;justify-content:center;gap:10px;padding:7px 12px;border-top:1px solid var(--border-light);background:var(--bg-input);font-size:.78rem;font-weight:700}
 .aud-subline .lbl{color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px}
 .aud-subline .run{font-family:var(--font-display);color:var(--txt-cyan);font-size:.95rem}
 .aud-subline .sub{font-family:var(--font-display);color:var(--text-primary)}
