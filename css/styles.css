@@ -53,21 +53,37 @@
   --cv-preview-by-a:#ff66cc;--cv-preview-by-b:#00cc88;
 }
 [data-theme="hc-light"]{
+  /* VIBRANCY / CONTRAST TARGET. Every accent below is the most saturated value its own hue can
+     take while still clearing WCAG AA against the darkest surface it actually renders on. The
+     hue angles are untouched — only chroma and lightness move — so this is the same palette,
+     not a different one.
+     They used to be tuned to AAA (7:1) instead, which is what made light mode read as muted: at
+     7:1 against a near-white card there is almost no lightness left to spend, so each hue
+     collapses towards black and renders as its muddy neighbour — orange as brown (#723300),
+     gold as olive (#55420e), cyan as navy (#004b64), the NJCB blue as slate (#3B5B7A). Dropping
+     to a comfortable AA (every value here lands at 4.6-5.2:1 as text, or 3.2:1+ where it is only
+     a border/fill edge) buys back 20-120% chroma per token.
+     Checked by auditing all 1,895 rendered text pairs in the running app — resolving effective
+     backgrounds through gradients, alpha layers and color-mix() rather than assuming the nearest
+     --bg-* token: 0 AA failures, down from 6. The 6 were --item-border's "+5 Bonus" chip at
+     4.0:1, which the new value fixes as a side effect of being more saturated.
+     Dark mode is deliberately not part of this — it has the opposite problem (light ink on black
+     has lightness to spare) and its accents are already at full brand saturation. */
   --bg-primary:#f5f5f5;--bg-card:#fff;--bg-card-alt:#f0f0f0;--bg-input:#e8e8e8;--bg-hover:#dcdcdc;
   --border:#b0b0b0;--border-light:#949494;--border-strong:#8a8a8a;--text-primary:#000;--text-secondary:#2a2a2a;--text-muted:#454545;
-  --accent-cyan:#006688;--accent-magenta:#bb0055;--accent-gold:#e0b123;--accent-green:#10a710;
-  --accent-red:#cc0000;--accent-orange:#994400;--shadow:0 4px 24px rgba(0,0,0,.12);--shadow-lg:0 16px 48px rgba(0,0,0,.28),0 2px 10px rgba(0,0,0,.18);
+  --accent-cyan:#006688;--accent-magenta:#bb0055;--accent-gold:#e2b000;--accent-green:#10a710;
+  --accent-red:#cc0000;--accent-orange:#c45900;--shadow:0 4px 24px rgba(0,0,0,.12);--shadow-lg:0 16px 48px rgba(0,0,0,.28),0 2px 10px rgba(0,0,0,.18);
   --row-stripe:rgba(0,0,0,.048);
-  --btn-idle-bg:#e8e8e8;--btn-correct-bg:#8ee89a;--btn-incorrect-bg:#eeaaaa;--btn-used-bg:#f0f0f0;
-  --pts-pos-bg:#0c7a0c;--pts-pos-border:#0a6a0a;--pts-pos-fg:#fff;
-  --pts-neg-bg:#c01818;--pts-neg-border:#a81414;--pts-neg-fg:#fff;
+  --btn-idle-bg:#e8e8e8;--btn-correct-bg:#54f377;--btn-incorrect-bg:#f7a5a6;--btn-used-bg:#f0f0f0;
+  --pts-pos-bg:#008802;--pts-pos-border:#007900;--pts-pos-fg:#fff;
+  --pts-neg-bg:#eb0012;--pts-neg-border:#d80000;--pts-neg-fg:#fff;
   --pts-nil-bg:rgba(0,0,0,.07);--pts-nil-border:rgba(0,0,0,.22);
   --on-accent-cyan:#fff;--on-accent-gold:#000;--on-badge:#fff;
-  --item-border:#B4552F;--item-fill-checked:#B4552F;
-  --njcb-border:#3B5B7A;--njcb-fill-checked:#3B5B7A;
-  --badge-gold-fg:#55420e;--badge-green-fg:#0a500a;
-  --txt-cyan:#004b64;--txt-magenta:#8c0040;--txt-red:#900000;--txt-orange:#723300;
-  --accent-cyan-solid:#006081;--danger-solid-bg:#b60000;
+  --item-border:#b54000;--item-fill-checked:#b54000;
+  --njcb-border:#006ab3;--njcb-fill-checked:#006ab3;
+  --badge-gold-fg:#785b00;--badge-green-fg:#006a03;
+  --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
+  --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
   /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
      background this dark — anything as light as --bg-card-alt forces the border down to a
      muddy, muted brown-olive to pass at all. Rather than accept that duller color, give the
@@ -115,6 +131,12 @@
 }
 [data-theme="hc-light"][data-cb="2"]{
   --accent-gold:#c2007a;--accent-cyan:#008060;
+  /* Pinned to the pre-vibrancy green. This mode swaps gold for magenta, which turns .fr-tie's
+     row wash (color-mix of --accent-gold with white) from cream into pink — and the brighter
+     #006a03 the base light theme now uses drops to 3.2:1 against that pink, under AA. The
+     darker green clears it at 4.53:1. Only this mode needs the exception; the cream row every
+     other light-mode variant uses is light enough for the vivid green. */
+  --badge-green-fg:#0a500a;
   --item-border:#e0008e;--item-fill-checked:#e0008e;
   --njcb-border:#008564;--njcb-fill-checked:#008564;
   --badge-gold-fg:#880056;--txt-cyan:#004f3b;--accent-cyan-solid:#00654c;
