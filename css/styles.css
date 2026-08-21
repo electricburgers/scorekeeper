@@ -80,6 +80,10 @@
      amber mug with cream foam, a red drum with a cream head. Light mode's own (darkened) tints
      were tuned to sit on a near-white card, and on the button they came out washed out and pale.
      --tint-* below alias these for the dark theme, so there is one source of truth per colour. */
+  /* Which way the accent-button stroke is pulled, and how far. Dark mode's button is bright
+     cyan, so darkening the outline separates the icon from it; light mode's is mid-dark teal, so
+     the outline has to go the other way. See the note on the stroke rule further down. */
+  --icon-stroke-ink:#000;--icon-stroke-mix:62%;
   --vivid-beer:#f5b53d;--vivid-beer-2:#fff1cf;
   --vivid-drum:#e8563f;--vivid-drum-2:#ffe0b8;--vivid-drum-3:#c99a63;
   --tint-beer:var(--vivid-beer);--tint-beer-2:var(--vivid-beer-2);
@@ -164,6 +168,7 @@
   --badge-gold-fg:#785b00;--badge-green-fg:#006a03;
   /* Same hues as the dark set above, darkened to clear 3:1 against a near-white card rather
      than near-black. See that block for why these are not colour-vision-swapped. */
+  --icon-stroke-ink:#fff;--icon-stroke-mix:32%;
   --tint-beer:#a56a00;--tint-beer-2:#d9a441;
   --tint-drum:#c0341f;--tint-drum-2:#a8703c;--tint-drum-3:#7a5330;
   --tint-trophy:#96700a;--tint-trophy-2:#6b4f05;
@@ -655,6 +660,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    no amount of measuring the pixels would have found it — it came from looking at the button.
    3 is where the pair stops looking mismatched; 3.5 overshoots and starts closing up the arc. */
 .icon-ui-reset{stroke-width:3}
+/* Checkered flag (Final Results). The filled squares are solid currentColor with no stroke — at
+   the 16px this header renders, a 4x5-unit square outlined at stroke-width 2.25 would be almost
+   entirely stroke and the checker would close up into a blob. The edge rect keeps the default
+   stroke but at 1.5 rather than 2.25, for the same reason in reverse: at full weight it eats into
+   the squares it is supposed to be containing. */
+.icon-flag .fl-sq{fill:currentColor;stroke:none}
+.icon-flag .fl-edge{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}
 /* Each pictograph carries .icon-tinted plus its own class; the class only sets --icon-tint, so
    the two rules below can both read it without repeating a colour.
    These get a FILL as well as a stroke, which is the other half of looking like the emoji they
@@ -727,16 +739,21 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    added to fix. Opaque also changes what has to clear the button: only the outer silhouette
    touches the cyan now, so what has to be legible against it is the stroke ringing that
    silhouette rather than every part of the icon.
-   The stroke is pulled a further 38% towards the same foreground so the interior lines survive
-   the fill instead of being swallowed by it — without that, an opaque icon is a silhouette: the
-   beer loses its two vertical ridges and the drum loses its head. It is also the stroke, not the
-   fill, that separates the icon from the button, since it rings the whole silhouette.
+   The stroke does two jobs: it keeps the interior lines from being swallowed by the fill —
+   without it an opaque icon is a silhouette, and the beer loses its two vertical ridges and the
+   drum loses its head — and, because it rings the outside as well, it is what separates the icon
+   from the button. Which direction it is pulled therefore depends on the button, not the icon:
+   away from a bright cyan fill means darker, away from a mid-dark teal one means lighter. The
+   fills stay vivid in both (see above); only the outline flips. --icon-stroke-ink and
+   --icon-stroke-mix carry that, and the light share is much smaller than the dark one because
+   #007ea8 gives white itself only 4.4:1 — there is little room, so the outline has to go most of
+   the way to white to clear 3:1 against it.
    This is also why the two icons' paths are ordered back-to-front in app.js rather than in
    Lucide's original order. Opaque fills paint over each other, so the mug body drawn last would
    erase the ridges and foam, and the drum shell drawn after the head would take a bite out of the
    cream oval. Translucent fills hid that; nothing about the order looked wrong until now. */
 .btn-accent .icon-tinted,.btn-accent .icon-tinted [class^="ip-"]{
-  fill:currentColor;stroke:color-mix(in srgb,currentColor 62%,#000)}
+  fill:currentColor;stroke:color-mix(in srgb,currentColor var(--icon-stroke-mix),var(--icon-stroke-ink))}
 .icon-mark polyline{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .icon-mark line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
 
@@ -1685,10 +1702,6 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    first to discover them. */
 .cp-manual-preview{display:flex;gap:8px;margin-top:8px}
 .cp-preview-btn{flex:1;opacity:.35;cursor:not-allowed}
-/* Plain .btn, not accent: handing the pool to an outside app is the side door, and it shouldn't
-   compete with Start Drumroll for the eye. Full width so it reads as its own row under the
-   Play Horn preview rather than a stray chip. */
-.cp-eligible-btn{width:100%;margin-top:8px}
 /* Trophy+name+"won!" are one flowing text span (not separate flex items) so a long team name
    wraps onto a second line on its own, with "won!" following right after it — the Clear
    button is the only other flex item, so it stays put on the first line instead of also
