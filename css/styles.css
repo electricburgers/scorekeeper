@@ -1364,18 +1364,18 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    any of that. inset, specifically — .question-block is overflow:hidden (it clips its own
    rounded corners), which would silently clip an outward-spreading ring; inset never needs to
    escape the element's own box in the first place, so it can't be clipped by anything. Same cyan
-   as .flash above, the existing "just happened here" attention color in this app. Pulsing three
-   times (not one long fade) reads as a deliberate cue rather than a blink easy to miss
-   mid-scroll.
-   2.2s a cycle, not 1s: at 1s the three pulses flickered — fast enough to read as an error state
+   as .flash above, the existing "just happened here" attention color in this app. Pulsing twice
+   (not one long fade) reads as a deliberate cue rather than a blink easy to miss mid-scroll.
+   2.2s a cycle, not 1s: at 1s the pulses flickered — fast enough to read as an error state
    rather than a "your question is here" pointer, and over almost before the smooth scroll that
    triggers it had finished. The slower cycle lands each pulse as its own deliberate beat and runs
    alongside the scroll instead of racing it. The 60% keyframe holds the ring near full strength
-   for longer than a linear fade would, so the slower version still reads as three distinct pulses
-   rather than one long glow.
+   for longer than a linear fade would, so each beat still reads as its own pulse rather than one
+   long glow. Two beats, not three: at 2.2s each, three ran 6.6s — long enough that the ring was
+   still going well after the host had started reading the row it pointed at.
    Colour via color-mix off --accent-cyan for the same reason the round-label tints above use it:
    as literal rgba(0,255,255,...) the ring stayed blue in blue-yellow mode. */
-.jump-pulse{animation:jump-pulse 2.2s ease-out 3}
+.jump-pulse{animation:jump-pulse 2.2s ease-out 2}
 @keyframes jump-pulse{
   0%{box-shadow:inset 0 0 0 3px color-mix(in srgb,var(--accent-cyan) 85%,transparent)}
   60%{box-shadow:inset 0 0 0 3px color-mix(in srgb,var(--accent-cyan) 15%,transparent)}

@@ -5,6 +5,9 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.61 - 2026-08-21
+- Tapping the progress bar pulses the ring twice instead of three times. At 2.2s a beat, three ran 6.6s — the ring was still going well after the host had started reading the row it pointed at. The cleanup in `scrollToAndPulse` listens for `animationend` rather than counting beats itself, so only the iteration count changed. `jumpToSection` shares the same cue and follows suit; two beats there and three from the progress bar would have read as two different signals.
+
 ## v18.60 - 2026-08-21
 - Round 3's clover is green and Round 4's Final Wager target is red, leaving the round accents they were given in v18.57. A gold clover and an orange bullseye read as "whatever colour that round is" rather than as a clover and a dartboard. Both are multi-part like the other pictographs: a darker green stem and leaf crease on the clover, and a pale middle ring between the target's red outer ring and red bullseye, which is what makes it read as a dartboard rather than three circles.
 - Round 1's gift and Round 2's Halftime pause keep their round accents. A red gift would fight the wager pills either side of it, and a pause bar has no emoji colour to go back to in the first place.
