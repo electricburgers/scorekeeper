@@ -1294,7 +1294,7 @@ const Tutorial = (function () {
     card.className = "tutorial-firstrun";
     card.id = "tutorialFirstRun";
     card.innerHTML =
-      `<p>🎓 New here? Take the 2-minute tour.</p>` +
+      `<p>🎓 New here? Take the tour.</p>` +
       `<div class="btn-row">` +
       `<button class="btn" onclick="Tutorial.start()">Take the Tour</button>` +
       `<button class="btn" onclick="Tutorial.dismissFirstRun()">Skip</button>` +

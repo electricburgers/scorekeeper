@@ -117,8 +117,8 @@ const X_ICON_SVG =
 // (--badge-green-fg, --pts-pos-fg, etc.), instead of a fixed-color platform glyph.
 const CHECK_ICON_SVG =
   '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg>';
-const APP_VERSION = "v18.50"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Aug 20, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v18.51"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Aug 21, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
 
@@ -825,13 +825,23 @@ let collapsedSections = new Set([
 let adjOpenTeams = new Set(),
   lastAction = null;
 // Tracks the nearest identifiable ancestor (a team's own row, or failing that the whole
-// question/bonus/special-wager/team-entry block) of whatever was just clicked inside
-// #mainContent — used by renderLeft()'s scroll anchor further down this file. Delegated +
-// capture phase (not each scoring function setting this individually, the way lastAction above
+// question/bonus/special-wager/team-entry block, or failing that the whole collapsible
+// .section) of whatever was just clicked inside #mainContent — used by renderLeft()'s scroll
+// anchor further down this file. Delegated + capture phase (not each scoring function setting
+// this individually, the way lastAction above
 // only covers cycleW) so EVERY scoring path is covered automatically: cycleW, markAll, bonus
 // choices, special-wager correct/incorrect, point adjustments, any future one — all of them
-// re-render through renderLeft(), and all of them can shift content the same way. Capture phase
-// runs before the click's own onclick handler (cycleW/markAll/etc., which is what actually
+// re-render through renderLeft(), and all of them can shift content the same way.
+//
+// `.section` is the catch-all at the end of that selector list, and it covers every re-rendering
+// control that isn't a scoring row at all: Craft Prize Drawing's buttons and steppers, Event
+// Details' fields, Export & Data's. Without it those matched nothing, so renderLeft() ran with
+// no anchor and fell back to the raw sy/wy restore — i.e. exactly the pre-v18.41 behaviour this
+// anchor exists to replace: right for as long as nothing above them changed height, and a jump
+// to somewhere unrelated the moment something did. closest() returns the NEAREST match, so a
+// scoring row inside a section still anchors to the row, never to the whole section.
+//
+// Capture phase runs before the click's own onclick handler (cycleW/markAll/etc., which is what actually
 // triggers the re-render), so this is always set to the right target before renderLeft() ever
 // reads it. Not document.activeElement: Safari deliberately doesn't focus a <button> on a plain
 // mouse/touch click, so that would silently miss this exact interaction on iOS, the platform
@@ -856,7 +866,7 @@ document.addEventListener(
   "click",
   (e) => {
     const el = e.target.closest(
-      "[data-ta], [data-ti], .question-block, .special-section",
+      "[data-ta], [data-ti], .question-block, .special-section, .section",
     );
     if (!el) return;
     lastClickAnchorSel = el.hasAttribute("data-ta")
@@ -3320,15 +3330,15 @@ function auditGuessDiff(ti, score) {
           : diff;
   const guessCell = `<div class="aud-cell"><span class="aud-stat-n">${guess == null ? "—" : guess}</span><span class="aud-stat-pct">Score Guess</span></div>`;
   const diffCell = `<div class="aud-cell"><span class="aud-stat-n">${diffTxt}</span><span class="aud-stat-pct">Diff</span></div>`;
-  // No bonuses: just Diff then Score Guess — Adjusted Score would equal the raw score, so
+  // No bonuses: just Diff then Score Guess — Adj. Score would equal the raw score, so
   // there's nothing for it to clarify and it's left out entirely, and Grand Total above stays
   // the sole score anchor.
   if (!bonuses) return `<div class="aud-grid aud-grid-2">${diffCell}${guessCell}</div>`;
   // Bonus Item/NJCB collapse into one combined "Diff Adj *" figure instead of separate -5/-3
-  // cells, sitting left of Adjusted Score so the whole chain (adjustment -> adjusted score ->
+  // cells, sitting left of Adj. Score so the whole chain (adjustment -> adjusted score ->
   // diff -> guess) reads as a single divided card.
   const adjCell = `<div class="aud-cell aud-stat-wrong"><span class="aud-stat-n">-${bonuses}</span><span class="aud-stat-pct">Diff Adj *</span></div>`;
-  const adjustedCell = `<div class="aud-cell"><span class="aud-stat-n">${adjusted}</span><span class="aud-stat-pct">Adjusted Score</span></div>`;
+  const adjustedCell = `<div class="aud-cell"><span class="aud-stat-n">${adjusted}</span><span class="aud-stat-pct">Adj. Score</span></div>`;
   return `<div class="aud-grid aud-grid-4">${adjCell}${adjustedCell}${diffCell}${guessCell}</div>`;
 }
 // Tally of every question a team has been marked on — the 16 regular Q1-4 x Round 1-4 answers,
@@ -3438,7 +3448,7 @@ function buildAudit(ti) {
     }
     const sub = roundSub(ti, ri);
     run += sub;
-    b += `<div class="aud-subline"><span class="lbl">Subtotal</span><span><span class="sub">${sub}</span> &nbsp;\u00B7&nbsp; total so far <span class="run">${run}</span></span></div>`;
+    b += `<div class="aud-subline"><span class="asl-row"><span class="lbl">Subtotal</span><span class="sub">${sub}</span></span><span class="asl-row"><span class="lbl">total so far</span><span class="run">${run}</span></span></div>`;
     return b + `</div>`;
   }
   function wagerBlock(data, label, colorCls, maxTxt, skipSub) {
@@ -3472,7 +3482,7 @@ function buildAudit(ti) {
     // Final Wager's own running total always equals Grand Total (nothing scores after it), which
     // sits right below in its own callout \u2014 showing it again here would just repeat that number.
     if (!skipSub)
-      b += `<div class="aud-subline"><span class="lbl">after ${label}</span><span>total so far <span class="run">${run}</span></span></div>`;
+      b += `<div class="aud-subline"><span class="asl-row"><span class="lbl">after ${label}</span></span><span class="asl-row"><span class="lbl">total so far</span><span class="run">${run}</span></span></div>`;
     return b + `</div>`;
   }
 
@@ -3524,7 +3534,7 @@ function buildAudit(ti) {
   if (run !== gt)
     h += `<div class="aud-note">Note: running figure (${run}) and grand total (${gt}) differ \u2014 if you see this, take a screenshot.</div>`;
   else
-    h += `<div class="aud-note">Tip: each round shows that question's wager, whether it was marked correct or incorrect, and the team's running score. To fix a wrong wager, close this and tap the wager button in the round itself. </br> </br>* Diff is minus Bonuses — Bonus Item (+5) and NJCB (+3) are stripped from a team's score before it's compared to their guess, for every team.</div>`;
+    h += `<div class="aud-note">Tip: each round shows that question's wager, whether it was marked correct or incorrect, and the team's running score. To fix a wrong wager, close this and tap the wager button in the round itself. </br> </br><strong>Diff Adj *</strong> is the Bonuses coming back off — Bonus Item (+5) and NJCB (+3). </br><strong>Adj. Score</strong> is the Grand Total with those stripped out. </br><strong>Diff</strong> is Adj. Score measured against the team's Score Guess — + if they guessed high, − if they guessed low, 0 if they called it exactly. </br> </br>* Every team's guess is compared on the same bonus-free footing, which is why the bonuses come off before the guess is scored.</div>`;
   h += `</div>`;
   return h;
 }
@@ -4953,10 +4963,46 @@ function qtSetDisplayText(fmt) {
     d.classList.toggle("qt-neg", fmt.neg);
   });
 }
+// One-shot handler for the qt-crit -> qt-over handover below: fires at the end of whichever
+// qtFlash cycle was in flight when the clock hit zero, and drops the class keeping it alive.
+// A single shared function (not a closure per call) so removeEventListener below can match it.
+function qtEndSettlePulse(e) {
+  e.currentTarget.classList.remove("qt-settling");
+}
 function qtSetDisplayClass(cls) {
   document.querySelectorAll(".qtimer-display").forEach((d) => {
+    // Whether this display is mid-pulse right now — either still in qt-crit's own infinite
+    // animation, or already settling one out from a previous tick.
+    const pulsing =
+      d.classList.contains("qt-crit") || d.classList.contains("qt-settling");
     d.classList.remove("qt-warn", "qt-crit", "qt-over");
     if (cls) d.classList.add(cls);
+    // Crossing 0:01 -> 0:00 swaps qt-crit for qt-over, and qt-over doesn't pulse — so the flash
+    // used to be cut off wherever it happened to be in its 2.9s cycle, snapping the box back to
+    // full brightness mid-fade at the exact moment the host is looking at it. .qt-settling
+    // re-declares the identical `qtFlash 2.9s ease-in-out infinite` on qt-over, and an unchanged
+    // animation-name between style recalcs means the browser carries the running animation over
+    // untouched rather than restarting it; the animationiteration listener then removes the class
+    // at the cycle's own end, where the keyframes are already back at brightness(1). So the pulse
+    // finishes the beat it was on and stops on its own, instead of being chopped.
+    //
+    // Guarded on `pulsing` so this only ever continues a pulse that was actually running: a timer
+    // resumed already past zero goes straight to qt-over with nothing in flight, and must not
+    // start a fresh flash just to fade it out. Guarded again on qt-settling because tickQTimer
+    // calls this every 200ms — without it, every tick would re-add the listener while waiting.
+    if (cls === "qt-over" && pulsing) {
+      if (!d.classList.contains("qt-settling")) {
+        d.classList.add("qt-settling");
+        d.addEventListener("animationiteration", qtEndSettlePulse, {
+          once: true,
+        });
+      }
+    } else if (d.classList.contains("qt-settling")) {
+      // Left the over state before the cycle ended (a +30s nudge, a reset, a fresh start) —
+      // drop the hold and the pending listener so it can't fire against a later state.
+      d.classList.remove("qt-settling");
+      d.removeEventListener("animationiteration", qtEndSettlePulse);
+    }
   });
 }
 // Inline SVG (fill:currentColor, see .qtimer-btn.qtimer-toggle svg in styles.css) rather than

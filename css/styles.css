@@ -613,14 +613,22 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);border-color:var(--bg-primary)}
 .qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;border-color:var(--bg-primary);animation:qtFlash 2.9s ease-in-out infinite}
 .qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff;border-color:var(--bg-primary)}
+/* qt-over doesn't pulse — but crossing 0:01 -> 0:00 swaps qt-crit for it mid-cycle, which used to
+   chop the flash off wherever it happened to be and snap the box back to full brightness. This
+   re-declares the SAME animation (identical name, duration and timing — an unchanged
+   animation-name between style recalcs is what makes the browser carry the running animation over
+   instead of restarting it), and qtSetDisplayClass in app.js drops .qt-settling on the next
+   animationiteration, i.e. at the cycle's own end where the keyframes are already back at
+   brightness(1). Net effect: the pulse finishes the beat it was on, then stops on its own. */
+.qtimer-display.qt-over.qt-settling{animation:qtFlash 2.9s ease-in-out infinite}
 @keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.75)}}
 @media(prefers-reduced-motion:reduce){
-  .qtimer-display.qt-crit{animation:none}
+  .qtimer-display.qt-crit,.qtimer-display.qt-over.qt-settling{animation:none}
 }
 /* Advanced Settings > Timer Pulse: Hidden. Set on <html> by applyPrefs() in app.js. The crit
    background/text/border still apply (they're the actual "time's nearly up" signal) — this only
    drops the flashing animation for hosts who find it distracting. */
-[data-timer-no-pulse] .qtimer-display.qt-crit{animation:none}
+[data-timer-no-pulse] .qtimer-display.qt-crit,[data-timer-no-pulse] .qtimer-display.qt-over.qt-settling{animation:none}
 
 /* Pinned to the bottom of the scores column (#sidebar / .col-right), overlaying .scores-list
    rather than sitting below it — the extra padding-bottom on .scores-list (its CSS rule,
@@ -1467,7 +1475,23 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   /* Desktop only: lay the two halves of the round-by-round breakdown side by side instead of
      one long scrolling column — Grand Total and everything after it (Guess/Diff, overall stats,
      the closing note) live outside .aud-columns entirely, so they stay full-width under both. */
-  .aud-columns{display:grid;grid-template-columns:1fr 1fr;gap:0 12px;align-items:start}
+  .aud-columns{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0 24px;align-items:start}
+  /* Rule down the middle of the gap, marking where one column ends and the other begins. Without
+     it the two halves just float next to each other and the eye has to work out that Round 3 is a
+     new column rather than a continuation of Round 2. The gap is widened from 12px to 24px to give
+     the line ~12px of clear space either side — at 12px it would have sat almost against both
+     round boxes and read as a border on one of them.
+     Absolutely positioned rather than a border on a column: .aud-columns is align-items:start, so
+     the two halves are different heights and a border would stop at whichever column it was on.
+     Anchored top:0/bottom:0 on the grid itself, it spans the taller of the two — from the top of
+     Round 1 / Round 3 down to the bottom edge of the breakdown, which is exactly where Grand Total
+     picks up. (position:absolute also takes it out of grid flow, so it never claims a cell.)
+     Faded at both ends instead of a flat 1px rule: hard stops in open space read as clipped, while
+     a line that resolves into the background looks intentional at both ends.
+     --border-light rather than the --border the round boxes use for their own edges: those sit
+     against a filled card, this one is a lone hairline in open background, where the darker tone
+     all but disappears. One step up reads as present without competing with the boxes. */
+  .aud-columns::before{content:"";position:absolute;top:2px;bottom:2px;left:50%;width:1px;margin-left:-.5px;pointer-events:none;background:linear-gradient(to bottom,transparent 0,var(--border-light) 24px,var(--border-light) calc(100% - 24px),transparent 100%)}
 }
 .aud-round{margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 .aud-round-h{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-card-alt);font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
@@ -1483,11 +1507,18 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .aud-p.pos{color:var(--badge-green-fg)}
 .aud-p.neg{color:var(--txt-red)}
 .aud-p.zero,.aud-p.none{color:var(--text-muted)}
-/* justify-content:center + a fixed gap, for the same reason .aud-total below uses it (see the
-   comment there): space-between stranded "Subtotal" against the round box's left edge and its
-   score against the right edge, with the gap between them growing with the panel's width, so
-   the two read as unrelated ends of a bar rather than one label/value pair. */
-.aud-subline{display:flex;align-items:center;justify-content:center;gap:10px;padding:7px 12px;border-top:1px solid var(--border-light);background:var(--bg-input);font-size:.78rem;font-weight:700}
+/* Subtotal and "total so far" stack as two right-aligned lines rather than sharing one. They're
+   two different figures (this round's points, and the team's running total across all rounds), and
+   on one line they read as a single run-on number; stacked, each gets its own label/value pair.
+   Right-aligned (not centered) so both values land in the same column as the +N point values on
+   every question line above them, making a round's per-question scores and the totals they add up
+   to one continuous right-hand column. Grand Total below stays centered — it's a full-width band
+   of its own with no column above it to line up with. */
+.aud-subline{display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:7px 12px;border-top:1px solid var(--border-light);background:var(--bg-input);font-size:.78rem;font-weight:700}
+/* Each label/value pair on its own line, held together by a fixed gap rather than pushed to
+   opposite edges — that gap is what keeps them reading as one pair instead of two unrelated ends
+   of a bar. */
+.aud-subline .asl-row{display:flex;align-items:center;gap:10px}
 .aud-subline .lbl{color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px}
 .aud-subline .run{font-family:var(--font-display);color:var(--txt-cyan);font-size:.95rem}
 .aud-subline .sub{font-family:var(--font-display);color:var(--text-primary)}
@@ -1507,28 +1538,43 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
 .aud-stat-correct .aud-stat-n{color:var(--badge-green-fg)}
 .aud-stat-wrong .aud-stat-n{color:var(--txt-red)}
-/* Single-card, vertical-rule layout for stat rows that hold 2+ related figures (Adjusted
+/* Single-card, vertical-rule layout for stat rows that hold 2+ related figures (Adj.
    Score/Diff/Score Guess, multiple bonus deductions, correct/incorrect) — one bordered card
    with equal-width grid columns and a divider between cells instead of separate bordered tiles,
    so the numbers read as one connected breakdown rather than a scattered row of boxes. */
 .aud-grid{display:grid;margin-top:8px;background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 .aud-grid-2{grid-template-columns:repeat(2,1fr)}
 .aud-grid-3{grid-template-columns:repeat(3,1fr)}
-/* Sized to their contents and centered as a group, rather than four equal 1fr columns each
-   taking a quarter of the panel: this row's labels are short and very uneven ("Diff" vs
-   "Adjusted Score"), so equal columns left ~110px of dead space between neighbours and the four
-   figures read as scattered across the card instead of one Diff Adj -> Adjusted Score -> Diff ->
-   Score Guess chain. The card itself still spans the full width, matching the 2-column stat rows
-   above it; only the columns inside it pack in.
-   `auto`, not `max-content`: max-content refuses to shrink, so on the narrow mobile audit panel
-   (and at the top of Settings > Size's font range, where every label grows) the four columns
-   outgrew the card and the end cells were silently clipped by .aud-grid's overflow:hidden.
-   `auto` tracks give the same content-width packing whenever there's room, but shrink and let a
-   label wrap instead of getting cut off when there isn't. */
-.aud-grid-4{grid-template-columns:repeat(4,auto);justify-content:center}
+/* Mobile/narrow default: four equal columns filling the card, so the four figures sit at even
+   intervals across it and each divider lands exactly on a quarter line. There's no dead space to
+   worry about at this width — a phone-width audit panel is ~355px, so four equal columns come out
+   at only ~79px each and the labels very nearly fill them. Desktop packs them in instead; see the
+   min-width:769px rule below. */
+.aud-grid-4{grid-template-columns:repeat(4,1fr)}
+/* 4px of side padding rather than the 8px .aud-cell sets below: four-to-a-row on a phone is the
+   only stat row tight enough for it to matter, and it buys "Score Guess" (the longest label here)
+   enough width to stay on one line. */
+.aud-grid-4 .aud-cell{padding-left:4px;padding-right:4px}
 .aud-cell{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 8px;text-align:center}
 /* Inset top/bottom so the divider doesn't touch the card's rounded corners. */
 .aud-cell:not(:last-child)::after{content:"";position:absolute;top:14px;bottom:14px;right:0;width:1px;background:var(--border)}
+/* Desktop: sized to their contents and centered as a group, rather than four equal quarters of
+   the card. This row's labels are short and very uneven ("Diff" vs "Adj. Score"), and at the audit
+   panel's full 680px equal columns leave ~110px of dead space between neighbours, so the four
+   figures read as scattered across the card instead of one Diff Adj -> Adj. Score -> Diff ->
+   Score Guess chain. The card itself still spans the full width, matching the 2-column stat rows
+   above it; only the columns inside it pack in.
+   `auto`, not `max-content`: max-content refuses to shrink, so at the top of Settings > Size's
+   font range (where every label grows) the four columns outgrew the card and the end cells were
+   silently clipped by .aud-grid's overflow:hidden. `auto` tracks pack to content width whenever
+   there's room, but shrink and let a label wrap instead of getting cut off when there isn't.
+   The side padding is what sets them apart once they're packed: 26px a side puts ~52px of clear
+   space between neighbouring labels, with each divider centered in that gap, so they read as four
+   distinct figures in one chain rather than four words crowded together. */
+@media(min-width:769px){
+  .aud-grid-4{grid-template-columns:repeat(4,auto);justify-content:center}
+  .aud-grid-4 .aud-cell{padding-left:26px;padding-right:26px}
+}
 .aud-cell .aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
 .aud-cell .aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
 .aud-cell.aud-stat-correct .aud-stat-n{color:var(--badge-green-fg)}
