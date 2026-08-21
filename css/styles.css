@@ -598,6 +598,15 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    Stroke-only + currentColor, so each icon inherits the contrast-audited text color of whatever
    button it sits in, in every theme and color-vision mode. */
 .icon-ui{width:1em;height:1em;display:block;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round}
+/* Reset carries a heavier nominal stroke than the other three, to match their apparent weight
+   rather than their measurements. Its glyph is one big open circle: two strokes far apart around
+   a large empty middle, where Sort — sitting immediately beside it — is four strokes packed into
+   the same box. The sparse shape reads lighter even though it is not: rasterised at the 12px
+   these buttons use, Reset at 2.25 actually put down MORE ink than Sort (0.243 vs 0.209 coverage,
+   mean alpha .58 vs .50), so this is a composition effect, not an anti-aliasing or gamma one, and
+   no amount of measuring the pixels would have found it — it came from looking at the button.
+   3 is where the pair stops looking mismatched; 3.5 overshoots and starts closing up the arc. */
+.icon-ui-reset{stroke-width:3}
 .icon-mark polyline{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .icon-mark line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
 
