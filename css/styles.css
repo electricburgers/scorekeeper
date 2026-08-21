@@ -124,6 +124,13 @@
   --accent-gold:#ff66cc;--accent-cyan:#00cc88;
   --item-border:#ff66cc;--item-fill-checked:#ff66cc;
   --njcb-border:#00cc88;--njcb-fill-checked:#00cc88;
+  /* Black tick and label once a chip is ticked, not the white :root default. This mode's fills are
+     the two brightest in the app (#ff66cc, #00cc88) precisely so a tritanope can tell them apart
+     on black, and white on top of them only manages 2.62:1 and 2.10:1 — far under AA. Flipping
+     the ink instead of dimming the fills keeps that discrimination intact and clears AA by a wide
+     margin: black reads 8.02:1 and 9.99:1. Only this mode needs it; every other variant's fills
+     are dark enough for white. */
+  --check-icon-color:#000;
   --badge-gold-fg:#ff96fc;--accent-cyan-solid:#00cc88;
   /* The pink/magenta gold-substitute already clears 7:1 on the normal --bg-card-alt (unlike
      real gold), so beer round doesn't need the special cream background here. */
@@ -137,9 +144,19 @@
      darker green clears it at 4.53:1. Only this mode needs the exception; the cream row every
      other light-mode variant uses is light enough for the vivid green. */
   --badge-green-fg:#0a500a;
-  --item-border:#e0008e;--item-fill-checked:#e0008e;
-  --njcb-border:#008564;--njcb-fill-checked:#008564;
-  --badge-gold-fg:#880056;--txt-cyan:#004f3b;--accent-cyan-solid:#00654c;
+  /* Each of these doubles as the chip's own TEXT color (on --bg-input) and, when the box is
+     ticked, as the fill sitting under --check-icon-color. The old pair was tuned for the fill
+     role and left the text role short of AA — 3.76:1 and 3.78:1 on --bg-input. Darkened just far
+     enough to clear it (4.60/4.65), which costs almost no chroma (.247->.226, .111->.102) and
+     improves the fill role too: white on them goes 4.7->5.6 and 4.8->5.7. Hues are untouched, so
+     the magenta/green split this mode relies on — a red-green distinction, which is exactly what
+     tritanopes still see — is unchanged. */
+  --item-border:#c7007d;--item-fill-checked:#c7007d;
+  --njcb-border:#007557;--njcb-fill-checked:#007557;
+  /* #004f3b landed at 4.49:1 on .fr-tie's row wash — this mode swaps gold for magenta, so that
+     wash is pink (#e799ca) rather than the cream every other variant gets, and it is the one
+     surface --txt-cyan sits on that is dark enough to bind. Two points of lightness clears it. */
+  --badge-gold-fg:#880056;--txt-cyan:#004d39;--accent-cyan-solid:#00654c;
   --beer-bg:var(--bg-card-alt);--beer-border:#c2007a;
   /* #c2007a is too dark for black text at small sizes here (~3.6:1, under the 4.5:1 AA floor
      for normal text — the base #000 only clears AA on LARGE text, e.g. the question timer's
