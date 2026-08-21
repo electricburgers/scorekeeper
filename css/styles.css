@@ -27,9 +27,22 @@
   --pts-neg-bg:rgba(255,68,68,.2);--pts-neg-border:rgba(255,68,68,.6);--pts-neg-fg:#ffa3a3;
   --pts-nil-bg:rgba(255,255,255,.06);--pts-nil-border:rgba(255,255,255,.12);
   --on-accent-cyan:#000;--on-accent-gold:#000;--on-badge:#000;
-  --item-border:#B4552F;--item-fill-checked:#B4552F;
-  --njcb-border:#5B84A8;--njcb-fill-checked:#5B84A8;
-  --check-icon-color:#ffffff;
+  /* Each of these is BOTH the chip's own text colour (against --bg-input) and, once ticked, the
+     fill sitting under --check-icon-color. With white ink those two roles pull in opposite
+     directions and neither pair could satisfy both: lightening the token to fix the text sinks
+     white-on-fill, darkening it does the reverse. #5B84A8 failed both at once (4.31 text, 3.95
+     under white); #B4552F failed the text role at 3.47.
+     Fixed by flipping the ticked ink to black rather than by splitting either token in two —
+     that is the same resolution blue-yellow mode already uses, and with black ink both roles
+     want the same thing (a lighter chip), so one value serves both. The colours themselves then
+     only needed the smallest lift that clears AA: OKLab dE 0.068 and 0.017, hue held exactly, so
+     the terracotta and slate read as the same two colours they always were. */
+  --item-border:#c76c49;--item-fill-checked:#c76c49;
+  --njcb-border:#6189ac;--njcb-fill-checked:#6189ac;
+  /* Black, because in BOTH dark palettes the ticked chip's fill is the lighter surface — see
+     above, and the brighter #ff66cc/#00cc88 pair blue-yellow swaps in. Light mode overrides this
+     back to white, where the same fills are the darker surface. */
+  --check-icon-color:#000;
   --badge-gold-fg:#ffee00;--badge-green-fg:#44ff44;
   /* AAA (7:1) text-safe variants of the brand accents, for use as TEXT on neutral surfaces
      (bg-card/bg-card-alt/bg-input) — kept separate from --accent-* so borders, focus rings,
@@ -81,6 +94,10 @@
   --on-accent-cyan:#fff;--on-accent-gold:#000;--on-badge:#fff;
   --item-border:#b54000;--item-fill-checked:#b54000;
   --njcb-border:#006ab3;--njcb-fill-checked:#006ab3;
+  /* Explicit, not inherited: the dark block now sets this to black for its own lighter fills,
+     and light mode's fills are the dark surface of the pair, so white is what clears AA here
+     (5.7:1 and 5.7:1). */
+  --check-icon-color:#fff;
   --badge-gold-fg:#785b00;--badge-green-fg:#006a03;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
   --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
@@ -124,13 +141,6 @@
   --accent-gold:#ff66cc;--accent-cyan:#00cc88;
   --item-border:#ff66cc;--item-fill-checked:#ff66cc;
   --njcb-border:#00cc88;--njcb-fill-checked:#00cc88;
-  /* Black tick and label once a chip is ticked, not the white :root default. This mode's fills are
-     the two brightest in the app (#ff66cc, #00cc88) precisely so a tritanope can tell them apart
-     on black, and white on top of them only manages 2.62:1 and 2.10:1 — far under AA. Flipping
-     the ink instead of dimming the fills keeps that discrimination intact and clears AA by a wide
-     margin: black reads 8.02:1 and 9.99:1. Only this mode needs it; every other variant's fills
-     are dark enough for white. */
-  --check-icon-color:#000;
   --badge-gold-fg:#ff96fc;--accent-cyan-solid:#00cc88;
   /* The pink/magenta gold-substitute already clears 7:1 on the normal --bg-card-alt (unlike
      real gold), so beer round doesn't need the special cream background here. */
@@ -431,8 +441,18 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .cv-select-btn:focus-visible{outline:2px solid var(--accent-cyan-solid);outline-offset:2px}
 .cv-select-arrow{font-size:.6rem;color:var(--text-muted);transition:transform .15s}
 .cv-select.open .cv-select-arrow{transform:rotate(180deg)}
-.cv-select-menu{position:fixed;min-width:0;width:max-content;max-width:min(260px,calc(100vw - 24px));margin:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);z-index:300;list-style:none;padding:4px;display:none;max-height:60vh;overflow-y:auto}
-.cv-select.open .cv-select-menu{display:block}
+/* z-index above the tutorial overlay's own layers (bars/ring 600, callout 601), not merely above
+   the settings panel it lives in. An open dropdown is the most transient, most foreground thing
+   on screen, and during the tutorial the Color Vision step spotlights this very control — at 300
+   the callout painted straight over the options the step is asking the host to look at. The step
+   also places its callout above the target now (see tutorial.js), so the two no longer overlap at
+   all at normal sizes; this is what keeps the options readable when the viewport is too short for
+   that and the callout has to fall back below. */
+.cv-select-menu{position:fixed;min-width:0;width:max-content;max-width:min(260px,calc(100vw - 24px));margin:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);z-index:700;list-style:none;padding:4px;display:none;max-height:60vh;overflow-y:auto}
+/* Two selectors, because the menu is re-parented to <body> while open (see toggleCvMenu in
+   app.js) and is no longer a descendant of .cv-select.open at that point. The descendant form is
+   kept as the belt-and-braces case for any path that adds .open without going through there. */
+.cv-select.open .cv-select-menu,.cv-select-menu.cv-open{display:block}
 .cv-select-menu li{padding:6px 8px;border-radius:6px;cursor:pointer;font-size:.78rem;color:var(--text-primary);display:flex;flex-direction:column;gap:1px;line-height:1.25}
 .cv-select-menu li:hover{background:var(--bg-hover)}
 .cv-select-menu li[aria-selected="true"]{font-weight:700;color:var(--txt-cyan)}

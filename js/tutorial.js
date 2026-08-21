@@ -309,10 +309,28 @@ const Tutorial = (function () {
       },
       {
         target: "#cbSelect",
+        // Above, not the default below: this is the one step whose target OPENS something
+        // downward. The callout's default placement put it directly over the dropdown it is
+        // telling the host to look at — measured at 375x812, it covered 89% of the open menu
+        // (both named modes entirely, leaving only part of "Off" visible), and at z-index 601
+        // against the menu's own layer it painted on top rather than behind. Placing it above
+        // clears the menu completely. The menu also now outranks the tutorial layer (see
+        // .cv-select-menu in styles.css), which covers the case this flag cannot: a viewport
+        // too short for the callout to fit above, where reposition() falls back to below.
+        calloutPosition: "above",
+        calloutClears: ".cv-select-menu.cv-open",
         text: `There's also a Color Vision mode here, for red-green or blue-yellow color blindness. ${tapWordCap()} Next when you're ready to keep going.`,
         advance: "manual",
         fill: (ready) => {
           if (!loadPrefs().settingsOpen) toggleSettings();
+          // Nothing else notices the dropdown opening — it only flips a class and re-parents the
+          // menu — so the callout would otherwise keep the position it took while the menu was
+          // still shut. Same pattern as the gear icon on the theme step above.
+          const cvBtn = document.querySelector("#cbSelect .cv-select-btn");
+          if (cvBtn && !cvBtn.dataset.tutHooked) {
+            cvBtn.dataset.tutHooked = "1";
+            cvBtn.addEventListener("click", () => setTimeout(reposition, 0));
+          }
           ready();
         },
       },
@@ -1241,17 +1259,38 @@ const Tutorial = (function () {
     const calloutH = dom.callout.offsetHeight || 170;
     const gap = pad + 10;
     let top, left;
+    // calloutClears: a selector for something the spotlighted control OPENS, which the callout
+    // has to clear as well as the control itself — the Color Vision dropdown is the only one so
+    // far. Placing against the button alone isn't enough: the whole point of that step is to look
+    // at the open menu, and the menu is taller than the button and lands on whichever side has
+    // room (toggleCvMenu flips it above when opening downward would overflow the viewport).
+    // Unioning the two rects pushes the callout clear of whichever side the menu took, while
+    // still leaving it directly against it. The ring and the dimming bars keep using the
+    // control's own rect, so the spotlight itself doesn't grow.
+    let cr = r;
+    if (step.calloutClears) {
+      const extra = document.querySelector(step.calloutClears);
+      if (extra) {
+        const e = extra.getBoundingClientRect();
+        if (e.width && e.height)
+          cr = {
+            top: Math.min(r.top, e.top),
+            bottom: Math.max(r.bottom, e.bottom),
+            left: r.left,
+          };
+      }
+    }
     if (onScreen) {
-      const spaceBelow = vh - r.bottom - gap;
-      const spaceAbove = r.top - gap;
+      const spaceBelow = vh - cr.bottom - gap;
+      const spaceAbove = cr.top - gap;
       const preferAbove = step.calloutPosition === "above";
-      if (preferAbove && spaceAbove >= calloutH) top = r.top - gap - calloutH;
-      else if (!preferAbove && spaceBelow >= calloutH) top = r.bottom + gap;
+      if (preferAbove && spaceAbove >= calloutH) top = cr.top - gap - calloutH;
+      else if (!preferAbove && spaceBelow >= calloutH) top = cr.bottom + gap;
       // Neither preferred side actually fits the real height — use whichever side has more
       // room instead of blindly clamping to the preferred one and risking an overlap anyway.
-      else if (spaceBelow >= spaceAbove) top = r.bottom + gap;
-      else top = r.top - gap - calloutH;
-      left = r.left;
+      else if (spaceBelow >= spaceAbove) top = cr.bottom + gap;
+      else top = cr.top - gap - calloutH;
+      left = cr.left;
     } else {
       top = vh / 2 - calloutH / 2;
       left = vw / 2 - 160;
