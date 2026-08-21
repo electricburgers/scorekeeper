@@ -79,6 +79,8 @@
   --tint-trophy:#f5c542;--tint-trophy-2:#c9922a;
   --tint-mic:#cfd6dc;--tint-mic-2:#8b949c;
   --tint-heart:#ff5a72;
+  --tint-clover:#3ecf62;--tint-clover-2:#2a9e49;
+  --tint-target:#f0574a;--tint-target-2:#ffe4cf;
   --tint-clipboard:#c98f52;--tint-clipboard-2:#dfe3e7;
   --tint-book:#e0574f;
   /* AAA (7:1) text-safe variants of the brand accents, for use as TEXT on neutral surfaces
@@ -159,6 +161,8 @@
   --tint-trophy:#96700a;--tint-trophy-2:#6b4f05;
   --tint-mic:#5c6469;--tint-mic-2:#98a0a6;
   --tint-heart:#c62741;
+  --tint-clover:#1c8438;--tint-clover-2:#0f5a24;
+  --tint-target:#c33528;--tint-target-2:#dda28f;
   --tint-clipboard:#8a5f2c;--tint-clipboard-2:#b9a48c;
   --tint-book:#c0332b;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
@@ -657,6 +661,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-trophy{--icon-tint:var(--tint-trophy);--icon-tint-2:var(--tint-trophy-2)}
 .icon-mic{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
 .icon-heart{--icon-tint:var(--tint-heart)}
+/* Round 3's clover and Round 4's target are the two that leave their round accent behind: a gold
+   clover and an orange bullseye were reading as "whatever colour Round 3 is" rather than as a
+   clover and a dartboard. Round 1's gift and Round 2's pause stay on theirs — a red gift would
+   fight the wager pills either side of it, and a pause button has no emoji colour to go back to. */
+.icon-clover{--icon-tint:var(--tint-clover);--icon-tint-2:var(--tint-clover-2)}
+.icon-target{--icon-tint:var(--tint-target);--icon-tint-2:var(--tint-target-2)}
 .icon-clipboard{--icon-tint:var(--tint-clipboard);--icon-tint-2:var(--tint-clipboard-2)}
 .icon-book{--icon-tint:var(--tint-book)}
 /* Second and third colours, for the icons whose emoji had more than one: the cream head of the
