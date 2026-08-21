@@ -117,7 +117,27 @@ const X_ICON_SVG =
 // (--badge-green-fg, --pts-pos-fg, etc.), instead of a fixed-color platform glyph.
 const CHECK_ICON_SVG =
   '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg>';
-const APP_VERSION = "v18.54"; // #Version Number — bump this manually when you release a new build
+// UI action glyphs, replacing the ↕ / ↺ / 🔄 / 🎲 characters these buttons used to carry. Same
+// reasoning as X_ICON_SVG/CHECK_ICON_SVG above, and it applies twice over here:
+//   1. 🔄 and 🎲 are emoji — fixed-color platform pictographs (a blue-and-white arrow loop, a
+//      white-pipped die) that no theme or color-vision token could reach, so they stayed the same
+//      two colors in all six theme/mode combinations while everything around them adapted.
+//   2. ↕ and ↺ are text glyphs, and a glyph's own font metrics decide where it sits inside its
+//      line box, so no amount of centering on the BUTTON can fix a glyph that sits high or low
+//      in its own box — which is exactly why Sort and Reset looked off-centre beside their
+//      labels. Geometry drawn around (12,12) in a 24x24 viewBox has no metrics to fight.
+// All four are stroke-only and inherit currentColor, so they take the button's own already
+// contrast-audited text color in every theme and color-vision mode. Geometry is Lucide's, the
+// same family the sun/moon/check/X above already use.
+const ICON_SORT =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg>';
+const ICON_RESET =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>';
+const ICON_REFRESH =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M21 21v-5h-5"></path></svg>';
+const ICON_SHUFFLE =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg>';
+const APP_VERSION = "v18.55"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 21, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -267,7 +287,7 @@ function renderBanter(cat, key, opts) {
     (showLabel ? `<span class="banter-cat">🎤 ${esc(lbl)}</span>` : "") +
     `<div class="banter-text" data-bkey="${key}">${esc(line)}</div>` +
     `</div>` +
-    `<button class="banter-refresh" type="button" onclick="cycleBanter('${key}','${cat}')" title="New line" aria-label="Refresh banter line">🔄</button>` +
+    `<button class="banter-refresh" type="button" onclick="cycleBanter('${key}','${cat}')" title="New line" aria-label="Refresh banter line">${ICON_REFRESH}</button>` +
     `</div>`
   );
 }
@@ -357,10 +377,10 @@ function renderStaffThanks() {
     `<span class="banter-cat">🙏 Thank the Staff</span>` +
     `<div class="banter-text" id="staffThanksLine">${staffThanksHtml()}</div>` +
     `</div>` +
-    `<button class="banter-refresh" type="button" onclick="cycleStaffThanks()" title="New line" aria-label="Refresh staff thank-you line">🔄</button>` +
+    `<button class="banter-refresh" type="button" onclick="cycleStaffThanks()" title="New line" aria-label="Refresh staff thank-you line">${ICON_REFRESH}</button>` +
     `</div>` +
     `<label class="staff-thanks-edit"><span class="staff-thanks-edit-label">Staff names — same field as Event Details</span>` +
-    `<textarea class="meta-textarea staff-names-input" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></label>` +
+    `<textarea class="meta-textarea staff-names-input" rows="2" aria-label="Restaurant staff names" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></label>` +
     `</div>`
   );
 }
@@ -898,6 +918,47 @@ let adjOpenTeams = new Set(),
 // synchronous render, see the IIFE below), which is why this went unnoticed: it only bites the
 // very first launch, or any time storage gets cleared/evicted (e.g. iOS Safari's ~7-day
 // eviction for a PWA that sits unopened between events).
+// KEYBOARD ACTIVATION for every role="button" in the app. These are divs and spans (section
+// headers, question headers, team names, the mini-progress bar, standings rows) that carry
+// role="button" and tabindex="0", so a keyboard or screen-reader user can focus them — but a
+// plain element does not activate on Enter/Space the way a real <button> does, so before this
+// they could be reached and then not used at all. That is a WCAG 2.1.1 (Keyboard, Level A)
+// failure, and it covered 297 controls.
+// Delegated on document rather than an onkeydown per element for the same reason the click
+// anchor above is delegated: it covers every one of them, including any added later, from one
+// place. Space is preventDefault-ed because its default action on a focused non-button is to
+// scroll the page, which would fire the control AND jump the view.
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " " && e.key !== "Spacebar") return;
+  const el = e.target.closest('[role="button"]');
+  if (!el) return;
+  // A real <button>/<a> inside the region handles its own keys; don't fire both.
+  if (e.target.closest("button,a,input,textarea,select") ) return;
+  e.preventDefault();
+  el.click();
+});
+
+// Screen-reader announcements for things that change on screen without moving focus — scoring a
+// team, clearing a mark, the craft prize winner. Sighted hosts see the row update; without a live
+// region a blind host taps a wager and gets no confirmation the tap landed at all (WCAG 4.1.3
+// Status Messages, Level AA).
+// The element is in the static HTML rather than created on demand: an aria-live region has to be
+// in the DOM and observed by the accessibility tree BEFORE text is put into it, or the first
+// message is silently missed. polite, so it queues behind whatever the reader is already saying
+// instead of cutting it off — every message here is a confirmation, never an emergency.
+// Re-announcing an identical string is a no-op in most readers, so a trailing space is toggled to
+// force each one through even when the same message repeats (e.g. two teams both scoring "+4").
+let __srToggle = false;
+function teamLabel(ti) {
+  return (gameState.teams[ti] && gameState.teams[ti].name) || "Team " + (ti + 1);
+}
+function announce(msg) {
+  const el = document.getElementById("srAnnouncer");
+  if (!el || !msg) return;
+  __srToggle = !__srToggle;
+  el.textContent = msg + (__srToggle ? " " : "");
+}
+
 let lastClickAnchorSel = null;
 document.addEventListener(
   "click",
@@ -1325,7 +1386,7 @@ function renderFinalResults() {
     h +=
       `<tr class="${r.tie ? "fr-tie" : ""}${medal}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to view team report" onclick="openAudit(${r.index})">` +
       `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>` +
-      `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie ? ` <span class="fr-tiebadge${r.tieWinner ? " fr-win" : ""}">${r.tieWinner ? "\u2713 closer" : "tie"}</span>` : ""}</td>` +
+      `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie ? ` <span class="fr-tiebadge${r.tieWinner ? " fr-win" : ""}">${r.tieWinner ? CHECK_ICON_SVG + " closer" : "tie"}</span>` : ""}</td>` +
       `<td class="fr-score" data-label="Score">${r.score}</td>` +
       `<td class="fr-guess" data-label="Guess">${r.guess == null ? "\u2014" : r.guess}</td>` +
       `<td class="fr-diff${r.tieWinner ? " fr-diff-win" : ""}" data-label="Diff *">${r.guess == null ? "\u2014" : diffSigned}</td>` +
@@ -1334,7 +1395,7 @@ function renderFinalResults() {
   h += "</tbody></table>";
   h +=
     '<details class="fr-details"><summary>Diff *</summary>' +
-    '<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Equal scores are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">\u2713 closer</span>, with the rest of that tied group marked <strong>tie</strong>). A team tied on BOTH score and Diff shares a place number outright.</p>' +
+    `<p class="fr-note">Listed lowest \u2192 highest score (reveal order). Equal scores are broken by whose final guess is closest to their actual score \u2014 the smallest <strong>Diff</strong> takes the higher place (marked <span style="color:var(--badge-green-fg);font-weight:700;">${CHECK_ICON_SVG} closer</span>, with the rest of that tied group marked <strong>tie</strong>). A team tied on BOTH score and Diff shares a place number outright.</p>` +
     "<p class=\"fr-note\">* <strong>Diff</strong> is minus Bonuses \u2014 Bonus Item (+5) and NJCB (+3) are stripped from a team's score before it's compared to their guess, for every team.</p>" +
     "</details>";
   return h;
@@ -1375,7 +1436,7 @@ function renderStandings(type) {
   } else list = base;
   const btns = [
     ["entry", "Entry"],
-    ["random", "🎲 Random"],
+    ["random", `${ICON_SHUFFLE}Shuffle`],
   ]
     .map(
       ([m, lbl]) =>
@@ -1443,7 +1504,7 @@ function getDisplayOrder() {
 function sortModeLabel() {
   switch (scoreSortMode) {
     case "random":
-      return "\uD83C\uDFB2 Random order \u2014 for mid-game reads";
+      return "Shuffled order \u2014 for mid-game reads";
     case "asc":
       return "\u2191 Lowest to highest \u2014 dramatic reveal";
     case "desc":
@@ -1563,14 +1624,14 @@ function renderLeft() {
   // typo can still happen, so the "Edit Locked Fields" setting lets the host reopen just these.
   const metaLocked = gs && !loadPrefs().unlockEventDetails;
   h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
-    <div class="field"><label>Date</label><div class="date-native-wrap"><input type="date" class="date-native" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"><span class="date-display-text${gameState.meta.date ? "" : " is-placeholder"}">${esc(isoToPretty(gameState.meta.date) || "Select date")}</span></div></div>
-    <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
-    <div class="field${hostInvalid ? " field-invalid" : ""}"><label>Host Name</label><input type="text" value="${esc(gameState.meta.hostName || "")}" placeholder="Who's hosting" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.hostName=this.value;autosave();renderLeft();">${hostInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
-    <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
-    <div class="field"><label>Craft Partner</label><input type="text" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
-    <div class="field"><label>Partner Town</label><input type="text" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
-    <div class="field full"><label>Bonus Item (+5)</label><input type="text" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
-    <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
+    <div class="field"><label>Date</label><div class="date-native-wrap"><input type="date" class="date-native" aria-label="Date" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"><span class="date-display-text${gameState.meta.date ? "" : " is-placeholder"}">${esc(isoToPretty(gameState.meta.date) || "Select date")}</span></div></div>
+    <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" aria-label="Quiz ID" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
+    <div class="field${hostInvalid ? " field-invalid" : ""}"><label>Host Name</label><input type="text" aria-label="Host Name" value="${esc(gameState.meta.hostName || "")}" placeholder="Who's hosting" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.hostName=this.value;autosave();renderLeft();">${hostInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
+    <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" aria-label="Location" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
+    <div class="field"><label>Craft Partner</label><input type="text" aria-label="Craft Partner" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
+    <div class="field"><label>Partner Town</label><input type="text" aria-label="Partner Town" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
+    <div class="field full"><label>Bonus Item (+5)</label><input type="text" aria-label="Bonus Item description" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
+    <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" aria-label="Restaurant staff names" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
   </div><p class="fr-note${metaLocked ? "" : " fr-note-pending"}">&#128274; Locked once scoring starts, so it can't drift mid-game. Typo? <a href="#" onclick="event.preventDefault();toggleUnlockEventDetails();">Unlock to fix it</a>.</p></div></div>`;
 
   // Flagged the whole game, not just before scoring starts — a guess left blank stops blocking
@@ -1587,7 +1648,7 @@ function renderLeft() {
     h += `<div class="team-entry${showAdj ? " has-adj" : ""}" data-ti="${i}">
       <div class="team-name-cell">
         <span class="team-number">Team ${i + 1}</span>
-        <input type="text" value="${esc(t.name)}" placeholder="Team name" onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
+        <input type="text" value="${esc(t.name)}" placeholder="Team name" aria-label="Team ${i + 1} name" onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
         <div class="team-checks">
           <label class="check-label item-check${t.bonusItem ? " is-checked" : ""}">
             <input type="checkbox" class="check-input" id="bi${i}" ${t.bonusItem ? "checked" : ""} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+5 Bonus
@@ -1597,7 +1658,7 @@ function renderLeft() {
           </label>
         </div>
       </div>
-      <div class="team-guess-cell${t.scoreGuess === "" || t.scoreGuess == null ? " guess-missing" : ""}"><label>Guess</label><input type="number" min="1" max="146" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-146" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class=\"guess-warn\">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
+      <div class="team-guess-cell${t.scoreGuess === "" || t.scoreGuess == null ? " guess-missing" : ""}"><label>Guess</label><input type="number" aria-label="Team ${i + 1} final score guess, 1 to 146" min="1" max="146" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-146" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class=\"guess-warn\">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
       ${
         showAdj
           ? `<div class="adj-wrap">
@@ -1943,8 +2004,8 @@ function renderWQ(ri, qi) {
     </div>
     <div class="q-header-right">
       ${qResultToggle ? renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length)) : ""}
-      <button class="q-sort-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195<span class="btn-label"> Sort</span></button>
-      <button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">\u21ba<span class="btn-label"> Reset</span></button>
+      <button class="q-sort-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button>
+      <button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>
     </div>
   </div>`;
 
@@ -2117,7 +2178,7 @@ function renderBQ(ri) {
   if (isCollapsedBQ) blockCls += " bq-collapsed";
   const bqStyle = BONUS_Q_STYLE[ri] || { emoji: "", cls: "" };
   const bqKey = "b" + ri;
-  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195<span class="btn-label"> Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">\u21ba<span class="btn-label"> Reset</span></button></div></div>${beer ? '<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>' : ""}<div class="q-body">`;
+  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">${bqStyle.emoji} Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>${beer ? '<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got all 4!</span></div>' : ""}<div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
     ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
@@ -2136,7 +2197,11 @@ function renderBQ(ri) {
     if (!submitted) ptsHtml = `<span class="bonus-pts pts-zero">\u2014</span>`;
     else if (c > 0)
       ptsHtml = `<span class="bonus-pts pts-pos">+${c * 5}</span>`;
-    else ptsHtml = `<span class="bonus-pts submitted-zero">\u2713 0</span>`;
+    // No tick before the 0. A checkmark reads as "correct" everywhere else in this app, and a
+    // team that got none of the four bonus questions right is the opposite of that — the mark
+    // was only ever there to say "submitted, not skipped", which .submitted-zero's own styling
+    // (and the row's .is-submitted state) already carry.
+    else ptsHtml = `<span class="bonus-pts submitted-zero">0</span>`;
     const choices = [0, 1, 2, 3, 4]
       .map((k) => {
         const isSel = submitted && c === k;
@@ -2197,7 +2262,7 @@ function renderSpecialWager(type) {
   // ignoring the toggle entirely, so turning the setting Off didn't hide it here like it does
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">${titleIcon} Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">\u2195<span class="btn-label"> Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">\u21BA<span class="btn-label"> Reset</span></button></div></div>`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">${titleIcon} Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">\u21BA<span class="btn-label"> Reset</span></button></div></div>`;
   if (beer)
     h += `<div class="beer-stripe"><span class="beer-stripe-icon">\uD83C\uDF7A</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
   h += `<div class="sw-body">`;
@@ -2228,8 +2293,8 @@ function renderSpecialWager(type) {
       <span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 tap to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
       ${selectHtml}
       <div class="ta-result">
-        <button class="result-btn ${d.correct === true ? "correct-sel" : ""}" onclick="${cSet}(${ti},true)" aria-label="Mark correct">\u2713${d.correct === true ? `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>` : ""}</button>
-        <button class="result-btn ${d.correct === false ? "incorrect-sel" : ""}" onclick="${cSet}(${ti},false)" aria-label="Mark incorrect">\u2717${d.correct === false ? `<span class="wager-badge bg-incorrect">${X_ICON_SVG}</span>` : ""}</button>
+        <button class="result-btn ${d.correct === true ? "correct-sel" : ""}" onclick="${cSet}(${ti},true)" aria-label="Mark correct">${CHECK_ICON_SVG}${d.correct === true ? `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>` : ""}</button>
+        <button class="result-btn ${d.correct === false ? "incorrect-sel" : ""}" onclick="${cSet}(${ti},false)" aria-label="Mark incorrect">${X_ICON_SVG}${d.correct === false ? `<span class="wager-badge bg-incorrect">${X_ICON_SVG}</span>` : ""}</button>
       </div>
       ${pts}
     </div>`;
@@ -2279,7 +2344,7 @@ function renderSB() {
   const sy = body.scrollTop;
   body.innerHTML = `<div class="sort-controls">
     <button class="sort-btn ${scoreSortMode === "entry" ? "active" : ""}" onclick="setSortMode('entry')">Entry</button>
-    <button class="sort-btn ${scoreSortMode === "random" ? "active" : ""}" onclick="setSortMode('random')">\uD83C\uDFB2 RAND</button>
+    <button class="sort-btn ${scoreSortMode === "random" ? "active" : ""}" onclick="setSortMode('random')">${ICON_SHUFFLE}Shuffle</button>
     <button class="sort-btn ${scoreSortMode === "asc" ? "active" : ""}" onclick="setSortMode('asc')">\u2191 Asc</button>
     <button class="sort-btn ${scoreSortMode === "desc" ? "active" : ""}" onclick="setSortMode('desc')">\u2193 Desc</button>
   </div><div class="sort-mode-label">${sortModeLabel()}</div>${buildScores()}`;
@@ -2812,7 +2877,7 @@ function copyCraftEligible(btn) {
   const blocked = craftEligibleBlocker();
   if (blocked) return alert(blocked);
   const text = craftEligibleNames().join("\n");
-  const ok = () => flashBtn(btn, "✓ Copied");
+  const ok = () => flashBtn(btn, CHECK_ICON_SVG + " Copied");
   const fail = () => {
     // execCommand is deprecated, but navigator.clipboard is undefined on a plain-http origin —
     // which is exactly what a laptop serving this over venue wifi looks like. Keep the fallback.
@@ -2836,14 +2901,17 @@ function copyCraftEligible(btn) {
 // Momentary label swap for confirmation — the app has no toast, and the button is already
 // under the pointer that pressed it. Restores from the original label, so a double-tap mid-
 // flash can't leave "✓ Copied" stuck there.
+// innerHTML, not textContent: the flash label carries the shared CHECK_ICON_SVG now, and a
+// textContent round-trip would both render the markup as literal text and strip any icon the
+// button itself already had when restoring it.
 function flashBtn(btn, label, ms) {
   if (!btn) return;
   if (btn.dataset.flashRestore == null)
-    btn.dataset.flashRestore = btn.textContent;
+    btn.dataset.flashRestore = btn.innerHTML;
   clearTimeout(+btn.dataset.flashTimer || 0);
-  btn.textContent = label;
+  btn.innerHTML = label;
   btn.dataset.flashTimer = setTimeout(() => {
-    btn.textContent = btn.dataset.flashRestore;
+    btn.innerHTML = btn.dataset.flashRestore;
     delete btn.dataset.flashRestore;
     delete btn.dataset.flashTimer;
   }, ms || 1500);
@@ -3023,12 +3091,12 @@ function renderCraftPrizeBlock() {
   let h = `<div class="cp-config">
       <div class="cp-field"><span class="cp-field-label">Exclude Top</span><div class="stepper">
         <button onclick="setExcludeTopN(${Math.max(1, excludeN - 1)})" ${drawing || excludeN <= 1 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Decrease excluded places">−</button>
-        <input type="number" class="sw-input" inputmode="numeric" min="1" max="${maxExcludeN}" value="${excludeN}" ${drawing ? "disabled" : ""} onchange="setExcludeTopN(this.value)">
+        <input type="number" class="sw-input" aria-label="Number of top places excluded from the draw" inputmode="numeric" min="1" max="${maxExcludeN}" value="${excludeN}" ${drawing ? "disabled" : ""} onchange="setExcludeTopN(this.value)">
         <button onclick="setExcludeTopN(${Math.min(maxExcludeN, excludeN + 1)})" ${drawing || excludeN >= maxExcludeN ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Increase excluded places">+</button>
       </div></div>
       <div class="cp-field"><span class="cp-field-label">Drumroll (sec)</span><div class="stepper">
         <button onclick="setCraftDrawSeconds(${Math.max(3, secs - 1)})" ${drawing || secs <= 3 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Decrease drumroll seconds">−</button>
-        <input type="number" class="sw-input" inputmode="numeric" min="3" max="30" value="${secs}" ${drawing ? "disabled" : ""} onchange="setCraftDrawSeconds(this.value)">
+        <input type="number" class="sw-input" aria-label="Drumroll length in seconds" inputmode="numeric" min="3" max="30" value="${secs}" ${drawing ? "disabled" : ""} onchange="setCraftDrawSeconds(this.value)">
         <button onclick="setCraftDrawSeconds(${Math.min(30, secs + 1)})" ${drawing || secs >= 30 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Increase drumroll seconds">+</button>
       </div></div>
     </div>
@@ -3083,7 +3151,7 @@ function renderCraftPrizeBlock() {
       }
       ${eligibleBtn}
       <label class="cp-script-label">Winner Announcement Script</label>
-      <textarea class="cp-script" onchange="updateCraftScript(this.value)">${esc(winner.script)}</textarea>`;
+      <textarea class="cp-script" aria-label="Winner announcement script" onchange="updateCraftScript(this.value)">${esc(winner.script)}</textarea>`;
   }
   return h;
 }
@@ -3167,6 +3235,14 @@ function cycleW(ri, qi, ti, w) {
     a.correct = true;
     q[ti] = a;
   }
+  // Say what just happened. The row updates visually, but focus never moves, so without this a
+  // screen-reader user gets nothing back from the tap that just scored a team.
+  const now = q[ti];
+  announce(
+    !now
+      ? `${teamLabel(ti)}, round ${ri + 1} question ${qi + 1} cleared`
+      : `${teamLabel(ti)}, round ${ri + 1} question ${qi + 1}, wager ${now.wager}, ${now.correct ? "correct, plus " + now.wager : "incorrect, 0"} points. Total ${grandTotal(ti)}`,
+  );
   const wasBeer = beerRoundToasted.has(ri + "-" + qi);
   lastAction = { ri, qi, ti };
   gameState.gameStarted = true;
@@ -3184,6 +3260,9 @@ function cycleW(ri, qi, ti, w) {
 }
 function markAll(ri, qi, correct) {
   if (!canScore()) return;
+  announce(
+    `All wagered teams marked ${correct ? "correct" : "incorrect"} for round ${ri + 1} question ${qi + 1}`,
+  );
   const wasBeer = beerRoundToasted.has(ri + "-" + qi);
   gameState.teams.forEach((_, ti) => {
     const a = gameState.rounds[ri].questions[qi][ti];
@@ -3276,8 +3355,12 @@ function setB(ri, ti, v) {
   const cur = gameState.rounds[ri].bonus[ti];
   if (cur === v) {
     delete gameState.rounds[ri].bonus[ti];
+    announce(`${teamLabel(ti)}, round ${ri + 1} bonus cleared`);
   } else {
     gameState.rounds[ri].bonus[ti] = v;
+    announce(
+      `${teamLabel(ti)}, round ${ri + 1} bonus, ${v} of 4 correct, plus ${v * 5} points`,
+    );
   }
   gameState.gameStarted = true;
   autosave();

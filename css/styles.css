@@ -7,7 +7,21 @@
 
 :root,[data-theme="hc-dark"]{
   --bg-primary:#000;--bg-card:#0d0d0d;--bg-card-alt:#141414;--bg-input:#1c1c1c;--bg-hover:#242424;
-  --border:#2e2e2e;--border-light:#404040;--border-strong:#5c5c5c;--text-primary:#fff;--text-secondary:#ccc;--text-muted:#aeaeae;
+  --border:#2e2e2e;--border-light:#404040;--border-strong:#5c5c5c;
+  /* The boundary of anything INTERACTIVE — inputs, buttons, wager/bonus/result chips, the team
+     checkboxes. WCAG 1.4.11 wants 3:1 for "visual information required to identify user interface
+     components", and for these the boundary IS that information: an unselected wager button is
+     --btn-used-bg on a --bg-card-alt row, i.e. the same colour as what it sits on, so nothing but
+     its edge says a control is there at all. --border/--border-light manage 1.1-2.0:1 against the
+     surfaces they are drawn on, so every one of them fell short.
+     #6f6f6f is the lightest neutral that still clears 3:1 against every dark surface a control
+     can sit on, from --bg-primary (#000, 4.18:1) through --bg-hover (#242424, 3.09:1) and the
+     Beer Round wash (3.08:1) — chosen at the boundary rather than brighter so controls gain a
+     legible edge without the UI turning into a wireframe.
+     Deliberately NOT applied to decorative container edges (.section, .aud-round, table rules,
+     the audit modal): those are not UI components, 1.4.11 does not cover them, and pushing them
+     all this bright would change the look of the app far more than it would help anyone. */
+  --border-control:#6f6f6f;--text-primary:#fff;--text-secondary:#ccc;--text-muted:#aeaeae;
   --accent-cyan:#00ffff;--accent-magenta:#ff44aa;--accent-gold:#ffee00;--accent-green:#44ff44;
   --accent-red:#ff4444;--accent-orange:#ffaa00;--shadow:0 4px 24px rgba(0,0,0,.8);--shadow-lg:0 16px 48px rgba(0,0,0,.85),0 2px 10px rgba(0,0,0,.7);
   --row-stripe:rgba(255,255,255,.055);--radius:8px;--radius-lg:12px;
@@ -48,7 +62,13 @@
      (bg-card/bg-card-alt/bg-input) — kept separate from --accent-* so borders, focus rings,
      and button fills can stay at full brand saturation without dragging text below AAA. */
   --txt-cyan:#00ffff;--txt-magenta:#ff72d8;--txt-red:#ff8282;--txt-orange:#ffaa00;
-  --accent-cyan-solid:#00ffff;--danger-solid-bg:#a52c2c;
+  /* #a52c2c was too dark to read as a control against the surfaces it sits on: the Reset button
+     and the incorrect badge are solid fills, and a fill is what identifies them, but it managed
+     only 2.4-2.6:1 against --bg-input/--bg-card-alt (WCAG 1.4.11 wants 3:1). #eb0025 is the most
+     saturated red at the same hue that keeps white text on it at AA (4.61:1) while clearing 3:1
+     on every dark surface (3.37-4.00:1) — so it fixes the boundary problem and is 52% more
+     chromatic into the bargain. It also lines light and dark up: light mode already uses #eb0000. */
+  --accent-cyan-solid:#00ffff;--danger-solid-bg:#eb0025;
   /* Beer Round highlight: a solid dark amber-brown (not a see-through gold rgba — this is a
      literal container background, not a layer stacked over other content) so the whole
      question/wager block reads as "golden" at a glance instead of just its border. Chosen
@@ -83,8 +103,18 @@
      Dark mode is deliberately not part of this — it has the opposite problem (light ink on black
      has lightness to spare) and its accents are already at full brand saturation. */
   --bg-primary:#f5f5f5;--bg-card:#fff;--bg-card-alt:#f0f0f0;--bg-input:#e8e8e8;--bg-hover:#dcdcdc;
-  --border:#b0b0b0;--border-light:#949494;--border-strong:#8a8a8a;--text-primary:#000;--text-secondary:#2a2a2a;--text-muted:#454545;
-  --accent-cyan:#006688;--accent-magenta:#bb0055;--accent-gold:#e2b000;--accent-green:#10a710;
+  --border:#b0b0b0;--border-light:#949494;--border-strong:#8a8a8a;
+  /* Light-theme counterpart — see the note in the dark block. #7b7b7b is the darkest neutral that
+     clears 3:1 on every light surface a control sits on, from --bg-card (#fff, 4.23:1) down to
+     --bg-hover (#dcdcdc, 3.09:1). */
+  --border-control:#7b7b7b;--text-primary:#000;--text-secondary:#2a2a2a;--text-muted:#454545;
+  /* #10a710 read at only 2.21:1 against --btn-correct-bg, the mint fill of the very button it
+     outlines, so the selected state's own boundary was the least visible thing about it (WCAG
+     1.4.11 covers component STATES, not just components). #008b02 clears 3:1 there (3.08) and
+     improves every neutral surface too (3.93 on --bg-card-alt, 4.47 on white), for 11% less
+     chroma at an unchanged hue. --accent-red needs no such move: it already sits at 3.05:1
+     against its own --btn-incorrect-bg fill. */
+  --accent-cyan:#006688;--accent-magenta:#bb0055;--accent-gold:#e2b000;--accent-green:#008b02;
   --accent-red:#cc0000;--accent-orange:#c45900;--shadow:0 4px 24px rgba(0,0,0,.12);--shadow-lg:0 16px 48px rgba(0,0,0,.28),0 2px 10px rgba(0,0,0,.18);
   --row-stripe:rgba(0,0,0,.048);
   --btn-idle-bg:#e8e8e8;--btn-correct-bg:#54f377;--btn-incorrect-bg:#f7a5a6;--btn-used-bg:#f0f0f0;
@@ -124,7 +154,12 @@
   --btn-correct-bg:#0d1f2e;--btn-incorrect-bg:#2e1f0d;
   --pts-pos-bg:rgba(51,153,255,.2);--pts-pos-border:rgba(51,153,255,.6);--pts-pos-fg:#8fc6ff;
   --pts-neg-bg:rgba(255,136,0,.2);--pts-neg-border:rgba(255,136,0,.6);--pts-neg-fg:#ffc182;
-  --badge-green-fg:#55bbff;--txt-red:#ff9008;--danger-solid-bg:#884900;
+  --badge-green-fg:#55bbff;--txt-red:#ff9008;
+  /* Same fix as the base dark theme's --danger-solid-bg: #884900 was a solid fill that read at
+     only 2.2-2.4:1 against the surfaces it sits on, so nothing identified the Reset button or the
+     incorrect badge as a control. #b16000 is the most saturated orange at that hue keeping white
+     on it at AA (4.62:1) while clearing 3:1 on every dark surface (3.36-3.99:1). */
+  --danger-solid-bg:#b16000;
 }
 [data-theme="hc-light"][data-cb="1"]{
   --accent-green:#0067c5;--accent-red:#cc6600;
@@ -194,6 +229,10 @@
    default transparent/white canvas showing through, which read as "the header goes transparent
    while scrolling" in Team Report on mobile. Matching body's own --bg-primary here closes that
    gap so an overscroll bounce reveals more of the same dark background instead. */
+/* The standard visually-hidden recipe: clipped to a 1px box rather than display:none or
+   visibility:hidden, both of which take an element out of the accessibility tree along with the
+   viewport — which would defeat the point of a live region. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 html{font-size:16px;max-width:100%;background:var(--bg-primary)}
 /* touch-action:manipulation app-wide: without it, two rapid taps on rapidly re-rendered
    controls (e.g. the standings Random button, which replaces its own DOM node on every tap)
@@ -227,14 +266,14 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .logo{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--accent-cyan);text-transform:uppercase;letter-spacing:2px}
 .logo span{color:var(--accent-magenta)}
 .toolbar{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
-.toolbar>button,.btn{font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
+.toolbar>button,.btn{font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:5px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .toolbar>button:hover,.btn:hover{background:var(--bg-hover);border-color:var(--border-light)}
 .btn-accent{background:var(--accent-cyan-solid)!important;color:var(--on-accent-cyan)!important;border-color:var(--accent-cyan-solid)!important;font-weight:700!important}
 .btn-accent:hover{opacity:.85}
 .btn-danger{border-color:var(--accent-red)!important;color:var(--txt-red)!important}
 .btn-danger:hover{background:rgba(255,68,68,.13)!important}
 
-.settings-toggle-btn{font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
+.settings-toggle-btn{font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:5px 12px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
 .settings-toggle-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .settings-toggle-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 
@@ -339,7 +378,7 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .settings-advanced-group{grid-column:1/-1;display:none;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
 .settings-advanced-group.open{display:grid}
 
-.settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
+.settings-btn{font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
 .settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 /* Theme toggle's sun/moon (THEME_ICON_SUN/THEME_ICON_MOON, app.js) — see the const comment there
@@ -419,7 +458,7 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
   .settings-row{flex-wrap:wrap}
   .settings-controls{flex-wrap:wrap;justify-content:flex-end}
 }
-.theme-select{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
+.theme-select{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
 .theme-select:hover{background-color:var(--bg-hover)}
 .theme-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,.13)}
 .theme-select option{background:var(--bg-card);color:var(--text-primary)}
@@ -436,7 +475,7 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    escapes that clipping entirely; the JS also flips the menu above the button instead of
    below when opening downward would run past the bottom of the viewport itself. */
 .cv-select{position:relative;display:inline-block}
-.cv-select-btn{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:var(--transition)}
+.cv-select-btn{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:var(--transition)}
 .cv-select-btn:hover{background:var(--bg-hover)}
 .cv-select-btn:focus-visible{outline:2px solid var(--accent-cyan-solid);outline-offset:2px}
 .cv-select-arrow{font-size:.6rem;color:var(--text-muted);transition:transform .15s}
@@ -552,6 +591,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    need a different size (.wager-badge.bg-incorrect, .remove-team button) target `svg` directly
    there, which is more specific than this class and wins. */
 .icon-mark{width:1em;height:1em;display:inline-block;vertical-align:-.15em;flex-shrink:0}
+/* Sort / Reset / Refresh / Shuffle (app.js ICON_* constants). Separate from .icon-mark because
+   those are two-or-three-stroke marks at stroke-width 4 in a 24-unit box, while these are Lucide
+   line icons that read correctly at 2.25 — heavier than Lucide's own 2 so they hold up at the
+   .7rem these buttons run at, where a 2-unit stroke renders under a physical pixel and goes grey.
+   Stroke-only + currentColor, so each icon inherits the contrast-audited text color of whatever
+   button it sits in, in every theme and color-vision mode. */
+.icon-ui{width:1em;height:1em;display:block;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round}
 .icon-mark polyline{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
 .icon-mark line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
 
@@ -590,7 +636,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qt-sign{opacity:0}
 .qtimer-display.qt-neg .qt-sign{opacity:1}
 .qtimer-btns{display:flex;gap:6px;flex-shrink:0}
-.qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
+.qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-control);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
 .qtimer-btn:hover{background:var(--bg-hover)}
 .qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
 /* Icon-only (play/pause, no "Start"/"Pause"/"Resume" label) — same fixed square treatment as
@@ -640,7 +686,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    centering the line box (align-items:center) still leaves the visible glyph looking low —
    asymmetric bottom padding (vs even 0 all around) shifts the centered content up ~3px to
    compensate for that glyph-specific baseline skew, without touching the button's own size. */
-.qtimer-btn.qtimer-reset{width:2rem;height:2rem;min-height:2rem;padding:0 0 6px;display:inline-flex;align-items:center;justify-content:center;font-size:1.15rem;line-height:1}
+/* padding:0, not the 0 0 6px this carried while it held a ↺ text glyph. That bottom padding was
+   a nudge to counteract where the glyph's own font metrics parked it inside the line box; the SVG
+   that replaced it is drawn centred in its viewBox, so the same nudge would now push a centred
+   icon off-centre instead of correcting one. */
+.qtimer-btn.qtimer-reset{width:2rem;height:2rem;min-height:2rem;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:1.15rem;line-height:1}
+.qtimer-btn.qtimer-reset .icon-ui{width:1.1em;height:1.1em}
 .qtimer-btn.qtimer-reset-active{background:var(--danger-solid-bg);border:2px solid var(--bg-primary);color:#fff}
 .qtimer-btn.qtimer-reset-active:hover{filter:brightness(1.15)}
 
@@ -874,7 +925,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sidebar-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;overflow-anchor:none}
 
 .sort-controls{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
-.sort-btn{flex:1;min-width:0;font-family:var(--font-display);font-size:.86rem;font-weight:700;padding:8px 4px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;touch-action:manipulation}
+.sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.3em;flex:1;min-width:0;font-family:var(--font-display);font-size:.86rem;font-weight:700;padding:8px 4px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;touch-action:manipulation}
 .sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .sort-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid);box-shadow:0 0 6px rgba(0,255,255,.3)}
 .sort-mode-label{padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -960,7 +1011,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .section.round-complete>.section-header{border-left-color:var(--accent-green)}
 
 label{display:block;font-size:.72rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-input[type="text"],input[type="number"],input[type="date"]{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;outline:none;transition:var(--transition)}
+input[type="text"],input[type="number"],input[type="date"]{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;outline:none;transition:var(--transition)}
 input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,.13)}
 /* color-scheme tells the browser which native-control palette to use for the date input's
    own calendar-picker icon and popup (so the icon isn't a near-invisible dark glyph on our
@@ -1023,7 +1074,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .team-number{font-family:var(--font-display);font-size:.66rem;color:var(--text-muted);letter-spacing:1px}
 .team-name-cell>input[type="text"]{width:100%}
 .team-checks{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px}
-.check-label{position:relative;display:inline-flex;align-items:center;gap:7px;font-size:.85rem;font-weight:700;cursor:pointer;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg-input);white-space:nowrap;transition:var(--transition);letter-spacing:.3px;margin-bottom:0!important;color:var(--text-muted)}
+.check-label{position:relative;display:inline-flex;align-items:center;gap:7px;font-size:.85rem;font-weight:700;cursor:pointer;padding:6px 10px;border-radius:6px;border:1px solid var(--border-control);background:var(--bg-input);white-space:nowrap;transition:var(--transition);letter-spacing:.3px;margin-bottom:0!important;color:var(--text-muted)}
 /* Native checkbox is kept for real keyboard/screen-reader semantics but rendered invisible —
    accent-color can't guarantee the checkmark glyph's own contrast (browser-chosen, unverifiable),
    so the visible box + checkmark below is fully custom-drawn and contrast-audited instead. */
@@ -1053,11 +1104,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* PER-TEAM ADJ */
 .adj-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;align-self:center}
 .remove-team{align-self:center}
-.adj-chip{font-family:var(--font-display);font-size:.72rem;font-weight:700;padding:5px 7px;border-radius:6px;border:1px solid var(--border);background:var(--bg-input);color:var(--text-muted);cursor:pointer;transition:var(--transition);white-space:nowrap;min-width:34px;text-align:center;line-height:1}
+.adj-chip{font-family:var(--font-display);font-size:.72rem;font-weight:700;padding:5px 7px;border-radius:6px;border:1px solid var(--border-control);background:var(--bg-input);color:var(--text-muted);cursor:pointer;transition:var(--transition);white-space:nowrap;min-width:34px;text-align:center;line-height:1}
 .adj-chip:hover{background:var(--bg-hover);border-color:var(--border-light);color:var(--text-primary)}
 .adj-chip.adj-active{color:var(--txt-orange);border-color:var(--accent-orange);background:rgba(255,170,0,.1)}
 .adj-stepper{display:flex;align-items:center;flex-shrink:0}
-.adj-stepper button{width:1.5rem;height:1.5rem;border:1px solid var(--border-light);background:var(--bg-input);color:var(--text-primary);font-size:.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.adj-stepper button{width:1.5rem;height:1.5rem;border:1px solid var(--border-control);background:var(--bg-input);color:var(--text-primary);font-size:.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .adj-stepper button:first-child{border-radius:5px 0 0 5px}
 .adj-stepper button:last-child{border-radius:0 5px 5px 0}
 .adj-stepper button:hover{background:var(--bg-hover)}
@@ -1120,9 +1171,18 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    for solid-fill buttons (e.g. .btn-accent, .mark-all-btn.active before this) — those are
    already verified >=4.5:1 in every theme × color-vision combination, so reusing them here
    keeps this AA-compliant for free instead of introducing new colors to re-verify. */
-.q-sort-btn,.q-reset-btn{font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation;display:inline-flex;align-items:center;justify-content:center}
+/* inline-flex + center on BOTH axes. These used to be plain inline buttons holding a glyph and
+   a label as inline content, so the glyph's vertical position came from its own font metrics and
+   the label's from the line box — which is what left the icon riding high next to its own text.
+   As flex items both are centred on the cross axis by align-items, and the pair is centred on the
+   main axis by justify-content, so the icon is centred horizontally and vertically by layout
+   rather than by whatever the glyph's metrics happened to be. gap replaces the leading space that
+   used to be baked into the label text. */
+.q-sort-btn,.q-reset-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation;display:inline-flex;align-items:center;justify-content:center}
 .q-sort-btn{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .q-sort-btn:hover{filter:brightness(1.1)}
+/* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
+.q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
 .q-sort-btn.active{box-shadow:0 0 0 2px var(--on-accent-cyan) inset}
 .q-reset-btn{background:var(--danger-solid-bg);color:#fff;border-color:var(--danger-solid-bg)}
 .q-reset-btn:hover{filter:brightness(1.15)}
@@ -1195,7 +1255,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 
 /* WAGER BUTTONS */
 .ta-wagers{display:flex;gap:.2rem;flex-shrink:0;margin-left:auto}
-.wager-btn{min-width:2.6rem;min-height:2.6rem;border:1px solid var(--border-light);border-radius:6px;background:var(--btn-idle-bg);color:var(--text-primary);font-family:var(--font-display);font-size:1.1rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation}
+.wager-btn{min-width:2.6rem;min-height:2.6rem;border:1px solid var(--border-control);border-radius:6px;background:var(--btn-idle-bg);color:var(--text-primary);font-family:var(--font-display);font-size:1.1rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation}
 .wager-btn:hover:not(.used):not(.correct):not(.incorrect){background:var(--bg-hover);border-color:var(--accent-cyan)}
 .wager-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
 .wager-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red)}
@@ -1244,7 +1304,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 
 /* RESULT BUTTONS */
 .ta-result{display:flex;gap:.2rem;flex-shrink:0}
-.result-btn{min-width:2.6rem;min-height:2.6rem;border:1px solid var(--border);border-radius:6px;background:var(--btn-idle-bg);font-size:1.1rem;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation;color:var(--text-secondary)}
+.result-btn{min-width:2.6rem;min-height:2.6rem;border:1px solid var(--border-control);border-radius:6px;background:var(--btn-idle-bg);font-size:1.1rem;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation;color:var(--text-secondary)}
 .result-btn:hover:not(.correct-sel):not(.incorrect-sel){background:var(--bg-hover)}
 /* Same fill tokens as .wager-btn.correct/.incorrect (not a neutral --bg-card) so a selected
    ✓/✕ reads consistently with the colored wager buttons elsewhere in the same round instead of
@@ -1271,7 +1331,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* Banter, sort buttons, and the table are all inside this wrapper so they collapse together. */
 .standings-collapsible{margin-top:8px}
 .standings-sort-btns{display:flex;gap:4px;align-items:center;margin-bottom:6px}
-.standings-sort-btn{font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
+.standings-sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.3em;font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .standings-sort-btn.active{background:var(--badge-gold-fg);color:var(--on-badge);border-color:var(--badge-gold-fg)}
 .standings-table{width:100%;border-collapse:collapse;font-size:.86rem}
@@ -1306,7 +1366,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .bonus-row:nth-child(even){background:var(--row-stripe)}
 .bonus-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
 .stepper{display:flex;align-items:center;flex-shrink:0}
-.stepper button{width:1.9rem;height:1.9rem;border:1px solid var(--border-light);background:var(--bg-card);color:var(--text-secondary);font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:var(--transition)}
+.stepper button{width:1.9rem;height:1.9rem;border:1px solid var(--border-control);background:var(--bg-card);color:var(--text-secondary);font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:var(--transition)}
 .stepper button:first-child{border-radius:6px 0 0 6px}
 .stepper button:last-child{border-radius:0 6px 6px 0}
 .stepper button:hover{background:var(--bg-hover);color:var(--text-primary)}
@@ -1353,7 +1413,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .standings-row:hover .ta-name-clickable::after,.final-table tbody tr:hover .ta-name-clickable::after{opacity:1}
 
 /* MANUAL ENTRY for special wagers (stepper + type) */
-.stepper input.sw-input{width:2.8rem;height:1.9rem;text-align:center;background:var(--bg-card);border:none;border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);border-radius:0;color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0;outline:none;box-shadow:none;-moz-appearance:textfield;appearance:textfield}
+.stepper input.sw-input{width:2.8rem;height:1.9rem;text-align:center;background:var(--bg-card);border:none;border-top:1px solid var(--border-control);border-bottom:1px solid var(--border-control);border-radius:0;color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0;outline:none;box-shadow:none;-moz-appearance:textfield;appearance:textfield}
 .stepper input.sw-input::-webkit-outer-spin-button,.stepper input.sw-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .stepper input.sw-input::placeholder{color:var(--text-muted);font-weight:400}
 .stepper input.sw-input:focus{background:var(--bg-hover);box-shadow:none}
@@ -1364,7 +1424,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    panel's "Exclude Top"/"Drumroll" fields above. text-align-last centers the CLOSED box's
    selected value — the only part of a native <select> that's reliably style-able; the open
    option list's own alignment is left to the browser/OS. */
-.sw-select{height:1.9rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0 4px;text-align:center;text-align-last:center;cursor:pointer;touch-action:manipulation;flex-shrink:0}
+.sw-select{height:1.9rem;border:1px solid var(--border-control);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-display);font-weight:700;font-size:1rem;padding:0 4px;text-align:center;text-align-last:center;cursor:pointer;touch-action:manipulation;flex-shrink:0}
 .sw-select:hover{background:var(--bg-hover)}
 .sw-select:focus{background:var(--bg-hover);outline:2px solid var(--accent-cyan-solid);outline-offset:1px}
 
@@ -1373,12 +1433,12 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .bonus-pts.submitted-zero{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border);font-size:1.05rem;font-weight:800}
 .bonus-zero{font-family:var(--font-display);font-size:.72rem;font-weight:700;padding:0 8px;height:1.9rem;border:1px solid var(--accent-green);border-radius:6px;background:rgba(68,255,68,.08);color:var(--badge-green-fg);cursor:pointer;transition:var(--transition);white-space:nowrap;flex-shrink:0;touch-action:manipulation}
 .bonus-zero:hover{background:rgba(68,255,68,.18)}
-.bonus-clear{width:1.9rem;height:1.9rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-input);color:var(--text-muted);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;touch-action:manipulation}
+.bonus-clear{width:1.9rem;height:1.9rem;border:1px solid var(--border-control);border-radius:6px;background:var(--bg-input);color:var(--text-muted);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;touch-action:manipulation}
 .bonus-clear:hover{background:rgba(255,68,68,.12);color:var(--txt-red);border-color:var(--accent-red)}
 
 /* BONUS ONE-CLICK CHOICE (R1 & R3) — one tap sets 0-4 correct, tap again to unselect */
 .bonus-choice{display:flex;gap:.18rem;flex-shrink:0}
-.bonus-choice-btn{width:2.2rem;height:2.2rem;border:1px solid var(--border-light);border-radius:6px;background:var(--bg-card);color:var(--text-secondary);font-family:var(--font-display);font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:var(--transition);position:relative}
+.bonus-choice-btn{width:2.2rem;height:2.2rem;border:1px solid var(--border-control);border-radius:6px;background:var(--bg-card);color:var(--text-secondary);font-family:var(--font-display);font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:var(--transition);position:relative}
 .bonus-choice-btn:hover:not(.correct):not(.incorrect){background:var(--bg-hover);color:var(--text-primary)}
 .bonus-choice-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green);color:var(--text-primary)}
 .bonus-choice-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red);color:var(--text-primary)}
@@ -1481,7 +1541,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .cp-clear-label{display:inline}
 }
 .cp-script-label{display:block;font-size:.66rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
-.cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
+.cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
 
 /* TEAM REPORT MODAL (formerly "Score Audit") */
 /* Bottom padding includes the safe-area inset so the scrollable content at the very bottom
@@ -1526,11 +1586,29 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    own — red reads as that affordance the way a plain neutral-gray X didn't as clearly. */
 .audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--accent-red);background:var(--bg-input);color:var(--txt-red);border-radius:var(--radius);padding:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
 .audit-close:hover{background:rgba(255,68,68,.15)}
-.audit-body{padding:12px 14px 18px}
+/* container-type/name so .aud-columns below can ask how wide a column would actually be in em
+   — i.e. relative to the current Settings > Size font — rather than only how wide the viewport
+   is. The modal's own width is capped at 680px, so as the font grows the columns stay the same
+   number of pixels while everything inside them needs more, and the split has to give way. */
+.audit-body{padding:12px 14px 18px;container-type:inline-size;container-name:audit}
 /* Mobile default: the two columns' markup is just two sequential <div>s (no grid), so column 1
    (Extras through Halftime Bonus) and column 2 (Round 3 through Final Wager) simply stack in
    that same order — visually identical to before columns existed. */
-@media(min-width:769px){
+/* A container query on .audit-body, not a viewport media query. The split needs BOTH things to
+   be true: a desktop-width window, and columns wide enough for a round's rows at the current
+   Settings > Size font. The old @media(min-width:769px) only tested the first, so from a 16px
+   root upward each row's result text ("correct", "incorrect", "4 of 4 correct") no longer fit its
+   half and wrapped onto a second line, leaving rows of uneven height down the column — worse the
+   larger the font, and at the top of the size range every single row was doing it. The modal is
+   capped at 680px, so the columns cannot grow to meet the text; the split has to give way
+   instead. The threshold is in em, so it tracks the size setting automatically: 42em is satisfied
+   by the 678px container up to and including the default 15px root (it flips at ~43.5em there),
+   and stops being satisfied from 16px up (flips at ~41em) — which is exactly the size the text
+   started wrapping at. Larger still and the breakdown stays one full-width column, where every
+   row fits on one line again.
+   A container query also implies a min-width, so it keeps the "desktop only" half of the old
+   condition without needing to say it twice. */
+@container audit (min-width:42em){
   /* Desktop only: lay the two halves of the round-by-round breakdown side by side instead of
      one long scrolling column — Grand Total and everything after it (Guess/Diff, overall stats,
      the closing note) live outside .aud-columns entirely, so they stay full-width under both. */
@@ -1552,13 +1630,23 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
      all but disappears. One step up reads as present without competing with the boxes. */
   .aud-columns::before{content:"";position:absolute;top:2px;bottom:2px;left:50%;width:1px;margin-left:-.5px;pointer-events:none;background:linear-gradient(to bottom,transparent 0,var(--border-light) 24px,var(--border-light) calc(100% - 24px),transparent 100%)}
 }
+}
 .aud-round{margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 .aud-round-h{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-card-alt);font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .aud-line{display:flex;align-items:center;gap:8px;padding:6px 12px;border-top:1px solid var(--border);font-size:.85rem}
 .aud-line:nth-child(even){background:var(--row-stripe)}
 .aud-q{font-family:var(--font-display);font-weight:700;width:2.3rem;flex-shrink:0;color:var(--text-secondary)}
 .aud-wager{color:var(--text-secondary);font-size:.78rem;width:5.2rem;flex-shrink:0}
-.aud-res{flex:1;font-size:.8rem;font-weight:600;min-width:0}
+/* nowrap: "correct" / "incorrect" / "4 of 4 correct" is one atomic result, and breaking it
+   across two lines made a round's rows different heights and the column ragged. The room to keep
+   it on one line comes from .aud-columns collapsing to a single column once the font is large
+   enough that two won't fit (see the container query below); this just makes sure the text never
+   breaks in the meantime. */
+.aud-res{flex:1;font-size:.8rem;font-weight:600;min-width:0;white-space:nowrap}
+/* The wager cell is the one fixed-width thing here that can afford to give: it holds at most
+   "wager 12". Letting it shrink below its 5.2rem when the row is tight buys .aud-res the space
+   it needs before anything has to overflow. */
+.aud-wager{min-width:0}
 .aud-res.aud-correct{color:var(--badge-green-fg)}
 .aud-res.aud-wrong{color:var(--txt-red)}
 .aud-res.aud-none,.aud-res.aud-pending{color:var(--text-muted);font-weight:400;font-style:italic}
@@ -1904,9 +1992,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .banter-cat{font-family:var(--font-display);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);display:block;margin-bottom:3px}
 .banter-text{font-size:.9rem;line-height:1.35;color:var(--text-primary);min-height:3.6rem;display:flex;align-items:center}
 .banter-sm .banter-text{min-height:2.45rem;font-size:.85rem}
-.banter-refresh{flex-shrink:0;width:2.6rem;height:2.6rem;min-width:2.6rem;border:1px solid var(--border-light);border-radius:8px;background:var(--bg-input);color:var(--txt-cyan);font-size:1.2rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;transition:var(--transition)}
+.banter-refresh{flex-shrink:0;width:2.6rem;height:2.6rem;min-width:2.6rem;border:1px solid var(--border-control);border-radius:8px;background:var(--bg-input);color:var(--txt-cyan);font-size:1.2rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;transition:var(--transition)}
 .banter-refresh:hover{background:var(--bg-hover);border-color:var(--accent-cyan)}
 .banter-refresh:active{transform:scale(.94)}
+.banter-refresh .icon-ui{width:1.15em;height:1.15em}
 .banter-group{margin-bottom:6px}
 .banter-group:last-child{margin-bottom:0}
 
@@ -1929,7 +2018,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .round-wager-label{font-size:.82rem;padding:3px 10px;margin-top:5px}
 
 /* session-info: restaurant staff free-text box */
-.meta-textarea{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;line-height:1.35;outline:none;resize:vertical;min-height:2.6rem;transition:var(--transition)}
+.meta-textarea{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;line-height:1.35;outline:none;resize:vertical;min-height:2.6rem;transition:var(--transition)}
 .meta-textarea:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px rgba(0,255,255,.13)}
 
 /* settings: version label + Claude disclaimer */

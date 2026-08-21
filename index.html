@@ -20,7 +20,7 @@
 
 <div class="header">
   <div class="header-top">
-    <div class="logo">Score <span>Keeper</span></div>
+    <h1 class="logo">Score <span>Keeper</span></h1>
     <div class="toolbar">
       <button onclick="saveToFile()">💾 Save</button>
       <button onclick="triggerLoadFile()">📂 Load</button>
@@ -486,8 +486,16 @@
   </div>
 </div>
 
+<!-- Present from first paint, empty: an aria-live region has to be in the accessibility tree
+     before text lands in it, or the first announcement is dropped. announce() in app.js writes
+     here. .sr-only keeps it off screen without display:none, which would hide it from readers
+     too. -->
+<div id="srAnnouncer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 <div class="app-layout">
-  <div class="col-left" id="mainContent"></div>
+  <!-- role="main" rather than a <main> element: .col-left carries layout/scroll styles keyed to
+       its class, and this leaves that untouched while still giving screen-reader users the
+       landmark to jump to. -->
+  <div class="col-left" id="mainContent" role="main"></div>
   <div class="drag-handle" id="dragHandle"></div>
   <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
   <div class="mobile-bottom-dock" id="mobileBottomDock">
@@ -501,7 +509,7 @@
       <button type="button" class="qtimer-btn qtimer-step" onclick="bumpQTimer(30)" aria-label="Add 30 seconds">+30</button>
       <div class="qtimer-btns">
         <button type="button" class="qtimer-btn qtimer-toggle" onclick="toggleQTimer()" aria-label="Start timer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg></button>
-        <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled aria-label="Reset timer">↺</button>
+        <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled aria-label="Reset timer"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg></button>
       </div>
     </div>
   </div>
@@ -518,7 +526,7 @@
       <button type="button" class="qtimer-btn qtimer-step" onclick="bumpQTimer(30)" aria-label="Add 30 seconds">+30s</button>
       <div class="qtimer-btns">
         <button type="button" class="qtimer-btn qtimer-toggle" onclick="toggleQTimer()" aria-label="Start timer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg></button>
-        <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled aria-label="Reset timer">↺</button>
+        <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled aria-label="Reset timer"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg></button>
       </div>
     </div>
   </div>
