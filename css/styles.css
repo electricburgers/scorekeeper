@@ -515,10 +515,16 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Advanced Settings > Timer Widget: Hidden. Set on <html> by applyPrefs() in app.js. Hides both
    copies of the widget (desktop and mobile) with one rule rather than duplicating it per class. */
 [data-timer-hidden] .qtimer{display:none}
-/* No border at rest — idle is just the plain padded/rounded box. warn/crit/over each add their
-   own halo-ring border (see those rules further down), so the box grows slightly the moment an
-   alert state kicks in; that small "pop" is read as part of the alert rather than a glitch. */
-.qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border-radius:6px;transition:background-color .2s ease,color .2s ease}
+/* A transparent 4px border is reserved here at rest, ALWAYS — not "no border" — so warn/crit/
+   over below only ever change its COLOR (transparent -> --bg-primary), never its width. This
+   used to be genuinely no border at rest, with warn/crit/over each adding their own halo-ring
+   border on top; that meant the box actually grew a few px the instant an alert state kicked in
+   (and again between warn's 3px and crit/over's 4px), which read as the whole timer — and
+   whatever sits next to it — jarringly shifting mid-countdown rather than a deliberate "pop".
+   Reserving the same 4px up front keeps the box's rendered size fully constant across every
+   state, at the cost of the border-width escalation (3px warn -> 4px crit/over) that used to be
+   a second, color-independent urgency signal — background/text color already carries that. */
+.qtimer-display{font-variant-numeric:tabular-nums;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-weight:700;font-size:1.5rem;line-height:1;padding:5px 10px;border:4px solid transparent;border-radius:6px;transition:background-color .2s ease,color .2s ease,border-color .2s ease}
 /* Reserves the minus sign's width at all times (opacity, not display:none, so the layout space
    stays even while hidden) — the countdown going negative then only reveals a glyph already
    sitting in its slot instead of widening the whole display. */
@@ -585,12 +591,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    red-green/blue-yellow) stays correct for free: --accent-gold becomes the tritanopia-safe pink
    substitute under data-cb="2", --danger-solid-bg becomes the deuteranopia/protanopia-safe
    orange substitute under data-cb="1", etc.
-   Each state also gets a border in --bg-primary — the page's own base color, one step darker
-   (light theme: lighter) than the --bg-card-alt bar the badge sits on — so it reads as a ring
-   cut into the bar rather than a flat patch flush with it. Needs no contrast check of its own:
-   border/non-text contrast (WCAG 1.4.11) only asks for 3:1 against what's adjacent, and
-   --bg-primary vs --bg-card-alt is already the app's own foundational surface split. Thickness
-   escalates with urgency (3px warn, 4px crit/over) as a second, color-independent signal.
+   Each state also gets a border color of --bg-primary — the page's own base color, one step
+   darker (light theme: lighter) than the --bg-card-alt bar the badge sits on — so it reads as a
+   ring cut into the bar rather than a flat patch flush with it. Needs no contrast check of its
+   own: border/non-text contrast (WCAG 1.4.11) only asks for 3:1 against what's adjacent, and
+   --bg-primary vs --bg-card-alt is already the app's own foundational surface split. Width is
+   always the 4px .qtimer-display already reserves at rest (see its own comment) — only the
+   color changes here, transparent -> --bg-primary, so no state ever resizes the box.
    The brightness floor (.75, not a near-black .55) is a hard WCAG floor, not a stylistic
    choice: at the darkest point of the pulse, --on-accent-gold's #000 text sits on top of
    --accent-gold, and the worst combination this app ships — dark theme + tritanopia mode,
@@ -603,9 +610,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    on its own, and flashing two different states at two different speeds (2s vs 1.5s previously)
    read as more agitated than the countdown actually warrants. qt-crit's own cycle is slowed to
    2.9s (from 1.5s) for the same reason, with the .75 floor left untouched. */
-.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);border:3px solid var(--bg-primary)}
-.qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;border:4px solid var(--bg-primary);animation:qtFlash 2.9s ease-in-out infinite}
-.qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff;border:4px solid var(--bg-primary)}
+.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);border-color:var(--bg-primary)}
+.qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;border-color:var(--bg-primary);animation:qtFlash 2.9s ease-in-out infinite}
+.qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff;border-color:var(--bg-primary)}
 @keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.75)}}
 @media(prefers-reduced-motion:reduce){
   .qtimer-display.qt-crit{animation:none}
