@@ -1514,7 +1514,18 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .aud-grid{display:grid;margin-top:8px;background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 .aud-grid-2{grid-template-columns:repeat(2,1fr)}
 .aud-grid-3{grid-template-columns:repeat(3,1fr)}
-.aud-grid-4{grid-template-columns:repeat(4,1fr)}
+/* Sized to their contents and centered as a group, rather than four equal 1fr columns each
+   taking a quarter of the panel: this row's labels are short and very uneven ("Diff" vs
+   "Adjusted Score"), so equal columns left ~110px of dead space between neighbours and the four
+   figures read as scattered across the card instead of one Diff Adj -> Adjusted Score -> Diff ->
+   Score Guess chain. The card itself still spans the full width, matching the 2-column stat rows
+   above it; only the columns inside it pack in.
+   `auto`, not `max-content`: max-content refuses to shrink, so on the narrow mobile audit panel
+   (and at the top of Settings > Size's font range, where every label grows) the four columns
+   outgrew the card and the end cells were silently clipped by .aud-grid's overflow:hidden.
+   `auto` tracks give the same content-width packing whenever there's room, but shrink and let a
+   label wrap instead of getting cut off when there isn't. */
+.aud-grid-4{grid-template-columns:repeat(4,auto);justify-content:center}
 .aud-cell{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 8px;text-align:center}
 /* Inset top/bottom so the divider doesn't touch the card's rounded corners. */
 .aud-cell:not(:last-child)::after{content:"";position:absolute;top:14px;bottom:14px;right:0;width:1px;background:var(--border)}

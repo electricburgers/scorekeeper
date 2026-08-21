@@ -5,6 +5,9 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.49 - 2026-08-20
+- Team Report: pull the Diff Adj / Adjusted Score / Diff / Score Guess figures together instead of spreading them across the whole card. They sat in four equal quarter-width columns, and since the labels are short and very uneven ("Diff" vs "Adjusted Score") that left ~110px of dead space between neighbours, reading as four scattered figures rather than one Diff Adj → Adjusted Score → Diff → Score Guess chain; the gaps are now a consistent 16px. The card itself still spans the full width, staying aligned with the correct/incorrect row below it. Columns are sized `auto` rather than `max-content` deliberately: max-content refuses to shrink, which clipped the end cells against the card's `overflow:hidden` on the narrow mobile audit panel and at the top of Settings > Size's font range — `auto` packs identically when there's room but lets a label wrap instead of getting cut off when there isn't.
+
 ## v18.48 - 2026-08-20
 - Team Report: bring each round's "Subtotal" label next to its own score instead of stranding the two at opposite edges of the round box. Same `space-between` → centered-pair fix (and same reasoning) already applied to Grand Total in v18.39 — the gap between label and value grew with the panel's width, so they read as two unrelated ends of a bar rather than one label/value pair. The "After Halftime Bonus" line shares the same style and picks up the change too.
 
