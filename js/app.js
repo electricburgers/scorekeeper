@@ -117,7 +117,7 @@ const X_ICON_SVG =
 // (--badge-green-fg, --pts-pos-fg, etc.), instead of a fixed-color platform glyph.
 const CHECK_ICON_SVG =
   '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg>';
-const APP_VERSION = "v18.46"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.47"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 20, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":114,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":100,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":119,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":105,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":110,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":150,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":115,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":90,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":131,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":95,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":61,"bonusItem":false,"njcb":true,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":false},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":true},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":false}}],"bonus":{"0":4,"1":3,"2":4,"3":3,"4":3,"5":2,"6":4,"7":1,"8":4,"9":3,"10":2}},{"questions":[{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":true},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":true},"4":{"wager":1,"correct":true},"5":{"wager":1,"correct":true},"6":{"wager":1,"correct":true},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":1,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":false}},{"0":{"wager":5,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":5,"correct":false},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":5,"correct":false},"6":{"wager":5,"correct":true},"7":{"wager":5,"correct":false},"8":{"wager":5,"correct":true},"9":{"wager":5,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":7,"correct":false},"1":{"wager":7,"correct":false},"2":{"wager":7,"correct":false},"3":{"wager":7,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":false}}],"bonus":{}},{"questions":[{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":2,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":2,"correct":false},"6":{"wager":2,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":false}},{"0":{"wager":4,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":false},"6":{"wager":4,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":8,"correct":true},"1":{"wager":8,"correct":true},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":false},"4":{"wager":8,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":8,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":8,"correct":true}}],"bonus":{"0":4,"1":2,"2":4,"3":2,"4":2,"5":4,"6":3,"7":3,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":3,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":3,"correct":false},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":3,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":3,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":6,"correct":false},"3":{"wager":6,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":6,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":9,"correct":true},"3":{"wager":9,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":9,"correct":true},"9":{"wager":9,"correct":true},"10":{"wager":9,"correct":true}},{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":12,"correct":true},"6":{"wager":12,"correct":false},"7":{"wager":12,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":12,"correct":false},"10":{"wager":12,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":false},"1":{"wager":4,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":10,"correct":true},"4":{"wager":4,"correct":true},"5":{"wager":6,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":4,"correct":false},"8":{"wager":10,"correct":true},"9":{"wager":10,"correct":true},"10":{"wager":10,"correct":true}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":20,"correct":true},"2":{"wager":15,"correct":true},"3":{"wager":15,"correct":false},"4":{"wager":15,"correct":false},"5":{"wager":20,"correct":true},"6":{"wager":20,"correct":true},"7":{"wager":18,"correct":true},"8":{"wager":18,"correct":true},"9":{"wager":20,"correct":false},"10":{"wager":18,"correct":false}},"gameStarted":true}`;
@@ -1453,14 +1453,42 @@ function renderLeft() {
   // round badge's "N left" count changing width, a round or question flipping to its "Done"
   // state, sort re-ordering a question's rows, etc. all shift everything below them by a few px,
   // which is what "the view moves"/"jumps to somewhere random" whenever a score gets corrected —
-  // sy/wy end up numerically right but pointing at different content than before. Below, once
-  // the anchor (whatever was just clicked — see lastClickAnchorSel above) exists again in the
-  // freshly-rendered DOM, scrollIntoView({block:"nearest"}) re-places it directly instead of
-  // trying to compute and re-apply a pixel offset ourselves. Consumed once, then cleared — so an
-  // unrelated later re-render (an onchange handler elsewhere, say) never reuses a stale anchor
-  // from a click that has nothing to do with it.
+  // sy/wy end up numerically right but pointing at different content than before. So instead we
+  // anchor on whatever was just clicked (see lastClickAnchorSel above): note exactly where it
+  // sits on screen now, and after the re-render put the scroll back so it sits in that same
+  // place again. Consumed once, then cleared — so an unrelated later re-render (an onchange
+  // handler elsewhere, say) never reuses a stale anchor from a click that has nothing to do
+  // with it.
+  //
+  // NOT scrollIntoView({block:"nearest"}), which is what v18.45 used and what was still causing
+  // the reported jump. Two separate problems with it, and they pull in opposite directions:
+  //
+  //   1. "nearest" asks the browser to bring the anchor *into view*, and a scroll container
+  //      whose scroll-padding is `auto` (the default) explicitly permits the UA to place the
+  //      target clear of obscuring position:sticky elements. This app stacks sticky bars at the
+  //      top of the scroller — .header, and .mini-progress under it on mobile — so once the host
+  //      is scrolled into a round (i.e. the entire time they're scoring), a row in that band
+  //      counts as obscured and every tap on it snapped the view to push it clear. Measured on
+  //      desktop: a hard snap by exactly .header's height, landing every start offset on the
+  //      same final scrollTop. And whenever the anchor was outside the viewport for any reason,
+  //      "nearest" yanked the whole view to it — up to 527px in testing.
+  //   2. In the case it was actually added for it did nothing at all: if content above the
+  //      anchor changes height, the anchor moves on screen but stays "in view", so "nearest" is
+  //      satisfied and the shift goes uncorrected.
+  //
+  // Pinning the anchor to its own previous on-screen offset has neither problem — it's zero
+  // movement by construction, and it never asks the browser where the element "should" go, so
+  // sticky overlays, scroll-margin, content reflowing above it, and late-settling fonts are all
+  // equally irrelevant.
   const anchorSel = lastClickAnchorSel;
   lastClickAnchorSel = null;
+  // Where the anchor sits on screen right now, measured before anything is replaced. Viewport
+  // coordinates (getBoundingClientRect) rather than offsetTop: they stay valid no matter which
+  // ancestor actually ends up scrolling, which matters because the scroller differs by layout —
+  // #mainContent scrolls on desktop, the window scrolls on mobile.
+  const anchorBefore = anchorSel
+    ? m.querySelector(anchorSel)?.getBoundingClientRect().top
+    : undefined;
   const gs = checkGameStarted();
   let h = "";
 
@@ -1586,29 +1614,39 @@ function renderLeft() {
     "--mini-progress-h",
     (m.querySelector(".mini-progress")?.offsetHeight || 0) + "px",
   );
-  const anchorEl = anchorSel ? m.querySelector(anchorSel) : null;
-  if (anchorEl) {
-    // Anchored path: let the browser's own scrollIntoView place it, rather than computing a
-    // before/after pixel delta and folding that into sy/wy ourselves. The delta math was fragile
-    // in exactly the way this whole mechanism exists to avoid — it trusted getBoundingClientRect
-    // readings taken a tick apart to line up perfectly, and any place they didn't (a font metric
-    // settling late, a container-query breakpoint flipping, sub-pixel rounding) meant the "fix"
-    // could itself introduce the jump it was trying to prevent. "nearest" is a no-op if the
-    // anchor is already fully in view — which it always was, since the host just tapped
-    // something on it — so the common case is provably zero movement instead of provably-close.
-    // instant, not smooth: an animated scroll on every single score tap would be exactly the
-    // "things shift and move" motion being fixed here, just spread over time instead of instant.
-    anchorEl.scrollIntoView({ block: "nearest", behavior: "instant" });
-  } else {
-    // Restore scroll synchronously so the browser never paints a frame scrolled to the top.
-    // (Setting scrollTop forces layout while JS is still running, so no jump is ever visible.)
+  const anchorEl =
+    anchorBefore === undefined ? null : m.querySelector(anchorSel);
+  // Puts the anchor back at the exact on-screen offset it had before the re-render. Reading
+  // getBoundingClientRect() here forces layout, so the comparison is against fully settled
+  // post-render geometry rather than a stale guess. Whatever the difference is — content above
+  // changing height, a badge rewrapping, rows re-sorting — it gets subtracted straight out of
+  // the scroll position, so the anchor cannot visually move. Returns nothing and does nothing
+  // when there's no anchor; callers fall back to the raw sy/wy restore below.
+  const pinAnchor = () => {
+    if (!anchorEl) return false;
+    const delta = anchorEl.getBoundingClientRect().top - anchorBefore;
+    // Sub-pixel noise is not worth a scroll write (and writing it back can itself round the
+    // other way, which is how a "correction" turns into a slow drift over many taps).
+    if (Math.abs(delta) < 0.5) return true;
+    // Apply to whichever scroller can actually absorb it: #mainContent owns the scroll on
+    // desktop, the window does on mobile. Taking the container's real applied movement (rather
+    // than assuming it took the whole delta) means hitting its top/bottom clamp just passes the
+    // remainder on to the window instead of silently dropping it.
+    const prev = m.scrollTop;
+    m.scrollTop = prev + delta;
+    const rest = delta - (m.scrollTop - prev);
+    if (Math.abs(rest) >= 0.5) window.scrollBy(0, rest);
+    return true;
+  };
+  // Restore synchronously so the browser never paints a frame at the wrong offset. (Both
+  // branches force layout while JS is still running, so no jump is ever visible.)
+  if (!pinAnchor()) {
     m.scrollTop = sy;
     if (wy) window.scrollTo(0, wy);
   }
   // Re-assert after layout settles (fonts/container-queries) — same target, so no visible motion.
   requestAnimationFrame(() => {
-    if (anchorEl) anchorEl.scrollIntoView({ block: "nearest", behavior: "instant" });
-    else {
+    if (!pinAnchor()) {
       m.scrollTop = sy;
       if (wy) window.scrollTo(0, wy);
     }
