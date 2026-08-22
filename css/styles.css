@@ -238,6 +238,13 @@
 }
 [data-theme="hc-light"][data-cb="2"]{
   --accent-gold:#c2007a;--accent-cyan:#008060;
+  /* The beer mug's own amber, darkened for this mode alone. Its worst surface is the Beer Round
+     badge's wash, which is a color-mix off --accent-gold — magenta here rather than gold, so the
+     wash is pink and light (L .636) where every other variant's is a deeper gold. The base light
+     amber #a56a00 lands at 2.94:1 on it: a miss by 0.06, and the only one across all six modes.
+     #9a6300 clears it at 3.30 and still holds 3.68:1 on the darkest ordinary light surface it
+     renders on. Hue is untouched — this is the same amber, two steps darker. */
+  --tint-beer:#9a6300;
   /* Pinned to the pre-vibrancy green. This mode swaps gold for magenta, which turns .fr-tie's
      row wash (color-mix of --accent-gold with white) from cream into pink — and the brighter
      #006a03 the base light theme now uses drops to 3.2:1 against that pink, under AA. The
@@ -672,6 +679,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    object the way the mug and the drum are, and a 38% green wash inside a document outline reads
    as a highlighted page rather than as a spreadsheet. */
 .icon-sheet{color:var(--tint-sheet)}
+/* The header band is the one filled part, and it is what makes this read as a SPREADSHEET rather
+   than a generic table — a plain grid of cells could be anything. Filled at 34% rather than
+   solid so the two column dividers still show through the top row instead of the band reading as
+   a solid green bar. Landscape, because a spreadsheet is wider than it is tall and the portrait
+   document this replaced was indistinguishable from the PDF button beside it. */
+.icon-sheet .sh-head{fill:currentColor;fill-opacity:.34;stroke:none}
 .icon-flag .fl-sq{fill:currentColor;stroke:none}
 .icon-flag .fl-edge{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}
 /* Each pictograph carries .icon-tinted plus its own class; the class only sets --icon-tint, so
@@ -737,12 +750,15 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   color:color-mix(in srgb,var(--part-tint,var(--icon-tint-acc,var(--icon-tint))) 78%,#000)}
 .btn-accent .icon-tinted .ip-2{--part-tint:var(--icon-tint-acc-2,var(--icon-tint-2,var(--icon-tint)))}
 .btn-accent .icon-tinted .ip-3{--part-tint:var(--icon-tint-acc-3,var(--icon-tint-3,var(--icon-tint)))}
-/* The Beer Round badge, its stripe and the CB Prize tag are ALREADY the beer's own colour — gold
-   wash, gold text — so tinting the mug amber on top of that put amber on gold and dropped to
-   2.94:1 in light blue-yellow mode, where the wash turns pink. Inheriting the badge's own
-   audited colour is both the legible answer and the right one: there is nothing to correct when
-   the context is already saying "beer". */
-.q-beer .icon-tinted,.beer-stripe .icon-tinted,.cb-tag .icon-tinted{color:inherit}
+/* The Beer Round badge, its stripe and the CB Prize tag used to opt out of the tint entirely and
+   inherit their own gold, on the grounds that the context was already saying "beer". It was the
+   wrong call: a mug rendered in one flat gold has no foam, and the foam is most of what makes it
+   read as a mug rather than a tankard-shaped blob. They take the full tint now, amber body and
+   cream head, like every other beer in the app.
+   The reason for the old exemption was real, though, and it is handled below instead: amber on
+   the gold wash measured 2.94:1 in LIGHT blue-yellow mode, where that wash turns pink. That is
+   the only one of the six modes it was ever a problem in, and a mode-scoped darkening of the
+   tint is a far smaller concession than dropping the colour in all six. */
 /* On a solid fill the pictographs are painted OPAQUE, not at the 38% they use on a card. At 38%
    the button's own cyan came up through the mug and the drum shell and tinted them — the icon
    read as a cyan object rather than an amber or red one, which is the whole thing the tints were
