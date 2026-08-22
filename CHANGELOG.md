@@ -5,6 +5,22 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.82 - 2026-08-22
+- **PDF export could open a new tab showing the PDF instead of just downloading it.** `dl()` (the
+  shared helper behind PDF, XLSX, and the craft-eligible TXT export) set `target="_blank"`
+  unconditionally on the downloading link. Chrome and every other Chromium browser already honor
+  the `download` attribute on their own — the file saves in place, no navigation happens, target
+  is irrelevant — but pairing THAT with `target="_blank"` on a PDF blob specifically can make
+  Chrome's own built-in PDF viewer win the race and open the file in a new tab instead of
+  triggering the download it would have done unprompted, which is exactly the jarring "navigates
+  away from the app" jump this was doing. `target="_blank"` was only ever needed for one browser
+  — iOS Safari is the one that doesn't honor `download` at all, navigating the current tab
+  straight to the blob URL instead (reloading the whole page and wiping in-memory state — mid
+  Tutorial Mode, that meant the practice game vanishing) — and it's now scoped to just that
+  platform, checked directly rather than feature-detected, since nothing distinguishes "actually
+  honors download" from "iOS Safari, which claims to but doesn't." Verified: exporting PDF and
+  XLSX on desktop Chrome now opens zero new tabs, where PDF previously opened one.
+
 ## v18.81 - 2026-08-22
 - **The Halftime/Final Wager "Mark correct" button no longer shows the same ✅ twice.** Selecting
   it overlays a green `CORRECT_BADGE_SVG` badge — the actual "this is the winning call" signal —
