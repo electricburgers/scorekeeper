@@ -247,9 +247,14 @@ const X_ICON_SVG_EMOJI = '<span class="icon-emoji">❌</span>';
 // answer" and would read as "delete/dismiss" everywhere else it currently shows up. ICON_INCORRECT
 // is the same SVG picture as X_ICON_SVG — nothing about how it looks in pictograph mode changes —
 // with its own emoji, and only the incorrect-marking call sites (the wager/bonus/special-wager
-// incorrect badges, the incorrect result button, the per-question incorrect stat, Team Report's
-// "incorrect" lines) use it instead of X_ICON_SVG.
+// incorrect badges, the incorrect result button, the per-question incorrect stat) use it instead
+// of X_ICON_SVG. Team Report's own "incorrect" lines split off further still — see
+// ICON_AUDIT_WRONG below.
 const ICON_INCORRECT_EMOJI = '<span class="icon-emoji">⛔</span>';
+// Team Report specifically: ❌ rather than ⛔ here, by request — same drawn X in Pictograph mode
+// as ICON_INCORRECT (and X_ICON_SVG), only Emoji mode's glyph differs, same split pattern as
+// every other ICON_* pair above that shares one drawing across more than one meaning.
+const ICON_AUDIT_WRONG_EMOJI = '<span class="icon-emoji">❌</span>';
 const CHECK_ICON_SVG_EMOJI = '<span class="icon-emoji">✅</span>';
 // The Halftime/Final Wager "Mark correct" button (renderSpecialWager) draws its own icon AND, once
 // selected, an overlaid CORRECT_BADGE_SVG badge right on top of it — both were ✅ in Emoji mode,
@@ -303,6 +308,7 @@ let THEME_ICON_SUN = THEME_ICON_SUN_PICT;
 let THEME_ICON_MOON = THEME_ICON_MOON_PICT;
 let X_ICON_SVG = X_ICON_SVG_PICT;
 let ICON_INCORRECT = X_ICON_SVG_PICT;
+let ICON_AUDIT_WRONG = X_ICON_SVG_PICT;
 let CHECK_ICON_SVG = CHECK_ICON_SVG_PICT;
 let ICON_DONE = CHECK_ICON_SVG_PICT;
 let ICON_MARK_CORRECT = CHECK_ICON_SVG_PICT;
@@ -365,6 +371,7 @@ function applyIconStyle(style) {
   THEME_ICON_MOON = emoji ? THEME_ICON_MOON_EMOJI : THEME_ICON_MOON_PICT;
   X_ICON_SVG = emoji ? X_ICON_SVG_EMOJI : X_ICON_SVG_PICT;
   ICON_INCORRECT = emoji ? ICON_INCORRECT_EMOJI : X_ICON_SVG_PICT;
+  ICON_AUDIT_WRONG = emoji ? ICON_AUDIT_WRONG_EMOJI : X_ICON_SVG_PICT;
   CHECK_ICON_SVG = emoji ? CHECK_ICON_SVG_EMOJI : CHECK_ICON_SVG_PICT;
   ICON_DONE = emoji ? ICON_DONE_EMOJI : CHECK_ICON_SVG_PICT;
   ICON_MARK_CORRECT = emoji ? ICON_MARK_CORRECT_EMOJI : CHECK_ICON_SVG_PICT;
@@ -483,7 +490,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.91"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.92"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -895,6 +902,11 @@ function applyPrefs() {
     manualEndToggle.classList.toggle("active", !!p.craftManualEnd);
     manualEndToggle.textContent = p.craftManualEnd ? "On" : "Off";
   }
+  // The crossfade length only ever matters once Manual Drumroll Control is on — it's Stop
+  // Drumroll's own fade-out duration, and that button doesn't exist until manual control does —
+  // so the row stays hidden rather than sitting there configuring a feature that isn't active.
+  const crossfadeRow = document.getElementById("drumCrossfadeRow");
+  if (crossfadeRow) crossfadeRow.style.display = p.craftManualEnd ? "" : "none";
   const vl = document.getElementById("versionLabel");
   if (vl) vl.textContent = "Scorekeeper " + APP_VERSION + " · " + APP_VERSION_DATE;
   const qts = document.getElementById("qtDurationSelect");
@@ -4021,7 +4033,7 @@ function auditQLine(ri, qi, ti) {
     pts = "+" + a.wager;
     pcls = "pos";
   } else {
-    res = `<span class="aud-res aud-wrong">${ICON_INCORRECT} incorrect</span>`;
+    res = `<span class="aud-res aud-wrong">${ICON_AUDIT_WRONG} incorrect</span>`;
     pts = "0";
     pcls = "zero";
   }
@@ -4054,7 +4066,7 @@ function buildAudit(ti) {
         pts = "+" + v * 5;
         pcls = "pos";
       } else {
-        res = `<span class="aud-res aud-wrong">${ICON_INCORRECT} 0 of 4 correct</span>`;
+        res = `<span class="aud-res aud-wrong">${ICON_AUDIT_WRONG} 0 of 4 correct</span>`;
         pts = "0";
         pcls = "zero";
       }
@@ -4085,7 +4097,7 @@ function buildAudit(ti) {
       pts = "+" + w;
       pcls = "pos";
     } else {
-      res = `<span class="aud-res aud-wrong">${ICON_INCORRECT} incorrect</span>`;
+      res = `<span class="aud-res aud-wrong">${ICON_AUDIT_WRONG} incorrect</span>`;
       pts = "\u2212" + w;
       pcls = "neg";
     }

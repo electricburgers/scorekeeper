@@ -5,6 +5,15 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.92 - 2026-08-22
+- **Team Report's "incorrect" lines now use ❌ in Emoji mode, not ⛔** — the wager/bonus/per-question
+  incorrect badges and stats elsewhere keep ⛔ unchanged; only Team Report's own three call sites
+  split off into their own `ICON_AUDIT_WRONG`, same Pictograph-mode drawing as `ICON_INCORRECT`.
+- **The Drumroll Crossfade slider only shows up in Advanced Settings once Manual Drumroll Control
+  is turned on.** It sets the fade-out length for the Stop Drumroll button, which doesn't exist
+  until manual control does — so the row now stays hidden rather than configuring a feature that
+  isn't active yet, and appears the moment the toggle above it is switched on.
+
 ## v18.91 - 2026-08-22
 - **The four Settings pictographs that were still plain monochrome now have colour**: App
   Preferences' Save (blue, silver window/label) and Load (gold folder), and Craft Prize Eligible
