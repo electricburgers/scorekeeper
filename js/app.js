@@ -134,7 +134,7 @@ const ICON_CLIPBOARD =
 const ICON_SQUARES =
   '<svg class="icon-ui icon-squares" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect class="sq-fill" x="13" y="13" width="8" height="8" rx="1.5"/></svg>';
 const ICON_HORSESHOE =
-  '<svg class="icon-ui icon-tinted icon-horseshoe" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 21v-8a6 6 0 0 1 12 0v8"/><path d="M4 21h4"/><path d="M16 21h4"/></svg>';
+  '<svg class="icon-ui icon-tinted icon-horseshoe" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3.5v6a7 7 0 0 0 14 0v-6"/><path d="M2.5 3.5h5.5"/><path d="M16 3.5h5.5"/></svg>';
 const ICON_MIC =
   '<svg class="icon-ui icon-tinted icon-mic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path class="ip-2" d="M19 10v2a7 7 0 0 1-14 0v-2"/><line class="ip-2" x1="12" x2="12" y1="19" y2="22"/></svg>';
 const ICON_HEART =
@@ -166,7 +166,7 @@ const ICON_TRASH =
 const ICON_CHIPS =
   '<svg class="icon-ui icon-tinted icon-chips" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="17" rx="8" ry="3"/><path d="M4 17v-3c0-1.7 3.6-3 8-3s8 1.3 8 3v3"/><circle class="ip-2" cx="12" cy="6" r="3.5"/></svg>';
 const ICON_CHIP =
-  '<svg class="icon-ui icon-chip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/></svg>';
+  '<svg class="icon-ui icon-chip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.6"/><rect class="chip-spot" x="10" y="2.2" width="4" height="3.6" rx="1"/><rect class="chip-spot" x="10" y="18.2" width="4" height="3.6" rx="1"/><rect class="chip-spot" x="2.2" y="10" width="3.6" height="4" rx="1"/><rect class="chip-spot" x="18.2" y="10" width="3.6" height="4" rx="1"/></svg>';
 const ICON_STOP =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>';
 const ICON_SHEET =
@@ -194,7 +194,23 @@ const BONUS_Q_STYLE = {
   0: { icon: ICON_SQUARES, cls: "bq-r1" },
   2: { icon: ICON_HORSESHOE, cls: "bq-r3" },
 };
-const APP_VERSION = "v18.70"; // #Version Number — bump this manually when you release a new build
+// Character limits for every field a host types free text into. Declared once and used twice:
+// as the inputs' own maxlength, and again in migrateState to clamp values arriving from a saved
+// file. The numbers are sized to what each field is for rather than to a round number — a quiz ID
+// is a code, a team name has to fit the scoresheet's 220pt column, the staff list is a handful of
+// first names, and the winner script is a paragraph read aloud.
+const FIELD_MAX = {
+  quizId: 24,
+  hostName: 40,
+  location: 60,
+  craftPartner: 50,
+  craftPartnerTown: 40,
+  bonusItem: 60,
+  staffNames: 200,
+  teamName: 40,
+  craftScript: 600,
+};
+const APP_VERSION = "v18.71"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 21, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -437,7 +453,7 @@ function renderStaffThanks() {
     `<button class="banter-refresh" type="button" onclick="cycleStaffThanks()" title="New line" aria-label="Refresh staff thank-you line">${ICON_REFRESH}</button>` +
     `</div>` +
     `<label class="staff-thanks-edit"><span class="staff-thanks-edit-label">Staff names — same field as Event Details</span>` +
-    `<textarea class="meta-textarea staff-names-input" rows="2" aria-label="Restaurant staff names" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></label>` +
+    `<textarea class="meta-textarea staff-names-input" maxlength="200" rows="2" aria-label="Restaurant staff names" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></label>` +
     `</div>`
   );
 }
@@ -1199,6 +1215,21 @@ function migrateState(s) {
   ].forEach((k) => {
     s.meta[k] = s.meta[k] || "";
   });
+  // The same limits the inputs carry as maxlength, applied again to whatever comes IN. maxlength
+  // only stops a person typing past it — it does nothing for a value arriving from a loaded .json
+  // file, an older session saved before these limits existed, or a paste handled by script. The
+  // PDF header and the scoresheet's team column size their text to fit a fixed box, so a runaway
+  // value doesn't overflow, it shrinks until it can't be read; clamping on the way in is what
+  // keeps that from being reachable at all.
+  Object.entries(FIELD_MAX).forEach(([k, max]) => {
+    if (typeof s.meta[k] === "string" && s.meta[k].length > max)
+      s.meta[k] = s.meta[k].slice(0, max);
+  });
+  if (Array.isArray(s.teams))
+    s.teams.forEach((t) => {
+      if (typeof t.name === "string" && t.name.length > FIELD_MAX.teamName)
+        t.name = t.name.slice(0, FIELD_MAX.teamName);
+    });
   if (!s.meta.excludeTopN) s.meta.excludeTopN = s.meta.giftCardCount || 2;
   if (!s.teams) s.teams = [];
   s.teams.forEach((t) => {
@@ -1685,13 +1716,13 @@ function renderLeft() {
   const metaLocked = gs && !loadPrefs().unlockEventDetails;
   h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
     <div class="field"><label>Date</label><div class="date-native-wrap"><input type="date" class="date-native" aria-label="Date" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"><span class="date-display-text${gameState.meta.date ? "" : " is-placeholder"}">${esc(isoToPretty(gameState.meta.date) || "Select date")}</span></div></div>
-    <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" aria-label="Quiz ID" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
-    <div class="field${hostInvalid ? " field-invalid" : ""}"><label>Host Name</label><input type="text" aria-label="Host Name" value="${esc(gameState.meta.hostName || "")}" placeholder="Who's hosting" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.hostName=this.value;autosave();renderLeft();">${hostInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
-    <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" aria-label="Location" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
-    <div class="field"><label>Craft Partner</label><input type="text" aria-label="Craft Partner" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
-    <div class="field"><label>Partner Town</label><input type="text" aria-label="Partner Town" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
-    <div class="field full"><label>Bonus Item (+5)</label><input type="text" aria-label="Bonus Item description" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
-    <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" aria-label="Restaurant staff names" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
+    <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" maxlength="24" aria-label="Quiz ID" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
+    <div class="field${hostInvalid ? " field-invalid" : ""}"><label>Host Name</label><input type="text" maxlength="40" aria-label="Host Name" value="${esc(gameState.meta.hostName || "")}" placeholder="Who's hosting" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.hostName=this.value;autosave();renderLeft();">${hostInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
+    <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" maxlength="60" aria-label="Location" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
+    <div class="field"><label>Craft Partner</label><input type="text" maxlength="50" aria-label="Craft Partner" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
+    <div class="field"><label>Partner Town</label><input type="text" maxlength="40" aria-label="Partner Town" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
+    <div class="field full"><label>Bonus Item (+5)</label><input type="text" maxlength="60" aria-label="Bonus Item description" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
+    <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" maxlength="200" aria-label="Restaurant staff names" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
   </div><p class="fr-note${metaLocked ? "" : " fr-note-pending"}"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Locked once scoring starts, so it can't drift mid-game. Typo? <a href="#" onclick="event.preventDefault();toggleUnlockEventDetails();">Unlock to fix it</a>.</p></div></div>`;
 
   // Flagged the whole game, not just before scoring starts — a guess left blank stops blocking
@@ -1708,7 +1739,7 @@ function renderLeft() {
     h += `<div class="team-entry${showAdj ? " has-adj" : ""}" data-ti="${i}">
       <div class="team-name-cell">
         <span class="team-number">Team ${i + 1}</span>
-        <input type="text" value="${esc(t.name)}" placeholder="Team name" aria-label="Team ${i + 1} name" onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
+        <input type="text" maxlength="40" value="${esc(t.name)}" placeholder="Team name" aria-label="Team ${i + 1} name" onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
         <div class="team-checks">
           <label class="check-label item-check${t.bonusItem ? " is-checked" : ""}">
             <input type="checkbox" class="check-input" id="bi${i}" ${t.bonusItem ? "checked" : ""} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+5 Bonus
@@ -2328,8 +2359,10 @@ function renderSpecialWager(type) {
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
   let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleIcon} ${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>`;
-  if (beer)
-    h += `<div class="beer-stripe"><span class="beer-stripe-icon">${ICON_BEER}</span><span class="beer-stripe-text">Beer Round! Everyone got it right!</span></div>`;
+  // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
+  // badge is two inches away and says the same thing, and the whole block is already washed gold
+  // with a gold border — three statements of one fact. Same call, same reasoning, as removing the
+  // bonus questions' version of this line in v18.57.
   h += `<div class="sw-body">`;
   const swEntryOrder = gameState.teams.map((_, i) => i);
   let swTeamOrder = questionSortOrder[swKey]
@@ -3199,7 +3232,7 @@ function renderCraftPrizeBlock() {
           : ""
       }
       <label class="cp-script-label">Winner Announcement Script</label>
-      <textarea class="cp-script" aria-label="Winner announcement script" onchange="updateCraftScript(this.value)">${esc(winner.script)}</textarea>`;
+      <textarea class="cp-script" maxlength="600" aria-label="Winner announcement script" onchange="updateCraftScript(this.value)">${esc(winner.script)}</textarea>`;
   }
   return h;
 }

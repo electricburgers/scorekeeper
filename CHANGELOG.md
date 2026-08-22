@@ -5,6 +5,14 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.71 - 2026-08-21
+- **Character limits on every field a host types free text into.** Quiz ID 24, Host Name 40, Location 60, Craft Partner 50, Partner Town 40, Bonus Item 60, Restaurant Staff 200, team names 40, the winner announcement script 600. Sized to what each field is for rather than to a round number — a quiz ID is a code, a team name has to fit the scoresheet's 220pt column, the staff list is a handful of first names, and the script is a paragraph read aloud.
+- The numbers live in one `FIELD_MAX` and are applied twice: as the inputs' `maxlength`, and again in `migrateState` to clamp whatever comes IN. `maxlength` only stops a person typing past it — it does nothing for a value arriving from a loaded .json, an older session saved before these limits existed, or a script-driven paste. Verified by migrating a deliberately abusive state (500-character location, 900-character staff list, 500-character team name): every field lands on its limit exactly.
+- Worth saying why this matters beyond tidiness: the PDF header and the scoresheet's team column size their text to fit a fixed box, so a runaway value never overflowed — it shrank until it could not be read. Clamping on the way in is what makes that unreachable.
+- Removed "Beer Round! Everyone got it right!" from the Halftime and Final Wager blocks. The header's own Beer Round badge is two inches away and says the same thing, and the block is already washed gold with a gold border — three statements of one fact. Same call, same reasoning, as removing the bonus questions' version in v18.57. The now-dead `.beer-stripe` rules go with it.
+- The horseshoe is the right way up, and reads as a horseshoe. It was an arch with its opening facing down — closer to a tombstone than a shoe. It now opens upward with flared heels.
+- The poker chip reads as a poker chip. A ring with a hub and four thin spokes was a steering wheel; it now has the four solid edge spots that are the thing which actually says "casino chip". Solid rather than stroked, because at the 12px this header renders a 4x3.6-unit rectangle outlined at stroke-width 2.25 is all stroke and no shape.
+
 ## v18.70 - 2026-08-21
 - Craft Partner and Bonus Item move out of the PDF's header and into the empty page beside the Standings table. The header is back to one row of four, which puts the round headers back at y=81 instead of y=121 — **40pt of vertical space reclaimed on every export**, where yesterday's second row was spending it on two fields.
 - The space beside Standings was already paid for: the table is 432pt of an ~794pt usable width, so roughly 360pt sits unused to its right on every export. Both fields get more than double the width a six-across header row could have given them, for no vertical cost.

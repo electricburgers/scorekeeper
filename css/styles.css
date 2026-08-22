@@ -729,6 +729,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    rather than as a plain grid. Not one of the tinted pictographs — it takes Round 1's own accent,
    like the gift it replaces — so it needs its own fill rule rather than .icon-tinted's. */
 .icon-squares .sq-fill{fill:currentColor;fill-opacity:.38;stroke:currentColor}
+/* The four edge spots are what make the poker chip a poker chip rather than a wheel — the ring
+   and hub alone read as a steering wheel, which is what the first version did. Solid rather than
+   stroked: at the 12px this header renders, a 4x3.6-unit rectangle outlined at stroke-width 2.25
+   is all stroke and no shape. */
+.icon-chip .chip-spot{fill:currentColor;stroke:none}
 .icon-clipboard{--icon-tint:var(--tint-clipboard);--icon-tint-2:var(--tint-clipboard-2)}
 /* PDF: a page with a download arrow through it, not the closed book it was. The arrow is the
    only one of the five candidates that survived the 13px this button actually renders at, and it
@@ -1604,9 +1609,6 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .standings-pts{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);text-align:right}
 
 /* BEER STRIPE — for Q5 bonus and special wager beer rounds */
-.beer-stripe{display:flex;align-items:center;gap:6px;padding:5px 12px 6px;background:color-mix(in srgb,var(--accent-gold) 7%,transparent);border-bottom:1px solid color-mix(in srgb,var(--accent-gold) 18%,transparent)}
-.beer-stripe-icon{font-size:1.05rem}
-.beer-stripe-text{font-family:var(--font-display);font-size:.75rem;font-weight:700;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:1.2px}
 .special-section.beer-round{background:var(--beer-bg)!important;border-color:var(--beer-border)!important}
 .special-section.beer-round h3{color:var(--badge-gold-fg)!important}
 
