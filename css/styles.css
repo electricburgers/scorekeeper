@@ -106,6 +106,17 @@
   --tint-heart:#ff5a72;
   --tint-clipboard:#c98f52;--tint-clipboard-2:#dfe3e7;
   --tint-pdf:#e0574f;
+  /* Try Example's flask and Take the Tour's graduation cap, plus the shuffle icon's decorative
+     (non-button) copy — see the note on --tint-shuffle below. Neither the flask nor the cap
+     stands for a real-world colour the way the beer/drum/trophy do, so hue was picked to stay
+     visually distinct from every tint already in the palette rather than to match anything.
+     Both clear 3:1 against every dark surface a settings row can sit on (--bg-card/-alt/-input/
+     -hover): 5.3-6.6:1 and 8.3-10.4:1. */
+  --tint-flask:#b07cff;--tint-cap:#5ec8ff;
+  /* Same swap as ICON_CLIPBOARD's own tint (app.js): a magenta distinct from the app's team-2
+     accent, picked so a decorative "shuffle" pictograph beside a text label doesn't borrow the
+     control-glyph's plain currentColor. Clears 6.6-8.2:1 on every dark surface. */
+  --tint-shuffle:#ff7ac9;
   /* AAA (7:1) text-safe variants of the brand accents, for use as TEXT on neutral surfaces
      (bg-card/bg-card-alt/bg-input) — kept separate from --accent-* so borders, focus rings,
      and button fills can stay at full brand saturation without dragging text below AAA. */
@@ -199,6 +210,9 @@
   --tint-heart:#c62741;
   --tint-clipboard:#8a5f2c;--tint-clipboard-2:#b9a48c;
   --tint-pdf:#c0332b;
+  /* Light counterparts — see the dark block's note. Darkened to clear 3:1 against a near-white
+     card instead of near-black: 4.4-6.0:1 and 4.0-5.5:1. */
+  --tint-flask:#7a3fd6;--tint-cap:#0d6fa8;--tint-shuffle:#a3006b;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
   --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
   /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
@@ -621,6 +635,11 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .cv-swatch-rg-b{background:var(--cv-preview-rg-b)}
 .cv-swatch-by-a{background:var(--cv-preview-by-a)}
 .cv-swatch-by-b{background:var(--cv-preview-by-b)}
+/* The closed button's own preview, next to the label rather than only inside the open menu —
+   see setCvSelectDisplay in app.js, which copies the selected option's own .cv-swatch-pair
+   markup in here. Empty (and so zero-width) whenever "Off" is selected, since Off has no
+   swatch pair of its own either. */
+.cv-select-swatch:empty{display:none}
 .size-label{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 .sep{width:1px;height:18px;background:var(--border-light);margin:0 2px;flex-shrink:0}
 
@@ -782,6 +801,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-mic{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
 .icon-heart{--icon-tint:var(--tint-heart)}
 .icon-clipboard{--icon-tint:var(--tint-clipboard);--icon-tint-2:var(--tint-clipboard-2)}
+.icon-flask{--icon-tint:var(--tint-flask)}
+.icon-cap{--icon-tint:var(--tint-cap)}
+.icon-shuffle{--icon-tint:var(--tint-shuffle)}
 /* Play Horn's play triangle — filled, and keeping .icon-ui's own stroke rather than clearing it.
    The stroke is what rounds the three corners (stroke-linejoin:round, inherited), so the glyph
    matches the rounded ends every other mark in this family is drawn with instead of coming to
@@ -1182,6 +1204,15 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    own chevron, just kept on this header instead of swapped for a plain ▼ + no rotation, so the
    flip is still an animated transition rather than an instant swap. */
 .col-right.open .sidebar-toggle{transform:rotate(180deg)}
+/* Desktop: drop the chevron. .col-right.open only repositions anything inside the
+   max-width:768px block above — on a wide viewport .col-right is a static column, so toggling
+   "open" here (the header's onclick="toggleSidebar()" is unconditional) rotated this arrow
+   180deg for no visible reason at all, the one piece of UI in the app that looked interactive
+   and did nothing. Same fix, same reasoning, as .standings-chevron's desktop treatment above:
+   drop the icon, leave the header itself clickable. */
+@media(min-width:769px){
+  .sidebar-toggle{display:none}
+}
 .sidebar-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;overflow-anchor:none}
 
 .sort-controls{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -1633,12 +1664,6 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .standings-title-row{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
 .standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:.5px}
 .standings-chevron{transition:transform .25s;flex-shrink:0}
-/* Desktop: drop the chevron icon entirely — the whole title row is still the click target
-   (title-row's own role="button"/onclick are untouched), so collapsing still works with just
-   the row itself as the affordance instead of needing the icon too. */
-@media(min-width:769px){
-  .standings-chevron{display:none}
-}
 .standings-block.collapsed .standings-collapsible{display:none}
 .standings-block.collapsed .standings-chevron{transform:rotate(-90deg)}
 /* Banter, sort buttons, and the table are all inside this wrapper so they collapse together. */

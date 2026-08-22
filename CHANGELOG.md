@@ -5,6 +5,61 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.74 - 2026-08-22
+- **The FAQ moved into this repo.** It used to live at `electricburgers/scorekeeper-faq`, a
+  separate git repo checked out at `faq/scorekeeper-faq/` and excluded here so the two repos'
+  histories never collided. It's now `faq/`, tracked like every other file, with its own nested
+  `.git` removed and its byte-for-byte copy of `css/styles.css` replaced with a link straight to
+  `../css/styles.css` — the two pages can no longer drift apart the way that copy already had.
+  Settings > Help now opens `faq/index.html` locally instead of the old GitHub Pages URL.
+- **The right-hand Scores header's chevron is gone on desktop.** It called `toggleSidebar()`,
+  which toggles `.col-right`'s `open` class — a class that only repositions anything inside the
+  mobile bottom-sheet media query. On a wide viewport `.col-right` is a static column, so every
+  click rotated the arrow 180deg for no reason at all: the one piece of the app that looked
+  interactive and did nothing. Same fix already applied to the standings chevron in a past
+  version; this is the other half — and that same standings chevron gets its own arrow BACK on
+  desktop here, since unlike the Scores header it does do something (collapses the block) and
+  hiding it there was removing a working affordance, not a dead one.
+- **Fixed a real, if intermittent, "I can still scroll past the bottom" bug**, on top of the
+  desktop layout-height fix from a few versions back. `--layout-top`'s sync() ran once,
+  synchronously, at script-parse time — before Inter has necessarily swapped in over its
+  font-display:swap fallback. On the loads where the Resume banner's one sentence wraps a
+  different number of lines under the fallback font than under Inter, that first measurement can
+  undershoot the panel's real top edge, which makes `.app-layout` (`height:calc(100vh -
+  var(--layout-top))`) render a few pixels TALLER than the viewport actually has room for — and
+  nothing else ever re-measures it, since neither `.header` nor `#resumeBanner`'s own box size
+  changes again afterward. `document.fonts.ready` (plus a `load` listener, belt-and-braces) now
+  forces one more sync() once every font has actually swapped in, closing the gap regardless of
+  which element's resize the ResizeObserver missed.
+- **Try Example and Take the Tour get their own pictograph colors** — a violet flask and a blue
+  graduation cap, the same `.icon-tinted` treatment every emoji-replacement pictograph already
+  gets, on two icons that had been left as plain `.icon-ui` outlines since they were drawn.
+- **Color Vision shows its swatches next to the dropdown even closed.** The two colors a mode
+  swaps to were only ever visible inside the open menu; the closed button now mirrors the
+  selected option's own swatch pair next to its label, so the picked mode's colors are visible at
+  a glance. "Off" has no swatch pair, so the button shows none for it, same as the menu always
+  has.
+- **"Shuffled order" gets the same tinted-pictograph treatment "Entry order" already had** — a
+  magenta shuffle icon ahead of the label in the Scores panel, sized and colored the same way
+  `ICON_CLIPBOARD` sits ahead of "Entry order" a few lines below it. The Shuffle sort BUTTON's own
+  icon is untouched: it's a control, and every action glyph in this file takes the control's own
+  audited text color rather than a color of its own, which is exactly why this needed its own
+  separate, tinted copy rather than reusing that one.
+- **New Settings row: Icon Style, Pictograph/Emoji.** Every `ICON_*` pictograph in the app —
+  Sort, Reset, Refresh, Shuffle, the check and X marks, Beer, Drum, Trophy, Mic, Heart, Clipboard,
+  Flag, PDF, Link, Trash, Play Horn, Stop, the spreadsheet icon, the alert triangle, the theme
+  toggle's sun and moon — is a reassignable `let` now rather than a `const`, holding either its
+  drawn-SVG value or the literal emoji it replaced (chosen from this changelog's own record of
+  what each one used to be, where that's on record — Sort/Reset/Refresh/Shuffle replaced ↕ / ↺ /
+  🔄 / 🎲, Play Horn replaced the 🎉 popper). Flipping the setting reassigns all of them and
+  re-renders, so every already-drawn Sort button, badge, and pictograph in the current game
+  updates in place; a handful of pictographs that live as one-off static markup in `index.html`
+  rather than as an `ICON_*` string (the settings gear, header Save/Load, the FAQ link, the two
+  Sample Data icons, the settings panel's round X) are swapped the same way through a small
+  element-keyed table instead. Purely opt-in nostalgia — every one of these was redrawn as an SVG
+  specifically to escape a fixed-color platform glyph the app's theme and color-vision tokens
+  couldn't reach, and this setting knowingly gives that back.
+
 ## v18.73 - 2026-08-22
 - **Every Q5 pictograph is gone** — Round 1's four squares, Round 2's poker chip, Round 3's horseshoe and Round 4's chip stack, the last two of which were only drawn in v18.71. Each sat beside a label that already said what the block was ("BONUS (0-4 x 5)", "BONUS WAGER (1-20)"), and four different marks across four Q5s implied a distinction between them that does not exist. The four `ICON_*` constants, their `.icon-*` rules, their `--tint-horseshoe` / `--tint-chips` tokens in both themes, and the `.sq-fill` / `.chip-spot` fill rules are all removed rather than left unreferenced. The round colour classes stay — the Q5 label still reads cyan in Round 1 and gold in Round 3.
 - **Round 4's Q5 Beer Round is no longer the most golden thing in the app.** `.special-section` is one padded box with no separate header surface, so a Beer Round painted the title row, the badge row and the whole body in `--beer-bg` together. Round 3's Q5 is the *same* gold but reads as far less of it, because `.question-block` gives its header an opaque `--bg-input` fill and only the body below goes gold. The special sections now get that same split, which is what makes them match: measured, Round 4's header band and Round 3's are the identical colour in both themes.

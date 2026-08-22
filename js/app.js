@@ -78,9 +78,9 @@ const CORRECT_BADGE_SVG =
 // Geometry is the well-known Feather/Lucide sun (circle + 8 rays) and moon (crescent via one
 // circle overlapping another) icons rather than a hand-drawn shape — both are widely used, so
 // they read as an actual sun/moon at a glance instead of needing to be puzzled out.
-const THEME_ICON_SUN =
+const THEME_ICON_SUN_PICT =
   '<svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></svg>';
-const THEME_ICON_MOON =
+const THEME_ICON_MOON_PICT =
   '<svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
 // Shared X icon (Feather/Lucide geometry, same family as the icons above) rather than a ✕/✗
 // Unicode glyph — the remove-team button and every .wager-badge.bg-incorrect badge (Q1-4,
@@ -96,7 +96,7 @@ const THEME_ICON_MOON =
 // Report lines) — contexts like .wager-badge.bg-incorrect/.remove-team button that need their
 // own size still get it, since their own `svg` element selectors there are more specific than
 // the shared class and win the cascade.
-const X_ICON_SVG =
+const X_ICON_SVG_PICT =
   '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg>';
 // Bare checkmark (no colored square background — CORRECT_BADGE_SVG's rect is specific to that
 // one small corner badge) for every OTHER ✓ in the app: the mini-progress "all rounds scored"
@@ -104,7 +104,7 @@ const X_ICON_SVG =
 // ✓/✗ line in the Team Report. Same rationale as X_ICON_SVG above — colored via currentColor, so
 // it always picks up whatever color token the pill/label around it already resolves to
 // (--badge-green-fg, --pts-pos-fg, etc.), instead of a fixed-color platform glyph.
-const CHECK_ICON_SVG =
+const CHECK_ICON_SVG_PICT =
   '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg>';
 // UI action glyphs, replacing the ↕ / ↺ / 🔄 / 🎲 characters these buttons used to carry. Same
 // reasoning as X_ICON_SVG/CHECK_ICON_SVG above, and it applies twice over here:
@@ -118,28 +118,36 @@ const CHECK_ICON_SVG =
 // All four are stroke-only and inherit currentColor, so they take the button's own already
 // contrast-audited text color in every theme and color-vision mode. Geometry is Lucide's, the
 // same family the sun/moon/check/X above already use.
-const ICON_SORT =
+const ICON_SORT_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg>';
-const ICON_RESET =
+const ICON_RESET_PICT =
   '<svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>';
-const ICON_REFRESH =
+const ICON_REFRESH_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"></path><path d="M21 21v-5h-5"></path></svg>';
-const ICON_SHUFFLE =
+const ICON_SHUFFLE_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg>';
+// Same geometry as ICON_SHUFFLE, tinted rather than currentColor. ICON_SHUFFLE itself stays
+// plain — it's the Shuffle sort BUTTON's own icon, and every action glyph in the app (Sort,
+// Reset, Refresh, the check/X) takes the control's own audited text colour rather than a colour
+// of its own. This copy sits beside "Shuffled order" in .sort-mode-label instead, a plain text
+// description rather than a control, which is the same role ICON_CLIPBOARD already plays beside
+// "Entry order" a few lines down — so it gets the same decorative-pictograph treatment.
+const ICON_SHUFFLE_TINTED_PICT =
+  '<svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg>';
 // The rest of the app's emoji, as drawn geometry. Same two reasons as the four above: an emoji
 // is a fixed-colour platform pictograph no theme or colour-vision token can reach, and its size
 // and baseline are the font's business rather than the layout's. Lucide geometry throughout.
-const ICON_CLIPBOARD =
+const ICON_CLIPBOARD_PICT =
   '<svg class="icon-ui icon-tinted icon-clipboard" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect class="ip-2" width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>';
-const ICON_MIC =
+const ICON_MIC_PICT =
   '<svg class="icon-ui icon-tinted icon-mic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path class="ip-2" d="M19 10v2a7 7 0 0 1-14 0v-2"/><line class="ip-2" x1="12" x2="12" y1="19" y2="22"/></svg>';
-const ICON_HEART =
+const ICON_HEART_PICT =
   '<svg class="icon-ui icon-tinted icon-heart" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>';
-const ICON_BEER =
+const ICON_BEER_PICT =
   '<svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg>';
-const ICON_DRUM =
+const ICON_DRUM_PICT =
   '<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg>';
-const ICON_TROPHY =
+const ICON_TROPHY_PICT =
   '<svg class="icon-ui icon-tinted icon-trophy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path class="ip-2" d="M4 22h16"/><path class="ip-2" d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path class="ip-2" d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
 // Final Results' checkered flag. Deliberately NOT one of the tinted pictographs: a racing flag
 // has no colour of its own, and the two things it IS made of are "ink" and "not ink". The filled
@@ -151,13 +159,13 @@ const ICON_TROPHY =
 // mid-row boundary and the bottom edge alike, so the checks bend with the cloth instead of
 // sitting flat on it. Three checks across rather than four: at the 16px this header renders, a
 // four-column checker closed up into a blob.
-const ICON_FLAG =
+const ICON_FLAG_PICT =
   '<svg class="icon-ui icon-flag" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 2v20"/><path class="fl-edge" d="M4 3C6 3.2 8 4.2 10 4.4C12 4.6 14 2.2 16 2C18 1.8 20 3.4 22 3.6L22 15.6C20 15.4 18 13.8 16 14C14 14.2 12 16.6 10 16.4C8 16.2 6 15.2 4 15Z"/><path class="fl-sq" d="M4 3C6 3.2 8 4.2 10 4.4L10 10.4C8 10.2 6 9.2 4 9Z"/><path class="fl-sq" d="M16 2C18 1.8 20 3.4 22 3.6L22 9.6C20 9.4 18 7.8 16 8Z"/><path class="fl-sq" d="M10 10.4C12 10.6 14 8.2 16 8L16 14C14 14.2 12 16.6 10 16.4Z"/></svg>';
-const ICON_PDF =
+const ICON_PDF_PICT =
   '<svg class="icon-ui icon-tinted icon-pdf" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg>';
-const ICON_LINK =
+const ICON_LINK_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
-const ICON_TRASH =
+const ICON_TRASH_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
 // Play Horn's icon: a plain play triangle. No frame around it — the button already has a border
 // and a label, so a square drawn inside a button was a second button drawn inside the first.
@@ -175,11 +183,11 @@ const ICON_TRASH =
 // 2.25 stroke carries out to roughly 7.2-20.2 of the 24 viewBox. Its centroid lands at x=12.0,
 // the usual optical nudge that stops a play triangle looking as though it has slid left in its
 // own box.
-const ICON_HORN =
+const ICON_HORN_PICT =
   '<svg class="icon-ui icon-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="pl-tri" d="M8.5 5.5 19 12l-10.5 6.5z"/></svg>';
-const ICON_STOP =
+const ICON_STOP_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>';
-const ICON_SHEET =
+const ICON_SHEET_PICT =
   '<svg class="icon-ui icon-sheet" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path class="sh-head" d="M4 5h16a2 2 0 0 1 2 2v3H2V7a2 2 0 0 1 2-2Z"/><path d="M2 14.5h20"/><path d="M8.5 10v9"/><path d="M15.5 10v9"/></svg>';
 // Alert triangle for the two warning banners (Resume, and the "autosave is off" notice). Both
 // carried a literal \u26A0\uFE0F, which is the one emoji the v18.57 sweep missed on each: the
@@ -188,8 +196,167 @@ const ICON_SHEET =
 // notice builds its own markup here. Same reasoning as the rest of these — an emoji is a
 // fixed-colour platform pictograph, and the autosave banner in particular draws its own amber
 // palette, which the emoji's baked-in orange-and-black never matched.
-const ICON_ALERT =
+const ICON_ALERT_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>';
+
+// ============================== ICON STYLE (pictograph / emoji) ==============================
+// Settings > Icon Style swaps every drawn pictograph above back for the platform emoji it
+// replaced — the whole reason each one was redrawn as an SVG in the first place (see the ICON_*
+// comments above) was to escape a fixed-colour glyph the app's own theme/colour-vision tokens
+// couldn't reach, so this is opt-in nostalgia, not a fix to anything.
+//
+// Each ICON_* above is a `let`, initialised to its own _PICT value, with a matching _EMOJI
+// string declared here — applyIconStyle reassigns every one of them in place rather than
+// swapping in a lookup function, so every existing `${ICON_BEER}` etc. call site throughout this
+// file keeps working unchanged; only the value the name currently points to changes. Emoji chosen
+// to match this app's own pre-SVG history where it's on record (ICON_SORT/RESET/REFRESH/SHUFFLE
+// replaced the literal ↕ / ↺ / \u{1F504} / \u{1F3B2} characters named in that comment; ICON_HORN
+// replaced the \u{1F389} party popper the v18.72 changelog calls out as "the last emoji in the
+// app" at the time) and to plain platform convention everywhere else.
+const THEME_ICON_SUN_EMOJI = "☀️";
+const THEME_ICON_MOON_EMOJI = "🌙";
+const X_ICON_SVG_EMOJI = "❌";
+const CHECK_ICON_SVG_EMOJI = "✅";
+const ICON_SORT_EMOJI = "↕️";
+const ICON_RESET_EMOJI = "↺";
+const ICON_REFRESH_EMOJI = "🔄";
+const ICON_SHUFFLE_EMOJI = "🎲";
+const ICON_SHUFFLE_TINTED_EMOJI = "🎲";
+const ICON_CLIPBOARD_EMOJI = "📋";
+const ICON_MIC_EMOJI = "🎤";
+const ICON_HEART_EMOJI = "❤️";
+const ICON_BEER_EMOJI = "🍺";
+const ICON_DRUM_EMOJI = "🥁";
+const ICON_TROPHY_EMOJI = "🏆";
+const ICON_FLAG_EMOJI = "🏁";
+const ICON_PDF_EMOJI = "📕";
+const ICON_LINK_EMOJI = "🔗";
+const ICON_TRASH_EMOJI = "🗑️";
+const ICON_HORN_EMOJI = "🎉";
+const ICON_STOP_EMOJI = "⏹️";
+const ICON_SHEET_EMOJI = "📊";
+const ICON_ALERT_EMOJI = "⚠️";
+
+// The reassignable bindings applyIconStyle below writes to — every existing `${ICON_BEER}` etc.
+// call site elsewhere in this file reads through one of these, so reassigning here is all it
+// takes to change what they render without touching any of those call sites.
+let THEME_ICON_SUN = THEME_ICON_SUN_PICT;
+let THEME_ICON_MOON = THEME_ICON_MOON_PICT;
+let X_ICON_SVG = X_ICON_SVG_PICT;
+let CHECK_ICON_SVG = CHECK_ICON_SVG_PICT;
+let ICON_SORT = ICON_SORT_PICT;
+let ICON_RESET = ICON_RESET_PICT;
+let ICON_REFRESH = ICON_REFRESH_PICT;
+let ICON_SHUFFLE = ICON_SHUFFLE_PICT;
+let ICON_SHUFFLE_TINTED = ICON_SHUFFLE_TINTED_PICT;
+let ICON_CLIPBOARD = ICON_CLIPBOARD_PICT;
+let ICON_MIC = ICON_MIC_PICT;
+let ICON_HEART = ICON_HEART_PICT;
+let ICON_BEER = ICON_BEER_PICT;
+let ICON_DRUM = ICON_DRUM_PICT;
+let ICON_TROPHY = ICON_TROPHY_PICT;
+let ICON_FLAG = ICON_FLAG_PICT;
+let ICON_PDF = ICON_PDF_PICT;
+let ICON_LINK = ICON_LINK_PICT;
+let ICON_TRASH = ICON_TRASH_PICT;
+let ICON_HORN = ICON_HORN_PICT;
+let ICON_STOP = ICON_STOP_PICT;
+let ICON_SHEET = ICON_SHEET_PICT;
+let ICON_ALERT = ICON_ALERT_PICT;
+
+// A handful of pictographs live as static markup in index.html rather than as ICON_* strings
+// (the settings gear, the header's Save/Load, the FAQ link, Try Example's flask, Take the Tour's
+// cap, the settings panel's round X) because they're each used at exactly one call site and never
+// built into a template literal. Keyed by element id/selector -> {pict, emoji}; pict is captured
+// from the live DOM the first time applyIconStyle runs (whatever index.html already shipped),
+// rather than duplicated here by hand, so it can never drift out of sync with the markup.
+const STATIC_ICON_TARGETS = [
+  { sel: "#settingsToggleBtn", emoji: "⚙️" },
+  { sel: '.toolbar button[onclick="saveToFile()"]', emoji: "💾", label: " Save" },
+  { sel: '.toolbar button[onclick="triggerLoadFile()"]', emoji: "📂", label: " Load" },
+  { sel: 'a[href="faq/index.html"]', emoji: "❓", label: " FAQ" },
+  { sel: 'button[onclick="loadSampleGame()"]', emoji: "🧪", label: " Try Example" },
+  { sel: 'button[onclick="Tutorial.start()"]', emoji: "🎓", label: " Take the Tour" },
+  { sel: ".settings-x-btn", emoji: "✕" },
+];
+let staticIconPictCache = null;
+
+function applyIconStyle(style) {
+  const emoji = style === "emoji";
+  THEME_ICON_SUN = emoji ? THEME_ICON_SUN_EMOJI : THEME_ICON_SUN_PICT;
+  THEME_ICON_MOON = emoji ? THEME_ICON_MOON_EMOJI : THEME_ICON_MOON_PICT;
+  X_ICON_SVG = emoji ? X_ICON_SVG_EMOJI : X_ICON_SVG_PICT;
+  CHECK_ICON_SVG = emoji ? CHECK_ICON_SVG_EMOJI : CHECK_ICON_SVG_PICT;
+  ICON_SORT = emoji ? ICON_SORT_EMOJI : ICON_SORT_PICT;
+  ICON_RESET = emoji ? ICON_RESET_EMOJI : ICON_RESET_PICT;
+  ICON_REFRESH = emoji ? ICON_REFRESH_EMOJI : ICON_REFRESH_PICT;
+  ICON_SHUFFLE = emoji ? ICON_SHUFFLE_EMOJI : ICON_SHUFFLE_PICT;
+  ICON_SHUFFLE_TINTED = emoji ? ICON_SHUFFLE_TINTED_EMOJI : ICON_SHUFFLE_TINTED_PICT;
+  ICON_CLIPBOARD = emoji ? ICON_CLIPBOARD_EMOJI : ICON_CLIPBOARD_PICT;
+  ICON_MIC = emoji ? ICON_MIC_EMOJI : ICON_MIC_PICT;
+  ICON_HEART = emoji ? ICON_HEART_EMOJI : ICON_HEART_PICT;
+  ICON_BEER = emoji ? ICON_BEER_EMOJI : ICON_BEER_PICT;
+  ICON_DRUM = emoji ? ICON_DRUM_EMOJI : ICON_DRUM_PICT;
+  ICON_TROPHY = emoji ? ICON_TROPHY_EMOJI : ICON_TROPHY_PICT;
+  ICON_FLAG = emoji ? ICON_FLAG_EMOJI : ICON_FLAG_PICT;
+  ICON_PDF = emoji ? ICON_PDF_EMOJI : ICON_PDF_PICT;
+  ICON_LINK = emoji ? ICON_LINK_EMOJI : ICON_LINK_PICT;
+  ICON_TRASH = emoji ? ICON_TRASH_EMOJI : ICON_TRASH_PICT;
+  ICON_HORN = emoji ? ICON_HORN_EMOJI : ICON_HORN_PICT;
+  ICON_STOP = emoji ? ICON_STOP_EMOJI : ICON_STOP_PICT;
+  ICON_SHEET = emoji ? ICON_SHEET_EMOJI : ICON_SHEET_PICT;
+  ICON_ALERT = emoji ? ICON_ALERT_EMOJI : ICON_ALERT_PICT;
+
+  if (!staticIconPictCache) {
+    staticIconPictCache = STATIC_ICON_TARGETS.map((t) => {
+      const el = document.querySelector(t.sel);
+      return el ? el.innerHTML : null;
+    });
+  }
+  STATIC_ICON_TARGETS.forEach((t, i) => {
+    const el = document.querySelector(t.sel);
+    if (!el) return;
+    const pict = staticIconPictCache[i];
+    el.innerHTML = emoji
+      ? t.emoji + (t.label || "")
+      : pict != null
+        ? pict
+        : el.innerHTML;
+  });
+
+  const btn = document.getElementById("iconStyleToggle");
+  if (btn) btn.textContent = emoji ? "Emoji" : "Pictograph";
+  // Resume banner text and the mini-progress "all rounds scored" label are both built once with
+  // a template literal rather than re-rendered by renderAll(), same as every other place a
+  // *_PICT/_EMOJI pair is baked into markup already on the page rather than freshly rendered —
+  // renderAll() below covers everything that IS rendered from gameState, and the one-off resume
+  // banner text is refreshed the same way dismissResumeBanner/resumeSession already do it.
+  const resumeText = document.getElementById("resumeText");
+  if (resumeText && resumeText.innerHTML.includes("Saved session from")) {
+    resumeText.innerHTML = resumeText.innerHTML.replace(
+      /^.*?Saved session from/,
+      ICON_ALERT + " Saved session from",
+    );
+  }
+  // Deliberately does NOT call renderAll() itself: renderAll() calls applyPrefs(), and
+  // applyPrefs() calls this function first thing — self-triggering a render in here would be
+  // infinite recursion. setIconStyle below calls this directly (so the ICON_* variables are
+  // already updated) and THEN calls renderAll() itself, which re-renders #mainContent/
+  // #sidebarBody with the new icons baked into their freshly-built HTML strings and, as a
+  // harmless side effect, calls this function a second time with the same value.
+}
+function setIconStyle(style) {
+  const p = loadPrefs();
+  p.iconStyle = style === "emoji" ? "emoji" : "pictograph";
+  savePrefs(p);
+  applyIconStyle(p.iconStyle);
+  renderAll();
+}
+function toggleIconStyle() {
+  const p = loadPrefs();
+  setIconStyle(p.iconStyle === "emoji" ? "pictograph" : "emoji");
+}
+
 // Round 1 and Round 3's bonus question keep the colour each round is already tagged with
 // elsewhere (rl-1 cyan, rl-3 gold) so the Q5 label is consistent with the rest of that round.
 // No icon any more: all four Q5 blocks carried a pictograph (four squares, a poker chip, a
@@ -220,7 +387,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.73"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.74"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -537,6 +704,10 @@ function savePrefs(p) {
 }
 function applyPrefs() {
   const p = loadPrefs();
+  // Before the theme toggle's innerHTML write below reads THEME_ICON_SUN/MOON (and every other
+  // ICON_* use further down this function and in renderAll()), so a saved "emoji" preference is
+  // already in effect for the very first paint instead of flashing the pictograph first.
+  applyIconStyle(p.iconStyle === "emoji" ? "emoji" : "pictograph");
   document.documentElement.setAttribute("data-theme", p.theme);
   const dn = p.density || "normal";
   if (dn === "normal") document.documentElement.removeAttribute("data-density");
@@ -832,6 +1003,13 @@ function setCvSelectDisplay(v) {
     li.setAttribute("aria-selected", "true");
     const lbl = w.querySelector(".cv-select-label");
     if (lbl) lbl.textContent = li.dataset.short || li.textContent.trim();
+    // Mirrors the option's own swatch pair (if it has one — "Off" doesn't) into the closed
+    // button, so the two colours a mode actually swaps to are visible at a glance without
+    // opening the menu. Copied from the li rather than given its own markup, so there is one
+    // source of truth for which colours each mode shows.
+    const swatchSrc = li.querySelector(".cv-swatch-pair");
+    const swatchDst = w.querySelector(".cv-select-swatch");
+    if (swatchDst) swatchDst.innerHTML = swatchSrc ? swatchSrc.innerHTML : "";
   }
 }
 document.addEventListener("click", (e) => {
@@ -1251,6 +1429,27 @@ function syncQtimerH() {
   }
   window.addEventListener("resize", sync);
   sync();
+  // This first sync() can still be measuring a page that hasn't fully settled: the resume
+  // banner's own text renders in Inter (font-display:swap) starting from a fallback system font,
+  // and the fallback's metrics are narrower per character on every measured case — so the very
+  // first paint can wrap the banner's one sentence onto one FEWER line than the webfont it swaps
+  // into a few dozen ms later. That swap is a genuine resize of #resumeBanner and the observer
+  // above does catch most of them, but the ones that land in the gap between this synchronous
+  // sync() call and the observer's own first async callback are missed entirely, leaving
+  // --layout-top permanently undershooting the panel's real top by however many lines the swap
+  // added — which makes .app-layout (height:calc(100vh - var(--layout-top))) render that many
+  // lines TALLER than the viewport actually has room for, and the document becomes scrollable by
+  // exactly that overshoot: this is the "I can still scroll down past the bottom" bug. Nothing
+  // else in the page re-triggers sync() once that initial race is lost — document.fonts.ready
+  // resolves once every @font-face this page declares has actually swapped in, so this adds the
+  // one guaranteed re-measurement that closes it, independent of whichever element's resize the
+  // observer happened to miss.
+  if (document.fonts?.ready) document.fonts.ready.then(sync);
+  // Belt-and-braces for the same race from the other end: the window "load" event (all
+  // resources, not just fonts, finished) fires after fonts.ready in every case that matters here
+  // and costs nothing extra to also resync on, in case something other than a font swap is ever
+  // the thing that lands late.
+  window.addEventListener("load", sync);
 })();
 
 // Keeps --mobile-dock-h in sync with the real rendered height of .mobile-bottom-dock (the peek
@@ -1717,7 +1916,7 @@ function getDisplayOrder() {
 function sortModeLabel() {
   switch (scoreSortMode) {
     case "random":
-      return "Shuffled order \u2014 for mid-game reads";
+      return `${ICON_SHUFFLE_TINTED} Shuffled order \u2014 for mid-game reads`;
     case "asc":
       return "\u2191 Lowest to highest \u2014 dramatic reveal";
     case "desc":

@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scorekeeper FAQ &amp; Tips</title>
+    <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <!-- The shared design system now lives in one place, ../css/styles.css — this used to be a
+         byte-for-byte copy kept in step by hand (this page was a separate repo/site until it was
+         folded back into the main app), which is exactly the kind of drift a copy invites. -->
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="css/faq.css" />
+    <!-- Plain blocking script (no defer/async) so it still runs before first paint, same
+         timing as when this bootstrap lived inline here. -->
+    <script src="js/faq-bootstrap.js"></script>
+  </head>
+  <body>
+    <div class="faq-header">
+      <div class="faq-header-row">
+        <div class="faq-logo">Score <span>Keeper</span> — FAQ</div>
+        <div class="faq-header-actions">
+          <a class="faq-back" href="../index.html"> ← Back to Scorekeeper </a>
+          <button
+            type="button"
+            class="settings-toggle-btn"
+            id="faqSettingsToggleBtn"
+            onclick="faqToggleSettings()"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="faqSettingsPanel"
+            title="Display settings"
+            aria-label="Display settings"
+          >
+            <svg
+              class="icon-ui"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            ><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div
+        class="settings-panel"
+        id="faqSettingsPanel"
+        role="region"
+        aria-label="Display settings"
+      >
+        <div class="settings-panel-head">
+          <span class="settings-panel-title">Display Settings</span>
+          <button
+            type="button"
+            class="settings-x-btn"
+            onclick="faqCloseSettingsPanel()"
+            aria-label="Close settings"
+            title="Close settings"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"
+              ><line x1="6" y1="6" x2="18" y2="18"></line><line
+                x1="18"
+                y1="6"
+                x2="6"
+                y2="18"
+              ></line
+            ></svg>
+          </button>
+        </div>
+        <div class="settings-panel-body">
+          <div class="settings-row">
+            <span class="size-label">Theme</span>
+            <div class="settings-controls">
+              <button
+                type="button"
+                class="settings-btn"
+                id="faqThemeToggle"
+                onclick="faqToggleTheme()"
+              >
+                <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark
+              </button>
+            </div>
+          </div>
+          <div class="settings-row">
+            <span class="size-label">Text Size</span>
+            <div class="settings-controls">
+              <button
+                type="button"
+                class="settings-btn"
+                onclick="faqAdjustFontSize(-1)"
+                aria-label="Decrease text size"
+              >
+                A−
+              </button>
+              <button
+                type="button"
+                class="settings-btn"
+                id="faqSizeResetBtn"
+                onclick="faqAdjustFontSize(0)"
+                aria-label="Reset text size"
+              >
+                A
+              </button>
+              <button
+                type="button"
+                class="settings-btn"
+                onclick="faqAdjustFontSize(1)"
+                aria-label="Increase text size"
+              >
+                A+
+              </button>
+            </div>
+          </div>
+          <div class="settings-row">
+            <span class="size-label">Color Vision</span>
+            <div class="cv-select" id="faqCvSelect">
+              <button
+                type="button"
+                class="cv-select-btn"
+                onclick="faqToggleCvMenu(event)"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                title="Adjust pass/fail colors for color blindness"
+              >
+                <span class="cv-select-label">Off</span
+                ><span class="cv-select-swatch" aria-hidden="true"></span
+                ><span class="cv-select-arrow">▾</span>
+              </button>
+              <ul class="cv-select-menu" role="listbox">
+                <li
+                  role="option"
+                  data-value="0"
+                  data-short="Off"
+                  aria-selected="true"
+                  onclick="faqSelectCvOption(this,'0')"
+                >
+                  Off<span class="cv-opt-sub">Standard colors</span>
+                </li>
+                <li
+                  role="option"
+                  data-value="1"
+                  data-short="Red-Green"
+                  aria-selected="false"
+                  onclick="faqSelectCvOption(this,'1')"
+                >
+                  <span class="cv-opt-main"
+                    >Red-Green<span class="cv-swatch-pair" aria-hidden="true"
+                      ><span class="cv-swatch cv-swatch-rg-a"></span
+                      ><span class="cv-swatch cv-swatch-rg-b"></span></span
+                  ></span>
+                  <span class="cv-opt-sub">Deuteranopia / protanopia</span>
+                </li>
+                <li
+                  role="option"
+                  data-value="2"
+                  data-short="Blue-Yellow"
+                  aria-selected="false"
+                  onclick="faqSelectCvOption(this,'2')"
+                >
+                  <span class="cv-opt-main"
+                    >Blue-Yellow<span class="cv-swatch-pair" aria-hidden="true"
+                      ><span class="cv-swatch cv-swatch-by-a"></span
+                      ><span class="cv-swatch cv-swatch-by-b"></span></span
+                  ></span>
+                  <span class="cv-opt-sub">Tritanopia</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="settings-panel-foot">
+          <span class="settings-meta"
+            ><span class="settings-version" id="faqSettingsVersionLabel"></span
+            ><span class="settings-disclaimer"
+              ><svg
+                class="icon-ui"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                focusable="false"
+              ><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+              Built with Anthropic's Claude AI — double-check details against
+              the app yourself.</span
+            ></span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="faq-wrap">
+      <p class="faq-intro">
+        Everything the app does from setting up Event Details to reading the
+        Craft Prize drawing. The first half covers
+        <strong>regular features</strong> in the order you'll actually meet them
+        during a game night; <strong>Tips &amp; Tricks</strong>
+        near the bottom covers the power-user stuff tucked into Advanced
+        Settings, plus a few shortcuts that aren't obvious from just looking at
+        the screen.
+      </p>
+
+      <div class="faq-toolbar">
+        <input
+          type="text"
+          class="faq-search"
+          id="faqSearch"
+          placeholder='Search the FAQ… (e.g. "wager", "tie", "audit")'
+          oninput="faqFilter(this.value)"
+        />
+      </div>
+      <p class="faq-no-results" id="faqNoResults">
+        No questions match that search.
+      </p>
+
+      <nav class="faq-toc" aria-label="Sections">
+        <a href="#getting-started">Getting Started</a>
+        <a href="#tutorial">Interactive Tutorial</a>
+        <a href="#event-details">Event Details</a>
+        <a href="#teams">Teams</a>
+        <a href="#rounds">Scoring Rounds</a>
+        <a href="#question-timer">Question Timer</a>
+        <a href="#wagers">Halftime &amp; Final Wager</a>
+        <a href="#standings">Scores &amp; Standings</a>
+        <a href="#final-results">Final Results &amp; Ties</a>
+        <a href="#craft-prize">Craft Prize Drawing</a>
+        <a href="#exporting">Exporting</a>
+        <a href="#autosave">Autosave &amp; Resume</a>
+        <a href="#manual-save-load">Manual Save &amp; Load</a>
+        <a href="#settings">Settings</a>
+        <a href="#appearance">Light Mode &amp; Dark Mode</a>
+        <a href="#tips">Tips &amp; Tricks</a>
+      </nav>
+
+      <div class="faq-expand-row">
+        <button class="faq-link-btn" onclick="faqExpandAll()">
+          Expand All
+        </button>
+        <span class="faq-expand-sep" aria-hidden="true">·</span>
+        <button class="faq-link-btn" onclick="faqCollapseAll()">
+          Collapse All
+        </button>
+      </div>
+
+      <!-- ============================== GETTING STARTED ============================== -->
+      <section class="faq-section" id="getting-started">
+        <h2 class="faq-section-title">Getting Started</h2>
+        <p class="faq-section-sub">
+          The night in order: fill in Event Details, add your teams, score each
+          round as it happens, then read Final Results and run the Craft Prize
+          drawing.
+        </p>
+
+        <details class="faq-item">
+          <summary>
+            What is Scorekeeper for?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              It's a live scoring tool for a trivia night: 4 rounds of
+              wager-based questions, a bonus question in Rounds 1 and 3, a
+              Halftime Wager and a Final Wager, running standings the whole
+              game, and a Craft Prize drawing at the end. It also builds the
+              exact PDF and XLSX scoresheets the trivia company uses to record
+              the night.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What's the fastest way to see the whole app working?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Two options, both under <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top
+              right), Sample Data row. <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong> loads a
+              simulated, fully-scored 11-team game — Event Details filled in,
+              every round scored, both wagers resolved, and (deliberately) a
+              genuine tie in Final Results — so you can click around every
+              screen without setting anything up yourself.
+              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour</strong> is the more hands-on option: a
+              guided, step-by-step walkthrough of an actual game, start to
+              finish. See <a href="#tutorial">Interactive Tutorial</a> below.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/settings-panel.webp"
+                data-shot-base="settings-panel"
+                alt="Settings panel open, showing the Try Example button, Take the Tour button, and the FAQ link"
+                onerror="faqShotFallback(this,'Settings panel open — Try Example button and the FAQ link both visible')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Does the app save my progress automatically?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Yes — every change autosaves to the browser as you go. See
+              <a href="#autosave">Autosave &amp; Resume</a> below for what
+              happens if you close the tab or reload mid-game.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Can I collapse sections I'm not using right now?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Yes — every section's header (Event Details, Teams, each Round,
+              Final Results, Craft Prize Drawing, Export &amp; Data) is
+              clickable and collapses/expands via the <strong>▼</strong>
+              arrow on its right edge. Handy for tidying the screen down to just
+              the round you're actively scoring, or for getting Event Details
+              and Teams out of the way once the game's underway. A few sections
+              (the rounds, and Export &amp; Data) start collapsed by default;
+              the rest start open.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== INTERACTIVE TUTORIAL ============================== -->
+      <section class="faq-section" id="tutorial">
+        <h2 class="faq-section-title">Interactive Tutorial</h2>
+        <p class="faq-section-sub">
+          A guided, click-along walkthrough of a full game — the fastest way
+          to learn the app by actually using it instead of reading about it.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/tutorial-spotlight.webp"
+            data-shot-base="tutorial-spotlight"
+            alt="The tutorial's spotlight overlay highlighting a control, with the callout box's step text and Next/Skip Tutorial buttons visible"
+            onerror="faqShotFallback(this,'The tutorial mid-step — spotlight ring around a control, callout box with Next/Skip Tutorial')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            What is the tutorial, and how do I start it?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              It's a spotlight-style tour: the rest of the screen dims, one
+              real control at a time is highlighted with a ring around it, and
+              a callout box explains what it does and what to do next. Start
+              it from <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) →
+              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour</strong>, right next to
+              <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong>. First-time visitors with no
+              game in progress also get offered it automatically — a small
+              "<svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> New here? Take the 2-minute tour." card appears where the
+              resume banner would normally be, with Take the Tour and Skip
+              buttons. That auto-offer only ever shows once; after that,
+              taking the tour is always available from Settings whenever you
+              want it.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What actually happens during the tour — is it real, or just a
+            slideshow?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              It's real. The tour runs an actual throwaway 5-team practice
+              game through the exact same scoring, wager, and export
+              functions a live game uses — nothing is faked or staged as a
+              picture. For the parts worth learning by doing, it hands control
+              to you: typing the Quiz ID and Host Name, flipping the Light/Dark
+              theme, adding and naming your first team, entering their Score
+              Guess, checking a Bonus box, cycling one question through
+              correct → incorrect → cleared, scoring a Bonus question, placing
+              a Halftime Wager, trying the ↕ Sort button, and opening (then
+              closing) a team's Team Report. For the repetitive rest —
+              the other four teams, the remaining rounds, everyone else's
+              wagers — the tour fills it in live for you so the tour takes a
+              couple of minutes instead of the length of a real game. It even
+              deliberately engineers a Beer Round and a genuine Final Results
+              tie along the way, so both of those moments are guaranteed to
+              show up instead of being left to chance. A
+              <strong>Step X of Y</strong> counter and Back / Next /
+              <strong>Skip Tutorial</strong> controls sit in the callout the
+              whole time, and it walks through essentially the entire app —
+              Event Details, Theme &amp; Color Vision in Settings, Teams,
+              collapsing sections, Round scoring, the Halftime Wager, Round 3
+              &amp; 4, the Final Wager, Final Results, the Craft Prize
+              Drawing, and Exporting.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Will starting the tour wipe out my real game in progress?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Starting it swaps in the throwaway practice game and asks you to
+              confirm first, same as <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example does. What happens to your
+              real game afterward depends on how the tour ends:
+              <strong>Skip Tutorial</strong> (available on every step but the
+              last) restores your real game exactly as it was, untouched.
+              Reaching the last step and finishing normally instead
+              <em>keeps the practice game</em> as your live session — so if
+              you have real, unsaved work in progress, export or save it (see
+              <a href="#manual-save-load">Manual Save &amp; Load</a>) before
+              starting the tour.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== EVENT DETAILS ============================== -->
+      <section class="faq-section" id="event-details">
+        <h2 class="faq-section-title">Event Details</h2>
+        <p class="faq-section-sub">
+          The fields at the top of the app — who, where, and what the bonus is
+          for tonight.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/event-details.webp"
+            data-shot-base="event-details"
+            alt="Event Details section filled in with the sample game's Date, Quiz ID, Host Name, Location, Craft Partner, Partner Town, Bonus Item, and Restaurant Staff"
+            onerror="faqShotFallback(this,'Event Details section, fully filled in using the sample game')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            What goes in each Event Details field?<span class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <ul>
+              <li><strong>Date</strong> — the date of the event.</li>
+              <li>
+                <strong>Quiz ID</strong> — required before scoring can start,
+                but its format is free-entry; typing something that doesn't look
+                like the usual pattern (a few letters, a few numbers) shows an
+                orange hint about proper formatting. A properly formatted ID
+                shows a green checkmark instead.
+              </li>
+              <li>
+                <strong>Host Name</strong> — who's hosting the game. Also
+                required before scoring can start; is shown on both the PDF and
+                XLSX exports.
+              </li>
+              <li>
+                <strong>Location</strong> — the venue. Also required before
+                scoring can start; type your own or pick from the suggestions
+                that pop up as you type.
+              </li>
+              <li>
+                <strong>Craft Partner</strong> / <strong>Partner Town</strong> —
+                the brewery providing the Craft Prize, and the town it's in.
+                Both go into the winner announcement banter at the end and the
+                eligible-list exports for a separate drumroll-chooser app.
+              </li>
+              <li>
+                <strong>Bonus Item (+5)</strong> — the "bring this item" bonus
+                for the night. If a team brings the right item, a box gets
+                checked on their Team Entry row for +5 points.
+              </li>
+              <li>
+                <strong>Restaurant Staff</strong> — names to shout out; also
+                feeds the "Thank the Staff" prompt that appears at halftime.
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Is there a limit on how much I can type into a field?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Yes — every field you type free text into has a character limit.
+              Reach one and the field outlines in orange with a
+              <strong>Limit reached — N characters max</strong> note underneath,
+              so a field that has stopped accepting letters is telling you why
+              rather than looking like a dropped keypress.
+            </p>
+            <ul>
+              <li><strong>Quiz ID</strong> — 24 characters.</li>
+              <li><strong>Host Name</strong> — 40 characters.</li>
+              <li><strong>Location</strong> — 60 characters.</li>
+              <li><strong>Craft Partner</strong> — 50 characters.</li>
+              <li><strong>Partner Town</strong> — 40 characters.</li>
+              <li><strong>Bonus Item</strong> — 60 characters.</li>
+              <li><strong>Restaurant Staff</strong> — 200 characters.</li>
+              <li>
+                <strong>Team name</strong> — 40 characters (over in
+                <a href="#teams">Teams</a>).
+              </li>
+              <li>
+                <strong>Winner announcement script</strong> — 600 characters (in
+                <a href="#craft-prize">Craft Prize Drawing</a>).
+              </li>
+            </ul>
+            <p>
+              The sizes follow what each field is for rather than a round
+              number — a Quiz ID is a code, a team name has to fit the
+              scoresheet's team column, the staff list is a handful of first
+              names, and the script is a paragraph read aloud.
+            </p>
+            <p>
+              The same limits apply to a game arriving from a saved
+              <strong>.json</strong> file, including one saved before these
+              limits existed — anything longer is trimmed to the limit as it
+              loads. That's deliberate: the PDF and the scoresheet shrink text
+              to fit a fixed box, so an overlong value never spilled over the
+              edge, it shrank until nobody could read it.
+            </p>
+          </div>
+        </details>
+
+      
+
+        <details class="faq-item">
+          <summary>
+            Why are some Event Details fields greyed out?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Once scoring starts, Event Details locks so it can't drift
+              mid-game — a wager gets scored, a team's added, whatever the
+              trigger, the section shows a <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> note with an
+              <strong>Unlock to fix it</strong> link right there in case of a
+              typo. That link does the same thing as the
+              <strong>Edit Locked Fields</strong> toggle in Advanced Settings —
+              see <a href="#tips">Tips &amp; Tricks</a>.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== TEAMS ============================== -->
+      <section class="faq-section" id="teams">
+        <h2 class="faq-section-title">Teams</h2>
+        <p class="faq-section-sub">
+          Add, rename, and remove teams whenever you need to — even mid-game.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/teams-list.webp"
+            data-shot-base="teams-list"
+            alt="Teams section showing team rows with name fields, +5 Bonus and +3 NJCB checkboxes, Score Guess field, and the remove button"
+            onerror="faqShotFallback(this,'Teams section — a few rows, showing the Bonus/NJCB checkboxes and Score Guess field')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            Can I add or rename teams after the game has already started?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Yes. Unlike Event Details, team names, guesses, and the
+              <strong>+ Add Team</strong> button all stay open the entire game —
+              handy for a team that walks in late or a name you misheard at
+              check-in. The team cap is <strong>100 teams</strong>; past that,
+              the Add Team button is replaced with a note saying the cap's been
+              hit.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What do the "+5 Bonus" and "+3 NJCB" checkboxes do?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              <strong>+5 Bonus</strong> is checked when a team brought that
+              night's Bonus Item (whatever you entered in Event Details).
+              <strong>+3 NJCB</strong> is checked when a team shows their NJCB
+              membership card. Both add straight to the team's total, and both
+              get stripped back out again before Score Guess is compared to the
+              final score — see
+              <a href="#final-results">Final Results &amp; Ties</a> for why that
+              matters.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What's the Score Guess field, and what if a team never gives
+            one?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              It's each team's pregame guess at their own final score (1–146),
+              used purely as a tiebreaker — the team whose guess lands closest
+              to their actual score wins a tie. A team with no guess entered
+              shows an orange <strong>⚠ missing</strong> warning next to their
+              field, and the Teams section header tallies how many are still
+              missing, so the warning doesn't disappear once scoring starts. A
+              missing guess never blocks scoring — it just shows as "—" instead
+              of a number in Final Results.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            I removed a team by mistake — what did that actually delete?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              The confirmation prompt explains what's being wiped: the team
+              itself, plus every round, bonus, and wager score already entered
+              for them. There's no separate undo — if you meant to keep the
+              data, cancel the prompt instead. Once confirmed, every other
+              team's data re-indexes cleanly (no gaps, no shifted scores).
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== SCORING ROUNDS ============================== -->
+      <section class="faq-section" id="rounds">
+        <h2 class="faq-section-title">Scoring Rounds</h2>
+        <p class="faq-section-sub">
+          Four rounds, five questions each, with point bank-based scoring, multi-part bonus questions, and point wagering.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/round-scoring.webp"
+            data-shot-base="round-scoring"
+            alt="A round expanded, showing wager buttons per team per question in green (correct), red (incorrect), and idle states"
+            onerror="faqShotFallback(this,'One round expanded — wager buttons in their correct/incorrect/idle states')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            How does marking a question correct/incorrect actually work?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Each question has 4 wager buttons. Click a team's chosen wager
+              once and it turns green (correct); click that <em>same</em> wager
+              again and it turns red (incorrect); click it a third time and the
+              answer clears entirely. A team can only use each wager value once
+              per round — trying to reuse one that's already assigned to a
+              different question is blocked.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What's the Q5 "Bonus" question in Rounds 1 and 3?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              A multi-part question with zero to four correct answers worth 5
+              points each.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What's a "Beer Round"?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              The app watches every question as it's scored. If
+              <em>every</em> team gets a question right, a gold "<svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg> Beer Round!"
+              banner lights up across that question automatically. Purely a fun
+              celebratory flourish; it doesn't change scoring.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/beer-round.webp"
+                data-shot-base="beer-round"
+                alt="A bonus question showing the gold Beer Round banner after every team scored all 4 correct"
+                onerror="faqShotFallback(this,'A bonus question with every team correct — the gold Beer Round banner')"
+              />
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== QUESTION TIMER ============================== -->
+      <section class="faq-section" id="question-timer">
+        <h2 class="faq-section-title">Question Timer</h2>
+        <p class="faq-section-sub">
+          A countdown clock for pacing each question. On bigger screens it's at
+          the bottom of the scoring sidebar. On smaller screens it's down in the
+          bottom dock.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/question-timer.webp"
+            data-shot-base="question-timer"
+            alt="The question timer widget showing a running countdown with the Pause and Reset buttons"
+            onerror="faqShotFallback(this,'Question timer widget — a running countdown with Pause and Reset buttons')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            How does the Question Timer work?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              <strong>▶ Start</strong> begins the countdown from its base
+              duration; the same button becomes <strong>⏸ Pause</strong> while
+              running and <strong>▶ Resume</strong> while paused.
+              <strong>↺ Reset</strong> stops the clock and returns it to the
+              base duration — it's disabled whenever the timer is already idle,
+              so there's nothing to reset. The base duration itself comes from
+              <strong>Settings → Question Timer</strong>, a dropdown from 1:00
+              to 15:00 in 30-second steps (default 3:00).
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            I changed the duration in Settings while a question was already
+            timing — why didn't it change?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              That's expected — the Settings dropdown only sets the duration the
+              timer uses the <em>next</em> time it's started fresh from idle. A
+              countdown that's already running or paused keeps counting down on
+              whatever duration it started with, so changing the setting
+              mid-question can't retroactively shorten or lengthen a clock
+              that's already live.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What happens when the timer hits 0:00?<span class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              It doesn't just stop — it keeps counting, now upward past zero
+              with a minus sign in front, so it's obvious at a glance that
+              time's run out without the display doing anything jarring at the
+              exact moment it happens. The background also shifts color as a
+              warning on the way there: one shade once under a minute left, a
+              more urgent one under 30 seconds, and a distinct look once it's
+              gone negative.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Can I hide the timer, or add quick +/-30s buttons?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Yes, both are Advanced Settings toggles — see
+              <strong>Timer Widget</strong> and
+              <strong>Timer Stepper Buttons</strong> in
+              <a href="#tips">Tips &amp; Tricks</a> for the full rundown of what
+              each one controls.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== HALFTIME & FINAL WAGER ============================== -->
+      <section class="faq-section" id="wagers">
+        <h2 class="faq-section-title">Halftime &amp; Final Wager</h2>
+        <p class="faq-section-sub">
+          One big wager after Round 2, one after Round 4.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/halftime-wager.webp"
+            data-shot-base="halftime-wager"
+            alt="Halftime Wager entry for one team, showing the wager amount field and correct/incorrect toggle"
+            onerror="faqShotFallback(this,'Halftime Wager row — wager amount plus the correct/incorrect toggle')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            How do the wagers affect a team's score?<span class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Each team wagers their own amount; they must bet at least one
+              point. For Round 2 they can bet up to 10 points and for Round 4
+              they can bet 20. If marked correct, that amount is
+              <em>added</em> to their score; if marked incorrect, it's
+              <em>subtracted</em>. Leaving a team's wager blank gives them a
+              zero.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== SCORES & STANDINGS ============================== -->
+      <section class="faq-section" id="standings">
+        <h2 class="faq-section-title">Scores &amp; Standings</h2>
+        <p class="faq-section-sub">
+          The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg> Scores panel tracks every team's running total the whole game.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/scores-sidebar.webp"
+            data-shot-base="scores-sidebar"
+            alt="Scores sidebar open, showing live team totals and the Entry / Random / Ascending / Descending sort buttons"
+            onerror="faqShotFallback(this,'Scores sidebar open — live totals plus the sort mode buttons')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            What are the Entry / <svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg> RAND / ↑ Asc / ↓ Desc buttons in the Scores
+            panel?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Four ways to order the live scoreboard: <strong>Entry</strong> is
+              the order teams were added at the start of the event,
+              <strong><svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg> RAND</strong> shuffles them into a random order (handy
+              for reading results aloud without always starting with the same
+              team), <strong>↑ Asc</strong> (Ascending) and
+              <strong>↓ Desc</strong> (Descending) sort by current score.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What are "Scores — Before Halftime Wager" and "Before Final
+            Wager"?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Team Standings that show their score at that point in the game.
+              This way, you can read out everyone's scores before going into the
+              question and teams can decide how much to bet.
+            </p>
+          </div>
+          <div class="faq-shot">
+            <img
+              src="screenshots/before-wager-scores.webp"
+              data-shot-base="before-wager-scores"
+              alt="Pre-Halftime wager scores"
+              onerror="faqShotFallback(this,'Pre-Halftime Wager score standings shown.')"
+            />
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            On my phone, I don't see the full Scores sidebar — what's the bar
+            at the bottom?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              That's the mobile bottom dock — a peek strip pinned to the
+              bottom of the screen showing a quick glance at scores without
+              leaving the round you're scoring. Drag it (or tap it) up to
+              expand the full Scores sidebar over the screen, and drag the
+              grab handle back down — or tap outside it — to collapse it
+              again. It only appears on narrow/phone-width screens; on a
+              tablet or desktop the Scores sidebar just sits open on screen
+              the whole time instead.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/mobile-bottom-dock.webp"
+                data-shot-base="mobile-bottom-dock"
+                alt="The mobile bottom dock peek strip showing live scores above the scoring area on a phone-width screen"
+                onerror="faqShotFallback(this,'Mobile bottom dock — the scores peek strip at the bottom of a phone-width screen')"
+              />
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== FINAL RESULTS & TIES ============================== -->
+      <section class="faq-section" id="final-results">
+        <h2 class="faq-section-title">Final Results &amp; Ties</h2>
+        <p class="faq-section-sub">
+          End of Game Scoring — including how ties are handled.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/final-results.webp"
+            data-shot-base="final-results"
+            alt="Final Results table showing two teams tied for a place, with the closer-guess tiebreak footnote visible"
+            onerror="faqShotFallback(this,'Final Results — the sample game&#39;s genuine 2nd-place tie is a good one to capture here')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            Why is a team's "Diff" not just Score minus Guess?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Because <strong>+5 Bonus</strong> and <strong>+3 NJCB</strong> are
+              stripped out of a team's score before it's compared to their guess
+              — teams generally guess their <em>trivia</em> score, not their
+              trivia score plus whatever extras they happened to bring. So
+              <code>Diff = |(Score − Bonuses) − Guess|</code>, and the Final
+              Results table has a footnote spelling that out.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Two teams have the same score — how does the app decide who ranks
+            higher?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              First tiebreak is Score Guess closeness — whichever team's guess
+              landed nearer their actual (bonus-adjusted) score ranks higher and
+              is marked "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg> closer". If their guesses are <em>also</em> equally
+              close (including two teams that both left the guess blank), that's
+              a genuine, unbreakable tie, and both teams share the exact same
+              place — the next distinct team after them still gets the very next
+              place number, nothing gets skipped. So three teams tied for 5th,
+              with one guessing closer, would read 5th / 6th / 6th rather than
+              5th / 5th / 5th.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            How do I double-check how one team's score was actually built?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Tap/Click on the team's name — see <a href="#tips">Score Audit</a> in Tips
+              &amp; Tricks.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/score-audit.webp"
+                data-shot-base="score-audit"
+                alt="The Score Audit modal open for one team, showing the round-by-round breakdown and Guess/Diff tiles"
+                onerror="faqShotFallback(this,'Score Audit modal — full round-by-round breakdown for one team')"
+              />
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== CRAFT PRIZE ============================== -->
+      <section class="faq-section" id="craft-prize">
+        <h2 class="faq-section-title">Craft Prize Drawing</h2>
+        <p class="faq-section-sub">
+          A random draw for the night's craft beer gift card, from a pool that
+          leaves the top finishers out (since they already won gift cards).
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/craft-prize.webp"
+            data-shot-base="craft-prize"
+            alt="Craft Prize Drawing section open, showing the Exclude Top stepper, Drumroll seconds, and the draw button"
+            onerror="faqShotFallback(this,'Craft Prize Drawing — Exclude Top stepper and Drumroll seconds visible')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            How does the drawing decide which teams are eligible?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              The <strong>Exclude Top</strong> stepper sets how many of the
+              top-placed teams sit out the drawing (top finishers already have
+              won gift cards; the craft prize is for everyone else). It scales
+              with your roster.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What happens when I click "<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg> Start Drumroll"?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              A drumroll plays for the configured number of seconds, then a
+              winner is drawn from the eligible pool and announced with a line
+              naming the craft partner and town from Event Details. A
+              <strong>Clear</strong> button next to the result lets you reset
+              and redraw a winner.
+            </p>
+            <div class="faq-shot-pair">
+              <div class="faq-shot">
+                <img
+                  src="screenshots/craft-prize-drumroll.webp"
+                  data-shot-base="craft-prize-drumroll"
+                  alt="The Craft Prize drumroll actively playing"
+                  onerror="faqShotFallback(this,'Drumroll running')"
+                />
+                <div class="faq-shot-caption">Drumroll running</div>
+              </div>
+              <div class="faq-shot">
+                <img
+                  src="screenshots/craft-prize-winner.webp"
+                  data-shot-base="craft-prize-winner"
+                  alt="The Craft Prize winner banner after the drumroll finishes, with the Clear button"
+                  onerror="faqShotFallback(this,'Finished — winning team announced')"
+                />
+                <div class="faq-shot-caption">Finished — winner announced</div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== EXPORTING ============================== -->
+      <section class="faq-section" id="exporting">
+        <h2 class="faq-section-title">Exporting Your Game</h2>
+        <p class="faq-section-sub">
+          Getting the night's results out of the browser.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/export-bar.webp"
+            data-shot-base="export-bar"
+            alt="Export section showing the XLSX, PDF, and JD Upload Form buttons"
+            onerror="faqShotFallback(this,'Export &amp; Data section — XLSX / PDF / JD Upload Form buttons')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            What's the difference between XLSX, PDF, and the JD Upload Form
+            link?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <ul>
+              <li>
+                <strong><svg class="icon-ui icon-sheet" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path class="sh-head" d="M4 5h16a2 2 0 0 1 2 2v3H2V7a2 2 0 0 1 2-2Z"/><path d="M2 14.5h20"/><path d="M8.5 10v9"/><path d="M15.5 10v9"/></svg> XLSX</strong> — fills in the official
+                spreadsheet template (Location, Date, Quiz ID, Host, every team's
+                wagers and totals) and downloads it.
+              </li>
+              <li>
+                <strong><svg class="icon-ui icon-tinted icon-pdf" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg> PDF</strong> — a printable, easily readable scoresheet, with Location/Date/Quiz ID/Host header and full
+                game results.
+              </li>
+              <li>
+                <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> JD Upload Form</strong> — opens JD's
+                results-submission form in a new tab; the scorekeeper app stays open
+                and untouched.
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What does the XLSX export look like?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              The official spreadsheet template, opened in a
+              spreadsheet app — Location/Date/Quiz ID/Host filled in, and every team's wagers and totals filled into their rows.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/xlsx-export.webp"
+                alt="The exported XLSX scoresheet opened in a spreadsheet app, showing the filled-in header and team rows"
+                onerror="faqShotFallback(this,'The exported XLSX scoresheet, opened')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What does the PDF export actually look like?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              A printable scoresheet with
+              Location/Date/Quiz ID/Host at the top and the full game results.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/pdf-export.webp"
+                alt="The exported PDF scoresheet, showing the header and standings"
+                onerror="faqShotFallback(this,'The exported PDF scoresheet')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What is the JD Upload Form link?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              A link straight to JD's results-submission form, opened in a new
+              tab.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/jd-upload-form.webp"
+                alt="The JD Upload Form page open in a new browser tab"
+                onerror="faqShotFallback(this,'The JD Upload Form, open in its own tab')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            After exporting, the app asks to "Clear session?" — what does that
+            mean?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              It's just a prompt, not automatic — choosing
+              <strong>Yes</strong> wipes the current game so you're ready for
+              the next one; <strong>No</strong> leaves everything exactly as it
+              was, in case you need to export again or double-check something
+              first.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Can I save/load the whole game, not just export it?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Yes — that's a separate feature from these exports, covered in
+              <a href="#manual-save-load">Manual Save &amp; Load</a> below.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== MANUAL SAVE & LOAD ============================== -->
+      <section class="faq-section" id="manual-save-load">
+        <h2 class="faq-section-title">Manual Save &amp; Load</h2>
+        <p class="faq-section-sub">
+          A manual backup of the whole game, separate from autosave and separate
+          from the PDF/XLSX exports.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/save-load-toolbar.webp"
+            data-shot-base="save-load-toolbar"
+            alt="The top toolbar showing the Save and Load buttons next to the Settings gear icon"
+            onerror="faqShotFallback(this,'Top toolbar — the Save and Load buttons next to the Settings gear icon')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            What do <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load (top toolbar) actually save?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save</strong> downloads the entire game as a JSON file
+              — every Event Details field, every team, every round, bonus, and
+              wager score, exactly as the app itself would need to reload it.
+              The filename uses the venue name and date, e.g.
+              <code>Man Skirt Brewery - 04-13-2026-save.json</code>.
+              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load</strong> reads that same kind of file back in and
+              picks up exactly where it left off — including a game saved from a
+              different browser or device entirely.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            How is this different from the PDF/XLSX exports?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              The PDF and XLSX exports (see <a href="#exporting">Exporting</a>)
+              are one-way, human-readable scoresheets — great for handing off or
+              printing, but not something the app can read back in. Save/Load's
+              JSON file is the opposite: not meant for a human to read, but a
+              complete, exact round-trip of the game state. Use exports to hand
+              off results to someone else; use Save/Load to back up or load the
+              game itself on a different device.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What happens if I click Load with a game already in progress?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              A confirmation prompt appears first, and it says plainly what's
+              about to happen: loading a file replaces every team, score, and
+              Event Details field currently entered, and it can't be undone.
+              Cancel it and nothing changes. If the chosen file turns out not to
+              be valid JSON (or isn't a real save), the app tells you so in an
+              alert instead of silently failing or corrupting the current
+              session.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What's the difference between this and "App Preferences" Save/Load
+            in Advanced Settings?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Separate file, separate purpose. The toolbar's Save/Load (above)
+              carries <strong>game data</strong> — teams and scores. Advanced
+              Settings' <strong>App Preferences</strong> Save/Load carries only
+              your <strong>display settings</strong> (theme, size, timer
+              defaults, and the rest of Settings) as its own JSON file, with no
+              team or score data in it at all. That split means you can carry
+              your preferred setup to a new device without dragging an old game
+              along, or hand off a game file without also handing off your
+              personal display preferences. Same pattern either way: a
+              confirmation before Load, and a clear alert if the file isn't
+              valid.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== AUTOSAVE ============================== -->
+      <section class="faq-section" id="autosave">
+        <h2 class="faq-section-title">Autosave &amp; Resume</h2>
+        <p class="faq-section-sub">
+          The app is built around not losing a night's scoring to a closed tab.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/resume-banner.webp"
+            data-shot-base="resume-banner"
+            alt="The Saved session found resume banner with Resume and New Game buttons"
+            onerror="faqShotFallback(this,'The resume banner — Resume and New Game buttons')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            What happens if I accidentally close the tab or reload
+            mid-game?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Every change autosaves to the browser as it happens. Reopening the
+              app shows a "<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Saved session found" banner with two choices:
+              <strong>Resume</strong> restores everything exactly as it was —
+              Event Details, every team, every score, Craft Prize state — and
+              <strong>New Game</strong> discards it and starts clean.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Does the app keep working if the venue's wifi drops?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Yes — once it's loaded successfully one time, it keeps working
+              with no signal at all. It registers itself as an installable
+              offline app in the background, so a dead spot in the room mid-game
+              won't interrupt scoring; you'll just need a connection again
+              once you're ready to actually export or upload results.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            The app is warning me that autosave is off — why?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              That only happens if the app was opened directly as a local file
+              (a <code>file://</code> address) instead of served from a real
+              web address — some browsers, notably Chrome, block persistent
+              storage entirely under those conditions. The game still works
+              for that session, but autosave, Resume, and saved Settings are
+              all disabled until it's reopened properly — as
+              <a href="https://electricburgers.github.io/scorekeeper/"
+                >the hosted app</a
+              >, or served locally (<code>python3 -m http.server</code>), or
+              opened in Firefox, which doesn't have this restriction.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== SETTINGS ============================== -->
+      <section class="faq-section" id="settings">
+        <h2 class="faq-section-title">Settings</h2>
+        <p class="faq-section-sub">The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> gear icon, top right.</p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/settings-panel.webp"
+            data-shot-base="settings-panel"
+            alt="Settings panel open, showing Theme, Size, Row Density, Row Zebra Stripes, Question Timer, Sample Data, Help, Color Vision, and the Advanced Settings toggle"
+            onerror="faqShotFallback(this,'Settings panel open — the full main Settings list')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            What's in the main Settings list?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <ul>
+              <li>
+                <strong>Theme</strong> — Dark or Light. See
+                <a href="#appearance">Light Mode &amp; Dark Mode</a> below.
+              </li>
+              <li><strong>Size</strong> — A−/A/A+ text size, app-wide.</li>
+              <li><strong>Row Density</strong> — Normal, Relaxed, or Compact spacing.</li>
+              <li>
+                <strong>Row Zebra Stripes</strong> — how visible the
+                alternating-row striping is for easier readability.
+              </li>
+              <li>
+                <strong>Question Timer</strong> — the default countdown length
+                for the on-screen question timer, from 1:00 to 15:00.
+              </li>
+              <li>
+                <strong>Sample Data</strong> — <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example loads a
+                finished sample game to browse; <svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour walks you
+                through playing one. See
+                <a href="#getting-started">Getting Started</a> and
+                <a href="#tutorial">Interactive Tutorial</a>.
+              </li>
+              <li>
+                <strong>Help</strong> — the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> FAQ link that opens this page.
+              </li>
+              <li>
+                <strong>Color Vision</strong> — Off / Red-Green / Blue-Yellow
+                modes that swap which colors carry pass/fail meaning, for hosts
+                or teammates who need it.
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            What's the difference between the main Settings and "Advanced
+            Settings"?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Main Settings covers display preferences most hosts touch every
+              game. Advanced Settings (collapsed by default, below the main
+              list) holds the rarer, power-user controls — unlocking Event
+              Details mid-game, timer widget behavior, drumroll controls, and
+              more. All covered in
+              <a href="#tips">Tips &amp; Tricks</a>.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== LIGHT MODE & DARK MODE ============================== -->
+      <section class="faq-section" id="appearance">
+        <h2 class="faq-section-title">Light Mode &amp; Dark Mode</h2>
+        <p class="faq-section-sub">
+          Settings → <strong>Theme</strong> toggles between the two themes.
+        </p>
+
+        <div class="faq-shot-pair">
+          <div class="faq-shot">
+            <img
+              src="screenshots/theme-dark.webp"
+              alt="Scorekeeper in Dark theme"
+              onerror="faqShotFallback(this,'Dark theme — Dark in Settings')"
+            />
+            <div class="faq-shot-caption">Dark (default)</div>
+          </div>
+          <div class="faq-shot">
+            <img
+              src="screenshots/theme-light.webp"
+              alt="Scorekeeper in Light theme"
+              onerror="faqShotFallback(this,'Light theme — Light in Settings')"
+            />
+            <div class="faq-shot-caption">Light</div>
+          </div>
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            How do I switch between them?<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Open <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) and click the
+              <strong>Theme</strong> button — it reads
+              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark</strong> or <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></svg> Light</strong> depending on
+              which one is active, and clicking it flips straight to the other.
+              The choice is saved and applied when the app opens.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Is there anything beyond just Dark/Light for accessibility?<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Yes, separately from theme — the <strong>Color Vision</strong>
+              setting (also in main Settings) swaps which colors are used for
+              pass/fail indicators for red-green or blue-yellow color vision.
+              See
+              <a href="#settings">Settings</a> above. The four panels below
+              are a fixed comparison image — they always show the same crop
+              regardless of your own theme, unlike the rest of this page's
+              screenshots (see <a href="#appearance">Light Mode &amp; Dark
+              Mode</a> for that).
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/color-vision-four-panel.webp"
+                alt="Four-panel comparison: the same wager row in Off, Red-Green, and Blue-Yellow color vision modes, plus a legend panel listing every swapped color pair"
+                onerror="faqShotFallback(this,'Color Vision comparison — Off, Red-Green, Blue-Yellow, and a legend of what swaps')"
+              />
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== TIPS & TRICKS ============================== -->
+      <section class="faq-section" id="tips">
+        <h2 class="faq-section-title">Tips &amp; Tricks</h2>
+        <p class="faq-section-sub">
+          The stuff that isn't obvious from just looking at the screen —
+          including everything tucked into Advanced Settings.
+        </p>
+
+        <div class="faq-shot">
+          <img
+            src="screenshots/advanced-settings.webp"
+            data-shot-base="advanced-settings"
+            alt="Advanced Settings expanded, showing Point Adjustments, Edit Locked Fields, timer controls, Manual Drumroll Control, Drumroll Crossfade, Craft Prize Eligible List, and App Preferences"
+            onerror="faqShotFallback(this,'Advanced Settings expanded — the full list of power-user controls')"
+          />
+        </div>
+
+        <details class="faq-item">
+          <summary>
+            Tap any team's name to audit their score<span class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              This works <em>everywhere</em> a team name appears — the Scores
+              sidebar, a round's question rows, standings, Final Results — not
+              just one dedicated screen. It opens a full breakdown: every
+              question's wager and correct/incorrect call, the running score
+              after each one, the bonus question tally, both wagers, and the
+              same Guess/Diff math Final Results uses, explained tile by tile.
+              It's the fastest way to answer "wait, how did they get that
+              score?" in the middle of a live game. Press
+              <strong>Esc</strong> to close it instead of hunting for the ✕ —
+              same shortcut closes the Scores sidebar on mobile.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/score-audit.webp"
+                data-shot-base="score-audit"
+                alt="The Score Audit modal open for one team, showing the round-by-round breakdown and Guess/Diff tiles"
+                onerror="faqShotFallback(this,'Score Audit modal — full round-by-round breakdown for one team')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Use the ↕ Sort button to find who still hasn't answered<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Every question has its own ↕ <strong>Sort</strong> and ↺
+              <strong>Reset</strong> buttons. Sort is a one-time move that bumps
+              currently-unanswered teams to the top of that question —
+              invaluable in a big room where you're waiting on the last few
+              answers. Click it again to re-sort as more come in, and Reset
+              restores the original entry order whenever you're done.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/sort-buttons.webp"
+                data-shot-base="sort-buttons"
+                alt="Close-up of a question's header showing the Sort and Reset buttons"
+                onerror="faqShotFallback(this,'Close-up of the Sort/Reset buttons on a question header')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <div class="faq-subgroup">
+        <h3 class="faq-subsection-title">Advanced Settings</h3>
+        <p class="faq-section-sub">
+          The rarer, power-user controls tucked into Settings → Advanced
+          Settings (collapsed by default). Off unless noted otherwise.
+        </p>
+
+        <details class="faq-item">
+          <summary>
+            Edit Locked Fields — fixing an Event Details typo mid-game<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Event Details locks once scoring starts (see
+              <a href="#event-details">Event Details</a>). This toggle reopens
+              Date, Quiz ID, Location, Craft Partner, and Partner Town for
+              editing without losing anything else. The same "Unlock to fix it"
+              link appears inline in Event Details itself once it's locked, so
+              you don't have to remember this is where it lives.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Timer Widget<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Shows or hides the on-screen question countdown entirely. See
+              <a href="#question-timer">Question Timer</a> above for what it
+              does while it's shown.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Timer Stepper Buttons<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Adds −30/+30 nudge buttons flanking the countdown — −30 sits
+              before it, +30 after — for adjusting time on the fly. While idle
+              they clamp to the same 1–15 minute range as the Settings duration
+              dropdown; while running or paused they're unclamped, so tapping
+              +30 repeatedly just keeps adding time.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/timer-stepper-buttons.webp"
+                data-shot-base="timer-stepper-buttons"
+                alt="The question timer widget with the -30/+30 stepper buttons visible"
+                onerror="faqShotFallback(this,'Timer widget with the −30/+30 stepper buttons showing')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Timer Pulse<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Flashes the timer's background when time is running low, on top of
+              the color shift that already happens either way — see
+              <a href="#question-timer">Question Timer</a> above.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Per-Question Percentage Correct Labels<span class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Adds a live correct/incorrect percentage next to each question's
+              Sort/Reset buttons — e.g. "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg> 3/5 (60%)" — so you can see at a
+              glance how a question is trending without scrolling through every
+              team's row.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Manual Drumroll Control<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Puts the end of the draw in your hands — useful when a staff
+              member is revealing the winner from a stack of papers rather than
+              the app's own random draw timing.
+              <strong>Stop Drumroll</strong> cuts the roll short and leaves the
+              draw paused, then that same button becomes
+              <strong>▶ Play Horn</strong>, which commits the winner and fires
+              the horn exactly when you want it. It's one button in two states,
+              not two side by side — the screenshot shows the paused half, since
+              that's the one you only ever see with this setting on.
+            </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/manual-drumroll-control.webp"
+                data-shot-base="manual-drumroll-control"
+                alt="The Craft Prize drawing paused mid-draw with Manual Drumroll Control on, showing the Play Horn button where Stop Drumroll was"
+                onerror="faqShotFallback(this,'Manual Drumroll Control — the draw paused, showing Play Horn')"
+              />
+            </div>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Drumroll Crossfade<span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              A slider (0.2s–3.0s) controlling how gradually the roll winds down
+              when you press Stop Drumroll.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            Craft Prize Eligible List — handing the draw to another app<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg> <strong>Copy</strong> and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> <strong>TXT</strong> export the
+              craft partner, its town, and the eligible team names (Exclude Top
+              already applied) as plain text — one name per line — so the actual
+              drawing can be handed off to a separate drumroll or name-picker
+              app if you'd rather run it there. The same list and buttons also
+              appear directly inside the Craft Prize Drawing section once it's
+              open.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            App Preferences — backing up just your settings<span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Saves or loads <em>only</em> your display preferences (theme,
+              size, timer defaults, and the rest of Settings) as a separate file
+              from the game data itself — handy for carrying your preferred
+              setup to a different device or browser without touching any game
+              in progress there. See
+              <a href="#manual-save-load">Manual Save &amp; Load</a> for how
+              this compares to the toolbar's own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save / <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load, which
+              carries the game itself.
+            </p>
+          </div>
+        </details>
+        </div>
+
+      </section>
+
+      <div class="faq-footer">
+        <span id="faqVersionLabel"></span> ·
+        Built with Claude AI
+        <br />
+        <span id="faqToday"></span>
+      </div>
+    </div>
+
+    <div
+      class="faq-lightbox"
+      id="faqLightbox"
+      onclick="if(event.target===this)closeFaqLightbox()"
+    >
+      <button
+        type="button"
+        class="faq-lightbox-close"
+        onclick="closeFaqLightbox()"
+        aria-label="Close"
+      >
+        ✕
+      </button>
+      <img id="faqLightboxImg" src="" alt="" />
+    </div>
+
+    <script src="js/faq.js"></script>
+  </body>
+</html>

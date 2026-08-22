@@ -1,0 +1,545 @@
+/* Page-specific layout for the FAQ page. Everything else (colors, fonts, buttons, the settings
+   panel, the color-vision select, etc.) comes from css/styles.css so this page always matches
+   the live app instead of drifting into its own palette. */
+.faq-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border);
+  padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+}
+.faq-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.faq-logo {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+.faq-logo span {
+  color: var(--accent-magenta);
+}
+/* This page's settings panel only ever holds two short rows (Text Size, Color Vision), so
+   unlike the main app's much longer Advanced Settings panel — which css/styles.css's shared
+   .settings-panel rule sizes overflow-y:auto/max-height for — it never needs to scroll. That
+   overflow:auto still clips the Color Vision dropdown whenever it opens past this small
+   panel's own box, even flipped upward (js/faq.js's faqToggleCvMenu), because the box itself
+   just isn't tall enough to contain it either direction. Overriding to overflow:visible here
+   removes the clipping outright, and the extra padding gives the dropdown room to open without
+   crowding the panel's edges. */
+#faqSettingsPanel {
+  overflow: visible;
+  padding: 14px 16px 22px;
+}
+/* css/styles.css's .settings-panel-head/-body/-foot only switch from display:contents to a real
+   head/scroll-body/foot layout inside its own max-width:600px breakpoint — sized for the main
+   app's much taller Advanced Settings panel needing to anchor a header and footer around a
+   scrolling middle. This panel never scrolls (see the overflow:visible override above) and is
+   short at every viewport width, so it gets that same head/body/foot treatment unconditionally
+   instead of only below 600px — which is what gives it the round X close button in the head
+   (see the removed bottom Close button in index.html) at every width, not just on phones. */
+/* Scoped to .settings-visible, not the bare #faqSettingsPanel id, so this doesn't out-specificity
+   the base .settings-panel{display:none} rule in ../css/styles.css and force the panel visible
+   even while closed. */
+#faqSettingsPanel.settings-visible {
+  display: flex;
+  flex-direction: column;
+}
+#faqSettingsPanel .settings-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-shrink: 0;
+  margin: -14px -16px 14px;
+  padding: 10px 16px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-strong);
+}
+#faqSettingsPanel .settings-panel-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+#faqSettingsPanel .settings-panel-body {
+  display: block;
+}
+#faqSettingsPanel .settings-panel-foot {
+  display: block;
+  flex-shrink: 0;
+  border-top: 1px solid var(--border-strong);
+  margin-top: 12px;
+  padding-top: 10px;
+}
+/* .settings-x-btn's real styling (the round red-bordered X) lives in the same max-width:600px
+   block in ../css/styles.css as the head/body/foot rules above, and is unstyled outside it for
+   the same reason — the main app only shows this button on its own mobile sheet layout. Same
+   fix, same reasoning: this panel wants it unconditionally, so it's restated here. */
+#faqSettingsPanel .settings-x-btn {
+  width: 1.7rem;
+  height: 1.7rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--accent-red);
+  background: none;
+  color: var(--txt-red);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  touch-action: manipulation;
+}
+#faqSettingsPanel .settings-x-btn svg {
+  width: 0.8rem;
+  height: 0.8rem;
+  display: block;
+}
+#faqSettingsPanel .settings-x-btn svg line {
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+#faqSettingsPanel .settings-x-btn:hover {
+  background: color-mix(in srgb, var(--accent-red) 15%, transparent);
+}
+.faq-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Same button look the rest of the design system uses (font-body 600, .78rem, 1px --border,
+   --radius, --bg-card resting/--bg-hover on hover) — an <a>, not a <button>, so it still needs
+   its own rule rather than reusing css/styles.css's .btn (which targets buttons/.toolbar
+   children), just with text-decoration stripped since it's a link. */
+.faq-back {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: var(--transition);
+}
+.faq-back:hover {
+  background: var(--bg-hover);
+  border-color: var(--border-light);
+}
+.faq-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+.faq-intro {
+  font-family: var(--font-body);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+.faq-intro strong {
+  color: var(--text-primary);
+}
+
+.faq-toolbar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.faq-search {
+  flex: 1;
+  min-width: 180px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-input);
+  color: var(--text-primary);
+}
+.faq-search:focus {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 1px;
+}
+.faq-no-results {
+  display: none;
+  font-family: var(--font-body);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  padding: 14px;
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius);
+  text-align: center;
+}
+.faq-no-results.show {
+  display: block;
+}
+
+/* Search-match highlight, applied by js/faq.js's faqHighlightMatches(). A fixed yellow/black
+   pair rather than one of the theme's own accent-* tokens: #ffee00 on #000 is ~19:1 contrast,
+   comfortably past the WCAG AAA bar (7:1) for normal text, and stays that way in every theme
+   this page ships (Dark, Light, and both Color Vision modes) since none of them touch this pair
+   — no per-theme override needed, and no risk of a future accent-color tweak quietly dropping
+   search highlighting below AAA. */
+mark.faq-hl {
+  background: #ffee00;
+  color: #000;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.faq-toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 26px;
+}
+.faq-toc a {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+.faq-toc a:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+
+/* Expand All / Collapse All — deliberately separate from .faq-search above (which stays a
+   single full-width primary control) and sits right above the section list it acts on
+   instead, as plain text-weight links rather than bordered buttons, so they read as a
+   secondary, "control the list below" utility rather than competing with search for
+   attention. */
+.faq-expand-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.faq-link-btn {
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 2px 0;
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.faq-link-btn:hover {
+  color: var(--text-primary);
+}
+.faq-expand-sep {
+  color: var(--border-light);
+  font-size: 0.76rem;
+}
+
+.faq-section {
+  margin-bottom: 34px;
+  scroll-margin-top: 70px;
+}
+.faq-section-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+.faq-section-sub {
+  font-family: var(--font-body);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin: 6px 0 14px;
+  line-height: 1.5;
+}
+/* A lighter second-level heading for grouping a run of items within a section (currently
+   just "Advanced Settings" inside Tips & Tricks) — same uppercase display-font treatment
+   as .faq-section-title but smaller and with a 1px (not 2px) border, so it reads as a
+   subordinate heading rather than a second top-level section. Colored with the same
+   --txt-orange token the old per-item "Advanced" badge used, so the grouping still reads
+   as "the advanced stuff" at a glance. */
+.faq-subsection-title {
+  font-family: var(--font-display);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--txt-orange);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 22px 0 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.faq-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-card);
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.faq-item[hidden] {
+  display: none;
+}
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 14px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  -webkit-tap-highlight-color: transparent;
+}
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+.faq-item summary:hover {
+  background: var(--bg-hover);
+}
+.faq-q-arrow {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+.faq-item[open] .faq-q-arrow {
+  transform: rotate(90deg);
+}
+.faq-item summary:focus-visible {
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: -2px;
+}
+.faq-a {
+  padding: 0 14px 14px;
+  font-family: var(--font-body);
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+.faq-a p {
+  margin: 0 0 10px;
+}
+.faq-a p:last-child {
+  margin-bottom: 0;
+}
+.faq-a ul,
+.faq-a ol {
+  margin: 0 0 10px 1.1em;
+}
+.faq-a li {
+  margin-bottom: 4px;
+}
+.faq-a code {
+  font-family: var(--font-display);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 0.82em;
+  color: var(--txt-cyan);
+}
+.faq-a strong {
+  color: var(--text-primary);
+}
+/* In-body cross-reference links ("see Score Audit above", etc.) had no color rule of
+   their own, so they fell back to the browser's default link blue/visited-purple —
+   low contrast against this page's dark background, same issue already fixed for the
+   app's "Unlock to fix it" link. --txt-cyan is the same AAA(7:1) text-safe token used
+   there and for .faq-a code above, defined for every theme AND color-vision combination
+   in css/styles.css, so this is guaranteed AA everywhere without a color pick of its own. */
+.faq-a a {
+  color: var(--txt-cyan);
+  text-decoration: underline;
+}
+.faq-a a:hover {
+  opacity: 0.8;
+}
+.faq-a .tag-adv {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--txt-orange);
+  background: rgba(255, 170, 0, 0.12);
+  border: 1px solid var(--accent-orange);
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-bottom: 8px;
+}
+
+/* Screenshot slots — self-hosted, so they degrade to a labeled placeholder instead of a
+   broken-image icon until the real PNGs are dropped into /screenshots. */
+.faq-shot {
+  margin: 10px 0;
+  border: 1px dashed var(--border-light);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--bg-input);
+}
+.faq-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.faq-shot-caption {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  padding: 6px 10px;
+  border-top: 1px dashed var(--border-light);
+}
+.faq-shot.faq-shot-missing {
+  padding: 22px 14px;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+.faq-shot.faq-shot-missing::before {
+  content: "📸";
+  display: block;
+  font-size: 1.4rem;
+  margin-bottom: 6px;
+}
+/* Side-by-side Light/Dark comparison — stacks on narrow screens instead of squeezing
+   two screenshots into half-width each, same breakpoint the app's own layout uses. */
+.faq-shot-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 10px 0;
+}
+.faq-shot-pair .faq-shot {
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .faq-shot-pair {
+    grid-template-columns: 1fr;
+  }
+}
+/* Three-up Color Vision comparison (Off / Red-Green / Blue-Yellow) — same idea as
+   faq-shot-pair, one more column, one more breakpoint before it drops to one-per-row. */
+.faq-shot-trio {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin: 10px 0;
+}
+.faq-shot-trio .faq-shot {
+  margin: 0;
+}
+@media (max-width: 700px) {
+  .faq-shot-trio {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 420px) {
+  .faq-shot-trio {
+    grid-template-columns: 1fr;
+  }
+}
+/* Paired/trio screenshots are the ones meant to be compared side by side, so only those
+   invite a closer look — a click opens the same image full-size instead of squinting at
+   a half- or third-width thumbnail. Single full-width shots elsewhere are already as big
+   as the page allows, so they're left alone (plain img, no pointer cursor). */
+.faq-shot-pair .faq-shot img,
+.faq-shot-trio .faq-shot img {
+  cursor: zoom-in;
+}
+
+.faq-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 40px 20px;
+  align-items: center;
+  justify-content: center;
+}
+.faq-lightbox.show {
+  display: flex;
+}
+.faq-lightbox img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+.faq-lightbox-close {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(16px, env(safe-area-inset-right));
+  width: 2.4rem;
+  height: 2.4rem;
+  border: 1px solid var(--border-light);
+  border-radius: 50%;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+.faq-lightbox-close:hover {
+  background: var(--bg-hover);
+}
+
+.faq-footer {
+  max-width: 900px;
+  margin: 30px auto 0;
+  padding: 16px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  line-height: 1.7;
+}
+
+@media (max-width: 600px) {
+  .faq-section-title {
+    font-size: 0.95rem;
+  }
+}
