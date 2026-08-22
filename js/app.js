@@ -112,6 +112,13 @@ const X_ICON_SVG_PICT =
 // (--badge-green-fg, --pts-pos-fg, etc.), instead of a fixed-color platform glyph.
 const CHECK_ICON_SVG_PICT =
   '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg>';
+// ICON_DONE is the exact same drawn checkmark as CHECK_ICON_SVG above (its own Pictograph-mode
+// value IS CHECK_ICON_SVG_PICT, not a separate drawing) — the two only diverge in Emoji mode:
+// "this round/question is finished" (round/question Done badges, and the mini-progress banner at
+// 100%) gets ✔️, while every other ✓ above (Team Report lines, "looks good", "Copied", the
+// correct/incorrect stat pills) keeps ✅. Split out for the same reason ICON_MARK_CORRECT was:
+// one glyph was being asked to carry two different meanings under Icon Style's Emoji mode.
+const ICON_DONE_EMOJI = '<span class="icon-emoji">✔️</span>';
 // UI action glyphs, replacing the ↕ / ↺ / 🔄 / 🎲 characters these buttons used to carry. Same
 // reasoning as X_ICON_SVG/CHECK_ICON_SVG above, and it applies twice over here:
 //   1. 🔄 and 🎲 are emoji — fixed-color platform pictographs (a blue-and-white arrow loop, a
@@ -126,6 +133,15 @@ const CHECK_ICON_SVG_PICT =
 // same family the sun/moon/check/X above already use.
 const ICON_SORT_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg>';
+// The Scores sidebar's Asc/Desc sort buttons and sortModeLabel()'s matching description below
+// each carried a bare ↑/↓ Unicode glyph — swapped for the same reasoning as every other ICON_*
+// here (a fixed-weight text glyph rather than currentColor-aware geometry), with ⬆️/⬇️ as the
+// Emoji-mode pair since those are exactly what "Asc"/"Desc" already point at (single direction),
+// not ICON_SORT's own two-way ↕ glyph above (used only for the icon-only Shuffle button).
+const ICON_ARROW_UP_PICT =
+  '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,12 12,5 19,12"></polyline><line x1="12" y1="5" x2="12" y2="19"></line></svg>';
+const ICON_ARROW_DOWN_PICT =
+  '<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,12 12,19 19,12"></polyline><line x1="12" y1="5" x2="12" y2="19"></line></svg>';
 const ICON_RESET_PICT =
   '<svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>';
 const ICON_REFRESH_PICT =
@@ -150,7 +166,7 @@ const ICON_MIC_PICT =
 const ICON_HEART_PICT =
   '<svg class="icon-ui icon-tinted icon-heart" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>';
 const ICON_BEER_PICT =
-  '<svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg>';
+  '<svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg>';
 const ICON_DRUM_PICT =
   '<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg>';
 const ICON_TROPHY_PICT =
@@ -248,6 +264,8 @@ const CHECK_ICON_SVG_EMOJI = '<span class="icon-emoji">✅</span>';
 // way a CSS-colored icon would.
 const ICON_MARK_CORRECT_EMOJI = '<span class="icon-emoji">☑️</span>';
 const ICON_SORT_EMOJI = '<span class="icon-emoji">↕️</span>';
+const ICON_ARROW_UP_EMOJI = '<span class="icon-emoji">⬆️</span>';
+const ICON_ARROW_DOWN_EMOJI = '<span class="icon-emoji">⬇️</span>';
 const ICON_RESET_EMOJI = '<span class="icon-emoji">↩️</span>';
 const ICON_REFRESH_EMOJI = '<span class="icon-emoji">🔄</span>';
 // 🔀 rather than the 🎲 this button's comment traces its history to: at the sizes Sort/Reset/
@@ -278,8 +296,11 @@ let THEME_ICON_MOON = THEME_ICON_MOON_PICT;
 let X_ICON_SVG = X_ICON_SVG_PICT;
 let ICON_INCORRECT = X_ICON_SVG_PICT;
 let CHECK_ICON_SVG = CHECK_ICON_SVG_PICT;
+let ICON_DONE = CHECK_ICON_SVG_PICT;
 let ICON_MARK_CORRECT = CHECK_ICON_SVG_PICT;
 let ICON_SORT = ICON_SORT_PICT;
+let ICON_ARROW_UP = ICON_ARROW_UP_PICT;
+let ICON_ARROW_DOWN = ICON_ARROW_DOWN_PICT;
 let ICON_RESET = ICON_RESET_PICT;
 let ICON_REFRESH = ICON_REFRESH_PICT;
 let ICON_SHUFFLE = ICON_SHUFFLE_PICT;
@@ -329,8 +350,11 @@ function applyIconStyle(style) {
   X_ICON_SVG = emoji ? X_ICON_SVG_EMOJI : X_ICON_SVG_PICT;
   ICON_INCORRECT = emoji ? ICON_INCORRECT_EMOJI : X_ICON_SVG_PICT;
   CHECK_ICON_SVG = emoji ? CHECK_ICON_SVG_EMOJI : CHECK_ICON_SVG_PICT;
+  ICON_DONE = emoji ? ICON_DONE_EMOJI : CHECK_ICON_SVG_PICT;
   ICON_MARK_CORRECT = emoji ? ICON_MARK_CORRECT_EMOJI : CHECK_ICON_SVG_PICT;
   ICON_SORT = emoji ? ICON_SORT_EMOJI : ICON_SORT_PICT;
+  ICON_ARROW_UP = emoji ? ICON_ARROW_UP_EMOJI : ICON_ARROW_UP_PICT;
+  ICON_ARROW_DOWN = emoji ? ICON_ARROW_DOWN_EMOJI : ICON_ARROW_DOWN_PICT;
   ICON_RESET = emoji ? ICON_RESET_EMOJI : ICON_RESET_PICT;
   ICON_REFRESH = emoji ? ICON_REFRESH_EMOJI : ICON_REFRESH_PICT;
   ICON_SHUFFLE = emoji ? ICON_SHUFFLE_EMOJI : ICON_SHUFFLE_PICT;
@@ -442,7 +466,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.88"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.89"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -1973,9 +1997,9 @@ function sortModeLabel() {
     case "random":
       return `${ICON_SHUFFLE_TINTED} Shuffled order \u2014 for mid-game reads`;
     case "asc":
-      return "\u2191 Lowest to highest \u2014 dramatic reveal";
+      return `${ICON_ARROW_UP} Lowest to highest \u2014 dramatic reveal`;
     case "desc":
-      return "\u2193 Highest to lowest \u2014 leaderboard order";
+      return `${ICON_ARROW_DOWN} Highest to lowest \u2014 leaderboard order`;
     default:
       return `${ICON_CLIPBOARD} Entry order \u2014 matches your scoresheet`;
   }
@@ -2150,7 +2174,7 @@ function renderLeft() {
     let rpBadge = "";
     if (rp.total > 0) {
       if (rComplete)
-        rpBadge = `<span class="round-badge rb-done">${CHECK_ICON_SVG} Done</span>`;
+        rpBadge = `<span class="round-badge rb-done">${ICON_DONE} Done</span>`;
       else if (rp.done > 0)
         rpBadge =
           '<span class="round-badge rb-partial">' +
@@ -2369,7 +2393,7 @@ function renderMiniProgress(visible) {
   const pendingCls = visible ? "" : " mp-pending";
   if (s.ri == null) {
     return `<div class="mini-progress mp-complete${pendingCls}" role="button" tabindex="0" onclick="jumpToSection('sec-final')">
-      <span class="mp-label">${CHECK_ICON_SVG} ${s.done}/${s.total} 100% - Jump to Final Results</span>
+      <span class="mp-label">${ICON_DONE} ${s.done}/${s.total} 100% - Jump to Final Results</span>
     </div>`;
   }
   const pct = s.total ? Math.round((s.done / s.total) * 100) : 0;
@@ -2452,7 +2476,7 @@ function renderWQ(ri, qi) {
       : beer
         ? `${ICON_BEER} Beer Round!`
         : qs.done === qs.total
-          ? `${CHECK_ICON_SVG} Done`
+          ? `${ICON_DONE} Done`
           : qs.total - qs.done + " left";
 
   let h = `<div class="${blockCls}" id="qblock-${ri}-${qi}">`;
@@ -2630,7 +2654,7 @@ function renderBQ(ri) {
       badge =
         `<span class="q-badge q-badge-lg q-beer">${ICON_BEER} Beer Round!</span>`;
     else if (subDone === n)
-      badge = `<span class="q-badge q-badge-lg q-complete">${CHECK_ICON_SVG} Done</span>`;
+      badge = `<span class="q-badge q-badge-lg q-complete">${ICON_DONE} Done</span>`;
     else
       badge = `<span class="q-badge q-badge-lg q-remaining">${n - subDone} left</span>`;
   }
@@ -2714,7 +2738,7 @@ function renderSpecialWager(type) {
     if (beer)
       swBadge = `<span class="q-badge q-beer">${ICON_BEER} Beer Round!</span>`;
     else if (swDone === swN)
-      swBadge = `<span class="q-badge q-complete">${CHECK_ICON_SVG} Done</span>`;
+      swBadge = `<span class="q-badge q-complete">${ICON_DONE} Done</span>`;
     else
       swBadge = `<span class="q-badge q-remaining">${swN - swDone} left</span>`;
   }
@@ -2810,8 +2834,8 @@ function renderSB() {
   body.innerHTML = `<div class="sort-controls">
     <button class="sort-btn ${scoreSortMode === "entry" ? "active" : ""}" onclick="setSortMode('entry')">Entry</button>
     <button class="sort-btn ${scoreSortMode === "random" ? "active" : ""}" onclick="setSortMode('random')" title="Shuffle" aria-label="Shuffle">${ICON_SHUFFLE}<span class="sr-only">Shuffle</span></button>
-    <button class="sort-btn ${scoreSortMode === "asc" ? "active" : ""}" onclick="setSortMode('asc')">\u2191 Asc</button>
-    <button class="sort-btn ${scoreSortMode === "desc" ? "active" : ""}" onclick="setSortMode('desc')">\u2193 Desc</button>
+    <button class="sort-btn ${scoreSortMode === "asc" ? "active" : ""}" onclick="setSortMode('asc')">${ICON_ARROW_UP} Asc</button>
+    <button class="sort-btn ${scoreSortMode === "desc" ? "active" : ""}" onclick="setSortMode('desc')">${ICON_ARROW_DOWN} Desc</button>
   </div><div class="sort-mode-label">${sortModeLabel()}</div>${buildScores()}`;
   body.scrollTop = sy;
   requestAnimationFrame(() => {

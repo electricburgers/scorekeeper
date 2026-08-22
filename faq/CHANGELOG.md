@@ -2,6 +2,13 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.25] - 22 Aug 2026
+
+### Changed
+
+- **The drawn beer mug's handle is taller** in both places it appears here (the Beer Round
+  callout, the CB Prize tag), matching the main app's own mug icon getting the same fix.
+
 ## [1.24] - 22 Aug 2026
 
 ### Changed

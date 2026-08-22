@@ -5,6 +5,41 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.89 - 2026-08-22
+- **Audited every emoji sitting alone inside its own container** (the close-X circles, remove-team,
+  Team Report's ✅/⛔ lines, and the rest) — everything but one was already correctly centered.
+  The exception: the per-question wager's incorrect (⛔) badge, which was reading a fixed
+  `margin-top` tuned for the old, smaller emoji size rather than being centered by the flex box
+  around it. **Then corrected further per follow-up feedback**: the badge's own red circle stays
+  the shared size every badge uses — only the glyph inside it grows, up to ~90% fill (matching how
+  full the correct badge's own ✅ already sits), leaving a thin ring of the badge's own red visible
+  around it. That ring matters for colour vision specifically: the badge's red is one of this
+  app's audited color-vision tokens; the ⛔ glyph itself is a fixed-palette platform emoji no CSS
+  token can retint, so the ring is the one part of this badge every color-vision mode can still
+  actually adjust.
+- **The drawn beer mug's handle is taller.** Was a plain circular arc (equal width and height);
+  now an ellipse — same horizontal reach as before, noticeably more vertical, reading like an
+  actual mug handle instead of a stub. Updated everywhere the mug is drawn: the app's own
+  `ICON_BEER_PICT`, the Icon Style swatch, and both FAQ occurrences.
+- **The Scores sidebar's Asc/Desc sort controls, and their "Lowest to highest"/"Highest to lowest"
+  descriptions, now use ⬆️/⬇️ in Emoji mode** (a matching drawn up/down arrow pair in Pictograph
+  mode) instead of a bare ↑/↓ Unicode glyph that ignored Icon Style entirely.
+- **The horizontal lines separating team rows in Teams now clear WCAG 1.4.11's 3:1 contrast
+  floor.** They were using the plain `--border` token (~2.2:1 in light mode, ~1.4:1 in dark —
+  failing in both), switched to `--border-control`, the token this app already maintains
+  specifically to clear 3:1 on every surface a control sits on, rather than inventing a new color
+  for just this one divider.
+- **"Done" (round/question completion badges, and the mini-progress banner at 100%) now uses ✔️ in
+  Emoji mode, not ✅.** Every OTHER ✅ in the app (Team Report lines, "looks good", "Copied", the
+  correct/incorrect stat pills) is unchanged — only completion-marking specifically split off into
+  its own `ICON_DONE`, the same way `ICON_MARK_CORRECT` split off before it for an equivalent
+  one-glyph-two-meanings reason.
+- **"Scores — Before Halftime/Final Wager" no longer renders as a dull mustard yellow in light
+  mode.** That heading used the shared gold text token, which has to stay dark enough on white to
+  hold 4.5:1 (#845e00) — visibly duller than dark theme's own vivid gold, which never has this
+  problem and is untouched. Light mode only, switched to the same teal already used one line down
+  for the standings themselves, which reads at 5.6:1 against this block's background.
+
 ## v18.88 - 2026-08-22
 - **Advanced Settings reordered once more**: Row Density, Row Zebra Stripes, and Craft Prize
   Eligible List now lead the group, Point Adjustments moved to the very end.
