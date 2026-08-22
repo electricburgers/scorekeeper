@@ -5,6 +5,15 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.100 - 2026-08-22
+- **The ☑️/✖️ in the R2/R4 bonus wager's correct/incorrect buttons were visibly off-centre in Emoji
+  mode** — both glyphs' visible ink sits noticeably below the flex-centred box `getBoundingClientRect`
+  reports (a mismatch only caught by comparing a 16x-scaled screenshot against the actual box,
+  not by trusting layout metrics alone). Nudged up with `margin-top:-.3em`, scoped to the button's
+  own icon so it never touches the overlaid `.wager-badge`'s already-correct icon.
+- **The Before Halftime/Final Wager Shuffle icon is bigger within its unchanged button** — scale
+  bumped from 1.32x to 1.5x; the button itself (`min-height/width: max(2rem,32px)`) is untouched.
+
 ## v18.99 - 2026-08-22
 - **Team Report's bottom note dropped the "Tip: " prefix** — it's an explanation of what the
   numbers mean, not a tip. Also spelled out the two abbreviations it defines: "Diff Adj (Difference
