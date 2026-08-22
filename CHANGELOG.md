@@ -5,6 +5,21 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.76 - 2026-08-22
+- **Three more Icon Style emoji picks, all by request.** Reset (per-question Sort/Reset, and the
+  standings/scores Reset buttons) is ↩️ now, not ↺. Correct stays ✅ — already the case, just
+  confirmed.
+- **"Marking a question incorrect" splits off its own emoji, ⛔, from the generic X.** X_ICON_SVG
+  was one shared mark for every "dismiss" meaning in the app AND for "wrong answer" — remove
+  team, close Team Report, clear the craft prize winner, dismiss the autosave-off notice, *and*
+  every incorrect wager/bonus/special-wager badge, the Mark Incorrect button, the per-question
+  incorrect stat, Team Report's incorrect lines. Fine in pictograph mode, where the same drawn X
+  reads as either depending on context; wrong in emoji mode, where ⛔ reading as "wrong answer"
+  would also paint every close/remove/dismiss button in the app with a no-entry sign. New
+  `ICON_INCORRECT` is the exact same SVG picture as `X_ICON_SVG` — nothing changes in pictograph
+  mode — with its own `⛔` emoji, and only the incorrect-marking call sites use it; every
+  dismiss/remove/close use stays on `X_ICON_SVG` (❌).
+
 ## v18.75 - 2026-08-22
 - **Icon Style's Shuffle emoji is 🔀, not 🎲.** At the sizes Sort/Reset/Shuffle actually render —
   the sort-controls row, the standings sort buttons — a die reads as an ambiguous blob where the
