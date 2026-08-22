@@ -163,6 +163,21 @@ const ICON_LINK =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
 const ICON_TRASH =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+// Play Horn's party popper, and the last emoji in the app — the v18.57 sweep converted it, v18.59
+// put an emoji back at the host's request, and this is the drawn version returning with the
+// colour that was missing the first time round. Five candidates were drawn and compared at the
+// 13px this button actually renders (an angled popper, a straight party horn, an air-horn
+// canister, a trumpet, and a popper mid-burst); this one won on the same test the horseshoe and
+// the poker chip were judged by, which is whether it still reads as itself once it is small.
+//
+// The cone is one filled triangle with two stripes drawn ACROSS it as open paths — .icon-tinted's
+// 38% fill only means something on a closed shape, so a stripe drawn as a line takes the stroke
+// and nothing else, which is what keeps them as stripes rather than bands at this size. Three
+// tints, not one: the cone is the shape, the stripes are the party, and a popper rendered in a
+// single flat hue is a triangle with lines on it. The three confetti marks are deliberately
+// asymmetric — evenly spaced ones read as a sun's rays.
+const ICON_HORN =
+  '<svg class="icon-ui icon-tinted icon-horn" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.2 20.8 9.8 6.6 17.4 14.2Z"/><path class="ip-2" d="m6.10 14.55 3.35 3.35"/><path class="ip-3" d="m7.95 10.58 5.47 5.47"/><path class="ip-2" d="M14.4 3.4v2.2"/><path class="ip-3" d="m18.3 5.7 1.6-1.6"/><path class="ip-2" d="M19.4 10.6h2.2"/></svg>';
 const ICON_CHIPS =
   '<svg class="icon-ui icon-tinted icon-chips" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="17" rx="8" ry="3"/><path d="M4 17v-3c0-1.7 3.6-3 8-3s8 1.3 8 3v3"/><circle class="ip-2" cx="12" cy="6" r="3.5"/></svg>';
 const ICON_CHIP =
@@ -210,8 +225,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.71"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Aug 21, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v18.72"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
 
@@ -1032,6 +1047,72 @@ function announce(msg) {
   el.textContent = msg + (__srToggle ? " " : "");
 }
 
+// ---- CHARACTER-LIMIT FEEDBACK ------------------------------------------------------------
+// Every host-typed field carries a maxlength (Team name 40, Location 60, Quiz ID 24, the
+// announcement script 600, and so on). The browser enforces those silently: at the limit the
+// field simply stops accepting characters, with no cue at all. Typing a team name that is one
+// word too long therefore looks identical to a dropped keypress or a wedged app, and the host
+// finds out only when they read back a name that stops mid-word.
+//
+// One delegated listener rather than a handler per field: the fields are re-rendered from
+// scratch on nearly every interaction (renderLeft swaps #mainContent's innerHTML), so anything
+// bound to the elements themselves would have to be re-bound every time. Delegation on document
+// survives all of it and picks up fields added later for free.
+//
+// The note is one shared element that gets moved to whichever field is at its limit, not a node
+// per field, so there is never more than one on screen and nothing to clean up if a re-render
+// takes the old parent away. It is removed when the value drops back under the limit, when focus
+// leaves, and on a timer — whichever happens first, because a message about what you just typed
+// stops being about what you just typed fairly quickly.
+(function () {
+  let noteEl = null,
+    noteTimer = null,
+    noteField = null;
+  function clearLimitNote() {
+    clearTimeout(noteTimer);
+    noteTimer = null;
+    if (noteField) noteField.classList.remove("at-limit");
+    noteField = null;
+    if (noteEl) noteEl.remove();
+    noteEl = null;
+  }
+  function showLimitNote(el, max) {
+    // Already showing for this same field — leave it alone rather than restarting the timer on
+    // every further keystroke, which would keep a note up indefinitely while the host holds a
+    // key down against the limit.
+    if (noteField === el) return;
+    clearLimitNote();
+    noteEl = document.createElement("span");
+    noteEl.className = "limit-note";
+    // aria-hidden and a separate announce(): the note is inserted mid-edit, and a live region
+    // that appears inside the field's own labelling context can make a screen reader re-read the
+    // whole field. #srAnnouncer is the app's existing single announcement channel.
+    noteEl.setAttribute("aria-hidden", "true");
+    noteEl.textContent = `Limit reached — ${max} characters max`;
+    el.insertAdjacentElement("afterend", noteEl);
+    el.classList.add("at-limit");
+    noteField = el;
+    announce(`Character limit reached, ${max} maximum`);
+    noteTimer = setTimeout(clearLimitNote, 3200);
+  }
+  document.addEventListener("input", (e) => {
+    const el = e.target;
+    if (
+      !(el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)
+    )
+      return;
+    // maxLength is -1 on a field that does not declare one, and number inputs (the team guess)
+    // have no meaningful length limit even though they have min/max.
+    const max = el.maxLength;
+    if (!max || max < 0 || el.type === "number") return;
+    if (el.value.length >= max) showLimitNote(el, max);
+    else if (noteField === el) clearLimitNote();
+  });
+  // Capture, because focusout does not bubble in the same way from every field type here, and
+  // because the field may be gone by the time a bubbled event would arrive.
+  document.addEventListener("focusout", clearLimitNote, true);
+})();
+
 let lastClickAnchorSel = null;
 document.addEventListener(
   "click",
@@ -1128,6 +1209,52 @@ function syncQtimerH() {
       headerEl.offsetHeight + "px",
     );
   new ResizeObserver(sync).observe(headerEl);
+  sync();
+})();
+
+// Keeps --layout-top in sync with where .app-layout actually starts down the viewport, which is
+// what its desktop height subtracts from 100dvh (see the note on .app-layout in styles.css for
+// what the hardcoded 60px this replaces got wrong, and why the blank strip it left below the
+// layout was reachable by scrolling with the cursor over the Scores column).
+//
+// One measurement of the panel's own top edge, rather than adding up the heights of the things
+// above it: the sticky .header and the Resume banner are what sit there today, but a single
+// "where does it begin" number stays right for whatever is ever added, shown or hidden up there,
+// with no list to keep in step.
+//
+// getBoundingClientRect().top + scrollY, not offsetTop, because offsetTop is rounded to a whole
+// pixel and this needs the fraction: the header is 46.5px at the default text size, and half a
+// pixel of leftover height is enough for the document's rounded-up scrollHeight to exceed the
+// viewport and make the page scrollable by 1px again — the exact thing being fixed. Adding
+// scrollY makes it the document-relative top, so a measurement taken while the page happens to
+// be scrolled (the very state this corrects, on the first pass after load) still reads true.
+//
+// Observed rather than measured once, for the same reason as --header-h above: the header grows
+// with the font-size setting, and the Resume banner appears on load with a saved session and
+// disappears on Resume/New Game/dismiss — a display:none toggle, which a ResizeObserver reports
+// as a resize to zero. The window listener covers viewport changes that resize nothing being
+// observed, and the two together are idempotent: re-running sync with nothing changed writes the
+// same value back.
+(function () {
+  const layoutEl = document.querySelector(".app-layout");
+  if (!layoutEl) return;
+  const sync = () =>
+    document.documentElement.style.setProperty(
+      "--layout-top",
+      layoutEl.getBoundingClientRect().top + window.scrollY + "px",
+    );
+  const ro = new ResizeObserver(sync);
+  // The two things in flow above the panel, and deliberately NOT the panel itself: a
+  // ResizeObserver reports size, not position, so observing the panel could not detect it being
+  // MOVED anyway — and since its height is what this variable sets, observing it would only feed
+  // every write back in as another callback.
+  for (const el of [
+    document.querySelector(".header"),
+    document.getElementById("resumeBanner"),
+  ]) {
+    if (el) ro.observe(el);
+  }
+  window.addEventListener("resize", sync);
   sync();
 })();
 
@@ -1909,32 +2036,24 @@ function currentProgressSummary() {
   for (let ri = 0; ri < 4; ri++) all += roundProgress(ri).total;
   return { ri: null, done: all, total: all };
 }
-// Shared by jumpToSection/jumpToFirstUnanswered below: scrolls to whatever matches selector,
-// then rings it with .jump-pulse (styles.css) so it's obvious at a glance where the jump
-// actually landed, rather than the host having to spot it themselves once the scroll settles.
-function scrollToAndPulse(selector) {
+// Shared by jumpToSection/jumpToFirstUnanswered below: scrolls to whatever matches selector.
+// It used to also ring the target with a .jump-pulse cyan box-shadow that beat twice over 4.4s.
+// That is gone at the host's request, along with its CSS: the smooth scroll itself already
+// shows where the jump landed — you watch it arrive — so the ring was restating something the
+// motion had just said, and it kept going for seconds after the host had started reading the
+// row it pointed at. requestAnimationFrame stays: the callers re-render first, so the element
+// this looks up does not exist until after that render.
+function scrollToJumpTarget(selector) {
   requestAnimationFrame(() => {
     const el = document.querySelector(selector);
     if (!el) return;
     el.scrollIntoView({ behavior: "smooth", block: "start" });
-    // Remove-then-reflow-then-add so this still restarts the animation even if the same
-    // element was just pulsed a moment ago (e.g. two quick taps landing on the same still-
-    // unanswered question) — re-adding a class that's already present doesn't retrigger a CSS
-    // animation on its own.
-    el.classList.remove("jump-pulse");
-    void el.offsetWidth;
-    el.classList.add("jump-pulse");
-    el.addEventListener(
-      "animationend",
-      () => el.classList.remove("jump-pulse"),
-      { once: true },
-    );
   });
 }
 function jumpToSection(id) {
   collapsedSections.delete(id);
   renderAll();
-  scrollToAndPulse("#" + id);
+  scrollToJumpTarget("#" + id);
 }
 // Tapping the mini-progress bar used to just jump to the current round's section header,
 // leaving the host to scroll and expand their way to whatever's actually unscored inside it.
@@ -1988,7 +2107,7 @@ function jumpToFirstUnanswered() {
   const sectionId = "sec-r" + (ri + 1);
   collapsedSections.delete(sectionId);
   renderAll();
-  scrollToAndPulse(targetSel || "#" + sectionId);
+  scrollToJumpTarget(targetSel || "#" + sectionId);
 }
 // visible: false renders the exact same markup the real, scored-at-least-once state uses (never
 // a guessed/simplified placeholder) but with the .mp-pending class, which visibility:hidden's
@@ -3195,7 +3314,7 @@ function renderCraftPrizeBlock() {
   if (drawing) {
     h += `<div class="cp-intro">${ICON_MIC} Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName || "")}</div>`;
     if (craftDrawState.audioStopped) {
-      h += `<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Pick the winner and play the victory horn now">🎉 Play Horn</button>`;
+      h += `<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Pick the winner and play the victory horn now">${ICON_HORN} Play Horn</button>`;
     } else {
       const st = craftCountdownState() || {
         remaining: craftDrawState.totalMs,
@@ -3219,7 +3338,7 @@ function renderCraftPrizeBlock() {
       // drumroll is even running — rather than only discovering them once a draw is underway.
       h += `<div class="cp-manual-preview">
         <button class="btn btn-danger cp-preview-btn" disabled title="Available once the drumroll is running">${ICON_STOP} Stop Drumroll</button>
-        <button class="btn btn-accent cp-preview-btn" disabled title="Available once the drumroll is running">🎉 Play Horn</button>
+        <button class="btn btn-accent cp-preview-btn" disabled title="Available once the drumroll is running">${ICON_HORN} Play Horn</button>
       </div>`;
     }
   }
@@ -3228,7 +3347,12 @@ function renderCraftPrizeBlock() {
     h += `<div class="cp-winner"><span class="cp-winner-text">${ICON_TROPHY} <strong>${esc(wname)}</strong> won!</span><button class="btn btn-danger cp-clear-btn" onclick="clearCraftPrizeWinner()" title="Clear the winner and run the drawing again" aria-label="Clear the winner">${X_ICON_SVG}<span class="cp-clear-label"> Clear</span></button></div>
       ${
         prefs.craftManualEnd
-          ? '<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Play the victory horn on demand">🎉 Play Horn</button>'
+          ? // Concatenation, not a ${} placeholder: this arm is a plain single-quoted string,
+            // not a template literal, and pasting a placeholder into one is exactly how v18.57
+            // shipped a button that rendered the literal text "${ICON_HORN} Play Horn" on screen.
+            '<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Play the victory horn on demand">' +
+            ICON_HORN +
+            ' Play Horn</button>'
           : ""
       }
       <label class="cp-script-label">Winner Announcement Script</label>

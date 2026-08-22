@@ -58,6 +58,18 @@
      back to white, where the same fills are the darker surface. */
   --check-icon-color:#000;
   --badge-gold-fg:#ffee00;--badge-green-fg:#44ff44;
+  /* The theme toggle's sun, as its own two-part pair rather than the shared
+     --badge-gold-fg it used to borrow. That token is a TEXT colour, held to 4.5:1 on the
+     darkest surface it ever renders on, and in light mode that ceiling drags it all the way
+     down to #845e00 — a dark olive-brown. Correct for text, and the reason the light sun
+     did not look like a sun. Splitting the disc from the rays is what buys the yellow back:
+     the disc is a filled area that only has to be seen, so it can be a genuinely vivid
+     yellow, while the rays and the ring drawn around the disc are the thin marks that carry
+     the shape, so they take the darker, still-saturated amber and hold 3:1 on their own.
+     Dark mode never actually shows this icon — the toggle carries the moon whenever the
+     theme is not hc-light — so these are the fallback that keeps the var() chain valid
+     rather than a rendered appearance. */
+  --sun-disc:#ffe14d;--sun-ray:#ffb300;
   /* PICTOGRAPH TINTS. The icons that replaced emoji are stroke-only and inherit currentColor,
      which is right for the UI action glyphs (Sort, Reset, Refresh, Shuffle, the check and the X)
      — those ARE the control, so they should carry the control's own audited text colour. It is
@@ -87,6 +99,15 @@
   --tint-sheet:#2fbf72;
   --vivid-beer:#f5b53d;--vivid-beer-2:#fff1cf;
   --vivid-drum:#e8563f;--vivid-drum-2:#ffe0b8;--vivid-drum-3:#c99a63;
+  /* Play Horn's party popper. Three colours because the emoji it replaces has three and
+     because the cone's stripes are the whole point of the mark — one flat hue and it is a
+     plain triangle. Cone orange, stripes pink and cyan, which is also the order they read
+     in: the widest area carries the identity, the two thin marks across it carry the
+     party. Same vivid-equals-tint arrangement the beer and drum use in this theme (the
+     dark palette is already at full saturation, so there is nothing to brighten for the
+     accent-fill case). 5.5:1 or better on every dark surface. */
+  --vivid-horn:#ff8a3d;--vivid-horn-2:#ff5fae;--vivid-horn-3:#46e0e0;
+  --tint-horn:var(--vivid-horn);--tint-horn-2:var(--vivid-horn-2);--tint-horn-3:var(--vivid-horn-3);
   --tint-beer:var(--vivid-beer);--tint-beer-2:var(--vivid-beer-2);
   --tint-drum:var(--vivid-drum);--tint-drum-2:var(--vivid-drum-2);--tint-drum-3:var(--vivid-drum-3);
   --tint-trophy:#f5c542;--tint-trophy-2:#c9922a;
@@ -167,6 +188,17 @@
      (5.7:1 and 5.7:1). */
   --check-icon-color:#fff;
   --badge-gold-fg:#845e00;--badge-green-fg:#006a03;
+  /* The light sun (see the pair's note in the dark block above for why it is two tokens).
+     #ffc400 is +66% chroma and far lighter than the #845e00 this icon used to inherit
+     (OKLCh L .850/C .174 against L .508/C .105), which is the whole point — it is a real
+     yellow now instead of an olive-brown. It measures 1.6:1 on a white card and is not
+     meant to clear anything on its own: it is an enclosed area with the ray colour ringing
+     it, so what has to be legible is that ring. #ffb300, this theme's own --accent-gold,
+     would not do that job at 1.79:1, so the rays step down the same hue family to a deeper
+     amber that clears 3:1 on every light surface this button takes, including the #dcdcdc
+     it turns on hover: 4.72:1 on --bg-card, 4.14 on --bg-card-alt, 3.44 on --bg-hover. It
+     is still +33% chroma on the old value, so the icon gains saturation in both parts. */
+  --sun-disc:#ffc400;--sun-ray:#b35c00;
   /* Same hues as the dark set above, darkened to clear 3:1 against a near-white card rather
      than near-black. See that block for why these are not colour-vision-swapped. */
   --icon-stroke-ink:#fff;--icon-stroke-mix:32%;
@@ -180,6 +212,10 @@
   --tint-chips:#c33528;--tint-chips-2:#9a6a12;
   --tint-clipboard:#8a5f2c;--tint-clipboard-2:#b9a48c;
   --tint-pdf:#c0332b;
+  /* Play Horn's popper, light. Same three roles as the dark set above, darkened to clear
+     3:1 against a near-white card rather than near-black: 3.78:1, 5.11 and 3.91 on
+     --bg-hover, the darkest light surface any of them renders on. */
+  --tint-horn:#c2410c;--tint-horn-2:#a81b62;--tint-horn-3:#0e7490;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
   --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
   /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
@@ -250,6 +286,11 @@
   /* The pink/magenta gold-substitute already clears 7:1 on the normal --bg-card-alt (unlike
      real gold), so beer round doesn't need the special cream background here. */
   --beer-bg:var(--bg-card-alt);--beer-border:#ff66cc;
+  /* Only the popper's third stripe moves here, and only because it is the one cyan in it —
+     this is the mode whose whole purpose is getting blue out of the palette. Green, to
+     match the --accent-cyan this block already swaps in. The cone's orange and the second
+     stripe's pink are both on the red side and stay as they are. */
+  --vivid-horn-3:#3fe0a8;--tint-horn-3:var(--vivid-horn-3);
 }
 [data-theme="hc-light"][data-cb="2"]{
   --accent-gold:#c2007a;--accent-cyan:#008060;
@@ -279,7 +320,18 @@
      wash is pink (#e799ca) rather than the cream every other variant gets, and it is the one
      surface --txt-cyan sits on that is dark enough to bind. Two points of lightness clears it. */
   --badge-gold-fg:#880056;--txt-cyan:#004d39;--accent-cyan-solid:#00654c;
+  /* The sun swaps with everything else gold in this mode. A yellow sun is exactly the
+     wrong thing here — blue-yellow mode exists to get yellow out of the palette — and the
+     old inherit-from---badge-gold-fg wiring got this swap for free, so the split pair has
+     to keep it deliberately. Both parts reuse magenta already in the palette: the rays take
+     this mode's own --accent-gold (4.28:1 on --bg-hover, clear of 3:1), and the disc takes
+     the brighter #ff66cc the DARK tritan block uses for the same token, which is the
+     closest thing this palette has to the vivid-fill role #ffc400 plays above. */
+  --sun-disc:#ff66cc;--sun-ray:#c2007a;
   --beer-bg:var(--bg-card-alt);--beer-border:#c2007a;
+  /* Same single-stripe swap as the dark tritan block, at this theme's own lightness.
+     3.56:1 on --bg-hover. */
+  --tint-horn-3:#00806a;
   /* #c2007a is too dark for black text at small sizes here (~3.6:1, under the 4.5:1 AA floor
      for normal text — the base #000 only clears AA on LARGE text, e.g. the question timer's
      own big countdown digits). White text clears 5.9:1 on this same background. */
@@ -470,7 +522,18 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 #themeToggle svg{width:.8em;height:.8em;flex-shrink:0}
 #themeToggle svg circle,#themeToggle svg path{fill:currentColor}
 #themeToggle svg line{stroke:currentColor}
-#themeToggle .icon-sun{color:var(--badge-gold-fg)}
+/* The sun is the one icon here painted from two tokens rather than one inherited colour:
+   --sun-ray drives currentColor, so the eight rays (stroked <line>s) and the ring around
+   the disc both take it, and --sun-disc fills the disc inside that ring. The ring is what
+   makes the vivid fill usable — a #ffc400 circle alone on a white card is a 1.6:1 smudge,
+   and at the .8em this renders it would read as a blank gap between the rays.
+   stroke-width is set here rather than on the <circle> in app.js because the ring is a
+   presentational choice this rule is making; 2 matches the <g stroke-width="2"> the rays
+   are drawn with, so the ring and the rays are one continuous weight. The circle's own r=5
+   is unchanged — the stroke straddles it, so the disc reads slightly larger against the
+   rays than it did as a flat fill, which is the right direction for a sun. */
+#themeToggle .icon-sun{color:var(--sun-ray)}
+#themeToggle .icon-sun circle{fill:var(--sun-disc);stroke:var(--sun-ray);stroke-width:2}
 #themeToggle .icon-moon{color:var(--txt-cyan)}
 /* Hidden by default (desktop's multi-column grid rarely needs to scroll, so a heading here would
    just be dead weight) — shown only in the mobile single-column layout below, where Advanced
@@ -603,7 +666,32 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .resume-banner-close:hover{background:color-mix(in srgb,var(--accent-red) 15%,transparent)}
 
 /* LAYOUT */
-.app-layout{display:flex;height:calc(100vh - 60px);overflow:hidden}
+/* --layout-top is how far down the viewport this panel actually starts, kept in sync with the
+   real rendered geometry by a ResizeObserver in app.js (the same pattern --header-h /
+   --mini-progress-h / --mobile-dock-h already use). It replaces a hardcoded 60px, which was a
+   guess at "the header's height" and was wrong in both directions:
+     - Too SMALL whenever anything above this panel was taller than 60px — the sticky .header is
+       47px at the default 15px text but grows to 70px at the 30px setting, and the Resume banner
+       sits in flow above this panel for another ~91px on every load with a saved session. In
+       those cases the panel's bottom edge landed BELOW the viewport, which made the document
+       itself scrollable by the difference, into a strip of blank background under the layout.
+       Nothing is rendered there — .col-left and .col-right are their own scrolling panes and end
+       with the panel — so it was pure void. It was reachable from anywhere the wheel could
+       chain to the document: most easily with the cursor over the Scores column, which either
+       is not scrollable at all (few teams) or hands the scroll straight on once it bottoms out,
+       so a normal scroll-down gesture over the scoreboard dragged the whole app up the screen.
+     - Too LARGE whenever they were shorter than 60px, leaving a dead strip of background below
+       the panel that the columns could have been using.
+   Measuring the panel's own top edge rather than summing the parts above it means it stays
+   correct for anything that is ever added, shown or hidden up there without a second variable
+   to keep in sync. The 60px fallback is only what applies for the one frame before app.js's
+   first measurement lands.
+   100dvh restated after 100vh for the same reason .settings-panel does it: on mobile Safari
+   100vh is the viewport as if the toolbars were already collapsed, so it over-measures while
+   they are still shown. Browsers without dvh keep the 100vh line above it. This whole height is
+   desktop-only in effect anyway — the mobile media query below sets height:auto, since there the
+   document is the scroller and the columns stack. */
+.app-layout{display:flex;height:calc(100vh - var(--layout-top,60px));height:calc(100dvh - var(--layout-top,60px));overflow:hidden}
 .col-left{flex:1;min-width:300px;padding:0 16px 40px;overflow-y:auto;overflow-x:hidden;max-width:100%;container-type:inline-size;container-name:scorecol;overflow-anchor:none}
 .col-right{position:relative;width:380px;min-width:200px;max-width:60vw;height:100%;overflow-y:auto;background:var(--bg-card);display:flex;flex-direction:column;flex-shrink:0;border-left:1px solid var(--border)}
 .drag-handle{position:relative;width:6px;flex-shrink:0;height:100%;background:var(--border);cursor:col-resize;z-index:101;transition:background .15s}
@@ -735,6 +823,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    is all stroke and no shape. */
 .icon-chip .chip-spot{fill:currentColor;stroke:none}
 .icon-clipboard{--icon-tint:var(--tint-clipboard);--icon-tint-2:var(--tint-clipboard-2)}
+/* Play Horn's popper — the last emoji left in the app, and the only pictograph here that
+   only ever renders ON an accent fill (every one of its three buttons is .btn-accent), so
+   the -acc trio is the set that actually gets used. */
+.icon-horn{--icon-tint:var(--tint-horn);--icon-tint-2:var(--tint-horn-2);--icon-tint-3:var(--tint-horn-3);
+  --icon-tint-acc:var(--vivid-horn,var(--tint-horn));--icon-tint-acc-2:var(--vivid-horn-2,var(--tint-horn-2));--icon-tint-acc-3:var(--vivid-horn-3,var(--tint-horn-3))}
 /* PDF: a page with a download arrow through it, not the closed book it was. The arrow is the
    only one of the five candidates that survived the 13px this button actually renders at, and it
    is what keeps it distinct from the spreadsheet sitting immediately beside it. */
@@ -1328,10 +1421,28 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    At the label's own 3px the guess input sat 4.5px above the name input — the actual thing that
    looked wrong here, and invisible in the markup because one side spaces with a gap and the
    other with a margin. */
+/* No native up/down spinners on the guess field. type="number" is kept for the numeric keypad
+   it brings up on a phone and for the min/max the field already declares, but the spinner
+   buttons it also brings are the wrong control here: they are ~10px tall each at this size,
+   they step by 1 through a 1-146 range, and on a row the host is tabbing through at speed the
+   only thing they reliably do is catch a stray click and silently change a score that was
+   already right. The craft prize steppers turn them off the same way (.stepper input.sw-input,
+   further down) — this is that rule applied to the one other number input in the app. */
+.team-guess-cell input[type=number]{-moz-appearance:textfield;appearance:textfield}
+.team-guess-cell input[type=number]::-webkit-outer-spin-button,
+.team-guess-cell input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .team-guess-cell>label{font-size:.66rem;margin-bottom:7px}
 .team-guess-cell.guess-missing>label{color:var(--txt-orange)}
 .team-guess-cell.guess-missing input{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
 .guess-warn{display:block;font-size:.58rem;font-weight:700;color:var(--txt-orange);letter-spacing:.3px;margin-top:2px}
+/* "Limit reached" cue for maxlength fields (see the delegated listener in app.js). Same
+   orange, size and weight as .guess-warn above rather than a new visual language — this is
+   the app's existing "something about this field needs your attention" voice, and the host
+   has already learned it from the required-field and Quiz ID hints. Not blocking, though,
+   so unlike .field-invalid the field keeps a plain border and only gains the ring; what was
+   typed is valid, there is just no room for more of it. */
+.limit-note{display:block;font-size:.58rem;font-weight:700;color:var(--txt-orange);letter-spacing:.3px;margin-top:2px}
+input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
 
 /* PER-TEAM ADJ */
 .adj-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;align-self:center}
@@ -1466,6 +1577,23 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .team-answer:nth-child(even){background:var(--row-stripe)}
 
 .ta-name{font-weight:600;font-size:.88rem;flex-shrink:0;width:11rem;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;padding-left:4px;padding-right:8px;line-height:1.3}
+/* No hover magnifier on these rows — see .ta-name-clickable::after below. Nothing else here
+   controls the vertical position of the name: .team-answer is align-items:center, so a box whose
+   height is exactly its own lines is centred by that alone, one line or two. What broke it was
+   the magnifier, and it broke it in two ways, both desktop-only (the mobile rule further down
+   already hid the icon, which is why none of this showed there):
+     1. At font-size 1.25em it was the tallest thing on its line, so it set the line box height —
+        every single-line name sat in a 21.4px line instead of a 17.2px one.
+     2. Worse, it is a ~22px inline box that has to FIT on a line, so any name landing within
+        about that distance of the column edge pushed it onto a second line of its own. The box
+        then measured two lines tall while the name still occupied only the first, and
+        align-items:center dutifully centred that two-line box — leaving the visible text 11px
+        above the row's centre, hard against the top. That is the "sometimes top justified,
+        sometimes centred" split: it turned purely on whether a given name left room for an
+        invisible icon on its last line, so "Sherlock Homies" centred and "Two Heads, One Trophy"
+        did not.
+   padding-right is back to the 8px it always was, so names wrap exactly where they used to —
+   in fact slightly later, since the icon is no longer eating ~22px off the last line. */
 
 .team-answer.flash{animation:row-flash .85s ease-out}
 @keyframes row-flash{0%{background:color-mix(in srgb,var(--accent-cyan) 22%,transparent)}100%{background:transparent}}
@@ -1477,31 +1605,6 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 @keyframes beer-row-flash{0%{background:color-mix(in srgb,var(--accent-gold) 35%,transparent)}60%{background:color-mix(in srgb,var(--accent-gold) 12%,transparent)}100%{background:transparent}}
 .team-answer:nth-child(even).beer-flash{animation:beer-row-flash-stripe 1.1s ease-out}
 @keyframes beer-row-flash-stripe{0%{background:color-mix(in srgb,var(--accent-gold) 35%,transparent)}60%{background:color-mix(in srgb,var(--accent-gold) 12%,transparent)}100%{background:var(--row-stripe)}}
-
-/* Momentary attention ring for whatever element jumpToSection/jumpToFirstUnanswered (app.js)
-   scrolls to — a whole .section, .question-block, or .special-section. box-shadow rather than
-   the .flash rows' background swap above: these targets already carry their own background
-   (including the Beer Round/medal gradients), and a ring reads as "look here" without fighting
-   any of that. inset, specifically — .question-block is overflow:hidden (it clips its own
-   rounded corners), which would silently clip an outward-spreading ring; inset never needs to
-   escape the element's own box in the first place, so it can't be clipped by anything. Same cyan
-   as .flash above, the existing "just happened here" attention color in this app. Pulsing twice
-   (not one long fade) reads as a deliberate cue rather than a blink easy to miss mid-scroll.
-   2.2s a cycle, not 1s: at 1s the pulses flickered — fast enough to read as an error state
-   rather than a "your question is here" pointer, and over almost before the smooth scroll that
-   triggers it had finished. The slower cycle lands each pulse as its own deliberate beat and runs
-   alongside the scroll instead of racing it. The 60% keyframe holds the ring near full strength
-   for longer than a linear fade would, so each beat still reads as its own pulse rather than one
-   long glow. Two beats, not three: at 2.2s each, three ran 6.6s — long enough that the ring was
-   still going well after the host had started reading the row it pointed at.
-   Colour via color-mix off --accent-cyan for the same reason the round-label tints above use it:
-   as literal rgba(0,255,255,...) the ring stayed blue in blue-yellow mode. */
-.jump-pulse{animation:jump-pulse 2.2s ease-out 2}
-@keyframes jump-pulse{
-  0%{box-shadow:inset 0 0 0 3px color-mix(in srgb,var(--accent-cyan) 85%,transparent)}
-  60%{box-shadow:inset 0 0 0 3px color-mix(in srgb,var(--accent-cyan) 15%,transparent)}
-  100%{box-shadow:inset 0 0 0 0 color-mix(in srgb,var(--accent-cyan) 0%,transparent)}
-}
 
 /* WAGER BUTTONS */
 .ta-wagers{display:flex;gap:.2rem;flex-shrink:0;margin-left:auto}
@@ -1643,7 +1746,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .bonus-pts.pts-zero{color:var(--text-muted);text-align:center;font-weight:700;opacity:.7}
 
 /* EXPORT */
-.export-bar{display:flex;gap:8px;flex-wrap:wrap;padding:10px 0}
+/* Centred to line up with the Clear Session button directly below it, which has been
+   text-align:center all along — left-aligned, the section read as two rows that had
+   nothing to do with each other. Applies at every width: the same reasoning holds once
+   the three wrap onto separate lines on a phone. */
+.export-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px 0}
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
 .export-prompt.show{display:block}
 .export-prompt p{margin-bottom:6px;color:var(--badge-gold-fg);font-weight:600;font-size:.85rem}
@@ -1658,6 +1765,14 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    back to a plain monochrome glyph, which can end up low-contrast against a theme's
    background instead of the intended colorful magnifying glass. */
 .ta-name-clickable::after{content:'\1F50D\FE0F';font-size:1.25em;opacity:0;margin-left:4px;transition:opacity .15s}
+/* ...but not on the question rows' team names, where it cost more than it was worth. Reserving
+   room for it (as padding, or inline as it used to be) makes names wrap earlier than they need
+   to in an 11rem column, and NOT reserving room means it sits on top of the name it belongs to.
+   Neither is worth paying for a second hint: .ta-name-clickable already turns --txt-cyan and
+   underlines on hover, which is the same signal every other link in the app uses, and the mobile
+   rule below has shipped without the icon all along. It stays on the standings and Final Results
+   cells, which are single-line and have width to spare. */
+.ta-name.ta-name-clickable::after{content:none}
 .ta-name-clickable:hover::after{opacity:1}
 
 /* FULLY CLICKABLE ROWS (standings + final results) — the whole row is the audit target, not
@@ -1757,6 +1872,17 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 
 /* CRAFT PRIZE RANDOMIZER */
 .cp-config{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:8px}
+/* .section-body has no top padding — every other section opens on something that brings its own
+   leading space, and Craft Prize Drawing is the one that does not. Whatever it opens on lands
+   flush against the bottom edge of the section header: the "Choose Craft Prize Winner" button
+   before the flow is opened, and the EXCLUDE TOP / DRUMROLL (SEC) captions once it is. Applied
+   to the first child rather than to either of them by name, so all three states this section
+   renders — the button, the config row, and the "Add teams to run the craft prize drawing"
+   note — clear the header by the same amount, and adding a fourth needs nothing here. Scoped to
+   this section: the rest of the app's sections open on blocks that already stand off correctly,
+   and a blanket rule would add space they have not asked for. 10px matches what .export-bar
+   takes for the same job one section down. */
+#sec-craftprize .section-body>:first-child{margin-top:10px}
 .cp-field{display:flex;flex-direction:column;align-items:center;gap:5px}
 .cp-field-label{font-size:.68rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;text-align:center}
 .cp-field .stepper input.sw-input{width:3.2rem}

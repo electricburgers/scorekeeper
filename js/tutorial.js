@@ -850,6 +850,18 @@ const Tutorial = (function () {
     // from early on; Craft Prize is left collapsed here on purpose, same as a real game, and
     // its own step below opens it right when the tour actually gets there.
     collapsedSections = new Set(["sec-craftprize"]);
+    // The per-ITEM collapse sets have to be cleared too, and used not to be. Unlike
+    // collapsedSections they start empty on a fresh game rather than pre-populated, so nothing
+    // here re-created them — they simply carried the host's real session straight into the tour.
+    // A host who had tidied away a couple of finished questions before opening the tutorial
+    // (which is exactly what that control is for, and what the collapse step below teaches) got
+    // a tour whose steps pointed at question blocks that were still shut: the spotlight lands on
+    // a zero-height element and the instruction refers to controls that are not on screen.
+    // All three are in stateVars() below, so the host's real collapse state is restored on exit
+    // the same as everything else the tour touches.
+    collapsedQuestions = new Set();
+    collapsedBonusQuestions = new Set();
+    collapsedSpecialWagers = new Set();
     // The drumroll length is a Settings slider, not part of gameState, so it survives the
     // gameState swap untouched — left alone, the tour would run whatever the host's real game
     // is set to (3-30s). Pinning it to a fixed 6s here makes the one step that needs a real
