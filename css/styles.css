@@ -391,7 +391,17 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .btn-danger{border-color:var(--accent-red)!important;color:var(--txt-red)!important}
 .btn-danger:hover{background:color-mix(in srgb,var(--accent-red) 13%,transparent)!important}
 
-.settings-toggle-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:5px 12px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
+/* min-height, not line-height — this button is flex/inline-flex like Save/Load, and a flex
+   container's own height comes from its tallest CHILD, not from line-height on the container
+   itself (line-height only sizes an actual text line box, which this icon-only button, unlike
+   Save/Load's icon-plus-" Save" text, never has one of). Save/Load end up taller purely because
+   their bare " Save"/" Load" text node forces a text line-box at the button's font-size, which
+   this button's single 1em-square icon child never triggers. calc(1.24em + 12px) reconstructs
+   that same text-driven height directly — 1.24 is Save/Load's own line-box-to-font-size ratio at
+   this font stack, and 12px is this rule's own padding+border (5px×2 + 1px×2) — so it tracks
+   Settings > Size the same way Save/Load's real text metrics already do, rather than a fixed px
+   height that wouldn't scale alongside them. */
+.settings-toggle-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.78rem;font-weight:600;min-height:calc(1.24em + 12px);padding:5px 12px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
 .settings-toggle-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .settings-toggle-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 

@@ -5,6 +5,18 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.98 - 2026-08-22
+- **The header's Settings gear button now matches Save/Load's height**, in both Pictograph and
+  Emoji mode. It was a few px shorter — flexbox sizes a row from its tallest child, and Save/Load
+  are taller because their own text node (" Save"/" Load") forces a real text line-box at the
+  button's font-size, which the gear's single icon-only child, with no text of its own, never
+  triggered. `min-height:calc(1.24em + 12px)` reconstructs that same text-driven height directly,
+  scaling with Settings > Size the same way Save/Load's real text metrics already do.
+- **Re-audited every emoji sitting alone inside its own container** (close-X buttons, remove-team,
+  both wager badges, Team Report's close X, the question timer's play/pause/reset, the Settings
+  gear) — everything was already correctly centered; the gear's height was the only real issue
+  found, fixed above.
+
 ## v18.97 - 2026-08-22
 - **Four new host banter lines**, added to the categories that already fit their tone: "Somewhere
   in this room, someone just changed a right answer to a wrong one. Rest in peace, that point."
