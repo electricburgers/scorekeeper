@@ -92,8 +92,8 @@
   --tint-trophy:#f5c542;--tint-trophy-2:#c9922a;
   --tint-mic:#cfd6dc;--tint-mic-2:#8b949c;
   --tint-heart:#ff5a72;
-  --tint-clover:#3ecf62;--tint-clover-2:#2a9e49;
-  --tint-target:#f0574a;--tint-target-2:#ffe4cf;
+  --tint-horseshoe:#3ecf62;
+  --tint-chips:#f0574a;--tint-chips-2:#ffd08a;
   --tint-clipboard:#c98f52;--tint-clipboard-2:#dfe3e7;
   --tint-pdf:#e0574f;
   /* AAA (7:1) text-safe variants of the brand accents, for use as TEXT on neutral surfaces
@@ -152,7 +152,7 @@
      improves every neutral surface too (3.93 on --bg-card-alt, 4.47 on white), for 11% less
      chroma at an unchanged hue. --accent-red needs no such move: it already sits at 3.05:1
      against its own --btn-incorrect-bg fill. */
-  --accent-cyan:#006688;--accent-magenta:#bb0055;--accent-gold:#e2b000;--accent-green:#008b02;
+  --accent-cyan:#006688;--accent-magenta:#bb0055;--accent-gold:#ffb300;--accent-green:#008b02;
   --accent-red:#cc0000;--accent-orange:#c45900;--shadow:0 4px 24px rgba(0,0,0,.12);--shadow-lg:0 16px 48px rgba(0,0,0,.28),0 2px 10px rgba(0,0,0,.18);
   --row-stripe:rgba(0,0,0,.048);
   --btn-idle-bg:#e8e8e8;--btn-correct-bg:#54f377;--btn-incorrect-bg:#f7a5a6;--btn-used-bg:#f0f0f0;
@@ -166,7 +166,7 @@
      and light mode's fills are the dark surface of the pair, so white is what clears AA here
      (5.7:1 and 5.7:1). */
   --check-icon-color:#fff;
-  --badge-gold-fg:#785b00;--badge-green-fg:#006a03;
+  --badge-gold-fg:#845e00;--badge-green-fg:#006a03;
   /* Same hues as the dark set above, darkened to clear 3:1 against a near-white card rather
      than near-black. See that block for why these are not colour-vision-swapped. */
   --icon-stroke-ink:#fff;--icon-stroke-mix:32%;
@@ -176,8 +176,8 @@
   --tint-trophy:#96700a;--tint-trophy-2:#6b4f05;
   --tint-mic:#5c6469;--tint-mic-2:#98a0a6;
   --tint-heart:#c62741;
-  --tint-clover:#1c8438;--tint-clover-2:#0f5a24;
-  --tint-target:#c33528;--tint-target-2:#dda28f;
+  --tint-horseshoe:#1c8438;
+  --tint-chips:#c33528;--tint-chips-2:#9a6a12;
   --tint-clipboard:#8a5f2c;--tint-clipboard-2:#b9a48c;
   --tint-pdf:#c0332b;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
@@ -187,7 +187,22 @@
      muddy, muted brown-olive to pass at all. Rather than accept that duller color, give the
      Beer Round card its own barely-there warm cream background (still ~17:1 for the existing
      black team-name text) so the border can be a real golden yellow instead. */
-  --beer-bg:#f1e7d0;--beer-border:#9f7804;
+  /* Beer Round, light. The old #f1e7d0 / #9f7804 / #785b00 set was the dullest thing in the
+     light theme: at OKLCh chroma .032 the background was a near-neutral beige, so the block that
+     is supposed to read as the fun moment of the night looked like unstyled paper. The
+     background is the lever — it carries far more of the impression than the text does, and it
+     had far more room. #fff0c4 is +83% chroma and slightly lighter, which also buys headroom for
+     the text sitting on it. --accent-gold (all the 7-14% washes: the badge, the stripe, the CB
+     Prize row and tag, the flash) goes to #ffb300, +7%. The border takes the most chromatic gold
+     that still clears 3:1 against the new background, +10%.
+     --badge-gold-fg could only gain 5%, and that is the honest number: it has to hold 4.5:1 as
+     text on the Beer Round badge — the darkest surface it ever renders on, and darker than the
+     block behind it because the badge lays a gold wash over it — while also serving as the fill
+     under white on .fr-tiebadge and the active standings sort button. 4.51:1 and 5.86:1. The
+     lesson from the first attempt at this: the ceiling has to come from measuring the composited
+     badge surface in the running app, not from computing the wash over the card. The wash sits on
+     --beer-bg, not on the card, and guessing put the first value 9% too bright. */
+  --beer-bg:#fff0c4;--beer-border:#b68000;
   /* Same Color Vision dropdown swatches as the dark theme above, duplicated from the
      [data-theme="hc-light"][data-cb="1"]/[data-cb="2"] tokens below. --cv-preview-rg-b uses the
      darker #b35900 (the cb1 pts-neg-bg) rather than the lighter #cc6600 accent-red so the swatch
@@ -703,12 +718,17 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-trophy{--icon-tint:var(--tint-trophy);--icon-tint-2:var(--tint-trophy-2)}
 .icon-mic{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
 .icon-heart{--icon-tint:var(--tint-heart)}
-/* Round 3's clover and Round 4's target are the two that leave their round accent behind: a gold
-   clover and an orange bullseye were reading as "whatever colour Round 3 is" rather than as a
-   clover and a dartboard. Round 1's gift and Round 2's pause stay on theirs — a red gift would
-   fight the wager pills either side of it, and a pause button has no emoji colour to go back to. */
-.icon-clover{--icon-tint:var(--tint-clover);--icon-tint-2:var(--tint-clover-2)}
-.icon-target{--icon-tint:var(--tint-target);--icon-tint-2:var(--tint-target-2)}
+/* Round 3's horseshoe and Round 4's chip stack are the two Q5 marks that leave their round accent
+   behind, for the same reason the clover and target did before them: in gold and orange they read
+   as "whatever colour that round is" rather than as the objects they are. Round 1's four squares
+   and Round 2's poker chip stay on their round accents — neither is a thing with a colour of its
+   own, so there is nothing to correct towards. */
+.icon-horseshoe{--icon-tint:var(--tint-horseshoe)}
+.icon-chips{--icon-tint:var(--tint-chips);--icon-tint-2:var(--tint-chips-2)}
+/* One of the four squares is filled, so the mark reads as "four parts, and they get scored"
+   rather than as a plain grid. Not one of the tinted pictographs — it takes Round 1's own accent,
+   like the gift it replaces — so it needs its own fill rule rather than .icon-tinted's. */
+.icon-squares .sq-fill{fill:currentColor;fill-opacity:.38;stroke:currentColor}
 .icon-clipboard{--icon-tint:var(--tint-clipboard);--icon-tint-2:var(--tint-clipboard-2)}
 /* PDF: a page with a download arrow through it, not the closed book it was. The arrow is the
    only one of the five candidates that survived the 13px this button actually renders at, and it

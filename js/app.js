@@ -131,10 +131,10 @@ const ICON_SHUFFLE =
 // and baseline are the font's business rather than the layout's. Lucide geometry throughout.
 const ICON_CLIPBOARD =
   '<svg class="icon-ui icon-tinted icon-clipboard" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect class="ip-2" width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>';
-const ICON_GIFT =
-  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></svg>';
-const ICON_CLOVER =
-  '<svg class="icon-ui icon-tinted icon-clover" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="ip-2" d="M16.17 7.83 2 22"/><path d="M4.02 12a2.827 2.827 0 1 1 3.81-4.17A2.827 2.827 0 1 1 12 4.02a2.827 2.827 0 1 1 4.17 3.81A2.827 2.827 0 1 1 19.98 12a2.827 2.827 0 1 1-3.81 4.17A2.827 2.827 0 1 1 12 19.98a2.827 2.827 0 1 1-4.17-3.81A2.827 2.827 0 1 1 4.02 12"/><path class="ip-2" d="m7.83 7.83 8.34 8.34"/></svg>';
+const ICON_SQUARES =
+  '<svg class="icon-ui icon-squares" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect class="sq-fill" x="13" y="13" width="8" height="8" rx="1.5"/></svg>';
+const ICON_HORSESHOE =
+  '<svg class="icon-ui icon-tinted icon-horseshoe" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 21v-8a6 6 0 0 1 12 0v8"/><path d="M4 21h4"/><path d="M16 21h4"/></svg>';
 const ICON_MIC =
   '<svg class="icon-ui icon-tinted icon-mic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path class="ip-2" d="M19 10v2a7 7 0 0 1-14 0v-2"/><line class="ip-2" x1="12" x2="12" y1="19" y2="22"/></svg>';
 const ICON_HEART =
@@ -163,10 +163,10 @@ const ICON_LINK =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
 const ICON_TRASH =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
-const ICON_TARGET =
-  '<svg class="icon-ui icon-tinted icon-target" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><circle class="ip-2" cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>';
-const ICON_PAUSE =
-  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg>';
+const ICON_CHIPS =
+  '<svg class="icon-ui icon-tinted icon-chips" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="17" rx="8" ry="3"/><path d="M4 17v-3c0-1.7 3.6-3 8-3s8 1.3 8 3v3"/><circle class="ip-2" cx="12" cy="6" r="3.5"/></svg>';
+const ICON_CHIP =
+  '<svg class="icon-ui icon-chip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/></svg>';
 const ICON_STOP =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>';
 const ICON_SHEET =
@@ -188,13 +188,13 @@ const ICON_ALERT =
 // brand-new session — no saved game to resume — runs synchronously at script-parse time, before a
 // `const` declared further down the file would be out of its temporal dead zone. It has to sit
 // BELOW the ICON_* constants for the same reason, now that it references two of them: put it back
-// above them and it reads ICON_GIFT before that line has run, which throws at parse time and
+// above them and it reads ICON_SQUARES before that line has run, which throws at parse time and
 // takes the whole script — and every later render — down with it.
 const BONUS_Q_STYLE = {
-  0: { icon: ICON_GIFT, cls: "bq-r1" },
-  2: { icon: ICON_CLOVER, cls: "bq-r3" },
+  0: { icon: ICON_SQUARES, cls: "bq-r1" },
+  2: { icon: ICON_HORSESHOE, cls: "bq-r3" },
 };
-const APP_VERSION = "v18.68"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.69"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 21, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -2300,7 +2300,7 @@ function renderSpecialWager(type) {
   const sectionCls = isFinal
     ? "special-section final-wager"
     : "special-section";
-  const titleIcon = isFinal ? ICON_TARGET : ICON_PAUSE;
+  const titleIcon = isFinal ? ICON_CHIPS : ICON_CHIP;
   const titleSub = isFinal ? "BONUS WAGER (1-20)" : "BONUS WAGER (1-10)";
   const wSet = isFinal ? "setFW" : "setHW",
     cSet = isFinal ? "setFC" : "setHC";
@@ -4499,19 +4499,42 @@ function exportPDF() {
         ["QUIZ #", meta.quizId || "—"],
         ["HOST", meta.hostName || "—"],
       ];
-      const fieldW = Math.min(220, usableW / 4);
-      headerFields.forEach(([label, value], i) => {
-        const fx = M + i * fieldW;
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(8);
-        setText("595959");
-        doc.text(label, fx, y + 9);
-        doc.setFont("helvetica", "bold");
-        fitFs(value, fieldW - 6, 15);
-        setText("000000");
-        doc.text(value, fx, y + 28, { maxWidth: fieldW - 6 });
-      });
-      y += 44;
+      // Craft Partner and Bonus Item go on a SECOND row of two half-width fields rather than
+      // squeezing six across the first. Both hold free text a host types — a brewery name plus
+      // its town, a prize description — and at usableW/6 they would have been the two narrowest
+      // fields on the page holding the two longest values, which fitFs would answer by shrinking
+      // them to near-illegible. Half-width each gives them roughly double what the first row's
+      // fields get. Rendered unconditionally, with the same em-dash placeholder the other four
+      // use when empty, so the header block is the same height on every export.
+      const drawRow = (fields, rowY, perRow) => {
+        const fieldW = Math.min(320, usableW / perRow);
+        fields.forEach(([label, value], i) => {
+          const fx = M + i * fieldW;
+          doc.setFont("helvetica", "normal");
+          doc.setFontSize(8);
+          setText("595959");
+          doc.text(label, fx, rowY + 9);
+          doc.setFont("helvetica", "bold");
+          fitFs(value, fieldW - 6, 15);
+          setText("000000");
+          doc.text(value, fx, rowY + 28, { maxWidth: fieldW - 6 });
+        });
+      };
+      drawRow(headerFields, y, 4);
+      const partner = (meta.craftPartner || "").trim();
+      const town = (meta.craftPartnerTown || "").trim();
+      const partnerTxt = partner
+        ? partner + (town ? " \u2014 " + town : "")
+        : "\u2014";
+      drawRow(
+        [
+          ["CRAFT PARTNER", partnerTxt],
+          ["BONUS ITEM", (meta.bonusItem || "").trim() || "\u2014"],
+        ],
+        y + 40,
+        2,
+      );
+      y += 84;
     }
     function drawMainHeaderRows() {
       const groupY = y;
