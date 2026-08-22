@@ -2,6 +2,19 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.16] - 22 Aug 2026
+
+### Fixed
+
+- **The Theme button now follows Icon Style too.** It was hardcoded plain-text emoji
+  (`"🌑 Dark"` / `"☀️ Light"`) set directly in `faqApplyDisplayPrefs`, wired up before Icon Style
+  existed and never brought in line with it — the one pictograph on the page the toggle couldn't
+  reach. It now renders the same drawn sun/moon `.icon-ui` svg (tagged `data-emoji`, same as
+  everything else) in Pictograph mode and swaps with the rest in Emoji mode.
+- **Dark uses 🌙 (crescent moon), not 🌑 (new moon).** 🌑 is a plain dark disc with no crescent
+  shape at all — barely reads as "moon" next to ☀️'s sun. 🌙 is also what the main app's own
+  Icon Style toggle already uses for Dark (`THEME_ICON_MOON_EMOJI`), so the two now match.
+
 ## [1.15] - 22 Aug 2026
 
 ### Added

@@ -4,8 +4,16 @@
 // #versionLabel element. Here the same string feeds two spots — the page footer and the
 // Settings panel's settings-meta row — so bumping a release only means editing these two
 // constants instead of hunting down every place the version text is written out by hand.
-const FAQ_VERSION = "v1.15";
+const FAQ_VERSION = "v1.16";
 const FAQ_VERSION_DATE = "22 Aug 2026";
+
+// Same Lucide sun/moon geometry as the main app's THEME_ICON_SUN/MOON (js/app.js), tagged
+// data-emoji so Icon Style (see faqApplyIconStyle further down) can swap this page's Theme
+// button between the two the same way it swaps everything else.
+const FAQ_THEME_SUN_SVG =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="☀️"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></svg>';
+const FAQ_THEME_MOON_SVG =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🌙"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
 (function () {
   var text = "FAQ " + FAQ_VERSION + " (" + FAQ_VERSION_DATE + ")";
   ["faqVersionLabel", "faqSettingsVersionLabel"].forEach(function (id) {
@@ -298,7 +306,16 @@ function faqApplyDisplayPrefs() {
     : "hc-dark";
   document.documentElement.setAttribute("data-theme", theme);
   const tb = document.getElementById("faqThemeToggle");
-  if (tb) tb.textContent = theme === "hc-light" ? "☀️ Light" : "🌑 Dark";
+  // Same drawn-pictograph/emoji pair Icon Style swaps everywhere else on this page (data-emoji
+  // tag + faqApplyIconStyle below, which runs right after this and converts it if the saved
+  // style is "emoji") — this button used to be hardcoded plain-text emoji, the one pictograph on
+  // the page Icon Style couldn't reach. 🌙 (crescent), not 🌑 (new moon, a plain dark circle with
+  // no crescent shape at all) — matches the main app's own THEME_ICON_MOON_EMOJI.
+  if (tb)
+    tb.innerHTML =
+      theme === "hc-light"
+        ? FAQ_THEME_SUN_SVG + " Light"
+        : FAQ_THEME_MOON_SVG + " Dark";
   faqApplyIconStyle(p.iconStyle === "emoji" ? "emoji" : "pictograph");
   const cbm = p.cbMode || 0;
   if (cbm) document.documentElement.setAttribute("data-cb", String(cbm));
