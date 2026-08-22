@@ -2,6 +2,24 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.18] - 22 Aug 2026
+
+### Fixed
+
+- **A full wording audit for leftover emoji and stale UI descriptions.** The Question Timer entry
+  described the Start/Pause/Resume/Reset controls as labeled `▶ Start`/`⏸ Pause`/`↺ Reset`
+  buttons — the app dropped those Unicode glyphs (and the text labels) versions ago in favor of
+  icon-only buttons whose shape swaps with state, so the entry now shows the actual play/pause/
+  reset pictographs and describes the one-button-two-states behavior for real. Three more spots
+  ("trying the Sort button", "Use the Sort button to find who hasn't answered", "Sort and Reset
+  buttons") had the same bare `↕`/`↺` characters in place of the drawn icons the buttons have
+  used since the main app's own icon sweep; Manual Drumroll Control's "▶ Play Horn" mention gets
+  the actual play-triangle pictograph in place of a plain triangle character. All five are tagged
+  `data-emoji` like everything else, so Icon Style reaches them too.
+- Checked the rest of the page against the current app for description drift — no other stale
+  feature references turned up (the removed Q5 pictographs, the old up/down guess-field spinners,
+  and the team-name hover magnifier are all correctly absent already).
+
 ## [1.17] - 22 Aug 2026
 
 ### Fixed

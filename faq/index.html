@@ -402,7 +402,7 @@
               theme, adding and naming your first team, entering their Score
               Guess, checking a Bonus box, cycling one question through
               correct → incorrect → cleared, scoring a Bonus question, placing
-              a Halftime Wager, trying the ↕ Sort button, and opening (then
+              a Halftime Wager, trying the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg> Sort button, and opening (then
               closing) a team's Team Report. For the repetitive rest —
               the other four teams, the remaining rounds, everyone else's
               wagers — the tour fills it in live for you so the tour takes a
@@ -770,12 +770,18 @@
           </summary>
           <div class="faq-a">
             <p>
-              <strong>▶ Start</strong> begins the countdown from its base
-              duration; the same button becomes <strong>⏸ Pause</strong> while
-              running and <strong>▶ Resume</strong> while paused.
-              <strong>↺ Reset</strong> stops the clock and returns it to the
-              base duration — it's disabled whenever the timer is already idle,
-              so there's nothing to reset. The base duration itself comes from
+              One icon-only button does all three jobs, its shape (and its
+              <code>aria-label</code> for screen readers) swapping with the
+              state: a play triangle
+              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="▶️"><path d="M8 5v14l11-7z"/></svg>
+              begins the countdown from its base duration and, once paused,
+              resumes it; the same button becomes a pause icon
+              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⏸️"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+              while running. A separate
+              <strong><svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↩️"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg> Reset</strong>
+              button stops the clock and returns it to the base duration —
+              it's disabled whenever the timer is already idle, so there's
+              nothing to reset. The base duration itself comes from
               <strong>Settings → Question Timer</strong>, a dropdown from 1:00
               to 15:00 in 30-second steps (default 3:00).
             </p>
@@ -1631,14 +1637,14 @@
 
         <details class="faq-item">
           <summary>
-            <span class="faq-q-text">Use the ↕ Sort button to find who still hasn't answered</span><span
+            <span class="faq-q-text">Use the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg> Sort button to find who still hasn't answered</span><span
               class="faq-q-arrow"
               >▶</span
             >
           </summary>
           <div class="faq-a">
             <p>
-              Every question has its own ↕ <strong>Sort</strong> and ↺
+              Every question has its own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg> <strong>Sort</strong> and <svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↩️"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
               <strong>Reset</strong> buttons. Sort is a one-time move that bumps
               currently-unanswered teams to the top of that question —
               invaluable in a big room where you're waiting on the last few
@@ -1758,7 +1764,7 @@
               the app's own random draw timing.
               <strong>Stop Drumroll</strong> cuts the roll short and leaves the
               draw paused, then that same button becomes
-              <strong>▶ Play Horn</strong>, which commits the winner and fires
+              <strong><svg class="icon-ui icon-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎉"><path class="pl-tri" d="M8.5 5.5 19 12l-10.5 6.5z"/></svg> Play Horn</strong>, which commits the winner and fires
               the horn exactly when you want it. It's one button in two states,
               not two side by side — the screenshot shows the paused half, since
               that's the one you only ever see with this setting on.
