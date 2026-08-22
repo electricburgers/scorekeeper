@@ -5,6 +5,16 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.91 - 2026-08-22
+- **The four Settings pictographs that were still plain monochrome now have colour**: App
+  Preferences' Save (blue, silver window/label) and Load (gold folder), and Craft Prize Eligible
+  List's Copy (the same tan/silver `ICON_CLIPBOARD` already drawn elsewhere, just missing its own
+  classes) and TXT (silver page). All four reuse tint tokens this app already has audited
+  (`--tint-cap`, `--accent-gold`, `--tint-clipboard`, `--tint-mic`) rather than inventing new ones.
+- **Try Example's flask is green with a silver neck, matching the 🧪 emoji it stands in for**,
+  reversed from its original "arbitrary purple, picked only to look distinct" choice. Reuses
+  `--tint-sheet` (XLSX's own green) and `--tint-mic` (the mic's silver) rather than new colors.
+
 ## v18.90 - 2026-08-22
 - **The R2/R4 bonus wager's "Mark incorrect" button now uses ✖️ for its own icon in Emoji mode,
   not ⛔.** Selecting it still overlays a ⛔ `wager-badge` right on top — that's the actual

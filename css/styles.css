@@ -820,9 +820,27 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-mic{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
 .icon-heart{--icon-tint:var(--tint-heart)}
 .icon-clipboard{--icon-tint:var(--tint-clipboard);--icon-tint-2:var(--tint-clipboard-2)}
-.icon-flask{--icon-tint:var(--tint-flask)}
+/* Green body + silver neck, like the 🧪 emoji it replaced — a deliberate reversal of this icon's
+   original "arbitrary purple, picked only to stay distinct from every other tint" choice (see the
+   removed note this replaced). --tint-sheet/--tint-mic reused as-is rather than inventing new
+   hex values: this app already has an audited green (XLSX's own icon) and an audited silver
+   (the mic), and neither needs its own one-off variant just for this icon to borrow it. */
+.icon-flask{--icon-tint:var(--tint-sheet);--icon-tint-2:var(--tint-mic)}
 .icon-cap{--icon-tint:var(--tint-cap)}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
+/* Settings > App Preferences (Save/Load) and > Craft Prize Eligible List (Copy/TXT) — the only
+   four pictographs left with no colour of their own after every OTHER Settings row got one.
+   --tint-cap reused for Save's floppy disk (already this app's blue, from Take the Tour's cap)
+   and --tint-mic for its silver label/window detail, same reasoning as icon-flask's reuse above.
+   --accent-gold for Load's folder needs no second tone — it's one path, not a picture split into
+   separate parts — and comes with color-vision-mode overrides already, for free, that a bespoke
+   --tint-load never would. TXT's page reuses --tint-mic/-2 for the same plain silver-on-silver
+   .icon-mic already is; Copy reuses .icon-clipboard verbatim below, not a class of its own — it's
+   the exact same clipboard shape already drawn for ICON_CLIPBOARD_PICT (app.js), just missing the
+   classes that would have tinted it the same way. */
+.icon-save{--icon-tint:var(--tint-cap);--icon-tint-2:var(--tint-mic)}
+.icon-load{--icon-tint:var(--accent-gold)}
+.icon-txt{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
 /* Play Horn's play triangle — filled, and keeping .icon-ui's own stroke rather than clearing it.
    The stroke is what rounds the three corners (stroke-linejoin:round, inherited), so the glyph
    matches the rounded ends every other mark in this family is drawn with instead of coming to
