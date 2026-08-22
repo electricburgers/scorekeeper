@@ -21,25 +21,32 @@
         <div class="faq-logo">Score <span>Keeper</span> — FAQ</div>
         <div class="faq-header-actions">
           <a class="faq-back" href="../index.html"> ← Back to Scorekeeper </a>
-          <button
-            type="button"
-            class="settings-toggle-btn"
-            id="faqSettingsToggleBtn"
-            onclick="faqToggleSettings()"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-controls="faqSettingsPanel"
-            title="Display settings"
-            aria-label="Display settings"
-          >
-            <svg
-              class="icon-ui"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              focusable="false"
-             data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
         </div>
+        <!-- A direct child of .faq-header-row itself (position:relative — see the CSS), not of
+             .faq-header-actions' flex flow, and positioned absolutely: .faq-header-row wraps its
+             flex content at narrow widths (the logo drops to its own line above "Back to
+             Scorekeeper"), and this used to wrap right along with it — landing wherever "Back to
+             Scorekeeper" happened to end rather than the corner of the page. Taking it out of
+             flow entirely pins it to the same top-right corner at every width, matching the main
+             app's own settings gear. -->
+        <button
+          type="button"
+          class="settings-toggle-btn faq-settings-toggle"
+          id="faqSettingsToggleBtn"
+          onclick="faqToggleSettings()"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="faqSettingsPanel"
+          title="Display settings"
+          aria-label="Display settings"
+        >
+          <svg
+            class="icon-ui"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+           data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
       </div>
       <div
         class="settings-panel"
@@ -770,9 +777,8 @@
           </summary>
           <div class="faq-a">
             <p>
-              One icon-only button does all three jobs, its shape (and its
-              <code>aria-label</code> for screen readers) swapping with the
-              state: a play triangle
+              One icon-only button does all three jobs, changing shape as the
+              timer's state changes: a play triangle
               <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="▶️"><path d="M8 5v14l11-7z"/></svg>
               begins the countdown from its base duration and, once paused,
               resumes it; the same button becomes a pause icon

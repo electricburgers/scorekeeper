@@ -2,6 +2,23 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.19] - 22 Aug 2026
+
+### Fixed
+
+- **The gear button now stays pinned to the top-right corner at every width.** It used to be a
+  flex child of `.faq-header-actions`, riding along with "← Back to Scorekeeper" — at narrow
+  widths where the header wraps (the logo drops to its own line), the whole actions group wrapped
+  with it, landing the gear wherever "Back to Scorekeeper" happened to end rather than the corner
+  of the page. It's `position:absolute` against `.faq-header-row` now (not `.faq-header` itself,
+  which would have pinned it to the raw viewport edge instead of the row's own max-width:900px
+  centered content on wide screens) — out of the wrapping flow entirely, so it can't drift.
+- **One more audit pass, this time for engineering language rather than emoji** — the Question
+  Timer entry (rewritten last version to describe the real icon-only button) mentioned
+  `aria-label`, an HTML attribute name with no reason to appear in a reader-facing answer. Reworded
+  to just say what the button does. A full pass over the rest of the page's wording didn't turn up
+  other cases of implementation detail standing in for plain description.
+
 ## [1.18] - 22 Aug 2026
 
 ### Fixed

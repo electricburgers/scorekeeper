@@ -24,6 +24,14 @@
   flex-wrap: wrap;
   max-width: 900px;
   margin: 0 auto;
+  /* Positioning context for .faq-settings-toggle below, and the reason that button's own
+     right:0 lands on THIS row's right edge (which stops growing past 900px and re-centers)
+     rather than the raw viewport edge, which is what position:absolute on .faq-header itself —
+     the sticky ancestor further out — would have pinned to instead. */
+  position: relative;
+  /* Reserves room for the gear so wrapped "Back to Scorekeeper" text (see .faq-settings-toggle)
+     never runs under it — sized to the button's ~34px plus the row's own 10px gap. */
+  padding-right: 44px;
 }
 .faq-logo {
   font-family: var(--font-display);
@@ -127,6 +135,16 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+/* Pinned to .faq-header-row's own top-right corner (see that rule's position:relative), clear of
+   the flex flow .faq-logo/.faq-header-actions wrap in at narrow widths — see the HTML comment
+   above this button for why it needs to be. Vertically centered against the row's own height
+   rather than any one line within it, since which line is "the top" changes once wrapped. */
+.faq-settings-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
 }
 /* Same button look the rest of the design system uses (font-body 600, .78rem, 1px --border,
    --radius, --bg-card resting/--bg-hover on hover) — an <a>, not a <button>, so it still needs
