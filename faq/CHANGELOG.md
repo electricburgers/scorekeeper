@@ -2,6 +2,21 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.17] - 22 Aug 2026
+
+### Fixed
+
+- **Fixed the huge, wrong gaps around a question's inline pictograph/emoji** — e.g. `What
+  happens when I click 🥁 Start Drumroll?` was rendering as the icon and the trailing text each
+  shoved out to their own far corner. `.faq-item summary` is `display:flex;
+  justify-content:space-between`, built for exactly two children (the question text, the
+  `.faq-q-arrow` chevron) — every Icon Style `data-emoji` svg or emoji span sitting mid-question
+  was a direct child of that flex row too, so space-between spread however many text-runs and
+  icons a question had evenly across the whole row instead of just pushing the arrow to the end.
+  The question text (icons and all) is now wrapped in one `.faq-q-text` span, so the row is back
+  to exactly its intended two flex items regardless of how many pictographs a question's title
+  has.
+
 ## [1.16] - 22 Aug 2026
 
 ### Fixed

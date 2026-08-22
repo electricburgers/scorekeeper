@@ -340,6 +340,19 @@ mark.faq-hl {
 .faq-item summary:hover {
   background: var(--bg-hover);
 }
+/* Wraps the question text as the summary row's ONE other flex item, alongside .faq-q-arrow.
+   Without it, any inline pictograph/emoji sitting mid-question (Icon Style's data-emoji svgs —
+   e.g. "What happens when I click 🥁 Start Drumroll?") split the row into as many anonymous flex
+   items as there were runs of text and elements, and .faq-item summary's own
+   justify-content:space-between then spread THAT many items evenly across the row instead of
+   just pushing the arrow to the end — the icon (and everything after it) landing wildly
+   separated from its own sentence. flex:1/min-width:0 is what lets it still wrap normally
+   instead of forcing the row wider than its container once it's a flex item rather than plain
+   inline text. */
+.faq-q-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
 .faq-q-arrow {
   font-size: 0.75rem;
   color: var(--text-muted);
