@@ -5,6 +5,17 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.83 - 2026-08-22
+- **The mobile docked timer's display and buttons are bigger, without the dock itself growing a
+  single pixel.** A first pass at this grew `.qtimer-mobile`'s own padding to make room, which grew
+  `.mobile-bottom-dock`'s measured height right along with it and ate into the game content above
+  — not what was asked. This version instead trims that row's padding (8px → 4px) and the display's
+  own padding (5px → 3px) to free up exactly the room the bigger sizes need: display font-size
+  1.3rem → 2.1rem, and the toggle/reset/step buttons' `2rem` floor → `2.75rem`. Verified against the
+  pre-change build pixel for pixel: `.mobile-bottom-dock` height and `.qtimer-mobile` row height are
+  both unchanged (103.5px / 54.5px), while the display, toggle, reset, and stepper buttons all
+  measure visibly larger inside that same frame.
+
 ## v18.82 - 2026-08-22
 - **PDF export could open a new tab showing the PDF instead of just downloading it.** `dl()` (the
   shared helper behind PDF, XLSX, and the craft-eligible TXT export) set `target="_blank"`

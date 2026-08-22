@@ -1205,8 +1205,30 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      scores on top, timer below — rather than two stacked boxes. No drop shadow of its own
      (unlike .qtimer-desktop): the dock already carries the shadow for the whole card. Hidden
      entirely when the timer is turned off in Advanced Settings, via [data-timer-hidden] below. */
-  .qtimer-mobile{display:flex;border-top:1px solid var(--border);padding:8px 10px}
-  .qtimer-mobile .qtimer-display{font-size:1.3rem}
+  /* This row's own OUTER height (border-top plus the padding below) is a hard ceiling, not just
+     a starting point: growing it grows .mobile-bottom-dock along with it, eating into the game
+     content above the dock — which the first pass at this got wrong, trading a taller dock for
+     bigger controls. Padding trimmed from 8px to 4px top/bottom is what buys the room to grow
+     everything below WITHOUT that trade: same 1px border-top plus 2x4px padding as the original
+     frame, just less of it spent on empty margin and more on the controls themselves. */
+  .qtimer-mobile{display:flex;border-top:1px solid var(--border);padding:4px 10px}
+  /* Docked row had ~194px of unused WIDTH at rest (no steppers) and ~93px with them — measured
+     empirically, not eyeballed — so there's no width trade-off here at all, only the height one
+     resolved above. font-size bumped as far as the row's own trimmed padding allows without
+     .qtimer-display's OWN padding (also trimmed, 5px to 3px top/bottom) pushing the row past the
+     original 54.5px total height: 2.1rem + 3px+3px own padding + the 4px+4px border every state
+     (qt-warn/crit) already reserves lands exactly on that ceiling, measured. */
+  .qtimer-mobile .qtimer-display{font-size:2.1rem;padding:3px 10px}
+  /* Flat rem values here, not max(...,44px) — the usual touch-target floor elsewhere in the app
+     (.standings-sort-btn) would push these half a pixel past the frozen row height this whole
+     rule exists to respect. 2.75rem (41.25px at this app's 15px root) is what actually fits;
+     their own svg/icon-emoji children are already sized in em, so they scale up for free with
+     font-size alone, no separate rule needed. */
+  .qtimer-mobile .qtimer-btn.qtimer-toggle,
+  .qtimer-mobile .qtimer-btn.qtimer-reset{
+    width:2.75rem;height:2.75rem;min-height:2.75rem;font-size:1.3rem;
+  }
+  .qtimer-mobile .qtimer-btn.qtimer-step{font-size:.88rem;padding:6px 8px;min-height:2.75rem}
   /* Column 1 is left empty on purpose — an unfilled 1fr grid track still reserves the same
      width as column 3's chevron, which is what keeps column 2 centered against the full strip
      rather than just the leftover space; it doesn't need visible content of its own to do that. */
