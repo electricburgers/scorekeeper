@@ -5,6 +5,11 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.67 - 2026-08-21
+- Entry and Shuffle in the Before Halftime / Before Final Wager blocks split the difference at **32px** (58x32 and 38x32, measured), halfway between the ~20px they started at and the 44px of v18.64. 44 fixed the tap problem and overshot the look: two chunky pills above a quiet little standings table, pulling more attention than the scores they sit over.
+- Worth being straight about the cost rather than filing it under "improved": 32px is **under** the 44px both platform guidelines ask for, so this is a deliberate trade of guideline compliance for proportion, not a claim to meet it. It clears the 24px WCAG 2.5.8 asks for at AA, and is 60% bigger than what was there before v18.64.
+- Sized `max(2rem,32px)` for the same reason the 44px version used `max()`: the rem tracks Settings > Size so scaling the app up scales the button, but the app's root is 15px, so rem alone would land at 30px at the default and lower at the small end of the range.
+
 ## v18.66 - 2026-08-21
 - **The beer has its foam everywhere it appears.** The Beer Round badge, its stripe and the CB Prize tag were opting out of the tint entirely and inheriting their own gold, on the v18.59 reasoning that the context was already saying "beer". That was the wrong call: a mug rendered in one flat gold has no foam, and the foam is most of what makes it read as a mug rather than a tankard-shaped blob. All three take the full tint now — amber body, cream head — like every other beer in the app.
 - The reason for that exemption was real, and is handled properly instead of by dropping the colour. Amber on the Beer Round wash measured 2.94:1 — a miss by 0.06, and only in LIGHT blue-yellow mode, where the wash is a color-mix off `--accent-gold` and therefore pink and light rather than deep gold. `--tint-beer` is darkened to #9a6300 for that one mode: 3.30:1 on the pink wash, still 3.68:1 on the darkest ordinary light surface it renders on, hue untouched. A mode-scoped two-step darkening is a far smaller concession than dropping the colour in all six.

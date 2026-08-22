@@ -1113,7 +1113,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    a little larger to hold the same optical weight as "Entry"/"Asc"/"Desc" beside it. Dropping the
    word is what stopped this button being the widest of the four and squeezing the other three. */
 .sort-btn .icon-ui{width:1.25em;height:1.25em}
-.standings-sort-btn .icon-ui{width:1.4em;height:1.4em}
+.standings-sort-btn .icon-ui{width:1.32em;height:1.32em}
 .sort-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid);box-shadow:0 0 6px color-mix(in srgb,var(--accent-cyan) 30%,transparent)}
 .sort-mode-label{padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0}
 
@@ -1555,16 +1555,22 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .standings-block.collapsed .standings-chevron{transform:rotate(-90deg)}
 /* Banter, sort buttons, and the table are all inside this wrapper so they collapse together. */
 .standings-collapsible{margin-top:8px}
-.standings-sort-btns{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-/* Sized as a real touch target. max(2.75rem,44px) rather than a plain 2.75rem: the rem tracks
-   Settings > Size so a host who has scaled the app up gets a bigger button, but at the default
-   and below, rem alone lands under the mark (41px at the shipped default, less at the small end
-   of the range) — the px floor is what guarantees 44 regardless of the size setting. These sit in the Before Halftime / Before Final
-   Wager blocks, which is the one moment in the night the host is reading scores aloud to the room
-   rather than looking at the screen — at the old .65rem/3px they were about 20px tall, small
-   enough to need a careful, deliberate tap. Deliberately not narrowed on desktop: this app is
-   used on a phone or tablet at a venue far more than at a desk. */
-.standings-sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-display);font-size:.8rem;font-weight:700;min-height:max(2.75rem,44px);min-width:max(2.75rem,44px);padding:0 14px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
+.standings-sort-btns{display:flex;gap:6px;align-items:center;margin-bottom:7px}
+/* 32px, halfway between where these started and where v18.64 put them. They sit in the Before
+   Halftime / Before Final Wager blocks, and at their original .65rem/3px they were about 20px —
+   small enough to need a careful, deliberate tap at the one moment in the night the host is
+   reading scores aloud rather than looking at the screen. 44px fixed that and overshot: two
+   chunky pills above a quiet little standings table, pulling more attention than the scores they
+   sit over. 32px is the compromise, and the cost is worth stating plainly — it is under the 44px
+   both platform guidelines ask for, so this is a deliberate trade of guideline compliance for
+   proportion rather than a claim to meet it. Still comfortably over the 24px WCAG 2.5.8 asks for
+   at AA, and 60% bigger than what was there.
+   max(2rem,32px) rather than a plain 2rem: the rem tracks Settings > Size so scaling the app up
+   scales the button, but the app's root is 15px, so rem alone would land at 30px at the default
+   and lower at the small end of the range. The px floor holds the bottom. Deliberately not
+   narrowed further on desktop: this app is used on a phone or tablet at a venue far more than at
+   a desk. */
+.standings-sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-display);font-size:.72rem;font-weight:700;min-height:max(2rem,32px);min-width:max(2rem,32px);padding:0 11px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .standings-sort-btn.active{background:var(--badge-gold-fg);color:var(--on-badge);border-color:var(--badge-gold-fg)}
 .standings-table{width:100%;border-collapse:collapse;font-size:.86rem}
