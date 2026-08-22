@@ -5,6 +5,16 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.96 - 2026-08-22
+- **Clicking Shuffle (or Entry) on the Before Halftime/Final Wager standings no longer nudges the
+  view a few pixels on every click.** Same root cause and same fix as v18.95's R2/R4 row jump:
+  the click-position anchor had no way to target the Entry/Shuffle button row specifically, so it
+  fell back to the whole `.standings-block` — and that block's own banter line (a random line of
+  variable length, re-picked on every re-render) sits ABOVE the button row, so a longer or shorter
+  line pushed the buttons themselves up or down even while the block's own top edge stayed put.
+  The button row now carries its own id and anchors to itself, independent of whatever the banter
+  line above it does.
+
 ## v18.95 - 2026-08-22
 - **The ☑️ in Round/Q5 "Done" badges no longer covers the badge's own green border in dark theme
   Emoji mode.** At the badge's tight 1px vertical padding, the emoji's own glyph box rendered
