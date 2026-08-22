@@ -1571,6 +1571,14 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .round-badge{font-family:var(--font-body);font-size:1rem;line-height:1;font-weight:700;padding:1px 8px;border-radius:4px;border:1px solid currentColor}
 .round-badge.rb-partial{background:color-mix(in srgb,var(--accent-gold) 13%,transparent);color:var(--badge-gold-fg)}
 .round-badge.rb-done{background:color-mix(in srgb,var(--accent-green) 10%,transparent);color:var(--badge-green-fg)}
+/* Icon Style's Emoji mode swaps ICON_DONE's drawn checkmark for ☑️ here (dark theme; ✔️ in
+   light — see applyIconStyle) — at this badge's own tight 1px vertical padding, the emoji's own
+   glyph box renders taller than the pill itself, poking past the rounded green border instead of
+   sitting inside it the way the drawn pictograph (sized to exactly fill icon-mark's 1em box)
+   already did. Scaled down to fit back inside the border rather than widening the badge to fit
+   the glyph — the badge's height is shared with every other state (.rb-partial etc.), which
+   don't have this problem and shouldn't grow to accommodate it. */
+.round-badge.rb-done .icon-emoji,.q-badge.q-complete .icon-emoji{transform:scale(.72)}
 
 /* QUESTION BLOCKS — collapsible */
 /* border-left is 6px from the start (transparent) rather than growing from 3px once a question

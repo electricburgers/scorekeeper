@@ -5,6 +5,29 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.95 - 2026-08-22
+- **The ☑️ in Round/Q5 "Done" badges no longer covers the badge's own green border in dark theme
+  Emoji mode.** At the badge's tight 1px vertical padding, the emoji's own glyph box rendered
+  taller than the pill, poking past the rounded border instead of sitting inside it. Scaled down
+  to fit.
+- **The R2/R4 bonus wager's "Mark incorrect" button uses ❌ now, not ✖️** (an earlier pass here
+  tried ✖️ first) — still distinct from the ⛔ badge that overlays it once selected.
+- **Every `STATIC_ICON_TARGETS` emoji is wrapped in the same `.icon-emoji` span now**, not just
+  the one that already needed it (the settings-close X) — a bare platform emoji's own line-box
+  height varies glyph to glyph, which is what made Try Example (🧪) render visibly taller than
+  Take the Tour (ℹ️) once they stopped sharing similarly-sized glyphs. Fixes that pair and closes
+  the door on any other pairing having the same problem later.
+- **Take the Tour's Pictograph-mode icon is a lowercase i in a rounded square now**, replacing the
+  graduation cap, to actually match the ℹ️ it swaps to in Emoji mode rather than depicting
+  something else entirely. Three shape options (circle/rounded-square/no-container) were
+  previewed live in the running app before picking this one.
+- **Fixed a subtle layout shift when marking a R2/R4 (halftime/final) bonus wager team correct or
+  incorrect.** The click-position anchor that keeps the row you just clicked from jumping around
+  on re-render had no way to target an individual `.special-wager-row` — closest() fell back to
+  the entire Q5 block, so anything ABOVE the row you clicked (the block's own "N left"/"Done"
+  badge, in particular) changing size still nudged your row a few pixels. Each row now carries
+  `data-ta="{type}-{ti}"`, the same per-row anchoring every other question row already had.
+
 ## v18.94 - 2026-08-22
 - **"Done" no longer disappears into the background in dark theme's Emoji mode.** ✔️ renders as a
   bare dark tick with no background of its own — legible on light theme's surfaces, nearly

@@ -280,10 +280,10 @@ const ICON_MARK_CORRECT_EMOJI = '<span class="icon-emoji">☑️</span>';
 // once selected, an overlaid wager-badge with ICON_INCORRECT on top of it — both were ⛔ in Emoji
 // mode, so a selected button showed two identical prohibition signs stacked on each other. The
 // badge keeps ⛔ (ICON_INCORRECT, above) — that's the actual "this one's wrong" signal, same role
-// CORRECT_BADGE_SVG plays on the correct side. The button's OWN icon gets ✖️ instead, the same
-// pairing logic as ICON_MARK_CORRECT's ☑️: a visibly different mark from the badge it can sit
-// next to, rather than the same glyph twice.
-const ICON_MARK_INCORRECT_EMOJI = '<span class="icon-emoji">✖️</span>';
+// CORRECT_BADGE_SVG plays on the correct side. The button's OWN icon gets ❌ instead (by request —
+// an earlier pass here tried ✖️ first), the same pairing logic as ICON_MARK_CORRECT's ☑️: a
+// visibly different mark from the badge it can sit next to, rather than the same glyph twice.
+const ICON_MARK_INCORRECT_EMOJI = '<span class="icon-emoji">❌</span>';
 const ICON_SORT_EMOJI = '<span class="icon-emoji">↕️</span>';
 const ICON_ARROW_UP_EMOJI = '<span class="icon-emoji">⬆️</span>';
 const ICON_ARROW_DOWN_EMOJI = '<span class="icon-emoji">⬇️</span>';
@@ -349,26 +349,28 @@ let ICON_ALERT = ICON_ALERT_PICT;
 // built into a template literal. Keyed by element id/selector -> {pict, emoji}; pict is captured
 // from the live DOM the first time applyIconStyle runs (whatever index.html already shipped),
 // rather than duplicated here by hand, so it can never drift out of sync with the markup.
+// Every emoji value below is wrapped in <span class="icon-emoji"> (styles.css: display:
+// inline-block, line-height:1) rather than left as bare text — a bare platform emoji's own
+// natural line-box height varies glyph to glyph (🧪 needs visibly more vertical room in its line
+// than ℹ️ does, at the same font-size), so two of these buttons sitting side by side with no
+// shared height constraint could end up two different heights depending only on which emoji they
+// happened to carry. The wrapper is what settings-x-btn already needed this fix for on its own
+// (below); every other target gets it now too, for the same reason rather than only when it goes
+// visibly wrong.
 const STATIC_ICON_TARGETS = [
-  { sel: "#settingsToggleBtn", emoji: "⚙️" },
-  { sel: '.toolbar button[onclick="saveToFile()"]', emoji: "💾", label: " Save" },
-  { sel: '.toolbar button[onclick="triggerLoadFile()"]', emoji: "📂", label: " Load" },
-  { sel: 'a[href="faq/index.html"]', emoji: "❓", label: " FAQ" },
-  { sel: 'button[onclick="loadSampleGame()"]', emoji: "🧪", label: " Try Example" },
-  { sel: 'button[onclick="Tutorial.start()"]', emoji: "ℹ️", label: " Take the Tour" },
+  { sel: "#settingsToggleBtn", emoji: '<span class="icon-emoji">⚙️</span>' },
+  { sel: '.toolbar button[onclick="saveToFile()"]', emoji: '<span class="icon-emoji">💾</span>', label: " Save" },
+  { sel: '.toolbar button[onclick="triggerLoadFile()"]', emoji: '<span class="icon-emoji">📂</span>', label: " Load" },
+  { sel: 'a[href="faq/index.html"]', emoji: '<span class="icon-emoji">❓</span>', label: " FAQ" },
+  { sel: 'button[onclick="loadSampleGame()"]', emoji: '<span class="icon-emoji">🧪</span>', label: " Try Example" },
+  { sel: 'button[onclick="Tutorial.start()"]', emoji: '<span class="icon-emoji">ℹ️</span>', label: " Take the Tour" },
   // App Preferences (Advanced Settings) and Craft Prize Eligible List's Copy/TXT — four buttons
   // that never made it into this table at all, so Icon Style's Emoji mode silently skipped them
   // while every other icon-bearing static button in Settings swapped correctly.
-  { sel: 'button[onclick="savePrefsToFile()"]', emoji: "💾", label: " Save" },
-  { sel: 'button[onclick="triggerLoadPrefsFile()"]', emoji: "📂", label: " Load" },
-  { sel: 'button[onclick="copyCraftEligible(this)"]', emoji: "📋", label: " Copy" },
-  { sel: 'button[onclick="exportCraftEligible()"]', emoji: "📄", label: " TXT" },
-  // Wrapped in .icon-emoji (styles.css) rather than the bare "✕" every other target above uses
-  // plain: a lone multiplication-sign glyph at the button's own (small) text size read as thin
-  // and undersized against the drawn pictograph's bolder two-stroke X, in a way none of the other
-  // targets' naturally-large platform emoji did — .settings-x-btn's own font-size bump (below)
-  // is what actually fixes the size; the wrapper just gets it the same line-height:1 centering
-  // every other icon-emoji already relies on.
+  { sel: 'button[onclick="savePrefsToFile()"]', emoji: '<span class="icon-emoji">💾</span>', label: " Save" },
+  { sel: 'button[onclick="triggerLoadPrefsFile()"]', emoji: '<span class="icon-emoji">📂</span>', label: " Load" },
+  { sel: 'button[onclick="copyCraftEligible(this)"]', emoji: '<span class="icon-emoji">📋</span>', label: " Copy" },
+  { sel: 'button[onclick="exportCraftEligible()"]', emoji: '<span class="icon-emoji">📄</span>', label: " TXT" },
   { sel: ".settings-x-btn", emoji: '<span class="icon-emoji">✕</span>' },
 ];
 let staticIconPictCache = null;
@@ -502,7 +504,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.94"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.95"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -2838,7 +2840,7 @@ function renderSpecialWager(type) {
       selOpts += `<option value="${n}"${w === n ? " selected" : ""}>${n}</option>`;
     }
     const selectHtml = `<select class="sw-select" aria-label="Wager amount (1\u2013${max})" onchange="${wSet}(${ti},this.value)">${selOpts}</select>`;
-    h += `<div class="special-wager-row">
+    h += `<div class="special-wager-row" data-ta="${type}-${ti}">
       <span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 tap to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
       ${selectHtml}
       <div class="ta-result">
