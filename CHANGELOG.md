@@ -5,6 +5,16 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.94 - 2026-08-22
+- **"Done" no longer disappears into the background in dark theme's Emoji mode.** ✔️ renders as a
+  bare dark tick with no background of its own — legible on light theme's surfaces, nearly
+  invisible against dark theme's near-black ones. `ICON_DONE` now picks ☑️ instead specifically in
+  dark theme (its own light box stays legible without needing a background to sit on), keeping ✔️
+  in light theme where it already read fine. Toggling theme now also re-renders every already-
+  painted Done badge/mini-progress banner to match — previously theme changes never needed to
+  touch already-rendered icons, since nothing icon-related depended on theme before this.
+- **"Take the Tour" uses ℹ️ in Emoji mode now, not 🎓.**
+
 ## v18.93 - 2026-08-22
 - **Timer Stepper Buttons and Timer Pulse only show up in Advanced Settings once Timer Widget is
   turned on**, same reasoning and same pattern as Drumroll Crossfade needing Manual Drumroll

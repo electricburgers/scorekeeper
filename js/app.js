@@ -119,6 +119,14 @@ const CHECK_ICON_SVG_PICT =
 // correct/incorrect stat pills) keeps ✅. Split out for the same reason ICON_MARK_CORRECT was:
 // one glyph was being asked to carry two different meanings under Icon Style's Emoji mode.
 const ICON_DONE_EMOJI = '<span class="icon-emoji">✔️</span>';
+// Dark theme only: ✔️ renders as a bare dark tick with no background of its own (the same
+// legibility problem ICON_MARK_CORRECT's own comment above describes for ✔️ on a dark surface),
+// which gets lost against this app's near-black dark-theme surfaces specifically. ☑️ carries its
+// own light box baked into the glyph, so it stays legible there without needing a background of
+// its own to sit on — same fix, same reasoning, just picked by theme here rather than being a
+// fixed per-context choice, since THIS glyph (unlike ICON_MARK_CORRECT's) sits on plain page
+// background rather than one fixed color that's always dark.
+const ICON_DONE_EMOJI_DARK = '<span class="icon-emoji">☑️</span>';
 // UI action glyphs, replacing the ↕ / ↺ / 🔄 / 🎲 characters these buttons used to carry. Same
 // reasoning as X_ICON_SVG/CHECK_ICON_SVG above, and it applies twice over here:
 //   1. 🔄 and 🎲 are emoji — fixed-color platform pictographs (a blue-and-white arrow loop, a
@@ -347,7 +355,7 @@ const STATIC_ICON_TARGETS = [
   { sel: '.toolbar button[onclick="triggerLoadFile()"]', emoji: "📂", label: " Load" },
   { sel: 'a[href="faq/index.html"]', emoji: "❓", label: " FAQ" },
   { sel: 'button[onclick="loadSampleGame()"]', emoji: "🧪", label: " Try Example" },
-  { sel: 'button[onclick="Tutorial.start()"]', emoji: "🎓", label: " Take the Tour" },
+  { sel: 'button[onclick="Tutorial.start()"]', emoji: "ℹ️", label: " Take the Tour" },
   // App Preferences (Advanced Settings) and Craft Prize Eligible List's Copy/TXT — four buttons
   // that never made it into this table at all, so Icon Style's Emoji mode silently skipped them
   // while every other icon-bearing static button in Settings swapped correctly.
@@ -373,7 +381,11 @@ function applyIconStyle(style) {
   ICON_INCORRECT = emoji ? ICON_INCORRECT_EMOJI : X_ICON_SVG_PICT;
   ICON_AUDIT_WRONG = emoji ? ICON_AUDIT_WRONG_EMOJI : X_ICON_SVG_PICT;
   CHECK_ICON_SVG = emoji ? CHECK_ICON_SVG_EMOJI : CHECK_ICON_SVG_PICT;
-  ICON_DONE = emoji ? ICON_DONE_EMOJI : CHECK_ICON_SVG_PICT;
+  ICON_DONE = emoji
+    ? document.documentElement.getAttribute("data-theme") === "hc-dark"
+      ? ICON_DONE_EMOJI_DARK
+      : ICON_DONE_EMOJI
+    : CHECK_ICON_SVG_PICT;
   ICON_MARK_CORRECT = emoji ? ICON_MARK_CORRECT_EMOJI : CHECK_ICON_SVG_PICT;
   ICON_MARK_INCORRECT = emoji ? ICON_MARK_INCORRECT_EMOJI : X_ICON_SVG_PICT;
   ICON_SORT = emoji ? ICON_SORT_EMOJI : ICON_SORT_PICT;
@@ -490,7 +502,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.93"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.94"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -807,11 +819,16 @@ function savePrefs(p) {
 }
 function applyPrefs() {
   const p = loadPrefs();
+  // data-theme set BEFORE applyIconStyle below: ICON_DONE's own emoji picks between ✔️/☑️ by
+  // reading data-theme off the DOM (see applyIconStyle), so the new theme has to already be
+  // live on <html> the moment that read happens — otherwise a theme change made in the same tick
+  // this runs (setTheme calls applyPrefs synchronously) would apply icons for the THEME BEING
+  // LEFT rather than the one being switched to.
+  document.documentElement.setAttribute("data-theme", p.theme);
   // Before the theme toggle's innerHTML write below reads THEME_ICON_SUN/MOON (and every other
   // ICON_* use further down this function and in renderAll()), so a saved "emoji" preference is
   // already in effect for the very first paint instead of flashing the pictograph first.
   applyIconStyle(p.iconStyle === "emoji" ? "emoji" : "pictograph");
-  document.documentElement.setAttribute("data-theme", p.theme);
   const dn = p.density || "normal";
   if (dn === "normal") document.documentElement.removeAttribute("data-density");
   else document.documentElement.setAttribute("data-density", dn);
@@ -925,6 +942,13 @@ function setTheme(t) {
   p.theme = t;
   savePrefs(p);
   applyPrefs();
+  // ICON_DONE's own emoji depends on theme now (see applyIconStyle), so a theme change has to
+  // rebuild every already-rendered Done badge/mini-progress banner, not just flip CSS variables
+  // the way every other theme-driven visual in this app can get away with — renderAll() re-reads
+  // the ICON_DONE applyPrefs above just updated, the same order setIconStyle already uses
+  // (applyIconStyle direct, then renderAll) so this isn't a new pattern, just the same one theme
+  // changes hadn't needed before.
+  renderAll();
 }
 function toggleTheme() {
   const p = loadPrefs();
