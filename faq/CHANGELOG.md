@@ -2,6 +2,20 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.21] - 22 Aug 2026
+
+### Fixed
+
+- **A real factual error, not just stale wording: the Score Audit entry claimed tapping a team's
+  name in the Scores sidebar opened the Team Report, and it doesn't.** Checked against the actual
+  running app rather than assumed from a first code read (the first pass here missed it too —
+  `buildScores()` renders the sidebar's own rows through a different path than every other team
+  name, and it wires them to `toggleCraftPrize()`, not `openAudit()`). Tapping a name there sets —
+  or clears — that team as the Craft Beer Prize winner directly, no drumroll. Fixed in two spots:
+  the Score Audit entry no longer lists the sidebar among the places it opens from, and a new
+  paragraph in Craft Prize Drawing documents the manual pick itself, cross-linked from both
+  directions.
+
 ## [1.20] - 22 Aug 2026
 
 ### Fixed
