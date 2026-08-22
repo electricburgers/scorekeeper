@@ -5,6 +5,21 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.90 - 2026-08-22
+- **The R2/R4 bonus wager's "Mark incorrect" button now uses ✖️ for its own icon in Emoji mode,
+  not ⛔.** Selecting it still overlays a ⛔ `wager-badge` right on top — that's the actual
+  "this one's wrong" signal — which was showing the same ⛔ twice, stacked, the mirror image of
+  the ☑️/✅ split `ICON_MARK_CORRECT` already fixed on the correct side. Split out the same way:
+  new `ICON_MARK_INCORRECT` (✖️) for the button's own icon, `ICON_INCORRECT` (⛔) stays the badge.
+- **Four Settings buttons weren't swapping to emoji at all**: App Preferences' Save/Load and Craft
+  Prize Eligible List's Copy/TXT were never added to `STATIC_ICON_TARGETS`, so Icon Style's Emoji
+  mode silently skipped them while every other icon-bearing button in Settings swapped correctly.
+  Added all four (💾/📂/📋/📄).
+- **The "Scores — Before Halftime/Final Wager" Entry button's active state was still the dull
+  mustard yellow** the title itself was fixed to avoid last version — its background is a
+  separate CSS rule that also reads `--badge-gold-fg`, missed in that pass. Same light-mode-only
+  fix, same teal.
+
 ## v18.89 - 2026-08-22
 - **Audited every emoji sitting alone inside its own container** (the close-X circles, remove-team,
   Team Report's ✅/⛔ lines, and the rest) — everything but one was already correctly centered.

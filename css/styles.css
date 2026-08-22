@@ -1781,6 +1781,12 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .standings-sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-display);font-size:.72rem;font-weight:700;min-height:max(2rem,32px);min-width:max(2rem,32px);padding:0 11px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .standings-sort-btn.active{background:var(--badge-gold-fg);color:var(--on-badge);border-color:var(--badge-gold-fg)}
+/* Light theme only — same dull-mustard problem and same fix as .standings-title just above:
+   --badge-gold-fg has to stay dark enough to hold 4.5:1 as TEXT on white, which makes a poor
+   background color choice on its own terms (a washed brown chip rather than an actual "active"
+   accent), a problem dark theme's vivid gold doesn't have. --on-badge (white) still clears 6.4:1
+   against this teal, so it's reused as-is rather than needing its own override too. */
+[data-theme="hc-light"] .standings-sort-btn.active{background:var(--txt-cyan);border-color:var(--txt-cyan)}
 .standings-table{width:100%;border-collapse:collapse;font-size:.86rem}
 .standings-table th,.standings-table td{padding:7px 8px;border-bottom:1px solid var(--border)}
 .standings-table thead th{color:var(--text-muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;text-align:left}
