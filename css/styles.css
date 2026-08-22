@@ -569,6 +569,11 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
   .settings-x-btn svg{width:.8rem;height:.8rem;display:block}
   .settings-x-btn svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
   .settings-x-btn:hover{background:color-mix(in srgb,var(--accent-red) 15%,transparent)}
+  /* Icon Style's Emoji mode swaps the pictograph X above for a bare "✕" character (app.js
+     STATIC_ICON_TARGETS) — at the button's own small text size that glyph read thin and
+     undersized next to the drawn pictograph's bolder two-stroke X, so it gets its own bump here
+     rather than inheriting whatever size .settings-x-btn's text happens to run at. */
+  .settings-x-btn .icon-emoji{font-size:1.3rem}
   .settings-row{padding:10px 2px;gap:10px}
   .settings-row .size-label{font-size:.78rem}
   .settings-controls .settings-btn{padding:7px 12px;font-size:.85rem}
@@ -1513,6 +1518,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    SVG's geometry is centered on its own, regardless of font. */
 .remove-team button svg{width:1em;height:1em;display:block}
 .remove-team button svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
+/* Icon Style's Emoji mode swaps the thin two-stroke pictograph X above for the platform ❌ glyph
+   (X_ICON_SVG_EMOJI, app.js) — a full-colour emoji at the same nominal font-size reads visibly
+   bulkier than that thin SVG did against this button's small 1.6rem circle, so it gets scaled
+   back down rather than inheriting the pictograph's 1em/1rem sizing as-is. */
+.remove-team button .icon-emoji{transform:scale(.7)}
 
 #addTeamBtn{margin-top:10px;width:100%;padding:8px;font-family:var(--font-display);text-transform:uppercase;letter-spacing:1px}
 

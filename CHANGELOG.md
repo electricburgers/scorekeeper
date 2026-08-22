@@ -5,6 +5,21 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.88 - 2026-08-22
+- **Advanced Settings reordered once more**: Row Density, Row Zebra Stripes, and Craft Prize
+  Eligible List now lead the group, Point Adjustments moved to the very end.
+- **Icon Style's own swatch is now a beer mug, not a checkmark.** A checkmark looks nearly
+  identical in both Pictograph and Emoji mode, so it didn't actually show what the choice does; the
+  drawn mug and 🍺 read as visibly different drawings of the same thing, and it's this app's own
+  mascot icon besides.
+- **The Settings panel's close X was too small in Emoji mode.** It rendered as a bare "✕" at the
+  button's own small text size, thinner and smaller than the drawn pictograph X it replaced.
+  Wrapped in `.icon-emoji` and given its own font-size bump so it reads as a proper X inside its
+  circle instead of a faint sliver.
+- **The remove-team X was too big in Emoji mode**, the opposite problem: the full-colour ❌ glyph
+  at that button's small 1.6rem circle read visibly bulkier than the thin pictograph X it replaced.
+  Scaled back down to match.
+
 ## v18.87 - 2026-08-22
 - **The mobile docked timer's display and buttons are a notch smaller than v18.83 shipped them.**
   Display font-size 2.1rem → 1.85rem, toggle/reset/step buttons 2.75rem → 2.4rem — still bigger
