@@ -5,6 +5,11 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.99 - 2026-08-22
+- **Team Report's bottom note dropped the "Tip: " prefix** — it's an explanation of what the
+  numbers mean, not a tip. Also spelled out the two abbreviations it defines: "Diff Adj (Difference
+  Adjustment)" and "Adj. Score (Adjusted Score)".
+
 ## v18.98 - 2026-08-22
 - **The header's Settings gear button now matches Save/Load's height**, in both Pictograph and
   Emoji mode. It was a few px shorter — flexbox sizes a row from its tallest child, and Save/Load
