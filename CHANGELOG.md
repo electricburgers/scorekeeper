@@ -5,6 +5,21 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.101 - 2026-08-22
+- **The R2/R4 correct/incorrect emoji were still off-center after v18.100** — the previous fix was
+  wrong on two counts, both from unreliable verification rather than the CSS logic itself: the
+  scaled clone used to calibrate it had been moved out of its layout position via
+  `position:fixed`, which silently breaks the `@container` query this button's size depends on,
+  so the calibration target was the wrong size; and the "it's fixed now" screenshots taken right
+  after were caught by this environment's browser-cache staleness (documented earlier this
+  session) showing the pre-fix state back again. Redone properly this time: the real in-place
+  button scaled via `transform` (never relocated), a forced service-worker/cache clear before
+  every check, and the two sizes this button actually renders at (1.1rem on a wide desktop column,
+  1rem once the score column narrows past 600px, mobile included) calibrated and confirmed
+  separately, since testing showed one em value doesn't hold across both.
+- **Team Report's Diff note spells out plus/minus now**: "A plus (+) means..." and "a minus (−)
+  means...", not just the bare symbols.
+
 ## v18.100 - 2026-08-22
 - **The ☑️/✖️ in the R2/R4 bonus wager's correct/incorrect buttons were visibly off-centre in Emoji
   mode** — both glyphs' visible ink sits noticeably below the flex-centred box `getBoundingClientRect`

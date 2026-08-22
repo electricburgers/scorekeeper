@@ -1776,10 +1776,15 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* Icon Style's ☑️/✖️ here specifically (ICON_MARK_CORRECT/ICON_MARK_INCORRECT) — the button's
    own icon, not the overlaid .wager-badge (selector is a direct child so it never touches that
    badge's own icon-emoji, which already sits centered on its own). Both glyphs' visible ink sits
-   measurably below the flex-centered box a plain glyph would occupy — confirmed, and this value
-   tuned, against a 16x-scaled clone screenshot rather than trusting font metrics/getBoundingClientRect
-   alone, which report the glyph's layout box, not where its ink actually sits within that box. */
-.result-btn>.icon-emoji{margin-top:-.3em}
+   measurably below the flex-centered box a plain glyph occupies — getBoundingClientRect reports
+   that box as already centered (margin:0 measures dx/dy 0,0), which is a red herring: it's the
+   LAYOUT box, not where the glyph's ink actually paints inside it, and only a scaled-up screenshot
+   of the real in-place button (not a relocated clone — cloning this specific button and moving it
+   via position:fixed breaks the @container query below, silently resizing it, which is what
+   produced a wrong calibration and had to be redone) shows the true gap. -.24em is that value at
+   THIS rule's own 1.1rem — the @container override below repeats this at 1rem's own ratio rather
+   than assuming one em value holds across both, since testing showed it doesn't scale evenly. */
+.result-btn>.icon-emoji{margin-top:-.24em}
 .result-btn:hover:not(.correct-sel):not(.incorrect-sel){background:var(--bg-hover)}
 /* Same fill tokens as .wager-btn.correct/.incorrect (not a neutral --bg-card) so a selected
    ✓/✕ reads consistently with the colored wager buttons elsewhere in the same round instead of
@@ -2242,6 +2247,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   /* wager / result buttons: clamp so they can't balloon past the column */
   .wager-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
   .result-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
+  /* Re-tuned for this rule's own 1rem, not inherited from the -.24em above — checked separately
+     at this narrower size (screenshot, not box math; see that rule's own comment) rather than
+     assumed to scale evenly from the wide-desktop value, since it doesn't. */
+  .result-btn>.icon-emoji{margin-top:-.13em}
   .bonus-choice-btn{width:clamp(1.7rem,7.5cqw,2.2rem);height:clamp(1.7rem,7.5cqw,2.2rem);font-size:.92rem}
 
   /* score pill — width (not min-width), same reasoning as the base rule: a floor sized to the
