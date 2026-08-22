@@ -5,6 +5,11 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.86 - 2026-08-22
+- **"Per-Question Percentage Correct Labels" is now "Crowd-Wisdom Percentage Tags."** Renamed in
+  Advanced Settings and in the matching FAQ entry title, plus the two code comments in app.js that
+  named the old setting by string. No behavior change — same toggle, same `qResultToggle` pref key.
+
 ## v18.85 - 2026-08-22
 - **Advanced Settings rows lost the icons v18.84 just gave them.** Ten rows each carrying their own
   small pictograph/emoji pair, on top of the buttons and range slider each row already had, read as

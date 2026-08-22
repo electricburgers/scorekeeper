@@ -2,6 +2,14 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.23] - 22 Aug 2026
+
+### Changed
+
+- **The "Per-Question Percentage Correct Labels" entry is now titled "Crowd-Wisdom Percentage
+  Tags"**, matching the Advanced Settings row it documents after the main app renamed it. Same
+  answer text underneath, unchanged.
+
 ## [1.22] - 22 Aug 2026
 
 ### Changed
