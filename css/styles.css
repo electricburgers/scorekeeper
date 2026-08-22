@@ -84,6 +84,7 @@
      cyan, so darkening the outline separates the icon from it; light mode's is mid-dark teal, so
      the outline has to go the other way. See the note on the stroke rule further down. */
   --icon-stroke-ink:#000;--icon-stroke-mix:62%;
+  --tint-sheet:#2fbf72;
   --vivid-beer:#f5b53d;--vivid-beer-2:#fff1cf;
   --vivid-drum:#e8563f;--vivid-drum-2:#ffe0b8;--vivid-drum-3:#c99a63;
   --tint-beer:var(--vivid-beer);--tint-beer-2:var(--vivid-beer-2);
@@ -169,6 +170,7 @@
   /* Same hues as the dark set above, darkened to clear 3:1 against a near-white card rather
      than near-black. See that block for why these are not colour-vision-swapped. */
   --icon-stroke-ink:#fff;--icon-stroke-mix:32%;
+  --tint-sheet:#1a7f4b;
   --tint-beer:#a56a00;--tint-beer-2:#d9a441;
   --tint-drum:#c0341f;--tint-drum-2:#a8703c;--tint-drum-3:#7a5330;
   --tint-trophy:#96700a;--tint-trophy-2:#6b4f05;
@@ -665,6 +667,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    entirely stroke and the checker would close up into a blob. The edge rect keeps the default
    stroke but at 1.5 rather than 2.25, for the same reason in reverse: at full weight it eats into
    the squares it is supposed to be containing. */
+/* XLSX's spreadsheet icon takes Excel's green, and ONLY on the stroke — no .icon-tinted, so it
+   keeps .icon-ui's fill:none. The green here is a hint about the file format, not a picture of an
+   object the way the mug and the drum are, and a 38% green wash inside a document outline reads
+   as a highlighted page rather than as a spreadsheet. */
+.icon-sheet{color:var(--tint-sheet)}
 .icon-flag .fl-sq{fill:currentColor;stroke:none}
 .icon-flag .fl-edge{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}
 /* Each pictograph carries .icon-tinted plus its own class; the class only sets --icon-tint, so
@@ -1086,7 +1093,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Shuffle carries no visible label (its name is there for screen readers only), so the icon runs
    a little larger to hold the same optical weight as "Entry"/"Asc"/"Desc" beside it. Dropping the
    word is what stopped this button being the widest of the four and squeezing the other three. */
-.sort-btn .icon-ui,.standings-sort-btn .icon-ui{width:1.25em;height:1.25em}
+.sort-btn .icon-ui{width:1.25em;height:1.25em}
+.standings-sort-btn .icon-ui{width:1.4em;height:1.4em}
 .sort-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid);box-shadow:0 0 6px color-mix(in srgb,var(--accent-cyan) 30%,transparent)}
 .sort-mode-label{padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0}
 
@@ -1513,8 +1521,16 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .standings-block.collapsed .standings-chevron{transform:rotate(-90deg)}
 /* Banter, sort buttons, and the table are all inside this wrapper so they collapse together. */
 .standings-collapsible{margin-top:8px}
-.standings-sort-btns{display:flex;gap:4px;align-items:center;margin-bottom:6px}
-.standings-sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.3em;font-family:var(--font-display);font-size:.65rem;font-weight:700;padding:3px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
+.standings-sort-btns{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+/* Sized as a real touch target. max(2.75rem,44px) rather than a plain 2.75rem: the rem tracks
+   Settings > Size so a host who has scaled the app up gets a bigger button, but at the default
+   and below, rem alone lands under the mark (41px at the shipped default, less at the small end
+   of the range) — the px floor is what guarantees 44 regardless of the size setting. These sit in the Before Halftime / Before Final
+   Wager blocks, which is the one moment in the night the host is reading scores aloud to the room
+   rather than looking at the screen — at the old .65rem/3px they were about 20px tall, small
+   enough to need a careful, deliberate tap. Deliberately not narrowed on desktop: this app is
+   used on a phone or tablet at a venue far more than at a desk. */
+.standings-sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-display);font-size:.8rem;font-weight:700;min-height:max(2.75rem,44px);min-width:max(2.75rem,44px);padding:0 14px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .standings-sort-btn.active{background:var(--badge-gold-fg);color:var(--on-badge);border-color:var(--badge-gold-fg)}
 .standings-table{width:100%;border-collapse:collapse;font-size:.86rem}
