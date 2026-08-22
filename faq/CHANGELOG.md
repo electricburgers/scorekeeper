@@ -2,6 +2,21 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.20] - 22 Aug 2026
+
+### Fixed
+
+- **Icon Style's emoji center properly now**, same fix as the main app: `.faq-emoji-ph` gets
+  `line-height:1` so the flex-centered gear and round X buttons center the actual glyph, not a
+  taller inherited line-box with the glyph riding off-center inside it.
+
+### Added
+
+- **The main Settings list now mentions Icon Style** (Pictograph/Emoji) — it existed in the app
+  and on this very page already, but nothing in the FAQ's own settings rundown said so. Also
+  notes that this page has the same toggle, in its own panel, and that this page's own icons
+  follow it.
+
 ## [1.19] - 22 Aug 2026
 
 ### Fixed

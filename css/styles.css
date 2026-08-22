@@ -766,7 +766,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    with the pictograph in it. Un-boosted (scale defaults to 1) everywhere that doesn't opt in
    below, since .wager-badge's own font-size (1.15rem/1.05rem) already sizes an emoji there
    proportionately without help. */
-.icon-emoji{display:inline-block}
+/* line-height:1 (not inherited from whatever button/label surrounds it, which is often the
+   browser default ~1.15-1.2) is what makes the flex align-items:center every icon-only button
+   below already uses actually center the glyph rather than centering a line-box that's taller
+   than the glyph itself and leaves it riding off-centre inside that extra leading. */
+.icon-emoji{display:inline-block;line-height:1}
 /* Reset carries a heavier nominal stroke than the other three, to match their apparent weight
    rather than their measurements. Its glyph is one big open circle: two strokes far apart around
    a large empty middle, where Sort — sitting immediately beside it — is four strokes packed into
@@ -1632,6 +1636,16 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .wager-badge.bg-correct svg rect{fill:var(--correct-badge-bg)}
 .wager-badge.bg-correct svg path{fill:none;stroke:var(--correct-badge-fg);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .wager-badge.bg-incorrect{background:var(--danger-solid-bg);color:#fff;font-size:1.05rem;font-weight:900}
+/* Icon Style's ⛔ in this badge specifically — not .bg-correct's ✅, which already sits centered
+   without help, and not any other .icon-emoji context, which is why this is scoped this narrow.
+   .wager-badge's own padding-bottom:1px (the base rule above) was tuned for the old SVG line
+   icon's own visual weight; measured against the emoji glyph's actual drawn ink (a canvas
+   actualBoundingBox reading against a 10x-scaled render) it left ⛔'s white bar sitting
+   noticeably above centre instead. Overridden back to 0 and replaced with a margin-top tuned
+   the same way — 0.28em nudges the bar to the badge's true centre; scale(.85) is what keeps the
+   now-lower glyph from poking past the badge's own circular edge. */
+.wager-badge.bg-incorrect{padding-bottom:0}
+.wager-badge.bg-incorrect .icon-emoji{margin-top:.28em;transform:scale(.85)}
 /* X_ICON_SVG (app.js) replaces a ✕ Unicode glyph here — this circle already centered its content
    with flex, but the glyph's own font metrics never quite landed it in the visual middle, and by
    a different amount than the ✕ inside .bg-correct's differently-shaped sibling or the ones on

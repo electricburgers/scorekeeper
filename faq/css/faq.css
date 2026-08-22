@@ -7,6 +7,12 @@
 .faq-emoji-ph {
   display: inline-block;
   vertical-align: -0.1em;
+  /* Without this the glyph's line-box inherits whatever line-height the surrounding text has
+     (often the browser default ~1.15-1.2, taller than the emoji itself), which leaves it riding
+     off-centre inside icon-only containers that flex-center this span — the gear toggle and the
+     round X close button both do — since align-items:center centers that whole taller box, not
+     the glyph's own visual weight inside it. */
+  line-height: 1;
 }
 .faq-header {
   position: sticky;

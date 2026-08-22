@@ -5,6 +5,19 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.79 - 2026-08-22
+- **Icon Style's emoji are properly centered now.** `.icon-emoji` never set its own `line-height`,
+  so it inherited whatever the surrounding button had (usually the browser default ~1.15-1.2x) —
+  flex `align-items:center` centers that whole taller line-box, not the glyph's own visual weight
+  inside it, so every icon-only button (the settings gear, the round X buttons, Shuffle) had a
+  glyph riding slightly off the true center of its box. `line-height:1` on `.icon-emoji` closes
+  most of that gap on its own. The one that needed more: the incorrect wager badge's ⛔ — measured
+  against a 10x-scaled render, its white bar sat noticeably above center, because the badge's own
+  `padding-bottom:1px` was tuned for the old SVG line icon's proportions, not this glyph's. Scoped
+  to `.wager-badge.bg-incorrect .icon-emoji` only (✅ on the correct badge already sat centered
+  without help): padding-bottom back to 0, replaced with a margin-top and a slight scale-down
+  measured to land the bar dead center without poking past the badge's own circular edge.
+
 ## v18.78 - 2026-08-22
 - **Shuffling the Before Halftime/Final Wager standings could scroll the page**, since the click
   anchor renderLeft() uses to pin the view in place (see the big comment on `lastClickAnchorSel`)
