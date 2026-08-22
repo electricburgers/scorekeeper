@@ -5,6 +5,16 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.78 - 2026-08-22
+- **Shuffling the Before Halftime/Final Wager standings could scroll the page**, since the click
+  anchor renderLeft() uses to pin the view in place (see the big comment on `lastClickAnchorSel`)
+  only matched `[data-ta]`, `[data-ti]`, `.question-block`, `.special-section`, or the broad
+  `.section` catch-all — a click inside `.standings-block` fell through to that catch-all and
+  anchored on the ENTIRE enclosing round section instead of the standings block itself, which is
+  the wrong granularity for something re-rendering a small part of a much bigger section.
+  `.standings-block` now anchors to itself, the same "anchor the specific thing that was actually
+  clicked, not everything around it" rule every other interactive element here already gets.
+
 ## v18.77 - 2026-08-22
 - **Icon Style's emoji were rendering visibly smaller than the pictographs they replaced** in
   every button that gave its icon extra room on purpose — the Scores panel's Shuffle button most
