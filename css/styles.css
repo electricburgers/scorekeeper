@@ -95,7 +95,7 @@
   --tint-clover:#3ecf62;--tint-clover-2:#2a9e49;
   --tint-target:#f0574a;--tint-target-2:#ffe4cf;
   --tint-clipboard:#c98f52;--tint-clipboard-2:#dfe3e7;
-  --tint-book:#e0574f;
+  --tint-pdf:#e0574f;
   /* AAA (7:1) text-safe variants of the brand accents, for use as TEXT on neutral surfaces
      (bg-card/bg-card-alt/bg-input) — kept separate from --accent-* so borders, focus rings,
      and button fills can stay at full brand saturation without dragging text below AAA. */
@@ -179,7 +179,7 @@
   --tint-clover:#1c8438;--tint-clover-2:#0f5a24;
   --tint-target:#c33528;--tint-target-2:#dda28f;
   --tint-clipboard:#8a5f2c;--tint-clipboard-2:#b9a48c;
-  --tint-book:#c0332b;
+  --tint-pdf:#c0332b;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
   --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
   /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
@@ -697,7 +697,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-clover{--icon-tint:var(--tint-clover);--icon-tint-2:var(--tint-clover-2)}
 .icon-target{--icon-tint:var(--tint-target);--icon-tint-2:var(--tint-target-2)}
 .icon-clipboard{--icon-tint:var(--tint-clipboard);--icon-tint-2:var(--tint-clipboard-2)}
-.icon-book{--icon-tint:var(--tint-book)}
+/* PDF: a page with a download arrow through it, not the closed book it was. The arrow is the
+   only one of the five candidates that survived the 13px this button actually renders at, and it
+   is what keeps it distinct from the spreadsheet sitting immediately beside it. */
+.icon-pdf{--icon-tint:var(--tint-pdf)}
 /* Second and third colours, for the icons whose emoji had more than one: the cream head of the
    drum against its red shell and its wooden sticks, the foam on the beer, the trophy's darker
    plinth, the mic's darker yoke, the pale clip on the clipboard. Each part needs fill and stroke
@@ -1244,7 +1247,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .team-entry.has-adj{grid-template-columns:1fr 5.4rem auto auto}
 .team-entry:last-of-type{border-bottom:none}
 .team-name-cell{display:flex;flex-direction:column;gap:7px;min-width:0}
-.team-number{font-family:var(--font-display);font-size:.66rem;color:var(--text-muted);letter-spacing:1px}
+/* Same treatment as the Guess label beside it, because they are the same thing: a field label
+   over an input, on one row. They had been diverging on five counts at once — display font vs
+   body, weight 400 vs 600, letter-spacing 1px vs .5px, sentence case vs upper, --text-muted vs
+   --text-secondary — which is what made the pair read as two unrelated bits of text. */
+.team-number{font-family:var(--font-body);font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary)}
 .team-name-cell>input[type="text"]{width:100%}
 .team-checks{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px}
 .check-label{position:relative;display:inline-flex;align-items:center;gap:7px;font-size:.85rem;font-weight:700;cursor:pointer;padding:6px 10px;border-radius:6px;border:1px solid var(--border-control);background:var(--bg-input);white-space:nowrap;transition:var(--transition);letter-spacing:.3px;margin-bottom:0!important;color:var(--text-muted)}
@@ -1258,8 +1265,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    isn't lost for users who can't perceive the fill color at all. */
 .item-check .check-box{border:2px solid var(--item-border)}
 .njcb-check .check-box{border:2px solid var(--njcb-border)}
-.item-check .check-input:checked+.check-box{background:var(--item-fill-checked);border-color:var(--item-fill-checked)}
-.njcb-check .check-input:checked+.check-box{background:var(--njcb-fill-checked);border-color:var(--njcb-fill-checked)}
+/* Ticked, the box's border does NOT go to the fill colour. The chip around it takes that exact
+   same fill (.item-check.is-checked below), so a box filled and bordered in it has nothing to
+   separate it from the chip — the box disappears and the tick is left floating on a coloured
+   pill. Bordering it in --check-icon-color instead, the tick's own colour, keeps a visible box
+   around the mark in both themes. That colour is already audited against these two fills (it is
+   what the tick is drawn in), so the outline inherits the same contrast rather than needing a
+   value of its own. */
+.item-check .check-input:checked+.check-box{background:var(--item-fill-checked);border-color:var(--check-icon-color)}
+.njcb-check .check-input:checked+.check-box{background:var(--njcb-fill-checked);border-color:var(--check-icon-color)}
 .item-check .check-input:checked+.check-box::after,.njcb-check .check-input:checked+.check-box::after{
   content:'';position:absolute;left:6px;top:2px;width:6px;height:11px;
   border:solid var(--check-icon-color);border-width:0 3px 3px 0;transform:rotate(45deg);
@@ -1269,7 +1283,11 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .item-check.is-checked{background:var(--item-fill-checked);color:var(--check-icon-color);border-color:var(--item-fill-checked)}
 .njcb-check{color:var(--njcb-border);border-color:var(--njcb-border);background:var(--bg-input)}
 .njcb-check.is-checked{background:var(--njcb-fill-checked);color:var(--check-icon-color);border-color:var(--njcb-fill-checked)}
-.team-guess-cell>label{font-size:.66rem}
+/* 7px, matching .team-name-cell's flex gap, so the two inputs on this row start at the same y.
+   At the label's own 3px the guess input sat 4.5px above the name input — the actual thing that
+   looked wrong here, and invisible in the markup because one side spaces with a gap and the
+   other with a margin. */
+.team-guess-cell>label{font-size:.66rem;margin-bottom:7px}
 .team-guess-cell.guess-missing>label{color:var(--txt-orange)}
 .team-guess-cell.guess-missing input{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
 .guess-warn{display:block;font-size:.58rem;font-weight:700;color:var(--txt-orange);letter-spacing:.3px;margin-top:2px}
@@ -1778,12 +1796,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .audit-head .aud-sub{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:3px}
 /* Icon-only now (see buildAudit in app.js) — used to read "✕ Close", but the X alone next to a
    modal titled "Team Report" already reads as close without needing the word spelled out too.
-   display:flex/square-ish padding replace the old text button's asymmetric 7px/12px, which was
-   sized for a line of text and would otherwise leave the lone icon looking off-balance. */
+   A circle, not the rounded square it was: with the word gone this is a lone mark, and a round
+   button reads as "dismiss this" the way a rounded rectangle — the same shape every other button
+   in the app uses for an action with a label — does not. Explicit equal width/height rather than
+   symmetric padding, since 50% on a box sized by its content is only round while the content
+   happens to be square. Matches .resume-banner-close, the app's other icon-only dismiss. */
 /* Border/icon red (same --accent-red/--txt-red pair as .remove-team button) now that it's just
    an X with no "Close" text next to it to carry the "this dismisses something" signal on its
    own — red reads as that affordance the way a plain neutral-gray X didn't as clearly. */
-.audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--accent-red);background:var(--bg-input);color:var(--txt-red);border-radius:var(--radius);padding:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
+.audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--accent-red);background:var(--bg-input);color:var(--txt-red);border-radius:50%;width:2.1rem;height:2.1rem;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
 .audit-close:hover{background:color-mix(in srgb,var(--accent-red) 15%,transparent)}
 .audit-body{padding:12px 14px 18px}
 /* Mobile default: the two columns' markup is just two sequential <div>s (no grid), so column 1
