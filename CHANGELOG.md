@@ -5,6 +5,29 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.87 - 2026-08-22
+- **The mobile docked timer's display and buttons are a notch smaller than v18.83 shipped them.**
+  Display font-size 2.1rem → 1.85rem, toggle/reset/step buttons 2.75rem → 2.4rem — still bigger
+  than the pre-v18.83 originals (1.3rem/2rem), just not as large as that first pass. The dock and
+  row height stay exactly as frozen as before; shrinking the controls only freed more room under
+  that same ceiling, nothing to re-derive.
+- **Regular Settings and Advanced Settings shuffled once more.** App Preferences moved out of
+  Advanced into the regular list (last, before the Advanced Settings toggle) — it's a meta setting,
+  but not one that needs to hide behind "Advanced." Row Density and Row Zebra Stripes moved the
+  other way, from regular into Advanced (last two rows), freeing the regular list down to the
+  settings most hosts actually touch mid-event.
+- **"Crowd-Wisdom Percentage Tags" is now just "Crowd-Wisdom Percentage."** Updated in Advanced
+  Settings, the matching FAQ entry title, and the two app.js comments that named it.
+- **Icon Style's own choice now previews itself, the same way Color Vision's swatch does.** The
+  Pictograph/Emoji button carries a small checkmark next to the word — the drawn `CHECK_ICON_SVG`
+  in Pictograph mode, the ✅ emoji in Emoji mode — so the choice shows what it actually looks like
+  instead of naming itself in the abstract.
+- **Saved App Preferences files are named after the host, when one's entered.** `savePrefsToFile()`
+  used to always save as "Scorekeeper Preferences.json" no matter whose settings they were; it now
+  prefixes the host's name (sanitized the same way exportFn's game filenames are) — "Guy Fawkes -
+  Scorekeeper Preferences.json" — so a host who keeps their own prefs file can tell it apart from
+  someone else's at a glance. Falls back to the plain name when Host Name is blank.
+
 ## v18.86 - 2026-08-22
 - **"Per-Question Percentage Correct Labels" is now "Crowd-Wisdom Percentage Tags."** Renamed in
   Advanced Settings and in the matching FAQ entry title, plus the two code comments in app.js that

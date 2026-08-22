@@ -2,6 +2,14 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.24] - 22 Aug 2026
+
+### Changed
+
+- **The "Crowd-Wisdom Percentage Tags" entry is now titled "Crowd-Wisdom Percentage"**, matching
+  the main app dropping "Tags" from the same Advanced Settings row. Same answer text underneath,
+  unchanged.
+
 ## [1.23] - 22 Aug 2026
 
 ### Changed
