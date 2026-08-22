@@ -5,6 +5,20 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.84 - 2026-08-22
+- **Settings and Advanced Settings are grouped by what a user actually comes here to do, instead of
+  the order each row happened to ship in.** Regular settings now read Theme → Size → Icon Style →
+  Color Vision → Row Density → Row Zebra Stripes (appearance, most-impactful first) → Question Timer
+  (the one gameplay setting) → Sample Data → Help (onboarding/reference, last). Advanced Settings now
+  reads Point Adjustments → Per-Question Percentage Correct Labels → Edit Locked Fields (scoring/
+  editing) → Timer Widget → Timer Stepper Buttons → Timer Pulse (the timer's three toggles, together)
+  → Manual Drumroll Control → Drumroll Crossfade → Craft Prize Eligible List (the craft-prize cluster,
+  together) → App Preferences (a meta setting that backs up all the others, so it goes after them).
+  Every Advanced Settings row also gets a small icon now — a drawn pictograph by default, swapped for
+  a matching emoji by the Icon Style toggle above it, the same STATIC_ICON_TARGETS mechanism Try
+  Example/Take the Tour/FAQ already used — closing the one place in Settings that had no icons at
+  all while every other row already did.
+
 ## v18.83 - 2026-08-22
 - **The mobile docked timer's display and buttons are bigger, without the dock itself growing a
   single pixel.** A first pass at this grew `.qtimer-mobile`'s own padding to make room, which grew
