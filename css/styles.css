@@ -99,22 +99,11 @@
   --tint-sheet:#2fbf72;
   --vivid-beer:#f5b53d;--vivid-beer-2:#fff1cf;
   --vivid-drum:#e8563f;--vivid-drum-2:#ffe0b8;--vivid-drum-3:#c99a63;
-  /* Play Horn's party popper. Three colours because the emoji it replaces has three and
-     because the cone's stripes are the whole point of the mark — one flat hue and it is a
-     plain triangle. Cone orange, stripes pink and cyan, which is also the order they read
-     in: the widest area carries the identity, the two thin marks across it carry the
-     party. Same vivid-equals-tint arrangement the beer and drum use in this theme (the
-     dark palette is already at full saturation, so there is nothing to brighten for the
-     accent-fill case). 5.5:1 or better on every dark surface. */
-  --vivid-horn:#ff8a3d;--vivid-horn-2:#ff5fae;--vivid-horn-3:#46e0e0;
-  --tint-horn:var(--vivid-horn);--tint-horn-2:var(--vivid-horn-2);--tint-horn-3:var(--vivid-horn-3);
   --tint-beer:var(--vivid-beer);--tint-beer-2:var(--vivid-beer-2);
   --tint-drum:var(--vivid-drum);--tint-drum-2:var(--vivid-drum-2);--tint-drum-3:var(--vivid-drum-3);
   --tint-trophy:#f5c542;--tint-trophy-2:#c9922a;
   --tint-mic:#cfd6dc;--tint-mic-2:#8b949c;
   --tint-heart:#ff5a72;
-  --tint-horseshoe:#3ecf62;
-  --tint-chips:#f0574a;--tint-chips-2:#ffd08a;
   --tint-clipboard:#c98f52;--tint-clipboard-2:#dfe3e7;
   --tint-pdf:#e0574f;
   /* AAA (7:1) text-safe variants of the brand accents, for use as TEXT on neutral surfaces
@@ -208,14 +197,8 @@
   --tint-trophy:#96700a;--tint-trophy-2:#6b4f05;
   --tint-mic:#5c6469;--tint-mic-2:#98a0a6;
   --tint-heart:#c62741;
-  --tint-horseshoe:#1c8438;
-  --tint-chips:#c33528;--tint-chips-2:#9a6a12;
   --tint-clipboard:#8a5f2c;--tint-clipboard-2:#b9a48c;
   --tint-pdf:#c0332b;
-  /* Play Horn's popper, light. Same three roles as the dark set above, darkened to clear
-     3:1 against a near-white card rather than near-black: 3.78:1, 5.11 and 3.91 on
-     --bg-hover, the darkest light surface any of them renders on. */
-  --tint-horn:#c2410c;--tint-horn-2:#a81b62;--tint-horn-3:#0e7490;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
   --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
   /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
@@ -286,11 +269,6 @@
   /* The pink/magenta gold-substitute already clears 7:1 on the normal --bg-card-alt (unlike
      real gold), so beer round doesn't need the special cream background here. */
   --beer-bg:var(--bg-card-alt);--beer-border:#ff66cc;
-  /* Only the popper's third stripe moves here, and only because it is the one cyan in it —
-     this is the mode whose whole purpose is getting blue out of the palette. Green, to
-     match the --accent-cyan this block already swaps in. The cone's orange and the second
-     stripe's pink are both on the red side and stay as they are. */
-  --vivid-horn-3:#3fe0a8;--tint-horn-3:var(--vivid-horn-3);
 }
 [data-theme="hc-light"][data-cb="2"]{
   --accent-gold:#c2007a;--accent-cyan:#008060;
@@ -329,9 +307,6 @@
      closest thing this palette has to the vivid-fill role #ffc400 plays above. */
   --sun-disc:#ff66cc;--sun-ray:#c2007a;
   --beer-bg:var(--bg-card-alt);--beer-border:#c2007a;
-  /* Same single-stripe swap as the dark tritan block, at this theme's own lightness.
-     3.56:1 on --bg-hover. */
-  --tint-horn-3:#00806a;
   /* #c2007a is too dark for black text at small sizes here (~3.6:1, under the 4.5:1 AA floor
      for normal text — the base #000 only clears AA on LARGE text, e.g. the question timer's
      own big countdown digits). White text clears 5.9:1 on this same background. */
@@ -806,28 +781,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-trophy{--icon-tint:var(--tint-trophy);--icon-tint-2:var(--tint-trophy-2)}
 .icon-mic{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
 .icon-heart{--icon-tint:var(--tint-heart)}
-/* Round 3's horseshoe and Round 4's chip stack are the two Q5 marks that leave their round accent
-   behind, for the same reason the clover and target did before them: in gold and orange they read
-   as "whatever colour that round is" rather than as the objects they are. Round 1's four squares
-   and Round 2's poker chip stay on their round accents — neither is a thing with a colour of its
-   own, so there is nothing to correct towards. */
-.icon-horseshoe{--icon-tint:var(--tint-horseshoe)}
-.icon-chips{--icon-tint:var(--tint-chips);--icon-tint-2:var(--tint-chips-2)}
-/* One of the four squares is filled, so the mark reads as "four parts, and they get scored"
-   rather than as a plain grid. Not one of the tinted pictographs — it takes Round 1's own accent,
-   like the gift it replaces — so it needs its own fill rule rather than .icon-tinted's. */
-.icon-squares .sq-fill{fill:currentColor;fill-opacity:.38;stroke:currentColor}
-/* The four edge spots are what make the poker chip a poker chip rather than a wheel — the ring
-   and hub alone read as a steering wheel, which is what the first version did. Solid rather than
-   stroked: at the 12px this header renders, a 4x3.6-unit rectangle outlined at stroke-width 2.25
-   is all stroke and no shape. */
-.icon-chip .chip-spot{fill:currentColor;stroke:none}
 .icon-clipboard{--icon-tint:var(--tint-clipboard);--icon-tint-2:var(--tint-clipboard-2)}
-/* Play Horn's popper — the last emoji left in the app, and the only pictograph here that
-   only ever renders ON an accent fill (every one of its three buttons is .btn-accent), so
-   the -acc trio is the set that actually gets used. */
-.icon-horn{--icon-tint:var(--tint-horn);--icon-tint-2:var(--tint-horn-2);--icon-tint-3:var(--tint-horn-3);
-  --icon-tint-acc:var(--vivid-horn,var(--tint-horn));--icon-tint-acc-2:var(--vivid-horn-2,var(--tint-horn-2));--icon-tint-acc-3:var(--vivid-horn-3,var(--tint-horn-3))}
+/* Play Horn's play triangle — filled, and keeping .icon-ui's own stroke rather than clearing it.
+   The stroke is what rounds the three corners (stroke-linejoin:round, inherited), so the glyph
+   matches the rounded ends every other mark in this family is drawn with instead of coming to
+   three hard points. Filled as well as stroked because at this size an outline-only triangle
+   reads as a hollow arrow. */
+.icon-play .pl-tri{fill:currentColor}
 /* PDF: a page with a download arrow through it, not the closed book it was. The arrow is the
    only one of the five candidates that survived the 13px this button actually renders at, and it
    is what keeps it distinct from the spreadsheet sitting immediately beside it. */
@@ -1711,9 +1671,24 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .standings-name{text-align:left;font-weight:600}
 .standings-pts{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);text-align:right}
 
-/* BEER STRIPE — for Q5 bonus and special wager beer rounds */
+/* BEER ROUND — Q5 special wagers (Round 2 halftime, Round 4 final) */
 .special-section.beer-round{background:var(--beer-bg)!important;border-color:var(--beer-border)!important}
 .special-section.beer-round h3{color:var(--badge-gold-fg)!important}
+/* Opaque header band, so the gold stops at the header instead of running edge to edge.
+   Round 4's Q5 was the most golden thing in the app: .special-section is one padded box with no
+   separate header surface, so a Beer Round painted the title row, the badge row and the whole
+   body in --beer-bg together. Round 3's Q5 is the same colour but reads as far less of it,
+   because .question-block gives .q-header its own opaque --bg-input fill and only the body below
+   it goes gold. This gives the special sections that same split.
+   Negative margins because .special-section carries 12px of padding that .question-block does
+   not — the band has to reach back out to the section's inner edge to be a band at all, and the
+   padding is then restated on the band itself. The radius is the section's own 12px less its 2px
+   border, so the band's top corners sit inside the border rather than crossing it. */
+.special-section.beer-round .sw-header{
+  background:var(--bg-input);margin:-12px -12px 0;padding:8px 12px;border-radius:10px 10px 0 0}
+/* Collapsed there is no body under the band, so it takes the section's full inner radius and
+   pulls the leftover strip of padding out from under itself too. */
+.special-section.beer-round.sw-collapsed .sw-header{margin-bottom:-12px;border-radius:10px}
 
 /* SPECIAL WAGER SECTIONS */
 .special-section{background:var(--bg-card-alt);border:2px solid var(--accent-magenta);border-radius:var(--radius-lg);padding:12px;margin-bottom:8px;scroll-margin-top:calc(var(--header-h,80px) + var(--mini-progress-h,0px) + 12px)}

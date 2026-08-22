@@ -22,7 +22,7 @@
 // The app is split across index.html/css/js — all of it is pre-cached below so a fresh install
 // works offline immediately, not just after each file has been individually fetched once. The
 // Google Fonts stylesheet is not cached — it just falls back to system fonts offline.
-const CACHE_NAME='trivia-scorekeeper-shell-v6';
+const CACHE_NAME='trivia-scorekeeper-shell-v7';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/app.js','./js/tutorial.js',
   './js/vendor/fflate.min.js','./js/vendor/jspdf.min.js','./js/data/xlsx-templates.js'];

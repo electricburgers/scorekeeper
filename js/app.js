@@ -131,10 +131,6 @@ const ICON_SHUFFLE =
 // and baseline are the font's business rather than the layout's. Lucide geometry throughout.
 const ICON_CLIPBOARD =
   '<svg class="icon-ui icon-tinted icon-clipboard" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect class="ip-2" width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>';
-const ICON_SQUARES =
-  '<svg class="icon-ui icon-squares" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect class="sq-fill" x="13" y="13" width="8" height="8" rx="1.5"/></svg>';
-const ICON_HORSESHOE =
-  '<svg class="icon-ui icon-tinted icon-horseshoe" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3.5v6a7 7 0 0 0 14 0v-6"/><path d="M2.5 3.5h5.5"/><path d="M16 3.5h5.5"/></svg>';
 const ICON_MIC =
   '<svg class="icon-ui icon-tinted icon-mic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path class="ip-2" d="M19 10v2a7 7 0 0 1-14 0v-2"/><line class="ip-2" x1="12" x2="12" y1="19" y2="22"/></svg>';
 const ICON_HEART =
@@ -163,25 +159,24 @@ const ICON_LINK =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
 const ICON_TRASH =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
-// Play Horn's party popper, and the last emoji in the app — the v18.57 sweep converted it, v18.59
-// put an emoji back at the host's request, and this is the drawn version returning with the
-// colour that was missing the first time round. Five candidates were drawn and compared at the
-// 13px this button actually renders (an angled popper, a straight party horn, an air-horn
-// canister, a trumpet, and a popper mid-burst); this one won on the same test the horseshoe and
-// the poker chip were judged by, which is whether it still reads as itself once it is small.
+// Play Horn's icon: a plain play triangle. No frame around it — the button already has a border
+// and a label, so a square drawn inside a button was a second button drawn inside the first.
 //
-// The cone is one filled triangle with two stripes drawn ACROSS it as open paths — .icon-tinted's
-// 38% fill only means something on a closed shape, so a stripe drawn as a line takes the stroke
-// and nothing else, which is what keeps them as stripes rather than bands at this size. Three
-// tints, not one: the cone is the shape, the stripes are the party, and a popper rendered in a
-// single flat hue is a triangle with lines on it. The three confetti marks are deliberately
-// asymmetric — evenly spaced ones read as a sun's rays.
+// No .icon-tinted, unlike the beer/drum/trophy pictographs. Those are pictures of coloured
+// objects and need their emoji's hue back to read as themselves; a play triangle is not a picture
+// of anything, so it takes currentColor like every other UI action glyph in this file (Sort,
+// Reset, Refresh, Shuffle, Stop). On this button currentColor resolves to --on-accent-cyan, which
+// is already audited against the accent fill it sits on, in every theme and colour-vision mode.
+//
+// Filled AND stroked (see .icon-play in styles.css): the fill is what makes it a play triangle
+// rather than a hollow arrow at this size, and .icon-ui's inherited stroke-linejoin:round is what
+// softens the three corners so it matches the rounded ends the rest of this family is drawn with.
+// The geometry is sized for that stroke to sit around it: the path spans 8.5-19 across, which the
+// 2.25 stroke carries out to roughly 7.2-20.2 of the 24 viewBox. Its centroid lands at x=12.0,
+// the usual optical nudge that stops a play triangle looking as though it has slid left in its
+// own box.
 const ICON_HORN =
-  '<svg class="icon-ui icon-tinted icon-horn" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.2 20.8 9.8 6.6 17.4 14.2Z"/><path class="ip-2" d="m6.10 14.55 3.35 3.35"/><path class="ip-3" d="m7.95 10.58 5.47 5.47"/><path class="ip-2" d="M14.4 3.4v2.2"/><path class="ip-3" d="m18.3 5.7 1.6-1.6"/><path class="ip-2" d="M19.4 10.6h2.2"/></svg>';
-const ICON_CHIPS =
-  '<svg class="icon-ui icon-tinted icon-chips" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><ellipse cx="12" cy="17" rx="8" ry="3"/><path d="M4 17v-3c0-1.7 3.6-3 8-3s8 1.3 8 3v3"/><circle class="ip-2" cx="12" cy="6" r="3.5"/></svg>';
-const ICON_CHIP =
-  '<svg class="icon-ui icon-chip" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.6"/><rect class="chip-spot" x="10" y="2.2" width="4" height="3.6" rx="1"/><rect class="chip-spot" x="10" y="18.2" width="4" height="3.6" rx="1"/><rect class="chip-spot" x="2.2" y="10" width="3.6" height="4" rx="1"/><rect class="chip-spot" x="18.2" y="10" width="3.6" height="4" rx="1"/></svg>';
+  '<svg class="icon-ui icon-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="pl-tri" d="M8.5 5.5 19 12l-10.5 6.5z"/></svg>';
 const ICON_STOP =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>';
 const ICON_SHEET =
@@ -195,19 +190,19 @@ const ICON_SHEET =
 // palette, which the emoji's baked-in orange-and-black never matched.
 const ICON_ALERT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>';
-// Round 2's halftime wager and Round 4's final wager already get their own icon + accent color
-// (pause/magenta, target/orange) via renderSpecialWager — this gives Round 1 and Round 3's bonus
-// question the same treatment, reusing the color each round is already tagged with elsewhere
-// (rl-1 cyan, rl-3 gold) so it's consistent rather than a brand-new color choice.
+// Round 1 and Round 3's bonus question keep the colour each round is already tagged with
+// elsewhere (rl-1 cyan, rl-3 gold) so the Q5 label is consistent with the rest of that round.
+// No icon any more: all four Q5 blocks carried a pictograph (four squares, a poker chip, a
+// horseshoe, a stack of chips) and they are gone at the host's request. They were decoration
+// beside a label that already said what the block was — "BONUS (0-4 x 5)", "BONUS WAGER (1-20)"
+// — and four different marks across four Q5s implied a distinction between them that does not
+// exist. The colour classes stay; only the pictographs go.
 // Declared up here, not next to renderBQ where it's used, because the very first render on a
 // brand-new session — no saved game to resume — runs synchronously at script-parse time, before a
-// `const` declared further down the file would be out of its temporal dead zone. It has to sit
-// BELOW the ICON_* constants for the same reason, now that it references two of them: put it back
-// above them and it reads ICON_SQUARES before that line has run, which throws at parse time and
-// takes the whole script — and every later render — down with it.
+// `const` declared further down the file would be out of its temporal dead zone.
 const BONUS_Q_STYLE = {
-  0: { icon: ICON_SQUARES, cls: "bq-r1" },
-  2: { icon: ICON_HORSESHOE, cls: "bq-r3" },
+  0: { cls: "bq-r1" },
+  2: { cls: "bq-r3" },
 };
 // Character limits for every field a host types free text into. Declared once and used twice:
 // as the inputs' own maxlength, and again in migrateState to clamp values arriving from a saved
@@ -225,7 +220,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.72"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.73"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -2391,9 +2386,9 @@ function renderBQ(ri) {
   else if (n > 0 && subDone === n) blockCls += " q-done";
   else if (subDone > 0) blockCls += " q-active";
   if (isCollapsedBQ) blockCls += " bq-collapsed";
-  const bqStyle = BONUS_Q_STYLE[ri] || { icon: "", cls: "" };
+  const bqStyle = BONUS_Q_STYLE[ri] || { cls: "" };
   const bqKey = "b" + ri;
-  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">${bqStyle.icon} BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div><div class="q-body">`;
+  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div><div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
     ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
@@ -2450,7 +2445,6 @@ function renderSpecialWager(type) {
   const sectionCls = isFinal
     ? "special-section final-wager"
     : "special-section";
-  const titleIcon = isFinal ? ICON_CHIPS : ICON_CHIP;
   const titleSub = isFinal ? "BONUS WAGER (1-20)" : "BONUS WAGER (1-10)";
   const wSet = isFinal ? "setFW" : "setHW",
     cSet = isFinal ? "setFC" : "setHC";
@@ -2477,7 +2471,7 @@ function renderSpecialWager(type) {
   // ignoring the toggle entirely, so turning the setting Off didn't hide it here like it does
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleIcon} ${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>`;
   // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
   // badge is two inches away and says the same thing, and the whole block is already washed gold
   // with a gold border — three statements of one fact. Same call, same reasoning, as removing the
