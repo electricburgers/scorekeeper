@@ -4,7 +4,7 @@
 // #versionLabel element. Here the same string feeds two spots — the page footer and the
 // Settings panel's settings-meta row — so bumping a release only means editing these two
 // constants instead of hunting down every place the version text is written out by hand.
-const FAQ_VERSION = "v1.21";
+const FAQ_VERSION = "v1.22";
 const FAQ_VERSION_DATE = "22 Aug 2026";
 
 // Same Lucide sun/moon geometry as the main app's THEME_ICON_SUN/MOON (js/app.js), tagged

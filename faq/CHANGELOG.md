@@ -2,6 +2,16 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.22] - 22 Aug 2026
+
+### Changed
+
+- **Craft Prize Drawing's manual-pick paragraph (new last version) now says outright when to
+  reach for it**: whenever the winner isn't coming from this app's own random draw, most often
+  because a bar or restaurant staff member is the one actually choosing — from behind the bar, a
+  jar of tickets, however that venue runs it. Tap their team in once staff announces it, and the
+  winner banner and exports reflect the real result.
+
 ## [1.21] - 22 Aug 2026
 
 ### Fixed

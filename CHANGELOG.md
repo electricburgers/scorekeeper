@@ -5,6 +5,19 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.81 - 2026-08-22
+- **The Halftime/Final Wager "Mark correct" button no longer shows the same ✅ twice.** Selecting
+  it overlays a green `CORRECT_BADGE_SVG` badge — the actual "this is the winning call" signal —
+  right on top of the button's own icon, and in Icon Style's Emoji mode both were ✅, so a selected
+  button showed two identical green checks stacked on each other. The badge keeps ✅. The button's
+  own icon is `ICON_MARK_CORRECT` now, a separate reassignable pair from the shared `CHECK_ICON_SVG`
+  (which stays ✅ everywhere else — Done badges, "looks good", the rest), picked as ☑️ over ✔️ for
+  where this button's background actually swings: `.correct-sel`'s fill runs from near-black in
+  dark theme to bright light green in light theme (color-vision modes push it further still), and
+  ✔️ renders as a bare dark tick with no background of its own — legible on the light end, nearly
+  invisible on the dark one. ☑️ carries its own light box baked into the glyph, so it reads at
+  both ends without needing per-theme tuning.
+
 ## v18.80 - 2026-08-22
 - **The timer's critical-time pulse no longer shows a grey halo in light mode.** It animated
   `filter:brightness()`, which forces the element onto its own compositing layer for as long as
