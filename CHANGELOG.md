@@ -5,6 +5,12 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.93 - 2026-08-22
+- **Timer Stepper Buttons and Timer Pulse only show up in Advanced Settings once Timer Widget is
+  turned on**, same reasoning and same pattern as Drumroll Crossfade needing Manual Drumroll
+  Control on last version: both configure the timer widget itself (whether it shows -30/+30
+  nudges, whether it flashes), so neither means anything with the widget off.
+
 ## v18.92 - 2026-08-22
 - **Team Report's "incorrect" lines now use ❌ in Emoji mode, not ⛔** — the wager/bonus/per-question
   incorrect badges and stats elsewhere keep ⛔ unchanged; only Team Report's own three call sites
