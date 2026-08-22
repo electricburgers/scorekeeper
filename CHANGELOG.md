@@ -5,6 +5,26 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.77 - 2026-08-22
+- **Icon Style's emoji were rendering visibly smaller than the pictographs they replaced** in
+  every button that gave its icon extra room on purpose — the Scores panel's Shuffle button most
+  noticeably, but the same gap applied to every `.sort-btn`, `.standings-sort-btn`,
+  `.q-sort-btn`/`.q-reset-btn`, the timer's reset button, and Banter's refresh button. Each of
+  those boosts its `.icon-ui` svg past the shared 1em baseline (1.1-1.32em, tuned per button); a
+  bare emoji character has no width/height for that boost to apply to, so in Emoji mode it fell
+  straight back to the button's own small font-size. Every `*_EMOJI` string is wrapped in
+  `<span class="icon-emoji">` now, and each of those five contexts gets a matching
+  `transform:scale()` mirroring its `.icon-ui` ratio exactly — `transform`, not `font-size`, so
+  the glyph reads bigger without growing the button's own padded box around it. Left unboosted
+  (and unproblematic) everywhere else, e.g. `.wager-badge`'s own font-size already sized an emoji
+  there proportionately.
+- **The small correct/incorrect badges are Icon Style-aware now too.** `CORRECT_BADGE_SVG` was
+  the one icon deliberately left out of the original sweep — colored square background baked into
+  the SVG's own `<rect>`, "opaque and theme-independent" by design — but its own header comment
+  says outright it replaced a ✅ emoji originally, which makes it exactly the kind of icon Icon
+  Style exists to bring back. `CORRECT_BADGE_SVG` is a `let` now, defaulting to the same picture
+  and swapping to ✅ in Emoji mode, same pattern as everything else.
+
 ## v18.76 - 2026-08-22
 - **Three more Icon Style emoji picks, all by request.** Reset (per-question Sort/Reset, and the
   standings/scores Reset buttons) is ↩️ now, not ↺. Correct stays ✅ — already the case, just

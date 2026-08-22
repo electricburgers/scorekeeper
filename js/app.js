@@ -67,8 +67,14 @@ const BONUS_ROUNDS = new Set([0, 2]);
 // ever touch it. A bare shape has no color of its own, so it always renders in whatever
 // --correct-badge-bg/--correct-badge-fg already resolve to for the active theme and color-vision
 // mode.
-const CORRECT_BADGE_SVG =
+const CORRECT_BADGE_SVG_PICT =
   '<svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><rect x="1" y="1" width="18" height="18" rx="5"></rect><path d="M4.5 10.3l3.5 3.5l7-7.8"></path></svg>';
+// Icon Style (see the block starting at ICON_ALERT_PICT below) brings this one back into the
+// swappable set too: the header comment above is exactly the reason CORRECT_BADGE_SVG existed in
+// the first place (a fixed-color ✅ no CSS token could reach), and Icon Style's whole point is to
+// let a host who wants that back have it, same as every other icon this replaced.
+const CORRECT_BADGE_EMOJI = '<span class="icon-emoji">✅</span>';
+let CORRECT_BADGE_SVG = CORRECT_BADGE_SVG_PICT;
 // Same reasoning as CORRECT_BADGE_SVG above, applied to the Theme toggle's own 🌑/☀️ Unicode
 // emoji: both are fixed-color platform pictographs (a literal gray moon, a literal orange sun)
 // that no CSS token could touch. .icon-sun/.icon-moon (styles.css) each set color to a token
@@ -215,9 +221,9 @@ const ICON_ALERT_PICT =
 // time) and to plain platform convention everywhere else. ICON_SHUFFLE/ICON_SHUFFLE_TINTED are
 // the one deliberate exception — see the note on their own declaration for why \u{1F500} replaces
 // the historical \u{1F3B2} rather than restoring it.
-const THEME_ICON_SUN_EMOJI = "☀️";
-const THEME_ICON_MOON_EMOJI = "🌙";
-const X_ICON_SVG_EMOJI = "❌";
+const THEME_ICON_SUN_EMOJI = '<span class="icon-emoji">☀️</span>';
+const THEME_ICON_MOON_EMOJI = '<span class="icon-emoji">🌙</span>';
+const X_ICON_SVG_EMOJI = '<span class="icon-emoji">❌</span>';
 // X_ICON_SVG is shared by every "dismiss" meaning in the app — remove team, close Team Report,
 // clear the craft prize winner, dismiss the autosave-off notice — and by "mark this wrong",
 // which is a different meaning wearing the same mark. In pictograph mode that's fine, the same
@@ -227,30 +233,30 @@ const X_ICON_SVG_EMOJI = "❌";
 // with its own emoji, and only the incorrect-marking call sites (the wager/bonus/special-wager
 // incorrect badges, the incorrect result button, the per-question incorrect stat, Team Report's
 // "incorrect" lines) use it instead of X_ICON_SVG.
-const ICON_INCORRECT_EMOJI = "⛔";
-const CHECK_ICON_SVG_EMOJI = "✅";
-const ICON_SORT_EMOJI = "↕️";
-const ICON_RESET_EMOJI = "↩️";
-const ICON_REFRESH_EMOJI = "🔄";
+const ICON_INCORRECT_EMOJI = '<span class="icon-emoji">⛔</span>';
+const CHECK_ICON_SVG_EMOJI = '<span class="icon-emoji">✅</span>';
+const ICON_SORT_EMOJI = '<span class="icon-emoji">↕️</span>';
+const ICON_RESET_EMOJI = '<span class="icon-emoji">↩️</span>';
+const ICON_REFRESH_EMOJI = '<span class="icon-emoji">🔄</span>';
 // 🔀 rather than the 🎲 this button's comment traces its history to: at the sizes Sort/Reset/
 // Shuffle actually render (the sort-controls row, the standings sort buttons) a die reads as an
 // ambiguous blob, where the crossed arrows keep reading as "shuffle" at a glance.
-const ICON_SHUFFLE_EMOJI = "🔀";
-const ICON_SHUFFLE_TINTED_EMOJI = "🔀";
-const ICON_CLIPBOARD_EMOJI = "📋";
-const ICON_MIC_EMOJI = "🎤";
-const ICON_HEART_EMOJI = "❤️";
-const ICON_BEER_EMOJI = "🍺";
-const ICON_DRUM_EMOJI = "🥁";
-const ICON_TROPHY_EMOJI = "🏆";
-const ICON_FLAG_EMOJI = "🏁";
-const ICON_PDF_EMOJI = "📕";
-const ICON_LINK_EMOJI = "🔗";
-const ICON_TRASH_EMOJI = "🗑️";
-const ICON_HORN_EMOJI = "🎉";
-const ICON_STOP_EMOJI = "⏹️";
-const ICON_SHEET_EMOJI = "📊";
-const ICON_ALERT_EMOJI = "⚠️";
+const ICON_SHUFFLE_EMOJI = '<span class="icon-emoji">🔀</span>';
+const ICON_SHUFFLE_TINTED_EMOJI = '<span class="icon-emoji">🔀</span>';
+const ICON_CLIPBOARD_EMOJI = '<span class="icon-emoji">📋</span>';
+const ICON_MIC_EMOJI = '<span class="icon-emoji">🎤</span>';
+const ICON_HEART_EMOJI = '<span class="icon-emoji">❤️</span>';
+const ICON_BEER_EMOJI = '<span class="icon-emoji">🍺</span>';
+const ICON_DRUM_EMOJI = '<span class="icon-emoji">🥁</span>';
+const ICON_TROPHY_EMOJI = '<span class="icon-emoji">🏆</span>';
+const ICON_FLAG_EMOJI = '<span class="icon-emoji">🏁</span>';
+const ICON_PDF_EMOJI = '<span class="icon-emoji">📕</span>';
+const ICON_LINK_EMOJI = '<span class="icon-emoji">🔗</span>';
+const ICON_TRASH_EMOJI = '<span class="icon-emoji">🗑️</span>';
+const ICON_HORN_EMOJI = '<span class="icon-emoji">🎉</span>';
+const ICON_STOP_EMOJI = '<span class="icon-emoji">⏹️</span>';
+const ICON_SHEET_EMOJI = '<span class="icon-emoji">📊</span>';
+const ICON_ALERT_EMOJI = '<span class="icon-emoji">⚠️</span>';
 
 // The reassignable bindings applyIconStyle below writes to — every existing `${ICON_BEER}` etc.
 // call site elsewhere in this file reads through one of these, so reassigning here is all it
@@ -323,6 +329,7 @@ function applyIconStyle(style) {
   ICON_STOP = emoji ? ICON_STOP_EMOJI : ICON_STOP_PICT;
   ICON_SHEET = emoji ? ICON_SHEET_EMOJI : ICON_SHEET_PICT;
   ICON_ALERT = emoji ? ICON_ALERT_EMOJI : ICON_ALERT_PICT;
+  CORRECT_BADGE_SVG = emoji ? CORRECT_BADGE_EMOJI : CORRECT_BADGE_SVG_PICT;
 
   if (!staticIconPictCache) {
     staticIconPictCache = STATIC_ICON_TARGETS.map((t) => {
@@ -404,7 +411,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.76"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.77"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;

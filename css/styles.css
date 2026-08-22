@@ -757,6 +757,16 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    Stroke-only + currentColor, so each icon inherits the contrast-audited text color of whatever
    button it sits in, in every theme and color-vision mode. */
 .icon-ui{width:1em;height:1em;display:inline-block;vertical-align:-.15em;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2.25;stroke-linecap:round;stroke-linejoin:round}
+/* Icon Style's emoji wrapper (every *_EMOJI string in app.js). A plain text glyph has no
+   width/height to size the way .icon-ui's svgs do above — it only responds to font-size, which
+   in a small button (.sort-btn is .86rem) renders it noticeably smaller than the pictograph it
+   replaced. transform:scale rather than font-size for the per-button boosts below: font-size
+   would grow the glyph's own line box and, with it, the button's padded height; a transform only
+   enlarges what's already painted, so every one of these buttons stays exactly the size it was
+   with the pictograph in it. Un-boosted (scale defaults to 1) everywhere that doesn't opt in
+   below, since .wager-badge's own font-size (1.15rem/1.05rem) already sizes an emoji there
+   proportionately without help. */
+.icon-emoji{display:inline-block}
 /* Reset carries a heavier nominal stroke than the other three, to match their apparent weight
    rather than their measurements. Its glyph is one big open circle: two strokes far apart around
    a large empty middle, where Sort — sitting immediately beside it — is four strokes packed into
@@ -974,6 +984,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    icon off-centre instead of correcting one. */
 .qtimer-btn.qtimer-reset{width:2rem;height:2rem;min-height:2rem;padding:0;display:inline-flex;align-items:center;justify-content:center;font-size:1.15rem;line-height:1}
 .qtimer-btn.qtimer-reset .icon-ui{width:1.1em;height:1.1em}
+.qtimer-btn.qtimer-reset .icon-emoji{transform:scale(1.1)}
 .qtimer-btn.qtimer-reset-active{background:var(--danger-solid-bg);border:2px solid var(--bg-primary);color:#fff}
 .qtimer-btn.qtimer-reset-active:hover{filter:brightness(1.15)}
 
@@ -1222,7 +1233,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    a little larger to hold the same optical weight as "Entry"/"Asc"/"Desc" beside it. Dropping the
    word is what stopped this button being the widest of the four and squeezing the other three. */
 .sort-btn .icon-ui{width:1.25em;height:1.25em}
+.sort-btn .icon-emoji{transform:scale(1.25)}
 .standings-sort-btn .icon-ui{width:1.32em;height:1.32em}
+.standings-sort-btn .icon-emoji{transform:scale(1.32)}
 .sort-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid);box-shadow:0 0 6px color-mix(in srgb,var(--accent-cyan) 30%,transparent)}
 .sort-mode-label{padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0}
 
@@ -1527,6 +1540,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .q-sort-btn:hover{filter:brightness(1.1)}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
 .q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
+.q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.15)}
 .q-sort-btn.active{box-shadow:0 0 0 2px var(--on-accent-cyan) inset}
 .q-reset-btn{background:var(--danger-solid-bg);color:#fff;border-color:var(--danger-solid-bg)}
 .q-reset-btn:hover{filter:brightness(1.15)}
@@ -2352,6 +2366,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .banter-refresh:hover{background:var(--bg-hover);border-color:var(--accent-cyan)}
 .banter-refresh:active{transform:scale(.94)}
 .banter-refresh .icon-ui{width:1.15em;height:1.15em}
+.banter-refresh .icon-emoji{transform:scale(1.15)}
 .banter-group{margin-bottom:6px}
 .banter-group:last-child{margin-bottom:0}
 
