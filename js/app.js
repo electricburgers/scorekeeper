@@ -468,6 +468,11 @@ function setIconStyle(style) {
   savePrefs(p);
   applyIconStyle(p.iconStyle);
   renderAll();
+  // The question timer's play/pause/reset icons live outside renderAll's own tree (built by
+  // renderQtControls, called on timer state changes rather than on every render), so they'd
+  // otherwise keep showing whichever style was active when the timer last started/paused/reset
+  // until the next tick — same reason setTheme below re-renders for ICON_DONE.
+  renderQtControls();
 }
 function toggleIconStyle() {
   const p = loadPrefs();
@@ -504,7 +509,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.96"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.97"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -568,6 +573,7 @@ const BANTER = {
     "Locked in? Good. Pencils ready for the next question.",
     "Nicely played, everybody. Onward to the next.",
     "That one's in the books. Bartender, a round of consolation for the wrong answers.",
+    "Somewhere in this room, someone just changed a right answer to a wrong one. Rest in peace, that point.",
   ],
   round: [
     "That round's in the books — great work! Stretch those brains, the next round's coming up.",
@@ -579,6 +585,7 @@ const BANTER = {
     "That round had some teeth — you survived it! Onto the next.",
     "Done and dusted. Remember: it's not about what you know, it's about what your teammate refused to write down.",
     "Round finished! If you're winning, act humble. If you're losing, act like it's strategy.",
+    "Remember: there's no crying in trivia. There's a little crying in trivia.",
     "Wagers are scored! Fortunes were made and lost on that one.",
   ],
   scores: [
@@ -591,6 +598,8 @@ const BANTER = {
     "Here come the numbers — don't get comfortable, this can still swing.",
     "Scores are in for that one. No lead is safe, folks.",
     "Let's see those totals. Remember: the team in last place statistically buys the best snacks.",
+    "If you're losing, it builds character. If you're winning, it builds a tab.",
+    "Statistically, the team in last is having the best time. Somebody has to.",
   ],
   beer: [
     "EVERYONE got that one — beer round, people! Beautifully done, whole room.",
@@ -688,6 +697,14 @@ const STAFF_THANKS = [
   "Halftime's in the books — and none of it happens without {names}. Give them a hand, and remember: they are the only people in this room who can bring you another drink.",
   "Round of applause for {names}! They've been dodging your elbows all night carrying a full tray — tip them like your next drink depends on it. It does.",
   "Quick shoutout to the real MVPs tonight: {names}. Not one correct wager between them, but every glass in here is full — take care of them on the way out.",
+  "Before we go further — let's hear it for {names}, keeping this place running while we all yell about geography.",
+  "Big thanks to {names} behind the bar tonight — pouring all night and putting up with us the whole time.",
+  "Round of applause for {names} — you've earned hazard pay navigating this crowd tonight.",
+  "Let's not forget the people actually working tonight — thank you to {names} for having us.",
+  "A big thank you to {names} — trivia night doesn't happen without you.",
+  "Let's hand out some appreciation along with the points tonight — thanks, {names}.",
+  "Quick shoutout to {names}, keeping the drinks and food coming — we see you, we appreciate you.",
+  "Before the next round — thanks to {names} behind the bar and in the kitchen making this happen.",
 ];
 const STAFF_THANKS_FALLBACK = "your servers and bartenders tonight";
 const STAFF_THANKS_KEY = "staff-thanks";
@@ -5748,16 +5765,32 @@ function qtSetDisplayClass(cls) {
 // the ▶/⏸ Unicode glyphs these replaced — those default to a fixed-color platform emoji font on
 // iOS/Android, ignoring this button's own already theme/color-vision-audited text color entirely.
 // A path/rect shape has no color of its own, so it always renders in whatever the button's state
-// (idle/pause/resume) already resolves to.
-const QT_ICON_PLAY =
+// (idle/pause/resume) already resolves to. Still the Pictograph-mode value for exactly that
+// reason — Icon Style's Emoji mode below is opt-in nostalgia (see the ICON STYLE section up top),
+// not a fix to anything, so the color-losing tradeoff is the user's own choice to make there.
+const QT_ICON_PLAY_PICT =
   '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg>';
-const QT_ICON_PAUSE =
+const QT_ICON_PAUSE_PICT =
   '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>';
+const QT_ICON_PLAY_EMOJI = '<span class="icon-emoji">▶️</span>';
+const QT_ICON_PAUSE_EMOJI = '<span class="icon-emoji">⏸️</span>';
+// .qtimer-reset's own icon was static markup in index.html (desktop AND mobile copies), never
+// touched by JS at all, since it never needed to change with timer STATE the way play/pause
+// does — only reused here as a plain string constant so Icon Style can now swap it too, the same
+// two-value PICT/EMOJI split as everything else, just driven from this render function instead
+// of STATIC_ICON_TARGETS (that table only ever patches ONE matching element via querySelector;
+// this button exists twice, desktop and mobile, and querySelectorAll below already visits both).
+const QT_ICON_RESET_PICT =
+  '<svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>';
+const QT_ICON_RESET_EMOJI = '<span class="icon-emoji">↩️</span>';
 function renderQtControls() {
+  const emoji = loadPrefs().iconStyle === "emoji";
   document.querySelectorAll(".qtimer-toggle").forEach((b) => {
     // Icon-only (no "Start"/"Pause"/"Resume" label) — aria-label carries the accessible name
     // the bare icon can't, and stays in sync with it here rather than living in static HTML.
-    b.innerHTML = qtState === "running" ? QT_ICON_PAUSE : QT_ICON_PLAY;
+    b.innerHTML = qtState === "running"
+      ? (emoji ? QT_ICON_PAUSE_EMOJI : QT_ICON_PAUSE_PICT)
+      : (emoji ? QT_ICON_PLAY_EMOJI : QT_ICON_PLAY_PICT);
     b.setAttribute(
       "aria-label",
       qtState === "running"
@@ -5773,6 +5806,7 @@ function renderQtControls() {
     const active = qtState !== "idle";
     b.disabled = !active;
     b.classList.toggle("qtimer-reset-active", active);
+    b.innerHTML = emoji ? QT_ICON_RESET_EMOJI : QT_ICON_RESET_PICT;
   });
 }
 function toggleQTimer() {

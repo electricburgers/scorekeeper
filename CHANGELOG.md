@@ -5,6 +5,24 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.97 - 2026-08-22
+- **Four new host banter lines**, added to the categories that already fit their tone: "Somewhere
+  in this room, someone just changed a right answer to a wrong one. Rest in peace, that point."
+  (After the Answer), "Remember: there's no crying in trivia. There's a little crying in trivia."
+  (Moving to the Next Round), and "If you're losing, it builds character. If you're winning, it
+  builds a tab." / "Statistically, the team in last is having the best time. Somebody has to."
+  (Reading the Scores).
+- **Eight new Thank the Staff lines, merged into the existing 3-line rotation** (not a new,
+  separate box — this app already has a dedicated Thank the Staff block right after Halftime
+  Wager, which the first pass at this request didn't know about and briefly duplicated before
+  catching it). Rewritten to use the `{names}` token the existing lines use, so they pull in the
+  actual Restaurant Staff names from Event Details the same way.
+- **The question timer's play/pause/reset buttons now use ▶️/⏸️/↩️ in Emoji mode.** These were
+  deliberately pictograph-only before now — a platform emoji ignores the button's own theme/
+  color-vision-audited text color the way a currentColor SVG doesn't — but that tradeoff is the
+  user's own call to make under Icon Style, same as everywhere else Emoji mode trades some
+  polish for platform glyphs.
+
 ## v18.96 - 2026-08-22
 - **Clicking Shuffle (or Entry) on the Before Halftime/Final Wager standings no longer nudges the
   view a few pixels on every click.** Same root cause and same fix as v18.95's R2/R4 row jump:
