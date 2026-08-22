@@ -5,6 +5,12 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.70 - 2026-08-21
+- Craft Partner and Bonus Item move out of the PDF's header and into the empty page beside the Standings table. The header is back to one row of four, which puts the round headers back at y=81 instead of y=121 — **40pt of vertical space reclaimed on every export**, where yesterday's second row was spending it on two fields.
+- The space beside Standings was already paid for: the table is 432pt of an ~794pt usable width, so roughly 360pt sits unused to its right on every export. Both fields get more than double the width a six-across header row could have given them, for no vertical cost.
+- Drawn once, from the top of the Standings heading, and only on the page the table starts on. It is event metadata rather than part of the table, so repeating it after a page break would read as a second header. Skipped entirely if the remaining width ever drops under 90pt — better absent than crushed.
+- Verified by intercepting what jsPDF is asked to draw, across four cases: both fields filled, both empty (em-dash), a partner with no town (no trailing dash), and values long enough to need shrinking and wrapping. No overlap with the standings rows, and the panel's right edge lands flush with the page margin.
+
 ## v18.69 - 2026-08-21
 - **Light mode's Beer Round is actually gold now.** The old #f1e7d0 background sat at OKLCh chroma .032 — a near-neutral beige, so the block that is meant to read as the fun moment of the night looked like unstyled paper. The background was both the biggest lever and the one with the most room: #fff0c4 is **+83% chroma** and slightly lighter. `--accent-gold` (every 7-14% wash: the Beer Round badge, its stripe, the CB Prize row and tag, the craft-prize flash) goes #e2b000 to #ffb300, +7%. `--beer-border` takes the most chromatic gold that still clears 3:1 on the new background, +10%.
 - `--badge-gold-fg` could only gain 5%, and that is the honest number rather than the one I wanted. It has to hold 4.5:1 as text on the Beer Round badge — the darkest surface it ever renders on, and darker than the block behind it because the badge lays a gold wash *over* that block — while also serving as the fill under white on the tie badge and the active standings sort button. #845e00 lands at 4.51:1 and 5.86:1.
