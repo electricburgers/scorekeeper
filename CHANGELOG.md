@@ -5,6 +5,10 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.68 - 2026-08-21
+- Round 1's gift and Round 3's clover move to the head of their own "BONUS (0-4 x 5)" line, matching what v18.64 did for the Halftime and Final Wager icons. All four Q5 headers now read the same way: a bare "Q5" with its badge on the top line, and the pictograph introducing the sub-line that says what kind of question it is. Doing only the wagers left the two bonus rounds as the odd pair out.
+- `BONUS_Q_STYLE`'s field is `icon`, not `emoji`. It has held an SVG since v18.57 and the old name had started reading as a leftover to be cleaned up rather than a thing in use.
+
 ## v18.67 - 2026-08-21
 - Entry and Shuffle in the Before Halftime / Before Final Wager blocks split the difference at **32px** (58x32 and 38x32, measured), halfway between the ~20px they started at and the 44px of v18.64. 44 fixed the tap problem and overshot the look: two chunky pills above a quiet little standings table, pulling more attention than the scores they sit over.
 - Worth being straight about the cost rather than filing it under "improved": 32px is **under** the 44px both platform guidelines ask for, so this is a deliberate trade of guideline compliance for proportion, not a claim to meet it. It clears the 24px WCAG 2.5.8 asks for at AA, and is 60% bigger than what was there before v18.64.
