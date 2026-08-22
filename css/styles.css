@@ -1020,22 +1020,39 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);border-color:var(--bg-primary)}
 .qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;border-color:var(--bg-primary);animation:qtFlash 2.9s ease-in-out infinite}
 .qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff;border-color:var(--bg-primary)}
-/* qt-over doesn't pulse — but crossing 0:01 -> 0:00 swaps qt-crit for it mid-cycle, which used to
-   chop the flash off wherever it happened to be and snap the box back to full brightness. This
-   re-declares the SAME animation (identical name, duration and timing — an unchanged
-   animation-name between style recalcs is what makes the browser carry the running animation over
-   instead of restarting it), and qtSetDisplayClass in app.js drops .qt-settling on the next
-   animationiteration, i.e. at the cycle's own end where the keyframes are already back at
-   brightness(1). Net effect: the pulse finishes the beat it was on, then stops on its own. */
-.qtimer-display.qt-over.qt-settling{animation:qtFlash 2.9s ease-in-out infinite}
-@keyframes qtFlash{0%,100%{filter:brightness(1)}50%{filter:brightness(.75)}}
+/* An animated filter — brightness(), as this used to be — forces the element onto its own
+   compositing layer for as long as the animation is running, even at the 0%/100% keyframes where
+   the computed value is a no-op. That layer's own edge antialiasing reads as a faint grey halo
+   traced around the box wherever it sits against a light background — invisible in dark mode,
+   where the page behind it is already dark enough to hide it, but plainly visible in light mode,
+   which is what it looked like: a dark overlay sitting on top of the timer rather than the timer
+   itself pulsing. An inset box-shadow filled with the box's own radius (a huge spread, zero blur)
+   is a normal paint op with no such layer, and rgba(0,0,0,.25) over the fill is the exact
+   equivalent darkening — result = original x (1-.25) is the same arithmetic brightness(.75)'s
+   original x .75 was already doing. Border and text are untouched either way: the border already
+   had its own resting colour transition, never part of this pulse, and white text over a
+   darkening red only gains contrast as the fill goes darker, so nothing here reopens the
+   contrast floor the old comment on this block used to defend. */
+@keyframes qtFlash{0%,100%{box-shadow:inset 0 0 0 0 rgba(0,0,0,0)}50%{box-shadow:inset 0 0 0 999px rgba(0,0,0,.25)}}
+/* qt-over doesn't pulse — but crossing 0:01 -> 0:00 used to chop the flash off wherever it
+   happened to be in its cycle and snap the box back with no transition, and waiting out however
+   much of a 2.9s cycle was left (the fix before this one) traded that snap for a settle that
+   could take most of 3 seconds — too slow for the one moment a host is most likely watching this
+   number. qtSetDisplayClass in app.js now freezes whatever box-shadow the pulse was actually
+   showing at the instant of crossing as an inline style, adds this class, and flips that inline
+   value to transparent on the next frame — a plain CSS transition, unrelated to qtFlash's own
+   timing, so however far into a beat the pulse was, it always finishes over the same short .35s
+   rather than up to 2.9s. */
+.qtimer-display.qt-settle-fast{transition:box-shadow .35s ease-out}
 @media(prefers-reduced-motion:reduce){
-  .qtimer-display.qt-crit,.qtimer-display.qt-over.qt-settling{animation:none}
+  .qtimer-display.qt-crit{animation:none}
+  .qtimer-display.qt-settle-fast{transition:none}
 }
 /* Advanced Settings > Timer Pulse: Hidden. Set on <html> by applyPrefs() in app.js. The crit
    background/text/border still apply (they're the actual "time's nearly up" signal) — this only
    drops the flashing animation for hosts who find it distracting. */
-[data-timer-no-pulse] .qtimer-display.qt-crit,[data-timer-no-pulse] .qtimer-display.qt-over.qt-settling{animation:none}
+[data-timer-no-pulse] .qtimer-display.qt-crit{animation:none}
+[data-timer-no-pulse] .qtimer-display.qt-settle-fast{transition:none}
 
 /* Pinned to the bottom of the scores column (#sidebar / .col-right), overlaying .scores-list
    rather than sitting below it — the extra padding-bottom on .scores-list (its CSS rule,

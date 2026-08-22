@@ -5,6 +5,29 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.80 - 2026-08-22
+- **The timer's critical-time pulse no longer shows a grey halo in light mode.** It animated
+  `filter:brightness()`, which forces the element onto its own compositing layer for as long as
+  the animation runs — including at the 0%/100% keyframes where the computed value is a no-op —
+  and that layer's own edge antialiasing traced a faint grey fringe around the box wherever it sat
+  against a light page. Invisible in dark mode, where the surroundings are already dark enough to
+  hide it; in light mode it read as a dark film sitting on top of the timer rather than the timer
+  itself pulsing. Replaced with an animated inset `box-shadow` (a huge zero-blur spread, filled
+  with the box's own radius) — a normal paint operation with no such layer. `rgba(0,0,0,.25)` over
+  the fill is the exact arithmetic equivalent of the old `brightness(.75)` (both just scale the
+  original color by .75), so the pulse looks identical in dark mode and everywhere else this
+  wasn't visible before.
+- **Crossing 0:00 now finishes the pulse in a fixed, fast .35s instead of however much of a 2.9s
+  beat happened to be left.** The previous fix for the old snap-to-full-brightness bug re-declared
+  the same `qtFlash` animation on the settling state and let it run out its own cycle, which could
+  take most of 3 seconds after the round was already over — correct, but slow for the one moment a
+  host is most likely watching the number. `qtSetDisplayClass` now freezes whatever the pulse was
+  actually showing at the instant of crossing as an inline `box-shadow`, then lets a plain CSS
+  transition (`.qt-settle-fast`, unrelated to `qtFlash`'s own timing) carry it down to nothing —
+  always the same short duration regardless of how dark that frozen instant was, and still smooth
+  since a transition, unlike a fresh animation, always interpolates from whatever's actually on
+  screen rather than restarting from a keyframe's fixed value.
+
 ## v18.79 - 2026-08-22
 - **Icon Style's emoji are properly centered now.** `.icon-emoji` never set its own `line-height`,
   so it inherited whatever the surrounding button had (usually the browser default ~1.15-1.2x) —

@@ -411,7 +411,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v18.79"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v18.80"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":3,"5":0,"6":2,"7":3,"8":3,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -5552,45 +5552,57 @@ function qtSetDisplayText(fmt) {
     d.classList.toggle("qt-neg", fmt.neg);
   });
 }
-// One-shot handler for the qt-crit -> qt-over handover below: fires at the end of whichever
-// qtFlash cycle was in flight when the clock hit zero, and drops the class keeping it alive.
-// A single shared function (not a closure per call) so removeEventListener below can match it.
+// One-shot handler for the qt-crit -> qt-over handover below: fires once the fast settle
+// transition (.qt-settle-fast, styles.css) actually finishes, and clears the inline box-shadow
+// and class it ran on. A single shared function (not a closure per call) so
+// removeEventListener below can match it.
 function qtEndSettlePulse(e) {
-  e.currentTarget.classList.remove("qt-settling");
+  if (e.propertyName && e.propertyName !== "box-shadow") return;
+  e.currentTarget.classList.remove("qt-settle-fast");
+  e.currentTarget.style.boxShadow = "";
 }
 function qtSetDisplayClass(cls) {
   document.querySelectorAll(".qtimer-display").forEach((d) => {
     // Whether this display is mid-pulse right now — either still in qt-crit's own infinite
     // animation, or already settling one out from a previous tick.
     const pulsing =
-      d.classList.contains("qt-crit") || d.classList.contains("qt-settling");
+      d.classList.contains("qt-crit") || d.classList.contains("qt-settle-fast");
+    // Read before the class swap below removes qt-crit and its animation along with it — this
+    // is the actual on-screen darkness of the pulse at the exact instant the clock crossed zero.
+    const midFlash = pulsing
+      ? getComputedStyle(d).boxShadow
+      : null;
     d.classList.remove("qt-warn", "qt-crit", "qt-over");
     if (cls) d.classList.add(cls);
-    // Crossing 0:01 -> 0:00 swaps qt-crit for qt-over, and qt-over doesn't pulse — so the flash
-    // used to be cut off wherever it happened to be in its 2.9s cycle, snapping the box back to
-    // full brightness mid-fade at the exact moment the host is looking at it. .qt-settling
-    // re-declares the identical `qtFlash 2.9s ease-in-out infinite` on qt-over, and an unchanged
-    // animation-name between style recalcs means the browser carries the running animation over
-    // untouched rather than restarting it; the animationiteration listener then removes the class
-    // at the cycle's own end, where the keyframes are already back at brightness(1). So the pulse
-    // finishes the beat it was on and stops on its own, instead of being chopped.
+    // Crossing 0:01 -> 0:00 swaps qt-crit for qt-over, and qt-over doesn't pulse. Snapping
+    // straight to "no shadow" here would chop the flash off wherever it happened to be and pop
+    // the box back flat at the exact moment the host is looking at it — so instead, freeze
+    // whatever the pulse was actually showing (midFlash, above) as an inline style, then let it
+    // transition down to nothing over .qt-settle-fast's own short, fixed .35s (styles.css) —
+    // fast enough not to keep flashing after the round is already over, and a plain CSS
+    // transition, so it's always smooth regardless of how dark that frozen instant was.
     //
-    // Guarded on `pulsing` so this only ever continues a pulse that was actually running: a timer
+    // Guarded on `pulsing` so this only ever settles a pulse that was actually running: a timer
     // resumed already past zero goes straight to qt-over with nothing in flight, and must not
-    // start a fresh flash just to fade it out. Guarded again on qt-settling because tickQTimer
-    // calls this every 200ms — without it, every tick would re-add the listener while waiting.
+    // start one just to fade it out. Guarded again on qt-settle-fast because tickQTimer calls
+    // this every 200ms — without it, every tick would re-freeze and restart the transition from
+    // itself, never actually finishing.
     if (cls === "qt-over" && pulsing) {
-      if (!d.classList.contains("qt-settling")) {
-        d.classList.add("qt-settling");
-        d.addEventListener("animationiteration", qtEndSettlePulse, {
-          once: true,
+      if (!d.classList.contains("qt-settle-fast")) {
+        d.style.boxShadow = midFlash;
+        d.classList.add("qt-settle-fast");
+        requestAnimationFrame(() => {
+          d.style.boxShadow = "inset 0 0 0 0 rgba(0,0,0,0)";
         });
+        d.addEventListener("transitionend", qtEndSettlePulse, { once: true });
       }
-    } else if (d.classList.contains("qt-settling")) {
-      // Left the over state before the cycle ended (a +30s nudge, a reset, a fresh start) —
-      // drop the hold and the pending listener so it can't fire against a later state.
-      d.classList.remove("qt-settling");
-      d.removeEventListener("animationiteration", qtEndSettlePulse);
+    } else if (d.classList.contains("qt-settle-fast")) {
+      // Left the over state before the transition ended (a +30s nudge, a reset, a fresh start) —
+      // drop the hold, the inline freeze, and the pending listener so none of it can fire against
+      // a later state.
+      d.classList.remove("qt-settle-fast");
+      d.style.boxShadow = "";
+      d.removeEventListener("transitionend", qtEndSettlePulse);
     }
   });
 }
