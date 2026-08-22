@@ -1,6 +1,13 @@
 /* Page-specific layout for the FAQ page. Everything else (colors, fonts, buttons, the settings
    panel, the color-vision select, etc.) comes from css/styles.css so this page always matches
    the live app instead of drifting into its own palette. */
+/* Settings > Icon Style's emoji placeholder (js/faq.js's faqApplyIconStyle) — sized/aligned to
+   sit in running text the same way .icon-ui's own svgs do, so swapping to emoji doesn't shift
+   the baseline of whatever sentence it's inline with. */
+.faq-emoji-ph {
+  display: inline-block;
+  vertical-align: -0.1em;
+}
 .faq-header {
   position: sticky;
   top: 0;

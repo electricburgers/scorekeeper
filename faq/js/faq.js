@@ -4,7 +4,7 @@
 // #versionLabel element. Here the same string feeds two spots — the page footer and the
 // Settings panel's settings-meta row — so bumping a release only means editing these two
 // constants instead of hunting down every place the version text is written out by hand.
-const FAQ_VERSION = "v1.14";
+const FAQ_VERSION = "v1.15";
 const FAQ_VERSION_DATE = "22 Aug 2026";
 (function () {
   var text = "FAQ " + FAQ_VERSION + " (" + FAQ_VERSION_DATE + ")";
@@ -247,6 +247,50 @@ function faqSavePrefs(p) {
     window.localStorage.setItem(FAQ_PREFS_KEY, JSON.stringify(p));
   } catch (e) {}
 }
+// ============================== ICON STYLE (pictograph / emoji) ==============================
+// Same Settings > Icon Style toggle as the main app (js/app.js's applyIconStyle), same shared
+// "iconStyle" field in the trivRev6_prefs key, so a choice made on either page carries over to
+// the other. The main app can reassign its ICON_* variables in place because every icon there is
+// built into a template literal at render time; every pictograph on THIS page is static markup
+// that's already in the DOM at load, so the mechanism here is a DOM swap instead: every svg this
+// page draws is tagged data-emoji="<the emoji it replaced>" (see index.html), and toggling to
+// "emoji" replaces each one with a plain text span carrying that emoji, caching the original
+// svg's own outerHTML on the span (span.dataset.pict) so toggling back can restore the exact
+// element rather than needing a second copy of every icon's markup kept in this file.
+function faqApplyIconStyle(style) {
+  const emoji = style === "emoji";
+  if (emoji) {
+    document.querySelectorAll("svg[data-emoji]").forEach((svg) => {
+      const e = svg.getAttribute("data-emoji");
+      const span = document.createElement("span");
+      span.className = "faq-emoji-ph";
+      span.setAttribute("aria-hidden", svg.getAttribute("aria-hidden") || "true");
+      span.dataset.pict = svg.outerHTML;
+      span.textContent = e;
+      svg.replaceWith(span);
+    });
+  } else {
+    document.querySelectorAll("span.faq-emoji-ph").forEach((span) => {
+      const tmp = document.createElement("div");
+      tmp.innerHTML = span.dataset.pict;
+      const svg = tmp.firstElementChild;
+      if (svg) span.replaceWith(svg);
+    });
+  }
+  const btn = document.getElementById("faqIconStyleToggle");
+  if (btn) btn.textContent = emoji ? "Emoji" : "Pictograph";
+}
+function faqSetIconStyle(style) {
+  const p = faqLoadPrefs();
+  p.iconStyle = style === "emoji" ? "emoji" : "pictograph";
+  faqSavePrefs(p);
+  faqApplyIconStyle(p.iconStyle);
+}
+function faqToggleIconStyle() {
+  const p = faqLoadPrefs();
+  faqSetIconStyle(p.iconStyle === "emoji" ? "pictograph" : "emoji");
+}
+
 function faqApplyDisplayPrefs() {
   const p = faqLoadPrefs();
   const theme = ["hc-dark", "hc-light"].includes(p.theme)
@@ -255,6 +299,7 @@ function faqApplyDisplayPrefs() {
   document.documentElement.setAttribute("data-theme", theme);
   const tb = document.getElementById("faqThemeToggle");
   if (tb) tb.textContent = theme === "hc-light" ? "☀️ Light" : "🌑 Dark";
+  faqApplyIconStyle(p.iconStyle === "emoji" ? "emoji" : "pictograph");
   const cbm = p.cbMode || 0;
   if (cbm) document.documentElement.setAttribute("data-cb", String(cbm));
   else document.documentElement.removeAttribute("data-cb");

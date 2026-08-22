@@ -5,6 +5,12 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.75 - 2026-08-22
+- **Icon Style's Shuffle emoji is 🔀, not 🎲.** At the sizes Sort/Reset/Shuffle actually render —
+  the sort-controls row, the standings sort buttons — a die reads as an ambiguous blob where the
+  crossed arrows keep reading as "shuffle" at a glance. `ICON_SHUFFLE_EMOJI`/
+  `ICON_SHUFFLE_TINTED_EMOJI` both change; nothing else about the toggle does.
+
 ## v18.74 - 2026-08-22
 - **The FAQ moved into this repo.** It used to live at `electricburgers/scorekeeper-faq`, a
   separate git repo checked out at `faq/scorekeeper-faq/` and excluded here so the two repos'

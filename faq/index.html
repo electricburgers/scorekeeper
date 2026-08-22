@@ -37,7 +37,7 @@
               viewBox="0 0 24 24"
               aria-hidden="true"
               focusable="false"
-            ><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+             data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
           </button>
         </div>
       </div>
@@ -57,7 +57,7 @@
             title="Close settings"
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"
-              ><line x1="6" y1="6" x2="18" y2="18"></line><line
+               data-emoji="❌"><line x1="6" y1="6" x2="18" y2="18"></line><line
                 x1="18"
                 y1="6"
                 x2="6"
@@ -76,7 +76,7 @@
                 id="faqThemeToggle"
                 onclick="faqToggleTheme()"
               >
-                <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark
+                <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🌙"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark
               </button>
             </div>
           </div>
@@ -166,6 +166,20 @@
               </ul>
             </div>
           </div>
+          <div class="settings-row">
+            <span class="size-label">Icon Style</span>
+            <div class="settings-controls">
+              <button
+                type="button"
+                class="settings-btn"
+                id="faqIconStyleToggle"
+                onclick="faqToggleIconStyle()"
+                title="Swap every drawn pictograph on this page for the platform emoji it replaced"
+              >
+                Pictograph
+              </button>
+            </div>
+          </div>
         </div>
         <div class="settings-panel-foot">
           <span class="settings-meta"
@@ -176,7 +190,7 @@
                 viewBox="0 0 24 24"
                 aria-hidden="true"
                 focusable="false"
-              ><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+               data-emoji="⚠️"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
               Built with Anthropic's Claude AI — double-check details against
               the app yourself.</span
             ></span
@@ -272,13 +286,13 @@
           </summary>
           <div class="faq-a">
             <p>
-              Two options, both under <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top
-              right), Sample Data row. <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong> loads a
+              Two options, both under <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top
+              right), Sample Data row. <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong> loads a
               simulated, fully-scored 11-team game — Event Details filled in,
               every round scored, both wagers resolved, and (deliberately) a
               genuine tie in Final Results — so you can click around every
               screen without setting anything up yourself.
-              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour</strong> is the more hands-on option: a
+              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎓"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour</strong> is the more hands-on option: a
               guided, step-by-step walkthrough of an actual game, start to
               finish. See <a href="#tutorial">Interactive Tutorial</a> below.
             </p>
@@ -360,11 +374,11 @@
               It's a spotlight-style tour: the rest of the screen dims, one
               real control at a time is highlighted with a ring around it, and
               a callout box explains what it does and what to do next. Start
-              it from <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) →
-              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour</strong>, right next to
-              <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong>. First-time visitors with no
+              it from <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) →
+              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎓"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour</strong>, right next to
+              <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong>. First-time visitors with no
               game in progress also get offered it automatically — a small
-              "<svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> New here? Take the 2-minute tour." card appears where the
+              "<svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎓"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> New here? Take the 2-minute tour." card appears where the
               resume banner would normally be, with Take the Tour and Skip
               buttons. That auto-offer only ever shows once; after that,
               taking the tour is always available from Settings whenever you
@@ -417,7 +431,7 @@
           <div class="faq-a">
             <p>
               Starting it swaps in the throwaway practice game and asks you to
-              confirm first, same as <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example does. What happens to your
+              confirm first, same as <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example does. What happens to your
               real game afterward depends on how the tour ends:
               <strong>Skip Tutorial</strong> (available on every step but the
               last) restores your real game exactly as it was, untouched.
@@ -555,7 +569,7 @@
             <p>
               Once scoring starts, Event Details locks so it can't drift
               mid-game — a wager gets scored, a team's added, whatever the
-              trigger, the section shows a <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> note with an
+              trigger, the section shows a <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔒"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> note with an
               <strong>Unlock to fix it</strong> link right there in case of a
               typo. That link does the same thing as the
               <strong>Edit Locked Fields</strong> toggle in Advanced Settings —
@@ -716,7 +730,7 @@
           <div class="faq-a">
             <p>
               The app watches every question as it's scored. If
-              <em>every</em> team gets a question right, a gold "<svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg> Beer Round!"
+              <em>every</em> team gets a question right, a gold "<svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🍺"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg> Beer Round!"
               banner lights up across that question automatically. Purely a fun
               celebratory flourish; it doesn't change scoring.
             </p>
@@ -862,7 +876,7 @@
       <section class="faq-section" id="standings">
         <h2 class="faq-section-title">Scores &amp; Standings</h2>
         <p class="faq-section-sub">
-          The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg> Scores panel tracks every team's running total the whole game.
+          The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📊"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg> Scores panel tracks every team's running total the whole game.
         </p>
 
         <div class="faq-shot">
@@ -876,14 +890,14 @@
 
         <details class="faq-item">
           <summary>
-            What are the Entry / <svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg> RAND / ↑ Asc / ↓ Desc buttons in the Scores
+            What are the Entry / <svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔀"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg> RAND / ↑ Asc / ↓ Desc buttons in the Scores
             panel?<span class="faq-q-arrow">▶</span>
           </summary>
           <div class="faq-a">
             <p>
               Four ways to order the live scoreboard: <strong>Entry</strong> is
               the order teams were added at the start of the event,
-              <strong><svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg> RAND</strong> shuffles them into a random order (handy
+              <strong><svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔀"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg> RAND</strong> shuffles them into a random order (handy
               for reading results aloud without always starting with the same
               team), <strong>↑ Asc</strong> (Ascending) and
               <strong>↓ Desc</strong> (Descending) sort by current score.
@@ -985,7 +999,7 @@
             <p>
               First tiebreak is Score Guess closeness — whichever team's guess
               landed nearer their actual (bonus-adjusted) score ranks higher and
-              is marked "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg> closer". If their guesses are <em>also</em> equally
+              is marked "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><polyline points="5,13 10,18 20,6"></polyline></svg> closer". If their guesses are <em>also</em> equally
               close (including two teams that both left the guess blank), that's
               a genuine, unbreakable tie, and both teams share the exact same
               place — the next distinct team after them still gets the very next
@@ -1056,7 +1070,7 @@
 
         <details class="faq-item">
           <summary>
-            What happens when I click "<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg> Start Drumroll"?<span
+            What happens when I click "<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🥁"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg> Start Drumroll"?<span
               class="faq-q-arrow"
               >▶</span
             >
@@ -1117,16 +1131,16 @@
           <div class="faq-a">
             <ul>
               <li>
-                <strong><svg class="icon-ui icon-sheet" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="5" width="20" height="14" rx="2"/><path class="sh-head" d="M4 5h16a2 2 0 0 1 2 2v3H2V7a2 2 0 0 1 2-2Z"/><path d="M2 14.5h20"/><path d="M8.5 10v9"/><path d="M15.5 10v9"/></svg> XLSX</strong> — fills in the official
+                <strong><svg class="icon-ui icon-sheet" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📈"><rect x="2" y="5" width="20" height="14" rx="2"/><path class="sh-head" d="M4 5h16a2 2 0 0 1 2 2v3H2V7a2 2 0 0 1 2-2Z"/><path d="M2 14.5h20"/><path d="M8.5 10v9"/><path d="M15.5 10v9"/></svg> XLSX</strong> — fills in the official
                 spreadsheet template (Location, Date, Quiz ID, Host, every team's
                 wagers and totals) and downloads it.
               </li>
               <li>
-                <strong><svg class="icon-ui icon-tinted icon-pdf" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg> PDF</strong> — a printable, easily readable scoresheet, with Location/Date/Quiz ID/Host header and full
+                <strong><svg class="icon-ui icon-tinted icon-pdf" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📕"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg> PDF</strong> — a printable, easily readable scoresheet, with Location/Date/Quiz ID/Host header and full
                 game results.
               </li>
               <li>
-                <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> JD Upload Form</strong> — opens JD's
+                <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔗"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> JD Upload Form</strong> — opens JD's
                 results-submission form in a new tab; the scorekeeper app stays open
                 and untouched.
               </li>
@@ -1248,19 +1262,19 @@
 
         <details class="faq-item">
           <summary>
-            What do <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load (top toolbar) actually save?<span
+            What do <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load (top toolbar) actually save?<span
               class="faq-q-arrow"
               >▶</span
             >
           </summary>
           <div class="faq-a">
             <p>
-              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save</strong> downloads the entire game as a JSON file
+              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save</strong> downloads the entire game as a JSON file
               — every Event Details field, every team, every round, bonus, and
               wager score, exactly as the app itself would need to reload it.
               The filename uses the venue name and date, e.g.
               <code>Man Skirt Brewery - 04-13-2026-save.json</code>.
-              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load</strong> reads that same kind of file back in and
+              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load</strong> reads that same kind of file back in and
               picks up exactly where it left off — including a game saved from a
               different browser or device entirely.
             </p>
@@ -1354,7 +1368,7 @@
           <div class="faq-a">
             <p>
               Every change autosaves to the browser as it happens. Reopening the
-              app shows a "<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Saved session found" banner with two choices:
+              app shows a "<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚠️"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Saved session found" banner with two choices:
               <strong>Resume</strong> restores everything exactly as it was —
               Event Details, every team, every score, Craft Prize state — and
               <strong>New Game</strong> discards it and starts clean.
@@ -1407,7 +1421,7 @@
       <!-- ============================== SETTINGS ============================== -->
       <section class="faq-section" id="settings">
         <h2 class="faq-section-title">Settings</h2>
-        <p class="faq-section-sub">The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> gear icon, top right.</p>
+        <p class="faq-section-sub">The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> gear icon, top right.</p>
 
         <div class="faq-shot">
           <img
@@ -1439,14 +1453,14 @@
                 for the on-screen question timer, from 1:00 to 15:00.
               </li>
               <li>
-                <strong>Sample Data</strong> — <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example loads a
-                finished sample game to browse; <svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour walks you
+                <strong>Sample Data</strong> — <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example loads a
+                finished sample game to browse; <svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎓"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour walks you
                 through playing one. See
                 <a href="#getting-started">Getting Started</a> and
                 <a href="#tutorial">Interactive Tutorial</a>.
               </li>
               <li>
-                <strong>Help</strong> — the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> FAQ link that opens this page.
+                <strong>Help</strong> — the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="❓"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> FAQ link that opens this page.
               </li>
               <li>
                 <strong>Color Vision</strong> — Off / Red-Green / Blue-Yellow
@@ -1507,9 +1521,9 @@
           </summary>
           <div class="faq-a">
             <p>
-              Open <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) and click the
+              Open <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) and click the
               <strong>Theme</strong> button — it reads
-              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark</strong> or <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></svg> Light</strong> depending on
+              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🌙"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark</strong> or <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="☀️"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></svg> Light</strong> depending on
               which one is active, and clicking it flips straight to the other.
               The choice is saved and applied when the app opens.
             </p>
@@ -1529,18 +1543,40 @@
               setting (also in main Settings) swaps which colors are used for
               pass/fail indicators for red-green or blue-yellow color vision.
               See
-              <a href="#settings">Settings</a> above. The four panels below
-              are a fixed comparison image — they always show the same crop
-              regardless of your own theme, unlike the rest of this page's
-              screenshots (see <a href="#appearance">Light Mode &amp; Dark
-              Mode</a> for that).
+              <a href="#settings">Settings</a> above. Each option below is its
+              own four-panel image, all four showing a different part of the
+              app in that one mode — so you can see everywhere a mode changes
+              things at once instead of hunting for it screen by screen. These
+              are a fixed comparison, not live screenshots — they always show
+              the same crop regardless of your own theme, unlike the rest of
+              this page's screenshots (see <a href="#appearance">Light Mode
+              &amp; Dark Mode</a> for that).
             </p>
-            <div class="faq-shot">
-              <img
-                src="screenshots/color-vision-four-panel.webp"
-                alt="Four-panel comparison: the same wager row in Off, Red-Green, and Blue-Yellow color vision modes, plus a legend panel listing every swapped color pair"
-                onerror="faqShotFallback(this,'Color Vision comparison — Off, Red-Green, Blue-Yellow, and a legend of what swaps')"
-              />
+            <div class="faq-shot-trio">
+              <div class="faq-shot">
+                <img
+                  src="screenshots/color-vision-off.webp"
+                  alt="Off, four panels: wager correct/incorrect buttons, Bonus/NJCB checkboxes, the Beer Round section, and the Final Results tie badge"
+                  onerror="faqShotFallback(this,'Color Vision: Off — wager buttons, checkboxes, Beer Round, tie badge')"
+                />
+                <div class="faq-shot-caption">Off</div>
+              </div>
+              <div class="faq-shot">
+                <img
+                  src="screenshots/color-vision-red-green.webp"
+                  alt="Red-Green, four panels: wager correct/incorrect buttons in blue/orange, unchanged Bonus/NJCB checkboxes, unchanged Beer Round section, and the tie badge in blue"
+                  onerror="faqShotFallback(this,'Color Vision: Red-Green — wager buttons, checkboxes, Beer Round, tie badge')"
+                />
+                <div class="faq-shot-caption">Red-Green</div>
+              </div>
+              <div class="faq-shot">
+                <img
+                  src="screenshots/color-vision-blue-yellow.webp"
+                  alt="Blue-Yellow, four panels: wager buttons with a green Sort button, Bonus/NJCB checkboxes swapped to magenta/green, the Beer Round section swapped to magenta, and an unchanged green tie badge"
+                  onerror="faqShotFallback(this,'Color Vision: Blue-Yellow — wager buttons, checkboxes, Beer Round, tie badge')"
+                />
+                <div class="faq-shot-caption">Blue-Yellow</div>
+              </div>
             </div>
           </div>
         </details>
@@ -1704,7 +1740,7 @@
           <div class="faq-a">
             <p>
               Adds a live correct/incorrect percentage next to each question's
-              Sort/Reset buttons — e.g. "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polyline points="5,13 10,18 20,6"></polyline></svg> 3/5 (60%)" — so you can see at a
+              Sort/Reset buttons — e.g. "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><polyline points="5,13 10,18 20,6"></polyline></svg> 3/5 (60%)" — so you can see at a
               glance how a question is trending without scrolling through every
               team's row.
             </p>
@@ -1759,7 +1795,7 @@
           </summary>
           <div class="faq-a">
             <p>
-              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg> <strong>Copy</strong> and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> <strong>TXT</strong> export the
+              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📋"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg> <strong>Copy</strong> and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📄"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> <strong>TXT</strong> export the
               craft partner, its town, and the eligible team names (Exclude Top
               already applied) as plain text — one name per line — so the actual
               drawing can be handed off to a separate drumroll or name-picker
@@ -1785,7 +1821,7 @@
               setup to a different device or browser without touching any game
               in progress there. See
               <a href="#manual-save-load">Manual Save &amp; Load</a> for how
-              this compares to the toolbar's own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save / <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load, which
+              this compares to the toolbar's own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save / <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load, which
               carries the game itself.
             </p>
           </div>

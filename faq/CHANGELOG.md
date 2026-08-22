@@ -2,6 +2,32 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.15] - 22 Aug 2026
+
+### Added
+
+- **Settings > Icon Style, same Pictograph/Emoji toggle the main app got.** Every one of this
+  page's 38 drawn pictographs — content and settings-panel icons alike — is tagged
+  `data-emoji="…"` in the markup; toggling swaps each `<svg>` for a plain text span holding that
+  emoji (caching the svg's own markup on the span so switching back restores the exact element,
+  rather than keeping a second copy of every icon in this file). Shares the same `iconStyle` field
+  in `trivRev6_prefs` the main app's toggle writes, so a choice made on either page carries over
+  to the other, same as Theme/Color Vision/Text Size already do.
+
+### Changed
+
+- **The Color Vision entry is three four-panel images now, one per mode, not one four-panel
+  image comparing the three modes.** Each image — Off, Red-Green, Blue-Yellow — shows four
+  DIFFERENT parts of the app changed by that one mode: the real wager correct/incorrect buttons
+  (an actual screenshot crop), the Bonus/NJCB team checkboxes, the Beer Round section, and the
+  Final Results tie badge, each panel's colors pulled directly from that mode's own CSS tokens
+  (`--item-border`, `--njcb-border`, `--beer-bg`/`--beer-border`, `--badge-green-fg`) rather than
+  screenshotted live, since three of the four never render together on one screen at once. This
+  also makes the "nothing changes here" cases visible on their own terms: the checkboxes and Beer
+  Round panels are pixel-identical between Off and Red-Green (that mode only swaps green/red),
+  and the tie badge is identical between Off and Blue-Yellow (that mode only swaps the blue/gold
+  pair) — each image shows its mode's real footprint, not a padded four-for-four.
+
 ## [1.14] - 22 Aug 2026
 
 ### Changed
