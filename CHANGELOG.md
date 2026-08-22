@@ -5,6 +5,15 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
+## v18.85 - 2026-08-22
+- **Advanced Settings rows lost the icons v18.84 just gave them.** Ten rows each carrying their own
+  small pictograph/emoji pair, on top of the buttons and range slider each row already had, read as
+  clutter rather than help — the reorganized grouping from v18.84 was doing the actual work of
+  making the list easier to scan, and the icons were competing with it rather than adding to it.
+  Removed the SVGs, the row ids that existed only to target them, and their `STATIC_ICON_TARGETS`
+  entries (app.js); every Advanced Settings row is back to a plain text label, same grouped order
+  as v18.84.
+
 ## v18.84 - 2026-08-22
 - **Settings and Advanced Settings are grouped by what a user actually comes here to do, instead of
   the order each row happened to ship in.** Regular settings now read Theme → Size → Icon Style →
