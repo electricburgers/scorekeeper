@@ -10,6 +10,15 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.37 - 2026-08-23
+- **Fixed the FAQ's collapse/expand arrow**: it used to be a plain "▶" glyph sitting on the right
+  of each question — inconsistent with every other collapse/expand affordance in the main app
+  (`.chevron`/`.q-chevron`/`.standings-chevron`), which all use the same "▼" character on the
+  *left* of the label it toggles, and which some platforms rendered as a colorful play-button-style
+  emoji rather than the app's plain monochrome triangle. Now uses that same "▼" glyph, moved to the
+  left (`order:-1`, so all 68 FAQ entries didn't need their markup touched), with the same
+  rotate-on-toggle convention the rest of the app uses.
+
 ## v19.36 - 2026-08-23
 - **Fixed mobile Settings panel's resting gap and scroll-clip point**: the header's border-line
   used to be followed by a fixed 16px of dead black space that lived *outside* the scrolling area

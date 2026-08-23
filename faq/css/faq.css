@@ -397,7 +397,10 @@ mark.faq-hl {
   color: var(--text-primary);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* flex-start, not space-between: the arrow now leads on the left (.faq-q-arrow's order:-1
+     below), so the two items should sit right next to each other with just the row's own gap
+     between them, not be stretched to opposite ends of the row. */
+  justify-content: flex-start;
   gap: 10px;
   -webkit-tap-highlight-color: transparent;
 }
@@ -410,24 +413,33 @@ mark.faq-hl {
 /* Wraps the question text as the summary row's ONE other flex item, alongside .faq-q-arrow.
    Without it, any inline pictograph/emoji sitting mid-question (Icon Style's data-emoji svgs —
    e.g. "What happens when I click 🥁 Start Drumroll?") split the row into as many anonymous flex
-   items as there were runs of text and elements, and .faq-item summary's own
-   justify-content:space-between then spread THAT many items evenly across the row instead of
-   just pushing the arrow to the end — the icon (and everything after it) landing wildly
-   separated from its own sentence. flex:1/min-width:0 is what lets it still wrap normally
-   instead of forcing the row wider than its container once it's a flex item rather than plain
-   inline text. */
+   items as there were runs of text and elements, and each of those extra items would claim its
+   own share of space instead of just flowing after the arrow as one block. flex:1/min-width:0 is
+   what lets it still wrap normally instead of forcing the row wider than its container once it's
+   a flex item rather than plain inline text. */
 .faq-q-text {
   flex: 1 1 auto;
   min-width: 0;
 }
+/* Was a plain "▶" glyph sitting after the question text, on the right — inconsistent with every
+   other collapse/expand affordance in the main app (.chevron/.q-chevron/.standings-chevron, all
+   the same "▼" character, left of the label they toggle). Now matches: same glyph, and moved to
+   the left via order:-1 rather than reordering the <span> in all 68 FAQ entries' markup (which
+   would've meant touching every question in this file for a purely visual change, and risking a
+   mismatched pair somewhere in the process). rotate(-90deg) is the resting/closed state — a
+   "▼" turned -90deg points right, i.e. "expand me", same convention .chevron uses for its
+   collapsed state — flipping to rotate(0) (pointing down) once open, same meaning as .chevron's
+   own un-rotated resting state, which is always the "already expanded" one there. */
 .faq-q-arrow {
-  font-size: 0.75rem;
+  order: -1;
+  font-size: 0.85rem;
   color: var(--text-muted);
   transition: transform 0.15s ease;
+  transform: rotate(-90deg);
   flex-shrink: 0;
 }
 .faq-item[open] .faq-q-arrow {
-  transform: rotate(90deg);
+  transform: rotate(0deg);
 }
 .faq-item summary:focus-visible {
   outline: 2px solid var(--accent-cyan);

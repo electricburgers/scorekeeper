@@ -2,6 +2,15 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.32] - 23 Aug 2026
+
+### Changed
+
+- **Collapse/expand arrow**: replaced the plain "▶" glyph on the right of each question (which
+  some platforms rendered as a colorful play-button emoji) with the same "▼" the main app uses for
+  every other collapse/expand toggle, moved to the left of the question text to match, with the
+  same rotate-on-toggle behavior.
+
 ## [1.31] - 23 Aug 2026
 
 ### Added
