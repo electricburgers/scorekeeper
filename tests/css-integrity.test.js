@@ -305,3 +305,163 @@ test("css/styles.css's mobile .settings-panel-head keeps the iOS GPU-layer-promo
   assert.match(withContent[1], /backface-visibility:hidden/);
   assert.match(withContent[1], /-webkit-backface-visibility:hidden/);
 });
+
+// ============================================================================
+// Five new tests (per this session's "think about and describe... implement all of these"),
+// plus the double-tap-zoom guard requested alongside them.
+// ============================================================================
+
+// ---- Double-tap-zoom: body{touch-action:manipulation} (already relied on by every button via
+// the CSS Touch Action spec's ancestor-intersection rule) plus the explicit, redundant
+// button/[role="button"] rule added this session as a self-contained belt-and-suspenders copy —
+// see the comment above it in css/styles.css for why relying on the ancestor rule alone was
+// judged too easy to accidentally defeat. ----
+test("css/styles.css: body has touch-action:manipulation (prevents a double-tap being read as double-tap-to-zoom)", () => {
+  const src = read("css/styles.css");
+  const m = src.match(/\bbody\{([^}]*)\}/);
+  assert.ok(m, "no body{...} rule found");
+  assert.match(m[1], /touch-action:manipulation/);
+});
+test('css/styles.css: every actual <button>/[role="button"] gets touch-action:manipulation explicitly, not only by inheriting body\'s', () => {
+  const src = read("css/styles.css");
+  assert.match(src, /button,\[role="button"\]\{touch-action:manipulation\}/);
+});
+test("css/styles.css has no rule that sets touch-action to auto/pan-x/pan-y (either would defeat the double-tap-zoom fix for anything under it — .sheet-grab-handle/.mobile-scores-peek's deliberate drag-gesture opt-out uses touch-action:none instead, which is stricter, not more permissive)", () => {
+  const src = read("css/styles.css");
+  assert.doesNotMatch(src, /touch-action:\s*(auto|pan-x|pan-y)\b/);
+});
+
+// ---- Every transform:translateZ(0) GPU-layer-promotion fix (see .header/.mini-progress/
+// .audit-head/.settings-panel-head's own comments — a compositing-layer-boundary artifact next to
+// -webkit-overflow-scrolling:touch that surfaces as visible ghosting on real iOS Safari, invisible
+// to every browser this test suite or the preview tool can actually check) is applied as the full
+// 4-declaration idiom together, not just transform on its own — a partial copy would silently
+// reintroduce the exact ghosting bug this session already chased down twice. ----
+test("css/styles.css: every transform:translateZ(0) site also has -webkit-transform, backface-visibility, and -webkit-backface-visibility in the same rule", () => {
+  const root = parse("css/styles.css");
+  const offenders = [];
+  root.walkRules((rule) => {
+    const props = new Set();
+    let hasTranslateZ = false;
+    rule.walkDecls((decl) => {
+      props.add(decl.prop.toLowerCase());
+      if (/translateZ\(0\)/.test(decl.value)) hasTranslateZ = true;
+    });
+    if (!hasTranslateZ) return;
+    for (const required of [
+      "transform",
+      "-webkit-transform",
+      "backface-visibility",
+      "-webkit-backface-visibility",
+    ]) {
+      if (!props.has(required))
+        offenders.push(`${rule.selector} (line ${rule.source.start.line}) missing ${required}`);
+    }
+  });
+  assert.deepEqual(offenders, []);
+});
+
+// ---- Every class a js/*.js file toggles onto an element with classList.add/toggle/remove has a
+// matching CSS selector somewhere — swept automatically off the literal class-name arguments in
+// every top-level js/*.js file, rather than a hand-maintained list (like the .icon-* test above)
+// that can drift the same way the class names themselves can. A renamed/removed CSS rule for a
+// class still toggled from JS would otherwise fail completely silently: the class lands on the
+// element exactly as intended, nothing throws, it just does nothing visually. ----
+test("every class referenced by classList.add/toggle/remove(...) in a top-level js/*.js file has a matching CSS selector", () => {
+  const jsDir = path.join(ROOT, "js");
+  const jsFiles = fs
+    .readdirSync(jsDir)
+    .filter((f) => f.endsWith(".js"))
+    .map((f) => "js/" + f);
+  const classes = new Set();
+  for (const f of jsFiles) {
+    for (const m of read(f).matchAll(
+      /classList\.(?:add|toggle|remove)\(\s*"([a-zA-Z0-9_-]+)"/g,
+    )) {
+      classes.add(m[1]);
+    }
+  }
+  assert.ok(classes.size > 10, "expected to find several classList.add/toggle/remove class names");
+  const cssSrc = CSS_FILES.map((f) => read(f)).join("\n");
+  const missing = [...classes].filter((cls) => {
+    const re = new RegExp("\\." + cls.replace(/-/g, "\\-") + "(?![a-zA-Z0-9_-])");
+    return !re.test(cssSrc);
+  });
+  assert.deepEqual(missing, []);
+});
+
+// ---- Every animation:name shorthand resolves to a @keyframes name actually defined somewhere —
+// a typo'd or renamed keyframes name fails silently (the element just never animates), the same
+// invisible-no-op shape as the classList check above. ----
+test("every animation:<name> in css/styles.css has a matching @keyframes <name> definition", () => {
+  const root = parse("css/styles.css");
+  const defined = new Set();
+  root.walkAtRules("keyframes", (rule) => defined.add(rule.params.trim()));
+  const missing = [];
+  root.walkDecls("animation", (decl) => {
+    const name = decl.value.trim().split(/\s+/)[0];
+    if (name === "none") return; // animation:none deliberately clears an inherited animation
+    if (!defined.has(name)) missing.push(`${name} (line ${decl.source.start.line})`);
+  });
+  assert.ok(defined.size > 3, "expected to find several @keyframes definitions");
+  assert.deepEqual(missing, []);
+});
+
+// ---- !important is a specificity escape hatch, not a design pattern — pinned to the exact,
+// already-reviewed set it's used for today (mostly deliberate "this state always wins" overrides:
+// .btn-danger/.btn-accent's solid colors beating a more specific hover rule elsewhere, the
+// beer-round highlight beating the row's own base styling, col-resize's cursor beating whatever
+// the pointer is currently over) so a NEW one shows up as a failing test — a prompt to ask whether
+// the specificity fight it's papering over is worth fixing at the root instead, the same judgment
+// call this exact list already got, rather than silently accumulating. ----
+test("css/styles.css uses !important only in the known, already-reviewed set of overrides", () => {
+  const root = parse("css/styles.css");
+  const found = [];
+  root.walkDecls((decl) => {
+    if (decl.important) found.push(`${decl.parent.selector} { ${decl.prop} }`);
+  });
+  const expected = [
+    ".btn-accent { background }",
+    ".btn-accent { color }",
+    ".btn-accent { border-color }",
+    ".btn-accent { font-weight }",
+    ".btn-danger { border-color }",
+    ".btn-danger { color }",
+    ".btn-danger:hover { background }",
+    "body.col-resizing { cursor }",
+    "body.col-resizing { user-select }",
+    "body.col-resizing * { cursor }",
+    "body.col-resizing * { user-select }",
+    ".col-right { width }",
+    ".check-label { margin-bottom }",
+    ".question-block.beer-round { background }",
+    ".question-block.beer-round { border-left-color }",
+    ".question-block.beer-round { opacity }",
+    ".special-section.beer-round { background }",
+    ".special-section.beer-round { border-color }",
+    ".special-section.beer-round h3 { color }",
+    ".sw-header h3 { margin-bottom }",
+    ".question-block.beer-round { border-color }",
+    ".fr-diff-win { color }",
+    ".fr-diff-win { font-weight }",
+  ];
+  assert.deepEqual([...found].sort(), [...expected].sort());
+});
+
+// ---- Mobile breakpoints only ever use this project's fixed, intentional set of pixel values —
+// {480, 600, 601, 768, 769} — where 600/601 and 768/769 are deliberate max-width/min-width
+// complementary pairs (one rule ends exactly where its counterpart begins, no 1px gap or overlap)
+// and 480 is a further sub-breakpoint nested inside the ≤600px mobile block. A one-off value like
+// 599px or 767px typo'd into a new rule wouldn't line up with its neighbor and would leave a
+// dead pixel gap where neither rule's styles apply — the same shape of bug the mobile Settings
+// panel gap fix (this session) chased down, just in a media query instead of a padding value. ----
+test("css/styles.css only uses the project's known set of @media width breakpoints", () => {
+  const src = read("css/styles.css");
+  const KNOWN = new Set([480, 600, 601, 768, 769]);
+  const found = [...src.matchAll(/@media\s*\(\s*(?:min|max)-width:\s*(\d+)px/g)].map(
+    (m) => Number(m[1]),
+  );
+  assert.ok(found.length > 3, "expected to find several @media width breakpoints");
+  const unknown = found.filter((px) => !KNOWN.has(px));
+  assert.deepEqual(unknown, []);
+});

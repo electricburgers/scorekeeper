@@ -1360,3 +1360,352 @@ describe("Update check (checkForUpdate)", () => {
     assert.equal(evalIn(window, "latestVersion"), null);
   });
 });
+
+// ============================================================================
+// Five new tests (per this session's "think about and describe... implement all of these").
+// ============================================================================
+
+// ---- Static TDZ sweep — generalizes the exact bug hit twice now (BONUS_Q_STYLE, then
+// latestVersion, both js/app.js — see their own top-of-file comments) into a real test instead
+// of needing a third live crash to catch the next one. applyPrefs() runs synchronously at
+// script-parse time (the `else applyPrefs();` at the very end of js/app.js — see its own
+// comment), so any top-level `const`/`let` in js/app.js that a function reachable from
+// applyPrefs() reads has to be declared BEFORE that line, or it's still in its temporal dead
+// zone the first time the page ever loads. Reachability is a static call-graph BFS over
+// js/app.js's own top-level `function` declarations (the ones a load-time call chain can
+// actually reach — cross-file calls into shared-ui.js/storage.js/etc. don't need checking here,
+// since every other <script> tag has already fully run, top to bottom, by the time js/app.js
+// itself starts executing).
+describe("Static TDZ sweep: applyPrefs()'s load-time call chain (js/app.js)", () => {
+  const src = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+
+  function extractTopLevelFunctions(text) {
+    const map = new Map();
+    const re = /^function\s+([A-Za-z_$][A-Za-z0-9_$]*)\s*\(/gm;
+    let m;
+    while ((m = re.exec(text))) {
+      const braceStart = text.indexOf("{", m.index);
+      if (braceStart === -1) continue;
+      let depth = 0,
+        i = braceStart;
+      for (; i < text.length; i++) {
+        if (text[i] === "{") depth++;
+        else if (text[i] === "}") {
+          depth--;
+          if (depth === 0) break;
+        }
+      }
+      map.set(m[1], { body: text.slice(braceStart, i + 1) });
+    }
+    return map;
+  }
+  function topLevelDecls(text) {
+    const decls = new Map(); // name -> char offset of the `const`/`let` keyword
+    const re = /^(?:const|let)\s+([A-Za-z_$][A-Za-z0-9_$]*)\s*[=,;]/gm;
+    let m;
+    while ((m = re.exec(text))) decls.set(m[1], m.index);
+    return decls;
+  }
+  // Strips string/template literal and comment contents (but keeps `${...}` interpolation, since
+  // an identifier read inside one is a real read) so identifier-matching below doesn't trip over
+  // prose in a string that happens to spell a variable's name.
+  function stripNonCode(text) {
+    return text
+      .replace(/\/\*[\s\S]*?\*\//g, " ")
+      .replace(/\/\/[^\n]*/g, " ")
+      .replace(/`(?:\\.|\$\{[^}]*\}|[^`\\])*`/g, (m) =>
+        (m.match(/\$\{[^}]*\}/g) || []).join(" "),
+      )
+      .replace(/"(?:\\.|[^"\\])*"/g, '""')
+      .replace(/'(?:\\.|[^'\\])*'/g, "''");
+  }
+
+  const funcs = extractTopLevelFunctions(src);
+  const decls = topLevelDecls(src);
+  const entryMatch = [...src.matchAll(/^else applyPrefs\(\);/gm)].pop();
+  it("finds applyPrefs()'s synchronous load-time entry point (`else applyPrefs();` at end of file)", () => {
+    assert.ok(entryMatch, "expected `else applyPrefs();` at the end of js/app.js");
+  });
+  it("finds applyPrefs and a substantial top-level function set to search", () => {
+    assert.ok(funcs.has("applyPrefs"), "applyPrefs() itself not found");
+    assert.ok(funcs.size > 20, "expected many top-level functions in js/app.js");
+  });
+
+  const entryIndex = entryMatch ? entryMatch.index : src.length;
+  // BFS over the call graph starting at applyPrefs, following any identifier-followed-by-"("
+  // that names another top-level function in this same file.
+  const reachable = new Set();
+  const queue = ["applyPrefs"];
+  while (queue.length) {
+    const name = queue.pop();
+    if (reachable.has(name)) continue;
+    reachable.add(name);
+    const f = funcs.get(name);
+    if (!f) continue;
+    const code = stripNonCode(f.body);
+    for (const m of code.matchAll(/\b([A-Za-z_$][A-Za-z0-9_$]*)\s*\(/g)) {
+      if (funcs.has(m[1]) && !reachable.has(m[1])) queue.push(m[1]);
+    }
+  }
+
+  it("every top-level const/let read by a function reachable from applyPrefs() is declared before applyPrefs()'s own load-time call", () => {
+    const violations = [];
+    for (const name of reachable) {
+      const f = funcs.get(name);
+      if (!f) continue;
+      const code = stripNonCode(f.body);
+      const read = new Set(
+        [...code.matchAll(/\b([A-Za-z_$][A-Za-z0-9_$]*)\b/g)].map((m) => m[1]),
+      );
+      for (const id of read) {
+        if (!decls.has(id)) continue;
+        if (decls.get(id) > entryIndex) {
+          violations.push(`${name}() reads ${id}, declared after the load-time applyPrefs() call`);
+        }
+      }
+    }
+    assert.deepEqual(violations, []);
+  });
+});
+
+// ---- Settings round-trip sweep — one systematic test instead of a bespoke persistence test per
+// toggle. For each control: change it, then simulate a reload by calling applyPrefs() again (the
+// same real load-time sync function tested above, and the same "call applyPrefs() again against
+// whatever's in localStorage now" pattern the theme-migration tests above already use) after
+// first clobbering the DOM's own reflection of it — so this is actually testing that the
+// PERSISTED value round-trips through a reload, not just that the toggle function's own
+// synchronous DOM update worked.
+describe("Settings round-trip: every Settings control's change survives reapplying prefs (reload-equivalent)", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+
+  it("Theme", () => {
+    window.toggleTheme();
+    const theme = window.document.documentElement.getAttribute("data-theme");
+    window.document.documentElement.setAttribute("data-theme", "bogus");
+    evalIn(window, "applyPrefs()");
+    assert.equal(window.document.documentElement.getAttribute("data-theme"), theme);
+  });
+  it("Icon Style", () => {
+    window.toggleIconStyle();
+    const label = window.document.getElementById("iconStyleToggle").innerHTML;
+    window.document.getElementById("iconStyleToggle").innerHTML = "bogus";
+    evalIn(window, "applyPrefs()");
+    assert.equal(window.document.getElementById("iconStyleToggle").innerHTML, label);
+  });
+  it("Row Density", () => {
+    window.toggleDensity();
+    const text = window.document.getElementById("densityToggle").textContent;
+    const attr = window.document.documentElement.getAttribute("data-density");
+    window.document.getElementById("densityToggle").textContent = "bogus";
+    window.document.documentElement.removeAttribute("data-density");
+    evalIn(window, "applyPrefs()");
+    assert.equal(window.document.getElementById("densityToggle").textContent, text);
+    assert.equal(window.document.documentElement.getAttribute("data-density"), attr);
+  });
+  it("Row Zebra Stripes", () => {
+    window.toggleStripe();
+    const text = window.document.getElementById("stripeToggle").textContent;
+    window.document.getElementById("stripeToggle").textContent = "bogus";
+    evalIn(window, "applyPrefs()");
+    assert.equal(window.document.getElementById("stripeToggle").textContent, text);
+  });
+  it("Color Vision", () => {
+    const li = window.document.querySelector('#cbSelect li[data-value="2"]');
+    window.selectCvOption(li, "2");
+    const attr = window.document.documentElement.getAttribute("data-cb");
+    window.document.documentElement.removeAttribute("data-cb");
+    evalIn(window, "applyPrefs()");
+    assert.equal(window.document.documentElement.getAttribute("data-cb"), attr);
+    // restore for any later test in this process
+    window.selectCvOption(
+      window.document.querySelector('#cbSelect li[data-value="0"]'),
+      "0",
+    );
+  });
+  it("Question Timer default duration", () => {
+    window.setQtDurationSec(420);
+    const sec = evalIn(window, "qtDurationSec");
+    assert.equal(sec, 420);
+    evalIn(window, "qtDurationSec = 60;");
+    evalIn(window, "applyPrefs()");
+    // applyPrefs() itself doesn't re-sync qtDurationSec (only setQtDurationSec/storage.js's own
+    // restore path does, on load) — this asserts the PERSISTED value is what a real reload's own
+    // restore path reads, the same TRStore.getItem(PREFS_KEY) round-trip storage.js performs.
+    const persisted = JSON.parse(evalIn(window, "TRStore.getItem(PREFS_KEY)"));
+    assert.equal(persisted.qtDurationSec, 420);
+  });
+});
+
+// ============================================================================
+// Save/Load round-trip — nothing above exercised loadFromFile() at all (only Save/Export). A
+// real File is constructed and fed through the real FileReader path exactly as a host's file
+// picker would, guarding the whole format from silent data loss as team/round fields get added.
+// ============================================================================
+describe("Save/Load round-trip", () => {
+  it("a file exported from gameState loads back to a deep-equal gameState", async () => {
+    const window = await loadAppWindow();
+    try {
+      evalIn(
+        window,
+        `gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+         gameState.meta.hostName = "Round-Trip File Test";
+         renderAll();`,
+      );
+      const original = evalIn(window, "JSON.stringify(gameState)");
+      const file = new window.File([original], "save.json", {
+        type: "application/json",
+      });
+      evalIn(window, "gameState = freshState(); renderAll();");
+      assert.notEqual(evalIn(window, "JSON.stringify(gameState)"), original);
+      window.loadFromFile({ target: { files: [file], value: "" } });
+      await new Promise((r) => setTimeout(r, 50));
+      const restored = evalIn(window, "JSON.stringify(gameState)");
+      assert.equal(restored, original);
+    } finally {
+      window.close();
+    }
+  });
+
+  it("loading a file with invalid JSON leaves gameState untouched and shows an alert, rather than throwing", async () => {
+    const window = await loadAppWindow();
+    try {
+      evalIn(
+        window,
+        "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();",
+      );
+      const before_ = evalIn(window, "JSON.stringify(gameState)");
+      const file = new window.File(["not valid json{{{"], "bad.json", {
+        type: "application/json",
+      });
+      assert.doesNotThrow(() =>
+        window.loadFromFile({ target: { files: [file], value: "" } }),
+      );
+      await new Promise((r) => setTimeout(r, 50));
+      assert.equal(evalIn(window, "JSON.stringify(gameState)"), before_);
+      assert.equal(
+        window.document.getElementById("confirmOverlay").classList.contains("show"),
+        true,
+      );
+      window.document.getElementById("confirmOkBtn").click();
+    } finally {
+      window.close();
+    }
+  });
+});
+
+// ============================================================================
+// Render idempotency — calling the real render entry points twice with no state change in
+// between must produce byte-identical HTML. Catches non-determinism (a stray Math.random()/
+// Date.now()-derived id, an unstable object-key iteration order feeding a template) that would
+// otherwise only ever show up as intermittent flicker or orphaned event listeners in a real
+// browser, never as a clean test failure.
+// ============================================================================
+describe("Render idempotency", () => {
+  it("renderAll() called twice in a row with no state change produces byte-identical #mainContent and #sidebarBody HTML", async () => {
+    const window = await loadAppWindow();
+    try {
+      evalIn(
+        window,
+        "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();",
+      );
+      evalIn(window, "renderAll()");
+      const main1 = window.document.getElementById("mainContent").innerHTML;
+      const sb1 = window.document.getElementById("sidebarBody").innerHTML;
+      evalIn(window, "renderAll()");
+      const main2 = window.document.getElementById("mainContent").innerHTML;
+      const sb2 = window.document.getElementById("sidebarBody").innerHTML;
+      assert.equal(main2, main1);
+      assert.equal(sb2, sb1);
+    } finally {
+      window.close();
+    }
+  });
+
+  it("renderAll() on a freshly-started (empty) game is also idempotent", async () => {
+    const window = await loadAppWindow();
+    try {
+      evalIn(window, "gameState = freshState(); renderAll();");
+      const main1 = window.document.getElementById("mainContent").innerHTML;
+      evalIn(window, "renderAll()");
+      const main2 = window.document.getElementById("mainContent").innerHTML;
+      assert.equal(main2, main1);
+    } finally {
+      window.close();
+    }
+  });
+});
+
+// ============================================================================
+// Reentrancy smoke test — most of this app's UI is bare onclick with no disable-while-pending
+// guard. Every handler exercised here is a synchronous Set add/delete (toggleSection/
+// toggleBonusQ/toggleQuestion) or a synchronous DOM write (Save), so a rapid double-invocation
+// from a real double-tap can never actually interleave mid-toggle the way an async handler
+// could — but a regression that made one of these async (an added await, a setTimeout) would
+// reopen exactly that risk silently. This is cheap insurance either way: two calls back-to-back
+// must never throw, and — since two toggles of the same boolean/Set-membership state are a
+// no-op overall — must leave state exactly as it started, not half-flipped.
+// ============================================================================
+describe("Reentrancy smoke test: rapid double-invocation of a toggle handler", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+    evalIn(
+      window,
+      "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();",
+    );
+  });
+  after(() => window.close());
+
+  it("double-invoking toggleSection('sec-r1') back-to-back doesn't throw and restores the original collapsed state", () => {
+    const before_ = window.document
+      .getElementById("sec-r1")
+      .classList.contains("collapsed");
+    assert.doesNotThrow(() => {
+      window.toggleSection("sec-r1");
+      window.toggleSection("sec-r1");
+    });
+    assert.equal(
+      window.document.getElementById("sec-r1").classList.contains("collapsed"),
+      before_,
+    );
+  });
+
+  it("double-invoking toggleBonusQ(0) back-to-back doesn't throw and restores the original collapsed state", () => {
+    const before_ = window.document
+      .getElementById("bqblock-0")
+      .classList.contains("bq-collapsed");
+    assert.doesNotThrow(() => {
+      window.toggleBonusQ(0);
+      window.toggleBonusQ(0);
+    });
+    assert.equal(
+      window.document.getElementById("bqblock-0").classList.contains("bq-collapsed"),
+      before_,
+    );
+  });
+
+  it("double-invoking toggleQuestion(0,0) back-to-back doesn't throw and restores the original collapsed state", () => {
+    const before_ = window.document
+      .getElementById("qblock-0-0")
+      .classList.contains("q-collapsed");
+    assert.doesNotThrow(() => {
+      window.toggleQuestion(0, 0);
+      window.toggleQuestion(0, 0);
+    });
+    assert.equal(
+      window.document.getElementById("qblock-0-0").classList.contains("q-collapsed"),
+      before_,
+    );
+  });
+
+  it("double-clicking Save (saveToFile) back-to-back doesn't throw", () => {
+    assert.doesNotThrow(() => {
+      window.saveToFile();
+      window.saveToFile();
+    });
+  });
+});

@@ -448,3 +448,176 @@ test("version.json's version matches js/app.js's APP_VERSION exactly", () => {
   const versionJson = JSON.parse(read("version.json"));
   assert.equal(versionJson.version, appMatch[1]);
 });
+
+// ============================================================================
+// Five new tests (per this session's "think about and describe... implement all of these").
+// ============================================================================
+
+// ---- Every icon-only <button>/[role="button"] — one with no visible text, just an SVG/emoji
+// glyph — has an accessible name (aria-label, aria-labelledby, or title). Static index.html/
+// faq/index.html pass today (every icon-only control already carries one); this is a regression
+// guard against a future one shipping without it, silent to a screen reader the same way a button
+// wired to nothing is silent to a sighted user clicking it. ----
+for (const p of PAGES) {
+  test(`${p.name}: every icon-only <button>/[role="button"] (no visible text) has an accessible name`, () => {
+    const doc = loadDoc(p.rel);
+    const missing = [];
+    doc.querySelectorAll('button, [role="button"]').forEach((el) => {
+      const text = el.textContent.replace(/\s+/g, " ").trim();
+      if (text) return; // has its own visible text — that IS its accessible name
+      const hasLabel =
+        el.hasAttribute("aria-label") ||
+        el.hasAttribute("aria-labelledby") ||
+        el.hasAttribute("title");
+      if (!hasLabel) missing.push(el.outerHTML.slice(0, 120));
+    });
+    assert.deepEqual(missing, []);
+  });
+}
+
+// ---- The same check for the small set of icon-only glyph buttons js/app.js emits directly as
+// literal characters (not interpolated text) — the one shape a purely static-HTML sweep above
+// can't see. Scoped narrowly to literal, non-interpolated button bodies specifically to avoid
+// false positives on buttons whose visible text comes from a `${...}` expression this test can't
+// evaluate (e.g. a Tutorial callout's own "${nextLabel}", or a wager amount's "${w}${badge}") —
+// those already read as real words/numbers at runtime, unlike a bare "−"/"+"/"×" glyph, which
+// needs a label the same way .settings-x-btn's drawn X icon does. Caught two real ones the first
+// time this test was written: the Point Adjustment stepper's − and + buttons (js/app.js). ----
+test("js/*.js: every icon-only <button> with a literal (non-interpolated) glyph body has an accessible name", () => {
+  const jsDir = path.join(ROOT, "js");
+  const jsFiles = fs
+    .readdirSync(jsDir)
+    .filter((f) => f.endsWith(".js"))
+    .map((f) => "js/" + f);
+  const missing = [];
+  for (const f of jsFiles) {
+    const src = read(f);
+    for (const m of src.matchAll(/<button\b([^>]*)>([\s\S]*?)<\/button>/g)) {
+      const attrs = m[1];
+      const inner = m[2].replace(/<[^>]*>/g, "").trim();
+      if (inner.includes("${")) continue; // can't statically evaluate — see comment above
+      const decoded = inner.replace(/\\u([0-9a-fA-F]{4})/g, (_, h) =>
+        String.fromCharCode(parseInt(h, 16)),
+      );
+      if (decoded.length > 2) continue; // not a bare-glyph (or empty, icon-only-via-child) body
+      if (/[a-zA-Z]/.test(decoded)) continue; // a real short word ("No"), not a symbol glyph
+      const hasLabel = /aria-label=|title=|aria-labelledby=/.test(attrs);
+      if (!hasLabel) {
+        const lineNo = src.slice(0, m.index).split("\n").length;
+        missing.push(`${f}:${lineNo} ${JSON.stringify(decoded)}`);
+      }
+    }
+  }
+  assert.deepEqual(missing, []);
+});
+
+// ---- Locks in the v19.33 PWA status-bar-shadow fix: index.html's status bar meta must not be
+// "black-translucent" (which pulls content under the notch and gets an OS-drawn translucency
+// scrim, the actual shadow this session's bug report was about — see CHANGELOG.md's v19.33 entry
+// for the full diagnosis), and neither page's viewport meta may reintroduce viewport-fit=cover
+// (what makes black-translucent's scrim apply in the first place). Not a page-to-page equality
+// check — faq/index.html deliberately has no status-bar meta at all (it's never launched as its
+// own standalone PWA window), which is exactly why the shadow never appeared there to begin
+// with, not a drift to unify away. ----
+test('index.html\'s apple-mobile-web-app-status-bar-style is not "black-translucent"', () => {
+  const doc = loadDoc("index.html");
+  const meta = doc.querySelector(
+    'meta[name="apple-mobile-web-app-status-bar-style"]',
+  );
+  assert.ok(meta, "expected an apple-mobile-web-app-status-bar-style meta tag");
+  assert.notEqual(meta.getAttribute("content"), "black-translucent");
+});
+for (const p of PAGES) {
+  test(`${p.name}: viewport meta does not set viewport-fit=cover (re-enables the OS status-bar scrim)`, () => {
+    const doc = loadDoc(p.rel);
+    const viewport = doc.querySelector('meta[name="viewport"]');
+    assert.ok(viewport, "expected a viewport meta tag");
+    assert.doesNotMatch(viewport.getAttribute("content") || "", /viewport-fit=cover/);
+  });
+}
+
+// ---- Guards the chevron-on-the-left CSS fix (this session): it works by giving .faq-q-arrow
+// order:-1 inside its <summary>'s flex row rather than reordering the <span>s themselves (to avoid
+// touching all 68 FAQ entries' markup) — which means the fix silently stops working, per entry,
+// for any <summary> missing either span, or holding more than one of either. ----
+test("faq/index.html: every .faq-item's <summary> has exactly one .faq-q-arrow and one .faq-q-text", () => {
+  const doc = loadDoc("faq/index.html");
+  const bad = [];
+  doc.querySelectorAll(".faq-item > summary").forEach((summary) => {
+    const arrows = summary.querySelectorAll(":scope > .faq-q-arrow").length;
+    const texts = summary.querySelectorAll(":scope > .faq-q-text").length;
+    if (arrows !== 1 || texts !== 1) {
+      bad.push(
+        `${summary.closest(".faq-item").id}: ${arrows} .faq-q-arrow, ${texts} .faq-q-text`,
+      );
+    }
+  });
+  assert.deepEqual(bad, []);
+});
+
+// ---- Every non-empty, non-data: <img> has real alt text — the existing checks above cover src
+// resolving to a real file, but not whether it's actually described for a screen reader. The
+// lightbox's own placeholder <img> is the one deliberate exception: it starts with alt="" and an
+// empty src by design, filled in at click time from the clicked screenshot's own alt
+// (openFaqLightbox, faq/js/faq.js) — same exemption already given to it by the lazy-loading check
+// above, for the same reason. ----
+test("faq/index.html: every <img> other than the lightbox placeholder has non-empty alt text", () => {
+  const doc = loadDoc("faq/index.html");
+  const missing = [];
+  doc.querySelectorAll("img").forEach((img) => {
+    if (img.id === "faqLightboxImg") return;
+    const alt = img.getAttribute("alt");
+    if (!alt || !alt.trim()) missing.push(img.getAttribute("src"));
+  });
+  assert.deepEqual(missing, []);
+});
+
+// ---- Generalizes the "every onclick=\"fnName(...)\" in index.html resolves to a real function"
+// check above to the markup js/*.js itself builds and injects at render time (template strings in
+// app.js/team-audit.js/craft-prize.js/tutorial.js/etc.) — the exact blind spot that let the
+// missing js/team-audit.js <script> tag ship (openAudit/closeAudit/buildAudit were all correctly
+// DEFINED, so the static-HTML-only version of this check had nothing to flag; the bug was only
+// ever reachable through a real click on JS-emitted markup). Strips ${...} template interpolation
+// before matching call sites — both because an interpolated argument (Math.max(...) computing a
+// number, say) isn't part of the onclick attribute a browser ever sees, and because a handful of
+// onclick strings interpolate the FUNCTION NAME itself (onclick="${cSet}(...)"), which this static
+// sweep has no way to resolve and has to skip rather than guess. ----
+test("every onclick=\"fnName(...)\" emitted by a top-level js/*.js template string references a function defined in one of the app's own <script> files", () => {
+  const jsDir = path.join(ROOT, "js");
+  const jsFiles = fs
+    .readdirSync(jsDir)
+    .filter((f) => f.endsWith(".js"))
+    .map((f) => "js/" + f);
+  const declared = collectDeclaredFunctionNames(...jsFiles);
+  const skip = new Set([
+    "if",
+    "for",
+    "while",
+    "switch",
+    "catch",
+    "function",
+    "return",
+    "typeof",
+    "new",
+    "event",
+    "document",
+    "this",
+    "window",
+    "confirm",
+    "Tutorial",
+    "Math",
+  ]);
+  const missing = [];
+  for (const f of jsFiles) {
+    const src = read(f);
+    for (const m of src.matchAll(/onclick="([^"]*)"/g)) {
+      const code = m[1].replace(/\$\{[^}]*\}/g, ""); // strip template interpolation entirely
+      for (const c of code.matchAll(/(^|[^.\w])([A-Za-z_][A-Za-z0-9_]*)\s*\(/g)) {
+        const name = c[2];
+        if (skip.has(name)) continue;
+        if (!declared.has(name)) missing.push(`${f}: ${name}`);
+      }
+    }
+  }
+  assert.deepEqual([...new Set(missing)], []);
+});

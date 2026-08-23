@@ -358,6 +358,17 @@ html{font-size:16px;max-width:100%;background:var(--bg-primary)}
    controls (e.g. the standings Random button, which replaces its own DOM node on every tap)
    can be read by mobile browsers as a double-tap-to-zoom gesture instead of two clicks. */
 body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;max-width:100%;overflow-anchor:none;touch-action:manipulation}
+/* Belt-and-suspenders on top of body's own touch-action above: per the CSS Touch Action spec, a
+   descendant with no touch-action of its own already computes to "manipulation" here (the UA
+   intersects an element's own value — "auto", unset — with every ancestor's, and body's value
+   wins that intersection), so this is redundant with every actual <button>/[role="button"] in the
+   app today. It's here anyway so the double-tap-zoom fix doesn't quietly depend on a distant
+   ancestor's rule and everyone remembering the intersection rule above — a future component that
+   sets its own touch-action for some OTHER reason (a drag handle, say — see .sheet-grab-handle/
+   .mobile-scores-peek's deliberate touch-action:none) is far more likely to accidentally leave a
+   button that also needs "manipulation" without a value of its own, than to explicitly set
+   touch-action back to its "auto" default and undo this line directly. */
+button,[role="button"]{touch-action:manipulation}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg-primary)}::-webkit-scrollbar-thumb{background:var(--border-light);border-radius:3px}
 
 /* HEADER */

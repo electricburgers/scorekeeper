@@ -10,6 +10,32 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.38 - 2026-08-23
+- **Double-tap-zoom guard on every button.** `body{touch-action:manipulation}` already covered
+  this for most controls via the CSS Touch Action spec's ancestor-intersection rule, but a fast
+  double-tap on a control that replaces its own DOM node between taps (the standings Random
+  button, say) could still occasionally read as double-tap-to-zoom on mobile Safari/Chrome. Added
+  an explicit, redundant `button,[role="button"]{touch-action:manipulation}` rule so the fix
+  doesn't quietly depend on every future component inheriting it from a distant ancestor.
+- **Point Adjustment stepper's − / + buttons now have accessible names** (`aria-label`) — they
+  were icon-only glyph buttons with no visible text, silent to a screen reader.
+- **15 new regression tests** (5 HTML, 5 CSS, 5 JS) covering: icon-only controls having an
+  accessible name; the two pages' PWA status-bar meta staying in sync (locks in v19.33's fix);
+  every FAQ `<summary>` keeping exactly one arrow and one text span (locks in v19.37's chevron
+  fix); every `<img>` having real alt text; every `onclick` a JS template string emits resolving
+  to a real function (the exact blind spot that let the missing team-audit.js `<script>` tag ship
+  undetected) — plus, on the CSS side, the full 4-declaration GPU-layer-promotion idiom staying
+  intact everywhere it's used, every `classList.add/toggle/remove` class swept automatically
+  against real CSS selectors, every `animation:` name resolving to a real `@keyframes` block, an
+  allowlist on `!important` usage, and mobile `@media` breakpoints staying inside the project's
+  known set — and, on the JS side, a static TDZ sweep generalizing the BONUS_Q_STYLE/latestVersion
+  bugs, a Settings-panel round-trip sweep, a Save/Load file round-trip, render idempotency, and a
+  reentrancy smoke test on double-invoked toggle handlers.
+- Investigated a report of a "garbled checkmark" in the FAQ — checked every checkmark glyph
+  (Unicode text, inline SVG, and the embedded screenshot images) across both themes and both Icon
+  Style modes and found none broken. If it's still visible, a screenshot or the specific FAQ
+  section would help track it down.
+
 ## v19.37 - 2026-08-23
 - **Fixed the FAQ's collapse/expand arrow**: it used to be a plain "▶" glyph sitting on the right
   of each question — inconsistent with every other collapse/expand affordance in the main app

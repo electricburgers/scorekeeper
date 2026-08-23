@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.37"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.38"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 23, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1102,7 +1102,7 @@ function renderLeft() {
         showAdj
           ? `<div class="adj-wrap">
         <button class="adj-chip${adj !== 0 ? " adj-active" : ""}" onclick="toggleAdj(${i})" title="${adj !== 0 ? "Adj: " + (adj > 0 ? "+" : "") + adj + " \u2014 click to edit" : "Manual point adjustment"}">${adj !== 0 ? (adj > 0 ? "+" + adj : adj) : "\u00B1"}</button>
-        ${adjOpen ? `<div class="adj-stepper"><button onclick="adjPts(${i},-1)">\u2212</button><span class="adj-val${adj > 0 ? " pos" : adj < 0 ? " neg" : ""}">${adj > 0 ? "+" + adj : adj}</span><button onclick="adjPts(${i},1)">+</button></div>` : ""}
+        ${adjOpen ? `<div class="adj-stepper"><button onclick="adjPts(${i},-1)" aria-label="Decrease point adjustment">\u2212</button><span class="adj-val${adj > 0 ? " pos" : adj < 0 ? " neg" : ""}">${adj > 0 ? "+" + adj : adj}</span><button onclick="adjPts(${i},1)" aria-label="Increase point adjustment">+</button></div>` : ""}
       </div>`
           : ""
       }
