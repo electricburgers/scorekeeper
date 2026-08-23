@@ -10,6 +10,29 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.33 - 2026-08-23
+- **Fixed the mobile Settings panel's header visibly double-exposing/ghosting against the Theme
+  row while scrolling**, on a real iPhone. `.settings-panel-head` was pinned in place by flex
+  layout (`flex-shrink:0`) rather than `position:sticky`, on the assumption that made the iOS
+  `transform:translateZ(0)` GPU-layer-promotion workaround already used on `.header`/
+  `.mini-progress`/`.audit-head` for this exact class of glitch sticky-specific and no longer
+  needed — wrong. The artifact is a compositing-layer-boundary issue next to a
+  `-webkit-overflow-scrolling:touch` container (`.settings-panel-body`), not something specific
+  to `position:sticky` itself; re-added the same fix, sticky or not.
+- **Fixed a soft shadow/scrim hanging over the top of the app in an installed iOS PWA**, right
+  where Save/Load/the gear icon sit — real and on-device (confirmed it wasn't the OS status bar
+  itself, which has no way to be shadowed by app CSS at all, and wasn't a stale service-worker
+  cache). `viewport-fit=cover` + `apple-mobile-web-app-status-bar-style="black-translucent"` were
+  what let the header extend full-bleed under the status bar/notch in the first place — and
+  exactly what makes iOS draw its own translucent scrim over that region, to keep the status
+  bar's white icons legible against whatever's underneath. `faq/index.html` never opted into
+  either and never showed the shadow, which is what pinned this down. Dropped both from
+  `index.html`: iOS now reserves and draws the status bar area itself, the same as any ordinary
+  page — trading the full-bleed-under-the-notch look for a status bar area with nothing rendering
+  under it to need a scrim over. `env(safe-area-inset-top/bottom)` simply reads 0 without
+  `viewport-fit=cover`, so the `calc(10px + env(...))` padding built around it throughout the
+  file falls back to its flat base value rather than breaking.
+
 ## v19.32 - 2026-08-23
 - **New tests for the desktop "scroll void" bug** (v18.something: `.app-layout` sizing itself as
   a hardcoded `100vh - 60px` guess at the sticky header/Resume banner, which undershot whenever

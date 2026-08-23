@@ -283,3 +283,25 @@ test("css/styles.css's desktop .app-layout height reads var(--layout-top, ...), 
   assert.match(m[1], /height:calc\(100vh - var\(--layout-top,/);
   assert.match(m[1], /height:calc\(100dvh - var\(--layout-top,/);
 });
+
+// ---- Mobile Settings panel header ghosting: a host on a real iPhone saw the Theme row visibly
+// double-expose/ghost against the Settings header while scrolling the panel. .settings-panel-
+// head was pinned by flex layout (flex-shrink:0), not position:sticky, on the assumption that
+// meant it didn't need the transform:translateZ(0) GPU-layer-promotion workaround already used
+// on .header/.mini-progress/.audit-head for the same class of iOS Safari glitch — wrong, since
+// the artifact is a compositing-layer boundary issue next to a -webkit-overflow-scrolling:touch
+// container (.settings-panel-body), not something specific to position:sticky. Re-added; this
+// guards the CSS side of that fix directly, since Chromium (this test suite's only real browser
+// check, via the preview tool) doesn't reproduce this WebKit-specific glitch at all — nothing
+// here can confirm the ghosting itself is gone, only that the fix that closed it last time is
+// still present. ----
+test("css/styles.css's mobile .settings-panel-head keeps the iOS GPU-layer-promotion fix (transform:translateZ(0) etc.)", () => {
+  const src = read("css/styles.css");
+  const rules = [...src.matchAll(/\.settings-panel-head\{([^}]*)\}/g)];
+  const withContent = rules.find((m) => !/^display:none$/.test(m[1]));
+  assert.ok(withContent, "no non-display:none .settings-panel-head rule found");
+  assert.match(withContent[1], /transform:translateZ\(0\)/);
+  assert.match(withContent[1], /-webkit-transform:translateZ\(0\)/);
+  assert.match(withContent[1], /backface-visibility:hidden/);
+  assert.match(withContent[1], /-webkit-backface-visibility:hidden/);
+});

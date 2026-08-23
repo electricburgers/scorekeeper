@@ -2,12 +2,19 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#000000">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- Was viewport-fit=cover + status-bar-style=black-translucent: full-bleed content extending
+     under the status bar/notch, with iOS drawing its own translucent scrim over it so the
+     status bar's white icons stay legible against arbitrary content beneath. That scrim is
+     exactly the "shadow at the very top, over Save/Load" a host reported — real, on-device,
+     not a CSS bug of this app's own (confirmed by comparison: faq/index.html never opted into
+     either of these and never showed it). Dropping both here: iOS now reserves and draws the
+     status bar area itself, like any ordinary page, instead of blending it with app content. -->
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Scorekeeper">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Scorekeeper</title>
