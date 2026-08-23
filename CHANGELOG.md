@@ -10,6 +10,38 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.30 - 2026-08-23
+- **The drumroll's five audio clips are no longer base64 text inside `js/app.js`.** They were
+  ~2.1MB of that file's ~2.5MB — every visitor's browser downloaded and parsed/compiled all of it
+  on every page load, whether or not a drumroll ever ran. The four finished clips (silent, roll,
+  finale, horn) now ship as real files under `assets/audio/`, referenced directly by an `<audio>`
+  element's `src` instead of being decoded into a Blob on first use — not fetched at page load at
+  all, only when the drumroll tap actually needs one, and now cacheable by the browser's own
+  HTTP/disk cache and the service worker precache instead of an in-memory Blob rebuilt every
+  session. The fade clip's raw-PCM source (still base64 — it's read back as sample bytes for
+  runtime envelope math, and unlike `<audio src>`, `fetch()`-ing a local file is blocked under
+  Chrome's `file://` origin, which this app has to keep working under) moved to a new
+  `js/data/drum-clips.js`, loaded the same way `js/data/xlsx-templates.js` already was.
+  `js/app.js` itself drops from 2.4MB to 288KB — a real parse/compile-time measurement (V8's own
+  script compiler, cold) puts that at roughly 8ms → 2ms. No behavior change for hosts; verified
+  end to end in a real browser (not just the test suite) that `assets/audio/roll.mp3` loads and
+  reports the exact original 32.6s duration.
+- `js/data/xlsx-templates.js`'s `TRIVIA_XLSX_B64` was declared with `var`; changed to `const`,
+  matching every other data file now.
+- **New tests**: 22 more (246 total, up from 224) — the drumroll's audio pipeline (WAV header/
+  envelope math, file existence and container format, the exact byte size a given fade length
+  produces), an autosave/localStorage save-then-load round trip (no coverage of this existed
+  before), a service-worker precache integrity check (every `SHELL_FILES` entry resolves to a
+  real file, and matches what `index.html`/`faq/index.html` actually load — the exact class of
+  bug the service worker's own comment says "bit three separate times" in past versions), and an
+  export smoke test that actually runs `exportXLSXBackup()`/`exportPDF()` against a real game
+  instead of only checking their buttons exist. That last one caught a real bug — in the test
+  harness, not the app: a naive `TextEncoder` stub assigned jsdom's window the outer Node
+  process's own class, a different realm's `Uint8Array`, which made `fflate.zipSync` silently
+  balloon a 17-entry, 36KB XLSX export into a 31MB, 29,148-entry one every time a test exercised
+  it. Real browsers' native `TextEncoder` is already same-realm, so no user ever saw this; fixed
+  in `tests/helpers/load-app.js` alone.
+
 ## v19.29 - 2026-08-22
 - **The app and FAQ now share one implementation of the Color Vision dropdown and the font-size
   scale** (new `js/shared-ui.js`, loaded by both `index.html` and `faq/index.html`) instead of

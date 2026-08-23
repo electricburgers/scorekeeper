@@ -6,7 +6,9 @@
 "use strict";
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
-const { loadAppWindow, loadFaqWindow, evalIn } = require("./helpers/load-app");
+const fs = require("fs");
+const path = require("path");
+const { loadAppWindow, loadFaqWindow, evalIn, ROOT } = require("./helpers/load-app");
 
 // ============================================================================
 // Shared UI (js/shared-ui.js) — the module this session's refactor extracted specifically
@@ -414,6 +416,111 @@ describe("confirm-gated app actions", () => {
 });
 
 // ============================================================================
+// Drumroll audio pipeline — silent/roll/finale/horn were base64 text inlined in js/app.js
+// (~2.1MB of it) until this session's extraction moved them to real files under assets/audio/,
+// referenced directly instead of decoded into a Blob on first use. The fade clip is the one
+// exception: its length depends on a Settings slider, so it's still synthesised at runtime from
+// DRUM_FADESRC_B64 (js/data/drum-clips.js) — these tests are the safety net for that split, and
+// for the runtime envelope math, which had no coverage at all before this.
+// ============================================================================
+describe("Drumroll audio pipeline", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+
+  it("b64Bytes round-trips a known string through atob/charCode", () => {
+    const b64 = Buffer.from("hello scorekeeper", "utf-8").toString("base64");
+    const bytes = evalIn(window, `b64Bytes(${JSON.stringify(b64)})`);
+    assert.equal(Buffer.from(bytes).toString("utf-8"), "hello scorekeeper");
+  });
+
+  it("DRUM_CLIPS points silent/roll/finale/horn at real files under assets/audio/, not base64", () => {
+    // Individual property checks, not assert.deepEqual(clips, {...}) — DRUM_CLIPS crossed the
+    // jsdom/Node realm boundary via evalIn(), so it's a structurally-identical but not
+    // reference-identical Object (different Object.prototype), which deepStrictEqual rejects.
+    const clips = evalIn(window, "DRUM_CLIPS");
+    assert.equal(clips.silent, "assets/audio/silent.wav");
+    assert.equal(clips.roll, "assets/audio/roll.mp3");
+    assert.equal(clips.finale, "assets/audio/finale.wav");
+    assert.equal(clips.horn, "assets/audio/horn.mp3");
+  });
+
+  it("every DRUM_CLIPS file exists on disk with the right container for its extension", () => {
+    const clips = evalIn(window, "DRUM_CLIPS");
+    for (const [name, rel] of Object.entries(clips)) {
+      const full = path.join(ROOT, rel);
+      assert.ok(fs.existsSync(full), `${name}: ${rel} does not exist`);
+      const head = Buffer.alloc(4);
+      const fd = fs.openSync(full, "r");
+      fs.readSync(fd, head, 0, 4, 0);
+      fs.closeSync(fd);
+      if (rel.endsWith(".wav")) {
+        assert.equal(head.toString("ascii"), "RIFF", `${name}: expected a RIFF/WAV header`);
+      } else if (rel.endsWith(".mp3")) {
+        // MP3 with an ID3v2 tag starts "ID3"; a bare frame starts 0xFF Ex (sync word + MPEG-1
+        // Layer III). This codebase's clips carry ID3 tags (see js/app.js's own DRUM_ROLL_B64
+        // rebuild comment), but check both so a re-encode without one doesn't fail spuriously.
+        const isId3 = head.slice(0, 3).toString("ascii") === "ID3";
+        const isFrameSync = head[0] === 0xff && (head[1] & 0xe0) === 0xe0;
+        assert.ok(isId3 || isFrameSync, `${name}: expected an ID3 tag or MPEG frame sync`);
+      }
+    }
+  });
+
+  it("drumClipUrl returns the DRUM_CLIPS path directly for a finished clip (no decode, no blob:)", () => {
+    const url = evalIn(window, 'drumClipUrl("roll")');
+    assert.equal(url, "assets/audio/roll.mp3");
+  });
+
+  it("drumClipUrl(\"fade\") delegates to fadeClipUrl at the current craftFadeSec()", () => {
+    const url = evalIn(window, 'drumClipUrl("fade")');
+    assert.match(url, /^blob:mock-/);
+  });
+
+  it("fadeClipUrl builds a valid WAV: RIFF/WAVE header, 48kHz stereo 16-bit, correct data length", () => {
+    const url = evalIn(window, "fadeClipUrl(2)");
+    const blob = window.__mockBlobUrls.get(url);
+    assert.equal(blob.type, "audio/wav");
+    const buf = Buffer.from(blob.parts[0]);
+    assert.equal(buf.toString("ascii", 0, 4), "RIFF");
+    assert.equal(buf.toString("ascii", 8, 12), "WAVE");
+    assert.equal(buf.readUInt16LE(20), 1); // PCM
+    assert.equal(buf.readUInt16LE(22), 2); // FADE_CH
+    assert.equal(buf.readUInt32LE(24), 48000); // FADE_SR
+    assert.equal(buf.readUInt16LE(34), 16); // bits per sample
+    const frames = Math.round(2 * 48000);
+    const dataLen = frames * 2 * 2;
+    assert.equal(buf.readUInt32LE(40), dataLen); // "data" chunk size
+    assert.equal(buf.length, 44 + dataLen);
+  });
+
+  it("fadeClipUrl's envelope opens at exactly zero (the ramp-in's own start), not full level", () => {
+    const url = evalIn(window, "fadeClipUrl(1.5)");
+    const buf = Buffer.from(window.__mockBlobUrls.get(url).parts[0]);
+    // First stereo frame, both channels, right after the 44-byte header.
+    assert.equal(buf.readInt16LE(44), 0);
+    assert.equal(buf.readInt16LE(46), 0);
+  });
+
+  it("fadeClipUrl caches: the same sec returns the identical url without building a new blob", () => {
+    const url1 = evalIn(window, "fadeClipUrl(4)");
+    const url2 = evalIn(window, "fadeClipUrl(4)");
+    assert.equal(url1, url2);
+  });
+
+  it("fadeClipUrl rebuilds for a different sec (new url, correctly resized data)", () => {
+    const url1 = evalIn(window, "fadeClipUrl(1)");
+    const url2 = evalIn(window, "fadeClipUrl(6)");
+    assert.notEqual(url1, url2);
+    const buf2 = Buffer.from(window.__mockBlobUrls.get(url2).parts[0]);
+    const frames = Math.round(6 * 48000);
+    assert.equal(buf2.length, 44 + frames * 2 * 2);
+  });
+});
+
+// ============================================================================
 // Sample game data (this session's tweak: two more 0/4 Round 1 bonus scores)
 // ============================================================================
 describe("sample game data", () => {
@@ -790,5 +897,113 @@ describe("FAQ Icon Style preview swatch", () => {
       (u) => !window.document.getElementById((u.getAttribute("href") || "").replace("#", "")),
     );
     assert.deepEqual(broken, []);
+  });
+});
+
+// ============================================================================
+// Autosave round-trip — gameState survives a save/load cycle through TRStore/localStorage
+// unchanged. No coverage of this existed before, despite it being the one piece of state every
+// other feature in the app depends on. A literal close-this-window-open-a-new-one reload isn't
+// tested here: jsdom gives each `new JSDOM()` its own isolated localStorage backing (confirmed
+// directly — a value autosave()'d in one loadAppWindow() is invisible to a second one against
+// the same fake origin), so this instead calls the app's own loadSaved() against what autosave()
+// actually wrote within one window, which is exactly the JSON.stringify/parse round trip a real
+// reload's TRStore.getItem would perform.
+// ============================================================================
+describe("Autosave round-trip", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+
+  it("autosave() then loadSaved() returns the exact same state, not just an equivalent one", () => {
+    evalIn(
+      window,
+      `gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+       gameState.meta.hostName = "Round-Trip Test Host";
+       gameState.teams[0].scoreGuess = 999;
+       autosave();`,
+    );
+    const original = evalIn(window, "JSON.stringify(gameState)");
+    const restored = evalIn(window, "JSON.stringify(loadSaved())");
+    assert.equal(restored, original);
+  });
+
+  it("clearSaved() removes it — loadSaved() afterward returns null", () => {
+    evalIn(window, "autosave(); clearSaved();");
+    assert.equal(evalIn(window, "loadSaved()"), null);
+  });
+
+  it("TRStore reports persistent:true against the fake http: origin (confirms this test is exercising real storage, not the in-memory fallback)", () => {
+    assert.equal(evalIn(window, "TRStore.persistent"), true);
+  });
+});
+
+// ============================================================================
+// Export smoke test — exportXLSXBackup()/exportPDF() actually run against a real game state
+// end to end (fflate zip, jsPDF page-building) instead of only checking their buttons exist.
+// This is what caught a real bug during this session's work: with a naive cross-realm
+// TextEncoder stub (see tests/helpers/load-app.js's beforeParse), fflate.zipSync silently
+// exploded a 17-entry, 36KB XLSX into a 31MB, 29,148-entry one — entirely a test-harness defect,
+// never reachable by a real user (browsers' native TextEncoder is already same-realm), but only
+// exportXLSXBackup() actually running here would ever have surfaced it.
+// ============================================================================
+describe("Export smoke test", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+    evalIn(
+      window,
+      "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();",
+    );
+  });
+  after(() => window.close());
+
+  it("exportXLSXBackup() produces a zip fflate can read back, with the template's own entry count (no corruption)", () => {
+    // Everything below runs inside the window's own realm via one evalIn() call, deliberately —
+    // fflate.zipSync/unzipSync do their own `instanceof Uint8Array` checks against THEIR OWN
+    // realm's Uint8Array (see beforeParse's TextEncoder comment for the same issue elsewhere),
+    // so handing them a Node-side-reconstructed typed array here would risk masking exactly the
+    // class of bug this test exists to catch. Only the small JSON summary crosses the boundary.
+    evalIn(window, "exportXLSXBackup()");
+    const result = JSON.parse(
+      evalIn(
+        window,
+        `JSON.stringify((function () {
+          const blob = [...window.__mockBlobUrls.values()].find((b) =>
+            b.type.includes("spreadsheetml"),
+          );
+          if (!blob) return { found: false };
+          const unzipped = fflate.unzipSync(blob.parts[0]);
+          return {
+            found: true,
+            entries: Object.keys(unzipped).length,
+            hasSheet: !!unzipped["xl/worksheets/sheet1.xml"],
+          };
+        })())`,
+      ),
+    );
+    assert.ok(result.found, "expected exportXLSXBackup to build an xlsx-typed blob");
+    // The unmodified template itself has 17 entries — real injected data only ever overwrites
+    // two existing files (xl/worksheets/sheet1.xml, xl/workbook.xml), never adds new ones, so
+    // this must stay exactly 17 regardless of team/round count.
+    assert.equal(result.entries, 17);
+    assert.ok(result.hasSheet);
+  });
+
+  it("exportXLSXBackup() shows the export-complete prompt", () => {
+    assert.ok(
+      window.document.getElementById("exportPrompt").classList.contains("show"),
+    );
+  });
+
+  it("exportPDF() runs to completion against an 11-team game without throwing", () => {
+    assert.doesNotThrow(() => evalIn(window, "exportPDF()"));
+    const found = evalIn(
+      window,
+      '[...window.__mockBlobUrls.values()].some((b) => b.parts && b.parts.length > 0)',
+    );
+    assert.ok(found, "expected exportPDF to build a blob for download");
   });
 });

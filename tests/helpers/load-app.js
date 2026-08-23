@@ -51,8 +51,32 @@ class LocalFileResourceLoader extends ResourceLoader {
  * parse time — actually runs; a post-construction call raced the async script-fetch queue and
  * missed it intermittently. */
 function beforeParse(window) {
-  window.TextEncoder = TextEncoder;
-  window.TextDecoder = TextDecoder;
+  // NOT `window.TextEncoder = TextEncoder` (the outer Node process's own class) — jsdom's
+  // runScripts:"dangerously" runs every <script> in its own separate vm realm, with its own
+  // Uint8Array constructor distinct from the outer process's. Assigning the outer TextEncoder
+  // directly makes .encode() return a cross-realm Uint8Array; fflate.min.js (running inside the
+  // window) checks `x instanceof Uint8Array` against ITS OWN realm's Uint8Array to tell a file's
+  // bytes apart from a nested folder object, that check silently fails, and zipSync walks the
+  // "array-like" byte-by-byte as if each index were a subdirectory — a 17-entry, 36KB XLSX
+  // export came out as a 31MB, 29,148-entry zip full of paths like
+  // "xl/worksheets/sheet1.xml/14203/" the first time this was actually exercised end to end (see
+  // the "export smoke test" describe block in tests/js-behavior.test.js). Real browsers never
+  // hit this — native TextEncoder is already same-realm — so wrapping it here, not touching
+  // js/app.js, is the fix: these two classes just make sure encode()/decode() only ever hand
+  // back or read this window's own Uint8Array.
+  window.TextEncoder = class {
+    encode(str) {
+      return window.Uint8Array.from(Buffer.from(str, "utf-8"));
+    }
+  };
+  window.TextDecoder = class {
+    constructor(enc) {
+      this._enc = enc || "utf-8";
+    }
+    decode(bytes) {
+      return Buffer.from(bytes).toString(this._enc);
+    }
+  };
   window.Audio = class {
     constructor() {}
     play() {
@@ -83,6 +107,28 @@ function beforeParse(window) {
     unobserve() {}
     disconnect() {}
   };
+  // jsdom's own Blob has no way to read bytes back out (no .arrayBuffer()/.text() — just .size/
+  // .type), and URL.createObjectURL doesn't exist at all, so fadeClipUrl()/exportXLSXBackup()/
+  // exportPDF() throw outright without a stub. This one keeps the constructor's own parts array
+  // reachable (blob.parts) instead of hiding it, specifically so a test can inspect the actual
+  // bytes js/app.js built — e.g. the fade clip's WAV header/envelope, or the XLSX zip fflate
+  // produced — rather than only checking that the call didn't throw.
+  window.Blob = class {
+    constructor(parts, opts) {
+      this.parts = parts || [];
+      this.type = (opts && opts.type) || "";
+    }
+  };
+  const mockBlobUrls = new Map();
+  let mockBlobSeq = 0;
+  window.URL.createObjectURL = (blob) => {
+    const url = "blob:mock-" + mockBlobSeq++;
+    mockBlobUrls.set(url, blob);
+    return url;
+  };
+  window.URL.revokeObjectURL = (url) => mockBlobUrls.delete(url);
+  // Exposed for tests only — real app code never reads this, it only ever holds a URL string.
+  window.__mockBlobUrls = mockBlobUrls;
 }
 
 /** Waits for the window's own load event (jsdom fires this once every <script src> — run

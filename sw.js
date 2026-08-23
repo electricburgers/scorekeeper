@@ -29,10 +29,12 @@
 // this whole service worker exists for, so it's worth the few extra KB at install time. The FAQ's
 // 50+ screenshots are deliberately left out: they're still cached opportunistically on first view,
 // same as before, rather than ballooning what a fresh install has to fetch before it's usable.
-const CACHE_NAME='trivia-scorekeeper-shell-v8';
+const CACHE_NAME='trivia-scorekeeper-shell-v9';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js','./js/app.js','./js/tutorial.js',
   './js/vendor/fflate.min.js','./js/vendor/jspdf.min.js','./js/data/xlsx-templates.js',
+  './js/data/drum-clips.js',
+  './assets/audio/silent.wav','./assets/audio/roll.mp3','./assets/audio/finale.wav','./assets/audio/horn.mp3',
   './faq/index.html','./faq/css/faq.css','./faq/css/fonts.css',
   './faq/js/faq.js','./faq/js/faq-bootstrap.js',
   './faq/fonts/inter-var.woff2','./faq/fonts/space-grotesk-var.woff2'];
