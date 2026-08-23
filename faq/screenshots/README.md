@@ -38,6 +38,7 @@ defeat the comparison it exists to make.
 | `round-scoring.webp` | One round expanded, with a mix of green (correct), red (incorrect), and idle wager buttons across a few teams/questions. | Scoring Rounds |
 | `beer-round.webp` | A bonus (Q5) question where every team is marked correct, showing the gold wash and the 🍺 Beer Round! badge. The standalone "Everyone got it right!" banner was removed in app v18.57 — the badge and the gold block are the whole treatment now. Round 3's Q5 in the sample game is one; otherwise mark a question correct for every team by hand. | Scoring Rounds |
 | `sort-buttons.webp` | Close-up of a single question's header, showing the ↕ Sort and ↺ Reset buttons. | Tips & Tricks |
+| `crowd-wisdom-percentage.webp` | Close-up of a single question's header with Advanced Settings → Crowd-Wisdom Percentage on, showing the live correct/incorrect counts next to Sort/Reset. | Tips & Tricks |
 | `question-timer.webp` | The question timer widget mid-countdown, showing the ⏸ Pause and ↺ Reset buttons (start it from Settings' default duration, or the sidebar/bottom-dock controls). | Question Timer |
 | `timer-stepper-buttons.webp` | The question timer widget with the −30/+30 stepper buttons visible (Advanced Settings → Timer Stepper Buttons must be on). | Tips & Tricks |
 | `halftime-wager.webp` | The Halftime Wager entry for one team — wager amount field plus the correct/incorrect toggle. | Halftime & Final Wager |

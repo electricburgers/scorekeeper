@@ -2,7 +2,36 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
-## [1.26] - 22 Aug 2026
+## [1.27] - 22 Aug 2026
+
+### Added
+
+- **A screenshot for Crowd-Wisdom Percentage** — a close-up of a question header with the toggle
+  on, showing the live "9/11 (82%) correct" / "2/11 (18%) incorrect" counts next to Sort/Reset,
+  the same close-up style `sort-buttons.webp` already uses.
+- **A new "Installing as an App" section**, between Autosave & Resume and Manual Save & Load: how
+  to add the app to the home screen on iPhone/iPad (Safari) and Android (Chrome), linking Apple's
+  and Google's own written guides. Neither company publishes a first-party video for this, so none
+  is linked — this page only links sources it can vouch for. Cross-linked from "Does the app keep
+  working if the venue's wifi drops?" in Autosave & Resume.
+- **The Team Report's own explanatory note, spelled out in FAQ text for the first time** — Diff
+  Adj (Difference Adjustment), Adj. Score (Adjusted Score), and what a Diff of +/−/0 means — added
+  to "Tap any team's name to audit their score," right above the screenshot that already showed
+  it. Previously that wording only ever existed as pixels in the screenshot itself, never as
+  actual page text.
+- **Settings > Icon Style now previews its own choice**, same as the main app: a tinted beer mug
+  (Pictograph) or 🍺 (Emoji) sits in the toggle button next to the word naming it, instead of
+  "Pictograph"/"Emoji" being a bare label the reader has to already know the meaning of.
+
+### Fixed
+
+- **The Color Vision dropdown wasn't quite the same control as the main app's** — missing the
+  `<ul>`'s `aria-label="Color vision mode"`, not wrapped in `.settings-controls` like every other
+  row's control, and carrying an extra "Standard colors" subtitle on Off that the app's own
+  version doesn't have. All three brought in line with the app's exact markup.
+- **Take the Tour's icon followed the app's ℹ️ → 👋 waving-hand change** (see the main app's
+  changelog) in all four places it appears here — Getting Started ×2, Interactive Tutorial,
+  Settings — plus the settings-panel screenshot, recaptured against the live app in both themes.
 
 Full re-audit against the main app, which had drifted ahead of this page across
 v18.90–v18.101 (v19.16–v19.27 in the app's own renumbered changelog) — the last

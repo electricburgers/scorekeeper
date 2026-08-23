@@ -122,58 +122,60 @@
           </div>
           <div class="settings-row">
             <span class="size-label">Color Vision</span>
-            <div class="cv-select" id="faqCvSelect">
-              <button
-                type="button"
-                class="cv-select-btn"
-                onclick="faqToggleCvMenu(event)"
-                aria-haspopup="listbox"
-                aria-expanded="false"
-                title="Adjust pass/fail colors for color blindness"
-              >
-                <span class="cv-select-label">Off</span
-                ><span class="cv-select-swatch" aria-hidden="true"></span
-                ><span class="cv-select-arrow">▾</span>
-              </button>
-              <ul class="cv-select-menu" role="listbox">
-                <li
-                  role="option"
-                  data-value="0"
-                  data-short="Off"
-                  aria-selected="true"
-                  onclick="faqSelectCvOption(this,'0')"
+            <div class="settings-controls">
+              <div class="cv-select" id="faqCvSelect">
+                <button
+                  type="button"
+                  class="cv-select-btn"
+                  onclick="faqToggleCvMenu(event)"
+                  aria-haspopup="listbox"
+                  aria-expanded="false"
+                  title="Adjust pass/fail colors for color blindness"
                 >
-                  Off<span class="cv-opt-sub">Standard colors</span>
-                </li>
-                <li
-                  role="option"
-                  data-value="1"
-                  data-short="Red-Green"
-                  aria-selected="false"
-                  onclick="faqSelectCvOption(this,'1')"
-                >
-                  <span class="cv-opt-main"
-                    >Red-Green<span class="cv-swatch-pair" aria-hidden="true"
-                      ><span class="cv-swatch cv-swatch-rg-a"></span
-                      ><span class="cv-swatch cv-swatch-rg-b"></span></span
-                  ></span>
-                  <span class="cv-opt-sub">Deuteranopia / protanopia</span>
-                </li>
-                <li
-                  role="option"
-                  data-value="2"
-                  data-short="Blue-Yellow"
-                  aria-selected="false"
-                  onclick="faqSelectCvOption(this,'2')"
-                >
-                  <span class="cv-opt-main"
-                    >Blue-Yellow<span class="cv-swatch-pair" aria-hidden="true"
-                      ><span class="cv-swatch cv-swatch-by-a"></span
-                      ><span class="cv-swatch cv-swatch-by-b"></span></span
-                  ></span>
-                  <span class="cv-opt-sub">Tritanopia</span>
-                </li>
-              </ul>
+                  <span class="cv-select-label">Off</span
+                  ><span class="cv-select-swatch" aria-hidden="true"></span
+                  ><span class="cv-select-arrow" aria-hidden="true">▾</span>
+                </button>
+                <ul class="cv-select-menu" role="listbox" aria-label="Color vision mode">
+                  <li
+                    role="option"
+                    data-value="0"
+                    data-short="Off"
+                    aria-selected="true"
+                    onclick="faqSelectCvOption(this,'0')"
+                  >
+                    Off
+                  </li>
+                  <li
+                    role="option"
+                    data-value="1"
+                    data-short="Red-Green"
+                    aria-selected="false"
+                    onclick="faqSelectCvOption(this,'1')"
+                  >
+                    <span class="cv-opt-main"
+                      >Red-Green<span class="cv-swatch-pair" aria-hidden="true"
+                        ><span class="cv-swatch cv-swatch-rg-a"></span
+                        ><span class="cv-swatch cv-swatch-rg-b"></span></span
+                    ></span>
+                    <span class="cv-opt-sub">(deuteranopia/protanopia)</span>
+                  </li>
+                  <li
+                    role="option"
+                    data-value="2"
+                    data-short="Blue-Yellow"
+                    aria-selected="false"
+                    onclick="faqSelectCvOption(this,'2')"
+                  >
+                    <span class="cv-opt-main"
+                      >Blue-Yellow<span class="cv-swatch-pair" aria-hidden="true"
+                        ><span class="cv-swatch cv-swatch-by-a"></span
+                        ><span class="cv-swatch cv-swatch-by-b"></span></span
+                    ></span>
+                    <span class="cv-opt-sub">(tritanopia)</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <div class="settings-row">
@@ -185,8 +187,7 @@
                 id="faqIconStyleToggle"
                 onclick="faqToggleIconStyle()"
                 title="Swap every drawn pictograph on this page for the platform emoji it replaced"
-              >
-                Pictograph
+              ><svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🍺"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg> <span id="faqIconStyleLabel">Pictograph</span>
               </button>
             </div>
           </div>
@@ -246,6 +247,7 @@
         <a href="#craft-prize">Craft Prize Drawing</a>
         <a href="#exporting">Exporting</a>
         <a href="#autosave">Autosave &amp; Resume</a>
+        <a href="#install-app">Installing as an App</a>
         <a href="#manual-save-load">Manual Save &amp; Load</a>
         <a href="#settings">Settings</a>
         <a href="#appearance">Light Mode &amp; Dark Mode</a>
@@ -302,7 +304,7 @@
               every round scored, both wagers resolved, and (deliberately) a
               genuine tie in Final Results — so you can click around every
               screen without setting anything up yourself.
-              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="ℹ️"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><path d="M12 16v-6"/><path d="M12 7.2h.01"/></svg> Take the Tour</strong> is the more hands-on option: a
+              <strong><svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> Take the Tour</strong> is the more hands-on option: a
               guided, step-by-step walkthrough of an actual game, start to
               finish. See <a href="#tutorial">Interactive Tutorial</a> below.
             </p>
@@ -385,10 +387,10 @@
               real control at a time is highlighted with a ring around it, and
               a callout box explains what it does and what to do next. Start
               it from <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) →
-              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="ℹ️"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><path d="M12 16v-6"/><path d="M12 7.2h.01"/></svg> Take the Tour</strong>, right next to
+              <strong><svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> Take the Tour</strong>, right next to
               <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong>. First-time visitors with no
               game in progress also get offered it automatically — a small
-              "<svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="ℹ️"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><path d="M12 16v-6"/><path d="M12 7.2h.01"/></svg> New here? Take the 2-minute tour." card appears where the
+              "<svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> New here? Take the 2-minute tour." card appears where the
               resume banner would normally be, with Take the Tour and Skip
               buttons. That auto-offer only ever shows once; after that,
               taking the tour is always available from Settings whenever you
@@ -1419,7 +1421,12 @@
               with no signal at all. It registers itself as an installable
               offline app in the background, so a dead spot in the room mid-game
               won't interrupt scoring; you'll just need a connection again
-              once you're ready to actually export or upload results.
+              once you're ready to actually export or upload results. See
+              <a href="#install-app">Installing as an App</a> for actually
+              putting it on your home screen, which makes this more reliable
+              still — an installed app is less likely to get reloaded or
+              closed by the OS than a browser tab left open in the
+              background.
             </p>
           </div>
         </details>
@@ -1443,6 +1450,73 @@
                 >the hosted app</a
               >, or served locally (<code>python3 -m http.server</code>), or
               opened in Firefox, which doesn't have this restriction.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== INSTALLING AS AN APP ============================== -->
+      <section class="faq-section" id="install-app">
+        <h2 class="faq-section-title">Installing as an App</h2>
+        <p class="faq-section-sub">
+          Optional, but worth it for game night: add Scorekeeper to your
+          phone's home screen and it opens full-screen, with its own icon,
+          same as a native app — no address bar, no tab to lose.
+        </p>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">iPhone or iPad (Safari)</span><span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Open the app in Safari, tap the Share icon, scroll down and tap
+              <strong>Add to Home Screen</strong>. Apple's own written
+              walkthrough covers this exactly, with current screenshots:
+              <a href="https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/ios" target="_blank" rel="noopener"
+                >Turn a website into an app in Safari on iPhone</a
+              >
+              (the
+              <a href="https://support.apple.com/guide/ipad/open-as-web-app-ipad8f1f7a29/ipados" target="_blank" rel="noopener"
+                >iPad version</a
+              >
+              is the same idea). Must be Safari — other iOS browsers can bookmark
+              a page but can't install it as a standalone app the same way.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">Android (Chrome)</span><span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Open the app in Chrome, tap the ⋮ menu, then
+              <strong>Add to Home screen</strong> (sometimes offered as
+              <strong>Install</strong> directly in the address bar). Google's
+              own written guide:
+              <a href="https://support.google.com/chrome/answer/9658361" target="_blank" rel="noopener"
+                >Use web apps on Android — Chrome Help</a
+              >.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">Is there an official video walkthrough?</span><span class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Not from Apple or Google directly, as far as this page can find
+              — both companies cover it in writing only (linked above), not in
+              a first-party video. Plenty of third-party tutorial videos exist
+              if you'd rather watch than read, but this page only links
+              sources it can vouch for, so it's sticking to the official
+              written guides.
             </p>
           </div>
         </details>
@@ -1492,7 +1566,7 @@
               </li>
               <li>
                 <strong>Sample Data</strong> — <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example loads a
-                finished sample game to browse; <svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="ℹ️"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><path d="M12 16v-6"/><path d="M12 7.2h.01"/></svg> Take the Tour walks you
+                finished sample game to browse; <svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> Take the Tour walks you
                 through playing one. See
                 <a href="#getting-started">Getting Started</a> and
                 <a href="#tutorial">Interactive Tutorial</a>.
@@ -1669,6 +1743,29 @@
               clears — that team as the Craft Beer Prize winner instead. See
               <a href="#craft-prize">Craft Prize Drawing</a>.
             </p>
+            <p>
+              The four tiles above the round-by-round breakdown, spelled out —
+              this is the same note the app shows right under them:
+            </p>
+            <p>
+              Each round shows that question's wager, whether it was marked
+              correct or incorrect, and the team's running score. To fix a
+              wrong wager, close this and tap the wager button in the round
+              itself.
+            </p>
+            <p>
+              <strong>Diff Adj (Difference Adjustment)</strong> is the Bonuses
+              coming back off — Bonus Item (+5) and NJCB (+3).
+              <strong>Adj. Score (Adjusted Score)</strong> is the Grand Total
+              with those stripped out. <strong>Diff</strong> is Adj. Score
+              measured against the team's Score Guess. A plus (+) means they
+              guessed high, a minus (−) means they guessed low, and 0 means
+              they called it exactly.
+            </p>
+            <p>
+              * Every team's guess is compared on the same bonus-free footing,
+              which is why the bonuses come off before the guess is scored.
+            </p>
             <div class="faq-shot">
               <img
                 src="screenshots/score-audit.webp"
@@ -1844,10 +1941,19 @@
           <div class="faq-a">
             <p>
               Adds a live correct/incorrect percentage next to each question's
-              Sort/Reset buttons — e.g. "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><polyline points="5,13 10,18 20,6"></polyline></svg> 3/5 (60%)" — so you can see at a
+              Sort/Reset buttons — both counts together, e.g.
+              "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><polyline points="5,13 10,18 20,6"></polyline></svg> 9/11 (82%)" and "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="❌"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg> 2/11 (18%)" — so you can see at a
               glance how a question is trending without scrolling through every
               team's row.
             </p>
+            <div class="faq-shot">
+              <img
+                src="screenshots/crowd-wisdom-percentage.webp"
+                data-shot-base="crowd-wisdom-percentage"
+                alt="A question header with Crowd-Wisdom Percentage on, showing 9/11 (82%) correct and 2/11 (18%) incorrect next to the Sort and Reset buttons"
+                onerror="faqShotFallback(this,'Question header with Crowd-Wisdom Percentage on — correct/incorrect counts next to Sort/Reset')"
+              />
+            </div>
           </div>
         </details>
 

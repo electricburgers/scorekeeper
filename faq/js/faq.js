@@ -4,7 +4,7 @@
 // #versionLabel element. Here the same string feeds two spots — the page footer and the
 // Settings panel's settings-meta row — so bumping a release only means editing these two
 // constants instead of hunting down every place the version text is written out by hand.
-const FAQ_VERSION = "v1.26";
+const FAQ_VERSION = "v1.27";
 const FAQ_VERSION_DATE = "22 Aug 2026";
 
 // Same Lucide sun/moon geometry as the main app's THEME_ICON_SUN/MOON (js/app.js), tagged
@@ -285,8 +285,13 @@ function faqApplyIconStyle(style) {
       if (svg) span.replaceWith(svg);
     });
   }
-  const btn = document.getElementById("faqIconStyleToggle");
-  if (btn) btn.textContent = emoji ? "Emoji" : "Pictograph";
+  // The toggle button's own beer-mug icon is a literal preview of the choice it makes — same
+  // reasoning as the main app's iconStyleToggle (js/app.js) swapping ICON_BEER_PICT/_EMOJI on
+  // itself. That icon is one of the svg[data-emoji] elements the sweep above already swapped;
+  // only the trailing label (its own span, not the button's textContent) needs updating here, so
+  // this doesn't clobber the icon the way overwriting the whole button's text would.
+  const label = document.getElementById("faqIconStyleLabel");
+  if (label) label.textContent = emoji ? "Emoji" : "Pictograph";
 }
 function faqSetIconStyle(style) {
   const p = faqLoadPrefs();
