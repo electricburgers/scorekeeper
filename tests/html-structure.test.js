@@ -435,3 +435,16 @@ test("index.html: every onclick=\"fnName(...)\" call references a function defin
   });
   assert.deepEqual([...new Set(missing)], []);
 });
+
+// ---- version.json (repo root) drives the "a newer version is available" check (checkForUpdate,
+// js/app.js) — it has to be bumped in the same commit as APP_VERSION or that check starts
+// lying: stale, it can never detect a real new release; ahead of what's actually deployed, it
+// nags a host running the exact build that just shipped it. This is the test js/app.js's own
+// top-of-file comment on APP_VERSION says exists. ----
+test("version.json's version matches js/app.js's APP_VERSION exactly", () => {
+  const appSrc = read("js/app.js");
+  const appMatch = appSrc.match(/const APP_VERSION = "([^"]+)"/);
+  assert.ok(appMatch, "APP_VERSION not found in js/app.js");
+  const versionJson = JSON.parse(read("version.json"));
+  assert.equal(versionJson.version, appMatch[1]);
+});

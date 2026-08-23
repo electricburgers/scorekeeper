@@ -1,0 +1,46 @@
+<!-- Source for icon-512.png/icon-192.png/apple-touch-icon.png. Regenerate after any edit with:
+       rsvg-convert -w 512 -h 512 icons/icon-source.svg -o icons/icon-512.png
+       rsvg-convert -w 192 -h 192 icons/icon-source.svg -o icons/icon-192.png
+       rsvg-convert -w 180 -h 180 icons/icon-source.svg -o icons/apple-touch-icon.png
+     No self-drawn rounded corners or border on the outer square (a rounded corner + border did
+     ship once — it got clipped unevenly by iOS's own corner mask, since the two roundings don't
+     agree exactly; see CHANGELOG). Full-bleed square background instead, and let the OS apply
+     its own mask on top. The purple (#241454) only shows in the square's corners outside the
+     black circle behind the gear ring — deliberately not filling the whole square, so the badge
+     reads as a distinct black-and-white-and-purple emblem sitting on a colored card, not a
+     purple icon with a black hole in the middle. Gear ring: 12 teeth as plain filled circles
+     sitting on a stroked base circle — simplest way to get an even, rounded-tooth cog silhouette
+     without per-tooth bezier math. Mask face: a solid white plate (not just an outline — an
+     outline-only version was tried first and read as a face, not a mask; the filled plate with
+     black features painted on top reads as an actual mask at a glance) with a black stroke
+     around its own edge so it stays visually separated from the black circle it sits on. Flat
+     top, tapering to a rounded point at the chin, not a plain circle — the flat top is what
+     reads as a mask/plate shape rather than a face outline. No eyebrows/nose/eye holes in the
+     end — tried, but they cluttered the small-size read without adding to recognizability; the
+     mustache carries the whole design. Goatee: a longer, narrower black point below the
+     mustache, not the short teardrop tried earlier — reads more deliberately "pointed beard"
+     instead of an ambiguous blob. -->
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#241454"/>
+  <circle cx="256" cy="256" r="215" fill="#000000"/>
+  <g fill="#ffffff" stroke="none">
+    <circle cx="444.0" cy="256.0" r="19.0"/>
+    <circle cx="418.8" cy="350.0" r="19.0"/>
+    <circle cx="350.0" cy="418.8" r="19.0"/>
+    <circle cx="256.0" cy="444.0" r="19.0"/>
+    <circle cx="162.0" cy="418.8" r="19.0"/>
+    <circle cx="93.2" cy="350.0" r="19.0"/>
+    <circle cx="68.0" cy="256.0" r="19.0"/>
+    <circle cx="93.2" cy="162.0" r="19.0"/>
+    <circle cx="162.0" cy="93.2" r="19.0"/>
+    <circle cx="256.0" cy="68.0" r="19.0"/>
+    <circle cx="350.0" cy="93.2" r="19.0"/>
+    <circle cx="418.8" cy="162.0" r="19.0"/>
+  </g>
+  <circle cx="256" cy="256" r="188" fill="none" stroke="#ffffff" stroke-width="16"/>
+  <g transform="translate(76 76) scale(15.33)">
+    <path d="M8 4.2 L16 4.2 C19 4.2 20 8 20 11.3 C20 16.5 15.5 21.6 12 21.6 C8.5 21.6 4 16.5 4 11.3 C4 8 5 4.2 8 4.2 Z" fill="#ffffff" stroke="#000000" stroke-width="1.15"/>
+    <path fill="#000000" stroke="none" d="M12 13.2c-.5-.9-1.6-1.3-2.6-.9-1.6.6-2.2 2.3-3.6 2.6-1 .2-1.9-.3-2.3-1.1-.3.9.1 2 1.1 2.5 1.7.8 3.5-.2 4.6-1.4.5-.6 1.1-1.1 1.8-1.4v-.3Zm0 0c.5-.9 1.6-1.3 2.6-.9 1.6.6 2.2 2.3 3.6 2.6 1 .2 1.9-.3 2.3-1.1.3.9-.1 2-1.1 2.5-1.7.8-3.5-.2-4.6-1.4-.5-.6-1.1-1.1-1.8-1.4v-.3Z"/>
+    <path fill="#000000" stroke="none" d="M10.1 16.4c.4 2.6 1 4.8 1.9 6.4 .9-1.6 1.5-3.8 1.9-6.4-.8.5-1.3.9-1.9 1.8-.6-.9-1.1-1.3-1.9-1.8Z"/>
+  </g>
+</svg>

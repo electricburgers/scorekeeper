@@ -30,8 +30,20 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.33"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v19.34"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Aug 23, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+// version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
+// in the same commit as these two or the update-available check starts lying: it'd either miss
+// a real new release (version.json still saying the old version) or nag a host running the
+// build that just shipped it (version.json bumped ahead of what's actually deployed and
+// cached). tests/js-behavior.test.js has a test that fails the build if the two ever disagree.
+// Set once a real newer build is confirmed available (checkForUpdate(), far below, next to the
+// service worker registration it sits beside conceptually) — declared all the way up here, not
+// down there, because applyPrefs() (also below) reads it and applyPrefs() runs synchronously at
+// script-parse time before that point in the file is ever reached; a `let` declared at its own
+// point of use would still be in its temporal dead zone on that first call. Same reasoning as
+// BONUS_Q_STYLE elsewhere in this file, which has the fuller explanation.
+let latestVersion = null;
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":0,"5":0,"6":2,"7":3,"8":0,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
 // Both this array and DEFAULT_SI are shared with the FAQ (js/shared-ui.js's SHARED_FONT_SIZES/
@@ -153,7 +165,12 @@ function applyPrefs() {
     .getElementById("settingsBackdrop")
     ?.classList.toggle("show", !!p.settingsOpen);
   const stb = document.getElementById("settingsToggleBtn");
-  if (stb) stb.classList.toggle("active", !!p.settingsOpen);
+  if (stb) {
+    stb.classList.toggle("active", !!p.settingsOpen);
+    // See checkForUpdate()'s own comment (below the service worker registration) for what sets
+    // latestVersion and why this stays a quiet dot rather than a banner.
+    stb.classList.toggle("has-update", !!latestVersion);
+  }
   const sl = p.stripeLevel ?? 0;
   if (sl === 0) document.documentElement.removeAttribute("data-stripe");
   else document.documentElement.setAttribute("data-stripe", String(sl));
@@ -228,7 +245,13 @@ function applyPrefs() {
   const crossfadeRow = document.getElementById("drumCrossfadeRow");
   if (crossfadeRow) crossfadeRow.style.display = p.craftManualEnd ? "" : "none";
   const vl = document.getElementById("versionLabel");
-  if (vl) vl.textContent = "Scorekeeper " + APP_VERSION + " · " + APP_VERSION_DATE;
+  if (vl) {
+    let html = "Scorekeeper " + APP_VERSION + " · " + APP_VERSION_DATE;
+    if (latestVersion)
+      html +=
+        ` <button type="button" class="update-available-btn" onclick="location.reload()">${esc(latestVersion)} available — tap to refresh</button>`;
+    vl.innerHTML = html;
+  }
   const qts = document.getElementById("qtDurationSelect");
   if (qts && document.activeElement !== qts) qts.value = p.qtDurationSec;
 }
@@ -2137,6 +2160,44 @@ if ("serviceWorker" in navigator && location.protocol !== "file:") {
     navigator.serviceWorker.register("sw.js").catch(() => {});
   });
 }
+
+// UPDATE CHECK — checkForUpdate() sets latestVersion (declared up near APP_VERSION at the top of
+// the file, not here, despite this being its only real use — applyPrefs() reads it, and runs
+// synchronously at load time far earlier than this point in the file; a `let` declared here
+// would still be in its temporal dead zone on that first call, throwing "Cannot access
+// 'latestVersion' before initialization" the same way this file's own BONUS_Q_STYLE note (near
+// the top) describes). Drives the gear icon's dot (applyPrefs below) and the "vX.X available" note under
+// the version line in Settings. Quiet by design: a host running this mid-game gets an
+// easy-to-miss dot, not a banner stealing attention from scoring — see the CHANGELOG entry this
+// shipped with for why.
+// Fetches version.json (repo root — kept in sync with APP_VERSION, see the note above it) with
+// the service worker and every HTTP cache along the way bypassed on purpose: this exists
+// specifically to answer "is there a real build newer than the one I'm currently running", and
+// the SW's own cache — or a stale HTTP response — answering that question would always say no,
+// since it'd just be reporting on itself. cache:"no-store" plus a cache-busting query string is
+// belt-and-braces — the query string alone already guarantees the SW's own cache.match() (keyed
+// on the exact request) never hits, since version.json was never precached under that exact URL
+// to begin with (deliberately not in sw.js's SHELL_FILES).
+function checkForUpdate() {
+  // Returns the chain (nothing at either real call site below awaits it) purely so a test can:
+  // callers that only fire-and-forget this are unaffected either way.
+  return fetch("version.json?_=" + Date.now(), { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      if (data && data.version && data.version !== APP_VERSION) {
+        latestVersion = data.version;
+        applyPrefs(); // cheap; picks up the gear-icon dot and version-line note below
+      }
+    })
+    .catch(() => {}); // offline, or the venue's own WiFi down — try again next load/foreground
+}
+checkForUpdate();
+// Re-checks when the host switches back to this tab/app after a while away — the one case a
+// long-running session (a whole trivia night, easily hours) would otherwise never see a build
+// that shipped after it opened, since nothing else re-runs this.
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") checkForUpdate();
+});
 
 // Sync the Settings controls to the saved prefs once on load. applyPrefs had only ever been
 // reached through renderAll(), so before the first render every control in the panel still showed

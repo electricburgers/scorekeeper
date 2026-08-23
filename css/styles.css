@@ -405,8 +405,19 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    this font stack, and 12px is this rule's own padding+border (5px×2 + 1px×2) — so it tracks
    Settings > Size the same way Save/Load's real text metrics already do, rather than a fixed px
    height that wouldn't scale alongside them. */
-.settings-toggle-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.78rem;font-weight:600;min-height:calc(1.24em + 12px);padding:5px 12px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
+.settings-toggle-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.78rem;font-weight:600;min-height:calc(1.24em + 12px);padding:5px 12px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
 .settings-toggle-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
+/* The one visible cue for checkForUpdate() (js/app.js) finding a real newer build — deliberately
+   just a dot, not a banner: a host mid-game shouldn't have their attention pulled by anything
+   louder than this. position:relative above is load-bearing (this dot's own containing block).
+   border matches --bg-card, not the page background, so the dot reads as sitting on the button
+   rather than looking like a notch cut out of it. */
+.settings-toggle-btn.has-update::after{content:"";position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--accent-gold);border:2px solid var(--bg-card)}
+/* The fuller "vX.X available" note under the version line in Settings — same info as the dot
+   above, spelled out for whoever actually opens Settings and wants to know what it means. A
+   real <button> (not a link) since it doesn't navigate anywhere, just reloads in place. */
+.update-available-btn{font-family:var(--font-display);font-size:.66rem;font-weight:700;color:var(--txt-cyan);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.update-available-btn:hover{color:var(--accent-cyan)}
 
 /* Overlay, not in-flow: .header is position:sticky (a valid containing block for an
    absolutely-positioned child), so this floats above the app instead of pushing the

@@ -10,6 +10,30 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.34 - 2026-08-23
+- **New PWA icon**: replaces the bar-chart mark with an original pictograph mask — a gear/cog
+  ring (12 teeth) around a mustachioed mask face, evoking the business's own real branding
+  without reproducing its detailed illustrated mark directly (see the design note in
+  `icons/icon-source.svg`, the new source file for this icon, for the full reasoning trail —
+  filled white mask plate with black features read better than an outlined one, plain arched
+  brows read better than an angled "sly" attempt that came out looking sad, etc.). Purple
+  (`#241454`) shows only in the square's corners outside the black circle behind the gear, not
+  the whole icon. Also fixes a real rendering bug the previous (beer mug) icon shipped with: a
+  self-drawn rounded corner + border got clipped unevenly by iOS's own corner mask, since the
+  two roundings don't exactly agree — this one ships as a full-bleed square with no self-drawn
+  corner treatment at all, letting iOS apply its own mask cleanly on top.
+- **New: a quiet "update available" indicator.** `checkForUpdate()` (`js/app.js`) fetches a new
+  `version.json` (repo root) — cache-busted and `cache:"no-store"`, deliberately bypassing the
+  service worker's own cache, since the whole point is to ask "is there a build newer than the
+  one I'm running" and a cached answer to that is always going to say no — on load and whenever
+  the tab/app comes back to the foreground. If it names a version newer than the one currently
+  running, a small dot appears on the ⚙️ Settings button and a "vX.X available — tap to refresh"
+  note appears under the version line inside Settings. Deliberately not a banner: this app runs
+  live during trivia nights, and a host mid-game shouldn't have their attention pulled by
+  anything louder than an easy-to-miss dot. `version.json` has to be bumped in the same commit
+  as `APP_VERSION` from now on (see the note above that constant) or the check starts lying —
+  a new test fails the build if they ever disagree.
+
 ## v19.33 - 2026-08-23
 - **Fixed the mobile Settings panel's header visibly double-exposing/ghosting against the Theme
   row while scrolling**, on a real iPhone. `.settings-panel-head` was pinned in place by flex

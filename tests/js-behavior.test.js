@@ -1279,3 +1279,76 @@ describe('Desktop "scroll void" bug (--layout-top sync)', () => {
     assert.match(block, /addEventListener\(["']load["'],\s*sync\)/);
   });
 });
+
+// ============================================================================
+// Update check (checkForUpdate, js/app.js) — fetches version.json (cache-busted, cache:
+// "no-store") and, if it names a version different from APP_VERSION, sets latestVersion and
+// drives a quiet gear-icon dot + a "vX.X available" note under the version line in Settings
+// (see the CHANGELOG entry this shipped with for why it's deliberately not a banner). jsdom has
+// no native fetch — tests/helpers/load-app.js stubs window.fetch to reject by default (the same
+// "offline, or the venue's own WiFi is down" path checkForUpdate() already handles gracefully in
+// a real browser), so each test below overrides it locally to exercise a specific real response.
+// ============================================================================
+describe("Update check (checkForUpdate)", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+
+  it("does nothing when version.json reports the same version already running", async () => {
+    evalIn(
+      window,
+      `window.fetch = () => Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ version: APP_VERSION }),
+      });`,
+    );
+    await evalIn(window, "checkForUpdate()");
+    assert.equal(evalIn(window, "latestVersion"), null);
+    assert.equal(
+      window.document
+        .getElementById("settingsToggleBtn")
+        .classList.contains("has-update"),
+      false,
+    );
+  });
+
+  it("sets latestVersion and shows the gear-icon dot + version-line note when a newer version is reported", async () => {
+    evalIn(
+      window,
+      `window.fetch = () => Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ version: "v99.99" }),
+      });`,
+    );
+    await evalIn(window, "checkForUpdate()");
+    assert.equal(evalIn(window, "latestVersion"), "v99.99");
+    assert.equal(
+      window.document
+        .getElementById("settingsToggleBtn")
+        .classList.contains("has-update"),
+      true,
+    );
+    const html = window.document.getElementById("versionLabel").innerHTML;
+    assert.match(html, /v99\.99 available/);
+    assert.match(html, /onclick="location\.reload\(\)"/);
+  });
+
+  it("silently no-ops (no throw, no latestVersion change) when the fetch fails, matching real offline/venue-WiFi-down behavior", async () => {
+    evalIn(window, "latestVersion = null;");
+    evalIn(
+      window,
+      'window.fetch = () => Promise.reject(new Error("offline"));',
+    );
+    await assert.doesNotReject(() => evalIn(window, "checkForUpdate()"));
+    assert.equal(evalIn(window, "latestVersion"), null);
+  });
+
+  it("silently no-ops when version.json's response isn't ok (e.g. a 404 on a dev/preview host with no version.json)", async () => {
+    evalIn(window, "latestVersion = null;");
+    evalIn(window, 'window.fetch = () => Promise.resolve({ ok: false });');
+    await evalIn(window, "checkForUpdate()");
+    assert.equal(evalIn(window, "latestVersion"), null);
+  });
+});

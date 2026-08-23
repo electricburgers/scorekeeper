@@ -107,6 +107,11 @@ function beforeParse(window) {
     unobserve() {}
     disconnect() {}
   };
+  // jsdom has no native fetch. checkForUpdate() (js/app.js) calls it unconditionally at load —
+  // rejecting here exercises the exact same "offline, or the venue's own WiFi is down" path
+  // that function already handles gracefully in a real browser (a silent no-op via its own
+  // .catch()), rather than throwing and taking down every test that loads the real app.
+  window.fetch = () => Promise.reject(new Error("fetch is not available in jsdom"));
   // jsdom's own Blob has no way to read bytes back out (no .arrayBuffer()/.text() — just .size/
   // .type), and URL.createObjectURL doesn't exist at all, so fadeClipUrl()/exportXLSXBackup()/
   // exportPDF() throw outright without a stub. This one keeps the constructor's own parts array
