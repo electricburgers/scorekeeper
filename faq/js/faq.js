@@ -4,7 +4,7 @@
 // #versionLabel element. Here the same string feeds two spots — the page footer and the
 // Settings panel's settings-meta row — so bumping a release only means editing these two
 // constants instead of hunting down every place the version text is written out by hand.
-const FAQ_VERSION = "v1.29";
+const FAQ_VERSION = "v1.30";
 const FAQ_VERSION_DATE = "22 Aug 2026";
 
 // Same Lucide sun/moon geometry as the main app's THEME_ICON_SUN/MOON (js/app.js), tagged
@@ -225,7 +225,7 @@ function faqHighlightMatches(root, query) {
 // dark-captured default.
 function faqApplyThemedShots() {
   var isLight =
-    document.documentElement.getAttribute("data-theme") === "hc-light";
+    document.documentElement.getAttribute("data-theme") === "light";
   document
     .querySelectorAll(".faq-shot img[data-shot-base]")
     .forEach(function (img) {
@@ -252,8 +252,11 @@ function faqApplyThemedShots() {
 // FONT_SIZES/DEFAULT_SI are kept identical to the main Scorekeeper app's own copy (js/app.js
 // there) so both pages resolve the same sizeIndex to the same pixel size.
 const FAQ_PREFS_KEY = "trivRev6_prefs";
-const FAQ_FONT_SIZES = [12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 30];
-const FAQ_DEFAULT_SI = 3;
+// Both this array and FAQ_DEFAULT_SI are shared with the main app (js/shared-ui.js's
+// SHARED_FONT_SIZES/SHARED_DEFAULT_SIZE_INDEX) — same sizes, same default, so kept in one place
+// instead of two copies of the same 14 numbers.
+const FAQ_FONT_SIZES = SHARED_FONT_SIZES;
+const FAQ_DEFAULT_SI = SHARED_DEFAULT_SIZE_INDEX;
 
 function faqLoadPrefs() {
   try {
@@ -318,9 +321,15 @@ function faqToggleIconStyle() {
 
 function faqApplyDisplayPrefs() {
   const p = faqLoadPrefs();
-  const theme = ["hc-dark", "hc-light"].includes(p.theme)
+  // Same "hc-light"/"hc-dark" legacy recognition as faq-bootstrap.js's own copy of this check
+  // (see its comment) — this one runs again after that pre-paint pass, off the same raw,
+  // still-unmigrated stored value, so it needs the same fallback or a real returning visitor's
+  // Light preference would flip to Dark right back on this second read.
+  const theme = ["dark", "light"].includes(p.theme)
     ? p.theme
-    : "hc-dark";
+    : ["light", "bw", "hc-light"].includes(p.theme)
+      ? "light"
+      : "dark";
   document.documentElement.setAttribute("data-theme", theme);
   const tb = document.getElementById("faqThemeToggle");
   // Same drawn-pictograph/emoji pair Icon Style swaps everywhere else on this page (data-emoji
@@ -330,7 +339,7 @@ function faqApplyDisplayPrefs() {
   // no crescent shape at all) — matches the main app's own THEME_ICON_MOON_EMOJI.
   if (tb)
     tb.innerHTML =
-      theme === "hc-light"
+      theme === "light"
         ? FAQ_THEME_SUN_SVG + " Light"
         : FAQ_THEME_MOON_SVG + " Dark";
   faqApplyIconStyle(p.iconStyle === "emoji" ? "emoji" : "pictograph");
@@ -360,9 +369,9 @@ function faqAdjustFontSize(d) {
 // Manual override for the Theme row: same "read current data-theme, flip it" toggle as the
 // main app's toggleTheme() (js/app.js), not a re-derive from stored prefs — the bootstrap
 // script (js/faq-bootstrap.js) already resolved a missing/invalid stored theme down to
-// "hc-dark" before first paint, so the live attribute is always the correct starting point.
+// "dark" before first paint, so the live attribute is always the correct starting point.
 function faqSetTheme(t) {
-  if (!["hc-dark", "hc-light"].includes(t)) t = "hc-dark";
+  if (!["dark", "light"].includes(t)) t = "dark";
   const p = faqLoadPrefs();
   p.theme = t;
   faqSavePrefs(p);
@@ -371,7 +380,7 @@ function faqSetTheme(t) {
 }
 function faqToggleTheme() {
   const current = document.documentElement.getAttribute("data-theme");
-  faqSetTheme(current === "hc-light" ? "hc-dark" : "hc-light");
+  faqSetTheme(current === "light" ? "dark" : "light");
 }
 function faqSetCbMode(v) {
   const p = faqLoadPrefs();
@@ -379,79 +388,20 @@ function faqSetCbMode(v) {
   faqSavePrefs(p);
   faqApplyDisplayPrefs();
 }
-// Same reason the main app's own cvMenuEl() exists (js/app.js): while open, the menu is
-// re-parented to <body> (see faqToggleCvMenu below), so it's no longer a descendant of
-// #faqCvSelect and a plain w.querySelector(...) can't find it any more. There's only ever one
-// on this page, so a bare document-wide lookup is unambiguous and works regardless of which
-// element currently parents it.
-function faqCvMenuEl() {
-  return document.querySelector(".cv-select-menu");
+// Thin, page-named wrappers around js/shared-ui.js's sharedToggleCvMenu/sharedCloseCvMenu/
+// sharedSetCvSelectDisplay — same widget, same markup, same positioning logic as the main app's
+// own #cbSelect, so the actual implementation lives there once instead of as two independently
+// hand-maintained copies (see that file's own top comment for the bug history behind why). Kept
+// as same-named functions here rather than calling the shared ones directly from this page's
+// onclick="" attributes, so nothing in the markup had to change for this.
+function faqCloseCvMenu() {
+  sharedCloseCvMenu("faqCvSelect");
+}
+function faqToggleCvMenu(e) {
+  sharedToggleCvMenu(e, "faqCvSelect");
 }
 function faqSetCvSelectDisplay(v) {
-  const w = document.getElementById("faqCvSelect");
-  const menu = faqCvMenuEl();
-  if (!w || !menu) return;
-  const li = menu.querySelector('li[data-value="' + v + '"]');
-  menu.querySelectorAll("li").forEach((o) => o.setAttribute("aria-selected", "false"));
-  if (li) {
-    li.setAttribute("aria-selected", "true");
-    const lbl = w.querySelector(".cv-select-label");
-    if (lbl) lbl.textContent = li.dataset.short || li.textContent.trim();
-    // Same mirroring the main app's setCvSelectDisplay does (js/app.js): copy the selected
-    // option's own swatch pair into the closed button so the two colours a mode swaps to are
-    // visible without opening the menu. "Off" has no swatch pair, so this clears it.
-    const swatchSrc = li.querySelector(".cv-swatch-pair");
-    const swatchDst = w.querySelector(".cv-select-swatch");
-    if (swatchDst) swatchDst.innerHTML = swatchSrc ? swatchSrc.innerHTML : "";
-  }
-}
-function faqCloseCvMenu() {
-  const w = document.getElementById("faqCvSelect");
-  if (!w) return;
-  const menu = faqCvMenuEl();
-  if (menu) {
-    menu.classList.remove("cv-open");
-    if (menu.parentElement === document.body) w.appendChild(menu);
-  }
-  w.classList.remove("open");
-  w.querySelector(".cv-select-btn")?.setAttribute("aria-expanded", "false");
-}
-// Ported straight from the main app's toggleCvMenu (js/app.js) — the FAQ's own previous version
-// tried to fix right-edge overflow with a data-align="right" attribute that no CSS rule ever
-// actually read (dead code — the menu still rendered whatever position:fixed's own default
-// static-position algorithm produced, uncorrected, which runs off the right edge for the wider
-// options here — "Red-Green (deuteranopia/protanopia)" — well before the viewport does). The
-// same fix applies for the same reason: .settings-panel (shared CSS, this page's panel too)
-// animates via slideDown, and an active transform/animation establishes a containing block for
-// position:fixed descendants same as a static transform would, so the coordinates computed
-// against the viewport need the menu actually parented to <body> — no transformed ancestor
-// between it and the viewport — to land where they're computed for.
-function faqToggleCvMenu(e) {
-  e.stopPropagation();
-  const w = document.getElementById("faqCvSelect");
-  if (!w) return;
-  const willOpen = !w.classList.contains("open");
-  const btnEl = w.querySelector(".cv-select-btn");
-  const menu = faqCvMenuEl();
-  if (!willOpen) {
-    faqCloseCvMenu();
-    return;
-  }
-  w.classList.add("open");
-  btnEl.setAttribute("aria-expanded", "true");
-  menu.classList.add("cv-open");
-  document.body.appendChild(menu);
-  const btn = btnEl.getBoundingClientRect();
-  menu.style.minWidth = btn.width + "px";
-  const menuRect = menu.getBoundingClientRect();
-  let left = btn.left;
-  if (left + menuRect.width > window.innerWidth - 8)
-    left = btn.right - menuRect.width;
-  menu.style.left = Math.max(8, left) + "px";
-  let top = btn.bottom + 4;
-  if (top + menuRect.height > window.innerHeight - 8)
-    top = btn.top - menuRect.height - 4;
-  menu.style.top = Math.max(8, top) + "px";
+  sharedSetCvSelectDisplay("faqCvSelect", v);
 }
 function faqSelectCvOption(li, v) {
   faqSetCvSelectDisplay(v);
@@ -489,7 +439,57 @@ document.addEventListener("keydown", (e) => {
     faqCloseCvMenu();
     faqCloseSettingsPanel();
   }
+  // "/" focuses search, same shortcut GitHub/most search-heavy sites use — skipped while
+  // already typing into any text field (this page's own search box included: without the
+  // isContentEditable/tagName guard, typing a literal "/" as part of a search query would
+  // instead yank focus right back to the box it's already in) or with a modifier held (so
+  // Cmd+/ and friends, if the browser or an extension binds them to something else, aren't
+  // hijacked).
+  if (
+    e.key === "/" &&
+    !e.metaKey &&
+    !e.ctrlKey &&
+    !e.altKey &&
+    !["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName) &&
+    !document.activeElement?.isContentEditable
+  ) {
+    const box = document.getElementById("faqSearch");
+    if (box) {
+      e.preventDefault();
+      box.focus();
+      box.select();
+    }
+  }
 });
+
+// A URL like faq/index.html?q=wager arrives pre-filtered and focused on the match — lets the
+// app itself (a tooltip, an error message, a future "?" hint) link straight into a topic
+// instead of only ever opening the FAQ cold and making the reader search it themselves.
+function faqApplyQueryParam() {
+  const q = new URLSearchParams(location.search).get("q");
+  if (!q) return;
+  const box = document.getElementById("faqSearch");
+  if (!box) return;
+  box.value = q;
+  faqFilter(q);
+  box.focus();
+}
+
+// Every .faq-item now carries its own id, so a link can point straight at one answer — but the
+// browser's own fragment-target auto-reveal only opens a closed <details> that's an ANCESTOR of
+// the targeted element, not one that IS the target itself (checked directly: navigating to
+// #<details-id> leaves that <details>.open === false, even though :target correctly matches
+// it). So the one thing that native behavior doesn't cover — actually opening the id'd
+// <details> itself, not just scrolling to its closed shell — needs doing by hand here.
+function faqOpenLinkedItem() {
+  const id = location.hash.slice(1);
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (el && el.classList.contains("faq-item")) el.open = true;
+}
 
 faqApplyDisplayPrefs();
 faqApplyThemedShots();
+faqApplyQueryParam();
+faqOpenLinkedItem();
+window.addEventListener("hashchange", faqOpenLinkedItem);

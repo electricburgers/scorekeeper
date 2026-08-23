@@ -48,9 +48,11 @@ const Tutorial = (function () {
   let sawSectionCollapsed = false; // tracks the collapse->expand sequence for that practice step
   let r1CycleSeen = null; // tracks correct->incorrect->cleared->back-to-correct on one question
   let auditOpened = false; // real click on a team name to open the Team Report modal
-  let pdfExportClicked = false; // real click on Export PDF, tracked via a listener (see below)
-  let jdUploadClicked = false; // real click on the JD Upload Form link — opens in a new tab, so
-  // there's no in-page state change to poll for the way every other on-click step has
+  // Note for the PDF export / JD Upload Form steps further down: neither tracks a
+  // clicked/not-clicked flag the way every other on-click step does. PDF export and the JD
+  // link (opens in a new tab) both leave no in-page state change to poll for, so those two
+  // steps lean on fallbackNext (see the STEP TABLE note on it) instead — an always-available
+  // Next button — rather than real click detection.
 
   // ── PRACTICE STATE ──────────────────────────────────────────────────────────────────────
   // Built the same way loadSampleGame() builds its demo, but 5 teams instead of 11 and every
@@ -437,7 +439,7 @@ const Tutorial = (function () {
         // so this reliably demonstrates that default regardless of any real customized setting.
         target: () =>
           isMobileViewport() ? ".qtimer-mobile" : ".qtimer-desktop",
-        text: `The Question Timer is here. ${tapWordCap()} ▶ to start a countdown. We'll come back to it at the end.`,
+        text: `The Question Timer is here. ${tapWordCap()} the play button to start a countdown. We'll come back to it at the end.`,
         advance: "on-click",
         // toggleQTimer() only flips module-level timer state and updates the qtimer-* elements
         // directly — it never calls a hooked render function, so nothing would otherwise
@@ -507,7 +509,7 @@ const Tutorial = (function () {
         target: "#qblock-1-1 .q-sort-btn",
         targetEnd: "#qblock-1-1 .q-reset-btn",
         calloutPosition: "above",
-        text: `${tapWordCap()} Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or ↺ Reset to go back to entry order. ${tapWordCap()} Next when you're ready to move on.`,
+        text: `${tapWordCap()} Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or Reset to go back to entry order. ${tapWordCap()} Next when you're ready to move on.`,
         // 'confirm' rather than 'on-click' here on purpose — the host might want to tap Sort a
         // few times (and try Reset) to get a feel for it, not get whisked away the instant it
         // sorts once.
@@ -654,7 +656,7 @@ const Tutorial = (function () {
       {
         target: ".cp-winner",
         targetEnd: ".cp-script",
-        text: `There's the Craft Prize Drawing winner! And right below it, a ready-to-read announcement with the craft partner's name and town filled in. You can ${tapWord()} ✕ Clear to wipe the choice and draw again.`,
+        text: `There's the Craft Prize Drawing winner! And right below it, a ready-to-read announcement with the craft partner's name and town filled in. You can ${tapWord()} Clear to wipe the choice and draw again.`,
         advance: "manual",
       },
       {
@@ -697,7 +699,7 @@ const Tutorial = (function () {
         // where it lives, so the callout lands dead center on the page instead (same no-target
         // path the welcome step uses — see the comment on that path in doReposition()).
         target: null,
-        text: `That's a full game! Feel free to keep playing around or check out the FAQ in Settings. To clear this Tutorial and start a new game, ${tapWord()} 🗑 Clear Session in Export & Data. ${tapWordCap()} Close Tutorial to close this box.`,
+        text: `That's a full game! Feel free to keep playing around or check out the FAQ in Settings. To clear this Tutorial and start a new game, ${tapWord()} Clear Session in Export & Data. ${tapWordCap()} Close Tutorial to close this box.`,
         advance: "manual",
         last: true,
       },
@@ -823,7 +825,7 @@ const Tutorial = (function () {
   }
 
   // ── ENGINE ───────────────────────────────────────────────────────────────────────────────
-  function start() {
+  async function start() {
     if (active) return;
     // Same "are you sure" pattern loadSampleGame() already uses for the same reason: starting
     // the tour swaps in a throwaway practice game, and while that's safely reversible via Skip
@@ -832,9 +834,10 @@ const Tutorial = (function () {
     // lose it if they don't realize that going in.
     if (
       gameState.teams.length &&
-      !confirm(
+      !(await appConfirm(
         "Starting the tutorial clears your current game in progress and starts a fresh practice one. Skipping the tour brings your real game back, but finishing it normally keeps the practice game instead — export or save first if you need to keep this one. Continue?",
-      )
+        { okLabel: "Start Tutorial" },
+      ))
     )
       return;
     if (loadPrefs().settingsOpen) closeSettingsPanel();
@@ -1344,8 +1347,13 @@ const Tutorial = (function () {
     const card = document.createElement("div");
     card.className = "tutorial-firstrun";
     card.id = "tutorialFirstRun";
+    // Same hand-wave pictograph as the Settings > Sample Data > Take the Tour button
+    // (index.html) — this card used to draw the graduation cap that icon had before it changed.
+    // Not wired into STATIC_ICON_TARGETS/Icon Style like that button is: this card is only ever
+    // in the DOM briefly, for a first-time visitor, so it isn't worth the extra bookkeeping a
+    // dynamically-inserted, one-time element would need to participate in that sweep.
     card.innerHTML =
-      `<p><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> New here? Take the tour.</p>` +
+      `<p><svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> New here? Take the tour.</p>` +
       `<div class="btn-row">` +
       `<button class="btn" onclick="Tutorial.start()">Take the Tour</button>` +
       `<button class="btn" onclick="Tutorial.dismissFirstRun()">Skip</button>` +

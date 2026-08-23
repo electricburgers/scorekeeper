@@ -384,7 +384,7 @@ function applyIconStyle(style) {
   ICON_AUDIT_WRONG = emoji ? ICON_AUDIT_WRONG_EMOJI : X_ICON_SVG_PICT;
   CHECK_ICON_SVG = emoji ? CHECK_ICON_SVG_EMOJI : CHECK_ICON_SVG_PICT;
   ICON_DONE = emoji
-    ? document.documentElement.getAttribute("data-theme") === "hc-dark"
+    ? document.documentElement.getAttribute("data-theme") === "dark"
       ? ICON_DONE_EMOJI_DARK
       : ICON_DONE_EMOJI
     : CHECK_ICON_SVG_PICT;
@@ -509,7 +509,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.28"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.29"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 22, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 
 const SAMPLE_GAME_JSON = `{"meta":{"date":"2024-02-29","location":"The Fawkes & Firkin","quizId":"XYZ-000","hostName":"Guy Fawkes","craftPartner":"Trivia Rev Brew Co","craftPartnerTown":"Toon Town","bonusItem":"Guy Fawkes Mask","staffNames":"Josie, Valerie, Fred, Daphne, Velma"},"teams":[{"name":"Parliamentary Procedure","scoreGuess":131,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Lanterns & Lore","scoreGuess":110,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Fifth of November","scoreGuess":86,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Quizzy McQuizface","scoreGuess":120,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Sherlock Homies","scoreGuess":113,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Mastermind Alliance","scoreGuess":130,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"The Usual Suspecters","scoreGuess":66,"bonusItem":false,"njcb":true,"adjustment":0},{"name":"Trivia Newton John","scoreGuess":124,"bonusItem":true,"njcb":false,"adjustment":0},{"name":"Two Heads, One Trophy","scoreGuess":99,"bonusItem":false,"njcb":false,"adjustment":0},{"name":"Powder Keg of Knowledge","scoreGuess":127,"bonusItem":true,"njcb":true,"adjustment":0},{"name":"Remember Remember","scoreGuess":76,"bonusItem":false,"njcb":false,"adjustment":0}],"rounds":[{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":3,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":2,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":3,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":4,"correct":true},"10":{"wager":4,"correct":true}},{"0":{"wager":1,"correct":true},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":3,"correct":true},"5":{"wager":2,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":3,"correct":true},"10":{"wager":1,"correct":false}},{"0":{"wager":2,"correct":true},"1":{"wager":2,"correct":true},"2":{"wager":4,"correct":true},"3":{"wager":2,"correct":false},"4":{"wager":4,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":false},"7":{"wager":4,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":2,"correct":true},"10":{"wager":2,"correct":true}},{"0":{"wager":3,"correct":true},"1":{"wager":4,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":3,"correct":true},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":true},"6":{"wager":4,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":2,"correct":true},"9":{"wager":1,"correct":true},"10":{"wager":3,"correct":true}}],"bonus":{"0":4,"1":3,"2":4,"3":2,"4":0,"5":0,"6":2,"7":3,"8":0,"9":2,"10":2}},{"questions":[{"0":{"wager":7,"correct":true},"1":{"wager":7,"correct":true},"2":{"wager":5,"correct":true},"3":{"wager":7,"correct":true},"4":{"wager":3,"correct":true},"5":{"wager":5,"correct":true},"6":{"wager":7,"correct":true},"7":{"wager":7,"correct":true},"8":{"wager":7,"correct":true},"9":{"wager":3,"correct":true},"10":{"wager":5,"correct":true}},{"0":{"wager":5,"correct":false},"1":{"wager":3,"correct":false},"2":{"wager":7,"correct":true},"3":{"wager":1,"correct":false},"4":{"wager":7,"correct":true},"5":{"wager":7,"correct":true},"6":{"wager":3,"correct":false},"7":{"wager":3,"correct":false},"8":{"wager":1,"correct":false},"9":{"wager":5,"correct":false},"10":{"wager":3,"correct":true}},{"0":{"wager":3,"correct":false},"1":{"wager":1,"correct":false},"2":{"wager":1,"correct":false},"3":{"wager":3,"correct":false},"4":{"wager":1,"correct":false},"5":{"wager":1,"correct":false},"6":{"wager":5,"correct":false},"7":{"wager":1,"correct":false},"8":{"wager":5,"correct":false},"9":{"wager":1,"correct":false},"10":{"wager":1,"correct":false}},{"0":{"wager":1,"correct":false},"1":{"wager":5,"correct":true},"2":{"wager":3,"correct":true},"3":{"wager":5,"correct":true},"4":{"wager":5,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":1,"correct":false},"7":{"wager":5,"correct":true},"8":{"wager":3,"correct":false},"9":{"wager":7,"correct":true},"10":{"wager":7,"correct":true}}],"bonus":{}},{"questions":[{"0":{"wager":4,"correct":true},"1":{"wager":6,"correct":true},"2":{"wager":2,"correct":true},"3":{"wager":4,"correct":true},"4":{"wager":6,"correct":true},"5":{"wager":8,"correct":true},"6":{"wager":4,"correct":false},"7":{"wager":8,"correct":true},"8":{"wager":6,"correct":true},"9":{"wager":6,"correct":true},"10":{"wager":8,"correct":true}},{"0":{"wager":2,"correct":false},"1":{"wager":8,"correct":true},"2":{"wager":6,"correct":true},"3":{"wager":2,"correct":true},"4":{"wager":2,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":8,"correct":true},"7":{"wager":6,"correct":true},"8":{"wager":4,"correct":true},"9":{"wager":4,"correct":false},"10":{"wager":4,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":4,"correct":false},"2":{"wager":4,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":4,"correct":false},"5":{"wager":2,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":2,"correct":true},"8":{"wager":8,"correct":true},"9":{"wager":2,"correct":false},"10":{"wager":2,"correct":true}},{"0":{"wager":8,"correct":true},"1":{"wager":2,"correct":false},"2":{"wager":8,"correct":true},"3":{"wager":8,"correct":true},"4":{"wager":8,"correct":true},"5":{"wager":4,"correct":true},"6":{"wager":2,"correct":true},"7":{"wager":4,"correct":true},"8":{"wager":2,"correct":false},"9":{"wager":8,"correct":true},"10":{"wager":6,"correct":false}}],"bonus":{"0":4,"1":4,"2":4,"3":4,"4":4,"5":4,"6":4,"7":4,"8":4,"9":4,"10":4}},{"questions":[{"0":{"wager":12,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":12,"correct":true},"3":{"wager":6,"correct":true},"4":{"wager":9,"correct":true},"5":{"wager":9,"correct":true},"6":{"wager":12,"correct":true},"7":{"wager":12,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":9,"correct":true},"10":{"wager":12,"correct":true}},{"0":{"wager":6,"correct":true},"1":{"wager":6,"correct":false},"2":{"wager":6,"correct":true},"3":{"wager":12,"correct":true},"4":{"wager":12,"correct":true},"5":{"wager":3,"correct":true},"6":{"wager":6,"correct":true},"7":{"wager":3,"correct":false},"8":{"wager":9,"correct":true},"9":{"wager":12,"correct":true},"10":{"wager":6,"correct":false}},{"0":{"wager":3,"correct":true},"1":{"wager":9,"correct":false},"2":{"wager":9,"correct":true},"3":{"wager":3,"correct":false},"4":{"wager":3,"correct":false},"5":{"wager":12,"correct":true},"6":{"wager":9,"correct":true},"7":{"wager":9,"correct":true},"8":{"wager":12,"correct":true},"9":{"wager":3,"correct":false},"10":{"wager":9,"correct":true}},{"0":{"wager":9,"correct":true},"1":{"wager":3,"correct":false},"2":{"wager":3,"correct":false},"3":{"wager":9,"correct":true},"4":{"wager":6,"correct":false},"5":{"wager":6,"correct":true},"6":{"wager":3,"correct":true},"7":{"wager":6,"correct":false},"8":{"wager":3,"correct":false},"9":{"wager":6,"correct":true},"10":{"wager":3,"correct":false}}],"bonus":{}}],"halftime":{"0":{"wager":10,"correct":true},"1":{"wager":9,"correct":true},"2":{"wager":8,"correct":false},"3":{"wager":4,"correct":true},"4":{"wager":7,"correct":true},"5":{"wager":10,"correct":true},"6":{"wager":5,"correct":false},"7":{"wager":10,"correct":true},"8":{"wager":3,"correct":true},"9":{"wager":8,"correct":true},"10":{"wager":2,"correct":false}},"finalWager":{"0":{"wager":20,"correct":true},"1":{"wager":12,"correct":true},"2":{"wager":18,"correct":false},"3":{"wager":8,"correct":true},"4":{"wager":15,"correct":true},"5":{"wager":20,"correct":true},"6":{"wager":10,"correct":false},"7":{"wager":14,"correct":true},"8":{"wager":6,"correct":false},"9":{"wager":17,"correct":true},"10":{"wager":5,"correct":false}},"gameStarted":true}`;
@@ -768,8 +768,11 @@ function renderStaffThanks() {
     `</div>`
   );
 }
-const FONT_SIZES = [12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 30],
-  DEFAULT_SI = 3;
+// Both this array and DEFAULT_SI are shared with the FAQ (js/shared-ui.js's SHARED_FONT_SIZES/
+// SHARED_DEFAULT_SIZE_INDEX) — same sizes, same default, so kept in one place instead of two
+// copies of the same 14 numbers.
+const FONT_SIZES = SHARED_FONT_SIZES,
+  DEFAULT_SI = SHARED_DEFAULT_SIZE_INDEX;
 const DENSITIES = ["normal", "compact", "relaxed"],
   DENSITY_LABELS = { normal: "Normal", compact: "Compact", relaxed: "Relaxed" };
 const STRIPE_LEVELS = [0, 1, 2],
@@ -786,10 +789,18 @@ function loadPrefs() {
     const r = TRStore.getItem(PREFS_KEY);
     if (r) {
       const p = JSON.parse(r);
-      if (!["hc-dark", "hc-light"].includes(p.theme))
+      // "hc-dark"/"hc-light" ("hc" for high contrast, from back when that was a separate,
+      // optional theme rather than the only one) were the stored values every real returning
+      // visitor's browser has under this key as of the rename that dropped the prefix — without
+      // them listed here too, a real saved "hc-light" preference would fail the now-current
+      // ["dark","light"] check above and fall through to the wrong branch below (anything not
+      // recognized as light-ish defaults dark), flipping actual visitors from Light to Dark the
+      // first time they load the renamed build. "light"/"bw" predate that and are kept for the
+      // same reason, one rename further back.
+      if (!["dark", "light"].includes(p.theme))
         p.theme = ["light", "bw", "hc-light"].includes(p.theme)
-          ? "hc-light"
-          : "hc-dark";
+          ? "light"
+          : "dark";
       if (p.sizeIndex == null) p.sizeIndex = DEFAULT_SI;
       if (!p.density) p.density = "normal";
       if (p.settingsOpen == null) p.settingsOpen = false;
@@ -814,7 +825,7 @@ function loadPrefs() {
     }
   } catch (e) {}
   return {
-    theme: "hc-dark",
+    theme: "dark",
     sizeIndex: DEFAULT_SI,
     density: "normal",
     settingsOpen: false,
@@ -854,7 +865,7 @@ function applyPrefs() {
   const tb = document.getElementById("themeToggle");
   if (tb)
     tb.innerHTML =
-      p.theme === "hc-light"
+      p.theme === "light"
         ? THEME_ICON_SUN + " Light"
         : THEME_ICON_MOON + " Dark";
   const cbm = p.cbMode || 0;
@@ -956,7 +967,7 @@ function applyPrefs() {
   if (qts && document.activeElement !== qts) qts.value = p.qtDurationSec;
 }
 function setTheme(t) {
-  if (!["hc-dark", "hc-light"].includes(t)) t = "hc-dark";
+  if (!["dark", "light"].includes(t)) t = "dark";
   const p = loadPrefs();
   p.theme = t;
   savePrefs(p);
@@ -971,7 +982,7 @@ function setTheme(t) {
 }
 function toggleTheme() {
   const p = loadPrefs();
-  setTheme(p.theme === "hc-dark" ? "hc-light" : "hc-dark");
+  setTheme(p.theme === "dark" ? "light" : "dark");
 }
 function toggleAdjSetting() {
   const p = loadPrefs();
@@ -1073,72 +1084,17 @@ function setCbMode(v) {
   applyPrefs();
 }
 
-// The menu is moved out to <body> while it is open (see toggleCvMenu), so it cannot be found by
-// querying inside #cbSelect. Everything that needs it goes through here instead. There is only
-// ever one on the page.
-function cvMenuEl() {
-  return document.querySelector(".cv-select-menu");
-}
+// Thin, page-named wrappers around js/shared-ui.js's sharedToggleCvMenu/sharedCloseCvMenu/
+// sharedSetCvSelectDisplay — same widget, same markup, same positioning logic as the FAQ's own
+// #faqCvSelect, so the actual implementation lives there once instead of as two independently
+// hand-maintained copies (see that file's own top comment for why). Kept as same-named
+// functions here rather than calling the shared ones directly from index.html's onclick=""
+// attributes, so nothing in the markup had to change for this.
 function closeCvMenu() {
-  const w = document.getElementById("cbSelect");
-  if (!w) return;
-  const menu = cvMenuEl();
-  if (menu) {
-    menu.classList.remove("cv-open");
-    if (menu.parentElement === document.body) w.appendChild(menu);
-  }
-  w.classList.remove("open");
-  w.querySelector(".cv-select-btn").setAttribute("aria-expanded", "false");
+  sharedCloseCvMenu("cbSelect");
 }
 function toggleCvMenu(e) {
-  e.stopPropagation();
-  const w = document.getElementById("cbSelect");
-  if (!w) return;
-  const willOpen = !w.classList.contains("open");
-  document.querySelectorAll(".cv-select.open").forEach((o) => {
-    if (o !== w) o.classList.remove("open");
-  });
-  const btnEl = w.querySelector(".cv-select-btn");
-  const menu = cvMenuEl();
-  if (!willOpen) {
-    closeCvMenu();
-    return;
-  }
-  w.classList.add("open");
-  btnEl.setAttribute("aria-expanded", "true");
-  {
-    // Re-parented to <body> for as long as it is open, then put back by closeCvMenu.
-    //
-    // position:fixed alone was not enough to place this against the viewport, which is what the
-    // math below assumes. A fixed element is positioned against the nearest ancestor that has a
-    // transform, not the viewport — and .settings-panel has one for its slideDown animation
-    // (and .header has translateZ(0) for an iOS repaint fix). So the panel was the containing
-    // block, and the coordinates computed here were being re-based onto it: measured on a 375px
-    // viewport, a menu told to sit at top 536.5 / left 187.7 actually rendered at 587 / 205,
-    // out by exactly the panel's own offset. The flip-above-when-it-would-overflow branch below
-    // was mis-triggering for the same reason, since it tests viewport coordinates.
-    // <body> has no transform, so from there fixed really does mean the viewport.
-    //
-    // It also lifts the menu clear of two stacking contexts it was otherwise trapped inside
-    // (.settings-panel at z-index 150, .header at 260). Its own z-index counts for nothing while
-    // nested in those, which is why the tutorial's callout — a plain z-index 601 element on body
-    // — painted straight over the open menu during the Color Vision step.
-    menu.classList.add("cv-open");
-    document.body.appendChild(menu);
-    const btn = btnEl.getBoundingClientRect();
-    menu.style.minWidth = btn.width + "px";
-    const menuRect = menu.getBoundingClientRect();
-    let left = btn.left;
-    if (left + menuRect.width > window.innerWidth - 8)
-      left = btn.right - menuRect.width;
-    menu.style.left = Math.max(8, left) + "px";
-    let top = btn.bottom + 4;
-    // Flip above the button instead of below when opening downward would run past the
-    // bottom of the viewport — the actual overflow bug this whole block exists to fix.
-    if (top + menuRect.height > window.innerHeight - 8)
-      top = btn.top - menuRect.height - 4;
-    menu.style.top = Math.max(8, top) + "px";
-  }
+  sharedToggleCvMenu(e, "cbSelect");
 }
 function selectCvOption(li, v) {
   setCvSelectDisplay(v);
@@ -1146,29 +1102,7 @@ function selectCvOption(li, v) {
   setCbMode(v);
 }
 function setCvSelectDisplay(v) {
-  const w = document.getElementById("cbSelect");
-  if (!w) return;
-  // Through cvMenuEl(), not w.querySelector: selectCvOption calls this while the menu is still
-  // parented to <body>, where a lookup scoped to #cbSelect would find no options at all and the
-  // button's label would silently stop updating.
-  const menu = cvMenuEl();
-  if (!menu) return;
-  const li = menu.querySelector('li[data-value="' + v + '"]');
-  menu.querySelectorAll("li").forEach((o) =>
-    o.setAttribute("aria-selected", "false"),
-  );
-  if (li) {
-    li.setAttribute("aria-selected", "true");
-    const lbl = w.querySelector(".cv-select-label");
-    if (lbl) lbl.textContent = li.dataset.short || li.textContent.trim();
-    // Mirrors the option's own swatch pair (if it has one — "Off" doesn't) into the closed
-    // button, so the two colours a mode actually swaps to are visible at a glance without
-    // opening the menu. Copied from the li rather than given its own markup, so there is one
-    // source of truth for which colours each mode shows.
-    const swatchSrc = li.querySelector(".cv-swatch-pair");
-    const swatchDst = w.querySelector(".cv-select-swatch");
-    if (swatchDst) swatchDst.innerHTML = swatchSrc ? swatchSrc.innerHTML : "";
-  }
+  sharedSetCvSelectDisplay("cbSelect", v);
 }
 document.addEventListener("click", (e) => {
   // .cv-select-menu is checked separately from .cv-select: while open the menu is a child of
@@ -2228,7 +2162,7 @@ function renderLeft() {
           </label>
         </div>
       </div>
-      <div class="team-guess-cell${t.scoreGuess === "" || t.scoreGuess == null ? " guess-missing" : ""}"><label>Guess</label><input type="number" aria-label="Team ${i + 1} final score guess, 1 to 146" min="1" max="146" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-146" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class=\"guess-warn\">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
+      <div class="team-guess-cell${t.scoreGuess === "" || t.scoreGuess == null ? " guess-missing" : ""}"><label>Guess</label><input type="number" aria-label="Team ${i + 1} final score guess, 1 to 146" min="1" max="146" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-146" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class="guess-warn">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
       ${
         showAdj
           ? `<div class="adj-wrap">
@@ -2277,7 +2211,7 @@ function renderLeft() {
   h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><h2>Export &amp; Data</h2><span class="chevron">▼</span></div><div class="section-body">
     <div class="export-bar"><button class="btn" onclick="exportXLSXBackup()">${ICON_SHEET} XLSX</button><button class="btn" onclick="exportPDF()">${ICON_PDF} PDF</button><a class="btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer">${ICON_LINK} JD Upload Form</a></div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="startNewGame();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
-    <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="if(confirm('Clear all data?'))startNewGame();">${ICON_TRASH} Clear Session</button></div>
+    <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>
   </div></div>`;
 
   m.innerHTML = h;
@@ -3433,7 +3367,7 @@ function craftEligibleBlocker() {
 }
 function exportCraftEligible() {
   const blocked = craftEligibleBlocker();
-  if (blocked) return alert(blocked);
+  if (blocked) return appAlert(blocked);
   dl(
     new Blob([craftEligibleNames().join("\n") + "\n"], {
       type: "text/plain;charset=utf-8",
@@ -3443,7 +3377,7 @@ function exportCraftEligible() {
 }
 function copyCraftEligible(btn) {
   const blocked = craftEligibleBlocker();
-  if (blocked) return alert(blocked);
+  if (blocked) return appAlert(blocked);
   const text = craftEligibleNames().join("\n");
   const ok = () => flashBtn(btn, CHECK_ICON_SVG + " Copied");
   const fail = () => {
@@ -3457,9 +3391,9 @@ function copyCraftEligible(btn) {
       ta.select();
       const copied = document.execCommand("copy");
       ta.remove();
-      copied ? ok() : alert("Couldn't copy — use the TXT button instead.");
+      copied ? ok() : appAlert("Couldn't copy — use the TXT button instead.");
     } catch (e) {
-      alert("Couldn't copy — use the TXT button instead.");
+      appAlert("Couldn't copy — use the TXT button instead.");
     }
   };
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -3488,12 +3422,12 @@ function flashBtn(btn, label, ms) {
 function startCraftPrizeDraw() {
   if (craftDrawState && craftDrawState.active) return;
   if (gameState.craftPrizeWinner) {
-    alert("The craft prize winner has already been chosen!");
+    appAlert("The craft prize winner has already been chosen!");
     return;
   }
   const pool = craftEligiblePool();
   if (!pool.length) {
-    alert(
+    appAlert(
       "No eligible teams left for the drawing (top-ranked teams are excluded)!",
     );
     return;
@@ -3597,12 +3531,12 @@ function playCraftVictoryHorn() {
   playVictoryHornSound();
   if (pool) finalizeCraftPrizeWinner(pool);
 }
-function clearCraftPrizeWinner() {
+async function clearCraftPrizeWinner() {
   if (!gameState.craftPrizeWinner) return;
   if (
-    !confirm(
+    !(await appConfirm(
       "Clear the craft prize winner? You can run the drumroll again after.",
-    )
+    ))
   )
     return;
   clearCraftDrawTimers();
@@ -3728,14 +3662,14 @@ function reindexAfterRemoval(map, ti) {
   }
   return out;
 }
-function removeTeam(ti) {
+async function removeTeam(ti) {
   const name = gameState.teams[ti]?.name || "Team " + (ti + 1);
   const msg = checkGameStarted()
     ? 'Remove "' +
       name +
       '"? This also deletes every round, bonus, and wager score already entered for them — it can’t be undone.'
     : 'Remove "' + name + '"?';
-  if (!confirm(msg)) return;
+  if (!(await appConfirm(msg, { danger: true, okLabel: "Remove" }))) return;
   gameState.teams.splice(ti, 1);
   const newAdj = new Set();
   adjOpenTeams.forEach((i) => {
@@ -3856,7 +3790,7 @@ function canScore() {
   // Required means entered, not "matches the pattern" — Quiz ID's format hint stays purely
   // advisory (v16.41), so a value that just doesn't look typical still satisfies this gate.
   if (!isQuizIdEntered(gameState.meta.quizId)) {
-    alert("Please enter a Quiz ID in Event Details before scoring begins.");
+    appAlert("Please enter a Quiz ID in Event Details before scoring begins.");
     const sec = document.getElementById("sec-meta");
     if (sec) {
       if (sec.classList.contains("collapsed"))
@@ -3867,7 +3801,7 @@ function canScore() {
     return false;
   }
   if (!isHostNameValid(gameState.meta.hostName)) {
-    alert("Please enter a Host Name in Event Details before scoring begins.");
+    appAlert("Please enter a Host Name in Event Details before scoring begins.");
     const sec = document.getElementById("sec-meta");
     if (sec) {
       if (sec.classList.contains("collapsed"))
@@ -3878,7 +3812,7 @@ function canScore() {
     return false;
   }
   if (!isLocationValid(gameState.meta.location)) {
-    alert("Please enter a Location in Event Details before scoring begins.");
+    appAlert("Please enter a Location in Event Details before scoring begins.");
     const sec = document.getElementById("sec-meta");
     if (sec) {
       if (sec.classList.contains("collapsed"))
@@ -3894,7 +3828,7 @@ function canScore() {
     return acc;
   }, []);
   if (missing.length === 0) return true;
-  alert(
+  appAlert(
     "Please enter a score guess for all teams before scoring begins.\n\nMissing guess:\u00a0" +
       missing.join(", "),
   );
@@ -3972,6 +3906,73 @@ function setFC(ti, v) {
   gameState.gameStarted = true;
   autosave();
   renderAll();
+}
+
+// ===== THEMED CONFIRM / ALERT (replaces window.confirm()/alert()) =====
+// window.confirm()/alert() render in the OS/browser's own fixed light popup style, no matter
+// this app's Dark/Light theme or Color Vision mode — the one thing left that ignored both, and
+// a jarring bright-white flash against a dark room's screen besides. Both return a Promise
+// instead of blocking the thread the way the native calls do (impossible to replicate for a
+// custom element — nothing in the DOM can pause script execution), so every call site that used
+// to read confirm()'s return value directly now awaits this instead; appAlert's callers already
+// only ever ran alert() for its side effect and never touched a return value, so those call
+// sites needed no restructuring beyond the rename.
+let confirmDialogResolve = null;
+function showConfirmDialog(message, opts) {
+  const modal = document.getElementById("confirmModal");
+  const overlay = document.getElementById("confirmOverlay");
+  document.getElementById("confirmMessage").textContent = message;
+  const isAlert = !!(opts && opts.alert);
+  modal.classList.toggle("confirm-alert", isAlert);
+  const okBtn = document.getElementById("confirmOkBtn");
+  okBtn.textContent = (opts && opts.okLabel) || (isAlert ? "OK" : "Confirm");
+  okBtn.classList.toggle("btn-danger", !!(opts && opts.danger));
+  document.getElementById("confirmCancelBtn").textContent =
+    (opts && opts.cancelLabel) || "Cancel";
+  overlay.classList.add("show");
+  // Alert has no Cancel to reach, so OK is the sensible default focus; confirm defaults to
+  // Cancel instead — every current confirm() call site guards a destructive or hard-to-undo
+  // action (clearing a session, replacing loaded data), so an accidental Enter press should
+  // never be the one that lands on the destructive option.
+  (isAlert ? okBtn : document.getElementById("confirmCancelBtn")).focus();
+  return new Promise((resolve) => {
+    confirmDialogResolve = resolve;
+  });
+}
+function confirmDialogRespond(result) {
+  document.getElementById("confirmOverlay").classList.remove("show");
+  const resolve = confirmDialogResolve;
+  confirmDialogResolve = null;
+  if (resolve) resolve(result);
+}
+document.addEventListener("keydown", (e) => {
+  if (
+    e.key === "Escape" &&
+    document.getElementById("confirmOverlay").classList.contains("show")
+  )
+    confirmDialogRespond(false);
+});
+// opts: {danger, okLabel, cancelLabel} — danger reddens the confirm button (btn-danger) for
+// destructive actions, matching the app's existing red/danger styling elsewhere.
+function appConfirm(message, opts) {
+  return showConfirmDialog(message, opts);
+}
+// Resolves once OK is dismissed — nothing meaningful in the resolved value (there's only ever
+// one way out), so callers that just want to keep going after the reader has seen the message
+// can await it same as appConfirm, just without checking what it returns.
+function appAlert(message) {
+  return showConfirmDialog(message, { alert: true });
+}
+// Export & Data's own "Clear Session" button (below the already-custom Yes/No export prompt) —
+// pulled out to a named function since an inline onclick="" attribute can't await a Promise.
+async function confirmClearSession() {
+  if (
+    await appConfirm("Clear all data?", {
+      danger: true,
+      okLabel: "Clear Session",
+    })
+  )
+    startNewGame();
 }
 
 // ===== TEAM REPORT (formerly "Score Audit") =====
@@ -4260,11 +4261,17 @@ function saveToFile() {
   a.download = exportFn("json").replace(".json", "-save.json");
   a.click();
 }
-function triggerLoadFile() {
+async function triggerLoadFile() {
   const msg = gameState.teams.length
     ? "Replace current session? This wipes every team, score, and Event Details field currently entered — it can’t be undone."
     : "Replace current session?";
-  if (confirm(msg)) document.getElementById("fileLoadInput").click();
+  // The file input's own .click() below needs to run off a real user gesture or the browser
+  // silently refuses to open the picker — the OK button's own click, which is what resolves
+  // this await, still counts (a browser's "transient activation" survives a promise resolving
+  // synchronously off a real click, same as it would survive any other microtask hop), so this
+  // works the same as it did calling window.confirm() synchronously.
+  if (await appConfirm(msg, { okLabel: "Replace" }))
+    document.getElementById("fileLoadInput").click();
 }
 function loadFromFile(e) {
   const f = e.target.files[0];
@@ -4275,7 +4282,7 @@ function loadFromFile(e) {
     try {
       data = JSON.parse(ev.target.result);
     } catch (err) {
-      alert(
+      appAlert(
         "Bad JSON \u2014 this file isn\u2019t a valid save: " + err.message,
       );
       return;
@@ -4287,7 +4294,7 @@ function loadFromFile(e) {
       document.getElementById("resumeBanner")?.classList.remove("show");
       closeSettingsPanel();
     } catch (err) {
-      alert("Couldn\u2019t load this save: " + err.message);
+      appAlert("Couldn\u2019t load this save: " + err.message);
       console.error("loadFromFile render error:", err);
     }
   };
@@ -4315,8 +4322,12 @@ function savePrefsToFile() {
   a.download = (host ? host + " - " : "") + "Scorekeeper Preferences.json";
   a.click();
 }
-function triggerLoadPrefsFile() {
-  if (confirm("Replace current app preferences?"))
+async function triggerLoadPrefsFile() {
+  if (
+    await appConfirm("Replace current app preferences?", {
+      okLabel: "Replace",
+    })
+  )
     document.getElementById("prefsLoadInput").click();
 }
 function loadPrefsFromFile(e) {
@@ -4328,7 +4339,7 @@ function loadPrefsFromFile(e) {
     try {
       data = JSON.parse(ev.target.result);
     } catch (err) {
-      alert(
+      appAlert(
         "Bad JSON — this file isn’t a valid preferences file: " + err.message,
       );
       return;
@@ -4338,18 +4349,18 @@ function loadPrefsFromFile(e) {
       applyPrefs();
       setQtDurationSec(loadPrefs().qtDurationSec);
     } catch (err) {
-      alert("Couldn’t load these preferences: " + err.message);
+      appAlert("Couldn’t load these preferences: " + err.message);
       console.error("loadPrefsFromFile error:", err);
     }
   };
   r.readAsText(f);
   e.target.value = "";
 }
-function loadSampleGame() {
+async function loadSampleGame() {
   const msg = gameState.teams.length
     ? "Load the sample game? This wipes every team, score, and Event Details field currently entered \u2014 it can\u2019t be undone."
     : "Load the sample game? This replaces your current session.";
-  if (!confirm(msg)) return;
+  if (!(await appConfirm(msg, { okLabel: "Load" }))) return;
   gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
   autosave();
   renderAll();
@@ -4482,11 +4493,11 @@ function expCols() {
 function exportPDF() {
   try {
     if (typeof window.jspdf === "undefined" || !window.jspdf.jsPDF) {
-      alert("PDF library not loaded — cannot build PDF.");
+      appAlert("PDF library not loaded — cannot build PDF.");
       return;
     }
     if (!gameState.teams || !gameState.teams.length) {
-      alert("No teams yet — nothing to export.");
+      appAlert("No teams yet — nothing to export.");
       return;
     }
     const { jsPDF } = window.jspdf;
@@ -4994,7 +5005,7 @@ function exportPDF() {
     const cellText = (txt, ix, yTop, h, fontHex, bold, base, alignL) => {
       if (txt === "") return;
       doc.setFont("helvetica", bold ? "bold" : "normal");
-      const fs = fitFs(txt, cw[ix], base);
+      fitFs(txt, cw[ix], base);
       setText(fontHex);
       const tx = alignL ? cx[ix] + 3 : cx[ix] + cw[ix] / 2;
       doc.text(txt, tx, yTop + h - h * 0.28, {
@@ -5091,14 +5102,14 @@ function exportPDF() {
     }
 
     drawInfoHeader();
-    let groupY = drawMainHeaderRows();
+    drawMainHeaderRows();
     let dataTop = y;
     for (let t = 0; t < N; t++) {
       if (y + rowH > pageBottom) {
         drawGridLines(dataTop, y, cx, M + usableW);
         doc.addPage();
         y = M;
-        groupY = drawMainHeaderRows();
+        drawMainHeaderRows();
         dataTop = y;
       }
       const stripe = t % 2 === 1;
@@ -5184,7 +5195,7 @@ function exportPDF() {
       });
     }
     const sideInfoY = y;
-    let sHeadY = drawStandingsHeader();
+    drawStandingsHeader();
     drawSideInfo(sideInfoY);
     let sDataTop = y;
     standings.forEach((s, i) => {
@@ -5192,7 +5203,7 @@ function exportPDF() {
         drawGridLines(sDataTop, y, scx, standingsW);
         doc.addPage();
         y = M;
-        sHeadY = drawStandingsHeader();
+        drawStandingsHeader();
         sDataTop = y;
       }
       const rowVals = {
@@ -5242,7 +5253,7 @@ function exportPDF() {
     dl(doc.output("blob"), exportFn("pdf"));
     document.getElementById("exportPrompt").classList.add("show");
   } catch (e) {
-    alert("PDF export failed: " + (e && e.message ? e.message : e));
+    appAlert("PDF export failed: " + (e && e.message ? e.message : e));
   }
 }
 
@@ -5288,7 +5299,7 @@ function setGameDateISO(v) {
 function sanitizeFile(s) {
   return String(s || "")
     .replace(/'/g, "")
-    .replace(/[\\\/:*?"<>|]+/g, " ")
+    .replace(/[\\/:*?"<>|]+/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -5395,11 +5406,11 @@ function trivInjectXlsx(templateBytes, gs, rk) {
 function exportXLSXBackup() {
   try {
     if (typeof fflate === "undefined") {
-      alert("Zip library not loaded \u2014 cannot build XLSX.");
+      appAlert("Zip library not loaded \u2014 cannot build XLSX.");
       return;
     }
     if (typeof TRIVIA_XLSX_B64 === "undefined") {
-      alert("Backup template not embedded.");
+      appAlert("Backup template not embedded.");
       return;
     }
     const bytes = trivB64ToBytes(TRIVIA_XLSX_B64);
@@ -5412,7 +5423,7 @@ function exportXLSXBackup() {
     );
     document.getElementById("exportPrompt").classList.add("show");
   } catch (e) {
-    alert("XLSX backup export failed: " + (e && e.message ? e.message : e));
+    appAlert("XLSX backup export failed: " + (e && e.message ? e.message : e));
   }
 }
 

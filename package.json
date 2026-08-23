@@ -1,0 +1,20 @@
+{
+  "name": "scorekeeper",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Live trivia night scorekeeping — a static, no-build-step app served as plain HTML/CSS/JS. This file exists for dev-time tooling only (lint/test); nothing here is required to run or deploy the app itself.",
+  "scripts": {
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:html",
+    "lint:js": "eslint .",
+    "lint:css": "stylelint \"css/**/*.css\" \"faq/css/**/*.css\"",
+    "lint:html": "html-validate index.html faq/index.html",
+    "test": "node --test \"tests/**/*.test.js\""
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^36.0.0",
+    "html-validate": "^8.0.0",
+    "jsdom": "^25.0.0"
+  }
+}

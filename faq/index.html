@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Scorekeeper FAQ &amp; Tips</title>
+    <meta name="description" content="Answers and tips for Scorekeeper, the live trivia night scorekeeping app." />
+    <meta property="og:title" content="Scorekeeper FAQ &amp; Tips" />
+    <meta property="og:description" content="Answers and tips for Scorekeeper, the live trivia night scorekeeping app." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="../icons/icon-512.png" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Scorekeeper FAQ &amp; Tips" />
+    <meta name="twitter:description" content="Answers and tips for Scorekeeper, the live trivia night scorekeeping app." />
+    <meta name="twitter:image" content="../icons/icon-512.png" />
     <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png" />
     <link rel="stylesheet" href="css/fonts.css" />
     <!-- The shared design system now lives in one place, ../css/styles.css — this used to be a
@@ -11,11 +20,15 @@
          folded back into the main app), which is exactly the kind of drift a copy invites. -->
     <link rel="stylesheet" href="../css/styles.css" />
     <link rel="stylesheet" href="css/faq.css" />
-    <!-- Plain blocking script (no defer/async) so it still runs before first paint, same
+    <!-- Same shared JS the main app loads (js/shared-ui.js — Color Vision dropdown, the
+         font-size scale) — before faq-bootstrap.js, which uses SHARED_FONT_SIZES too, and both
+         plain blocking <script src> (no defer/async) so they run before first paint, same
          timing as when this bootstrap lived inline here. -->
+    <script src="../js/shared-ui.js"></script>
     <script src="js/faq-bootstrap.js"></script>
   </head>
   <body>
+    <svg style="display:none" aria-hidden="true"><symbol id="ic-gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="ic-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></symbol><symbol id="ic-beer" viewBox="0 0 24 24"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></symbol><symbol id="ic-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol><symbol id="ic-flask" viewBox="0 0 24 24"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></symbol><symbol id="ic-hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></symbol><symbol id="ic-sort" viewBox="0 0 24 24"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></symbol><symbol id="ic-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol><symbol id="ic-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></symbol><symbol id="ic-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></symbol><symbol id="ic-chart" viewBox="0 0 24 24"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></symbol><symbol id="ic-shuffle" viewBox="0 0 24 24"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></symbol><symbol id="ic-check" viewBox="0 0 24 24"><polyline points="5,13 10,18 20,6"></polyline></symbol><symbol id="ic-drum" viewBox="0 0 24 24"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></symbol><symbol id="ic-sheet" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path class="sh-head" d="M4 5h16a2 2 0 0 1 2 2v3H2V7a2 2 0 0 1 2-2Z"/><path d="M2 14.5h20"/><path d="M8.5 10v9"/><path d="M15.5 10v9"/></symbol><symbol id="ic-pdf" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></symbol><symbol id="ic-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol><symbol id="ic-save" viewBox="0 0 24 24"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></symbol><symbol id="ic-load" viewBox="0 0 24 24"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></symbol><symbol id="ic-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol><symbol id="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></symbol><symbol id="ic-x" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></symbol><symbol id="ic-horn" viewBox="0 0 24 24"><path class="pl-tri" d="M8.5 5.5 19 12l-10.5 6.5z"/></symbol><symbol id="ic-clipboard" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol><symbol id="ic-txt" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol></svg>
     <div class="faq-header">
       <div class="faq-header-row">
         <div class="faq-logo">Score <span>Keeper</span> — FAQ</div>
@@ -44,12 +57,11 @@
         title="Display settings"
         aria-label="Display settings"
       >
-        <svg
-          class="icon-ui"
+        <svg class="icon-ui"
           viewBox="0 0 24 24"
           aria-hidden="true"
           focusable="false"
-         data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+         data-emoji="⚙️"><use href="#ic-gear"></use></svg>
       </button>
       <div
         class="settings-panel"
@@ -86,7 +98,7 @@
                 id="faqThemeToggle"
                 onclick="faqToggleTheme()"
               >
-                <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🌙"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark
+                <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🌙"><use href="#ic-moon"></use></svg> Dark
               </button>
             </div>
           </div>
@@ -187,7 +199,7 @@
                 id="faqIconStyleToggle"
                 onclick="faqToggleIconStyle()"
                 title="Swap every drawn pictograph on this page for the platform emoji it replaced"
-              ><svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🍺"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg> <span id="faqIconStyleLabel">Pictograph</span>
+              ><svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🍺"><use href="#ic-beer"></use></svg> <span id="faqIconStyleLabel">Pictograph</span>
               </button>
             </div>
           </div>
@@ -196,12 +208,11 @@
           <span class="settings-meta"
             ><span class="settings-version" id="faqSettingsVersionLabel"></span
             ><span class="settings-disclaimer"
-              ><svg
-                class="icon-ui"
+              ><svg class="icon-ui"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
                 focusable="false"
-               data-emoji="⚠️"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+               data-emoji="⚠️"><use href="#ic-alert"></use></svg>
               Built with Anthropic's Claude AI — double-check details against
               the app yourself.</span
             ></span
@@ -287,7 +298,7 @@
           drawing.
         </p>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-is-scorekeeper-for">
           <summary>
             <span class="faq-q-text">What is Scorekeeper for?</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -303,7 +314,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-whats-the-fastest-way-to-see-the-whole">
           <summary>
             <span class="faq-q-text">What's the fastest way to see the whole app working?</span><span
               class="faq-q-arrow"
@@ -312,18 +323,19 @@
           </summary>
           <div class="faq-a">
             <p>
-              Two options, both under <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top
-              right), Sample Data row. <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong> loads a
+              Two options, both under <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><use href="#ic-gear"></use></svg> top
+              right), Sample Data row. <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><use href="#ic-flask"></use></svg> Try Example</strong> loads a
               simulated, fully-scored 11-team game — Event Details filled in,
               every round scored, both wagers resolved, and (deliberately) a
               genuine tie in Final Results — so you can click around every
               screen without setting anything up yourself.
-              <strong><svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> Take the Tour</strong> is the more hands-on option: a
+              <strong><svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><use href="#ic-hand"></use></svg> Take the Tour</strong> is the more hands-on option: a
               guided, step-by-step walkthrough of an actual game, start to
               finish. See <a href="#tutorial">Interactive Tutorial</a> below.
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/settings-panel.webp"
                 data-shot-base="settings-panel"
                 alt="Settings panel open, showing the Try Example button, Take the Tour button, and the FAQ link"
@@ -333,7 +345,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-does-the-app-save-my-progress-automatically">
           <summary>
             <span class="faq-q-text">Does the app save my progress automatically?</span><span
               class="faq-q-arrow"
@@ -349,7 +361,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-can-i-collapse-sections-im-not-using-right">
           <summary>
             <span class="faq-q-text">Can I collapse sections I'm not using right now?</span><span
               class="faq-q-arrow"
@@ -381,6 +393,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/tutorial-spotlight.webp"
             data-shot-base="tutorial-spotlight"
             alt="The tutorial's spotlight overlay highlighting a control, with the callout box's step text and Next/Skip Tutorial buttons visible"
@@ -388,7 +401,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-is-the-tutorial-and-how-do-i">
           <summary>
             <span class="faq-q-text">What is the tutorial, and how do I start it?</span><span
               class="faq-q-arrow"
@@ -400,11 +413,11 @@
               It's a spotlight-style tour: the rest of the screen dims, one
               real control at a time is highlighted with a ring around it, and
               a callout box explains what it does and what to do next. Start
-              it from <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) →
-              <strong><svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> Take the Tour</strong>, right next to
-              <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong>. First-time visitors with no
+              it from <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><use href="#ic-gear"></use></svg> top right) →
+              <strong><svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><use href="#ic-hand"></use></svg> Take the Tour</strong>, right next to
+              <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><use href="#ic-flask"></use></svg> Try Example</strong>. First-time visitors with no
               game in progress also get offered it automatically — a small
-              "<svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> New here? Take the 2-minute tour." card appears where the
+              "<svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><use href="#ic-hand"></use></svg> New here? Take the 2-minute tour." card appears where the
               resume banner would normally be, with Take the Tour and Skip
               buttons. That auto-offer only ever shows once; after that,
               taking the tour is always available from Settings whenever you
@@ -413,7 +426,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-actually-happens-during-the-tour-is-it">
           <summary>
             <span class="faq-q-text">What actually happens during the tour — is it real, or just a
             slideshow?</span><span class="faq-q-arrow">▶</span>
@@ -428,7 +441,7 @@
               theme, adding and naming your first team, entering their Score
               Guess, checking a Bonus box, cycling one question through
               correct → incorrect → cleared, scoring a Bonus question, placing
-              a Halftime Wager, trying the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg> Sort button, and opening (then
+              a Halftime Wager, trying the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><use href="#ic-sort"></use></svg> Sort button, and opening (then
               closing) a team's Team Report. For the repetitive rest —
               the other four teams, the remaining rounds, everyone else's
               wagers — the tour fills it in live for you so the tour takes a
@@ -447,7 +460,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-will-starting-the-tour-wipe-out-my-real">
           <summary>
             <span class="faq-q-text">Will starting the tour wipe out my real game in progress?</span><span
               class="faq-q-arrow"
@@ -457,7 +470,7 @@
           <div class="faq-a">
             <p>
               Starting it swaps in the throwaway practice game and asks you to
-              confirm first, same as <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example does. What happens to your
+              confirm first, same as <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><use href="#ic-flask"></use></svg> Try Example does. What happens to your
               real game afterward depends on how the tour ends:
               <strong>Skip Tutorial</strong> (available on every step but the
               last) restores your real game exactly as it was, untouched.
@@ -481,6 +494,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/event-details.webp"
             data-shot-base="event-details"
             alt="Event Details section filled in with the sample game's Date, Quiz ID, Host Name, Location, Craft Partner, Partner Town, Bonus Item, and Restaurant Staff"
@@ -488,7 +502,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-goes-in-each-event-details-field">
           <summary>
             <span class="faq-q-text">What goes in each Event Details field?</span><span class="faq-q-arrow"
               >▶</span
@@ -533,7 +547,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-is-there-a-limit-on-how-much-i">
           <summary>
             <span class="faq-q-text">Is there a limit on how much I can type into a field?</span><span
               class="faq-q-arrow"
@@ -582,9 +596,7 @@
           </div>
         </details>
 
-      
-
-        <details class="faq-item">
+        <details class="faq-item" id="q-why-are-some-event-details-fields-greyed-out">
           <summary>
             <span class="faq-q-text">Why are some Event Details fields greyed out?</span><span
               class="faq-q-arrow"
@@ -595,7 +607,7 @@
             <p>
               Once scoring starts, Event Details locks so it can't drift
               mid-game — a wager gets scored, a team's added, whatever the
-              trigger, the section shows a <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔒"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> note with an
+              trigger, the section shows a <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔒"><use href="#ic-lock"></use></svg> note with an
               <strong>Unlock to fix it</strong> link right there in case of a
               typo. That link does the same thing as the
               <strong>Edit Locked Fields</strong> toggle in Advanced Settings —
@@ -614,6 +626,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/teams-list.webp"
             data-shot-base="teams-list"
             alt="Teams section showing team rows with name fields, +5 Bonus and +3 NJCB checkboxes, Score Guess field, and the remove button"
@@ -621,7 +634,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-can-i-add-or-rename-teams-after-the">
           <summary>
             <span class="faq-q-text">Can I add or rename teams after the game has already started?</span><span
               class="faq-q-arrow"
@@ -640,7 +653,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-do-the-5-bonus-and-3-njcb">
           <summary>
             <span class="faq-q-text">What do the "+5 Bonus" and "+3 NJCB" checkboxes do?</span><span
               class="faq-q-arrow"
@@ -661,7 +674,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-whats-the-score-guess-field-and-what-if">
           <summary>
             <span class="faq-q-text">What's the Score Guess field, and what if a team never gives
             one?</span><span class="faq-q-arrow">▶</span>
@@ -680,7 +693,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-i-removed-a-team-by-mistake-what-did">
           <summary>
             <span class="faq-q-text">I removed a team by mistake — what did that actually delete?</span><span
               class="faq-q-arrow"
@@ -708,6 +721,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/round-scoring.webp"
             data-shot-base="round-scoring"
             alt="A round expanded, showing wager buttons per team per question in green (correct), red (incorrect), and idle states"
@@ -715,7 +729,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-how-does-marking-a-question-correct-incorrect-actually">
           <summary>
             <span class="faq-q-text">How does marking a question correct/incorrect actually work?</span><span
               class="faq-q-arrow"
@@ -734,7 +748,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-whats-the-q5-bonus-question-in-rounds-1">
           <summary>
             <span class="faq-q-text">What's the Q5 "Bonus" question in Rounds 1 and 3?</span><span
               class="faq-q-arrow"
@@ -749,19 +763,20 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-whats-a-beer-round">
           <summary>
             <span class="faq-q-text">What's a "Beer Round"?</span><span class="faq-q-arrow">▶</span>
           </summary>
           <div class="faq-a">
             <p>
               The app watches every question as it's scored. If
-              <em>every</em> team gets a question right, a gold "<svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🍺"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg> Beer Round!"
+              <em>every</em> team gets a question right, a gold "<svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🍺"><use href="#ic-beer"></use></svg> Beer Round!"
               banner lights up across that question automatically. Purely a fun
               celebratory flourish; it doesn't change scoring.
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/beer-round.webp"
                 data-shot-base="beer-round"
                 alt="A bonus question showing the gold Beer Round banner after every team scored all 4 correct"
@@ -783,6 +798,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/question-timer.webp"
             data-shot-base="question-timer"
             alt="The question timer widget showing a running countdown with the Pause and Reset buttons"
@@ -790,7 +806,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-how-does-the-question-timer-work">
           <summary>
             <span class="faq-q-text">How does the Question Timer work?</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -798,12 +814,12 @@
             <p>
               One icon-only button does all three jobs, changing shape as the
               timer's state changes: a play triangle
-              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="▶️"><path d="M8 5v14l11-7z"/></svg>
+              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="▶️"><use href="#ic-play"></use></svg>
               begins the countdown from its base duration and, once paused,
               resumes it; the same button becomes a pause icon
-              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⏸️"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>
+              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⏸️"><use href="#ic-pause"></use></svg>
               while running. A separate
-              <strong><svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↩️"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg> Reset</strong>
+              <strong><svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↩️"><use href="#ic-reset"></use></svg> Reset</strong>
               button stops the clock and returns it to the base duration —
               it's disabled whenever the timer is already idle, so there's
               nothing to reset. The base duration itself comes from
@@ -813,7 +829,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-i-changed-the-duration-in-settings-while-a">
           <summary>
             <span class="faq-q-text">I changed the duration in Settings while a question was already
             timing — why didn't it change?</span><span class="faq-q-arrow">▶</span>
@@ -830,7 +846,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-happens-when-the-timer-hits-0-00">
           <summary>
             <span class="faq-q-text">What happens when the timer hits 0:00?</span><span class="faq-q-arrow"
               >▶</span
@@ -849,7 +865,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-can-i-hide-the-timer-or-add-quick">
           <summary>
             <span class="faq-q-text">Can I hide the timer, or add quick +/-30s buttons?</span><span
               class="faq-q-arrow"
@@ -877,6 +893,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/halftime-wager.webp"
             data-shot-base="halftime-wager"
             alt="Halftime Wager entry for one team, showing the wager amount field and correct/incorrect toggle"
@@ -884,7 +901,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-how-do-the-wagers-affect-a-teams-score">
           <summary>
             <span class="faq-q-text">How do the wagers affect a team's score?</span><span class="faq-q-arrow"
               >▶</span
@@ -907,11 +924,12 @@
       <section class="faq-section" id="standings">
         <h2 class="faq-section-title">Scores &amp; Standings</h2>
         <p class="faq-section-sub">
-          The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📊"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg> Scores panel tracks every team's running total the whole game.
+          The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📊"><use href="#ic-chart"></use></svg> Scores panel tracks every team's running total the whole game.
         </p>
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/scores-sidebar.webp"
             data-shot-base="scores-sidebar"
             alt="Scores sidebar open, showing live team totals and the Entry / Random / Ascending / Descending sort buttons"
@@ -919,16 +937,16 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-are-the-entry-rand-asc-desc-buttons">
           <summary>
-            <span class="faq-q-text">What are the Entry / <svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔀"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg> RAND / ↑ Asc / ↓ Desc buttons in the Scores
+            <span class="faq-q-text">What are the Entry / <svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔀"><use href="#ic-shuffle"></use></svg> RAND / ↑ Asc / ↓ Desc buttons in the Scores
             panel?</span><span class="faq-q-arrow">▶</span>
           </summary>
           <div class="faq-a">
             <p>
               Four ways to order the live scoreboard: <strong>Entry</strong> is
               the order teams were added at the start of the event,
-              <strong><svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔀"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></svg> RAND</strong> shuffles them into a random order (handy
+              <strong><svg class="icon-ui icon-tinted icon-shuffle" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔀"><use href="#ic-shuffle"></use></svg> RAND</strong> shuffles them into a random order (handy
               for reading results aloud without always starting with the same
               team), <strong>↑ Asc</strong> (Ascending) and
               <strong>↓ Desc</strong> (Descending) sort by current score.
@@ -936,7 +954,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-are-scores-before-halftime-wager-and-before">
           <summary>
             <span class="faq-q-text">What are "Scores — Before Halftime Wager" and "Before Final
             Wager"?</span><span class="faq-q-arrow">▶</span>
@@ -950,6 +968,7 @@
           </div>
           <div class="faq-shot">
             <img
+            loading="lazy"
               src="screenshots/before-wager-scores.webp"
               data-shot-base="before-wager-scores"
               alt="Pre-Halftime wager scores"
@@ -958,7 +977,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-on-my-phone-i-dont-see-the-full">
           <summary>
             <span class="faq-q-text">On my phone, I don't see the full Scores sidebar — what's the bar
             at the bottom?</span><span class="faq-q-arrow">▶</span>
@@ -976,6 +995,7 @@
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/mobile-bottom-dock.webp"
                 data-shot-base="mobile-bottom-dock"
                 alt="The mobile bottom dock peek strip showing live scores above the scoring area on a phone-width screen"
@@ -995,6 +1015,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/final-results.webp"
             data-shot-base="final-results"
             alt="Final Results table showing two teams tied for a place, with the closer-guess tiebreak footnote visible"
@@ -1002,7 +1023,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-why-is-a-teams-diff-not-just-score">
           <summary>
             <span class="faq-q-text">Why is a team's "Diff" not just Score minus Guess?</span><span
               class="faq-q-arrow"
@@ -1021,7 +1042,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-two-teams-have-the-same-score-how-does">
           <summary>
             <span class="faq-q-text">Two teams have the same score — how does the app decide who ranks
             higher?</span><span class="faq-q-arrow">▶</span>
@@ -1030,7 +1051,7 @@
             <p>
               First tiebreak is Score Guess closeness — whichever team's guess
               landed nearer their actual (bonus-adjusted) score ranks higher and
-              is marked "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><polyline points="5,13 10,18 20,6"></polyline></svg> closer". If their guesses are <em>also</em> equally
+              is marked "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><use href="#ic-check"></use></svg> closer". If their guesses are <em>also</em> equally
               close (including two teams that both left the guess blank), that's
               a genuine, unbreakable tie, and both teams share the exact same
               place — the next distinct team after them still gets the very next
@@ -1041,7 +1062,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-how-do-i-double-check-how-one-teams">
           <summary>
             <span class="faq-q-text">How do I double-check how one team's score was actually built?</span><span
               class="faq-q-arrow"
@@ -1067,7 +1088,7 @@
           came together.
         </p>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-how-do-i-open-a-teams-team-report">
           <summary>
             <span class="faq-q-text">How do I open a team's Team Report?</span><span class="faq-q-arrow"
               >▶</span
@@ -1086,7 +1107,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-i-tapped-a-name-in-the-scores-sidebar">
           <summary>
             <span class="faq-q-text">I tapped a name in the Scores sidebar and nothing like this
             opened</span><span class="faq-q-arrow">▶</span>
@@ -1102,7 +1123,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-does-each-round-in-the-breakdown-show">
           <summary>
             <span class="faq-q-text">What does each round in the breakdown show?</span><span class="faq-q-arrow"
               >▶</span
@@ -1119,7 +1140,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-do-the-four-tiles-above-the-breakdown">
           <summary>
             <span class="faq-q-text">What do the four tiles above the breakdown mean — Diff Adj, Adj.
             Score, Diff, Score Guess?</span><span class="faq-q-arrow">▶</span>
@@ -1155,6 +1176,7 @@
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/score-audit.webp"
                 data-shot-base="score-audit"
                 alt="The Team Report modal open for one team, showing the round-by-round breakdown and the Diff Adj / Adj. Score / Diff / Score Guess tiles"
@@ -1175,6 +1197,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/craft-prize.webp"
             data-shot-base="craft-prize"
             alt="Craft Prize Drawing section open, showing the Exclude Top stepper, Drumroll seconds, and the draw button"
@@ -1182,7 +1205,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-how-does-the-drawing-decide-which-teams-are">
           <summary>
             <span class="faq-q-text">How does the drawing decide which teams are eligible?</span><span
               class="faq-q-arrow"
@@ -1199,9 +1222,9 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-happens-when-i-click-start-drumroll">
           <summary>
-            <span class="faq-q-text">What happens when I click "<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🥁"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg> Start Drumroll"?</span><span
+            <span class="faq-q-text">What happens when I click "<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🥁"><use href="#ic-drum"></use></svg> Start Drumroll"?</span><span
               class="faq-q-arrow"
               >▶</span
             >
@@ -1219,7 +1242,7 @@
               name in the <strong>Scores</strong> sidebar (the running
               leaderboard, not this section) and that team becomes the winner
               directly, no drumroll, no pool — a
-              <span class="cb-tag"><svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🍺"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg> CB Prize</span>
+              <span class="cb-tag"><svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🍺"><use href="#ic-beer"></use></svg> CB Prize</span>
               tag appears next to their name to show it stuck. Tap the same name again to clear
               it. This is what you want whenever the winner isn't coming from
               this app's own random draw — most often because a bar or
@@ -1232,6 +1255,7 @@
             <div class="faq-shot-pair">
               <div class="faq-shot">
                 <img
+            loading="lazy"
                   src="screenshots/craft-prize-drumroll.webp"
                   data-shot-base="craft-prize-drumroll"
                   alt="The Craft Prize drumroll actively playing"
@@ -1241,6 +1265,7 @@
               </div>
               <div class="faq-shot">
                 <img
+            loading="lazy"
                   src="screenshots/craft-prize-winner.webp"
                   data-shot-base="craft-prize-winner"
                   alt="The Craft Prize winner banner after the drumroll finishes, with the Clear button"
@@ -1262,6 +1287,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/export-bar.webp"
             data-shot-base="export-bar"
             alt="Export section showing the XLSX, PDF, and JD Upload Form buttons"
@@ -1269,7 +1295,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-whats-the-difference-between-xlsx-pdf-and-the">
           <summary>
             <span class="faq-q-text">What's the difference between XLSX, PDF, and the JD Upload Form
             link?</span><span class="faq-q-arrow">▶</span>
@@ -1277,16 +1303,16 @@
           <div class="faq-a">
             <ul>
               <li>
-                <strong><svg class="icon-ui icon-sheet" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📈"><rect x="2" y="5" width="20" height="14" rx="2"/><path class="sh-head" d="M4 5h16a2 2 0 0 1 2 2v3H2V7a2 2 0 0 1 2-2Z"/><path d="M2 14.5h20"/><path d="M8.5 10v9"/><path d="M15.5 10v9"/></svg> XLSX</strong> — fills in the official
+                <strong><svg class="icon-ui icon-sheet" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📈"><use href="#ic-sheet"></use></svg> XLSX</strong> — fills in the official
                 spreadsheet template (Location, Date, Quiz ID, Host, every team's
                 wagers and totals) and downloads it.
               </li>
               <li>
-                <strong><svg class="icon-ui icon-tinted icon-pdf" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📕"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg> PDF</strong> — a printable, easily readable scoresheet, with Location/Date/Quiz ID/Host header and full
+                <strong><svg class="icon-ui icon-tinted icon-pdf" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📕"><use href="#ic-pdf"></use></svg> PDF</strong> — a printable, easily readable scoresheet, with Location/Date/Quiz ID/Host header and full
                 game results.
               </li>
               <li>
-                <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔗"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> JD Upload Form</strong> — opens JD's
+                <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔗"><use href="#ic-link"></use></svg> JD Upload Form</strong> — opens JD's
                 results-submission form in a new tab; the scorekeeper app stays open
                 and untouched.
               </li>
@@ -1294,7 +1320,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-does-the-xlsx-export-look-like">
           <summary>
             <span class="faq-q-text">What does the XLSX export look like?</span><span
               class="faq-q-arrow"
@@ -1308,6 +1334,7 @@
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/xlsx-export.webp"
                 alt="The exported XLSX scoresheet opened in a spreadsheet app, showing the filled-in header and team rows"
                 onerror="faqShotFallback(this,'The exported XLSX scoresheet, opened')"
@@ -1316,7 +1343,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-does-the-pdf-export-actually-look-like">
           <summary>
             <span class="faq-q-text">What does the PDF export actually look like?</span><span
               class="faq-q-arrow"
@@ -1330,6 +1357,7 @@
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/pdf-export.webp"
                 alt="The exported PDF scoresheet, showing the header and standings"
                 onerror="faqShotFallback(this,'The exported PDF scoresheet')"
@@ -1338,7 +1366,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-is-the-jd-upload-form-link">
           <summary>
             <span class="faq-q-text">What is the JD Upload Form link?</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -1349,6 +1377,7 @@
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/jd-upload-form.webp"
                 alt="The JD Upload Form page open in a new browser tab"
                 onerror="faqShotFallback(this,'The JD Upload Form, open in its own tab')"
@@ -1357,7 +1386,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-after-exporting-the-app-asks-to-clear-session">
           <summary>
             <span class="faq-q-text">After exporting, the app asks to "Clear session?" — what does that
             mean?</span><span class="faq-q-arrow">▶</span>
@@ -1373,7 +1402,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-can-i-save-load-the-whole-game-not">
           <summary>
             <span class="faq-q-text">Can I save/load the whole game, not just export it?</span><span
               class="faq-q-arrow"
@@ -1399,6 +1428,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/save-load-toolbar.webp"
             data-shot-base="save-load-toolbar"
             alt="The top toolbar showing the Save and Load buttons next to the Settings gear icon"
@@ -1406,28 +1436,28 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-do-save-and-load-top-toolbar-actually">
           <summary>
-            <span class="faq-q-text">What do <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load (top toolbar) actually save?</span><span
+            <span class="faq-q-text">What do <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><use href="#ic-save"></use></svg> Save and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><use href="#ic-load"></use></svg> Load (top toolbar) actually save?</span><span
               class="faq-q-arrow"
               >▶</span
             >
           </summary>
           <div class="faq-a">
             <p>
-              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save</strong> downloads the entire game as a JSON file
+              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><use href="#ic-save"></use></svg> Save</strong> downloads the entire game as a JSON file
               — every Event Details field, every team, every round, bonus, and
               wager score, exactly as the app itself would need to reload it.
               The filename uses the venue name and date, e.g.
               <code>Man Skirt Brewery - 04-13-2026-save.json</code>.
-              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load</strong> reads that same kind of file back in and
+              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><use href="#ic-load"></use></svg> Load</strong> reads that same kind of file back in and
               picks up exactly where it left off — including a game saved from a
               different browser or device entirely.
             </p>
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-how-is-this-different-from-the-pdf-xlsx">
           <summary>
             <span class="faq-q-text">How is this different from the PDF/XLSX exports?</span><span
               class="faq-q-arrow"
@@ -1447,7 +1477,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-happens-if-i-click-load-with-a">
           <summary>
             <span class="faq-q-text">What happens if I click Load with a game already in progress?</span><span
               class="faq-q-arrow"
@@ -1467,7 +1497,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-whats-the-difference-between-this-and-app-preferences">
           <summary>
             <span class="faq-q-text">What's the difference between this and "App Preferences" Save/Load
             in Settings?</span><span class="faq-q-arrow">▶</span>
@@ -1499,6 +1529,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/resume-banner.webp"
             data-shot-base="resume-banner"
             alt="The Saved session found resume banner with Resume and New Game buttons"
@@ -1506,7 +1537,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-what-happens-if-i-accidentally-close-the-tab">
           <summary>
             <span class="faq-q-text">What happens if I accidentally close the tab or reload
             mid-game?</span><span class="faq-q-arrow">▶</span>
@@ -1514,7 +1545,7 @@
           <div class="faq-a">
             <p>
               Every change autosaves to the browser as it happens. Reopening the
-              app shows a "<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚠️"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Saved session found" banner with two choices:
+              app shows a "<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚠️"><use href="#ic-alert"></use></svg> Saved session found" banner with two choices:
               <strong>Resume</strong> restores everything exactly as it was —
               Event Details, every team, every score, Craft Prize state — and
               <strong>New Game</strong> discards it and starts clean.
@@ -1522,7 +1553,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-does-the-app-keep-working-if-the-venues">
           <summary>
             <span class="faq-q-text">Does the app keep working if the venue's wifi drops?</span><span
               class="faq-q-arrow"
@@ -1545,7 +1576,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-the-app-is-warning-me-that-autosave-is">
           <summary>
             <span class="faq-q-text">The app is warning me that autosave is off — why?</span><span
               class="faq-q-arrow"
@@ -1578,7 +1609,7 @@
           same as a native app — no address bar, no tab to lose.
         </p>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-iphone-or-ipad-safari">
           <summary>
             <span class="faq-q-text">iPhone or iPad (Safari)</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -1600,7 +1631,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-android-chrome">
           <summary>
             <span class="faq-q-text">Android (Chrome)</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -1617,7 +1648,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-is-there-a-video-walkthrough">
           <summary>
             <span class="faq-q-text">Is there a video walkthrough?</span><span class="faq-q-arrow"
               >▶</span
@@ -1654,10 +1685,11 @@
       <!-- ============================== SETTINGS ============================== -->
       <section class="faq-section" id="settings">
         <h2 class="faq-section-title">Settings</h2>
-        <p class="faq-section-sub">The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> gear icon, top right.</p>
+        <p class="faq-section-sub">The <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><use href="#ic-gear"></use></svg> gear icon, top right.</p>
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/settings-panel.webp"
             data-shot-base="settings-panel"
             alt="Settings panel open, showing Theme, Size, Icon Style, Color Vision, Question Timer, Sample Data, Help, App Preferences, and the Advanced Settings toggle"
@@ -1665,7 +1697,7 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-whats-in-the-main-settings-list">
           <summary>
             <span class="faq-q-text">What's in the main Settings list?</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -1694,17 +1726,17 @@
                 for the on-screen question timer, from 1:00 to 15:00.
               </li>
               <li>
-                <strong>Sample Data</strong> — <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example loads a
-                finished sample game to browse; <svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> Take the Tour walks you
+                <strong>Sample Data</strong> — <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><use href="#ic-flask"></use></svg> Try Example loads a
+                finished sample game to browse; <svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="👋"><use href="#ic-hand"></use></svg> Take the Tour walks you
                 through playing one. See
                 <a href="#getting-started">Getting Started</a> and
                 <a href="#tutorial">Interactive Tutorial</a>.
               </li>
               <li>
-                <strong>Help</strong> — the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="❓"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> FAQ link that opens this page.
+                <strong>Help</strong> — the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="❓"><use href="#ic-help"></use></svg> FAQ link that opens this page.
               </li>
               <li>
-                <strong>App Preferences</strong> — <svg class="icon-ui icon-tinted icon-save" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save / <svg class="icon-ui icon-tinted icon-load" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load for just these
+                <strong>App Preferences</strong> — <svg class="icon-ui icon-tinted icon-save" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><use href="#ic-save"></use></svg> Save / <svg class="icon-ui icon-tinted icon-load" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><use href="#ic-load"></use></svg> Load for just these
                 display settings, separate from the game data itself. See
                 <a href="#tips">Tips &amp; Tricks</a> for how this compares to
                 the toolbar's own Save/Load.
@@ -1719,7 +1751,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-whats-the-difference-between-the-main-settings-and">
           <summary>
             <span class="faq-q-text">What's the difference between the main Settings and "Advanced
             Settings"?</span><span class="faq-q-arrow">▶</span>
@@ -1747,6 +1779,7 @@
         <div class="faq-shot-pair">
           <div class="faq-shot">
             <img
+            loading="lazy"
               src="screenshots/theme-dark.webp"
               alt="Scorekeeper in Dark theme"
               onerror="faqShotFallback(this,'Dark theme — Dark in Settings')"
@@ -1755,6 +1788,7 @@
           </div>
           <div class="faq-shot">
             <img
+            loading="lazy"
               src="screenshots/theme-light.webp"
               alt="Scorekeeper in Light theme"
               onerror="faqShotFallback(this,'Light theme — Light in Settings')"
@@ -1763,22 +1797,22 @@
           </div>
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-how-do-i-switch-between-them">
           <summary>
             <span class="faq-q-text">How do I switch between them?</span><span class="faq-q-arrow">▶</span>
           </summary>
           <div class="faq-a">
             <p>
-              Open <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) and click the
+              Open <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><use href="#ic-gear"></use></svg> top right) and click the
               <strong>Theme</strong> button — it reads
-              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🌙"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark</strong> or <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="☀️"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></svg> Light</strong> depending on
+              <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🌙"><use href="#ic-moon"></use></svg> Dark</strong> or <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="☀️"><use href="#ic-sun"></use></svg> Light</strong> depending on
               which one is active, and clicking it flips straight to the other.
               The choice is saved and applied when the app opens.
             </p>
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-is-there-anything-beyond-just-dark-light-for">
           <summary>
             <span class="faq-q-text">Is there anything beyond just Dark/Light for accessibility?</span><span
               class="faq-q-arrow"
@@ -1803,6 +1837,7 @@
             <div class="faq-shot-trio">
               <div class="faq-shot">
                 <img
+            loading="lazy"
                   src="screenshots/color-vision-off.webp"
                   alt="Off, four panels: wager correct/incorrect buttons, Bonus/NJCB checkboxes, the Beer Round section, and the Final Results tie badge"
                   onerror="faqShotFallback(this,'Color Vision: Off — wager buttons, checkboxes, Beer Round, tie badge')"
@@ -1811,6 +1846,7 @@
               </div>
               <div class="faq-shot">
                 <img
+            loading="lazy"
                   src="screenshots/color-vision-red-green.webp"
                   alt="Red-Green, four panels: wager correct/incorrect buttons in blue/orange, unchanged Bonus/NJCB checkboxes, unchanged Beer Round section, and the tie badge in blue"
                   onerror="faqShotFallback(this,'Color Vision: Red-Green — wager buttons, checkboxes, Beer Round, tie badge')"
@@ -1819,6 +1855,7 @@
               </div>
               <div class="faq-shot">
                 <img
+            loading="lazy"
                   src="screenshots/color-vision-blue-yellow.webp"
                   alt="Blue-Yellow, four panels: wager buttons with a green Sort button, Bonus/NJCB checkboxes swapped to magenta/green, the Beer Round section swapped to magenta, and an unchanged green tie badge"
                   onerror="faqShotFallback(this,'Color Vision: Blue-Yellow — wager buttons, checkboxes, Beer Round, tie badge')"
@@ -1840,6 +1877,7 @@
 
         <div class="faq-shot">
           <img
+            loading="lazy"
             src="screenshots/advanced-settings.webp"
             data-shot-base="advanced-settings"
             alt="Advanced Settings expanded, showing Row Density, Row Zebra Stripes, Craft Prize Eligible List, Crowd-Wisdom Percentage, Edit Locked Fields, timer controls, Manual Drumroll Control, Drumroll Crossfade, and Point Adjustments"
@@ -1847,16 +1885,16 @@
           />
         </div>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-use-the-sort-button-to-find-who-still">
           <summary>
-            <span class="faq-q-text">Use the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg> Sort button to find who still hasn't answered</span><span
+            <span class="faq-q-text">Use the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><use href="#ic-sort"></use></svg> Sort button to find who still hasn't answered</span><span
               class="faq-q-arrow"
               >▶</span
             >
           </summary>
           <div class="faq-a">
             <p>
-              Every question has its own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg> <strong>Sort</strong> and <svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↩️"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+              Every question has its own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><use href="#ic-sort"></use></svg> <strong>Sort</strong> and <svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↩️"><use href="#ic-reset"></use></svg>
               <strong>Reset</strong> buttons. Sort is a one-time move that bumps
               currently-unanswered teams to the top of that question —
               invaluable in a big room where you're waiting on the last few
@@ -1865,6 +1903,7 @@
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/sort-buttons.webp"
                 data-shot-base="sort-buttons"
                 alt="Close-up of a question's header showing the Sort and Reset buttons"
@@ -1874,7 +1913,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-app-preferences-backing-up-just-your-settings">
           <summary>
             <span class="faq-q-text">App Preferences — backing up just your settings</span><span
               class="faq-q-arrow"
@@ -1890,7 +1929,7 @@
               in progress there. It's a main Settings row, not an Advanced one
               — see
               <a href="#manual-save-load">Manual Save &amp; Load</a> for how
-              this compares to the toolbar's own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save / <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load, which
+              this compares to the toolbar's own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><use href="#ic-save"></use></svg> Save / <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><use href="#ic-load"></use></svg> Load, which
               carries the game itself.
             </p>
           </div>
@@ -1903,7 +1942,7 @@
           Settings (collapsed by default). Off unless noted otherwise.
         </p>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-row-density">
           <summary>
             <span class="faq-q-text">Row Density</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -1917,7 +1956,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-row-zebra-stripes">
           <summary>
             <span class="faq-q-text">Row Zebra Stripes</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -1930,7 +1969,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-edit-locked-fields-fixing-an-event-details-typo">
           <summary>
             <span class="faq-q-text">Edit Locked Fields — fixing an Event Details typo mid-game</span><span
               class="faq-q-arrow"
@@ -1949,7 +1988,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-timer-widget">
           <summary>
             <span class="faq-q-text">Timer Widget</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -1962,7 +2001,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-timer-stepper-buttons">
           <summary>
             <span class="faq-q-text">Timer Stepper Buttons</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -1978,6 +2017,7 @@
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/timer-stepper-buttons.webp"
                 data-shot-base="timer-stepper-buttons"
                 alt="The question timer widget with the -30/+30 stepper buttons visible"
@@ -1987,7 +2027,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-timer-pulse">
           <summary>
             <span class="faq-q-text">Timer Pulse</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -2002,7 +2042,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-crowd-wisdom-percentage">
           <summary>
             <span class="faq-q-text">Crowd-Wisdom Percentage</span><span class="faq-q-arrow"
               >▶</span
@@ -2012,12 +2052,13 @@
             <p>
               Adds a live correct/incorrect percentage next to each question's
               Sort/Reset buttons — both counts together, e.g.
-              "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><polyline points="5,13 10,18 20,6"></polyline></svg> 4/11 (36%)" and "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="❌"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg> 7/11 (64%)" — so you can see at a
+              "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><use href="#ic-check"></use></svg> 4/11 (36%)" and "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="❌"><use href="#ic-x"></use></svg> 7/11 (64%)" — so you can see at a
               glance how a question is trending without scrolling through every
               team's row.
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/crowd-wisdom-percentage.webp"
                 data-shot-base="crowd-wisdom-percentage"
                 alt="A question header with Crowd-Wisdom Percentage on, showing 4/11 (36%) correct and 7/11 (64%) incorrect next to the Sort and Reset buttons"
@@ -2027,7 +2068,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-manual-drumroll-control">
           <summary>
             <span class="faq-q-text">Manual Drumroll Control</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -2038,13 +2079,14 @@
               the app's own random draw timing.
               <strong>Stop Drumroll</strong> cuts the roll short and leaves the
               draw paused, then that same button becomes
-              <strong><svg class="icon-ui icon-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎉"><path class="pl-tri" d="M8.5 5.5 19 12l-10.5 6.5z"/></svg> Play Horn</strong>, which commits the winner and fires
+              <strong><svg class="icon-ui icon-play" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎉"><use href="#ic-horn"></use></svg> Play Horn</strong>, which commits the winner and fires
               the horn exactly when you want it. It's one button in two states,
               not two side by side — the screenshot shows the paused half, since
               that's the one you only ever see with this setting on.
             </p>
             <div class="faq-shot">
               <img
+            loading="lazy"
                 src="screenshots/manual-drumroll-control.webp"
                 data-shot-base="manual-drumroll-control"
                 alt="The Craft Prize drawing paused mid-draw with Manual Drumroll Control on, showing the Play Horn button where Stop Drumroll was"
@@ -2054,7 +2096,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-drumroll-crossfade">
           <summary>
             <span class="faq-q-text">Drumroll Crossfade</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -2068,7 +2110,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-craft-prize-eligible-list-handing-the-draw-to">
           <summary>
             <span class="faq-q-text">Craft Prize Eligible List — handing the draw to another app</span><span
               class="faq-q-arrow"
@@ -2077,7 +2119,7 @@
           </summary>
           <div class="faq-a">
             <p>
-              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📋"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg> <strong>Copy</strong> and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📄"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> <strong>TXT</strong> export the
+              <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📋"><use href="#ic-clipboard"></use></svg> <strong>Copy</strong> and <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📄"><use href="#ic-txt"></use></svg> <strong>TXT</strong> export the
               craft partner, its town, and the eligible team names (Exclude Top
               already applied) as plain text — one name per line — so the actual
               drawing can be handed off to a separate drumroll or name-picker
@@ -2088,7 +2130,7 @@
           </div>
         </details>
 
-        <details class="faq-item">
+        <details class="faq-item" id="q-point-adjustments">
           <summary>
             <span class="faq-q-text">Point Adjustments</span><span class="faq-q-arrow">▶</span>
           </summary>
@@ -2128,6 +2170,9 @@
       >
         ✕
       </button>
+      <!-- Deliberately empty src — openFaqLightbox() (js/faq.js) fills it in before the
+           lightbox ever becomes visible; there's no real image to point at until then. -->
+      <!-- [html-validate-disable-next attribute-allowed-values] -->
       <img id="faqLightboxImg" src="" alt="" />
     </div>
 

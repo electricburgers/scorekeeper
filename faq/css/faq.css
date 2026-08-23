@@ -378,6 +378,11 @@ mark.faq-hl {
   background: var(--bg-card);
   margin-bottom: 8px;
   overflow: hidden;
+  /* Every .faq-item now carries its own id (a slug of its question), so a link can point
+     straight at one answer instead of only a whole section — browsers auto-open a <details>
+     when a fragment link targets it or its id, no JS needed. Same scroll-margin-top as
+     .faq-section, so landing on one doesn't tuck it under the sticky header. */
+  scroll-margin-top: 70px;
 }
 .faq-item[hidden] {
   display: none;
@@ -623,5 +628,60 @@ mark.faq-hl {
 @media (max-width: 600px) {
   .faq-section-title {
     font-size: 0.95rem;
+  }
+}
+
+/* Printable reference sheet — for a venue with a flaky screen, this page's actual value is as
+   something a host can print and glance at, not just view. Three problems a screen-only design
+   never has to solve: this page's Dark theme is the default and prints as invisible white-on-
+   white once the screen's own black background is gone (browsers don't print backgrounds by
+   default); a <details> a reader hasn't clicked stays collapsed even on paper, where there's no
+   "click to expand" left to do; and the search box, TOC, and Settings gear are all
+   screen-only navigation with nothing to navigate on a printed page. */
+@media print {
+  /* Force light, high-contrast text regardless of the reader's actual Theme/Color Vision
+     choice — a print-out has no dark background to sit on, so the token overrides below apply
+     unconditionally rather than only inside a color-scheme media query. */
+  body {
+    background: #fff;
+    color: #000;
+  }
+  .faq-header,
+  .faq-toolbar,
+  .faq-no-results,
+  .faq-toc,
+  .faq-expand-row,
+  #faqSettingsPanel,
+  .faq-lightbox,
+  .faq-footer {
+    display: none !important;
+  }
+  .faq-item {
+    break-inside: avoid;
+    border-color: #999;
+  }
+  /* The collapse/expand arrow is a screen affordance with nothing left to affordance on paper —
+     every answer prints in full below its question either way (see .faq-a next). */
+  .faq-q-arrow {
+    display: none;
+  }
+  /* The whole reason this block exists: every answer prints whether or not a reader ever
+     clicked it open on screen. !important because .faq-a's shown/hidden state is otherwise
+     entirely native <details>/<summary> behavior, which this overrides outright rather than
+     fighting with more specific selectors. */
+  .faq-item .faq-a {
+    display: block !important;
+  }
+  /* Screenshots roughly double this page's printed length and cost real ink for what's meant
+     to be a quick-reference read, not a picture book — the question text alone carries the
+     answer. */
+  .faq-shot,
+  .faq-shot-pair,
+  .faq-shot-trio {
+    display: none;
+  }
+  a {
+    color: #000;
+    text-decoration: underline;
   }
 }

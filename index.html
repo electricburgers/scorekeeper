@@ -11,6 +11,15 @@
 <meta name="apple-mobile-web-app-title" content="Scorekeeper">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Scorekeeper</title>
+<meta name="description" content="Live trivia night scorekeeping — works offline once installed.">
+<meta property="og:title" content="Scorekeeper">
+<meta property="og:description" content="Live trivia night scorekeeping — works offline once installed.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="icons/icon-512.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scorekeeper">
+<meta name="twitter:description" content="Live trivia night scorekeeping — works offline once installed.">
+<meta name="twitter:image" content="icons/icon-512.png">
 <link rel="preload" href="fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/space-grotesk-700.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
@@ -544,9 +553,25 @@
 <div class="audit-overlay" id="auditOverlay" onclick="if(event.target===this)closeAudit()">
   <div class="audit-modal" id="auditModal"></div>
 </div>
+
+<!-- Themed stand-in for window.confirm()/alert() — see appConfirm/appAlert (js/app.js). The
+     native dialogs render in the OS/browser's own fixed light style regardless of this app's
+     Dark/Light theme or Color Vision mode, the one thing left in the app that did. Built once,
+     reused for every confirm/alert call site: the message and button labels are filled in by
+     JS per call, not hard-coded here. -->
+<div class="confirm-overlay" id="confirmOverlay" onclick="if(event.target===this)confirmDialogRespond(false)">
+  <div class="confirm-modal" id="confirmModal" role="alertdialog" aria-modal="true" aria-labelledby="confirmMessage">
+    <p class="confirm-message" id="confirmMessage"></p>
+    <div class="confirm-actions">
+      <button type="button" class="btn" id="confirmCancelBtn" onclick="confirmDialogRespond(false)">Cancel</button>
+      <button type="button" class="btn btn-accent" id="confirmOkBtn" onclick="confirmDialogRespond(true)">OK</button>
+    </div>
+  </div>
+</div>
 <script src="js/vendor/fflate.min.js"></script>
 <script src="js/vendor/jspdf.min.js"></script>
 <script src="js/data/xlsx-templates.js"></script>
+<script src="js/shared-ui.js"></script>
 <script src="js/app.js"></script>
 <script src="js/tutorial.js"></script>
 </body>

@@ -5,7 +5,7 @@
 @font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/space-grotesk-700.woff2') format('woff2')}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-:root,[data-theme="hc-dark"]{
+:root,[data-theme="dark"]{
   --bg-primary:#000;--bg-card:#0d0d0d;--bg-card-alt:#141414;--bg-input:#1c1c1c;--bg-hover:#242424;
   --border:#2e2e2e;--border-light:#404040;--border-strong:#5c5c5c;
   /* The boundary of anything INTERACTIVE — inputs, buttons, wager/bonus/result chips, the team
@@ -29,11 +29,11 @@
   --transition:.18s ease;--row-pad:8px;
   --btn-idle-bg:#1c1c1c;--btn-correct-bg:#0d2e0d;--btn-incorrect-bg:#2e0d0d;--btn-used-bg:#141414;
   /* Correct-badge square (.wager-badge.bg-correct, app.js's CORRECT_BADGE_SVG) — opaque and
-     theme-independent (same value for hc-dark and hc-light, no override in the light block below)
+     theme-independent (same value for dark and light, no override in the light block below)
      since the badge floats over whatever wager-button color is underneath and needs to read as
      its own solid chip either way, not blend into a per-theme wash the way --btn-correct-bg does.
-     #0c7a0c is the exact hex already used as --pts-pos-bg in hc-light — reused here rather than
-     inventing a new green — and white on it clears ~5.5:1 (AA). #0067c5 is likewise hc-light's
+     #0c7a0c is the exact hex already used as --pts-pos-bg in light — reused here rather than
+     inventing a new green — and white on it clears ~5.5:1 (AA). #0067c5 is likewise light's
      existing cb1 --pts-pos-bg; white clears ~5.6:1. Tritanopia (cb2) doesn't change green per the
      COLOR VISION MODES rule below, so there's no cb2 override — only [data-cb="1"] further down. */
   --correct-badge-bg:#0c7a0c;--correct-badge-fg:#fff;
@@ -67,7 +67,7 @@
      yellow, while the rays and the ring drawn around the disc are the thin marks that carry
      the shape, so they take the darker, still-saturated amber and hold 3:1 on their own.
      Dark mode never actually shows this icon — the toggle carries the moon whenever the
-     theme is not hc-light — so these are the fallback that keeps the var() chain valid
+     theme is not light — so these are the fallback that keeps the var() chain valid
      rather than a rendered appearance. */
   --sun-disc:#ffe14d;--sun-ray:#ffb300;
   /* PICTOGRAPH TINTS. The icons that replaced emoji are stroke-only and inherit currentColor,
@@ -146,7 +146,7 @@
   --cv-preview-rg-a:#3399ff;--cv-preview-rg-b:#ff8800;
   --cv-preview-by-a:#ff66cc;--cv-preview-by-b:#00cc88;
 }
-[data-theme="hc-light"]{
+[data-theme="light"]{
   /* VIBRANCY / CONTRAST TARGET. Every accent below is the most saturated value its own hue can
      take while still clearing WCAG AA against the darkest surface it actually renders on. The
      hue angles are untouched — only chroma and lightness move — so this is the same palette,
@@ -239,7 +239,7 @@
      --beer-bg, not on the card, and guessing put the first value 9% too bright. */
   --beer-bg:#fff0c4;--beer-border:#b68000;
   /* Same Color Vision dropdown swatches as the dark theme above, duplicated from the
-     [data-theme="hc-light"][data-cb="1"]/[data-cb="2"] tokens below. --cv-preview-rg-b uses the
+     [data-theme="light"][data-cb="1"]/[data-cb="2"] tokens below. --cv-preview-rg-b uses the
      darker #b35900 (the cb1 pts-neg-bg) rather than the lighter #cc6600 accent-red so the swatch
      still clears 3:1 against --bg-hover (#dcdcdc), not just the ~4.5:1 it'd get against the
      lighter --bg-card the accent-red value itself clears. */
@@ -250,7 +250,7 @@
    1 = red-green (deuteranopia/protanopia): swaps green/red pass-fail colors for blue/orange.
    2 = blue-yellow (tritanopia): keeps green/red (tritanopes see these fine) but swaps the
        blue/gold accent pair, which is where tritanopes actually lose contrast. */
-[data-theme="hc-dark"][data-cb="1"]{
+[data-theme="dark"][data-cb="1"]{
   --accent-green:#3399ff;--accent-red:#ff8800;
   --btn-correct-bg:#0d1f2e;--btn-incorrect-bg:#2e1f0d;
   --pts-pos-bg:rgba(51,153,255,.2);--pts-pos-border:rgba(51,153,255,.6);--pts-pos-fg:#8fc6ff;
@@ -262,7 +262,7 @@
      on it at AA (4.62:1) while clearing 3:1 on every dark surface (3.36-3.99:1). */
   --danger-solid-bg:#b16000;
 }
-[data-theme="hc-light"][data-cb="1"]{
+[data-theme="light"][data-cb="1"]{
   --accent-green:#0067c5;--accent-red:#cc6600;
   --btn-correct-bg:#cfe6fb;--btn-incorrect-bg:#ffe1bf;
   --pts-pos-bg:#0067c5;--pts-pos-border:#005aae;--pts-pos-fg:#fff;
@@ -273,7 +273,7 @@
    first place (see its definition up top) — it's the same fixed blue in cb1 regardless of which
    theme is active too, so one plain [data-cb="1"] rule covers both instead of two duplicates. */
 [data-cb="1"]{--correct-badge-bg:#0067c5}
-[data-theme="hc-dark"][data-cb="2"]{
+[data-theme="dark"][data-cb="2"]{
   --accent-gold:#ff66cc;--accent-cyan:#00cc88;
   --item-border:#ff66cc;--item-fill-checked:#ff66cc;
   --njcb-border:#00cc88;--njcb-fill-checked:#00cc88;
@@ -286,7 +286,7 @@
      real gold), so beer round doesn't need the special cream background here. */
   --beer-bg:var(--bg-card-alt);--beer-border:#ff66cc;
 }
-[data-theme="hc-light"][data-cb="2"]{
+[data-theme="light"][data-cb="2"]{
   --accent-gold:#c2007a;--accent-cyan:#008060;
   /* The beer mug's own amber, darkened for this mode alone. Its worst surface is the Beer Round
      badge's wash, which is a color-mix off --accent-gold — magenta here rather than gold, so the
@@ -332,10 +332,10 @@
 [data-density="compact"]{--row-pad:4px}
 [data-density="relaxed"]{--row-pad:12px}
 
-[data-theme="hc-dark"][data-stripe="1"],[data-stripe="1"]{--row-stripe:rgba(255,255,255,.11)}
-[data-theme="hc-dark"][data-stripe="2"],[data-stripe="2"]{--row-stripe:rgba(255,255,255,.19)}
-[data-theme="hc-light"][data-stripe="1"]{--row-stripe:rgba(0,0,0,.09)}
-[data-theme="hc-light"][data-stripe="2"]{--row-stripe:rgba(0,0,0,.16)}
+[data-theme="dark"][data-stripe="1"],[data-stripe="1"]{--row-stripe:rgba(255,255,255,.11)}
+[data-theme="dark"][data-stripe="2"],[data-stripe="2"]{--row-stripe:rgba(255,255,255,.19)}
+[data-theme="light"][data-stripe="1"]{--row-stripe:rgba(0,0,0,.09)}
+[data-theme="light"][data-stripe="2"]{--row-stripe:rgba(0,0,0,.16)}
 
 /* overflow-x lives on body only, not html: with both elements declaring it, the CSS overflow-
    propagation rules split scrolling ambiguously between html and body instead of the browser
@@ -455,8 +455,8 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    (blur-only) so the halo spreads evenly on all four sides instead of pooling underneath.
    Opacity/blur bumped up from the first pass (was .16/.10 and .32/.24) — still theme-aware,
    just a clearly more visible halo in both themes. */
-[data-theme="hc-dark"] .settings-panel{box-shadow:0 0 52px rgba(255,255,255,.30),0 0 16px rgba(255,255,255,.20)}
-[data-theme="hc-light"] .settings-panel{box-shadow:0 0 52px rgba(0,0,0,.46),0 0 16px rgba(0,0,0,.34)}
+[data-theme="dark"] .settings-panel{box-shadow:0 0 52px rgba(255,255,255,.30),0 0 16px rgba(255,255,255,.20)}
+[data-theme="light"] .settings-panel{box-shadow:0 0 52px rgba(0,0,0,.46),0 0 16px rgba(0,0,0,.34)}
 /* Text-selection highlight (click-drag over labels/inputs on desktop) defaults to the browser's
    own gray/blue, which reads as a flat light-gray smear against this panel's own dark surface.
    --bg-hover is already "a lighter version of the button background" everywhere else in the
@@ -737,8 +737,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    .settings-panel/.col-right.open: dark mode needs a pale glow to read as "floating above" its
    own near-black background, light mode gets a plain shadow instead. Scaled down from those
    bigger panels since this is a slim bar, not a full overlay. */
-[data-theme="hc-dark"] .mini-progress{box-shadow:0 0 24px rgba(255,255,255,.18),0 0 8px rgba(255,255,255,.12)}
-[data-theme="hc-light"] .mini-progress{box-shadow:0 0 24px rgba(0,0,0,.28),0 0 8px rgba(0,0,0,.20)}
+[data-theme="dark"] .mini-progress{box-shadow:0 0 24px rgba(255,255,255,.18),0 0 8px rgba(255,255,255,.12)}
+[data-theme="light"] .mini-progress{box-shadow:0 0 24px rgba(0,0,0,.28),0 0 8px rgba(0,0,0,.20)}
 .mini-progress:hover{background:var(--bg-hover)}
 .mp-round{font-family:var(--font-display);font-weight:700;font-size:.95rem;flex-shrink:0}
 .mp-count{font-family:var(--font-body);font-size:.8rem;font-weight:600;color:var(--text-secondary);white-space:nowrap}
@@ -1201,8 +1201,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      of a symmetric halo whose blur mostly bled past the narrow 8px inset and off the edge of the
      screen, leaving next to nothing visible. Dark mode needs a pale glow to read as "floating"
      against its near-black background; light mode gets a stronger plain shadow. */
-  [data-theme="hc-dark"] .col-right.open{box-shadow:0 -4px 16px rgba(255,255,255,.22),4px 0 16px rgba(255,255,255,.16),-4px 0 16px rgba(255,255,255,.16)}
-  [data-theme="hc-light"] .col-right.open{box-shadow:0 -4px 16px rgba(0,0,0,.30),4px 0 16px rgba(0,0,0,.22),-4px 0 16px rgba(0,0,0,.22)}
+  [data-theme="dark"] .col-right.open{box-shadow:0 -4px 16px rgba(255,255,255,.22),4px 0 16px rgba(255,255,255,.16),-4px 0 16px rgba(255,255,255,.16)}
+  [data-theme="light"] .col-right.open{box-shadow:0 -4px 16px rgba(0,0,0,.30),4px 0 16px rgba(0,0,0,.22),-4px 0 16px rgba(0,0,0,.22)}
 
   /* BOTTOM DOCK — a single fixed, rounded card holding the peek strip and the question timer
      stacked top-to-bottom (a border divider between them, not a gap), so the two read as one
@@ -1220,8 +1220,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .mobile-bottom-dock{display:flex;flex-direction:column;position:fixed;left:8px;right:8px;bottom:0;z-index:245;background:var(--bg-card);border:1px solid var(--border-strong);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
   /* Same 3-directional shadow (top/left/right, no bottom) as .col-right.open above, so the
      docked and deployed scores panels read as the same "floating above everything" surface. */
-  [data-theme="hc-dark"] .mobile-bottom-dock{box-shadow:0 -4px 16px rgba(255,255,255,.22),4px 0 16px rgba(255,255,255,.16),-4px 0 16px rgba(255,255,255,.16)}
-  [data-theme="hc-light"] .mobile-bottom-dock{box-shadow:0 -4px 16px rgba(0,0,0,.30),4px 0 16px rgba(0,0,0,.22),-4px 0 16px rgba(0,0,0,.22)}
+  [data-theme="dark"] .mobile-bottom-dock{box-shadow:0 -4px 16px rgba(255,255,255,.22),4px 0 16px rgba(255,255,255,.16),-4px 0 16px rgba(255,255,255,.16)}
+  [data-theme="light"] .mobile-bottom-dock{box-shadow:0 -4px 16px rgba(0,0,0,.30),4px 0 16px rgba(0,0,0,.22),-4px 0 16px rgba(0,0,0,.22)}
   /* PEEK STRIP — always-visible top row of the dock (hidden only while the sheet itself is
      open). 3-column grid (not flex) so the centered label is centered against the FULL row
      width, not just the space left over after the chevron — a flex row with the chevron as a
@@ -1345,18 +1345,18 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sr-rank.sr-rank-1{background:#ffe066;color:#000;border:2px solid #c8900a}
 .sr-rank.sr-rank-2{background:#d8d8dc;color:#000;border:2px solid #888898}
 .sr-rank.sr-rank-3{background:#e8b98a;color:#000;border:2px solid #8b4510}
-[data-theme="hc-dark"] .sr-rank{background:#3a3a3a;color:#fff;border:1px solid #555}
+[data-theme="dark"] .sr-rank{background:#3a3a3a;color:#fff;border:1px solid #555}
 /* Dark theme's own values, not just a copy of the light ones above: a much darker, muted
    gold-brown fill (not the pale #ffe066 light theme gets — pale would glow against this app's
    near-black dark theme instead of reading as muted) with white text and a genuinely lighter
    bright-gold border for definition against that darker fill, same shape as #2/#3's own
    dark-theme rows right below. Also fixes the specificity bug from the --accent-gold era: this
-   and the plain [data-theme="hc-dark"] .sr-rank rule above are equally specific (2 class-level
+   and the plain [data-theme="dark"] .sr-rank rule above are equally specific (2 class-level
    selectors each — attribute selectors count same as classes), so this still needs to be
    declared after it to win the tie rather than falling back to the plain gray badge. */
-[data-theme="hc-dark"] .sr-rank.sr-rank-1{background:#6e5600;color:#fff;border:2px solid #ffd700}
-[data-theme="hc-dark"] .sr-rank.sr-rank-2{background:#55555f;color:#fff;border:2px solid #c8c8d0}
-[data-theme="hc-dark"] .sr-rank.sr-rank-3{background:#6b3d15;color:#fff;border:2px solid #d68a42}
+[data-theme="dark"] .sr-rank.sr-rank-1{background:#6e5600;color:#fff;border:2px solid #ffd700}
+[data-theme="dark"] .sr-rank.sr-rank-2{background:#55555f;color:#fff;border:2px solid #c8c8d0}
+[data-theme="dark"] .sr-rank.sr-rank-3{background:#6b3d15;color:#fff;border:2px solid #d68a42}
 .sr-name{flex:1;font-weight:600;font-size:.85rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* Subtle 1st/2nd/3rd podium tint across the whole row container — same idea as Final Results'
    .fr-gold/.fr-silver/.fr-bronze row wash. All three are plain fixed, muted tints, matching the
@@ -1373,9 +1373,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .score-row.sr-rank-1{background:rgba(200,175,90,.16)}
 .score-row.sr-rank-2{background:rgba(200,202,215,.14)}
 .score-row.sr-rank-3{background:rgba(210,130,55,.16)}
-[data-theme="hc-light"] .score-row.sr-rank-1{background:rgba(150,120,40,.20)}
-[data-theme="hc-light"] .score-row.sr-rank-2{background:rgba(140,140,155,.20)}
-[data-theme="hc-light"] .score-row.sr-rank-3{background:rgba(180,100,40,.20)}
+[data-theme="light"] .score-row.sr-rank-1{background:rgba(150,120,40,.20)}
+[data-theme="light"] .score-row.sr-rank-2{background:rgba(140,140,155,.20)}
+[data-theme="light"] .score-row.sr-rank-3{background:rgba(180,100,40,.20)}
 .sr-score{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan);margin-left:8px;flex-shrink:0}
 
 /* SECTIONS */
@@ -1416,8 +1416,8 @@ input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in sr
 /* color-scheme tells the browser which native-control palette to use for the date input's
    own calendar-picker icon and popup (so the icon isn't a near-invisible dark glyph on our
    dark theme's input background) — this is the standards-based fix, not a filter/invert hack. */
-[data-theme="hc-dark"] input[type="date"]{color-scheme:dark}
-[data-theme="hc-light"] input[type="date"]{color-scheme:light}
+[data-theme="dark"] input[type="date"]{color-scheme:dark}
+[data-theme="light"] input[type="date"]{color-scheme:light}
 /* max-width is rem, not a flat px cap, on both this and .date-native-wrap below — same reasoning
    as the mobile bugs fixed elsewhere in this file: .date-display-text's font-size is also rem
    (below), driven by root font-size (Settings > Size, 12-30px), so at the larger end of that
@@ -1524,9 +1524,9 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    only thing they reliably do is catch a stray click and silently change a score that was
    already right. The craft prize steppers turn them off the same way (.stepper input.sw-input,
    further down) — this is that rule applied to the one other number input in the app. */
-.team-guess-cell input[type=number]{-moz-appearance:textfield;appearance:textfield}
-.team-guess-cell input[type=number]::-webkit-outer-spin-button,
-.team-guess-cell input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.team-guess-cell input[type="number"]{-moz-appearance:textfield;appearance:textfield}
+.team-guess-cell input[type="number"]::-webkit-outer-spin-button,
+.team-guess-cell input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .team-guess-cell>label{font-size:.66rem;margin-bottom:7px}
 .team-guess-cell.guess-missing>label{color:var(--txt-orange)}
 .team-guess-cell.guess-missing input{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
@@ -1640,7 +1640,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    main axis by justify-content, so the icon is centred horizontally and vertically by layout
    rather than by whatever the glyph's metrics happened to be. gap replaces the leading space that
    used to be baked into the label text. */
-.q-sort-btn,.q-reset-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation;display:inline-flex;align-items:center;justify-content:center}
+.q-sort-btn,.q-reset-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
 .q-sort-btn{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .q-sort-btn:hover{filter:brightness(1.1)}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
@@ -1814,7 +1814,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    about this title needs to BE gold specifically, so light mode gets the same teal already used
    one line down for the standings themselves (--txt-cyan), which reads clean at 5.6:1 on this
    block's own background instead. */
-[data-theme="hc-light"] .standings-block .standings-title{color:var(--txt-cyan)}
+[data-theme="light"] .standings-block .standings-title{color:var(--txt-cyan)}
 .standings-chevron{transition:transform .25s;flex-shrink:0}
 .standings-block.collapsed .standings-collapsible{display:none}
 .standings-block.collapsed .standings-chevron{transform:rotate(-90deg)}
@@ -1843,7 +1843,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    background color choice on its own terms (a washed brown chip rather than an actual "active"
    accent), a problem dark theme's vivid gold doesn't have. --on-badge (white) still clears 6.4:1
    against this teal, so it's reused as-is rather than needing its own override too. */
-[data-theme="hc-light"] .standings-sort-btn.active{background:var(--txt-cyan);border-color:var(--txt-cyan)}
+[data-theme="light"] .standings-sort-btn.active{background:var(--txt-cyan);border-color:var(--txt-cyan)}
 .standings-table{width:100%;border-collapse:collapse;font-size:.86rem}
 .standings-table th,.standings-table td{padding:7px 8px;border-bottom:1px solid var(--border)}
 .standings-table thead th{color:var(--text-muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;text-align:left}
@@ -2026,7 +2026,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .cb-tag{font-family:var(--font-body);font-size:.58rem;font-weight:700;color:var(--badge-gold-fg);background:color-mix(in srgb,var(--accent-gold) 14%,transparent);border:1px solid var(--badge-gold-fg);border-radius:4px;padding:1px 5px;margin-left:5px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle}
 /* .cb-tag can sit on a team row that is ALSO gold-tinted (.score-row.cb-prize), compounding
    the tint darker than badge-gold-fg was tuned for — bump brightness for that one case. */
-[data-theme="hc-dark"][data-cb="2"] .score-row.cb-prize .cb-tag{color:#ffb3ff}
+[data-theme="dark"][data-cb="2"] .score-row.cb-prize .cb-tag{color:#ffb3ff}
 
 /* CRAFT PRIZE RANDOMIZER */
 .cp-config{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:8px}
@@ -2103,6 +2103,20 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    comfortable slack at every step of the range. */
 .audit-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:32rem;box-shadow:var(--shadow);margin:20px auto 0;animation:auditPop .18s ease-out}
 @keyframes auditPop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* Themed confirm()/alert() replacement (appConfirm/appAlert, js/app.js) — centered, not
+   flex-start like .audit-overlay above, since this is a short one-off message rather than
+   content tall enough to need top-anchored scrolling. z-index above .audit-overlay's own 500:
+   a confirm can legitimately fire from inside an already-open audit/settings context (Clear
+   Session sits in Export & Data, reachable while other panels are open), and has to paint over
+   whichever of those is currently up. */
+.confirm-overlay{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.72);align-items:center;justify-content:center;padding:20px}
+.confirm-overlay.show{display:flex}
+.confirm-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:22rem;box-shadow:var(--shadow);padding:20px;animation:auditPop .18s ease-out}
+.confirm-message{font-family:var(--font-body);font-size:.9rem;line-height:1.5;color:var(--text-primary);white-space:pre-line;margin:0 0 16px}
+.confirm-actions{display:flex;justify-content:flex-end;gap:8px}
+/* alert() has nothing to cancel — appAlert hides Cancel outright rather than leaving a button
+   that would just do the same thing OK does. */
+.confirm-modal.confirm-alert #confirmCancelBtn{display:none}
 /* transform:translateZ(0) forces this sticky element onto its own GPU compositing layer — iOS
    Safari has a long-standing bug where a position:sticky element inside a
    -webkit-overflow-scrolling:touch container can repaint a frame late during momentum scroll,
@@ -2118,8 +2132,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    without this the header edge all but disappears once content is scrolled up under it. Dark
    mode needs a pale glow (a dark shadow is invisible against this app's near-black surfaces);
    light mode gets a plain downward shadow. */
-[data-theme="hc-dark"] .audit-head{box-shadow:0 6px 12px -4px rgba(255,255,255,.18)}
-[data-theme="hc-light"] .audit-head{box-shadow:0 6px 12px -4px rgba(0,0,0,.30)}
+[data-theme="dark"] .audit-head{box-shadow:0 6px 12px -4px rgba(255,255,255,.18)}
+[data-theme="light"] .audit-head{box-shadow:0 6px 12px -4px rgba(0,0,0,.30)}
 .audit-head h2{font-family:var(--font-display);font-size:1.05rem;color:var(--txt-cyan);text-transform:uppercase;letter-spacing:1px;line-height:1.2;word-break:break-word}
 .audit-head .aud-sub{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:3px}
 /* Icon-only now (see buildAudit in app.js) — used to read "✕ Close", but the X alone next to a
@@ -2144,7 +2158,6 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    report — the Extras block, Grand Total, the stat rows — had a few hundred pixels of dead space
    stretched through the middle of it. One column reads as a single chronological run of rounds
    and lets the modal be as narrow as its widest row. */
-}
 .aud-round{margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 .aud-round-h{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-card-alt);font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
 .aud-line{display:flex;align-items:center;gap:8px;padding:6px 12px;border-top:1px solid var(--border);font-size:.85rem}
@@ -2358,7 +2371,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    needed. Text drops the accompanying --on-accent-gold (tuned for a FULL-strength fill, where a
    dark magenta under tritanopia needs white) for plain --text-primary instead: every pale mix is
    light regardless of which hue it started from, so black already clears AA against all of them. */
-[data-theme="hc-light"] .final-table tr.fr-tie{background:color-mix(in srgb,var(--accent-gold) 40%,white);color:var(--text-primary)}
+[data-theme="light"] .final-table tr.fr-tie{background:color-mix(in srgb,var(--accent-gold) 40%,white);color:var(--text-primary)}
 /* .fr-tiebadge flags a SCORE-only tie (place numbers themselves are always distinct now — see
    finalResultsRows()) so the host can still see at a glance where a tied score existed and how
    the guess tiebreak resolved it: the closer guess gets the green "win" variant, the rest of
@@ -2374,15 +2387,15 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* Same pause-button match as the row background above, applied to the plain "tie" chip too.
    Declared BEFORE .fr-win below (same specificity, so source order decides) — the "closer"
    .fr-win variant must still win and stay green, a different signal from "the current yellow". */
-[data-theme="hc-light"] .fr-tiebadge{background:var(--accent-gold);color:var(--on-accent-gold)}
+[data-theme="light"] .fr-tiebadge{background:var(--accent-gold);color:var(--on-accent-gold)}
 .fr-tiebadge.fr-win{background:var(--badge-green-fg)}
 /* Light theme's --badge-green-fg (#0a500a) is a dark green tuned for use as TEXT on light
    surfaces elsewhere (aud-correct, mp-label, etc.) — as a solid pill background behind the
-   black text the hc-light rule above already applies to every .fr-tiebadge, it only clears
+   black text the light rule above already applies to every .fr-tiebadge, it only clears
    ~2.2:1, well under the 4.5:1 AA floor for normal text. Reuses the same green/white pairing
    already vetted for positive point deltas (--pts-pos-bg/--pts-pos-fg, colorblind-aware via its
    own [data-cb] overrides) instead of inventing a new color. */
-[data-theme="hc-light"] .fr-tiebadge.fr-win{background:var(--pts-pos-bg);color:var(--pts-pos-fg)}
+[data-theme="light"] .fr-tiebadge.fr-win{background:var(--pts-pos-bg);color:var(--pts-pos-fg)}
 .fr-diff-win{color:var(--badge-green-fg)!important;font-weight:800!important}
 .fr-note{font-size:.72rem;color:var(--text-muted);margin-top:9px;line-height:1.45}
 /* Event Details' "Locked once scoring starts" note (see metaLocked in app.js) is now always
@@ -2392,7 +2405,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    the whole time and drops it from tab order/hit-testing on its own while pending. */
 .fr-note.fr-note-pending{visibility:hidden}
 /* Links inside a note (e.g. Event Details' "Unlock to fix it") had no color rule of their own,
-   so they fell back to the browser default blue/purple — on hc-dark's near-black background
+   so they fell back to the browser default blue/purple — on dark's near-black background
    that read as low-contrast, and visited-purple in particular clears nowhere near AA. --txt-cyan
    is the same AAA(7:1) text-safe token already used for clickable text elsewhere (e.g.
    .ta-name-clickable), defined for every theme/color-vision combination, so this link is
@@ -2422,19 +2435,19 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .final-table tr.fr-silver .fr-place{color:#e3e6f0}
 .final-table tr.fr-bronze .fr-place{color:#f0a868}
 /* explicit high-contrast dark: brighter tints + borders */
-[data-theme="hc-dark"] .final-table tr.fr-gold  {background:linear-gradient(90deg,#ffe000 0 4px,rgba(255,224,0,.28) 4px,rgba(255,224,0,.13) 100%)}
-[data-theme="hc-dark"] .final-table tr.fr-silver{background:linear-gradient(90deg,#dde0ec 0 4px,rgba(215,218,232,.26) 4px,rgba(215,218,232,.12) 100%)}
-[data-theme="hc-dark"] .final-table tr.fr-bronze{background:linear-gradient(90deg,#f0a050 0 4px,rgba(232,140,60,.28) 4px,rgba(232,140,60,.13) 100%)}
-[data-theme="hc-dark"] .final-table tr.fr-gold   .fr-place{color:#ffe840}
-[data-theme="hc-dark"] .final-table tr.fr-silver .fr-place{color:#f0f2fa}
-[data-theme="hc-dark"] .final-table tr.fr-bronze .fr-place{color:#ffb76d}
+[data-theme="dark"] .final-table tr.fr-gold  {background:linear-gradient(90deg,#ffe000 0 4px,rgba(255,224,0,.28) 4px,rgba(255,224,0,.13) 100%)}
+[data-theme="dark"] .final-table tr.fr-silver{background:linear-gradient(90deg,#dde0ec 0 4px,rgba(215,218,232,.26) 4px,rgba(215,218,232,.12) 100%)}
+[data-theme="dark"] .final-table tr.fr-bronze{background:linear-gradient(90deg,#f0a050 0 4px,rgba(232,140,60,.28) 4px,rgba(232,140,60,.13) 100%)}
+[data-theme="dark"] .final-table tr.fr-gold   .fr-place{color:#ffe840}
+[data-theme="dark"] .final-table tr.fr-silver .fr-place{color:#f0f2fa}
+[data-theme="dark"] .final-table tr.fr-bronze .fr-place{color:#ffb76d}
 /* light theme (dark text): heavier tints so the medal reads, text stays legible */
-[data-theme="hc-light"] .final-table tr.fr-gold  {background:linear-gradient(90deg,#c8900a 0 4px,rgba(255,205,0,.42) 4px,rgba(255,216,80,.26) 100%)}
-[data-theme="hc-light"] .final-table tr.fr-silver{background:linear-gradient(90deg,#6f6f80 0 4px,rgba(150,150,165,.44) 4px,rgba(178,178,192,.28) 100%)}
-[data-theme="hc-light"] .final-table tr.fr-bronze{background:linear-gradient(90deg,#9c5a20 0 4px,rgba(200,115,40,.40) 4px,rgba(212,134,62,.26) 100%)}
-[data-theme="hc-light"] .final-table tr.fr-gold   .fr-place{color:#664800}
-[data-theme="hc-light"] .final-table tr.fr-silver .fr-place{color:#3d3d4b}
-[data-theme="hc-light"] .final-table tr.fr-bronze .fr-place{color:#5c3010}
+[data-theme="light"] .final-table tr.fr-gold  {background:linear-gradient(90deg,#c8900a 0 4px,rgba(255,205,0,.42) 4px,rgba(255,216,80,.26) 100%)}
+[data-theme="light"] .final-table tr.fr-silver{background:linear-gradient(90deg,#6f6f80 0 4px,rgba(150,150,165,.44) 4px,rgba(178,178,192,.28) 100%)}
+[data-theme="light"] .final-table tr.fr-bronze{background:linear-gradient(90deg,#9c5a20 0 4px,rgba(200,115,40,.40) 4px,rgba(212,134,62,.26) 100%)}
+[data-theme="light"] .final-table tr.fr-gold   .fr-place{color:#664800}
+[data-theme="light"] .final-table tr.fr-silver .fr-place{color:#3d3d4b}
+[data-theme="light"] .final-table tr.fr-bronze .fr-place{color:#5c3010}
 /* keep the score/diff text high-contrast on the medal rows in every theme */
 .final-table tr.fr-gold .fr-score,.final-table tr.fr-silver .fr-score,.final-table tr.fr-bronze .fr-score{color:var(--text-primary)}
 /* Dark theme only: match the score number's color on medal rows back to the same aqua
@@ -2444,7 +2457,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    reads at high contrast here same as it does anywhere else in this app on that background;
    light theme's much more opaque, heavier-tinted washes are the case that override was actually
    protecting, so that one still keeps --text-primary. */
-[data-theme="hc-dark"] .final-table tr.fr-gold .fr-score,[data-theme="hc-dark"] .final-table tr.fr-silver .fr-score,[data-theme="hc-dark"] .final-table tr.fr-bronze .fr-score{color:var(--txt-cyan)}
+[data-theme="dark"] .final-table tr.fr-gold .fr-score,[data-theme="dark"] .final-table tr.fr-silver .fr-score,[data-theme="dark"] .final-table tr.fr-bronze .fr-score{color:var(--txt-cyan)}
 
 /* ── Final results mobile layout: stack overflow cells onto a second row ──
    Uses the scorecol container query so it follows the score column's real

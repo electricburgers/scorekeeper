@@ -2,6 +2,34 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.30] - 22 Aug 2026
+
+### Changed
+
+- **The Color Vision dropdown and font-size scale now share the main app's own implementation**
+  (new `js/shared-ui.js`, loaded before `faq-bootstrap.js`/`faq.js`) instead of a separate copy —
+  the v1.29 fix that ported the app's positioning logic in by hand is now the *same* code, not a
+  parallel one that can drift again.
+- **`data-theme="hc-dark"`/`"hc-light"` renamed to `"dark"`/`"light"`**, matching the main app.
+  A returning visitor's already-stored theme preference is migrated automatically.
+
+### Added
+
+- **An SVG `<symbol>`/`<use>` icon sprite** in place of 51 duplicated inline SVGs — same icon,
+  defined once.
+- **Deep-linkable Q&A items**: every item has a stable `#q-...` id; opening a link with that hash
+  (or one arriving via `hashchange`) expands the matching item and scrolls to it.
+- **A `?q=` URL parameter** pre-fills and runs the search box on load, and a **"/" keyboard
+  shortcut** jumps focus to it (guarded against firing while already typing somewhere else).
+- **A print stylesheet** — printing (or Save as PDF) now forces every answer open and drops the
+  header, toolbar, table of contents, settings, lightbox, and screenshots, leaving plain black-on-
+  white Q&A text.
+- **`loading="lazy"` on every real screenshot**, meta description, and Open Graph/Twitter tags —
+  faster initial load on a long page, and a real preview card when the FAQ link is shared.
+- **The service worker now precaches the FAQ** (`index.html`, its CSS/JS, and both fonts)
+  alongside the main app shell, so it works offline after a first visit like the rest of the app
+  already did.
+
 ## [1.29] - 22 Aug 2026
 
 ### Added

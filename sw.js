@@ -22,10 +22,20 @@
 // The app is split across index.html/css/js — all of it is pre-cached below so a fresh install
 // works offline immediately, not just after each file has been individually fetched once. The
 // Google Fonts stylesheet is not cached — it just falls back to system fonts offline.
-const CACHE_NAME='trivia-scorekeeper-shell-v7';
+// v8: adds the FAQ (faq/index.html + its css/js/fonts) to the precached shell. Previously only
+// the main app was precached; the fetch handler below caches anything same-origin opportunistically
+// after its first successful fetch, so this only ever mattered for a host whose FIRST-EVER visit
+// to the FAQ (reached from Settings > Help) happened offline — but that's exactly the scenario
+// this whole service worker exists for, so it's worth the few extra KB at install time. The FAQ's
+// 50+ screenshots are deliberately left out: they're still cached opportunistically on first view,
+// same as before, rather than ballooning what a fresh install has to fetch before it's usable.
+const CACHE_NAME='trivia-scorekeeper-shell-v8';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
-  './css/styles.css','./css/tutorial.css','./js/app.js','./js/tutorial.js',
-  './js/vendor/fflate.min.js','./js/vendor/jspdf.min.js','./js/data/xlsx-templates.js'];
+  './css/styles.css','./css/tutorial.css','./js/shared-ui.js','./js/app.js','./js/tutorial.js',
+  './js/vendor/fflate.min.js','./js/vendor/jspdf.min.js','./js/data/xlsx-templates.js',
+  './faq/index.html','./faq/css/faq.css','./faq/css/fonts.css',
+  './faq/js/faq.js','./faq/js/faq-bootstrap.js',
+  './faq/fonts/inter-var.woff2','./faq/fonts/space-grotesk-var.woff2'];
 
 // How long the network gets before the cached copy is served instead. Long enough that a merely
 // sluggish venue connection still delivers the current build, short enough that a host tapping

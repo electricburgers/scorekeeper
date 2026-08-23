@@ -10,6 +10,44 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.29 - 2026-08-22
+- **The app and FAQ now share one implementation of the Color Vision dropdown and the font-size
+  scale** (new `js/shared-ui.js`, loaded by both `index.html` and `faq/index.html`) instead of
+  two hand-kept copies — the FAQ's dropdown was rebuilt from scratch to match the app's exact
+  markup/behavior a few versions back, and this is what stops the two from drifting apart again
+  the next time either changes.
+- **Native `confirm()`/`alert()` are gone**, replaced by an async, themed, Escape-to-cancel modal
+  (`appConfirm`/`appAlert` in `js/app.js`) — the browser's stock dialog broke the app's own visual
+  language and, on some mobile browsers, could stall behind the page's own paint. All 25 `alert()`
+  call sites and the 5 real `confirm()` gates (Clear Session, Remove Team, loading a save file or
+  prefs file, loading the sample game, and starting the tutorial over real data) now go through
+  it.
+- **`data-theme="hc-dark"`/`"hc-light"` are renamed to plain `"dark"`/`"light"`** throughout the
+  CSS and JS (the "hc-" prefix stopped meaning anything once high-contrast became the only theme
+  pair). Existing visitors' already-stored `hc-dark`/`hc-light`/`bw` prefs are migrated
+  automatically on next load — nobody's saved Settings silently reset.
+- **The FAQ picked up the rest of the app's install-quality polish**: an SVG `<symbol>`/`<use>`
+  icon sprite in place of 51 duplicated inline SVGs, deep-linkable Q&A items (`#q-...` ids, opened
+  automatically from the URL hash), a `?q=` query-string pre-filter, a "/" keyboard shortcut to
+  jump to search, a search-clear button, a print stylesheet, lazy-loaded screenshots, and meta
+  description/Open Graph/Twitter tags (matching ones were added to the main app too). The service
+  worker now precaches the FAQ and `js/shared-ui.js` alongside the app shell
+  (`trivia-scorekeeper-shell-v8`).
+- **Two real bugs turned up while adding lint tooling** (new `npm run lint`, covering
+  ESLint/Stylelint/html-validate): an orphaned `}` left over from a removed two-column layout in
+  `css/styles.css`, and `.q-sort-btn,.q-reset-btn` declaring `display`/`align-items`/
+  `justify-content` twice verbatim. Both are fixed. A handful of dead local variables (PDF-export
+  code, `js/tutorial.js`) and two unnecessary regex escapes were cleaned up alongside them.
+- **New `npm test`**: a from-scratch jsdom test suite (224 tests) that loads the real
+  `index.html`/`faq/index.html` and runs their actual `<script>` files rather than a
+  reimplemented copy, covering CSS structural integrity, HTML structure, and JS behavior —
+  including targeted regression tests for specific bugs this changelog has recorded fixing before
+  (the R2/R4 emoji centering, the theme-key rename's migration path, the Crowd-Wisdom Percentage
+  naming, and others), so they can't quietly come back.
+- Tutorial narration text had a few stray ▶/↺/✕/🗑 glyphs standing in for a button name instead of
+  describing it in words; the first-run offer card's icon (a graduation cap, unrelated to the Take
+  the Tour button's own icon since v19.28) now matches it.
+
 ## v19.28 - 2026-08-22
 - **Take the Tour's icon is a yellow waving hand now, not the ℹ️ info dot it's been since
   v19.20.** The bare circled "i" read as an unlabeled blob at mobile Settings-row sizes — a hand
