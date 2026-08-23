@@ -571,19 +571,29 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
      in the file: setting overflow-y to anything but visible makes the UA compute an unset
      overflow-x as auto instead, which would silently reopen the horizontal-scroll bug that rule
      exists to close — now on this element, since it's the one actually scrolling. */
-  .settings-panel-body{display:block;flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  /* padding-top is the "breathing room" before the first row (Theme) that used to live in
+     .settings-panel-head's own bottom margin instead — moved here deliberately: that margin sat
+     *outside* this scrolling box, so it was a fixed 16px of dead black space the header's
+     border-line never actually touched, and the first row only started disappearing under the
+     line 16px into the scroll instead of right at it. As padding-top on the scrolling box itself,
+     it scrolls away with the rest of the content, so the line and the first row's clip point are
+     the same pixel from the very start of a scroll gesture. */
+  .settings-panel-body{display:block;flex:1 1 auto;min-height:0;padding-top:12px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
   .settings-panel-foot{display:block;flex-shrink:0}
   /* grid-column:1/-1 spans the single-column layout's full width. Negative margin cancels
      .settings-panel's own 10px/16px padding so the bar bleeds edge-to-edge instead of floating
-     with a gap on both sides; the 16px bottom margin restores breathing room before the first row
-     starts. position:sticky was dropped here on the assumption that pinning this in place by
-     flex layout instead of scroll-tracking made the iOS translateZ(0) workaround (still used on
-     .mini-progress/.audit-head elsewhere in this file) sticky-specific and no longer needed —
-     wrong: a host on a real iPhone still saw the row right below this one double-expose/ghost
-     while scrolling, because the underlying glitch is a compositing-layer boundary artifact next
-     to a -webkit-overflow-scrolling:touch container (.settings-panel-body below), not something
+     with a gap on both sides. No bottom margin here (see below for why) — position:sticky was
+     dropped here on the assumption that pinning this in place by flex layout instead of
+     scroll-tracking made the iOS translateZ(0) workaround (still used on .mini-progress/
+     .audit-head elsewhere in this file) sticky-specific and no longer needed — wrong: a host on a
+     real iPhone still saw the row right below this one double-expose/ghost while scrolling,
+     because the underlying glitch is a compositing-layer boundary artifact next to a
+     -webkit-overflow-scrolling:touch container (.settings-panel-body below), not something
      specific to position:sticky itself. Re-added for that reason, sticky or not. */
-  .settings-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;grid-column:1/-1;flex-shrink:0;margin:-10px -16px 16px;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong);transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+  /* box-shadow is a faint downward fade under the border-line, hinting the row right below it is
+     genuinely scrollable content and not just static space — picked over a plain flush edge once
+     the 12px gap above moved inside the scroll box (V5 of the gap-fix variations). */
+  .settings-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;grid-column:1/-1;flex-shrink:0;margin:-10px -16px 0;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong);box-shadow:0 8px 10px -8px rgba(0,0,0,.6);transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
   .settings-panel-title{font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt-cyan)}
   /* X close button — same circular affordance as .resume-banner-close, reused here for visual
      consistency. With the panel now capped at max-height and scrolling only in the middle, the

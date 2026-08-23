@@ -10,6 +10,16 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.36 - 2026-08-23
+- **Fixed mobile Settings panel's resting gap and scroll-clip point**: the header's border-line
+  used to be followed by a fixed 16px of dead black space that lived *outside* the scrolling area
+  (a bottom margin on `.settings-panel-head`), so the Theme row sat too low at rest and only
+  started disappearing under the line 16px into a scroll instead of right at it. That breathing
+  room now lives as `padding-top` on `.settings-panel-body` itself (the scrolling box), so it
+  scrolls away with the rest of the content and the first row clips flush against the line from
+  the very start of a scroll gesture. Also added a faint downward fade under the line to hint
+  there's more content scrollable above it.
+
 ## v19.35 - 2026-08-23
 - **Fixed the update-available note's misleading advice**: it used to be a "tap to refresh" button
   that just called `location.reload()` — but a web app can't self-update that way. An installed
