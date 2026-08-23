@@ -106,12 +106,14 @@
   --tint-heart:#ff5a72;
   --tint-clipboard:#c98f52;--tint-clipboard-2:#dfe3e7;
   --tint-pdf:#e0574f;
-  /* Try Example's flask and Take the Tour's graduation cap, plus the shuffle icon's decorative
-     (non-button) copy — see the note on --tint-shuffle below. Neither the flask nor the cap
-     stands for a real-world colour the way the beer/drum/trophy do, so hue was picked to stay
-     visually distinct from every tint already in the palette rather than to match anything.
-     Both clear 3:1 against every dark surface a settings row can sit on (--bg-card/-alt/-input/
-     -hover): 5.3-6.6:1 and 8.3-10.4:1. */
+  /* Try Example's flask and Save's floppy disk (--icon-save below), plus the shuffle icon's
+     decorative (non-button) copy — see the note on --tint-shuffle below. --tint-cap originally
+     tinted Take the Tour's own icon too (a graduation cap, then an ℹ️) before that button moved
+     to --accent-gold (see .icon-hand) for its own reasons; it kept the name since Save still
+     uses it. Neither the flask nor this blue stands for a real-world colour the way the
+     beer/drum/trophy do, so hue was picked to stay visually distinct from every tint already in
+     the palette rather than to match anything. Both clear 3:1 against every dark surface a
+     settings row can sit on (--bg-card/-alt/-input/-hover): 5.3-6.6:1 and 8.3-10.4:1. */
   --tint-flask:#b07cff;--tint-cap:#5ec8ff;
   /* Same swap as ICON_CLIPBOARD's own tint (app.js): a magenta distinct from the app's team-2
      accent, picked so a decorative "shuffle" pictograph beside a text label doesn't borrow the
@@ -836,12 +838,19 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    hex values: this app already has an audited green (XLSX's own icon) and an audited silver
    (the mic), and neither needs its own one-off variant just for this icon to borrow it. */
 .icon-flask{--icon-tint:var(--tint-sheet);--icon-tint-2:var(--tint-mic)}
-.icon-cap{--icon-tint:var(--tint-cap)}
+/* Take the Tour's own icon — a waving hand, since the ℹ️ it had before this read as an
+   unlabeled dot at mobile sizes. --accent-gold rather than a bespoke tint: it's already
+   contrast-audited for both themes and every color-vision mode (unlike a new one-off hex pair),
+   and reads as a plain "hi, welcome" yellow without implying anything else already spoken for
+   (gold/beer, cyan/accent, magenta/accent). One SVG, no separate light/dark variant — the
+   --accent-gold token itself already carries the light/dark split, same as --icon-tint does for
+   every other icon here. */
+.icon-hand{--icon-tint:var(--accent-gold)}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
 /* Settings > App Preferences (Save/Load) and > Craft Prize Eligible List (Copy/TXT) — the only
    four pictographs left with no colour of their own after every OTHER Settings row got one.
-   --tint-cap reused for Save's floppy disk (already this app's blue, from Take the Tour's cap)
-   and --tint-mic for its silver label/window detail, same reasoning as icon-flask's reuse above.
+   --tint-cap reused for Save's floppy disk (this app's existing audited blue) and --tint-mic for
+   its silver label/window detail, same reasoning as icon-flask's reuse above.
    --accent-gold for Load's folder needs no second tone — it's one path, not a picture split into
    separate parts — and comes with color-vision-mode overrides already, for free, that a bespoke
    --tint-load never would. TXT's page reuses --tint-mic/-2 for the same plain silver-on-silver

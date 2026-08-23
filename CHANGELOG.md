@@ -10,6 +10,20 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.28 - 2026-08-22
+- **Take the Tour's icon is a yellow waving hand now, not the ℹ️ info dot it's been since
+  v19.20.** The bare circled "i" read as an unlabeled blob at mobile Settings-row sizes — a hand
+  wave reads as "hi, welcome" at a glance instead. New pictograph (`.icon-hand`, replacing
+  `.icon-cap`) tinted `--accent-gold` — already contrast-audited for both themes and every
+  color-vision mode, so no new tint tokens needed — and `👋` for Icon Style's Emoji mode, in place
+  of `ℹ️`. `--tint-cap` itself is untouched and still tints Save's own icon, which was the only
+  other thing borrowing it.
+- **The sample game now has three teams scoring 0 of 4 on Round 1's bonus question, not one** —
+  Sherlock Homies and Two Heads One Trophy join Mastermind Alliance at 0/4, so Try Example and the
+  tutorial's practice game show a more realistic spread of bonus outcomes instead of near-everyone
+  clearing it. Left Round 3's bonus (all 4/4, the sample game's built-in Beer Round) and both
+  tied-for-2nd teams' Round 1 bonus untouched, so neither of those still depends on exact numbers.
+
 ## v19.27 - 2026-08-22
 - **The R2/R4 correct/incorrect emoji were still off-center after v19.26** — the previous fix was
   wrong on two counts, both from unreliable verification rather than the CSS logic itself: the
