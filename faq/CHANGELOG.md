@@ -2,7 +2,23 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
-## [1.28] - 22 Aug 2026
+## [1.29] - 22 Aug 2026
+
+### Added
+
+- **Team Report is its own top-level section now**, between Final Results & Ties and Craft Prize
+  Drawing, not an entry buried in Tips & Tricks. Split into four real Q&A items instead of one
+  long entry: how to open it, the Scores-sidebar exception, what each round in the breakdown
+  shows, and what the four summary tiles mean — rewritten as actual answers to actual questions
+  rather than the app's own compact modal note quoted verbatim. The Tips & Tricks entry this
+  replaces is gone; Final Results & Ties keeps a one-line pointer to the new section instead of
+  duplicating the whole explanation.
+
+### Changed
+
+- **The Crowd-Wisdom Percentage screenshot and example now show 4/11 (36%) / 7/11 (64%)**, not
+  9/11 (82%) / 2/11 (18%) — a question where incorrect actually outnumbers correct, a clearer
+  demonstration of the split than one side being a near-sweep.
 
 ### Fixed
 

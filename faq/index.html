@@ -257,6 +257,7 @@
         <a href="#wagers">Halftime &amp; Final Wager</a>
         <a href="#standings">Scores &amp; Standings</a>
         <a href="#final-results">Final Results &amp; Ties</a>
+        <a href="#team-report">Team Report</a>
         <a href="#craft-prize">Craft Prize Drawing</a>
         <a href="#exporting">Exporting</a>
         <a href="#autosave">Autosave &amp; Resume</a>
@@ -1049,15 +1050,115 @@
           </summary>
           <div class="faq-a">
             <p>
-              Tap/Click on the team's name — see <a href="#tips">Team Report</a> in Tips
-              &amp; Tricks.
+              Tap/Click on the team's name to open their
+              <a href="#team-report">Team Report</a> — a full round-by-round
+              breakdown, with the same Guess/Diff math this table uses
+              explained tile by tile.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== TEAM REPORT ============================== -->
+      <section class="faq-section" id="team-report">
+        <h2 class="faq-section-title">Team Report</h2>
+        <p class="faq-section-sub">
+          A full round-by-round breakdown of exactly how one team's score
+          came together.
+        </p>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">How do I open a team's Team Report?</span><span class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Tap or click their name — this works
+              <em>almost everywhere</em> a team name appears: a round's
+              question rows, standings, Final Results, not just one dedicated
+              screen. It's the fastest way to answer "wait, how did they get
+              that score?" in the middle of a live game. Press
+              <strong>Esc</strong> to close it instead of hunting for the ✕ —
+              the same shortcut closes the Scores sidebar on mobile.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">I tapped a name in the Scores sidebar and nothing like this
+            opened</span><span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              That's the one exception — a name in the
+              <strong>Scores</strong> sidebar itself doesn't open the Team
+              Report. Tapping it there sets, or clears, that team as the
+              Craft Beer Prize winner instead. See
+              <a href="#craft-prize">Craft Prize Drawing</a>.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">What does each round in the breakdown show?</span><span class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              That question's wager, whether it was marked correct or
+              incorrect, and the team's running score right after it — round
+              by round, plus the bonus question tally and both wagers. If a
+              wager's wrong, this isn't where you fix it: close the report and
+              tap the wager button in the round itself instead.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">What do the four tiles above the breakdown mean — Diff Adj, Adj.
+            Score, Diff, Score Guess?</span><span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              They walk through how a team's Grand Total gets compared to
+              their own Score Guess, in order, left to right:
+            </p>
+            <ul>
+              <li>
+                <strong>Diff Adj</strong> (Difference Adjustment) — the bonus
+                points coming back off: Bonus Item (+5) and NJCB (+3), if the
+                team had either.
+              </li>
+              <li>
+                <strong>Adj. Score</strong> (Adjusted Score) — the Grand Total
+                with those bonuses stripped back out.
+              </li>
+              <li>
+                <strong>Diff</strong> — Adj. Score measured against
+                <strong>Score Guess</strong>, what the team guessed their own
+                score would be at the start of the night. A plus (+) means
+                they guessed high, a minus (−) means they guessed low, and 0
+                means they called it exactly.
+              </li>
+            </ul>
+            <p>
+              The bonuses come off before that comparison so every team is
+              judged on the same bonus-free footing — a team that guessed
+              accurately but also happened to win a bonus item shouldn't come
+              out looking like a worse guesser than one who didn't.
             </p>
             <div class="faq-shot">
               <img
                 src="screenshots/score-audit.webp"
                 data-shot-base="score-audit"
-                alt="The Team Report modal open for one team, showing the round-by-round breakdown and Guess/Diff tiles"
-                onerror="faqShotFallback(this,'Team Report modal — full round-by-round breakdown for one team')"
+                alt="The Team Report modal open for one team, showing the round-by-round breakdown and the Diff Adj / Adj. Score / Diff / Score Guess tiles"
+                onerror="faqShotFallback(this,'Team Report modal — full round-by-round breakdown and the four summary tiles')"
               />
             </div>
           </div>
@@ -1748,65 +1849,6 @@
 
         <details class="faq-item">
           <summary>
-            <span class="faq-q-text">Tap any team's name to audit their score</span><span class="faq-q-arrow"
-              >▶</span
-            >
-          </summary>
-          <div class="faq-a">
-            <p>
-              This works <em>almost everywhere</em> a team name appears — a
-              round's question rows, standings, Final Results — not just one
-              dedicated screen. It opens a full breakdown: every question's
-              wager and correct/incorrect call, the running score after each
-              one, the bonus question tally, both wagers, and the same
-              Guess/Diff math Final Results uses, explained tile by tile. It's
-              the fastest way to answer "wait, how did they get that score?"
-              in the middle of a live game. Press <strong>Esc</strong> to
-              close it instead of hunting for the ✕ — same shortcut closes the
-              Scores sidebar on mobile.
-            </p>
-            <p>
-              The one exception: a name in the <strong>Scores</strong>
-              sidebar itself doesn't open this. Tapping it there sets — or
-              clears — that team as the Craft Beer Prize winner instead. See
-              <a href="#craft-prize">Craft Prize Drawing</a>.
-            </p>
-            <p>
-              The four tiles above the round-by-round breakdown, spelled out —
-              this is the same note the app shows right under them:
-            </p>
-            <p>
-              Each round shows that question's wager, whether it was marked
-              correct or incorrect, and the team's running score. To fix a
-              wrong wager, close this and tap the wager button in the round
-              itself.
-            </p>
-            <p>
-              <strong>Diff Adj (Difference Adjustment)</strong> is the Bonuses
-              coming back off — Bonus Item (+5) and NJCB (+3).
-              <strong>Adj. Score (Adjusted Score)</strong> is the Grand Total
-              with those stripped out. <strong>Diff</strong> is Adj. Score
-              measured against the team's Score Guess. A plus (+) means they
-              guessed high, a minus (−) means they guessed low, and 0 means
-              they called it exactly.
-            </p>
-            <p>
-              * Every team's guess is compared on the same bonus-free footing,
-              which is why the bonuses come off before the guess is scored.
-            </p>
-            <div class="faq-shot">
-              <img
-                src="screenshots/score-audit.webp"
-                data-shot-base="score-audit"
-                alt="The Team Report modal open for one team, showing the round-by-round breakdown and Guess/Diff tiles"
-                onerror="faqShotFallback(this,'Team Report modal — full round-by-round breakdown for one team')"
-              />
-            </div>
-          </div>
-        </details>
-
-        <details class="faq-item">
-          <summary>
             <span class="faq-q-text">Use the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></svg> Sort button to find who still hasn't answered</span><span
               class="faq-q-arrow"
               >▶</span
@@ -1970,7 +2012,7 @@
             <p>
               Adds a live correct/incorrect percentage next to each question's
               Sort/Reset buttons — both counts together, e.g.
-              "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><polyline points="5,13 10,18 20,6"></polyline></svg> 9/11 (82%)" and "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="❌"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg> 2/11 (18%)" — so you can see at a
+              "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="✅"><polyline points="5,13 10,18 20,6"></polyline></svg> 4/11 (36%)" and "<svg class="icon-mark" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="❌"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg> 7/11 (64%)" — so you can see at a
               glance how a question is trending without scrolling through every
               team's row.
             </p>
@@ -1978,7 +2020,7 @@
               <img
                 src="screenshots/crowd-wisdom-percentage.webp"
                 data-shot-base="crowd-wisdom-percentage"
-                alt="A question header with Crowd-Wisdom Percentage on, showing 9/11 (82%) correct and 2/11 (18%) incorrect next to the Sort and Reset buttons"
+                alt="A question header with Crowd-Wisdom Percentage on, showing 4/11 (36%) correct and 7/11 (64%) incorrect next to the Sort and Reset buttons"
                 onerror="faqShotFallback(this,'Question header with Crowd-Wisdom Percentage on — correct/incorrect counts next to Sort/Reset')"
               />
             </div>
