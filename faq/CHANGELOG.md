@@ -2,6 +2,29 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.28] - 22 Aug 2026
+
+### Fixed
+
+- **The Color Vision dropdown ran off the right edge of the screen and got cut off** —
+  `faqToggleCvMenu` only ever toggled an `.open` class and set a dead `data-align="right"`
+  attribute no CSS rule ever read; the shared `.cv-select-menu{position:fixed}` rule (`css/styles.css`)
+  needs actual JS-computed `left`/`top` in px to land anywhere sensible, which nothing here was
+  providing, so it fell back to wherever the browser's own static-position algorithm put it —
+  well past the right edge for the wider options ("Red-Green (deuteranopia/protanopia)"). Ported
+  the main app's own `toggleCvMenu`/`closeCvMenu` (`js/app.js`) verbatim: the menu re-parents to
+  `<body>` while open (clear of `.settings-panel`'s own transformed/animated containing block,
+  the same reason the app's version does this) and its position is computed and clamped against
+  the real viewport edges. Verified in-browser at both desktop and mobile widths.
+
+### Added
+
+- **Two third-party video links** on "Is there a video walkthrough?" (renamed from "...official
+  video...") — one per platform, plainly titled, not claimed as official since neither Apple nor
+  Google publishes one themselves.
+- **A clear (✕) button on the search box**, mouse/tap equivalent of selecting the text and
+  hitting Backspace — hidden until there's something to clear, restores focus to the box after.
+
 ## [1.27] - 22 Aug 2026
 
 ### Added

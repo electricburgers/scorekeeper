@@ -195,12 +195,16 @@
   flex-wrap: wrap;
   margin-bottom: 18px;
 }
-.faq-search {
+.faq-search-wrap {
+  position: relative;
   flex: 1;
   min-width: 180px;
+}
+.faq-search {
+  width: 100%;
   font-family: var(--font-body);
   font-size: 0.85rem;
-  padding: 9px 12px;
+  padding: 9px 32px 9px 12px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg-input);
@@ -209,6 +213,41 @@
 .faq-search:focus {
   outline: 2px solid var(--accent-cyan);
   outline-offset: 1px;
+}
+/* Mouse/tap way to clear the box, next to the keyboard's own Esc — hidden by default
+   (faqFilter toggles the hidden attribute) so it's never sitting there over an empty,
+   just-loaded search box. Round and muted rather than the settings/audit panels' bordered
+   red X: those close a whole panel, this only clears a few characters, so it reads as a much
+   smaller, quieter action — same weight as a native browser input's own clear button. */
+.faq-search-clear {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.faq-search-clear:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+/* The [hidden] attribute only hides an element via the UA stylesheet's own [hidden]{display:none}
+   rule, which this class's own display:flex above — a real class selector, higher specificity
+   than a bare attribute one — otherwise wins over. Without this, faqFilter setting
+   clearBtn.hidden = true does nothing visible at all. */
+.faq-search-clear[hidden] {
+  display: none;
 }
 .faq-no-results {
   display: none;

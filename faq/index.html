@@ -222,13 +222,26 @@
       </p>
 
       <div class="faq-toolbar">
-        <input
-          type="text"
-          class="faq-search"
-          id="faqSearch"
-          placeholder='Search the FAQ… (e.g. "wager", "tie", "audit")'
-          oninput="faqFilter(this.value)"
-        />
+        <div class="faq-search-wrap">
+          <input
+            type="text"
+            class="faq-search"
+            id="faqSearch"
+            placeholder='Search the FAQ… (e.g. "wager", "tie", "audit")'
+            oninput="faqFilter(this.value)"
+          />
+          <button
+            type="button"
+            class="faq-search-clear"
+            id="faqSearchClear"
+            onclick="faqClearSearch()"
+            aria-label="Clear search"
+            title="Clear search"
+            hidden
+          >
+            ✕
+          </button>
+        </div>
       </div>
       <p class="faq-no-results" id="faqNoResults">
         No questions match that search.
@@ -1505,7 +1518,7 @@
 
         <details class="faq-item">
           <summary>
-            <span class="faq-q-text">Is there an official video walkthrough?</span><span class="faq-q-arrow"
+            <span class="faq-q-text">Is there a video walkthrough?</span><span class="faq-q-arrow"
               >▶</span
             >
           </summary>
@@ -1513,11 +1526,26 @@
             <p>
               Not from Apple or Google directly, as far as this page can find
               — both companies cover it in writing only (linked above), not in
-              a first-party video. Plenty of third-party tutorial videos exist
-              if you'd rather watch than read, but this page only links
-              sources it can vouch for, so it's sticking to the official
-              written guides.
+              a first-party video. If you'd rather watch than read, here are
+              two third-party tutorials — not official, not affiliated with
+              this app, just plainly titled and matching the exact steps
+              above:
             </p>
+            <ul>
+              <li>
+                iPhone/iPad:
+                <a href="https://www.youtube.com/watch?v=FjgSiH5uVhg" target="_blank" rel="noopener"
+                  >One-Click Access: How to Use the Add to Home Screen Feature on Safari for
+                  iPhone</a
+                >
+              </li>
+              <li>
+                Android:
+                <a href="https://www.youtube.com/watch?v=DxM2B-pdmCM" target="_blank" rel="noopener"
+                  >How to Add a Site to the Android's Home screen using the Chrome app</a
+                >
+              </li>
+            </ul>
           </div>
         </details>
       </section>

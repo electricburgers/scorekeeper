@@ -4,7 +4,7 @@
 // #versionLabel element. Here the same string feeds two spots — the page footer and the
 // Settings panel's settings-meta row — so bumping a release only means editing these two
 // constants instead of hunting down every place the version text is written out by hand.
-const FAQ_VERSION = "v1.27";
+const FAQ_VERSION = "v1.28";
 const FAQ_VERSION_DATE = "22 Aug 2026";
 
 // Same Lucide sun/moon geometry as the main app's THEME_ICON_SUN/MOON (js/app.js), tagged
@@ -126,6 +126,18 @@ function faqFilter(query) {
   document
     .getElementById("faqNoResults")
     .classList.toggle("show", !!q && !anyVisible);
+  var clearBtn = document.getElementById("faqSearchClear");
+  if (clearBtn) clearBtn.hidden = !q;
+}
+// Mouse/tap equivalent of selecting the box and pressing Backspace — clears the input, re-runs
+// the filter (faqFilter("") also collapses every item back and hides the clear button itself),
+// and returns focus to the box so typing a new search picks up right where clearing left off.
+function faqClearSearch() {
+  var input = document.getElementById("faqSearch");
+  if (!input) return;
+  input.value = "";
+  faqFilter("");
+  input.focus();
 }
 
 // ============================== SEARCH HIGHLIGHTING ==============================
@@ -367,11 +379,20 @@ function faqSetCbMode(v) {
   faqSavePrefs(p);
   faqApplyDisplayPrefs();
 }
+// Same reason the main app's own cvMenuEl() exists (js/app.js): while open, the menu is
+// re-parented to <body> (see faqToggleCvMenu below), so it's no longer a descendant of
+// #faqCvSelect and a plain w.querySelector(...) can't find it any more. There's only ever one
+// on this page, so a bare document-wide lookup is unambiguous and works regardless of which
+// element currently parents it.
+function faqCvMenuEl() {
+  return document.querySelector(".cv-select-menu");
+}
 function faqSetCvSelectDisplay(v) {
   const w = document.getElementById("faqCvSelect");
-  if (!w) return;
-  const li = w.querySelector('li[data-value="' + v + '"]');
-  w.querySelectorAll("li").forEach((o) => o.setAttribute("aria-selected", "false"));
+  const menu = faqCvMenuEl();
+  if (!w || !menu) return;
+  const li = menu.querySelector('li[data-value="' + v + '"]');
+  menu.querySelectorAll("li").forEach((o) => o.setAttribute("aria-selected", "false"));
   if (li) {
     li.setAttribute("aria-selected", "true");
     const lbl = w.querySelector(".cv-select-label");
@@ -387,29 +408,50 @@ function faqSetCvSelectDisplay(v) {
 function faqCloseCvMenu() {
   const w = document.getElementById("faqCvSelect");
   if (!w) return;
+  const menu = faqCvMenuEl();
+  if (menu) {
+    menu.classList.remove("cv-open");
+    if (menu.parentElement === document.body) w.appendChild(menu);
+  }
   w.classList.remove("open");
   w.querySelector(".cv-select-btn")?.setAttribute("aria-expanded", "false");
 }
+// Ported straight from the main app's toggleCvMenu (js/app.js) — the FAQ's own previous version
+// tried to fix right-edge overflow with a data-align="right" attribute that no CSS rule ever
+// actually read (dead code — the menu still rendered whatever position:fixed's own default
+// static-position algorithm produced, uncorrected, which runs off the right edge for the wider
+// options here — "Red-Green (deuteranopia/protanopia)" — well before the viewport does). The
+// same fix applies for the same reason: .settings-panel (shared CSS, this page's panel too)
+// animates via slideDown, and an active transform/animation establishes a containing block for
+// position:fixed descendants same as a static transform would, so the coordinates computed
+// against the viewport need the menu actually parented to <body> — no transformed ancestor
+// between it and the viewport — to land where they're computed for.
 function faqToggleCvMenu(e) {
   e.stopPropagation();
   const w = document.getElementById("faqCvSelect");
   if (!w) return;
   const willOpen = !w.classList.contains("open");
-  w.classList.toggle("open", willOpen);
-  w.querySelector(".cv-select-btn").setAttribute(
-    "aria-expanded",
-    String(willOpen),
-  );
-  const menu = w.querySelector(".cv-select-menu");
-  menu.removeAttribute("data-align");
-  if (willOpen) {
-    // Clamp to the viewport: only flip to right-aligned if the default left-aligned
-    // position would run off the right edge. Always opens downward — #faqSettingsPanel is
-    // overflow:visible (see css/faq.css) precisely so this menu is never clipped by the
-    // panel's own edge, so there's no need to flip it upward too.
-    const r = menu.getBoundingClientRect();
-    if (r.right > window.innerWidth - 8) menu.setAttribute("data-align", "right");
+  const btnEl = w.querySelector(".cv-select-btn");
+  const menu = faqCvMenuEl();
+  if (!willOpen) {
+    faqCloseCvMenu();
+    return;
   }
+  w.classList.add("open");
+  btnEl.setAttribute("aria-expanded", "true");
+  menu.classList.add("cv-open");
+  document.body.appendChild(menu);
+  const btn = btnEl.getBoundingClientRect();
+  menu.style.minWidth = btn.width + "px";
+  const menuRect = menu.getBoundingClientRect();
+  let left = btn.left;
+  if (left + menuRect.width > window.innerWidth - 8)
+    left = btn.right - menuRect.width;
+  menu.style.left = Math.max(8, left) + "px";
+  let top = btn.bottom + 4;
+  if (top + menuRect.height > window.innerHeight - 8)
+    top = btn.top - menuRect.height - 4;
+  menu.style.top = Math.max(8, top) + "px";
 }
 function faqSelectCvOption(li, v) {
   faqSetCvSelectDisplay(v);
@@ -434,7 +476,8 @@ function faqCloseSettingsPanel() {
   faqCloseCvMenu();
 }
 document.addEventListener("click", (e) => {
-  if (!e.target.closest(".cv-select")) faqCloseCvMenu();
+  if (!e.target.closest(".cv-select") && !e.target.closest(".cv-select-menu"))
+    faqCloseCvMenu();
   if (
     !e.target.closest("#faqSettingsPanel") &&
     !e.target.closest("#faqSettingsToggleBtn")
