@@ -2,7 +2,76 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
-## [1.25] - 22 Aug 2026
+## [1.26] - 22 Aug 2026
+
+Full re-audit against the main app, which had drifted ahead of this page across
+v18.90–v18.101 (v19.16–v19.27 in the app's own renumbered changelog) — the last
+real content sync here was v1.21, back at v18.80.
+
+### Fixed
+
+- **The Settings gear is pinned to the true top-right corner of the page now,
+  matching the main app's own gear, at every width** — not just at the
+  narrow widths it already handled correctly. It was positioned against
+  `.faq-header-row`, which caps at `max-width:900px` and re-centers on wide
+  screens; past ~930px wide that left the gear sitting well inside the page,
+  at the centered column's edge, while the app's own gear (no such cap on its
+  header) sits flush against the real viewport corner. Repositioned against
+  `.faq-header` itself instead, inset by the same padding the app's header
+  uses, so the two now land in the same spot at every screen size, not just
+  on phones.
+- **"What's in the main Settings list?" and the Settings panel screenshot's
+  alt text both still described a layout from before the app's own Settings
+  reorganization** — claiming Row Density and Row Zebra Stripes as main
+  Settings rows (they moved into Advanced Settings a while back) and missing
+  Icon Style and App Preferences entirely (both real main-Settings rows
+  today). Rewritten to the actual current order: Theme, Size, Icon Style,
+  Color Vision, Question Timer, Sample Data, Help, App Preferences, Advanced
+  Settings.
+- **The Advanced Settings screenshot and its alt text were further out of
+  date still** — showing "Per-Question Percentage Correct Labels" (renamed to
+  Crowd-Wisdom Percentage two names ago), Drumroll Crossfade always visible
+  instead of gated behind Manual Drumroll Control, and App Preferences
+  included as if it were an Advanced row rather than the main-Settings one it
+  actually is.
+- **Three Advanced Settings rows had no FAQ entry at all: Row Density, Row
+  Zebra Stripes, and Point Adjustments.** The first two used to be documented
+  as main Settings (see above, now corrected); Point Adjustments lost its
+  entry back in 1.9 "ahead of its planned removal from the main app" — a
+  removal that, checked against the app today, never actually happened. All
+  three now have real entries.
+- **The "App Preferences" entry was filed under Tips & Tricks → Advanced
+  Settings, but App Preferences is a main-Settings row, not an Advanced one.**
+  Moved it out to sit as a general tip alongside "Tap any team's name" and
+  "Use the Sort button," and fixed a Manual Save & Load entry that repeated
+  the same "in Advanced Settings" claim about it.
+- **Timer Stepper Buttons, Timer Pulse, and Drumroll Crossfade don't mention
+  that they're hidden until their parent toggle (Timer Widget, Timer Widget,
+  and Manual Drumroll Control respectively) is on** — true in the app since
+  those rows started gating on their parent, never caught here. Each entry
+  now says so.
+- **"Take the Tour" was still drawn as its old graduation cap, with a 🎓
+  emoji fallback, in four places** — the app redrew it to an ℹ️ info icon a
+  while back. Updated everywhere it appears (Getting Started ×2, Interactive
+  Tutorial, Settings).
+- **"Score Audit" survived in three spots** — two screenshot alt texts and one
+  cross-link label — after the app renamed the feature to "Team Report" a
+  long time ago; the rest of this page had already caught up. Now consistent
+  everywhere.
+- **The Team Report screenshot itself had stale baked-in text**: the note at
+  the bottom still read "Tip: each round shows…" with bare "Diff Adj" and
+  "Adj. Score" labels and unspelled +/− signs — the exact wording the app
+  changed in its last two releases (dropped "Tip:", spelled out "Diff Adj
+  (Difference Adjustment)" / "Adj. Score (Adjusted Score)", spelled out "A
+  plus (+)" / "a minus (−)"). Recaptured against the live app, dark and
+  light.
+
+### Changed
+
+- Recaptured `settings-panel.webp` and `advanced-settings.webp` (dark and
+  light) against the current app to match the corrected order and content
+  above — the old pair predated Icon Style existing at all and still showed
+  v18.73 in its own footer.
 
 ### Changed
 

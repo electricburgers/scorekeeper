@@ -22,32 +22,35 @@
         <div class="faq-header-actions">
           <a class="faq-back" href="../index.html"> ← Back to Scorekeeper </a>
         </div>
-        <!-- A direct child of .faq-header-row itself (position:relative — see the CSS), not of
-             .faq-header-actions' flex flow, and positioned absolutely: .faq-header-row wraps its
-             flex content at narrow widths (the logo drops to its own line above "Back to
-             Scorekeeper"), and this used to wrap right along with it — landing wherever "Back to
-             Scorekeeper" happened to end rather than the corner of the page. Taking it out of
-             flow entirely pins it to the same top-right corner at every width, matching the main
-             app's own settings gear. -->
-        <button
-          type="button"
-          class="settings-toggle-btn faq-settings-toggle"
-          id="faqSettingsToggleBtn"
-          onclick="faqToggleSettings()"
-          aria-haspopup="true"
-          aria-expanded="false"
-          aria-controls="faqSettingsPanel"
-          title="Display settings"
-          aria-label="Display settings"
-        >
-          <svg
-            class="icon-ui"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            focusable="false"
-           data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
       </div>
+      <!-- A direct child of .faq-header itself now (not .faq-header-row, which caps out at
+           max-width:900px and re-centers on wide screens so the logo/back-link line up with the
+           body content below) — a previous pass pinned this to .faq-header-row instead, on the
+           mistaken belief that matched the main app's gear. It didn't: the app's own header has
+           no such content cap, so its gear sits at the true top-right corner of the page at every
+           width. Positioned absolutely against .faq-header's own padding box so it does the same
+           here — right:16px/top's offset mirror .faq-header's own padding exactly, the same inset
+           Save/Load/gear sit at in the app's header — regardless of how wide the centered row
+           beneath it happens to be. Still out of .faq-header-row's flex flow so it can't wrap
+           down with "Back to Scorekeeper" at narrow widths either, same reasoning as before. -->
+      <button
+        type="button"
+        class="settings-toggle-btn faq-settings-toggle"
+        id="faqSettingsToggleBtn"
+        onclick="faqToggleSettings()"
+        aria-haspopup="true"
+        aria-expanded="false"
+        aria-controls="faqSettingsPanel"
+        title="Display settings"
+        aria-label="Display settings"
+      >
+        <svg
+          class="icon-ui"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+         data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
       <div
         class="settings-panel"
         id="faqSettingsPanel"
@@ -299,7 +302,7 @@
               every round scored, both wagers resolved, and (deliberately) a
               genuine tie in Final Results — so you can click around every
               screen without setting anything up yourself.
-              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎓"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour</strong> is the more hands-on option: a
+              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="ℹ️"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><path d="M12 16v-6"/><path d="M12 7.2h.01"/></svg> Take the Tour</strong> is the more hands-on option: a
               guided, step-by-step walkthrough of an actual game, start to
               finish. See <a href="#tutorial">Interactive Tutorial</a> below.
             </p>
@@ -382,10 +385,10 @@
               real control at a time is highlighted with a ring around it, and
               a callout box explains what it does and what to do next. Start
               it from <strong>Settings</strong> (<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="⚙️"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg> top right) →
-              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎓"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour</strong>, right next to
+              <strong><svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="ℹ️"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><path d="M12 16v-6"/><path d="M12 7.2h.01"/></svg> Take the Tour</strong>, right next to
               <strong><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</strong>. First-time visitors with no
               game in progress also get offered it automatically — a small
-              "<svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎓"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> New here? Take the 2-minute tour." card appears where the
+              "<svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="ℹ️"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><path d="M12 16v-6"/><path d="M12 7.2h.01"/></svg> New here? Take the 2-minute tour." card appears where the
               resume banner would normally be, with Take the Tour and Skip
               buttons. That auto-offer only ever shows once; after that,
               taking the tour is always available from Settings whenever you
@@ -1031,15 +1034,15 @@
           </summary>
           <div class="faq-a">
             <p>
-              Tap/Click on the team's name — see <a href="#tips">Score Audit</a> in Tips
+              Tap/Click on the team's name — see <a href="#tips">Team Report</a> in Tips
               &amp; Tricks.
             </p>
             <div class="faq-shot">
               <img
                 src="screenshots/score-audit.webp"
                 data-shot-base="score-audit"
-                alt="The Score Audit modal open for one team, showing the round-by-round breakdown and Guess/Diff tiles"
-                onerror="faqShotFallback(this,'Score Audit modal — full round-by-round breakdown for one team')"
+                alt="The Team Report modal open for one team, showing the round-by-round breakdown and Guess/Diff tiles"
+                onerror="faqShotFallback(this,'Team Report modal — full round-by-round breakdown for one team')"
               />
             </div>
           </div>
@@ -1351,13 +1354,13 @@
         <details class="faq-item">
           <summary>
             <span class="faq-q-text">What's the difference between this and "App Preferences" Save/Load
-            in Advanced Settings?</span><span class="faq-q-arrow">▶</span>
+            in Settings?</span><span class="faq-q-arrow">▶</span>
           </summary>
           <div class="faq-a">
             <p>
               Separate file, separate purpose. The toolbar's Save/Load (above)
-              carries <strong>game data</strong> — teams and scores. Advanced
-              Settings' <strong>App Preferences</strong> Save/Load carries only
+              carries <strong>game data</strong> — teams and scores. Settings'
+              own <strong>App Preferences</strong> Save/Load carries only
               your <strong>display settings</strong> (theme, size, timer
               defaults, and the rest of Settings) as its own JSON file, with no
               team or score data in it at all. That split means you can carry
@@ -1454,7 +1457,7 @@
           <img
             src="screenshots/settings-panel.webp"
             data-shot-base="settings-panel"
-            alt="Settings panel open, showing Theme, Size, Row Density, Row Zebra Stripes, Question Timer, Sample Data, Help, Color Vision, and the Advanced Settings toggle"
+            alt="Settings panel open, showing Theme, Size, Icon Style, Color Vision, Question Timer, Sample Data, Help, App Preferences, and the Advanced Settings toggle"
             onerror="faqShotFallback(this,'Settings panel open — the full main Settings list')"
           />
         </div>
@@ -1470,10 +1473,18 @@
                 <a href="#appearance">Light Mode &amp; Dark Mode</a> below.
               </li>
               <li><strong>Size</strong> — A−/A/A+ text size, app-wide.</li>
-              <li><strong>Row Density</strong> — Normal, Relaxed, or Compact spacing.</li>
               <li>
-                <strong>Row Zebra Stripes</strong> — how visible the
-                alternating-row striping is for easier readability.
+                <strong>Icon Style</strong> — Pictograph or Emoji. Every drawn
+                icon in the app (Sort, Reset, Beer Round, the correct/incorrect
+                marks, and the rest) can swap back to the platform emoji it
+                originally replaced, if that's more your speed. This page has
+                the same toggle, in its own Settings panel, top right — the
+                icons throughout this FAQ swap right along with it.
+              </li>
+              <li>
+                <strong>Color Vision</strong> — Off / Red-Green / Blue-Yellow
+                modes that swap which colors carry pass/fail meaning, for hosts
+                or teammates who need it.
               </li>
               <li>
                 <strong>Question Timer</strong> — the default countdown length
@@ -1481,7 +1492,7 @@
               </li>
               <li>
                 <strong>Sample Data</strong> — <svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🧪"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example loads a
-                finished sample game to browse; <svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎓"><path d="M22 10v6"/><path d="m2 10 10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> Take the Tour walks you
+                finished sample game to browse; <svg class="icon-ui icon-tinted icon-cap" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="ℹ️"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><path d="M12 16v-6"/><path d="M12 7.2h.01"/></svg> Take the Tour walks you
                 through playing one. See
                 <a href="#getting-started">Getting Started</a> and
                 <a href="#tutorial">Interactive Tutorial</a>.
@@ -1490,17 +1501,16 @@
                 <strong>Help</strong> — the <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="❓"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> FAQ link that opens this page.
               </li>
               <li>
-                <strong>Color Vision</strong> — Off / Red-Green / Blue-Yellow
-                modes that swap which colors carry pass/fail meaning, for hosts
-                or teammates who need it.
+                <strong>App Preferences</strong> — <svg class="icon-ui icon-tinted icon-save" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save / <svg class="icon-ui icon-tinted icon-load" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load for just these
+                display settings, separate from the game data itself. See
+                <a href="#tips">Tips &amp; Tricks</a> for how this compares to
+                the toolbar's own Save/Load.
               </li>
               <li>
-                <strong>Icon Style</strong> — Pictograph or Emoji. Every drawn
-                icon in the app (Sort, Reset, Beer Round, the correct/incorrect
-                marks, and the rest) can swap back to the platform emoji it
-                originally replaced, if that's more your speed. This page has
-                the same toggle, in its own Settings panel, top right — the
-                icons throughout this FAQ swap right along with it.
+                <strong>Advanced Settings</strong> — collapsed by default,
+                below the main list. Row Density, Row Zebra Stripes, timer
+                behavior, drumroll controls, and the rest of the power-user
+                toggles. All covered in <a href="#tips">Tips &amp; Tricks</a>.
               </li>
             </ul>
           </div>
@@ -1629,7 +1639,7 @@
           <img
             src="screenshots/advanced-settings.webp"
             data-shot-base="advanced-settings"
-            alt="Advanced Settings expanded, showing Point Adjustments, Edit Locked Fields, timer controls, Manual Drumroll Control, Drumroll Crossfade, Craft Prize Eligible List, and App Preferences"
+            alt="Advanced Settings expanded, showing Row Density, Row Zebra Stripes, Craft Prize Eligible List, Crowd-Wisdom Percentage, Edit Locked Fields, timer controls, Manual Drumroll Control, Drumroll Crossfade, and Point Adjustments"
             onerror="faqShotFallback(this,'Advanced Settings expanded — the full list of power-user controls')"
           />
         </div>
@@ -1663,8 +1673,8 @@
               <img
                 src="screenshots/score-audit.webp"
                 data-shot-base="score-audit"
-                alt="The Score Audit modal open for one team, showing the round-by-round breakdown and Guess/Diff tiles"
-                onerror="faqShotFallback(this,'Score Audit modal — full round-by-round breakdown for one team')"
+                alt="The Team Report modal open for one team, showing the round-by-round breakdown and Guess/Diff tiles"
+                onerror="faqShotFallback(this,'Team Report modal — full round-by-round breakdown for one team')"
               />
             </div>
           </div>
@@ -1697,12 +1707,61 @@
           </div>
         </details>
 
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">App Preferences — backing up just your settings</span><span
+              class="faq-q-arrow"
+              >▶</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Saves or loads <em>only</em> your display preferences (theme,
+              size, timer defaults, and the rest of Settings) as a separate file
+              from the game data itself — handy for carrying your preferred
+              setup to a different device or browser without touching any game
+              in progress there. It's a main Settings row, not an Advanced one
+              — see
+              <a href="#manual-save-load">Manual Save &amp; Load</a> for how
+              this compares to the toolbar's own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save / <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load, which
+              carries the game itself.
+            </p>
+          </div>
+        </details>
+
         <div class="faq-subgroup">
         <h3 class="faq-subsection-title">Advanced Settings</h3>
         <p class="faq-section-sub">
           The rarer, power-user controls tucked into Settings → Advanced
           Settings (collapsed by default). Off unless noted otherwise.
         </p>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">Row Density</span><span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Normal, Relaxed, or Compact spacing between rows — team rows,
+              question rows, and the rest — for fitting more on screen or
+              giving each row more breathing room, whichever the venue's
+              screen and lighting call for.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>
+            <span class="faq-q-text">Row Zebra Stripes</span><span class="faq-q-arrow">▶</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Subtle, Medium, or High — how visible the alternating-row
+              striping is, for tracking a specific row across a wide table at
+              a glance.
+            </p>
+          </div>
+        </details>
 
         <details class="faq-item">
           <summary>
@@ -1746,7 +1805,9 @@
               before it, +30 after — for adjusting time on the fly. While idle
               they clamp to the same 1–15 minute range as the Settings duration
               dropdown; while running or paused they're unclamped, so tapping
-              +30 repeatedly just keeps adding time.
+              +30 repeatedly just keeps adding time. This row only appears once
+              <strong>Timer Widget</strong> above it is on — nothing to add
+              stepper buttons to otherwise.
             </p>
             <div class="faq-shot">
               <img
@@ -1767,7 +1828,9 @@
             <p>
               Flashes the timer's background when time is running low, on top of
               the color shift that already happens either way — see
-              <a href="#question-timer">Question Timer</a> above.
+              <a href="#question-timer">Question Timer</a> above. Same as Timer
+              Stepper Buttons, this row is hidden until
+              <strong>Timer Widget</strong> is on.
             </p>
           </div>
         </details>
@@ -1822,7 +1885,9 @@
           <div class="faq-a">
             <p>
               A slider (0.2s–3.0s) controlling how gradually the roll winds down
-              when you press Stop Drumroll.
+              when you press Stop Drumroll. Only shown once
+              <strong>Manual Drumroll Control</strong> above it is on, since
+              there's no Stop Drumroll to fade without it.
             </p>
           </div>
         </details>
@@ -1849,21 +1914,16 @@
 
         <details class="faq-item">
           <summary>
-            <span class="faq-q-text">App Preferences — backing up just your settings</span><span
-              class="faq-q-arrow"
-              >▶</span
-            >
+            <span class="faq-q-text">Point Adjustments</span><span class="faq-q-arrow">▶</span>
           </summary>
           <div class="faq-a">
             <p>
-              Saves or loads <em>only</em> your display preferences (theme,
-              size, timer defaults, and the rest of Settings) as a separate file
-              from the game data itself — handy for carrying your preferred
-              setup to a different device or browser without touching any game
-              in progress there. See
-              <a href="#manual-save-load">Manual Save &amp; Load</a> for how
-              this compares to the toolbar's own <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="💾"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg> Save / <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="📂"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg> Load, which
-              carries the game itself.
+              Adds a manual <strong>±</strong> point adjustment control to each
+              team row, for a one-off nudge to a team's score that doesn't fit
+              anywhere else — a scoring dispute resolved after the fact, a
+              paper-scoresheet correction, that kind of thing. It stacks with
+              everything else the team already earned rather than replacing
+              it.
             </p>
           </div>
         </details>
