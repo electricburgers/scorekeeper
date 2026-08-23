@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.34"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.35"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 23, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -247,9 +247,13 @@ function applyPrefs() {
   const vl = document.getElementById("versionLabel");
   if (vl) {
     let html = "Scorekeeper " + APP_VERSION + " · " + APP_VERSION_DATE;
+    // Not a "tap to refresh" button — reloading doesn't reliably update an installed home-screen
+    // app (the icon specifically never does, and a plain reload of an already-open instance
+    // isn't guaranteed to either), so offering that as "the fix" was actively misleading. Points
+    // at the FAQ's own real instructions instead: remove the installed app and add it again.
     if (latestVersion)
       html +=
-        ` <button type="button" class="update-available-btn" onclick="location.reload()">${esc(latestVersion)} available — tap to refresh</button>`;
+        ` <a class="update-available-btn" href="faq/index.html#q-how-do-i-update-the-installed-app" target="_blank" rel="noopener">${esc(latestVersion)} available — see how to update</a>`;
     vl.innerHTML = html;
   }
   const qts = document.getElementById("qtDurationSelect");

@@ -415,7 +415,8 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 .settings-toggle-btn.has-update::after{content:"";position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--accent-gold);border:2px solid var(--bg-card)}
 /* The fuller "vX.X available" note under the version line in Settings — same info as the dot
    above, spelled out for whoever actually opens Settings and wants to know what it means. A
-   real <button> (not a link) since it doesn't navigate anywhere, just reloads in place. */
+   real link (js/app.js), not a button — it navigates to the FAQ's own instructions for actually
+   updating an installed app, which a reload can't reliably do itself (see js/app.js). */
 .update-available-btn{font-family:var(--font-display);font-size:.66rem;font-weight:700;color:var(--txt-cyan);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .update-available-btn:hover{color:var(--accent-cyan)}
 

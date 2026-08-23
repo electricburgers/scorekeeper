@@ -10,6 +10,15 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.35 - 2026-08-23
+- **Fixed the update-available note's misleading advice**: it used to be a "tap to refresh" button
+  that just called `location.reload()` — but a web app can't self-update that way. An installed
+  home-screen app's icon and shortcut are frozen at install time and never refresh on their own,
+  and even a plain reload of an already-open instance isn't guaranteed to pick up new content.
+  The note is now a link to a new FAQ entry ("I installed it a while ago — how do I get the latest
+  version?") with the actual fix: remove the installed app and add it to the home screen again,
+  with separate steps for iPhone/iPad and Android (see `faq/index.html`).
+
 ## v19.34 - 2026-08-23
 - **New PWA icon**: replaces the bar-chart mark with an original pictograph mask — a gear/cog
   ring (12 teeth) around a mustachioed mask face, evoking the business's own real branding

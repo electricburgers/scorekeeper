@@ -2,6 +2,18 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.31] - 23 Aug 2026
+
+### Added
+
+- **New "Installing as an App" item**: "I installed it a while ago — how do I get the latest
+  version?" — a web app added to the home screen doesn't self-update (no background download,
+  and the saved icon/shortcut don't refresh even when the site behind them does); the reliable
+  fix is removing the installed app and adding it again, with the exact steps for both iPhone/
+  iPad and Android. The main app's own "a newer version is available" note (Settings, this
+  session) links directly here instead of offering a "tap to refresh" that couldn't actually
+  deliver on updating the installed app or its icon.
+
 ## [1.30] - 22 Aug 2026
 
 ### Changed

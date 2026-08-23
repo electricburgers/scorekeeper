@@ -1332,7 +1332,15 @@ describe("Update check (checkForUpdate)", () => {
     );
     const html = window.document.getElementById("versionLabel").innerHTML;
     assert.match(html, /v99\.99 available/);
-    assert.match(html, /onclick="location\.reload\(\)"/);
+    // Not a "tap to refresh" reload button — reloading doesn't reliably update an installed
+    // home-screen app (the icon specifically never does that way), so this links to the FAQ's
+    // real instructions (remove the installed app, add it again) instead.
+    assert.match(
+      html,
+      /href="faq\/index\.html#q-how-do-i-update-the-installed-app"/,
+    );
+    assert.doesNotMatch(html, /tap to refresh/);
+    assert.doesNotMatch(html, /onclick="location\.reload\(\)"/);
   });
 
   it("silently no-ops (no throw, no latestVersion change) when the fetch fails, matching real offline/venue-WiFi-down behavior", async () => {
