@@ -573,6 +573,29 @@
 <script src="js/data/xlsx-templates.js"></script>
 <script src="js/data/drum-clips.js"></script>
 <script src="js/shared-ui.js"></script>
+<!--
+  js/app.js used to be one 5,900-line, 2.4MB file (audio extraction — see js/data/drum-clips.js's
+  own note — got it to 288KB; it was still one undifferentiated file after that). These ten are
+  what came out of it, split along its clearest natural seams via a real parse of the file (each
+  file boundary sits exactly on a top-level statement, verified byte-for-byte against the
+  original before this split shipped — see the "how this was verified" note in CHANGELOG.md).
+  Classic <script> tags, not modules, on purpose — same shared global scope as before (see
+  js/tutorial.js's own top comment for why), just organized into readable, single-purpose files
+  instead of one scroll-forever one. Load order relative to EACH OTHER genuinely doesn't matter —
+  none of them run anything at the top level, only declare functions/data that js/app.js (which
+  still holds all of the game's actual startup sequence) calls once every script has loaded — but
+  every one of them has to come before js/app.js itself, which is the one file that does.
+-->
+<script src="js/storage.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/content.js"></script>
+<script src="js/scoring.js"></script>
+<script src="js/dom-utils.js"></script>
+<script src="js/confirm-dialog.js"></script>
+<script src="js/team-audit.js"></script>
+<script src="js/question-timer.js"></script>
+<script src="js/craft-prize.js"></script>
+<script src="js/export.js"></script>
 <script src="js/app.js"></script>
 <script src="js/tutorial.js"></script>
 </body>

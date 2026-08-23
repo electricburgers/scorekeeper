@@ -312,6 +312,30 @@ test("js/app.js: Clear Session's button calls confirmClearSession(), not window.
   assert.doesNotMatch(src, /onclick="if\(confirm\(/);
 });
 
+// This session's js/app.js module split created js/team-audit.js — and shipped it with a real
+// bug: the file existed, was correct, was listed in eslint's glob and sw.js's SHELL_FILES and
+// the onclick-function-existence test's file list below, but its own <script src> tag was never
+// actually added to index.html. Every static/string-matching check that only reads *.js files
+// off disk passed anyway (openAudit/closeAudit/buildAudit genuinely exist in that file), so
+// nothing caught it until a real click on a team name threw "openAudit is not defined" in an
+// actual browser. This test is the fix: every non-vendor, non-data top-level file in js/ — the
+// exact directory this exact mistake can happen in — must have a matching <script src> in
+// index.html, checked by actually listing the directory, not by hand-maintaining a second list
+// that can drift from it the same way the missing tag itself did.
+test("every top-level js/*.js file (excluding js/vendor/** and js/data/**) has a <script src> tag in index.html", () => {
+  const jsFiles = fs
+    .readdirSync(path.join(ROOT, "js"))
+    .filter((f) => f.endsWith(".js"))
+    .map((f) => "js/" + f);
+  assert.ok(jsFiles.length > 5, "expected to find several top-level js/*.js files");
+  const doc = loadDoc("index.html");
+  const scripts = new Set(
+    [...doc.querySelectorAll("script[src]")].map((s) => s.getAttribute("src")),
+  );
+  const missing = jsFiles.filter((f) => !scripts.has(f));
+  assert.deepEqual(missing, []);
+});
+
 test("index.html loads js/shared-ui.js before js/app.js (app.js references SHARED_FONT_SIZES at parse time)", () => {
   const doc = loadDoc("index.html");
   const scripts = [...doc.querySelectorAll("script[src]")].map((s) =>
@@ -359,10 +383,22 @@ function collectDeclaredFunctionNames(...jsFiles) {
   }
   return names;
 }
-test("index.html: every onclick=\"fnName(...)\" call references a function defined in js/shared-ui.js, js/app.js, or js/tutorial.js", () => {
+test("index.html: every onclick=\"fnName(...)\" call references a function defined in one of the app's own <script> files", () => {
   const doc = loadDoc("index.html");
   const declared = collectDeclaredFunctionNames(
     "js/shared-ui.js",
+    // The nine files js/app.js was split into (this session's refactor) — same shared global
+    // scope as one file, just organized; onclick="" handlers can call into any of them.
+    "js/storage.js",
+    "js/icons.js",
+    "js/content.js",
+    "js/scoring.js",
+    "js/dom-utils.js",
+    "js/confirm-dialog.js",
+    "js/team-audit.js",
+    "js/question-timer.js",
+    "js/craft-prize.js",
+    "js/export.js",
     "js/app.js",
     "js/tutorial.js",
   );

@@ -10,6 +10,58 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.31 - 2026-08-23
+- **`js/app.js` split from one 5,943-line, 288KB file into eleven** — `js/app.js` itself plus ten
+  new single-purpose files (`storage`, `icons`, `content`, `scoring`, `dom-utils`,
+  `confirm-dialog`, `team-audit`, `question-timer`, `craft-prize`, `export`). Every file boundary
+  sits exactly on a top-level statement (a real parse of the original file, not eyeballed —
+  verified byte-for-byte against it before this shipped) and all ten load as plain `<script>`
+  tags sharing the same global scope as before, so behavior is unchanged; `js/app.js` itself
+  drops to 114KB. **Shipped with a real bug the first pass**: `js/team-audit.js`'s own `<script
+  src>` tag never made it into `index.html`, so `openAudit`/`closeAudit`/`buildAudit` existed on
+  disk, passed lint, and passed every *string-matching* check — but tapping a team's name to open
+  its Team Report threw `openAudit is not defined` in an actual browser, the one place nothing
+  had ever actually clicked it. Fixed, and the reason it slipped through has its own new tests
+  below.
+- **The tutorial's bulk-fill steps (Round 1-4's autofill, the forced Beer Round, the Sort demo)
+  no longer render on every single team/question they fill.** Each one calls the app's own real
+  `cycleW()`/`setB()`/`setHW()`/`setFW()` — the same functions a live tap uses — up to ~20 times
+  per step, and every one of those calls used to trigger its own full `renderAll()` plus a
+  forced-reflow spotlight reposition, entirely synchronously, before the host ever saw any of the
+  intermediate frames: real, measurable jank on exactly the steps a host reported as "feels
+  slow." A new `runBatched()` (js/tutorial.js) swallows every render during one of these bursts
+  and fires exactly the one that was ever going to be visible afterward. Measured against the
+  same full walkthrough both ways: 316 real render calls unbatched, 52 with the fix — an 83%
+  cut, and the worst single step (Round 4, which chains three bulk-fill calls) went from ~90
+  renders down to 1.
+- **`css/styles.css`: 16 groups of rules with byte-for-byte identical declaration bodies under
+  different selectors** (`.settings-toggle-btn.active`/`.settings-btn.active`/`.q-sort-btn`,
+  `.pts-pos`/`.q-stat-correct`/`.bonus-pts.pts-pos`, and 14 others) **merged into one combined
+  selector each** — 21 fewer lines, no visual change (verified in-browser), and one fewer place
+  for the same rule to drift out of sync with itself the next time it's edited.
+- **New iOS/PWA icon**: the bar-chart mark is replaced with the app's own beer mug pictograph,
+  colored to match exactly how it renders in the Craft Prize Drawing section (`--tint-beer`
+  amber body, `--tint-beer-2` cream foam, both at the same 38%-opacity fill the app itself uses)
+  rather than a flat single color, with a matching amber border. Regenerated at all three sizes
+  (512/192/apple-touch); `index.html`, `faq/index.html`, and `manifest.json` all already pointed
+  at these same three files, so nothing else needed updating.
+- **Removed `audio/`** — four raw source WAV files (`drumroll-end/loop/start.wav`, `horn.wav`)
+  left over from before the drumroll's audio was ever embedded in `js/app.js` at all (last
+  touched at v16.20); nothing in the current codebase has referenced them since. Not to be
+  confused with `assets/audio/`, the *shipped* clips this session's earlier audio extraction
+  added — that one stays.
+- `TESTING.md`'s own version stamp and its two "High-Contrast Dark/Light" references (renamed to
+  plain Dark/Light several versions ago) were left over from v10.38; corrected, and it now points
+  at `npm test` for the coverage that's automated rather than implying none exists.
+- **New tests**: 9 more (252 total, up from 243) — a comprehensive tutorial walkthrough that
+  drives the real practice tour start to finish (simulating the two things `Tutorial.next()`
+  can't fake on its own: real keystrokes into Quiz ID/Host Name, since `canScore()` blocks all
+  scoring without them, and real clicks on the Round 1 header and the Team Report open/close
+  buttons specifically, closing the exact gap that let the missing-`<script>`-tag bug ship
+  unnoticed) plus a general structural check that every top-level `js/*.js` file has a matching
+  `<script src>` in `index.html`, so the *next* file added to this split can't go un-wired the
+  same way.
+
 ## v19.30 - 2026-08-23
 - **The drumroll's five audio clips are no longer base64 text inside `js/app.js`.** They were
   ~2.1MB of that file's ~2.5MB — every visitor's browser downloaded and parsed/compiled all of it

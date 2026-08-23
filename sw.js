@@ -29,9 +29,15 @@
 // this whole service worker exists for, so it's worth the few extra KB at install time. The FAQ's
 // 50+ screenshots are deliberately left out: they're still cached opportunistically on first view,
 // same as before, rather than ballooning what a fresh install has to fetch before it's usable.
-const CACHE_NAME='trivia-scorekeeper-shell-v9';
+const CACHE_NAME='trivia-scorekeeper-shell-v10';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
-  './css/styles.css','./css/tutorial.css','./js/shared-ui.js','./js/app.js','./js/tutorial.js',
+  './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
+  // The ten files js/app.js was split into — see index.html, above these same script tags,
+  // for why.
+  './js/storage.js','./js/icons.js','./js/content.js','./js/scoring.js','./js/dom-utils.js',
+  './js/confirm-dialog.js','./js/team-audit.js','./js/question-timer.js','./js/craft-prize.js',
+  './js/export.js',
+  './js/app.js','./js/tutorial.js',
   './js/vendor/fflate.min.js','./js/vendor/jspdf.min.js','./js/data/xlsx-templates.js',
   './js/data/drum-clips.js',
   './assets/audio/silent.wav','./assets/audio/roll.mp3','./assets/audio/finale.wav','./assets/audio/horn.mp3',

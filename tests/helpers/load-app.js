@@ -129,6 +129,10 @@ function beforeParse(window) {
   window.URL.revokeObjectURL = (url) => mockBlobUrls.delete(url);
   // Exposed for tests only — real app code never reads this, it only ever holds a URL string.
   window.__mockBlobUrls = mockBlobUrls;
+  // jsdom doesn't implement scrolling at all — canScore() (js/app.js) and the Tutorial's own
+  // section-jump helpers both call this on a real user action, not at load time, so it only
+  // needs to exist, not actually move anything.
+  window.Element.prototype.scrollIntoView = () => {};
 }
 
 /** Waits for the window's own load event (jsdom fires this once every <script src> — run

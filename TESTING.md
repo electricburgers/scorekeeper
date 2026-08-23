@@ -1,10 +1,16 @@
 # Scorekeeper Test Plan
 
-Manual QA checklist for Score Keeper (v10.38). This is a static HTML/CSS/JS app with no
-build step or test runner, so these are browser-executable test cases rather than automated
-specs. Run the **Desktop** cases in a normal browser window (≥1024px wide) and the **Mobile**
-cases on an actual phone or a resized/emulated viewport (≤430px wide). Cases marked **Both**
-should be run once on each.
+Manual QA checklist for Score Keeper, written against v10.38 and not otherwise updated since —
+some cases below describe UI that has since been renamed or removed (flagged inline where
+found; the list hasn't been re-verified case-by-case against the current build). This is still
+a static HTML/CSS/JS app with no build step, but it's no longer without an automated test
+runner: `npm test` (see [package.json](package.json)) now covers CSS/HTML structural integrity
+and a real jsdom exercise of the shipped JS — run that first for fast, repeatable coverage, and
+treat the cases below as the slower, human-judgment checks a script can't make (visual
+legibility, gesture feel, cross-device behavior) rather than a full duplicate of it. Run the
+**Desktop** cases in a normal browser window (≥1024px wide) and the **Mobile** cases on an
+actual phone or a resized/emulated viewport (≤430px wide). Cases marked **Both** should be run
+once on each.
 
 Legend: **Platform** = Desktop / Mobile / Both.
 
@@ -22,8 +28,9 @@ Legend: **Platform** = Desktop / Mobile / Both.
    CSV/PDF/XLSX `Location` field (Export & Data section).
 6. **(Both)** Clear the Location field entirely and tab out — field stays empty, no console
    errors.
-7. **(Both)** Switch through every theme (Dark, Light, High-Contrast Dark, High-Contrast
-   Light — via Settings → Theme) and confirm the Location field's dropdown chevron and
+7. **(Both)** Switch through every theme (Dark, Light — via Settings → Theme; "High-Contrast
+   Dark/Light" were renamed to plain Dark/Light once that became the only theme pair) and
+   confirm the Location field's dropdown chevron and
    text color remain legible (not black-on-black or white-on-white) in each.
 8. **(Desktop)** Tab to the Location field via keyboard only (no mouse) — the dropdown is
    reachable and navigable with arrow keys + Enter.
@@ -107,9 +114,8 @@ Legend: **Platform** = Desktop / Mobile / Both.
 
 ## Settings & Themes
 
-38. **(Both)** Toggle Dark → Light → High-Contrast Dark → High-Contrast Light and confirm no
-    section (Event Details, Teams, Rounds, Final Results, Craft Prize, Export) has
-    unreadable/invisible text in any theme.
+38. **(Both)** Toggle Dark → Light and confirm no section (Event Details, Teams, Rounds, Final
+    Results, Craft Prize, Export) has unreadable/invisible text in either theme.
 39. **(Both)** Adjust font size (A−/A/A+) — layout doesn't break or overlap at either extreme.
 40. **(Both)** Toggle Density (Normal/Compact) — spacing changes without clipping content.
 41. **(Both)** Enable Color Vision mode (deuteranopia/tritanopia) — pass/fail score colors

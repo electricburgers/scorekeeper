@@ -48,6 +48,8 @@ const Tutorial = (function () {
   let sawSectionCollapsed = false; // tracks the collapse->expand sequence for that practice step
   let r1CycleSeen = null; // tracks correct->incorrect->cleared->back-to-correct on one question
   let auditOpened = false; // real click on a team name to open the Team Report modal
+  let batching = false; // see runBatched() below
+  let pendingRenderKind = null; // "all"|"left"|"sb" — the broadest render still owed once batching ends
   // Note for the PDF export / JD Upload Form steps further down: neither tracks a
   // clicked/not-clicked flag the way every other on-click step does. PDF export and the JD
   // link (opens in a new tab) both leave no in-page state change to poll for, so those two
@@ -236,6 +238,31 @@ const Tutorial = (function () {
       setTimeout(step, 220);
     };
     step();
+  }
+
+  // Runs fn() with renderAll/renderLeft/renderSB (installHooks' own wrappers, active for the
+  // whole tour) swallowed instead of actually rendering, then does exactly one real render
+  // afterward — the broadest one anything inside fn() asked for. autoFillRound alone calls
+  // cycleW() up to 20 times (5 practice teams × 4 questions), and every real cycleW() call
+  // renders AND (via installHooks' afterRender) reflows the spotlight via reposition()'s
+  // getBoundingClientRect() — up to 20 full re-renders plus 20 forced layouts, synchronously,
+  // for a single step, before the host ever sees any of the intermediate frames. The step at
+  // "Round 4" chains three of these bulk-fill calls back to back (~45 cycleW/setFW/setFC calls
+  // total) and was the worst of it. Wrapping each fill() body that calls an auto-fill helper in
+  // this collapses that down to the one render that was ever actually going to be visible.
+  function runBatched(fn) {
+    batching = true;
+    pendingRenderKind = null;
+    try {
+      fn();
+    } finally {
+      batching = false;
+      const kind = pendingRenderKind;
+      pendingRenderKind = null;
+      if (kind === "all") renderAll();
+      else if (kind === "left") renderLeft();
+      else if (kind === "sb") renderSB();
+    }
   }
 
   // ── STEP TABLE ───────────────────────────────────────────────────────────────────────────
@@ -471,7 +498,7 @@ const Tutorial = (function () {
         advance: "manual",
         fill: (ready) => {
           document.getElementById("auditOverlay")?.classList.remove("show");
-          autoFillRound(0, { ti: 0, qi: 0 });
+          runBatched(() => autoFillRound(0, { ti: 0, qi: 0 }));
           ready();
         },
       },
@@ -480,7 +507,7 @@ const Tutorial = (function () {
         text: "Scroll down to Round 2. Everything's the same, only the wager amounts change (1, 3, 5, 7). I'll fill in everyone's Q1.",
         advance: "manual",
         fill: (ready) => {
-          forceBeerRound(1, 0);
+          runBatched(() => forceBeerRound(1, 0));
           ready();
         },
       },
@@ -498,7 +525,7 @@ const Tutorial = (function () {
         text: `For Q2, I'll fill in answers only for two teams. With a full room of teams, scanning every row to find a specific team to score gets tedious. ${tapWordCap()} Next, then we'll try out Sorting.`,
         advance: "manual",
         fill: (ready) => {
-          partialFillTeams(1, 1, [0, 2]);
+          runBatched(() => partialFillTeams(1, 1, [0, 2]));
           ready();
         },
       },
@@ -522,7 +549,7 @@ const Tutorial = (function () {
         text: "I'll fill the rest of Round 2. Next, we'll cover the Before Halftime Wager scores and the Halftime Wager.",
         advance: "manual",
         fill: (ready) => {
-          autoFillRound(1);
+          runBatched(() => autoFillRound(1));
           ready();
         },
       },
@@ -548,7 +575,7 @@ const Tutorial = (function () {
         text: `I'll fill in the rest of the halftime wagers.`,
         advance: "manual",
         fill: (ready) => {
-          autoFillSpecialWager("halftime", 0);
+          runBatched(() => autoFillSpecialWager("halftime", 0));
           ready();
         },
       },
@@ -562,7 +589,7 @@ const Tutorial = (function () {
         text: "Scroll down to Round 3. Here the wagers are 2, 4, 6, and 8, plus another multi-part Bonus Question. I'll fill it all in.",
         advance: "manual",
         fill: (ready) => {
-          autoFillRound(2);
+          runBatched(() => autoFillRound(2));
           ready();
         },
       },
@@ -571,10 +598,18 @@ const Tutorial = (function () {
         text: "Scroll to Round 4. Just like Round 2, there's Before Final Wager scores to read out. For the final question of the night, players can bet up to 20 points. I'll fill it all in before we head down to Final Results.",
         advance: "manual",
         fill: (ready) => {
-          autoFillRound(3);
-          autoFillSpecialWager("final");
-          forceTieBreakDemo();
-          renderAll();
+          // The worst offender before runBatched(): three bulk-fill calls back to back, ~45
+          // cycleW/setFW/setFC calls between them, each one a real synchronous render+reflow —
+          // see runBatched's own comment. forceTieBreakDemo() only mutates gameState directly
+          // (no render of its own), which is exactly why the explicit renderAll() below used to
+          // exist — runBatched's pending-kind tracking already covers it now: autoFillRound and
+          // autoFillSpecialWager both ask for "all" during the batch, so the one real render
+          // runBatched issues afterward already reflects forceTieBreakDemo's adjustment too.
+          runBatched(() => {
+            autoFillRound(3);
+            autoFillSpecialWager("final");
+            forceTieBreakDemo();
+          });
           ready();
         },
       },
@@ -788,15 +823,27 @@ const Tutorial = (function () {
         reposition();
       }
     };
+    // While batching, swallow every render instead of running it — see runBatched() below for
+    // why — but still remember the broadest one asked for ("all" beats "left" beats "sb", same
+    // ordering the real functions nest in), so runBatched can run exactly that one for real once
+    // the loop that triggered all of them is done.
+    const rankOf = { all: 3, left: 2, sb: 1 };
+    const noteRender = (kind) => {
+      if (!pendingRenderKind || rankOf[kind] > rankOf[pendingRenderKind])
+        pendingRenderKind = kind;
+    };
     renderAll = function (...a) {
+      if (batching) return noteRender("all");
       orig.renderAll.apply(this, a);
       afterRender();
     };
     renderLeft = function (...a) {
+      if (batching) return noteRender("left");
       orig.renderLeft.apply(this, a);
       afterRender();
     };
     renderSB = function (...a) {
+      if (batching) return noteRender("sb");
       orig.renderSB.apply(this, a);
       afterRender();
     };

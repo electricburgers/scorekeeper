@@ -405,7 +405,6 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    height that wouldn't scale alongside them. */
 .settings-toggle-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.78rem;font-weight:600;min-height:calc(1.24em + 12px);padding:5px 12px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
 .settings-toggle-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
-.settings-toggle-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 
 /* Overlay, not in-flow: .header is position:sticky (a valid containing block for an
    absolutely-positioned child), so this floats above the app instead of pushing the
@@ -510,7 +509,6 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
 
 .settings-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
-.settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 /* Theme toggle's sun/moon (THEME_ICON_SUN/THEME_ICON_MOON, app.js) — see the const comment there
    for why these replaced the old ☀️/🌑 emoji. --badge-gold-fg/--txt-cyan are this app's existing
    "AAA(7:1) text-safe on neutral surfaces" token pair, and --bg-card (this button's own
@@ -579,7 +577,6 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
      plain X with no label, and red is what now carries the "this closes something" signal. */
   .settings-x-btn{width:1.7rem;height:1.7rem;flex-shrink:0;border-radius:50%;border:1px solid var(--accent-red);background:none;color:var(--txt-red);line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);touch-action:manipulation}
   .settings-x-btn svg{width:.8rem;height:.8rem;display:block}
-  .settings-x-btn svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
   .settings-x-btn:hover{background:color-mix(in srgb,var(--accent-red) 15%,transparent)}
   /* Icon Style's Emoji mode swaps the pictograph X above for a bare "✕" character (app.js
      STATIC_ICON_TARGETS) — at the button's own small text size that glyph read thin and
@@ -673,7 +670,6 @@ body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-
    glyph here too, for the same centering/consistency reasons as everywhere else it was swapped. */
 .resume-banner-close{position:absolute;top:10px;right:10px;width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--accent-red);background:none;color:var(--txt-red);line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);touch-action:manipulation}
 .resume-banner-close svg{width:.85rem;height:.85rem;display:block}
-.resume-banner-close svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
 .resume-banner-close:hover{background:color-mix(in srgb,var(--accent-red) 15%,transparent)}
 
 /* LAYOUT */
@@ -937,7 +933,6 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .btn-accent .icon-tinted,.btn-accent .icon-tinted [class^="ip-"]{
   fill:currentColor;stroke:color-mix(in srgb,currentColor var(--icon-stroke-mix),var(--icon-stroke-ink))}
 .icon-mark polyline{fill:none;stroke:currentColor;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
-.icon-mark line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
 
 /* Base (desktop-hidden) state for the mobile bottom sheet's peek strip + backdrop — declared
    here, before the @media block below, so that block's display:flex/block override actually
@@ -1530,14 +1525,13 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .team-guess-cell>label{font-size:.66rem;margin-bottom:7px}
 .team-guess-cell.guess-missing>label{color:var(--txt-orange)}
 .team-guess-cell.guess-missing input{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
-.guess-warn{display:block;font-size:.58rem;font-weight:700;color:var(--txt-orange);letter-spacing:.3px;margin-top:2px}
 /* "Limit reached" cue for maxlength fields (see the delegated listener in app.js). Same
    orange, size and weight as .guess-warn above rather than a new visual language — this is
    the app's existing "something about this field needs your attention" voice, and the host
    has already learned it from the required-field and Quiz ID hints. Not blocking, though,
    so unlike .field-invalid the field keeps a plain border and only gains the ring; what was
    typed is valid, there is just no room for more of it. */
-.limit-note{display:block;font-size:.58rem;font-weight:700;color:var(--txt-orange);letter-spacing:.3px;margin-top:2px}
+.guess-warn,.limit-note{display:block;font-size:.58rem;font-weight:700;color:var(--txt-orange);letter-spacing:.3px;margin-top:2px}
 input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
 
 /* PER-TEAM ADJ */
@@ -1546,7 +1540,6 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .adj-chip{font-family:var(--font-display);font-size:.72rem;font-weight:700;padding:5px 7px;border-radius:6px;border:1px solid var(--border-control);background:var(--bg-input);color:var(--text-muted);cursor:pointer;transition:var(--transition);white-space:nowrap;min-width:34px;text-align:center;line-height:1}
 .adj-chip:hover{background:var(--bg-hover);border-color:var(--border-light);color:var(--text-primary)}
 .adj-chip.adj-active{color:var(--txt-orange);border-color:var(--accent-orange);background:color-mix(in srgb,var(--accent-orange) 10%,transparent)}
-.adj-stepper{display:flex;align-items:center;flex-shrink:0}
 .adj-stepper button{width:1.5rem;height:1.5rem;border:1px solid var(--border-control);background:var(--bg-input);color:var(--text-primary);font-size:.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .adj-stepper button:first-child{border-radius:5px 0 0 5px}
 .adj-stepper button:last-child{border-radius:0 5px 5px 0}
@@ -1559,8 +1552,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* X_ICON_SVG (app.js) replaces a ✕ Unicode glyph here — the button already centers its content
    with flex, but the glyph's own font metrics never quite landed it in the visual middle. An
    SVG's geometry is centered on its own, regardless of font. */
-.remove-team button svg{width:1em;height:1em;display:block}
-.remove-team button svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
+.settings-x-btn svg line,.resume-banner-close svg line,.remove-team button svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
 /* Icon Style's Emoji mode swaps the thin two-stroke pictograph X above for the platform ❌ glyph
    (X_ICON_SVG_EMOJI, app.js) — a full-colour emoji at the same nominal font-size reads visibly
    bulkier than that thin SVG did against this button's small 1.6rem circle, so it gets scaled
@@ -1641,7 +1633,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    rather than by whatever the glyph's metrics happened to be. gap replaces the leading space that
    used to be baked into the label text. */
 .q-sort-btn,.q-reset-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
-.q-sort-btn{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
+.settings-toggle-btn.active,.settings-btn.active,.q-sort-btn{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .q-sort-btn:hover{filter:brightness(1.1)}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
 .q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
@@ -1678,8 +1670,6 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    than growing either one to match the other. */
 .q-stats-row{display:contents}
 .q-stat{font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 6px;border-radius:6px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
-.q-stat-correct{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
-.q-stat-incorrect{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
 
 /* TEAM ANSWER ROWS */
 .team-answer{display:flex;align-items:center;gap:.35rem;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);flex-wrap:nowrap;margin-left:-10px;margin-right:-10px;min-height:3.2rem}
@@ -1733,7 +1723,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    white check reads as its own badge instead of blending into the button, and clears >=4.5:1 AA
    in every theme x color-vision-mode combination this app ships. */
 .wager-badge.bg-correct{background:transparent;padding-bottom:0}
-.wager-badge.bg-correct svg{width:1em;height:1em;display:block}
+.remove-team button svg,.wager-badge.bg-correct svg{width:1em;height:1em;display:block}
 .wager-badge.bg-correct svg rect{fill:var(--correct-badge-bg)}
 .wager-badge.bg-correct svg path{fill:none;stroke:var(--correct-badge-fg);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
 .wager-badge.bg-incorrect{background:var(--danger-solid-bg);color:#fff;font-size:1.3rem;font-weight:900}
@@ -1758,7 +1748,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    character everywhere. An SVG's geometry is centered on its own, regardless of font, so every
    instance of this badge now lines up the same way. */
 .wager-badge.bg-incorrect svg{width:.95em;height:.95em;display:block}
-.wager-badge.bg-incorrect svg line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
+.icon-mark line,.wager-badge.bg-incorrect svg line{stroke:currentColor;stroke-width:4;stroke-linecap:round}
 
 /* SCORE PILL */
 /* width (not min-width): the placeholder em-dash ("—", shown before a team is scored) needs
@@ -1768,16 +1758,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    narrow layouts, that width difference shifted the wager/choice buttons before it every time a
    team went from unscored to scored. A fixed width sized to the dash's own need instead keeps
    every state — placeholder included — exactly the same size, so nothing moves on first score. */
-.ta-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;width:3.7rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
-.pts-pos{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
-.pts-neg{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
-.pts-nil{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
 /* No width here (unlike the old rule) — .pts-zero + .ta-pts/.bonus-pts is a 2-class selector,
    which would outrank the container-query's plain .ta-pts/.bonus-pts override below (1 class)
    and pin the placeholder to the un-clamped 3.7rem while every scored state used the clamped
    value, reintroducing the exact same shift-on-first-score bug this pill was just fixed for.
    Width comes from .ta-pts/.bonus-pts alone now, so every state resolves it the same way. */
-.pts-zero{color:var(--text-muted);text-align:center;font-weight:700;opacity:.7}
 
 /* RESULT BUTTONS */
 .ta-result{display:flex;gap:.2rem;flex-shrink:0}
@@ -1887,7 +1872,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .bonus-row:last-child{border-bottom:none}
 .bonus-row:nth-child(even){background:var(--row-stripe)}
 .bonus-right{display:flex;align-items:center;gap:8px;margin-left:auto;flex-shrink:0}
-.stepper{display:flex;align-items:center;flex-shrink:0}
+.adj-stepper,.stepper{display:flex;align-items:center;flex-shrink:0}
 .stepper button{width:1.9rem;height:1.9rem;border:1px solid var(--border-control);background:var(--bg-card);color:var(--text-secondary);font-size:1.1rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-tap-highlight-color:transparent;transition:var(--transition)}
 .stepper button:first-child{border-radius:6px 0 0 6px}
 .stepper button:last-child{border-radius:0 6px 6px 0}
@@ -1896,12 +1881,12 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .sw-val{width:2.8rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-primary)}
 .sw-val.unset{color:var(--text-muted);font-size:.85rem}
 /* Same fixed-width reasoning as .ta-pts above — see that comment. */
-.bonus-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;width:3.7rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
-.bonus-pts.pts-pos{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
-.bonus-pts.pts-nil{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
+.ta-pts,.bonus-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;width:3.7rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
+.q-stat-correct,.pts-pos,.bonus-pts.pts-pos{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
+.q-stat-incorrect,.pts-neg,.pts-nil,.bonus-pts.pts-nil{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
 /* No width here — same reasoning as the generic .pts-zero rule above: it comes from .bonus-pts
    alone so every state (including this one) resolves the container-query override identically. */
-.bonus-pts.pts-zero{color:var(--text-muted);text-align:center;font-weight:700;opacity:.7}
+.pts-zero,.bonus-pts.pts-zero{color:var(--text-muted);text-align:center;font-weight:700;opacity:.7}
 
 /* EXPORT */
 /* Centred to line up with the Clear Session button directly below it, which has been
@@ -2058,7 +2043,6 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .cp-countdown-fill{height:100%;background:var(--accent-cyan-solid);transition:width .1s linear}
 .cp-countdown-num{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--txt-cyan);min-width:2.8rem;text-align:right;font-variant-numeric:tabular-nums}
 .cp-manual-end-btn{width:100%;margin-top:8px}
-.cp-horn-btn{font-size:.9rem;line-height:1;padding:5px 9px;border-radius:var(--radius);flex-shrink:0}
 /* Faded, disabled preview of the manual Stop Drumroll / Play Horn controls shown before the draw
    starts, so the host knows they're available without having to press Choose Craft Prize Winner
    first to discover them. */
@@ -2074,7 +2058,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    every viewport width. flex-wrap on .cp-winner above still lets the button drop to its own
    line if a long team name eats the whole row's width, so it never ends up stranded. */
 .cp-winner-text{flex:0 1 auto;min-width:0}
-.cp-clear-btn{font-size:.9rem;line-height:1;padding:5px 9px;border-radius:var(--radius);flex-shrink:0}
+.cp-horn-btn,.cp-clear-btn{font-size:.9rem;line-height:1;padding:5px 9px;border-radius:var(--radius);flex-shrink:0}
 /* "Clear" label text is desktop-only (icon-only "✕" on mobile keeps the button compact there);
    the closer positioning above, though, applies everywhere. */
 .cp-clear-label{display:none}
@@ -2208,8 +2192,6 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    percentage stay legible at the same sizes .aud-total already uses. */
 .aud-stats{display:flex;margin-top:8px}
 .aud-stat{flex:1;min-width:70px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 8px;border-radius:var(--radius);background:var(--bg-card-alt);border:1px solid var(--border)}
-.aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
-.aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
 .aud-stat-correct .aud-stat-n{color:var(--badge-green-fg)}
 .aud-stat-wrong .aud-stat-n{color:var(--txt-red)}
 /* Single-card, vertical-rule layout for stat rows that hold 2+ related figures (Adj.
@@ -2249,8 +2231,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .aud-grid-4{grid-template-columns:repeat(4,auto);justify-content:center}
   .aud-grid-4 .aud-cell{padding-left:26px;padding-right:26px}
 }
-.aud-cell .aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
-.aud-cell .aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
+.aud-stat-n,.aud-cell .aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
+.aud-stat-pct,.aud-cell .aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
 .aud-cell.aud-stat-correct .aud-stat-n{color:var(--badge-green-fg)}
 .aud-cell.aud-stat-wrong .aud-stat-n{color:var(--txt-red)}
 .aud-note{font-size:.72rem;color:var(--text-muted);margin-top:10px;line-height:1.4}
@@ -2267,8 +2249,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .team-answer>.ta-wagers,.bonus-row>.bonus-right,.special-wager-row>.sw-select{margin-left:auto}
 
   /* wager / result buttons: clamp so they can't balloon past the column */
-  .wager-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
-  .result-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
+  .wager-btn,.result-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
   /* Re-tuned for this rule's own 1rem, not inherited from the -.24em above — checked separately
      at this narrower size (screenshot, not box math; see that rule's own comment) rather than
      assumed to scale evenly from the wide-desktop value, since it doesn't. */
@@ -2355,8 +2336,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .final-table th.fr-diff-h,.final-table td.fr-diff{padding-left:4px;border-left:1px solid var(--border)}
 /* Monospace: every digit is the same width, so the Guess/Diff numbers (and the mobile G/D
    labels next to them) line up consistently instead of drifting with proportional-font kerning. */
-.final-table td.fr-guess{color:var(--text-secondary);font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-.final-table td.fr-diff{color:var(--text-secondary);font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.final-table td.fr-guess,.final-table td.fr-diff{color:var(--text-secondary);font-weight:600;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .final-table tbody tr:last-child td{border-bottom:none}
 .final-table tbody tr:nth-child(even):not(.fr-tie):not(.fr-gold):not(.fr-silver):not(.fr-bronze){background:var(--row-stripe)}
 .final-table tr.fr-tie{background:color-mix(in srgb,var(--accent-gold) 13%,transparent)}
@@ -2520,7 +2500,6 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    shrink:0 with a fixed touch-size so it stays put as text changes. */
 .banter{display:flex;align-items:flex-start;gap:8px;background:var(--bg-card-alt);border:1px solid var(--border);border-left:3px solid var(--accent-magenta);border-radius:var(--radius);padding:8px 10px;margin-bottom:8px}
 .banter-main{flex:1;min-width:0}
-.banter-cat{font-family:var(--font-display);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);display:block;margin-bottom:3px}
 .banter-text{font-size:.9rem;line-height:1.35;color:var(--text-primary);min-height:3.6rem;display:flex;align-items:center}
 .banter-sm .banter-text{min-height:2.45rem;font-size:.85rem}
 .banter-refresh{flex-shrink:0;width:2.6rem;height:2.6rem;min-width:2.6rem;border:1px solid var(--border-control);border-radius:8px;background:var(--bg-input);color:var(--txt-cyan);font-size:1.2rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;transition:var(--transition)}
@@ -2542,7 +2521,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .staff-thanks-names{color:var(--txt-orange);font-weight:700}
 .staff-thanks-missing{color:var(--text-muted)}
 .staff-thanks-edit{display:block}
-.staff-thanks-edit-label{display:block;font-family:var(--font-display);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:3px}
+.banter-cat,.staff-thanks-edit-label{display:block;font-family:var(--font-display);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:3px}
 
 /* round header: wagers label forced onto its own row (h2 is flex-wrap) */
 /* round header: forced line break, then wager label sized to its text (not full width) */

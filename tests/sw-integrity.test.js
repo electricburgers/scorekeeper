@@ -93,13 +93,15 @@ test("the drumroll's audio files (this session's extraction) are all in SHELL_FI
   }
 });
 
-// The DRUM_CLIPS paths app.js actually uses at runtime must be the SAME paths SHELL_FILES
+// The DRUM_CLIPS paths the app actually uses at runtime must be the SAME paths SHELL_FILES
 // precaches — a typo in either place would precache the wrong thing (or the right thing at the
 // wrong path) and the drumroll would 404 offline despite this test suite's other checks passing.
-test("js/app.js's DRUM_CLIPS paths exactly match the audio files SHELL_FILES precaches", () => {
-  const appSrc = read("js/app.js");
-  const m = appSrc.match(/const DRUM_CLIPS = \{([\s\S]*?)\};/);
-  assert.ok(m, "DRUM_CLIPS not found in js/app.js");
+test("js/craft-prize.js's DRUM_CLIPS paths exactly match the audio files SHELL_FILES precaches", () => {
+  // DRUM_CLIPS lives in js/craft-prize.js, not js/app.js — this session's app.js module split
+  // moved the whole drumroll/craft-prize feature (including this const) out together.
+  const src = read("js/craft-prize.js");
+  const m = src.match(/const DRUM_CLIPS = \{([\s\S]*?)\};/);
+  assert.ok(m, "DRUM_CLIPS not found in js/craft-prize.js");
   const paths = [...m[1].matchAll(/:\s*"([^"]+)"/g)].map((x) => x[1]);
   assert.equal(paths.length, 4);
   const files = new Set(shellFiles().map((f) => f.replace(/^\.\//, "")));

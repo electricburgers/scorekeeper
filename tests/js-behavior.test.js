@@ -777,6 +777,163 @@ describe("Tutorial step table", () => {
 });
 
 // ============================================================================
+// Tutorial render batching — the early bulk-fill steps (Round 1's autoFillRound, its forced
+// Beer Round, its partial-fill Sort demo) each used to call the real, expensive cycleW()
+// (js/app.js) once per team/question — up to ~20 times for one step — and every one of those
+// calls independently triggered a full renderAll() *and* a forced-reflow reposition() via
+// installHooks' own render hook, entirely synchronously, before the host ever saw any of the
+// intermediate frames: real, measurable jank on exactly the steps a host reported as "feels
+// slow". runBatched() (js/tutorial.js) collapses each fill() step's whole burst of calls down
+// to the one render that was ever going to be visible. This test's own render count is
+// deterministic (confirmed by running it three times) precisely because that's what the fix
+// guarantees — it depends on how many runBatched()-wrapped fill() calls ran, not on how many
+// individual cycleW/setB calls happened inside them, so a regression that goes back to calling
+// autoFillRound() etc. directly (unbatched) would make this count balloon into the dozens.
+// ============================================================================
+// ============================================================================
+// Tutorial full walkthrough — drives the real practice tour start to finish, the same one a
+// host clicking "Take the Tour" runs, and checks the two things a host actually cares about:
+// it never errors, and it genuinely leaves a fully-played practice game behind (every round
+// scored, halftime/final wagers placed, gameStarted flips true) — not a tour that narrates over
+// empty data. Tutorial.next() bypasses the UI's own Next-button gating (it doesn't check
+// stepReady), which is what makes driving the whole thing from a test tractable at all — real
+// per-step pacing (typing, clicking, waiting for a render) doesn't have to be reproduced, only
+// the two things next() genuinely can't fake: Quiz ID/Host Name (real keystrokes into a text
+// input — canScore() blocks every scoring tap in the whole app, tutorial included, without
+// them) and the 220ms-paced team-adding / 300ms sidebar-toggle timers the app itself uses.
+// One shared walkthrough for the whole describe block (before(), not beforeEach) — it costs
+// several real seconds because of those waits, and every it() below only reads its result.
+// ============================================================================
+describe("Tutorial full walkthrough", () => {
+  let window;
+  let renderCounts;
+  let stoppedNaturally;
+  let jsErrors;
+  let clickedTargets;
+
+  before(async () => {
+    window = await loadAppWindow();
+    jsErrors = [];
+    window.addEventListener("error", (e) =>
+      jsErrors.push((e.error && e.error.message) || e.message || String(e)),
+    );
+    // Installed BEFORE Tutorial.start() so installHooks() (js/tutorial.js) captures these as
+    // its own `orig` — every real render, batched or not, funnels through them.
+    evalIn(
+      window,
+      `window.__rc = { all: 0, left: 0, sb: 0 };
+       (function () {
+         const _all = renderAll, _left = renderLeft, _sb = renderSB;
+         renderAll = function (...a) { window.__rc.all++; return _all.apply(this, a); };
+         renderLeft = function (...a) { window.__rc.left++; return _left.apply(this, a); };
+         renderSB = function (...a) { window.__rc.sb++; return _sb.apply(this, a); };
+       })();`,
+    );
+    await evalIn(window, "Tutorial.start()");
+    // The one thing next() can't simulate: real keystrokes into Quiz ID/Host Name. Without
+    // these, canScore() (js/app.js) blocks every single scoring tap app-wide — the tour would
+    // "complete" in the sense of reaching step 37, but leave every round genuinely empty.
+    evalIn(
+      window,
+      'gameState.meta.quizId = "TEST-001"; gameState.meta.hostName = "Test Host";',
+    );
+    // The other thing next() can't simulate: real 'on-click' steps wait on the target's own
+    // real onclick handler (see the STEP TABLE's own note on why), and next() bypasses that
+    // gating entirely — it advances regardless of whether anything was ever actually clicked.
+    // That gap is exactly how the Team Report's <script> tag went missing without a single test
+    // failing (see the dedicated "Team Report" describe block's own comment): nothing in this
+    // suite had ever actually called openAudit() the way a host's real tap does. Dispatching a
+    // real click on each of these targets closes that gap generally instead of only for the one
+    // step that already broke once — gated on the callout's own narration text (below), not
+    // bare DOM presence: #sec-r1's header exists in the page from the very first step (it's
+    // ordinary static UI, not tutorial-created), so clicking on sight — an earlier version of
+    // this loop — clicked it far too early. #addTeamBtn is deliberately NOT in this list: unlike
+    // the others, its real onclick (addTeam(), js/app.js) adds a genuine extra team the rest of
+    // this exact walkthrough doesn't expect (the tour's own "type a name for it" steps that
+    // follow are narration-only here, same as every other typing step — see the Quiz ID/Host
+    // Name note above), which cascades into an unnamed team[0] and downstream state this test
+    // isn't trying to model. addTeam() itself is already exercised directly elsewhere (the
+    // "starting the tutorial WITH a real team in progress" case above calls it the same way).
+    const CLICK_TARGETS = [
+      { sel: "#sec-r1 .section-header", when: /Round 1's header to collapse it/ },
+      {
+        sel: '#sec-final tr[onclick="openAudit(0)"] .ta-name-clickable',
+        when: /to open a Team Report/,
+      },
+      // Not /tap Close/ — tapWord() (js/tutorial.js) renders "click" on a desktop-width
+      // viewport (jsdom's default), so the real narration here reads "...then click Close...".
+      { sel: ".audit-close", when: /Close to dismiss it/ },
+    ];
+    const alreadyClicked = new Set();
+    let i = 0;
+    for (; i < 50; i++) {
+      const callout = window.document.querySelector(".tutorial-callout");
+      if (!callout) break;
+      const text = callout.textContent || "";
+      for (const { sel, when } of CLICK_TARGETS) {
+        if (alreadyClicked.has(sel) || !when.test(text)) continue;
+        const el = window.document.querySelector(sel);
+        if (el) {
+          el.click();
+          alreadyClicked.add(sel);
+        }
+      }
+      evalIn(window, "Tutorial.next()");
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    stoppedNaturally = i < 50; // false would mean the safety cap fired, not a real Finish
+    renderCounts = evalIn(window, "window.__rc");
+    clickedTargets = alreadyClicked;
+  });
+  after(() => window.close());
+
+  it("reaches the end of the step table on its own (the loop's safety cap never fired)", () => {
+    assert.equal(stoppedNaturally, true);
+  });
+  it("actually fired all three real clicks (Round 1 header, open Team Report, close Team Report) — confirms the text-gated matching above found its moment for each, not that it silently skipped all of them", () => {
+    assert.equal(clickedTargets.size, 3);
+  });
+  it("throws no errors anywhere in the walkthrough", () => {
+    assert.deepEqual(jsErrors, []);
+  });
+  it("every tutorial DOM element is cleaned up after Finish (no leftover overlay/callout/ring)", () => {
+    assert.equal(window.document.querySelectorAll("[class*='tutorial-']").length, 0);
+  });
+  it("flips gameStarted true (a real score was entered, not just narrated over)", () => {
+    assert.equal(evalIn(window, "gameState.gameStarted"), true);
+  });
+  it("adds the practice roster (host's own team plus the 4 auto-added ones)", () => {
+    assert.ok(evalIn(window, "gameState.teams.length") >= 4);
+  });
+  it("scores all four rounds for nearly every team (one cell per round is deliberately left for the host to fill by hand)", () => {
+    for (let ri = 0; ri < 4; ri++) {
+      const filled = evalIn(
+        window,
+        `Object.keys(gameState.rounds[${ri}].questions[0]).length`,
+      );
+      const teams = evalIn(window, "gameState.teams.length");
+      assert.ok(filled >= teams - 1, `round ${ri + 1} Q1: only ${filled}/${teams} teams scored`);
+    }
+  });
+  it("places both the halftime and final wagers", () => {
+    assert.ok(evalIn(window, "Object.keys(gameState.halftime).length") > 0);
+    assert.ok(evalIn(window, "Object.keys(gameState.finalWager).length") > 0);
+  });
+  it("keeps total real render calls well under what unbatched bulk-fills would cost (regression guard for runBatched — see js/tutorial.js)", () => {
+    const total = renderCounts.all + renderCounts.left + renderCounts.sb;
+    // Measured directly, both ways, against this exact walkthrough: 52 with runBatched() doing
+    // its job (stable across repeated runs), 316 with every runBatched() call unwrapped back to
+    // a bare call — the six bulk-fill steps' cycleW/setB/setHW/setFW calls each triggering their
+    // own real render again. 100 sits comfortably above real-world drift and just as
+    // comfortably below "batching broke."
+    assert.ok(
+      total < 100,
+      `expected batched rendering to stay well under 100, got ${total} (${JSON.stringify(renderCounts)})`,
+    );
+  });
+});
+
+// ============================================================================
 // No leftover emoji-as-picto narration in the tutorial (this session's audit)
 // ============================================================================
 describe("Tutorial narration text", () => {
@@ -897,6 +1054,64 @@ describe("FAQ Icon Style preview swatch", () => {
       (u) => !window.document.getElementById((u.getAttribute("href") || "").replace("#", "")),
     );
     assert.deepEqual(broken, []);
+  });
+});
+
+// ============================================================================
+// Team Report (js/team-audit.js, formerly "Score Audit") — openAudit/closeAudit/buildAudit had
+// zero coverage before this, and that gap is exactly how a real bug shipped: this session's
+// js/app.js module split moved these three into their own file correctly, but never added its
+// <script src> tag to index.html — every static/string check that only reads *.js files off
+// disk (lint, the onclick-handler-exists check, grep) passed anyway, since the file and its
+// functions genuinely existed on disk. Only a real click surfaced "openAudit is not defined".
+// loadAppWindow() runs index.html's actual <script> tags exactly as a browser would, so this is
+// the one kind of test that fails the same way that real click did — see
+// tests/html-structure.test.js's "every top-level js/*.js file... has a <script src> tag" for
+// the complementary static check, which catches the next file before anyone has to click it.
+// ============================================================================
+describe("Team Report (js/team-audit.js)", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+    evalIn(
+      window,
+      "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();",
+    );
+  });
+  after(() => window.close());
+
+  it("openAudit/closeAudit/buildAudit are actually defined (would have caught the missing <script> tag directly)", () => {
+    assert.equal(evalIn(window, "typeof openAudit"), "function");
+    assert.equal(evalIn(window, "typeof closeAudit"), "function");
+    assert.equal(evalIn(window, "typeof buildAudit"), "function");
+  });
+
+  it("openAudit(0) shows the overlay and builds Parliamentary Procedure's report, matching the app's own grandTotal(0)", () => {
+    evalIn(window, "openAudit(0)");
+    assert.equal(
+      window.document.getElementById("auditOverlay").classList.contains("show"),
+      true,
+    );
+    const html = window.document.getElementById("auditModal").innerHTML;
+    assert.match(html, /Parliamentary Procedure/);
+    const total = evalIn(window, "grandTotal(0)");
+    assert.match(html, new RegExp(String(total)));
+  });
+
+  it("closeAudit() hides the overlay again", () => {
+    evalIn(window, "openAudit(0); closeAudit();");
+    assert.equal(
+      window.document.getElementById("auditOverlay").classList.contains("show"),
+      false,
+    );
+  });
+
+  it("every onclick=\"openAudit(N)\" row in a freshly rendered page actually opens the right team (index round-trips correctly)", () => {
+    evalIn(window, "openAudit(2)");
+    const html = window.document.getElementById("auditModal").innerHTML;
+    const name = evalIn(window, "gameState.teams[2].name");
+    assert.match(html, new RegExp(name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    evalIn(window, "closeAudit()");
   });
 });
 
