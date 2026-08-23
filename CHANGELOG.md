@@ -10,6 +10,22 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.32 - 2026-08-23
+- **New tests for the desktop "scroll void" bug** (v18.something: `.app-layout` sizing itself as
+  a hardcoded `100vh - 60px` guess at the sticky header/Resume banner, which undershot whenever
+  either ran taller than that guess and left the document itself scrollable into a strip of
+  rendered nothing below the layout — and its own follow-up fix, a font-swap race that could
+  reopen the same gap even after `--layout-top` replaced the hardcoded guess). jsdom does no
+  real CSS layout, so nothing here can assert the actual pixel gap is zero the way a real browser
+  reflow could; these instead guard the two things that broke this exact bug before and would be
+  invisible in a screenshot taken on any display tall enough not to need the fallback: that
+  `css/styles.css`'s desktop `.app-layout` rule still reads `var(--layout-top, ...)` rather than
+  a bare number, and that `js/app.js`'s sync IIFE still observes `.header`/`#resumeBanner` via
+  `ResizeObserver` and still re-syncs on `window resize`, `document.fonts.ready`, and `window
+  load` — the third of which is specifically the font-swap race's own fix. Verified against the
+  real historical bug both ways: reverting either the CSS or the `document.fonts.ready` line
+  fails the corresponding test.
+
 ## v19.31 - 2026-08-23
 - **`js/app.js` split from one 5,943-line, 288KB file into eleven** — `js/app.js` itself plus ten
   new single-purpose files (`storage`, `icons`, `content`, `scoring`, `dom-utils`,

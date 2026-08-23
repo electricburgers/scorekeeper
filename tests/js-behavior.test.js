@@ -1222,3 +1222,60 @@ describe("Export smoke test", () => {
     assert.ok(found, "expected exportPDF to build a blob for download");
   });
 });
+
+// ============================================================================
+// Desktop "scroll void" bug — .app-layout's height used to be `100vh - 60px`, a flat guess at
+// the sticky header (+ Resume banner, when shown) that undershot in both directions and, when
+// too small, left the *document itself* scrollable by the difference: up to 89px of rendered
+// nothing below the layout, reachable by scrolling with the cursor anywhere in the right-hand
+// Scores column. The fix (js/app.js, the IIFE right above --mobile-dock-h's own) replaces the
+// guess with --layout-top, one real measurement of .app-layout's own on-screen top kept in sync
+// by a ResizeObserver on .header/#resumeBanner, a window resize listener, and a document.fonts.
+// ready/window-load resync (that last one closing a real follow-up bug of its own: the very
+// first sync() can run before Inter has swapped in over its font-display:swap fallback, and on
+// loads where the Resume banner wraps a different number of lines under the fallback font, that
+// undershoots --layout-top by exactly enough to reopen the same scrollable strip).
+//
+// jsdom does no real CSS layout (getBoundingClientRect is always zero), so nothing here can
+// assert the actual pixel gap is closed the way a real browser reflow could — these instead
+// guard the two things that broke this exact bug before and are invisible in a screenshot taken
+// on any display tall enough not to need the fallback in the first place: that the sync
+// mechanism actually runs and writes a real value (not silently leaving --layout-top unset, so
+// the CSS fallback undershoot line 703's own hardcoded ", 60px" — quietly wins), and that all
+// three of its resync paths are still wired up.
+// ============================================================================
+describe('Desktop "scroll void" bug (--layout-top sync)', () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+
+  it("--layout-top is explicitly set on <html> after load, not left for the CSS fallback to silently win", () => {
+    const val = window.document.documentElement.style.getPropertyValue(
+      "--layout-top",
+    );
+    assert.notEqual(val, "");
+    assert.match(val, /^-?\d+(\.\d+)?px$/);
+  });
+
+  it("the sync IIFE observes both .header and #resumeBanner for resize (the two things in flow above .app-layout)", () => {
+    const appSrc = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+    const m = appSrc.match(/Keeps --layout-top in sync[\s\S]*?\n\}\)\(\);/);
+    assert.ok(m, "the --layout-top sync IIFE was not found in js/app.js");
+    const block = m[0];
+    assert.match(block, /querySelector\(["']\.header["']\)/);
+    assert.match(block, /getElementById\(["']resumeBanner["']\)/);
+    assert.match(block, /new ResizeObserver\(sync\)/);
+  });
+
+  it("the sync IIFE re-syncs on window resize, document.fonts.ready, and window load (the font-swap race's own fix)", () => {
+    const appSrc = fs.readFileSync(path.join(ROOT, "js", "app.js"), "utf8");
+    const m = appSrc.match(/Keeps --layout-top in sync[\s\S]*?\n\}\)\(\);/);
+    assert.ok(m, "the --layout-top sync IIFE was not found in js/app.js");
+    const block = m[0];
+    assert.match(block, /addEventListener\(["']resize["'],\s*sync\)/);
+    assert.match(block, /document\.fonts\?\.ready.*\.then\(sync\)/);
+    assert.match(block, /addEventListener\(["']load["'],\s*sync\)/);
+  });
+});

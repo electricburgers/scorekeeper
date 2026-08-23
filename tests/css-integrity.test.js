@@ -265,3 +265,21 @@ test('css/styles.css\'s .icon-hand rule points at --accent-gold, not an undefine
   assert.ok(m, ".icon-hand rule not found");
   assert.match(m[1], /--icon-tint:\s*var\(--accent-gold\)/);
 });
+
+// ---- The desktop "scroll void" bug: .app-layout's height used to subtract a hardcoded 60px
+// guess at everything above it (the sticky header, sometimes the Resume banner) from 100vh/
+// 100dvh. That guess undershot whenever the header ran taller than 60px (up to 70px at large
+// text sizes) or the banner was in flow (~91px more), leaving the panel's bottom edge past the
+// viewport and the *document itself* scrollable into a strip of rendered nothing below it — up
+// to 89px of it. The fix (js/app.js's own --layout-top sync IIFE, see its top comment) measures
+// the panel's real on-screen top instead of guessing; this test only guards the CSS side of
+// that fix — that the desktop rule still reads the custom property rather than a bare number —
+// since a `var(--layout-top,60px)` reverted back to a plain `60px` would silently reintroduce
+// the exact bug with no visual difference on any display tall enough not to need the fallback. ----
+test("css/styles.css's desktop .app-layout height reads var(--layout-top, ...), not a bare hardcoded height", () => {
+  const src = read("css/styles.css");
+  const m = src.match(/\.app-layout\{([^}]*)\}/);
+  assert.ok(m, ".app-layout rule not found");
+  assert.match(m[1], /height:calc\(100vh - var\(--layout-top,/);
+  assert.match(m[1], /height:calc\(100dvh - var\(--layout-top,/);
+});
