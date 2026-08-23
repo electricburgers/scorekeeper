@@ -5,8 +5,13 @@ match the in-app "Scorekeeper vX.X" label (Settings panel). Reconstructed from
 git history — dates are commit dates, and entries bundle the commits that
 landed between one version bump and the next.
 
-## v18.101 - 2026-08-22
-- **The R2/R4 correct/incorrect emoji were still off-center after v18.100** — the previous fix was
+v18.74 through v18.101 (commit subjects still say v18.x — git history isn't
+rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
+its own separate site into this app lands on v19.0 instead of sitting mid-run
+as an arbitrary v18.74.
+
+## v19.27 - 2026-08-22
+- **The R2/R4 correct/incorrect emoji were still off-center after v19.26** — the previous fix was
   wrong on two counts, both from unreliable verification rather than the CSS logic itself: the
   scaled clone used to calibrate it had been moved out of its layout position via
   `position:fixed`, which silently breaks the `@container` query this button's size depends on,
@@ -20,7 +25,7 @@ landed between one version bump and the next.
 - **Team Report's Diff note spells out plus/minus now**: "A plus (+) means..." and "a minus (−)
   means...", not just the bare symbols.
 
-## v18.100 - 2026-08-22
+## v19.26 - 2026-08-22
 - **The ☑️/✖️ in the R2/R4 bonus wager's correct/incorrect buttons were visibly off-centre in Emoji
   mode** — both glyphs' visible ink sits noticeably below the flex-centred box `getBoundingClientRect`
   reports (a mismatch only caught by comparing a 16x-scaled screenshot against the actual box,
@@ -29,12 +34,12 @@ landed between one version bump and the next.
 - **The Before Halftime/Final Wager Shuffle icon is bigger within its unchanged button** — scale
   bumped from 1.32x to 1.5x; the button itself (`min-height/width: max(2rem,32px)`) is untouched.
 
-## v18.99 - 2026-08-22
+## v19.25 - 2026-08-22
 - **Team Report's bottom note dropped the "Tip: " prefix** — it's an explanation of what the
   numbers mean, not a tip. Also spelled out the two abbreviations it defines: "Diff Adj (Difference
   Adjustment)" and "Adj. Score (Adjusted Score)".
 
-## v18.98 - 2026-08-22
+## v19.24 - 2026-08-22
 - **The header's Settings gear button now matches Save/Load's height**, in both Pictograph and
   Emoji mode. It was a few px shorter — flexbox sizes a row from its tallest child, and Save/Load
   are taller because their own text node (" Save"/" Load") forces a real text line-box at the
@@ -46,7 +51,7 @@ landed between one version bump and the next.
   gear) — everything was already correctly centered; the gear's height was the only real issue
   found, fixed above.
 
-## v18.97 - 2026-08-22
+## v19.23 - 2026-08-22
 - **Four new host banter lines**, added to the categories that already fit their tone: "Somewhere
   in this room, someone just changed a right answer to a wrong one. Rest in peace, that point."
   (After the Answer), "Remember: there's no crying in trivia. There's a little crying in trivia."
@@ -64,9 +69,9 @@ landed between one version bump and the next.
   user's own call to make under Icon Style, same as everywhere else Emoji mode trades some
   polish for platform glyphs.
 
-## v18.96 - 2026-08-22
+## v19.22 - 2026-08-22
 - **Clicking Shuffle (or Entry) on the Before Halftime/Final Wager standings no longer nudges the
-  view a few pixels on every click.** Same root cause and same fix as v18.95's R2/R4 row jump:
+  view a few pixels on every click.** Same root cause and same fix as v19.21's R2/R4 row jump:
   the click-position anchor had no way to target the Entry/Shuffle button row specifically, so it
   fell back to the whole `.standings-block` — and that block's own banter line (a random line of
   variable length, re-picked on every re-render) sits ABOVE the button row, so a longer or shorter
@@ -74,7 +79,7 @@ landed between one version bump and the next.
   The button row now carries its own id and anchors to itself, independent of whatever the banter
   line above it does.
 
-## v18.95 - 2026-08-22
+## v19.21 - 2026-08-22
 - **The ☑️ in Round/Q5 "Done" badges no longer covers the badge's own green border in dark theme
   Emoji mode.** At the badge's tight 1px vertical padding, the emoji's own glyph box rendered
   taller than the pill, poking past the rounded border instead of sitting inside it. Scaled down
@@ -97,7 +102,7 @@ landed between one version bump and the next.
   badge, in particular) changing size still nudged your row a few pixels. Each row now carries
   `data-ta="{type}-{ti}"`, the same per-row anchoring every other question row already had.
 
-## v18.94 - 2026-08-22
+## v19.20 - 2026-08-22
 - **"Done" no longer disappears into the background in dark theme's Emoji mode.** ✔️ renders as a
   bare dark tick with no background of its own — legible on light theme's surfaces, nearly
   invisible against dark theme's near-black ones. `ICON_DONE` now picks ☑️ instead specifically in
@@ -107,13 +112,13 @@ landed between one version bump and the next.
   touch already-rendered icons, since nothing icon-related depended on theme before this.
 - **"Take the Tour" uses ℹ️ in Emoji mode now, not 🎓.**
 
-## v18.93 - 2026-08-22
+## v19.19 - 2026-08-22
 - **Timer Stepper Buttons and Timer Pulse only show up in Advanced Settings once Timer Widget is
   turned on**, same reasoning and same pattern as Drumroll Crossfade needing Manual Drumroll
   Control on last version: both configure the timer widget itself (whether it shows -30/+30
   nudges, whether it flashes), so neither means anything with the widget off.
 
-## v18.92 - 2026-08-22
+## v19.18 - 2026-08-22
 - **Team Report's "incorrect" lines now use ❌ in Emoji mode, not ⛔** — the wager/bonus/per-question
   incorrect badges and stats elsewhere keep ⛔ unchanged; only Team Report's own three call sites
   split off into their own `ICON_AUDIT_WRONG`, same Pictograph-mode drawing as `ICON_INCORRECT`.
@@ -122,7 +127,7 @@ landed between one version bump and the next.
   until manual control does — so the row now stays hidden rather than configuring a feature that
   isn't active yet, and appears the moment the toggle above it is switched on.
 
-## v18.91 - 2026-08-22
+## v19.17 - 2026-08-22
 - **The four Settings pictographs that were still plain monochrome now have colour**: App
   Preferences' Save (blue, silver window/label) and Load (gold folder), and Craft Prize Eligible
   List's Copy (the same tan/silver `ICON_CLIPBOARD` already drawn elsewhere, just missing its own
@@ -132,7 +137,7 @@ landed between one version bump and the next.
   reversed from its original "arbitrary purple, picked only to look distinct" choice. Reuses
   `--tint-sheet` (XLSX's own green) and `--tint-mic` (the mic's silver) rather than new colors.
 
-## v18.90 - 2026-08-22
+## v19.16 - 2026-08-22
 - **The R2/R4 bonus wager's "Mark incorrect" button now uses ✖️ for its own icon in Emoji mode,
   not ⛔.** Selecting it still overlays a ⛔ `wager-badge` right on top — that's the actual
   "this one's wrong" signal — which was showing the same ⛔ twice, stacked, the mirror image of
@@ -147,7 +152,7 @@ landed between one version bump and the next.
   separate CSS rule that also reads `--badge-gold-fg`, missed in that pass. Same light-mode-only
   fix, same teal.
 
-## v18.89 - 2026-08-22
+## v19.15 - 2026-08-22
 - **Audited every emoji sitting alone inside its own container** (the close-X circles, remove-team,
   Team Report's ✅/⛔ lines, and the rest) — everything but one was already correctly centered.
   The exception: the per-question wager's incorrect (⛔) badge, which was reading a fixed
@@ -182,7 +187,7 @@ landed between one version bump and the next.
   problem and is untouched. Light mode only, switched to the same teal already used one line down
   for the standings themselves, which reads at 5.6:1 against this block's background.
 
-## v18.88 - 2026-08-22
+## v19.14 - 2026-08-22
 - **Advanced Settings reordered once more**: Row Density, Row Zebra Stripes, and Craft Prize
   Eligible List now lead the group, Point Adjustments moved to the very end.
 - **Icon Style's own swatch is now a beer mug, not a checkmark.** A checkmark looks nearly
@@ -197,10 +202,10 @@ landed between one version bump and the next.
   at that button's small 1.6rem circle read visibly bulkier than the thin pictograph X it replaced.
   Scaled back down to match.
 
-## v18.87 - 2026-08-22
-- **The mobile docked timer's display and buttons are a notch smaller than v18.83 shipped them.**
+## v19.13 - 2026-08-22
+- **The mobile docked timer's display and buttons are a notch smaller than v19.9 shipped them.**
   Display font-size 2.1rem → 1.85rem, toggle/reset/step buttons 2.75rem → 2.4rem — still bigger
-  than the pre-v18.83 originals (1.3rem/2rem), just not as large as that first pass. The dock and
+  than the pre-v19.9 originals (1.3rem/2rem), just not as large as that first pass. The dock and
   row height stay exactly as frozen as before; shrinking the controls only freed more room under
   that same ceiling, nothing to re-derive.
 - **Regular Settings and Advanced Settings shuffled once more.** App Preferences moved out of
@@ -220,21 +225,21 @@ landed between one version bump and the next.
   Scorekeeper Preferences.json" — so a host who keeps their own prefs file can tell it apart from
   someone else's at a glance. Falls back to the plain name when Host Name is blank.
 
-## v18.86 - 2026-08-22
+## v19.12 - 2026-08-22
 - **"Per-Question Percentage Correct Labels" is now "Crowd-Wisdom Percentage Tags."** Renamed in
   Advanced Settings and in the matching FAQ entry title, plus the two code comments in app.js that
   named the old setting by string. No behavior change — same toggle, same `qResultToggle` pref key.
 
-## v18.85 - 2026-08-22
-- **Advanced Settings rows lost the icons v18.84 just gave them.** Ten rows each carrying their own
+## v19.11 - 2026-08-22
+- **Advanced Settings rows lost the icons v19.10 just gave them.** Ten rows each carrying their own
   small pictograph/emoji pair, on top of the buttons and range slider each row already had, read as
-  clutter rather than help — the reorganized grouping from v18.84 was doing the actual work of
+  clutter rather than help — the reorganized grouping from v19.10 was doing the actual work of
   making the list easier to scan, and the icons were competing with it rather than adding to it.
   Removed the SVGs, the row ids that existed only to target them, and their `STATIC_ICON_TARGETS`
   entries (app.js); every Advanced Settings row is back to a plain text label, same grouped order
-  as v18.84.
+  as v19.10.
 
-## v18.84 - 2026-08-22
+## v19.10 - 2026-08-22
 - **Settings and Advanced Settings are grouped by what a user actually comes here to do, instead of
   the order each row happened to ship in.** Regular settings now read Theme → Size → Icon Style →
   Color Vision → Row Density → Row Zebra Stripes (appearance, most-impactful first) → Question Timer
@@ -248,7 +253,7 @@ landed between one version bump and the next.
   Example/Take the Tour/FAQ already used — closing the one place in Settings that had no icons at
   all while every other row already did.
 
-## v18.83 - 2026-08-22
+## v19.9 - 2026-08-22
 - **The mobile docked timer's display and buttons are bigger, without the dock itself growing a
   single pixel.** A first pass at this grew `.qtimer-mobile`'s own padding to make room, which grew
   `.mobile-bottom-dock`'s measured height right along with it and ate into the game content above
@@ -259,7 +264,7 @@ landed between one version bump and the next.
   both unchanged (103.5px / 54.5px), while the display, toggle, reset, and stepper buttons all
   measure visibly larger inside that same frame.
 
-## v18.82 - 2026-08-22
+## v19.8 - 2026-08-22
 - **PDF export could open a new tab showing the PDF instead of just downloading it.** `dl()` (the
   shared helper behind PDF, XLSX, and the craft-eligible TXT export) set `target="_blank"`
   unconditionally on the downloading link. Chrome and every other Chromium browser already honor
@@ -275,7 +280,7 @@ landed between one version bump and the next.
   honors download" from "iOS Safari, which claims to but doesn't." Verified: exporting PDF and
   XLSX on desktop Chrome now opens zero new tabs, where PDF previously opened one.
 
-## v18.81 - 2026-08-22
+## v19.7 - 2026-08-22
 - **The Halftime/Final Wager "Mark correct" button no longer shows the same ✅ twice.** Selecting
   it overlays a green `CORRECT_BADGE_SVG` badge — the actual "this is the winning call" signal —
   right on top of the button's own icon, and in Icon Style's Emoji mode both were ✅, so a selected
@@ -288,7 +293,7 @@ landed between one version bump and the next.
   invisible on the dark one. ☑️ carries its own light box baked into the glyph, so it reads at
   both ends without needing per-theme tuning.
 
-## v18.80 - 2026-08-22
+## v19.6 - 2026-08-22
 - **The timer's critical-time pulse no longer shows a grey halo in light mode.** It animated
   `filter:brightness()`, which forces the element onto its own compositing layer for as long as
   the animation runs — including at the 0%/100% keyframes where the computed value is a no-op —
@@ -311,7 +316,7 @@ landed between one version bump and the next.
   since a transition, unlike a fresh animation, always interpolates from whatever's actually on
   screen rather than restarting from a keyframe's fixed value.
 
-## v18.79 - 2026-08-22
+## v19.5 - 2026-08-22
 - **Icon Style's emoji are properly centered now.** `.icon-emoji` never set its own `line-height`,
   so it inherited whatever the surrounding button had (usually the browser default ~1.15-1.2x) —
   flex `align-items:center` centers that whole taller line-box, not the glyph's own visual weight
@@ -324,7 +329,7 @@ landed between one version bump and the next.
   without help): padding-bottom back to 0, replaced with a margin-top and a slight scale-down
   measured to land the bar dead center without poking past the badge's own circular edge.
 
-## v18.78 - 2026-08-22
+## v19.4 - 2026-08-22
 - **Shuffling the Before Halftime/Final Wager standings could scroll the page**, since the click
   anchor renderLeft() uses to pin the view in place (see the big comment on `lastClickAnchorSel`)
   only matched `[data-ta]`, `[data-ti]`, `.question-block`, `.special-section`, or the broad
@@ -334,7 +339,7 @@ landed between one version bump and the next.
   `.standings-block` now anchors to itself, the same "anchor the specific thing that was actually
   clicked, not everything around it" rule every other interactive element here already gets.
 
-## v18.77 - 2026-08-22
+## v19.3 - 2026-08-22
 - **Icon Style's emoji were rendering visibly smaller than the pictographs they replaced** in
   every button that gave its icon extra room on purpose — the Scores panel's Shuffle button most
   noticeably, but the same gap applied to every `.sort-btn`, `.standings-sort-btn`,
@@ -354,7 +359,7 @@ landed between one version bump and the next.
   Style exists to bring back. `CORRECT_BADGE_SVG` is a `let` now, defaulting to the same picture
   and swapping to ✅ in Emoji mode, same pattern as everything else.
 
-## v18.76 - 2026-08-22
+## v19.2 - 2026-08-22
 - **Three more Icon Style emoji picks, all by request.** Reset (per-question Sort/Reset, and the
   standings/scores Reset buttons) is ↩️ now, not ↺. Correct stays ✅ — already the case, just
   confirmed.
@@ -369,13 +374,13 @@ landed between one version bump and the next.
   mode — with its own `⛔` emoji, and only the incorrect-marking call sites use it; every
   dismiss/remove/close use stays on `X_ICON_SVG` (❌).
 
-## v18.75 - 2026-08-22
+## v19.1 - 2026-08-22
 - **Icon Style's Shuffle emoji is 🔀, not 🎲.** At the sizes Sort/Reset/Shuffle actually render —
   the sort-controls row, the standings sort buttons — a die reads as an ambiguous blob where the
   crossed arrows keep reading as "shuffle" at a glance. `ICON_SHUFFLE_EMOJI`/
   `ICON_SHUFFLE_TINTED_EMOJI` both change; nothing else about the toggle does.
 
-## v18.74 - 2026-08-22
+## v19.0 - 2026-08-22
 - **The FAQ moved into this repo.** It used to live at `electricburgers/scorekeeper-faq`, a
   separate git repo checked out at `faq/scorekeeper-faq/` and excluded here so the two repos'
   histories never collided. It's now `faq/`, tracked like every other file, with its own nested
