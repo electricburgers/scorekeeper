@@ -58,6 +58,7 @@ const browserGlobals = {
 module.exports = [
   {
     ignores: [
+      "drumroll-pwa/**",
       "js/vendor/**",
       "js/data/xlsx-templates.js",
       "js/data/drum-clips.js",

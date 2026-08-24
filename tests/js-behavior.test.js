@@ -518,6 +518,39 @@ describe("Drumroll audio pipeline", () => {
     const frames = Math.round(6 * 48000);
     assert.equal(buf2.length, 44 + frames * 2 * 2);
   });
+
+  it("WEB_AUDIO_CLIPS points start/loop/end/horn at real WAV files under assets/audio/", () => {
+    const clips = evalIn(window, "WEB_AUDIO_CLIPS");
+    assert.equal(clips.start, "assets/audio/drumroll-start.wav");
+    assert.equal(clips.loop, "assets/audio/drumroll-loop.wav");
+    assert.equal(clips.end, "assets/audio/drumroll-end.wav");
+    assert.equal(clips.horn, "assets/audio/horn.wav");
+  });
+
+  it("every WEB_AUDIO_CLIPS file exists on disk as a valid WAV", () => {
+    const clips = evalIn(window, "WEB_AUDIO_CLIPS");
+    for (const [name, rel] of Object.entries(clips)) {
+      const full = path.join(ROOT, rel);
+      assert.ok(fs.existsSync(full), `${name}: ${rel} does not exist`);
+      const head = Buffer.alloc(4);
+      const fd = fs.openSync(full, "r");
+      fs.readSync(fd, head, 0, 4, 0);
+      fs.closeSync(fd);
+      assert.equal(head.toString("ascii"), "RIFF", `${name}: expected a RIFF/WAV header`);
+    }
+  });
+
+  it("Web Audio AudioContext is completely inert at initial page load (zero audio session theft)", () => {
+    assert.equal(evalIn(window, "webAudioCtx"), null);
+  });
+
+  it("isWebAudioEngine defaults to true and setCraftAudioEngine toggles between engines", () => {
+    assert.equal(evalIn(window, "isWebAudioEngine()"), true);
+    evalIn(window, "setCraftAudioEngine('legacy')");
+    assert.equal(evalIn(window, "isWebAudioEngine()"), false);
+    evalIn(window, "setCraftAudioEngine('webaudio')");
+    assert.equal(evalIn(window, "isWebAudioEngine()"), true);
+  });
 });
 
 // ============================================================================

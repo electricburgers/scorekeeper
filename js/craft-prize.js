@@ -378,12 +378,335 @@ function handOverToCue(name, after) {
   // second call if "playing" does eventually arrive after this fires.
   setTimeout(stopRoll, 400);
 }
+// --- WEB AUDIO API DRUMROLL ENGINE (Adapted from drumroll-pwa) ---
+//
+// AUDIO POLICY NOTE FOR WEB AUDIO:
+// The AudioContext is instantiated completely lazily on active user interaction (e.g. tap on
+// "Start Drumroll", "Play Horn", or sound test button), NEVER at script parse or page load.
+// Furthermore, useAmbientAudioSession() is invoked before playback begins so WebKit treats the
+// session as "ambient", mixing over background music instead of ducking or claiming an exclusive
+// playback session on iPadOS/iOS.
+const WEB_AUDIO_CLIPS = {
+  start: "assets/audio/drumroll-start.wav",
+  loop: "assets/audio/drumroll-loop.wav",
+  end: "assets/audio/drumroll-end.wav",
+  horn: "assets/audio/horn.wav",
+};
+
+let webAudioCtx = null;
+let webAudioBuffers = null;
+let webAudioLoadingPromise = null;
+let activeWebAudio = {
+  startSource: null,
+  loopSource: null,
+  endSource: null,
+  hornSource: null,
+  startGain: null,
+  loopGain: null,
+  active: false,
+};
+
+function getWebAudioContext() {
+  if (!webAudioCtx) {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtx) {
+      webAudioCtx = new AudioCtx();
+    }
+  }
+  return webAudioCtx;
+}
+
+function isWebAudioEngine() {
+  return loadPrefs().craftAudioEngine !== "legacy";
+}
+
+function setCraftAudioEngine(engine) {
+  const p = loadPrefs();
+  p.craftAudioEngine = engine === "legacy" ? "legacy" : "webaudio";
+  savePrefs(p);
+  applyPrefs();
+  renderLeft();
+}
+
+async function loadWebAudioBuffers() {
+  if (webAudioBuffers) return webAudioBuffers;
+  if (webAudioLoadingPromise) return webAudioLoadingPromise;
+  const ctx = getWebAudioContext();
+  if (!ctx) return null;
+  webAudioLoadingPromise = (async () => {
+    try {
+      const keys = Object.keys(WEB_AUDIO_CLIPS);
+      const buffers = {};
+      await Promise.all(
+        keys.map(async (k) => {
+          const res = await fetch(WEB_AUDIO_CLIPS[k]);
+          const ab = await res.arrayBuffer();
+          buffers[k] = await new Promise((resolve, reject) => {
+            ctx.decodeAudioData(ab, resolve, reject);
+          });
+        })
+      );
+      webAudioBuffers = buffers;
+      return buffers;
+    } catch (e) {
+      console.warn("Web Audio clip load failed:", e);
+      return null;
+    } finally {
+      webAudioLoadingPromise = null;
+    }
+  })();
+  return webAudioLoadingPromise;
+}
+
+function stopWebAudioDrumroll(stopEndAndHorn) {
+  if (stopEndAndHorn === undefined) stopEndAndHorn = true;
+  activeWebAudio.active = false;
+  if (activeWebAudio.startSource) {
+    try {
+      activeWebAudio.startSource.stop();
+      activeWebAudio.startSource.disconnect();
+    } catch (e) {}
+    activeWebAudio.startSource = null;
+  }
+  if (activeWebAudio.loopSource) {
+    try {
+      activeWebAudio.loopSource.stop();
+      activeWebAudio.loopSource.disconnect();
+    } catch (e) {}
+    activeWebAudio.loopSource = null;
+  }
+  activeWebAudio.startGain = null;
+  activeWebAudio.loopGain = null;
+  if (stopEndAndHorn) {
+    if (activeWebAudio.endSource) {
+      try {
+        activeWebAudio.endSource.stop();
+        activeWebAudio.endSource.disconnect();
+      } catch (e) {}
+      activeWebAudio.endSource = null;
+    }
+    if (activeWebAudio.hornSource) {
+      try {
+        activeWebAudio.hornSource.stop();
+        activeWebAudio.hornSource.disconnect();
+      } catch (e) {}
+      activeWebAudio.hornSource = null;
+    }
+  }
+}
+
+function startWebAudioDrumroll() {
+  const ctx = getWebAudioContext();
+  if (!ctx) {
+    // Fallback to legacy if Web Audio is unsupported
+    useAmbientAudioSession();
+    playDrumClip("roll");
+    cueDrumClip("finale");
+    cueDrumClip("fade");
+    return;
+  }
+  useAmbientAudioSession();
+  if (ctx.state === "suspended") {
+    ctx.resume().catch(() => {});
+  }
+  stopWebAudioDrumroll();
+  activeWebAudio.active = true;
+
+  const playWithBuffers = (bufs) => {
+    if (!activeWebAudio.active || !bufs || !bufs.start || !bufs.loop) return;
+    const now = ctx.currentTime;
+
+    const startSource = ctx.createBufferSource();
+    startSource.buffer = bufs.start;
+    const startGain = ctx.createGain();
+    startGain.gain.setValueAtTime(0.5, now);
+    startSource.connect(startGain);
+    startGain.connect(ctx.destination);
+
+    const loopSource = ctx.createBufferSource();
+    loopSource.buffer = bufs.loop;
+    loopSource.loop = true;
+    const loopGain = ctx.createGain();
+    loopGain.gain.setValueAtTime(0.5, now);
+    loopSource.connect(loopGain);
+    loopGain.connect(ctx.destination);
+
+    activeWebAudio.startSource = startSource;
+    activeWebAudio.loopSource = loopSource;
+    activeWebAudio.startGain = startGain;
+    activeWebAudio.loopGain = loopGain;
+
+    try {
+      startSource.start(now);
+      // Sample-accurate scheduled transition onto loop
+      loopSource.start(now + bufs.start.duration);
+    } catch (e) {
+      console.error("Web Audio start failed:", e);
+    }
+  };
+
+  if (webAudioBuffers) {
+    playWithBuffers(webAudioBuffers);
+  } else {
+    loadWebAudioBuffers().then((bufs) => {
+      playWithBuffers(bufs);
+    });
+  }
+}
+
+function playWebAudioFinale(after) {
+  const ctx = getWebAudioContext();
+  if (!ctx) {
+    if (after) setTimeout(after, 0);
+    return;
+  }
+  useAmbientAudioSession();
+  if (ctx.state === "suspended") {
+    ctx.resume().catch(() => {});
+  }
+  stopWebAudioDrumroll(false);
+
+  const play = (bufs) => {
+    if (!bufs) {
+      if (after) setTimeout(after, 0);
+      return;
+    }
+    const now = ctx.currentTime;
+    if (bufs.end) {
+      const endSource = ctx.createBufferSource();
+      endSource.buffer = bufs.end;
+      const endGain = ctx.createGain();
+      endGain.gain.setValueAtTime(0.5, now);
+      endGain.gain.linearRampToValueAtTime(1.0, now + 0.25);
+      endSource.connect(endGain);
+      endGain.connect(ctx.destination);
+      try {
+        endSource.start(now);
+        activeWebAudio.endSource = endSource;
+      } catch (e) {}
+    }
+    if (bufs.horn) {
+      const hornSource = ctx.createBufferSource();
+      hornSource.buffer = bufs.horn;
+      const hornGain = ctx.createGain();
+      hornGain.gain.setValueAtTime(0.5, now);
+      hornSource.connect(hornGain);
+      hornGain.connect(ctx.destination);
+      try {
+        hornSource.start(now);
+        activeWebAudio.hornSource = hornSource;
+      } catch (e) {}
+    }
+    if (after) setTimeout(after, 0);
+  };
+
+  if (webAudioBuffers) play(webAudioBuffers);
+  else loadWebAudioBuffers().then(play);
+}
+
+function fadeOutWebAudioDrumroll(fadeSec, after) {
+  const ctx = getWebAudioContext();
+  if (!ctx || !activeWebAudio.active) {
+    stopWebAudioDrumroll();
+    if (after) setTimeout(after, 0);
+    return;
+  }
+  activeWebAudio.active = false;
+  const now = ctx.currentTime;
+  const dur = Math.max(0.1, fadeSec || 1.2);
+
+  if (activeWebAudio.startGain) {
+    try {
+      activeWebAudio.startGain.gain.setValueAtTime(activeWebAudio.startGain.gain.value, now);
+      activeWebAudio.startGain.gain.linearRampToValueAtTime(0, now + dur);
+    } catch (e) {}
+  }
+  if (activeWebAudio.loopGain) {
+    try {
+      activeWebAudio.loopGain.gain.setValueAtTime(activeWebAudio.loopGain.gain.value, now);
+      activeWebAudio.loopGain.gain.linearRampToValueAtTime(0, now + dur);
+    } catch (e) {}
+  }
+
+  setTimeout(() => {
+    stopWebAudioDrumroll();
+    if (after) after();
+  }, dur * 1000);
+}
+
+function playWebAudioHorn() {
+  const ctx = getWebAudioContext();
+  if (!ctx) return;
+  useAmbientAudioSession();
+  if (ctx.state === "suspended") {
+    ctx.resume().catch(() => {});
+  }
+  const play = (bufs) => {
+    if (!bufs || !bufs.horn) return;
+    const now = ctx.currentTime;
+    const hornSource = ctx.createBufferSource();
+    hornSource.buffer = bufs.horn;
+    const hornGain = ctx.createGain();
+    hornGain.gain.setValueAtTime(0.5, now);
+    hornSource.connect(hornGain);
+    hornGain.connect(ctx.destination);
+    try {
+      hornSource.start(now);
+      activeWebAudio.hornSource = hornSource;
+    } catch (e) {}
+  };
+  if (webAudioBuffers) play(webAudioBuffers);
+  else loadWebAudioBuffers().then(play);
+}
+
+function testAudioClip(action) {
+  if (action === "start") {
+    startDrumrollAudio();
+  } else if (action === "fade") {
+    fadeOutDrumAudio();
+  } else if (action === "end") {
+    if (isWebAudioEngine()) {
+      const ctx = getWebAudioContext();
+      if (ctx) {
+        useAmbientAudioSession();
+        if (ctx.state === "suspended") ctx.resume().catch(() => {});
+        stopWebAudioDrumroll(false);
+        const play = (bufs) => {
+          if (!bufs || !bufs.end) return;
+          const now = ctx.currentTime;
+          const source = ctx.createBufferSource();
+          source.buffer = bufs.end;
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.5, now);
+          gain.gain.linearRampToValueAtTime(1.0, now + 0.25);
+          source.connect(gain);
+          gain.connect(ctx.destination);
+          try {
+            source.start(now);
+            activeWebAudio.endSource = source;
+          } catch (e) {}
+        };
+        if (webAudioBuffers) play(webAudioBuffers);
+        else loadWebAudioBuffers().then(play);
+      }
+    } else {
+      playDrumClip("finale");
+    }
+  } else if (action === "horn") {
+    playVictoryHornSound();
+  }
+}
+
 // Starts the drumroll. Called straight from the draw button's click handler: the .play() below
 // is the gesture-blessed call that unlocks the element for the roll itself, and the two cueDrumClip
 // calls do the same for the clips it can hand off to. Nothing is sequenced or looped — the clip
 // simply runs until the draw's finish timer cues the finale, which is what keeps the roll
 // perfectly continuous however long the countdown is.
 function startDrumrollAudio() {
+  if (isWebAudioEngine()) {
+    startWebAudioDrumroll();
+    return;
+  }
   // Belt and braces — this normally ran at load, but the session type has to be in place before
   // the first play whatever the load order was, and once set the call is a no-op. A synchronous
   // property write spends no gesture credit, so it is safe ahead of the .play() below.
@@ -398,15 +721,24 @@ function startDrumrollAudio() {
 // roll already fading out underneath it (see assets/audio/finale.wav), because one element cannot overlap
 // two clips itself and cutting the roll dead at the horn sounded choppy.
 function playDrumrollFinale(after) {
+  if (isWebAudioEngine()) {
+    playWebAudioFinale(after);
+    return;
+  }
   handOverToCue("finale", after);
 }
 // The horn on its own, for the manual "Play Horn" button. That button is only ever reached once
 // the roll has already been faded out by "Stop Drumroll", or after a winner is settled — there is
 // no roll left to overlap or hand over from, so this just plays on the main element.
 function playVictoryHornSound() {
+  if (isWebAudioEngine()) {
+    playWebAudioHorn();
+    return;
+  }
   playDrumClip("horn");
 }
 function stopAllDrumAudio() {
+  stopWebAudioDrumroll();
   // Never construct anything just to stop it — this is called from startNewGame and from clearing
   // a winner, neither of which should bring an audio element into existence.
   if (drumAudio) {
@@ -425,6 +757,10 @@ function stopAllDrumAudio() {
 // tail rather than ramping the element's volume, because iOS ignores volume writes entirely and a
 // scripted gain fade does nothing at all on an iPad.
 function fadeOutDrumAudio(after) {
+  if (isWebAudioEngine()) {
+    fadeOutWebAudioDrumroll(craftFadeSec(), after);
+    return;
+  }
   if (!drumAudio || drumAudio.paused) {
     stopAllDrumAudio();
     if (after) after();
@@ -735,6 +1071,7 @@ function renderCraftPrizeBlock() {
   if (!craftFlowOpen && !drawing && !winner) {
     return `<button class="btn btn-accent cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>${ICON_BEER} Choose Craft Prize Winner</button>${poolLeft <= 0 ? `<p class="fr-note">No teams left to draw from — top ${excludeN} place${excludeN > 1 ? "s" : ""} excluded covers everyone entered. Add a team, or open this to lower Exclude Top.</p>` : ""}`;
   }
+  const isWebAudio = prefs.craftAudioEngine !== "legacy";
   let h = `<div class="cp-config">
       <div class="cp-field"><span class="cp-field-label">Exclude Top</span><div class="stepper">
         <button onclick="setExcludeTopN(${Math.max(1, excludeN - 1)})" ${drawing || excludeN <= 1 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Decrease excluded places">−</button>
@@ -746,6 +1083,17 @@ function renderCraftPrizeBlock() {
         <input type="number" class="sw-input" aria-label="Drumroll length in seconds" inputmode="numeric" min="3" max="30" value="${secs}" ${drawing ? "disabled" : ""} onchange="setCraftDrawSeconds(this.value)">
         <button onclick="setCraftDrawSeconds(${Math.min(30, secs + 1)})" ${drawing || secs >= 30 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Increase drumroll seconds">+</button>
       </div></div>
+      <div class="cp-field"><span class="cp-field-label">Engine</span><div class="cp-engine-stepper">
+        <button class="settings-toggle-btn ${isWebAudio ? 'active' : ''}" ${drawing ? "disabled" : ""} onclick="setCraftAudioEngine('webaudio')">Web Audio</button>
+        <button class="settings-toggle-btn ${!isWebAudio ? 'active' : ''}" ${drawing ? "disabled" : ""} onclick="setCraftAudioEngine('legacy')">Legacy</button>
+      </div></div>
+    </div>
+    <div class="cp-test-bar">
+      <span class="cp-field-label">Test Sounds:</span>
+      <button class="settings-btn btn-sm" onclick="testAudioClip('start')" title="Play drumroll intro + loop">🥁 Roll</button>
+      <button class="settings-btn btn-sm" onclick="testAudioClip('fade')" title="Fade out active drumroll">⏹ Fade</button>
+      <button class="settings-btn btn-sm" onclick="testAudioClip('end')" title="Play drumroll crash stinger">💥 Crash</button>
+      <button class="settings-btn btn-sm" onclick="testAudioClip('horn')" title="Play victory horn">🎺 Horn</button>
     </div>
     <div class="cp-note">Top ${excludeN} place${excludeN > 1 ? "s" : ""} ${excludeN > 1 ? "are" : "is"} excluded: ${esc(
       ranked()

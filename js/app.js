@@ -30,8 +30,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.38"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Aug 23, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v19.39"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Aug 24, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -98,6 +98,7 @@ function loadPrefs() {
       if (p.timerPulse == null) p.timerPulse = true;
       if (p.craftManualEnd == null) p.craftManualEnd = false;
       if (p.craftFadeSec == null) p.craftFadeSec = CRAFT_FADE_DEFAULT;
+      if (!p.craftAudioEngine) p.craftAudioEngine = "webaudio";
       if (p.qResultToggle == null) p.qResultToggle = false;
       return p;
     }
@@ -119,6 +120,7 @@ function loadPrefs() {
     timerPulse: true,
     craftManualEnd: false,
     craftFadeSec: CRAFT_FADE_DEFAULT,
+    craftAudioEngine: "webaudio",
     qResultToggle: false,
   };
 }
@@ -239,6 +241,12 @@ function applyPrefs() {
     manualEndToggle.classList.toggle("active", !!p.craftManualEnd);
     manualEndToggle.textContent = p.craftManualEnd ? "On" : "Off";
   }
+  const engineToggle = document.getElementById("craftEngineToggle");
+  if (engineToggle) {
+    const isWebAudio = p.craftAudioEngine !== "legacy";
+    engineToggle.classList.toggle("active", isWebAudio);
+    engineToggle.textContent = isWebAudio ? "Web Audio (New)" : "Legacy (HTML5)";
+  }
   // The crossfade length only ever matters once Manual Drumroll Control is on — it's Stop
   // Drumroll's own fade-out duration, and that button doesn't exist until manual control does —
   // so the row stays hidden rather than sitting there configuring a feature that isn't active.
@@ -331,6 +339,13 @@ function toggleQResultButtons() {
 function toggleCraftManualEnd() {
   const p = loadPrefs();
   p.craftManualEnd = !p.craftManualEnd;
+  savePrefs(p);
+  applyPrefs();
+  renderLeft();
+}
+function toggleCraftEngine() {
+  const p = loadPrefs();
+  p.craftAudioEngine = p.craftAudioEngine === "legacy" ? "webaudio" : "legacy";
   savePrefs(p);
   applyPrefs();
   renderLeft();

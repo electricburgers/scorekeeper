@@ -10,6 +10,14 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.39 - 2026-08-24
+- **New Web Audio Drumroll Engine alongside Legacy HTML5 Audio.** Implements the sample-accurate, gapless Web Audio API engine adapted from `drumroll-pwa` directly into Scorekeeper's Craft Prize Drawing section.
+  - **Zero Audio Session Stealing**: Web Audio `AudioContext` is instantiated completely lazily on active user interaction (never on page load or section render) and requests `navigator.audioSession.type = "ambient"` to prevent ducking or interrupting background venue music on iOS/iPadOS.
+  - **Sample-Accurate Gapless Looping**: Seamlessly transitions from `drumroll-start.wav` into `drumroll-loop.wav` on the hardware audio clock without the frame-drop skips inherent to HTML5 `<audio>` tags.
+  - **Real-Time DSP Gain Fading**: Manual "Stop Drumroll" uses native `GainNode.gain.linearRampToValueAtTime()` for click-free fades over the configured crossfade duration, bypassing iOS Safari's limitation on HTMLMediaElement volume writes.
+  - **Side-by-Side Engine Switcher**: Hosts can toggle between `Web Audio (New)` and `Legacy (HTML5)` directly in the Craft Prize Drawing block or in Advanced Settings to test and compare both engines in real-time.
+  - **In-Section Sound Test Toolbar**: Quick-test buttons (Roll, Fade, Crash, Horn) added to the Craft Prize block for testing audio components without requiring a full game setup.
+
 ## v19.38 - 2026-08-23
 - **Double-tap-zoom guard on every button.** `body{touch-action:manipulation}` already covered
   this for most controls via the CSS Touch Action spec's ancestor-intersection rule, but a fast

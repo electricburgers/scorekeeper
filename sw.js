@@ -29,7 +29,7 @@
 // this whole service worker exists for, so it's worth the few extra KB at install time. The FAQ's
 // 50+ screenshots are deliberately left out: they're still cached opportunistically on first view,
 // same as before, rather than ballooning what a fresh install has to fetch before it's usable.
-const CACHE_NAME='trivia-scorekeeper-shell-v10';
+const CACHE_NAME='trivia-scorekeeper-shell-v11';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
   // The ten files js/app.js was split into — see index.html, above these same script tags,
@@ -41,6 +41,7 @@ const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png',
   './js/vendor/fflate.min.js','./js/vendor/jspdf.min.js','./js/data/xlsx-templates.js',
   './js/data/drum-clips.js',
   './assets/audio/silent.wav','./assets/audio/roll.mp3','./assets/audio/finale.wav','./assets/audio/horn.mp3',
+  './assets/audio/drumroll-start.wav','./assets/audio/drumroll-loop.wav','./assets/audio/drumroll-end.wav','./assets/audio/horn.wav',
   './faq/index.html','./faq/css/faq.css','./faq/css/fonts.css',
   './faq/js/faq.js','./faq/js/faq-bootstrap.js',
   './faq/fonts/inter-var.woff2','./faq/fonts/space-grotesk-var.woff2'];

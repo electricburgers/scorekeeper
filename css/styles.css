@@ -2103,6 +2103,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 @media(min-width:769px){
   .cp-clear-label{display:inline}
 }
+.cp-engine-stepper{display:flex;gap:4px}
+.cp-engine-stepper .settings-toggle-btn{font-size:.72rem;padding:3px 8px;min-height:28px}
+.cp-test-bar{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin:6px 0;padding:6px 8px;background:color-mix(in srgb,var(--text-primary) 3%,transparent);border-radius:var(--radius);border:1px solid var(--border)}
+.cp-test-bar .cp-field-label{margin-right:4px}
+.cp-test-bar .btn-sm{font-size:.72rem;padding:3px 8px;min-height:26px;border-radius:var(--radius)}
 .cp-script-label{display:block;font-size:.66rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
 

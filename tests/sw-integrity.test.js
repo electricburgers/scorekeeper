@@ -107,3 +107,13 @@ test("js/craft-prize.js's DRUM_CLIPS paths exactly match the audio files SHELL_F
   const files = new Set(shellFiles().map((f) => f.replace(/^\.\//, "")));
   for (const p of paths) assert.ok(files.has(p), `${p} not in SHELL_FILES`);
 });
+
+test("js/craft-prize.js's WEB_AUDIO_CLIPS paths exactly match the audio files SHELL_FILES precaches", () => {
+  const src = read("js/craft-prize.js");
+  const m = src.match(/const WEB_AUDIO_CLIPS = \{([\s\S]*?)\};/);
+  assert.ok(m, "WEB_AUDIO_CLIPS not found in js/craft-prize.js");
+  const paths = [...m[1].matchAll(/:\s*"([^"]+)"/g)].map((x) => x[1]);
+  assert.equal(paths.length, 4);
+  const files = new Set(shellFiles().map((f) => f.replace(/^\.\//, "")));
+  for (const p of paths) assert.ok(files.has(p), `${p} not in SHELL_FILES`);
+});
