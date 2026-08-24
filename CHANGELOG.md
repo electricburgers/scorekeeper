@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.44 - 2026-08-24
+- **Fixed the v19.43 indent silently vanishing on mobile.** `.settings-row-sub{padding-left:20px}` was a single-class selector — the same specificity as the `@media(max-width:600px)` breakpoint's own `.settings-row{padding:10px 2px;gap:10px}`, which sits later in the file and so won the cascade on any screen ≤600px wide, resetting `padding-left` back to `2px`. Requalified as `.settings-row.settings-row-sub` (two classes) so it wins regardless of viewport, same pattern already used elsewhere in styles.css for the same reason.
+
 ## v19.43 - 2026-08-24
 - **Indented Drumroll Crossfade and Sound Test Buttons in Advanced Settings** under Manual Drumroll Control, the toggle both rows only appear beneath — a new `.settings-row-sub` class adds left padding so the nesting reads visually, not just from the two rows popping in/out.
 

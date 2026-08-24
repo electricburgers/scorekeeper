@@ -516,8 +516,13 @@ button,[role="button"]{touch-action:manipulation}
    Test Buttons both only appear once Manual Drumroll Control is — see drumCrossfadeRow/
    soundTestRow's own display:none wiring in applyPrefs, js/app.js) — the extra left padding
    alone is enough to read as "nested under the row above" without a connector line or bullet,
-   and composes with .settings-row's own responsive padding since it only touches padding-left. */
-.settings-row-sub{padding-left:20px}
+   and composes with .settings-row's own responsive padding since it only touches padding-left.
+   Qualified as .settings-row.settings-row-sub (two classes), not .settings-row-sub alone: the
+   mobile breakpoint below (@media max-width:600px) sets its own `padding` shorthand on
+   .settings-row at the SAME specificity as a bare .settings-row-sub, and being later in the
+   file it won the cascade there — the indent was applying on desktop and silently vanishing on
+   mobile. Two classes doubles the specificity so this wins regardless of viewport width. */
+.settings-row.settings-row-sub{padding-left:20px}
 .settings-controls{display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
 /* Slider controls (drumroll crossfade). accent-color themes the track and thumb from the same
    token the rest of the app's active controls use, in every browser this app targets, without
