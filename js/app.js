@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.39"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.40"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 24, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -98,7 +98,6 @@ function loadPrefs() {
       if (p.timerPulse == null) p.timerPulse = true;
       if (p.craftManualEnd == null) p.craftManualEnd = false;
       if (p.craftFadeSec == null) p.craftFadeSec = CRAFT_FADE_DEFAULT;
-      if (!p.craftAudioEngine) p.craftAudioEngine = "webaudio";
       if (p.qResultToggle == null) p.qResultToggle = false;
       return p;
     }
@@ -120,7 +119,6 @@ function loadPrefs() {
     timerPulse: true,
     craftManualEnd: false,
     craftFadeSec: CRAFT_FADE_DEFAULT,
-    craftAudioEngine: "webaudio",
     qResultToggle: false,
   };
 }
@@ -241,12 +239,6 @@ function applyPrefs() {
     manualEndToggle.classList.toggle("active", !!p.craftManualEnd);
     manualEndToggle.textContent = p.craftManualEnd ? "On" : "Off";
   }
-  const engineToggle = document.getElementById("craftEngineToggle");
-  if (engineToggle) {
-    const isWebAudio = p.craftAudioEngine !== "legacy";
-    engineToggle.classList.toggle("active", isWebAudio);
-    engineToggle.textContent = isWebAudio ? "Web Audio (New)" : "Legacy (HTML5)";
-  }
   // The crossfade length only ever matters once Manual Drumroll Control is on — it's Stop
   // Drumroll's own fade-out duration, and that button doesn't exist until manual control does —
   // so the row stays hidden rather than sitting there configuring a feature that isn't active.
@@ -343,13 +335,6 @@ function toggleCraftManualEnd() {
   applyPrefs();
   renderLeft();
 }
-function toggleCraftEngine() {
-  const p = loadPrefs();
-  p.craftAudioEngine = p.craftAudioEngine === "legacy" ? "webaudio" : "legacy";
-  savePrefs(p);
-  applyPrefs();
-  renderLeft();
-}
 // Drumroll fade-out length, in seconds — the Settings slider's range and its default.
 const CRAFT_FADE_MIN = 0.2;
 const CRAFT_FADE_MAX = 3;
@@ -379,11 +364,6 @@ function setCraftFadeSec(v) {
   );
   savePrefs(p);
   applyPrefs();
-  const cue = drumCues.fade;
-  if (cue && cue.src !== drumClipUrl("silent")) {
-    cue.src = drumClipUrl("fade");
-    cue.load();
-  }
 }
 function setCbMode(v) {
   const p = loadPrefs();
@@ -649,6 +629,11 @@ function announce(msg) {
 })();
 
 let lastClickAnchorSel = null;
+// Same idea, scoped to the scoreboard sidebar's own scroller (#sidebarBody) — see renderSB's use
+// of it. A separate variable rather than reusing lastClickAnchorSel: renderAll() calls
+// renderLeft() before renderSB(), and renderLeft() reads-then-clears lastClickAnchorSel on every
+// call, which would silently eat a sidebar click's anchor before renderSB ever got to it.
+let lastSBClickAnchorSel = null;
 document.addEventListener(
   "click",
   (e) => {
@@ -656,13 +641,15 @@ document.addEventListener(
       "[data-ta], [data-ti], .question-block, .special-section, .standings-sort-btns, .standings-block, .section",
     );
     if (!el) return;
-    lastClickAnchorSel = el.hasAttribute("data-ta")
+    const sel = el.hasAttribute("data-ta")
       ? `[data-ta="${el.getAttribute("data-ta")}"]`
       : el.hasAttribute("data-ti")
         ? `[data-ti="${el.getAttribute("data-ti")}"]`
         : el.id
           ? "#" + el.id
           : null;
+    if (el.closest("#sidebarBody")) lastSBClickAnchorSel = sel;
+    else lastClickAnchorSel = sel;
   },
   true,
 );
@@ -1717,15 +1704,35 @@ function renderSB() {
   const body = document.getElementById("sidebarBody");
   if (!body) return;
   const sy = body.scrollTop;
+  // Anchor on whatever score-row was just tapped (see lastSBClickAnchorSel / the shared click
+  // listener above), the same technique renderLeft's pinAnchor uses and for the same reason —
+  // see the comment on renderSB above.
+  const anchorSel = lastSBClickAnchorSel;
+  lastSBClickAnchorSel = null;
+  const anchorBefore = anchorSel
+    ? body.querySelector(anchorSel)?.getBoundingClientRect().top
+    : undefined;
   body.innerHTML = `<div class="sort-controls">
     <button class="sort-btn ${scoreSortMode === "entry" ? "active" : ""}" onclick="setSortMode('entry')">Entry</button>
     <button class="sort-btn ${scoreSortMode === "random" ? "active" : ""}" onclick="setSortMode('random')" title="Shuffle" aria-label="Shuffle">${ICON_SHUFFLE}<span class="sr-only">Shuffle</span></button>
     <button class="sort-btn ${scoreSortMode === "asc" ? "active" : ""}" onclick="setSortMode('asc')">${ICON_ARROW_UP} Asc</button>
     <button class="sort-btn ${scoreSortMode === "desc" ? "active" : ""}" onclick="setSortMode('desc')">${ICON_ARROW_DOWN} Desc</button>
   </div><div class="sort-mode-label">${sortModeLabel()}</div>${buildScores()}`;
-  body.scrollTop = sy;
+  const anchorEl =
+    anchorBefore === undefined ? null : body.querySelector(anchorSel);
+  // Puts the anchor back at the exact on-screen offset it had before the re-render — see
+  // renderLeft's pinAnchor for the full reasoning. Returns false (never moving anything) when
+  // there's no anchor, so callers fall back to the raw sy restore below.
+  const pinAnchor = () => {
+    if (!anchorEl) return false;
+    const delta = anchorEl.getBoundingClientRect().top - anchorBefore;
+    if (Math.abs(delta) < 0.5) return true;
+    body.scrollTop += delta;
+    return true;
+  };
+  if (!pinAnchor()) body.scrollTop = sy;
   requestAnimationFrame(() => {
-    body.scrollTop = sy;
+    if (!pinAnchor()) body.scrollTop = sy;
     refreshPointerHover();
   });
 }
@@ -1765,7 +1772,7 @@ function buildScores() {
     const cbTag = t.craftPrize
       ? ` <span class="cb-tag">${ICON_BEER} CB Prize</span>`
       : "";
-    h += `<div class="score-row${cb}${rc ? " " + rc : ""}" title="${tip.join(" | ")}"><span class="sr-rank ${rc}">${rank}</span><span class="sr-name sr-name-clickable" role="button" tabindex="0" title="Tap to set or clear the Craft Beer prize winner" onclick="toggleCraftPrize(${ti})">${esc(t.name || "Team " + (ti + 1))}${cbTag}</span><span class="sr-score">${tot}</span></div>`;
+    h += `<div class="score-row${cb}${rc ? " " + rc : ""}" data-ti="${ti}" title="${tip.join(" | ")}"><span class="sr-rank ${rc}">${rank}</span><span class="sr-name sr-name-clickable" role="button" tabindex="0" title="Tap to set or clear the Craft Beer prize winner" onclick="toggleCraftPrize(${ti})">${esc(t.name || "Team " + (ti + 1))}${cbTag}</span><span class="sr-score">${tot}</span></div>`;
   });
   return h + "</div>";
 }

@@ -85,7 +85,6 @@
       <div class="settings-row" id="timerPulseRow"><span class="size-label">Timer Pulse</span><div class="settings-controls"><button class="settings-btn" id="timerPulseToggle" onclick="toggleTimerPulse()" title="Flash the timer background when time is running low">Shown</button></div></div>
       <div class="settings-row"><span class="size-label">Manual Drumroll Control</span><div class="settings-controls"><button class="settings-btn" id="craftManualEndToggle" onclick="toggleCraftManualEnd()" title="Show buttons to stop the craft prize drumroll sound early and play the victory horn on demand — handy when a staff member is revealing the winner from a stack of papers">Off</button></div></div>
       <div class="settings-row" id="drumCrossfadeRow"><span class="size-label">Drumroll Crossfade</span><div class="settings-controls"><input type="range" class="settings-range" id="craftFadeRange" min="0.2" max="3" step="0.1" value="1.2" aria-label="Drumroll crossfade length in seconds" title="How long the drumroll takes to fade away when you press Stop Drumroll — the roll crossfades into the fade-out, so a longer setting winds down more gradually" oninput="previewCraftFadeSec(this.value)" onchange="setCraftFadeSec(this.value)"><span class="settings-range-val" id="craftFadeVal">1.2s</span></div></div>
-      <div class="settings-row" id="drumEngineRow"><span class="size-label">Drumroll Engine</span><div class="settings-controls"><button class="settings-btn" id="craftEngineToggle" onclick="toggleCraftEngine()" title="Switch between the new Web Audio engine (sample-accurate looping and DSP gain fading) and the legacy HTML5 audio engine">Web Audio (New)</button></div></div>
       <div class="settings-row"><span class="size-label">Point Adjustments</span><div class="settings-controls"><button class="settings-btn" id="adjToggle" onclick="toggleAdjSetting()" title="Show a manual ± point adjustment control on each team row">Hidden</button></div></div>
     </div>
     </div>
@@ -579,11 +578,12 @@
 <script src="js/vendor/fflate.min.js"></script>
 <script src="js/vendor/jspdf.min.js"></script>
 <script src="js/data/xlsx-templates.js"></script>
-<script src="js/data/drum-clips.js"></script>
 <script src="js/shared-ui.js"></script>
 <!--
-  js/app.js used to be one 5,900-line, 2.4MB file (audio extraction — see js/data/drum-clips.js's
-  own note — got it to 288KB; it was still one undifferentiated file after that). These ten are
+  js/app.js used to be one 5,900-line, 2.4MB file (audio extraction — moved to real files under
+  assets/audio/, later including js/data/drum-clips.js's DRUM_FADESRC_B64, itself removed
+  entirely in v19.40 along with the legacy audio engine it existed for — got it to 288KB; it was
+  still one undifferentiated file after that). These ten are
   what came out of it, split along its clearest natural seams via a real parse of the file (each
   file boundary sits exactly on a top-level statement, verified byte-for-byte against the
   original before this split shipped — see the "how this was verified" note in CHANGELOG.md).

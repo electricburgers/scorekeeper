@@ -5,7 +5,9 @@
      No self-drawn rounded corners or border on the outer square (a rounded corner + border did
      ship once — it got clipped unevenly by iOS's own corner mask, since the two roundings don't
      agree exactly; see CHANGELOG). Full-bleed square background instead, and let the OS apply
-     its own mask on top. The purple (#241454) only shows in the square's corners outside the
+     its own mask on top. The purple (#341d79 — lightened from the original #241454 in v19.40,
+     same hue/saturation with lightness raised ~9pt, because the original read as too dark)
+     only shows in the square's corners outside the
      black circle behind the gear ring — deliberately not filling the whole square, so the badge
      reads as a distinct black-and-white-and-purple emblem sitting on a colored card, not a
      purple icon with a black hole in the middle. Gear ring: 12 teeth as plain filled circles
@@ -21,7 +23,7 @@
      mustache, not the short teardrop tried earlier — reads more deliberately "pointed beard"
      instead of an ambiguous blob. -->
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" fill="#241454"/>
+  <rect width="512" height="512" fill="#341d79"/>
   <circle cx="256" cy="256" r="215" fill="#000000"/>
   <g fill="#ffffff" stroke="none">
     <circle cx="444.0" cy="256.0" r="19.0"/>

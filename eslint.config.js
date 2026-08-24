@@ -61,7 +61,6 @@ module.exports = [
       "drumroll-pwa/**",
       "js/vendor/**",
       "js/data/xlsx-templates.js",
-      "js/data/drum-clips.js",
       "node_modules/**",
       "faq/screenshots/**",
       "coverage/**",

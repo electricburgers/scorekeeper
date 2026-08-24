@@ -10,6 +10,12 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.40 - 2026-08-24
+- **Fixed the scoreboard's scroll jump when tapping a team to set/clear the Craft Beer prize winner.** `renderSB()` was restoring the sidebar's raw pre-render `scrollTop`, which assumes nothing above that offset changed height between renders — but toggling CB Prize adds/removes a border and a "CB Prize" tag on that team's row (see `.score-row.cb-prize` in styles.css), shifting the rows below it by a couple of px. Now anchored on the tapped row instead (the same on-screen-offset-pinning technique `renderLeft()` already uses for the main column), so the tap no longer visibly nudges the list.
+- **Removed the Legacy HTML5-audio drumroll engine and its engine switcher**, shipping v19.39's new Web Audio engine as the only one. The two were only ever meant to run side-by-side for real-venue comparison; Web Audio won, so out goes ~400 lines of `<audio>`-element playback code, `js/data/drum-clips.js` (603KB of now-unused base64), and 4 legacy clip files (`silent.wav`, `roll.mp3`, `finale.wav`, `horn.mp3`).
+- **Fixed the Web Audio engine playing the crash stinger *and* the horn together when the drumroll finished on its own** — it should only ever be one or the other: the crash cymbal stinger (`drumroll-end.wav`) on an automatic finish, the victory horn only when the host manually stops the roll early and fires it on demand via "Play Horn".
+- **Lightened the purple in the app icon** (`icons/icon-source.svg`) — `#241454` → `#341d79`, same hue/saturation with lightness raised about 9 points; the original read as too dark. Regenerated `icon-512.png`/`icon-192.png`/`apple-touch-icon.png`.
+
 ## v19.39 - 2026-08-24
 - **New Web Audio Drumroll Engine alongside Legacy HTML5 Audio.** Implements the sample-accurate, gapless Web Audio API engine adapted from `drumroll-pwa` directly into Scorekeeper's Craft Prize Drawing section.
   - **Zero Audio Session Stealing**: Web Audio `AudioContext` is instantiated completely lazily on active user interaction (never on page load or section render) and requests `navigator.audioSession.type = "ambient"` to prevent ducking or interrupting background venue music on iOS/iPadOS.

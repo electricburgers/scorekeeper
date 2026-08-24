@@ -29,7 +29,7 @@
 // this whole service worker exists for, so it's worth the few extra KB at install time. The FAQ's
 // 50+ screenshots are deliberately left out: they're still cached opportunistically on first view,
 // same as before, rather than ballooning what a fresh install has to fetch before it's usable.
-const CACHE_NAME='trivia-scorekeeper-shell-v11';
+const CACHE_NAME='trivia-scorekeeper-shell-v12';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
   // The ten files js/app.js was split into — see index.html, above these same script tags,
@@ -39,8 +39,9 @@ const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png',
   './js/export.js',
   './js/app.js','./js/tutorial.js',
   './js/vendor/fflate.min.js','./js/vendor/jspdf.min.js','./js/data/xlsx-templates.js',
-  './js/data/drum-clips.js',
-  './assets/audio/silent.wav','./assets/audio/roll.mp3','./assets/audio/finale.wav','./assets/audio/horn.mp3',
+  // v19.40 dropped the legacy HTML5-audio drumroll engine (silent/roll/finale/horn.mp3 plus
+  // js/data/drum-clips.js, its fade-source base64 file) in favor of the Web Audio engine alone —
+  // these four real WAV files are all it precaches now.
   './assets/audio/drumroll-start.wav','./assets/audio/drumroll-loop.wav','./assets/audio/drumroll-end.wav','./assets/audio/horn.wav',
   './faq/index.html','./faq/css/faq.css','./faq/css/fonts.css',
   './faq/js/faq.js','./faq/js/faq-bootstrap.js',

@@ -416,12 +416,11 @@ describe("confirm-gated app actions", () => {
 });
 
 // ============================================================================
-// Drumroll audio pipeline — silent/roll/finale/horn were base64 text inlined in js/app.js
-// (~2.1MB of it) until this session's extraction moved them to real files under assets/audio/,
-// referenced directly instead of decoded into a Blob on first use. The fade clip is the one
-// exception: its length depends on a Settings slider, so it's still synthesised at runtime from
-// DRUM_FADESRC_B64 (js/data/drum-clips.js) — these tests are the safety net for that split, and
-// for the runtime envelope math, which had no coverage at all before this.
+// Drumroll audio pipeline — Web Audio API only. v19.40 removed the earlier HTML5 <audio>-element
+// engine (and its base64 fade-clip synthesis, DRUM_CLIPS, drumClipUrl/fadeClipUrl, b64Bytes) that
+// v19.39 had shipped alongside it for side-by-side testing — these are the safety net for the
+// four real WAV clips the surviving engine plays and for AudioContext staying inert until the
+// host actually asks for it.
 // ============================================================================
 describe("Drumroll audio pipeline", () => {
   let window;
@@ -429,95 +428,6 @@ describe("Drumroll audio pipeline", () => {
     window = await loadAppWindow();
   });
   after(() => window.close());
-
-  it("b64Bytes round-trips a known string through atob/charCode", () => {
-    const b64 = Buffer.from("hello scorekeeper", "utf-8").toString("base64");
-    const bytes = evalIn(window, `b64Bytes(${JSON.stringify(b64)})`);
-    assert.equal(Buffer.from(bytes).toString("utf-8"), "hello scorekeeper");
-  });
-
-  it("DRUM_CLIPS points silent/roll/finale/horn at real files under assets/audio/, not base64", () => {
-    // Individual property checks, not assert.deepEqual(clips, {...}) — DRUM_CLIPS crossed the
-    // jsdom/Node realm boundary via evalIn(), so it's a structurally-identical but not
-    // reference-identical Object (different Object.prototype), which deepStrictEqual rejects.
-    const clips = evalIn(window, "DRUM_CLIPS");
-    assert.equal(clips.silent, "assets/audio/silent.wav");
-    assert.equal(clips.roll, "assets/audio/roll.mp3");
-    assert.equal(clips.finale, "assets/audio/finale.wav");
-    assert.equal(clips.horn, "assets/audio/horn.mp3");
-  });
-
-  it("every DRUM_CLIPS file exists on disk with the right container for its extension", () => {
-    const clips = evalIn(window, "DRUM_CLIPS");
-    for (const [name, rel] of Object.entries(clips)) {
-      const full = path.join(ROOT, rel);
-      assert.ok(fs.existsSync(full), `${name}: ${rel} does not exist`);
-      const head = Buffer.alloc(4);
-      const fd = fs.openSync(full, "r");
-      fs.readSync(fd, head, 0, 4, 0);
-      fs.closeSync(fd);
-      if (rel.endsWith(".wav")) {
-        assert.equal(head.toString("ascii"), "RIFF", `${name}: expected a RIFF/WAV header`);
-      } else if (rel.endsWith(".mp3")) {
-        // MP3 with an ID3v2 tag starts "ID3"; a bare frame starts 0xFF Ex (sync word + MPEG-1
-        // Layer III). This codebase's clips carry ID3 tags (see js/app.js's own DRUM_ROLL_B64
-        // rebuild comment), but check both so a re-encode without one doesn't fail spuriously.
-        const isId3 = head.slice(0, 3).toString("ascii") === "ID3";
-        const isFrameSync = head[0] === 0xff && (head[1] & 0xe0) === 0xe0;
-        assert.ok(isId3 || isFrameSync, `${name}: expected an ID3 tag or MPEG frame sync`);
-      }
-    }
-  });
-
-  it("drumClipUrl returns the DRUM_CLIPS path directly for a finished clip (no decode, no blob:)", () => {
-    const url = evalIn(window, 'drumClipUrl("roll")');
-    assert.equal(url, "assets/audio/roll.mp3");
-  });
-
-  it("drumClipUrl(\"fade\") delegates to fadeClipUrl at the current craftFadeSec()", () => {
-    const url = evalIn(window, 'drumClipUrl("fade")');
-    assert.match(url, /^blob:mock-/);
-  });
-
-  it("fadeClipUrl builds a valid WAV: RIFF/WAVE header, 48kHz stereo 16-bit, correct data length", () => {
-    const url = evalIn(window, "fadeClipUrl(2)");
-    const blob = window.__mockBlobUrls.get(url);
-    assert.equal(blob.type, "audio/wav");
-    const buf = Buffer.from(blob.parts[0]);
-    assert.equal(buf.toString("ascii", 0, 4), "RIFF");
-    assert.equal(buf.toString("ascii", 8, 12), "WAVE");
-    assert.equal(buf.readUInt16LE(20), 1); // PCM
-    assert.equal(buf.readUInt16LE(22), 2); // FADE_CH
-    assert.equal(buf.readUInt32LE(24), 48000); // FADE_SR
-    assert.equal(buf.readUInt16LE(34), 16); // bits per sample
-    const frames = Math.round(2 * 48000);
-    const dataLen = frames * 2 * 2;
-    assert.equal(buf.readUInt32LE(40), dataLen); // "data" chunk size
-    assert.equal(buf.length, 44 + dataLen);
-  });
-
-  it("fadeClipUrl's envelope opens at exactly zero (the ramp-in's own start), not full level", () => {
-    const url = evalIn(window, "fadeClipUrl(1.5)");
-    const buf = Buffer.from(window.__mockBlobUrls.get(url).parts[0]);
-    // First stereo frame, both channels, right after the 44-byte header.
-    assert.equal(buf.readInt16LE(44), 0);
-    assert.equal(buf.readInt16LE(46), 0);
-  });
-
-  it("fadeClipUrl caches: the same sec returns the identical url without building a new blob", () => {
-    const url1 = evalIn(window, "fadeClipUrl(4)");
-    const url2 = evalIn(window, "fadeClipUrl(4)");
-    assert.equal(url1, url2);
-  });
-
-  it("fadeClipUrl rebuilds for a different sec (new url, correctly resized data)", () => {
-    const url1 = evalIn(window, "fadeClipUrl(1)");
-    const url2 = evalIn(window, "fadeClipUrl(6)");
-    assert.notEqual(url1, url2);
-    const buf2 = Buffer.from(window.__mockBlobUrls.get(url2).parts[0]);
-    const frames = Math.round(6 * 48000);
-    assert.equal(buf2.length, 44 + frames * 2 * 2);
-  });
 
   it("WEB_AUDIO_CLIPS points start/loop/end/horn at real WAV files under assets/audio/", () => {
     const clips = evalIn(window, "WEB_AUDIO_CLIPS");
@@ -542,14 +452,6 @@ describe("Drumroll audio pipeline", () => {
 
   it("Web Audio AudioContext is completely inert at initial page load (zero audio session theft)", () => {
     assert.equal(evalIn(window, "webAudioCtx"), null);
-  });
-
-  it("isWebAudioEngine defaults to true and setCraftAudioEngine toggles between engines", () => {
-    assert.equal(evalIn(window, "isWebAudioEngine()"), true);
-    evalIn(window, "setCraftAudioEngine('legacy')");
-    assert.equal(evalIn(window, "isWebAudioEngine()"), false);
-    evalIn(window, "setCraftAudioEngine('webaudio')");
-    assert.equal(evalIn(window, "isWebAudioEngine()"), true);
   });
 });
 

@@ -949,7 +949,7 @@ const Tutorial = (function () {
   //     wipe it and start a real one. This is the same "keep whatever's current" pattern the
   //     startNewGame hook above already uses for the Clear Session case, just generalized.
   // Restoring gameState alone was never enough either way: the Craft Prize step leaves a real,
-  // timer-driven async chain running (craftDrawTimeouts / drumAudio), keyed to team indices
+  // timer-driven async chain running (craftDrawTimeouts / activeWebAudio), keyed to team indices
   // from the throwaway practice roster. If that's still in flight when the tour exits, leaving
   // it to fire later would flag the wrong team (or index out of range) against whichever
   // gameState is now live — so it's torn down explicitly here, every time, not just when the

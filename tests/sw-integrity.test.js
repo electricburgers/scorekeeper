@@ -78,36 +78,9 @@ test("every local <script src>/<link stylesheet> in faq/index.html is listed in 
   assert.deepEqual(missing, []);
 });
 
-// This session's audio extraction specifically — the four real clip files and the relocated
-// fade-source script must all be precached, or the drumroll silently stops working offline.
-test("the drumroll's audio files (this session's extraction) are all in SHELL_FILES", () => {
-  const files = new Set(shellFiles().map((f) => f.replace(/^\.\//, "")));
-  for (const f of [
-    "js/data/drum-clips.js",
-    "assets/audio/silent.wav",
-    "assets/audio/roll.mp3",
-    "assets/audio/finale.wav",
-    "assets/audio/horn.mp3",
-  ]) {
-    assert.ok(files.has(f), `${f} missing from SHELL_FILES`);
-  }
-});
-
-// The DRUM_CLIPS paths the app actually uses at runtime must be the SAME paths SHELL_FILES
-// precaches — a typo in either place would precache the wrong thing (or the right thing at the
-// wrong path) and the drumroll would 404 offline despite this test suite's other checks passing.
-test("js/craft-prize.js's DRUM_CLIPS paths exactly match the audio files SHELL_FILES precaches", () => {
-  // DRUM_CLIPS lives in js/craft-prize.js, not js/app.js — this session's app.js module split
-  // moved the whole drumroll/craft-prize feature (including this const) out together.
-  const src = read("js/craft-prize.js");
-  const m = src.match(/const DRUM_CLIPS = \{([\s\S]*?)\};/);
-  assert.ok(m, "DRUM_CLIPS not found in js/craft-prize.js");
-  const paths = [...m[1].matchAll(/:\s*"([^"]+)"/g)].map((x) => x[1]);
-  assert.equal(paths.length, 4);
-  const files = new Set(shellFiles().map((f) => f.replace(/^\.\//, "")));
-  for (const p of paths) assert.ok(files.has(p), `${p} not in SHELL_FILES`);
-});
-
+// The Web Audio drumroll engine's four real clip files must all be precached, or it silently
+// stops working offline. (The legacy HTML5-audio engine and its own clip set were removed in
+// v19.40 — see CHANGELOG — so this is the only drumroll audio left to check.)
 test("js/craft-prize.js's WEB_AUDIO_CLIPS paths exactly match the audio files SHELL_FILES precaches", () => {
   const src = read("js/craft-prize.js");
   const m = src.match(/const WEB_AUDIO_CLIPS = \{([\s\S]*?)\};/);

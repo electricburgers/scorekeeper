@@ -23,369 +23,31 @@ function toggleCraftPrize(ti) {
 }
 
 // CRAFT PRIZE RANDOMIZER — drumroll + name-flash + spoken winner script. Only ever one winner.
+// Built entirely on the Web Audio API. v19.39 shipped this alongside the original HTML5
+// <audio>-element engine, with an in-app switcher, specifically so both could be tested
+// side-by-side on real hardware; v19.40 removes that legacy engine and switcher now that Web
+// Audio has been the winner of that comparison — this is the only drumroll implementation left.
 //
 // AUDIO POLICY — the app must never take the device's audio session until the host asks for it.
 // The host runs this on the same iPad they play background music from, and iOS hands the audio
 // session to whichever app most recently claimed it: the moment this tab claims one, their music
 // ducks or stops every time the tab takes focus. Claiming happens far earlier than most code
-// assumes — merely constructing an AudioContext is enough on iOS, even suspended, and so is a
-// silent priming .play(). The previous implementation did exactly that: it built an AudioContext
-// and decoded ~1.1MB of drum audio into it at page load as a warm-up, so simply opening the
-// scorekeeper stole audio priority from the music app.
+// assumes — merely constructing an AudioContext is enough on iOS, even suspended. So:
+//   * The AudioContext (below) is instantiated completely lazily, on active user interaction (a
+//     tap on "Start Drumroll", "Play Horn", or a sound test button) — NEVER at script parse or
+//     page load.
+//   * useAmbientAudioSession() (further down) is set once, ahead of any playback, so WebKit
+//     treats the session as "ambient" and mixes over background music instead of ducking or
+//     claiming an exclusive playback session on iPadOS/iOS.
+//   * Nothing anywhere else in the app plays audio. Grep for the functions below: they are only
+//     ever reached from a craft-prize button.
 //
-// So the rules here are:
-//   * No Web Audio API at all — no AudioContext, no decodeAudioData, no gain nodes.
-//   * Plain <audio> elements only, all of them constructed lazily inside the tap on the drumroll
-//     button — never before it — and reused for every draw thereafter.
-//   * The first .play() of a draw runs synchronously inside that tap's own click handler, with
-//     nothing awaited before it, so iOS counts it as a direct user gesture. The spare elements
-//     holding the fade and finale are unlocked in that same handler (see cueDrumClip), which is
-//     what lets them start later from a timer.
-//   * Nothing anywhere else in the app plays audio. Grep for playDrumClip and handOverToCue:
-//     these functions are the only callers, and they are only ever reached from a craft-prize
-//     button.
-//
-// An element can only play one thing at a time and cannot loop or cross a clip boundary
-// gaplessly, so nothing is sequenced, looped, or layered at playback time — every transition the
-// host hears is pre-rendered into a clip. assets/audio/roll.mp3 is a single 32.6s take long
-// enough that a draw never reaches its end; from there a roll hands off exactly once, on an
-// explicit cue, into a clip that already contains the transition: finale.wav (horn over the
-// roll fading out) at
-// the reveal, or the fade tail (roll fading out alone, built by fadeClipUrl at whatever length
-// the Settings slider is set to) if the host stops early. Both open at the roll's own level and
-// are handed over between elements rather than swapped on one, so neither transition has a level
-// step or a gap in it.
-
-// One continuous 32.6s drumroll: the 2.03s intro followed by 13 back-to-back copies of the
-// 2.35s loop clip, butt-joined sample-accurately offline and encoded as a single MP3. This is
-// one clip rather than an intro plus a looping middle because an HTMLMediaElement's loop
-// restart is NOT gapless — it seeks back to zero, dropping a few ms of audio, which on
-// something as continuous as a snare roll reads as a skip every 2.35s. (Web Audio's loop was
-// sample-accurate, so this only became audible once the AudioContext came out; see the AUDIO
-// POLICY note above for why it had to go.) MP3 encoder padding used to be the reason the loop
-// clip had to stay uncompressed WAV, but padding only sits at a file's head and tail, and
-// 32.6s covers the 30s maximum drumroll with room to spare — playback never reaches the end
-// and never loops, so neither boundary is ever heard. Rebuild with: decode the intro, append
-// 13 copies of the loop clip as raw PCM, then
-//   ffmpeg -i roll.wav -c:a libmp3lame -b:a 128k -ar 48000 -ac 2 roll.mp3
-// then replace assets/audio/roll.mp3 with the result.
-//
-// A fraction of a second of digital silence. iOS grants an <audio> element permission to play
-// only when a play() call happens inside a user gesture, and that permission is per element —
-// so the spare elements that hold the fade and finale have to be played once inside the host's
-// drumroll tap, before they are ever needed. Playing this first (then swapping to the real
-// clip, which keeps the permission) makes that unlocking play genuinely inaudible.
-//
-// The automatic ending: the victory horn with the drumroll fading out underneath it, mixed
-// offline into one clip. A single <audio> element can only ever play one thing at a time, so
-// an overlap has to be baked in — swapping straight from the roll to the horn left a hard
-// cut where the roll simply vanished, which is what read as choppy. The roll enters this clip
-// at exactly the level it was already playing at (the fade curve is at unity with zero slope
-// at t=0), so the swap into it is inaudible, then it falls away over 1.0s. The curve decays
-// faster than the standalone fade tail because it has to clear room for the horn, which is
-// ~13dB quieter than the roll in RMS and would otherwise be masked through its own attack.
-// WAV, not MP3: this clip is spliced into a running roll, and an encoder's leading padding would
-// drop a gap at precisely the seam it exists to hide.
-//
-// These four finished clips (silent/roll/finale/horn) ship as real files under assets/audio/,
-// referenced directly by DRUM_CLIPS below — not as base64 text in this bundle. They used to be
-// four const DRUM_*_B64 strings here, individually decoded into a Blob on first use, which cost
-// every visitor ~2.1MB of extra download and parse/compile time on this file whether or not they
-// ever ran a drumroll. A real <audio src="assets/audio/...">, like the app's own icons and fonts
-// already are, is at least as fast to swap between as the blob: URL it replaces (both are cheap
-// handle lookups, no re-parse) and lets the browser's HTTP/disk cache — and this app's own
-// service worker precache — do the caching instead of an in-memory Blob rebuilt every session.
-// Still file://-safe: <audio src> resolves like <img src>, not like fetch(), so it is not
-// subject to Chrome's block on fetch()/XHR to local files (see js/app.js's top-of-file note on
-// why file:// has to keep working here) — unlike DRUM_FADESRC_B64 below, which stays base64
-// text for exactly that reason.
-//
-// Raw PCM for the drumroll fade-out: one seamless 2.352s loop of the roll, interleaved stereo
-// 16-bit at 48kHz, with no container around it (buildFadeClip writes its own WAV header).
-// Shipped as source material rather than as a finished clip because the fade length is a
-// Settings slider now, and pre-rendering every length the slider can reach would cost
-// megabytes and still quantise it. Applying an envelope to these samples is plain arithmetic
-// over a typed array, so a fade of any length is built without Web Audio — which stays
-// off-limits here for the reason in the AUDIO POLICY note above. DRUM_FADESRC_B64 is declared
-// in js/data/drum-clips.js (loaded before this file) rather than inline here, same reasoning as
-// TRIVIA_XLSX_B64 in js/data/xlsx-templates.js: one giant string literal kept out of the file
-// every visitor's browser has to parse just to run anything else in the app.
-const DRUM_CLIPS = {
-  silent: "assets/audio/silent.wav",
-  roll: "assets/audio/roll.mp3",
-  finale: "assets/audio/finale.wav",
-  horn: "assets/audio/horn.mp3",
-};
-// Format of DRUM_FADESRC_B64, and therefore of the fade clips built from it. These have to match
-// the roll the fade splices out of, or the handover would step in level or collapse to mono.
-const FADE_SR = 48000;
-const FADE_CH = 2;
-// Where in the loop the fade starts. This point measures the same RMS as the loop overall, so the
-// fade opens at the level the roll was already playing at and the handover has no step in it —
-// the loop's own start is 2.8dB quieter and audibly dropped. Wraps, since the source is a loop.
-const FADE_SRC_OFFSET = Math.round(2.2 * FADE_SR);
-const FADE_RAMP_SEC = 0.008; // ramp-in covering the sub-ms overlap at the handover
-let drumAudio = null; // plays the roll, and the horn on its own
-let drumCues = {}; // clip name -> spare element holding that clip pre-loaded and ready to start
-let fadeSrcPcm = null; // Int16Array of DRUM_FADESRC_B64, decoded once
-let fadeClip = { sec: null, url: null }; // the one built fade clip, rebuilt when the slider moves
-
-function b64Bytes(b64) {
-  const bin = atob(b64);
-  const bytes = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-  return bytes;
-}
-function drumClipUrl(name) {
-  // The fade is synthesised rather than shipped, since its length is a Settings slider.
-  if (name === "fade") return fadeClipUrl(craftFadeSec());
-  // The other four are real files (DRUM_CLIPS above) — no decode, no cache dict needed, the
-  // browser's own HTTP/disk cache (and the service worker precache) already does that job.
-  return DRUM_CLIPS[name];
-}
-// Renders the fade-out to a WAV blob at the requested length: read the roll loop from the
-// level-matched offset, multiply by a raised-cosine envelope (unity with zero slope at the start,
-// true zero at the end, so neither the splice nor the tail can click), and wrap the header on.
-// Pure arithmetic over a typed array — no AudioContext, so this costs nothing on the audio session.
-function fadeClipUrl(sec) {
-  if (fadeClip.sec === sec && fadeClip.url) return fadeClip.url;
-  if (!fadeSrcPcm) {
-    const bytes = b64Bytes(DRUM_FADESRC_B64);
-    fadeSrcPcm = new Int16Array(
-      bytes.buffer,
-      bytes.byteOffset,
-      bytes.byteLength / 2,
-    );
-  }
-  const srcFrames = fadeSrcPcm.length / FADE_CH;
-  const frames = Math.max(1, Math.round(sec * FADE_SR));
-  const ramp = Math.round(FADE_RAMP_SEC * FADE_SR);
-  const dataLen = frames * FADE_CH * 2;
-  const buf = new ArrayBuffer(44 + dataLen);
-  const dv = new DataView(buf);
-  const tag = (o, s) => {
-    for (let i = 0; i < s.length; i++) dv.setUint8(o + i, s.charCodeAt(i));
-  };
-  tag(0, "RIFF");
-  dv.setUint32(4, 36 + dataLen, true);
-  tag(8, "WAVE");
-  tag(12, "fmt ");
-  dv.setUint32(16, 16, true);
-  dv.setUint16(20, 1, true); // PCM
-  dv.setUint16(22, FADE_CH, true);
-  dv.setUint32(24, FADE_SR, true);
-  dv.setUint32(28, FADE_SR * FADE_CH * 2, true);
-  dv.setUint16(32, FADE_CH * 2, true);
-  dv.setUint16(34, 16, true);
-  tag(36, "data");
-  dv.setUint32(40, dataLen, true);
-  const out = new Int16Array(buf, 44, frames * FADE_CH);
-  for (let i = 0; i < frames; i++) {
-    let g = 0.5 * (1 + Math.cos((Math.PI * i) / frames));
-    if (i < ramp) g *= 0.5 * (1 - Math.cos((Math.PI * i) / ramp));
-    const si = ((FADE_SRC_OFFSET + i) % srcFrames) * FADE_CH;
-    const di = i * FADE_CH;
-    for (let c = 0; c < FADE_CH; c++) out[di + c] = fadeSrcPcm[si + c] * g;
-  }
-  // Only ever one fade clip alive — drop the previous length rather than leaking a blob per
-  // notch of the slider.
-  if (fadeClip.url) URL.revokeObjectURL(fadeClip.url);
-  fadeClip = {
-    sec,
-    url: URL.createObjectURL(new Blob([buf], { type: "audio/wav" })),
-  };
-  return fadeClip.url;
-}
-// Declares this page's audio as "ambient" — it mixes with whatever else the device is playing
-// rather than taking the audio session for itself. Without this, iOS gives any page that plays
-// audio an exclusive "playback" session, and the host's music app is paused the instant the
-// drumroll starts. That is the same failure the AUDIO POLICY above is written against, reached by
-// a different route: the policy stops the app claiming a session before it is asked to, and this
-// stops the session it does eventually take from being an exclusive one. The two are complements,
-// not alternatives — neither one alone keeps the music playing.
-//
-// Set once, ahead of any playback, and never per-play: the type is a property of the page, not of
-// a clip. Assigning it is a declaration of intent rather than a claim on the session — no element
-// is constructed and nothing is decoded — so unlike a priming .play() it is safe to do at load,
-// which is also the only place it can be done early enough to cover the first roll.
-//
-// Feature-detected, since the Audio Session API is recent WebKit only; everywhere else this is a
-// no-op and playback is unaffected. If iOS still interrupts the music with the type set to
-// ambient, that is the platform's call to make and not something the page can override.
-let ambientSessionRequested = false;
-function useAmbientAudioSession() {
-  if (ambientSessionRequested) return;
-  ambientSessionRequested = true;
-  try {
-    if ("audioSession" in navigator) navigator.audioSession.type = "ambient";
-  } catch (e) {
-    // A partial implementation can reject the assignment. Nothing to fall back to, and nothing
-    // worth blocking playback over — the drumroll still runs, it just may duck other audio.
-  }
-}
-// Builds the single reusable element the first time a clip is actually played. preload="none"
-// and the absence of a src keep it completely inert — no fetch, no decode, no audio session —
-// right up until playDrumClip points it at a clip.
-function getDrumAudio() {
-  if (!drumAudio) {
-    drumAudio = new Audio();
-    drumAudio.preload = "none";
-  }
-  return drumAudio;
-}
-// Points the one element at a clip and starts it. Deliberately synchronous end to end: the first
-// call of any draw runs inside a click handler, and an await/.then() before .play() would spend
-// the user-gesture credit iOS grants that handler and leave the drumroll silent.
-function playDrumClip(name) {
-  const a = getDrumAudio();
-  const url = drumClipUrl(name);
-  if (a.src !== url) a.src = url;
-  // A just-assigned src already starts at zero; this matters when the same clip is replayed
-  // (tapping Play Horn twice), which would otherwise resume from where the last play ended.
-  try {
-    a.currentTime = 0;
-  } catch (e) {}
-  const p = a.play();
-  if (p && p.catch)
-    p.catch((err) => {
-      // AbortError just means something legitimately superseded this play — a handover pausing
-      // the roll, or a new draw reassigning src — so it is expected traffic, not a failure.
-      if (err && err.name === "AbortError") return;
-      console.error("Craft prize audio failed to play:", name, err);
-    });
-  return a;
-}
-// Loads a clip into its own spare element so it can start the instant it is cued, and unlocks
-// that element for iOS while we are still inside the drumroll tap.
-//
-// Reassigning .src on the element that is currently playing costs ~30ms of real silence (measured:
-// emptied -> loadstart -> loadedmetadata -> canplay), and the roll lands a beat every ~47ms, so
-// that swap punched a hole through most of a beat. Handing over between two elements instead
-// removes the load entirely: the incoming clip is already decoded and sitting at position zero,
-// so cueing it is just a play() on a warm element.
-//
-// The unlocking play() has to happen here, inside the gesture, because iOS grants that permission
-// per element and would otherwise reject the cue when it fires later from a timer. It plays
-// assets/audio/silent.wav rather than the real clip so nothing is audible, then swaps to the real clip,
-// which keeps the permission the silent play just earned.
-function cueDrumClip(name) {
-  let el = drumCues[name];
-  if (el) {
-    try {
-      el.currentTime = 0;
-    } catch (e) {}
-    return el;
-  }
-  el = drumCues[name] = new Audio();
-  el.preload = "auto";
-  el.src = drumClipUrl("silent");
-  const arm = () => {
-    el.src = drumClipUrl(name);
-    el.load(); // buffer it now, while the roll still has seconds left to run
-    // Then play it once, muted, and rewind. Buffering alone is not enough: an element's first
-    // play after a src swap blocks for ~10ms inside play() itself, and that time would be spent
-    // with the roll still running over the top of the incoming clip. Playing it through once
-    // muted takes that cost now, seconds before the host can possibly need it, and leaves the
-    // element able to start in a fraction of a millisecond when it is actually cued. It is
-    // inaudible, and it is not a preload of playback in the sense the AUDIO POLICY forbids —
-    // it happens only after the host has already tapped the drumroll and started the audio.
-    el.muted = true;
-    const cool = () => {
-      el.pause();
-      try {
-        el.currentTime = 0;
-      } catch (e) {}
-      el.muted = false;
-    };
-    const w = el.play();
-    if (w && w.then) w.then(cool, cool);
-    else cool();
-  };
-  const p = el.play();
-  if (p && p.then)
-    p.then(() => {
-      el.pause();
-      arm();
-    }, arm);
-  else arm();
-  return el;
-}
-// Hands playback over from the roll to an already-cued clip. The roll is left running until the
-// incoming clip reports that it is actually producing sound ("playing"), so the two overlap by a
-// fraction of a millisecond rather than leaving a gap between them — and the cued clips open with
-// an 8ms ramp-in, so that overlap sums to roughly constant level instead of a bump. Together with
-// the clips starting at the roll's own level, the handover is heard as the roll simply beginning
-// to die away. Falls back to the same-element swap if the cue was never unlocked.
-//
-// `after` runs once the handover has completed, and exists to keep the caller's re-render off the
-// main thread until then. "playing" is delivered as a task, so ANY synchronous work queued ahead
-// of it — including a setTimeout(…, 0) — runs first and holds the event off for as long as it
-// takes. A full renderLeft() there cost 11-19ms, all of it spent with the roll still playing over
-// the incoming clip. Handing the render back through this callback makes the ordering explicit
-// instead of racing it.
-function handOverToCue(name, after) {
-  let pending = after;
-  // Always hand the caller's re-render to a later task. Running it inline would put ~10ms of
-  // layout work inside the "playing" handler, i.e. in the middle of the handover itself, which
-  // is exactly the window where the roll and the incoming clip are both audible.
-  const finish = () => {
-    if (!pending) return;
-    const fn = pending;
-    pending = null;
-    setTimeout(fn, 0);
-  };
-  const el = drumCues[name];
-  if (!el || el.src === drumClipUrl("silent")) {
-    playDrumClip(name);
-    finish();
-    return;
-  }
-  const stopRoll = () => {
-    if (drumAudio) {
-      try {
-        drumAudio.pause();
-      } catch (e) {}
-    }
-    finish();
-  };
-  el.addEventListener("playing", stopRoll, { once: true });
-  // Insurance against being cued while the warm-up play in cueDrumClip is still in flight, which
-  // would otherwise hand over to a muted element and drop the fade entirely.
-  el.muted = false;
-  // Only seek when it would actually move — a redundant seek on a paused element still puts it
-  // through the seeking/seeked cycle before it will report itself as playing.
-  if (el.currentTime) {
-    try {
-      el.currentTime = 0;
-    } catch (e) {}
-  }
-  const p = el.play();
-  if (p && p.catch)
-    p.catch((err) => {
-      el.removeEventListener("playing", stopRoll);
-      // An AbortError means the cue was deliberately stopped (a new draw, or the winner being
-      // cleared mid-fade); anything else means it was refused, so fall back to swapping on the
-      // main element rather than leaving the host with a roll that never winds down.
-      if (!(err && err.name === "AbortError")) playDrumClip(name);
-      finish();
-    });
-  // Safety net: never strand the caller's UI update if "playing" somehow never arrives — but the
-  // roll has to be stopped too, not just the UI unblocked. This used to call finish() directly,
-  // which fired the winner reveal/re-render fine but skipped the drumAudio.pause() that only
-  // stopRoll does, so a browser that's slow (or fails) to fire "playing" left the roll looping
-  // forever under the reveal instead of handing over to the horn. Routing through stopRoll keeps
-  // both halves together; it's safe to run twice; finish()'s own pending guard already no-ops the
-  // second call if "playing" does eventually arrive after this fires.
-  setTimeout(stopRoll, 400);
-}
-// --- WEB AUDIO API DRUMROLL ENGINE (Adapted from drumroll-pwa) ---
-//
-// AUDIO POLICY NOTE FOR WEB AUDIO:
-// The AudioContext is instantiated completely lazily on active user interaction (e.g. tap on
-// "Start Drumroll", "Play Horn", or sound test button), NEVER at script parse or page load.
-// Furthermore, useAmbientAudioSession() is invoked before playback begins so WebKit treats the
-// session as "ambient", mixing over background music instead of ducking or claiming an exclusive
-// playback session on iPadOS/iOS.
+// The four clips (start/loop/end/horn) ship as real files under assets/audio/, decoded once into
+// AudioBuffers and reused for every draw thereafter — see loadWebAudioBuffers. "end" is the crash
+// cymbal stinger the countdown hands off to when the drumroll finishes on its own; "horn" is the
+// victory horn, played on its own only when the host has stopped the roll manually and fires it
+// on demand (see playCraftVictoryHorn). The two used to play together on an automatic finish —
+// that was a bug (see playWebAudioFinale below), not a design choice.
 const WEB_AUDIO_CLIPS = {
   start: "assets/audio/drumroll-start.wav",
   loop: "assets/audio/drumroll-loop.wav",
@@ -416,16 +78,32 @@ function getWebAudioContext() {
   return webAudioCtx;
 }
 
-function isWebAudioEngine() {
-  return loadPrefs().craftAudioEngine !== "legacy";
-}
-
-function setCraftAudioEngine(engine) {
-  const p = loadPrefs();
-  p.craftAudioEngine = engine === "legacy" ? "legacy" : "webaudio";
-  savePrefs(p);
-  applyPrefs();
-  renderLeft();
+// Declares this page's audio as "ambient" — it mixes with whatever else the device is playing
+// rather than taking the audio session for itself. Without this, iOS gives any page that plays
+// audio an exclusive "playback" session, and the host's music app is paused the instant the
+// drumroll starts. That is the same failure the AUDIO POLICY above is written against, reached by
+// a different route: the policy stops the app claiming a session before it is asked to, and this
+// stops the session it does eventually take from being an exclusive one. The two are complements,
+// not alternatives — neither one alone keeps the music playing.
+//
+// Set once, ahead of any playback, and never per-play: the type is a property of the page, not of
+// a clip. Assigning it is a declaration of intent rather than a claim on the session — no element
+// is constructed and nothing is decoded — so unlike a priming .play() it is safe to do at load,
+// which is also the only place it can be done early enough to cover the first roll.
+//
+// Feature-detected, since the Audio Session API is recent WebKit only; everywhere else this is a
+// no-op and playback is unaffected. If iOS still interrupts the music with the type set to
+// ambient, that is the platform's call to make and not something the page can override.
+let ambientSessionRequested = false;
+function useAmbientAudioSession() {
+  if (ambientSessionRequested) return;
+  ambientSessionRequested = true;
+  try {
+    if ("audioSession" in navigator) navigator.audioSession.type = "ambient";
+  } catch (e) {
+    // A partial implementation can reject the assignment. Nothing to fall back to, and nothing
+    // worth blocking playback over — the drumroll still runs, it just may duck other audio.
+  }
 }
 
 async function loadWebAudioBuffers() {
@@ -457,6 +135,7 @@ async function loadWebAudioBuffers() {
   })();
   return webAudioLoadingPromise;
 }
+
 
 function stopWebAudioDrumroll(stopEndAndHorn) {
   if (stopEndAndHorn === undefined) stopEndAndHorn = true;
@@ -498,11 +177,9 @@ function stopWebAudioDrumroll(stopEndAndHorn) {
 function startWebAudioDrumroll() {
   const ctx = getWebAudioContext();
   if (!ctx) {
-    // Fallback to legacy if Web Audio is unsupported
-    useAmbientAudioSession();
-    playDrumClip("roll");
-    cueDrumClip("finale");
-    cueDrumClip("fade");
+    // Web Audio unsupported (very old browser) — nothing left to fall back to, so the draw just
+    // runs silently; the visual flash/countdown still work.
+    console.warn("Web Audio unavailable — drumroll will run without sound.");
     return;
   }
   useAmbientAudioSession();
@@ -554,6 +231,10 @@ function startWebAudioDrumroll() {
   }
 }
 
+// The automatic ending: the countdown reaching zero hands off to the crash cymbal stinger alone
+// (WEB_AUDIO_CLIPS.end) — never the horn. The horn is reserved for the manual "Play Horn" reveal
+// (playVictoryHornSound/playWebAudioHorn below); the two playing together here was the bug this
+// function exists not to have.
 function playWebAudioFinale(after) {
   const ctx = getWebAudioContext();
   if (!ctx) {
@@ -583,18 +264,6 @@ function playWebAudioFinale(after) {
       try {
         endSource.start(now);
         activeWebAudio.endSource = endSource;
-      } catch (e) {}
-    }
-    if (bufs.horn) {
-      const hornSource = ctx.createBufferSource();
-      hornSource.buffer = bufs.horn;
-      const hornGain = ctx.createGain();
-      hornGain.gain.setValueAtTime(0.5, now);
-      hornSource.connect(hornGain);
-      hornGain.connect(ctx.destination);
-      try {
-        hornSource.start(now);
-        activeWebAudio.hornSource = hornSource;
       } catch (e) {}
     }
     if (after) setTimeout(after, 0);
@@ -665,108 +334,59 @@ function testAudioClip(action) {
   } else if (action === "fade") {
     fadeOutDrumAudio();
   } else if (action === "end") {
-    if (isWebAudioEngine()) {
-      const ctx = getWebAudioContext();
-      if (ctx) {
-        useAmbientAudioSession();
-        if (ctx.state === "suspended") ctx.resume().catch(() => {});
-        stopWebAudioDrumroll(false);
-        const play = (bufs) => {
-          if (!bufs || !bufs.end) return;
-          const now = ctx.currentTime;
-          const source = ctx.createBufferSource();
-          source.buffer = bufs.end;
-          const gain = ctx.createGain();
-          gain.gain.setValueAtTime(0.5, now);
-          gain.gain.linearRampToValueAtTime(1.0, now + 0.25);
-          source.connect(gain);
-          gain.connect(ctx.destination);
-          try {
-            source.start(now);
-            activeWebAudio.endSource = source;
-          } catch (e) {}
-        };
-        if (webAudioBuffers) play(webAudioBuffers);
-        else loadWebAudioBuffers().then(play);
-      }
-    } else {
-      playDrumClip("finale");
+    const ctx = getWebAudioContext();
+    if (ctx) {
+      useAmbientAudioSession();
+      if (ctx.state === "suspended") ctx.resume().catch(() => {});
+      stopWebAudioDrumroll(false);
+      const play = (bufs) => {
+        if (!bufs || !bufs.end) return;
+        const now = ctx.currentTime;
+        const source = ctx.createBufferSource();
+        source.buffer = bufs.end;
+        const gain = ctx.createGain();
+        gain.gain.setValueAtTime(0.5, now);
+        gain.gain.linearRampToValueAtTime(1.0, now + 0.25);
+        source.connect(gain);
+        gain.connect(ctx.destination);
+        try {
+          source.start(now);
+          activeWebAudio.endSource = source;
+        } catch (e) {}
+      };
+      if (webAudioBuffers) play(webAudioBuffers);
+      else loadWebAudioBuffers().then(play);
     }
   } else if (action === "horn") {
     playVictoryHornSound();
   }
 }
 
-// Starts the drumroll. Called straight from the draw button's click handler: the .play() below
-// is the gesture-blessed call that unlocks the element for the roll itself, and the two cueDrumClip
-// calls do the same for the clips it can hand off to. Nothing is sequenced or looped — the clip
-// simply runs until the draw's finish timer cues the finale, which is what keeps the roll
-// perfectly continuous however long the countdown is.
+// Starts the drumroll. Called straight from the draw button's click handler: it has to run
+// synchronously inside that click for iOS to treat the AudioContext construction/decode as a
+// user gesture (see the AUDIO POLICY note above).
 function startDrumrollAudio() {
-  if (isWebAudioEngine()) {
-    startWebAudioDrumroll();
-    return;
-  }
-  // Belt and braces — this normally ran at load, but the session type has to be in place before
-  // the first play whatever the load order was, and once set the call is a no-op. A synchronous
-  // property write spends no gesture credit, so it is safe ahead of the .play() below.
-  useAmbientAudioSession();
-  playDrumClip("roll");
-  // Cue both clips a running roll can hand off to. This has to happen on this tap — it needs the
-  // gesture — but it runs after playback is already under way so the roll never waits on it.
-  cueDrumClip("finale");
-  cueDrumClip("fade");
+  startWebAudioDrumroll();
 }
-// The automatic reveal, fired by the draw's finish timer. Hands the roll over to the horn with the
-// roll already fading out underneath it (see assets/audio/finale.wav), because one element cannot overlap
-// two clips itself and cutting the roll dead at the horn sounded choppy.
+// The automatic reveal, fired by the draw's finish timer. See playWebAudioFinale for what it
+// plays (the crash stinger, not the horn).
 function playDrumrollFinale(after) {
-  if (isWebAudioEngine()) {
-    playWebAudioFinale(after);
-    return;
-  }
-  handOverToCue("finale", after);
+  playWebAudioFinale(after);
 }
 // The horn on its own, for the manual "Play Horn" button. That button is only ever reached once
-// the roll has already been faded out by "Stop Drumroll", or after a winner is settled — there is
-// no roll left to overlap or hand over from, so this just plays on the main element.
+// the roll has already been faded out by "Stop Drumroll", or after a winner is settled.
 function playVictoryHornSound() {
-  if (isWebAudioEngine()) {
-    playWebAudioHorn();
-    return;
-  }
-  playDrumClip("horn");
+  playWebAudioHorn();
 }
 function stopAllDrumAudio() {
   stopWebAudioDrumroll();
-  // Never construct anything just to stop it — this is called from startNewGame and from clearing
-  // a winner, neither of which should bring an audio element into existence.
-  if (drumAudio) {
-    try {
-      drumAudio.pause();
-    } catch (e) {}
-  }
-  Object.keys(drumCues).forEach((k) => {
-    try {
-      drumCues[k].pause();
-    } catch (e) {}
-  });
 }
 // Winds the roll down instead of cutting it off mid-beat — used by the manual "Stop Drumroll"
-// control, over whatever length the Settings crossfade slider is set to. Hands over to the fade
-// tail rather than ramping the element's volume, because iOS ignores volume writes entirely and a
-// scripted gain fade does nothing at all on an iPad.
+// control, over whatever length the Settings crossfade slider is set to. Native GainNode ramping,
+// not element volume: iOS ignores HTMLMediaElement volume writes entirely, but a scripted Web
+// Audio gain fade works regardless.
 function fadeOutDrumAudio(after) {
-  if (isWebAudioEngine()) {
-    fadeOutWebAudioDrumroll(craftFadeSec(), after);
-    return;
-  }
-  if (!drumAudio || drumAudio.paused) {
-    stopAllDrumAudio();
-    if (after) after();
-    return;
-  }
-  handOverToCue("fade", after);
+  fadeOutWebAudioDrumroll(craftFadeSec(), after);
 }
 function clearCraftDrawTimers() {
   craftDrawTimeouts.forEach((id) => clearTimeout(id));
@@ -1005,10 +625,10 @@ function finalizeCraftPrizeWinner(pool) {
 function stopDrumrollOnly() {
   if (!craftDrawState || !craftDrawState.active) return;
   // State first, because the repaint below can run synchronously on the fallback path and would
-  // otherwise draw the pre-stop UI. The repaint is then handed to fadeOutDrumAudio rather than
-  // run here, so it lands after the handover instead of blocking the event that drives it (see
-  // handOverToCue). A frame's delay on the button swapping to "Play Horn" is invisible; the delay
-  // it was costing the audio was not.
+  // otherwise draw the pre-stop UI. The repaint is then handed to fadeOutDrumAudio rather than run
+  // here, so it lands after the gain fade is scheduled instead of blocking ahead of it. A frame's
+  // delay on the button swapping to "Play Horn" is invisible; the delay it was costing the audio
+  // was not.
   clearCraftDrawTimers();
   craftDrawState.audioStopped = true;
   fadeOutDrumAudio(renderLeft);
@@ -1071,7 +691,6 @@ function renderCraftPrizeBlock() {
   if (!craftFlowOpen && !drawing && !winner) {
     return `<button class="btn btn-accent cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>${ICON_BEER} Choose Craft Prize Winner</button>${poolLeft <= 0 ? `<p class="fr-note">No teams left to draw from — top ${excludeN} place${excludeN > 1 ? "s" : ""} excluded covers everyone entered. Add a team, or open this to lower Exclude Top.</p>` : ""}`;
   }
-  const isWebAudio = prefs.craftAudioEngine !== "legacy";
   let h = `<div class="cp-config">
       <div class="cp-field"><span class="cp-field-label">Exclude Top</span><div class="stepper">
         <button onclick="setExcludeTopN(${Math.max(1, excludeN - 1)})" ${drawing || excludeN <= 1 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Decrease excluded places">−</button>
@@ -1082,10 +701,6 @@ function renderCraftPrizeBlock() {
         <button onclick="setCraftDrawSeconds(${Math.max(3, secs - 1)})" ${drawing || secs <= 3 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Decrease drumroll seconds">−</button>
         <input type="number" class="sw-input" aria-label="Drumroll length in seconds" inputmode="numeric" min="3" max="30" value="${secs}" ${drawing ? "disabled" : ""} onchange="setCraftDrawSeconds(this.value)">
         <button onclick="setCraftDrawSeconds(${Math.min(30, secs + 1)})" ${drawing || secs >= 30 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Increase drumroll seconds">+</button>
-      </div></div>
-      <div class="cp-field"><span class="cp-field-label">Engine</span><div class="cp-engine-stepper">
-        <button class="settings-toggle-btn ${isWebAudio ? 'active' : ''}" ${drawing ? "disabled" : ""} onclick="setCraftAudioEngine('webaudio')">Web Audio</button>
-        <button class="settings-toggle-btn ${!isWebAudio ? 'active' : ''}" ${drawing ? "disabled" : ""} onclick="setCraftAudioEngine('legacy')">Legacy</button>
       </div></div>
     </div>
     <div class="cp-test-bar">

@@ -113,8 +113,8 @@ function beforeParse(window) {
   // .catch()), rather than throwing and taking down every test that loads the real app.
   window.fetch = () => Promise.reject(new Error("fetch is not available in jsdom"));
   // jsdom's own Blob has no way to read bytes back out (no .arrayBuffer()/.text() — just .size/
-  // .type), and URL.createObjectURL doesn't exist at all, so fadeClipUrl()/exportXLSXBackup()/
-  // exportPDF() throw outright without a stub. This one keeps the constructor's own parts array
+  // .type), and URL.createObjectURL doesn't exist at all, so exportXLSXBackup()/exportPDF()
+  // throw outright without a stub. This one keeps the constructor's own parts array
   // reachable (blob.parts) instead of hiding it, specifically so a test can inspect the actual
   // bytes js/app.js built — e.g. the fade clip's WAV header/envelope, or the XLSX zip fflate
   // produced — rather than only checking that the call didn't throw.
