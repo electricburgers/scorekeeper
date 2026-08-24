@@ -578,6 +578,35 @@ describe("Advanced Settings: rows gated on their own parent toggle", () => {
     assert.notEqual(window.document.getElementById("drumCrossfadeRow").style.display, "none");
     window.toggleCraftManualEnd(); // restore
   });
+  it("Sound Test Buttons row is hidden by default (Manual Drumroll Control starts off)", () => {
+    assert.equal(window.document.getElementById("soundTestRow").style.display, "none");
+  });
+  it("Sound Test Buttons row appears once Manual Drumroll Control is switched on, and hides again once it's switched back off", () => {
+    window.toggleCraftManualEnd();
+    assert.notEqual(window.document.getElementById("soundTestRow").style.display, "none");
+    window.toggleCraftManualEnd();
+    assert.equal(window.document.getElementById("soundTestRow").style.display, "none");
+  });
+  it("the Craft Prize block's own Test Sounds bar needs BOTH prefs — Sound Test Buttons alone (without Manual Drumroll Control) is not enough", () => {
+    const out = evalIn(
+      window,
+      `(function(){
+        gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+        renderAll();
+        craftFlowOpen = true;
+        toggleCraftSoundTest(); // craftSoundTest: true, craftManualEnd still false
+        const withSoundTestOnly = document.getElementById("sec-craftprize").innerHTML.includes("cp-test-bar");
+        toggleCraftManualEnd(); // both on now
+        const withBoth = document.getElementById("sec-craftprize").innerHTML.includes("cp-test-bar");
+        toggleCraftManualEnd(); // restore
+        toggleCraftSoundTest(); // restore
+        return JSON.stringify({ withSoundTestOnly, withBoth });
+      })();`,
+    );
+    const result = JSON.parse(out);
+    assert.equal(result.withSoundTestOnly, false);
+    assert.equal(result.withBoth, true);
+  });
   it("Timer Stepper Buttons and Timer Pulse are visible by default (Timer Widget starts on)", () => {
     assert.notEqual(window.document.getElementById("timerSteppersRow").style.display, "none");
     assert.notEqual(window.document.getElementById("timerPulseRow").style.display, "none");
@@ -1212,6 +1241,95 @@ describe('Desktop "scroll void" bug (--layout-top sync)', () => {
     assert.match(block, /addEventListener\(["']resize["'],\s*sync\)/);
     assert.match(block, /document\.fonts\?\.ready.*\.then\(sync\)/);
     assert.match(block, /addEventListener\(["']load["'],\s*sync\)/);
+  });
+});
+
+// ============================================================================
+// Scoreboard sidebar re-render bug (v19.40) — tapping a team in the scoreboard to set/clear the
+// Craft Beer prize winner used to make the whole list visibly jump. renderSB() was restoring the
+// sidebar's raw pre-render scrollTop, which silently assumes nothing above that offset changed
+// height between renders — but toggling CB Prize adds/removes a border + "CB Prize" tag on that
+// team's row (.score-row.cb-prize in styles.css), which shifts every row below it by a few px.
+// The fix anchors on the tapped row instead (renderLeft's own pinAnchor technique, scoped to
+// #sidebarBody via the separate lastSBClickAnchorSel — see the click listener above its
+// declaration in js/app.js), correcting scrollTop by exactly however much the anchor moved.
+//
+// jsdom does no real CSS layout, so Element.prototype.getBoundingClientRect always reports zero
+// — real geometry can't be asserted here any more than the --layout-top tests above can. Instead
+// these mock getBoundingClientRect to hand back two DIFFERENT top values, one for the
+// pre-render "before" measurement (still against the old row) and one for the post-render
+// "after" measurement (against the freshly-rendered replacement) — standing in for a real
+// browser's reflow after a row's height changes — and then assert renderSB() actually did the
+// compensating arithmetic instead of the old code's flat scrollTop = sy.
+// ============================================================================
+describe("Scoreboard sidebar re-render: CB Prize tap keeps the tapped row visually pinned", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+
+  it("a real click on a score-row's CB Prize control routes through #sidebarBody's own anchor (not the main column's), and renderSB compensates scrollTop by exactly the row's simulated on-screen shift", () => {
+    const out = evalIn(
+      window,
+      `(function(){
+        gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+        renderAll();
+        const body = document.getElementById("sidebarBody");
+        body.scrollTop = 40;
+
+        const row = document.querySelector(".score-row[data-ti]");
+        const ti = row.getAttribute("data-ti");
+
+        // 1st getBoundingClientRect() call (renderSB's anchorBefore, against the row still in
+        // the DOM pre-render) reports top:100; every call after that (against the replacement
+        // row post-render) reports top:130 — a simulated 30px push-down, the exact shape of the
+        // real bug (a border/tag added above the fold).
+        let calls = 0;
+        Element.prototype.getBoundingClientRect = function () {
+          calls++;
+          return { top: calls === 1 ? 100 : 130, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
+        };
+
+        row.querySelector(".sr-name-clickable").click();
+
+        return JSON.stringify({
+          scrollTop: body.scrollTop,
+          getBoundingClientRectCalls: calls,
+          sbAnchorConsumed: lastSBClickAnchorSel === null,
+          mainColumnAnchorUntouched: lastClickAnchorSel === null,
+        });
+      })();`,
+    );
+    const result = JSON.parse(out);
+    // 40 (pre-tap scrollTop) + 30 (the row's simulated shift) — not 40 (the old flat restore)
+    // and not 100/130 (the mocked rect values themselves, which would mean the code used the
+    // raw measurement instead of a delta against the prior position).
+    assert.equal(result.scrollTop, 70);
+    assert.equal(result.getBoundingClientRectCalls, 2);
+    assert.equal(result.sbAnchorConsumed, true);
+    assert.equal(result.mainColumnAnchorUntouched, true);
+  });
+
+  it("a re-render with no prior sidebar click (e.g. a sort change) still falls back to the plain pre-render scrollTop", () => {
+    const out = evalIn(
+      window,
+      `(function(){
+        gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+        renderAll();
+        const body = document.getElementById("sidebarBody");
+        body.scrollTop = 25;
+        lastSBClickAnchorSel = null;
+        // Even if geometry were queried, it must not matter here — no anchor means the fallback
+        // path is taken, not the anchor-pin path.
+        Element.prototype.getBoundingClientRect = function () {
+          return { top: 999, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
+        };
+        setSortMode("desc");
+        return body.scrollTop;
+      })();`,
+    );
+    assert.equal(out, 25);
   });
 });
 

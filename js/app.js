@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.40"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.41"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 24, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -98,6 +98,7 @@ function loadPrefs() {
       if (p.timerPulse == null) p.timerPulse = true;
       if (p.craftManualEnd == null) p.craftManualEnd = false;
       if (p.craftFadeSec == null) p.craftFadeSec = CRAFT_FADE_DEFAULT;
+      if (p.craftSoundTest == null) p.craftSoundTest = false;
       if (p.qResultToggle == null) p.qResultToggle = false;
       return p;
     }
@@ -119,6 +120,7 @@ function loadPrefs() {
     timerPulse: true,
     craftManualEnd: false,
     craftFadeSec: CRAFT_FADE_DEFAULT,
+    craftSoundTest: false,
     qResultToggle: false,
   };
 }
@@ -244,6 +246,16 @@ function applyPrefs() {
   // so the row stays hidden rather than sitting there configuring a feature that isn't active.
   const crossfadeRow = document.getElementById("drumCrossfadeRow");
   if (crossfadeRow) crossfadeRow.style.display = p.craftManualEnd ? "" : "none";
+  // Same reasoning as the crossfade row above: Sound Test Buttons is a Manual Drumroll Control
+  // companion setting, so it stays hidden until that's on rather than sitting there configuring
+  // a row the host hasn't opted into yet.
+  const soundTestRow = document.getElementById("soundTestRow");
+  if (soundTestRow) soundTestRow.style.display = p.craftManualEnd ? "" : "none";
+  const soundTestToggle = document.getElementById("craftSoundTestToggle");
+  if (soundTestToggle) {
+    soundTestToggle.classList.toggle("active", !!p.craftSoundTest);
+    soundTestToggle.textContent = p.craftSoundTest ? "Shown" : "Hidden";
+  }
   const vl = document.getElementById("versionLabel");
   if (vl) {
     let html = "Scorekeeper " + APP_VERSION + " · " + APP_VERSION_DATE;
@@ -331,6 +343,13 @@ function toggleQResultButtons() {
 function toggleCraftManualEnd() {
   const p = loadPrefs();
   p.craftManualEnd = !p.craftManualEnd;
+  savePrefs(p);
+  applyPrefs();
+  renderLeft();
+}
+function toggleCraftSoundTest() {
+  const p = loadPrefs();
+  p.craftSoundTest = !p.craftSoundTest;
   savePrefs(p);
   applyPrefs();
   renderLeft();

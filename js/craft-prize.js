@@ -703,13 +703,17 @@ function renderCraftPrizeBlock() {
         <button onclick="setCraftDrawSeconds(${Math.min(30, secs + 1)})" ${drawing || secs >= 30 ? 'disabled style="opacity:.3;cursor:default"' : ""} aria-label="Increase drumroll seconds">+</button>
       </div></div>
     </div>
-    <div class="cp-test-bar">
+    ${
+      prefs.craftManualEnd && prefs.craftSoundTest
+        ? `<div class="cp-test-bar">
       <span class="cp-field-label">Test Sounds:</span>
       <button class="settings-btn btn-sm" onclick="testAudioClip('start')" title="Play drumroll intro + loop">🥁 Roll</button>
       <button class="settings-btn btn-sm" onclick="testAudioClip('fade')" title="Fade out active drumroll">⏹ Fade</button>
       <button class="settings-btn btn-sm" onclick="testAudioClip('end')" title="Play drumroll crash stinger">💥 Crash</button>
       <button class="settings-btn btn-sm" onclick="testAudioClip('horn')" title="Play victory horn">🎺 Horn</button>
-    </div>
+    </div>`
+        : ""
+    }
     <div class="cp-note">Top ${excludeN} place${excludeN > 1 ? "s" : ""} ${excludeN > 1 ? "are" : "is"} excluded: ${esc(
       ranked()
         .slice(0, excludeN)
