@@ -1341,14 +1341,13 @@ describe("Scoreboard sidebar re-render: CB Prize tap keeps the tapped row visual
   });
   after(() => window.close());
 
-  it("a real click on a score-row's CB Prize control routes through #sidebarBody's own anchor (not the main column's), and renderSB compensates scrollTop by exactly the row's simulated on-screen shift", () => {
+  it("a real click on a score-row's CB Prize control routes through #sidebarBody's own anchor (not the main column's), and renderSB compensates .scores-list's scrollTop — the element that actually scrolls, not sidebarBody itself — by exactly the row's simulated on-screen shift", () => {
     const out = evalIn(
       window,
       `(function(){
         gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
         renderAll();
-        const body = document.getElementById("sidebarBody");
-        body.scrollTop = 40;
+        document.querySelector(".scores-list").scrollTop = 40;
 
         const row = document.querySelector(".score-row[data-ti]");
         const ti = row.getAttribute("data-ti");
@@ -1366,7 +1365,7 @@ describe("Scoreboard sidebar re-render: CB Prize tap keeps the tapped row visual
         row.querySelector(".sr-name-clickable").click();
 
         return JSON.stringify({
-          scrollTop: body.scrollTop,
+          scrollTop: document.querySelector(".scores-list").scrollTop,
           getBoundingClientRectCalls: calls,
           sbAnchorConsumed: lastSBClickAnchorSel === null,
           mainColumnAnchorUntouched: lastClickAnchorSel === null,
@@ -1383,14 +1382,26 @@ describe("Scoreboard sidebar re-render: CB Prize tap keeps the tapped row visual
     assert.equal(result.mainColumnAnchorUntouched, true);
   });
 
-  it("a re-render with no prior sidebar click (e.g. a sort change) still falls back to the plain pre-render scrollTop", () => {
+  // Real bug (reported live, not hypothetical): tapping Entry/Shuffle/Asc/Desc — no row tap
+  // involved, so no anchor is ever set — silently reset the scores list to its very top on every
+  // click. renderSB() was reading/restoring scrollTop on #sidebarBody, but sidebarBody is a flex
+  // column sized to exactly fit its children (see .sidebar-body/.scores-list in styles.css) —
+  // its own scrollTop is always 0, a no-op to write to. buildScores() rebuilds .scores-list (the
+  // element that actually scrolls) from scratch via innerHTML on every render, a brand-new node
+  // whose scrollTop starts at 0 — nothing was ever restoring THAT. A jsdom assertion against
+  // sidebarBody.scrollTop can't catch this at all (jsdom does no real layout, so an unrelated
+  // sidebarBody.scrollTop and a real .scores-list.scrollTop are just two independent numbers
+  // either one will happily hold) — this asserts against the actual list element post-rebuild,
+  // and confirms it's a genuinely different DOM node each time (proving the rebuild, and thus the
+  // reset, really happens) rather than the same element merely being measured.
+  it("a re-render with no prior sidebar click (e.g. a sort change) restores .scores-list's own scrollTop, even though buildScores() replaces it with a brand-new element every render", () => {
     const out = evalIn(
       window,
       `(function(){
         gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
         renderAll();
-        const body = document.getElementById("sidebarBody");
-        body.scrollTop = 25;
+        const before = document.querySelector(".scores-list");
+        before.scrollTop = 25;
         lastSBClickAnchorSel = null;
         // Even if geometry were queried, it must not matter here — no anchor means the fallback
         // path is taken, not the anchor-pin path.
@@ -1398,10 +1409,13 @@ describe("Scoreboard sidebar re-render: CB Prize tap keeps the tapped row visual
           return { top: 999, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
         };
         setSortMode("desc");
-        return body.scrollTop;
+        const after = document.querySelector(".scores-list");
+        return JSON.stringify({ scrollTop: after.scrollTop, rebuilt: after !== before });
       })();`,
     );
-    assert.equal(out, 25);
+    const result = JSON.parse(out);
+    assert.equal(result.rebuilt, true, "buildScores() didn't actually replace .scores-list — this test isn't exercising the real bug");
+    assert.equal(result.scrollTop, 25);
   });
 });
 

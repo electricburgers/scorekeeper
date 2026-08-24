@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.45"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.46"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 24, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1722,7 +1722,17 @@ function toggleSidebar() {
 function renderSB() {
   const body = document.getElementById("sidebarBody");
   if (!body) return;
-  const sy = body.scrollTop;
+  // .scores-list — not sidebarBody — is the element that actually scrolls (see its own CSS
+  // comment in styles.css): sidebarBody is a flex column sized to exactly fit its children
+  // (sort-controls + sort-mode-label + scores-list), so its own scrollTop is always 0 and a
+  // write to it is a no-op. buildScores() below rebuilds .scores-list from scratch on every
+  // render — a brand-new element via innerHTML — which silently resets ITS scrollTop to 0
+  // unless something restores it on THAT element specifically. Nothing did: every tap on Entry/
+  // Shuffle/Asc/Desc (and, at enough teams to actually overflow the list, every craft-prize tap
+  // too) was snapping the scores list back to its very top, which read as "the view moves" —
+  // sidebarBody's own scrollTop, the thing this used to read/write, never moved at all.
+  const oldList = body.querySelector(".scores-list");
+  const sy = oldList ? oldList.scrollTop : 0;
   // Anchor on whatever score-row was just tapped (see lastSBClickAnchorSel / the shared click
   // listener above), the same technique renderLeft's pinAnchor uses and for the same reason —
   // see the comment on renderSB above.
@@ -1737,21 +1747,29 @@ function renderSB() {
     <button class="sort-btn ${scoreSortMode === "asc" ? "active" : ""}" onclick="setSortMode('asc')">${ICON_ARROW_UP} Asc</button>
     <button class="sort-btn ${scoreSortMode === "desc" ? "active" : ""}" onclick="setSortMode('desc')">${ICON_ARROW_DOWN} Desc</button>
   </div><div class="sort-mode-label">${sortModeLabel()}</div>${buildScores()}`;
+  const list = body.querySelector(".scores-list");
   const anchorEl =
     anchorBefore === undefined ? null : body.querySelector(anchorSel);
   // Puts the anchor back at the exact on-screen offset it had before the re-render — see
   // renderLeft's pinAnchor for the full reasoning. Returns false (never moving anything) when
-  // there's no anchor, so callers fall back to the raw sy restore below.
+  // there's no anchor or no list, so callers fall back to the raw sy restore below.
   const pinAnchor = () => {
-    if (!anchorEl) return false;
+    if (!anchorEl || !list) return false;
     const delta = anchorEl.getBoundingClientRect().top - anchorBefore;
-    if (Math.abs(delta) < 0.5) return true;
-    body.scrollTop += delta;
+    // list is a brand-new element (buildScores() rebuilt it via innerHTML above), not the same
+    // node sy was read from — its scrollTop starts at 0, so this has to be sy+delta, not the
+    // += renderLeft's pinAnchor uses on #mainContent, which (unlike .scores-list) persists
+    // across the render and so already carries sy into this line on its own.
+    if (Math.abs(delta) < 0.5) {
+      list.scrollTop = sy;
+      return true;
+    }
+    list.scrollTop = sy + delta;
     return true;
   };
-  if (!pinAnchor()) body.scrollTop = sy;
+  if (!pinAnchor() && list) list.scrollTop = sy;
   requestAnimationFrame(() => {
-    if (!pinAnchor()) body.scrollTop = sy;
+    if (!pinAnchor() && list) list.scrollTop = sy;
     refreshPointerHover();
   });
 }
