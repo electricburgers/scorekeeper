@@ -512,6 +512,12 @@ button,[role="button"]{touch-action:manipulation}
   .settings-panel.settings-visible,.settings-panel .settings-advanced-group{grid-template-columns:1fr}
 }
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border)}
+/* Marks a row as only meaningful once the toggle above it is on (Drumroll Crossfade and Sound
+   Test Buttons both only appear once Manual Drumroll Control is — see drumCrossfadeRow/
+   soundTestRow's own display:none wiring in applyPrefs, js/app.js) — the extra left padding
+   alone is enough to read as "nested under the row above" without a connector line or bullet,
+   and composes with .settings-row's own responsive padding since it only touches padding-left. */
+.settings-row-sub{padding-left:20px}
 .settings-controls{display:inline-flex;align-items:center;gap:4px;flex-shrink:0}
 /* Slider controls (drumroll crossfade). accent-color themes the track and thumb from the same
    token the rest of the app's active controls use, in every browser this app targets, without

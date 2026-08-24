@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.43 - 2026-08-24
+- **Indented Drumroll Crossfade and Sound Test Buttons in Advanced Settings** under Manual Drumroll Control, the toggle both rows only appear beneath — a new `.settings-row-sub` class adds left padding so the nesting reads visually, not just from the two rows popping in/out.
+
 ## v19.42 - 2026-08-24
 - **Added re-render scroll-anchor regression tests for #mainContent's other big re-render-heavy user interactions** — marking a wager correct/incorrect in question answering, sorting the halftime and final standings, and opening the Craft Prize drawing (drumroll) — extending the same getBoundingClientRect-mocked coverage the v19.41 scoreboard tests introduced to `renderLeft()`'s own anchor-pin mechanism (in place before this session, but previously untested). Verified meaningful by temporarily breaking `renderLeft()`'s pinAnchor and confirming all four fail, then restoring it and confirming all pass.
 
