@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.50 - 2026-08-24
+- **Added `tests/gameplay.test.js`, 46 new tests covering core game mechanics that had no direct coverage before**: team add/remove (including wager reindexing on removal and the name-input's onchange→autosave path), manual score adjustments, wager marking/undo via `cycleW` (mark correct, flip to incorrect, clear back to unanswered, and the duplicate-wager block), the `ROUND_WAGERS`/`BONUS_ROUNDS` rule tables, `sortQuestion` data integrity, `rankMap` tie-breaking (dense ranks, Score Guess as tiebreaker), `preWagerTotal`, Craft Prize winner assignment and the "already chosen" guard, `craftEligiblePool`'s Exclude-Top-N filtering, `migrateState`'s field clamping/backfilling/legacy-field migration, `isQuizIdValid`, beer-round detection, `checkGameStarted`, and empty-game/`clearSaved` persistence round trips. Full suite (346 tests) passes.
+
 ## v19.49 - 2026-08-24
 - **Wrote comprehensive README.md** documenting Scorekeeper's purpose, features, local development, project structure, and browser support — replacing the minimal placeholder with full setup instructions, feature overview, and developer guidance for running, linting, and testing the app.
 
