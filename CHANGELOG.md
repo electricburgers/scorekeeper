@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.47 - 2026-08-24
+- **Added a Silent Mode reminder to the Craft Prize Drawing section** — "Note: Not hearing sound? Make sure your device isn't on Silent Mode." — since the drumroll's Web Audio playback is easy to mistake for broken if the host's phone/tablet has its ringer switch flipped.
+
 ## v19.46 - 2026-08-24
 - **Fixed the scoreboard sidebar silently jumping to the top of the list on every Entry/Shuffle/Asc/Desc tap.** `renderSB()` was reading and restoring scroll position on `#sidebarBody`, but that element never actually scrolls — it's a flex column sized to exactly fit its children, so its own `scrollTop` is always 0 (see the CSS comment on `.scores-list`). The real scroller is `.scores-list`, a child `buildScores()` rebuilds from scratch (a brand-new element) on every render, silently resetting its scroll position to 0 with nothing restoring it. Now reads/writes `.scores-list`'s own `scrollTop` instead, seeded from the pre-render list rather than assumed to carry over (it can't — it's a new node each time).
 

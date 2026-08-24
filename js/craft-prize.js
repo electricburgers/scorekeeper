@@ -740,7 +740,8 @@ function renderCraftPrizeBlock() {
         .slice(0, excludeN)
         .map((r) => r.name)
         .join(", "),
-    )}</div>`;
+    )}</div>
+    <p class="fr-note">Note: Not hearing sound? Make sure your device isn't on Silent Mode.</p>`;
   if (drawing) {
     h += `<div class="cp-intro">${ICON_MIC} Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName || "")}</div>`;
     if (craftDrawState.audioStopped) {
