@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.48 - 2026-08-24
+- **Indented Timer Stepper Buttons and Timer Pulse under Timer Widget** in Advanced Settings on both mobile and desktop, applying the existing `.settings-row-sub` indent class (already used for the Drumroll Crossfade/Sound Test rows) to the two rows that already hide/show based on Timer Widget's state, so the nesting reads visually there too.
+
 ## v19.47 - 2026-08-24
 - **Added a Silent Mode reminder to the Craft Prize Drawing section** — "Note: Not hearing sound? Make sure your device isn't on Silent Mode." — since the drumroll's Web Audio playback is easy to mistake for broken if the host's phone/tablet has its ringer switch flipped.
 
