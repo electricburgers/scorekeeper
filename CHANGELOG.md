@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.45 - 2026-08-24
+- **Fixed the drumroll finishing on its own with no crash sound and no winner** — reported on both desktop and mobile. `getWebAudioContext()` cached its `AudioContext` forever, but the OS can invalidate one mid-roll out from under the page (mobile Safari does this routinely — a phone call, Control Center taking the audio session, the device locking; desktop can too under memory pressure). `createBufferSource()`/`createGain()` throw synchronously on a closed context, and that throw happened before `playWebAudioFinale` ever reached the line that reveals the winner, so both the crash cymbal stinger and the reveal silently vanished, leaving the draw stuck at 0s. `getWebAudioContext()` now discards a closed context and builds a fresh one (the already-decoded clips don't need reloading), and the crash cue's construction is wrapped in try/catch so a failure there can never again strand the winner reveal.
+
 ## v19.44 - 2026-08-24
 - **Fixed the v19.43 indent silently vanishing on mobile.** `.settings-row-sub{padding-left:20px}` was a single-class selector — the same specificity as the `@media(max-width:600px)` breakpoint's own `.settings-row{padding:10px 2px;gap:10px}`, which sits later in the file and so won the cascade on any screen ≤600px wide, resetting `padding-left` back to `2px`. Requalified as `.settings-row.settings-row-sub` (two classes) so it wins regardless of viewport, same pattern already used elsewhere in styles.css for the same reason.
 

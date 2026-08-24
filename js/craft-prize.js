@@ -68,7 +68,19 @@ let activeWebAudio = {
   active: false,
 };
 
+// Discards a context the OS has pulled out from under the page — mobile Safari does this
+// routinely (a phone call, Control Center taking the audio session, the device locking mid-roll),
+// and it can happen on desktop too under memory pressure. A closed AudioContext stays "truthy"
+// forever, so without this check every future createBufferSource()/createGain() call throws
+// InvalidStateError synchronously, uncaught, and silently kills whatever it was in the middle of
+// — which for the auto-finish handoff (see playWebAudioFinale) meant no crash sound AND no winner
+// reveal, since the throw happens before either runs. A fresh context picks the next play back up
+// cleanly; the decoded AudioBuffers stay valid and don't need reloading (they aren't tied to the
+// context that decoded them).
 function getWebAudioContext() {
+  if (webAudioCtx && webAudioCtx.state === "closed") {
+    webAudioCtx = null;
+  }
   if (!webAudioCtx) {
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     if (AudioCtx) {
@@ -252,19 +264,28 @@ function playWebAudioFinale(after) {
       if (after) setTimeout(after, 0);
       return;
     }
-    const now = ctx.currentTime;
-    if (bufs.end) {
-      const endSource = ctx.createBufferSource();
-      endSource.buffer = bufs.end;
-      const endGain = ctx.createGain();
-      endGain.gain.setValueAtTime(0.5, now);
-      endGain.gain.linearRampToValueAtTime(1.0, now + 0.25);
-      endSource.connect(endGain);
-      endGain.connect(ctx.destination);
-      try {
+    // The whole crash cue, not just its .start() call, is wrapped here — createBufferSource()/
+    // createGain() throw synchronously on a context the OS has invalidated mid-roll (see
+    // getWebAudioContext), and unlike .start() they weren't guarded, so that throw used to skip
+    // straight past "if (after)" below: no crash sound AND the winner never got revealed, since
+    // nothing else was left to call it. The draw finishing with no sound and no winner (rather
+    // than just no sound) was the actual bug report — the host isn't left staring at a drumroll
+    // that "finished" but never produced anything.
+    try {
+      if (bufs.end) {
+        const now = ctx.currentTime;
+        const endSource = ctx.createBufferSource();
+        endSource.buffer = bufs.end;
+        const endGain = ctx.createGain();
+        endGain.gain.setValueAtTime(0.5, now);
+        endGain.gain.linearRampToValueAtTime(1.0, now + 0.25);
+        endSource.connect(endGain);
+        endGain.connect(ctx.destination);
         endSource.start(now);
         activeWebAudio.endSource = endSource;
-      } catch (e) {}
+      }
+    } catch (e) {
+      console.warn("Crash stinger failed to play:", e);
     }
     if (after) setTimeout(after, 0);
   };

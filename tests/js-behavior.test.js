@@ -453,6 +453,78 @@ describe("Drumroll audio pipeline", () => {
   it("Web Audio AudioContext is completely inert at initial page load (zero audio session theft)", () => {
     assert.equal(evalIn(window, "webAudioCtx"), null);
   });
+
+  // A drumroll letting its own timer run out (never manually stopped) hands off from the loop to
+  // the crash cymbal stinger via playWebAudioFinale — see that function's own comment. Real
+  // browsers can invalidate an AudioContext mid-roll out from under the page — mobile Safari does
+  // this routinely (a phone call, Control Center taking the audio session, the device locking),
+  // desktop less often but under memory pressure — and getWebAudioContext used to keep handing
+  // back that same closed context forever. createBufferSource()/createGain() throw synchronously
+  // on a closed context, and that throw happened before playWebAudioFinale ever reached
+  // "if (after) setTimeout(after, 0)", so the crash sound AND the winner reveal both silently
+  // vanished — the host was left staring at a drumroll stuck at 0s with no winner and no sound,
+  // exactly the reported bug. Installs a full-fidelity fake AudioContext (real stub only
+  // implements decodeAudioData) so the loop genuinely starts, then closes it mid-roll to
+  // reproduce the invalidation — asserting the fix (a fresh context + a try/catch that can't
+  // strand the reveal) recovers both.
+  it("a drumroll survives its AudioContext being invalidated mid-roll: crash cue still fires and the winner still gets revealed", async () => {
+    evalIn(
+      window,
+      `
+      window.fetch = () => Promise.resolve({ arrayBuffer: () => Promise.resolve(new ArrayBuffer(8)) });
+      class FakeParam { setValueAtTime(){} linearRampToValueAtTime(){} }
+      class FakeGainNode { constructor(){ this.gain = new FakeParam(); } connect(){} }
+      class FakeSourceNode {
+        constructor(ctx){ this._ctx = ctx; this.buffer = null; this.loop = false; }
+        connect(){}
+        disconnect(){}
+        start(){ if (this._ctx.state === "closed") throw new DOMException("closed", "InvalidStateError"); }
+        stop(){}
+      }
+      class FakeAudioContext {
+        constructor(){ this.state = "running"; this.currentTime = 0; this.destination = {}; }
+        createBufferSource(){
+          if (this.state === "closed") throw new DOMException("createBufferSource on a closed AudioContext", "InvalidStateError");
+          return new FakeSourceNode(this);
+        }
+        createGain(){
+          if (this.state === "closed") throw new DOMException("createGain on a closed AudioContext", "InvalidStateError");
+          return new FakeGainNode();
+        }
+        decodeAudioData(buf, ok){ ok({ duration: 1 }); }
+        resume(){
+          if (this.state === "closed") return Promise.reject(new Error("cannot resume a closed context"));
+          this.state = "running";
+          return Promise.resolve();
+        }
+      }
+      window.AudioContext = window.webkitAudioContext = FakeAudioContext;
+      gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+      let __p = loadPrefs(); __p.craftDrawSeconds = 3; savePrefs(__p);
+      craftFlowOpen = true;
+      gameState.craftPrizeWinner = null;
+      renderAll();
+      `,
+    );
+    evalIn(window, "startCraftPrizeDraw();");
+    await new Promise((r) => setTimeout(r, 300));
+    assert.equal(
+      evalIn(window, "!!activeWebAudio.loopSource"),
+      true,
+      "the loop never actually started, so this isn't testing a mid-roll invalidation",
+    );
+    // The OS pulls the audio session out from under the page mid-roll.
+    evalIn(window, "webAudioCtx.state = 'closed';");
+    await new Promise((r) => setTimeout(r, 3000));
+    assert.equal(evalIn(window, "craftDrawState"), null, "draw got stuck instead of finishing");
+    const winner = evalIn(window, "gameState.craftPrizeWinner");
+    assert.ok(winner && typeof winner.ti === "number", "no winner was picked");
+    assert.equal(
+      evalIn(window, "!!activeWebAudio.endSource"),
+      true,
+      "the crash cue was never actually scheduled",
+    );
+  });
 });
 
 // ============================================================================
