@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.42 - 2026-08-24
+- **Added re-render scroll-anchor regression tests for #mainContent's other big re-render-heavy user interactions** — marking a wager correct/incorrect in question answering, sorting the halftime and final standings, and opening the Craft Prize drawing (drumroll) — extending the same getBoundingClientRect-mocked coverage the v19.41 scoreboard tests introduced to `renderLeft()`'s own anchor-pin mechanism (in place before this session, but previously untested). Verified meaningful by temporarily breaking `renderLeft()`'s pinAnchor and confirming all four fail, then restoring it and confirming all pass.
+
 ## v19.41 - 2026-08-24
 - **Added a "Sound Test Buttons" toggle in Advanced Settings.** The Craft Prize Drawing section's Roll/Fade/Crash/Horn test buttons (handy for checking the drumroll's audio clips without running a full drawing) are now hidden by default and shown only once a host opts in, same pattern as Point Adjustments. The row itself only appears once Manual Drumroll Control is also on — a test toolbar for a feature the host hasn't opted into yet would just be clutter — and the Craft Prize block's actual Test Sounds bar requires both prefs together, same as the row that controls it.
 - **Added regression tests for v19.40's scoreboard scroll-jump fix** — a real click on a score-row's CB Prize control, with `getBoundingClientRect` mocked to simulate the row-height shift a real browser reflow would produce, asserting `renderSB()` compensates `scrollTop` by exactly that shift instead of the old flat restore (verified these fail against the pre-v19.40 code, and pass with it) — plus coverage for the new Sound Test Buttons gating.

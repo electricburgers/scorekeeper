@@ -1334,6 +1334,161 @@ describe("Scoreboard sidebar re-render: CB Prize tap keeps the tapped row visual
 });
 
 // ============================================================================
+// Main column re-render (renderLeft, js/app.js) — the general-purpose counterpart to the
+// #sidebarBody-specific bug fixed above. renderLeft has anchored on lastClickAnchorSel (the same
+// getBoundingClientRect-delta pinAnchor technique renderSB now also uses) since before this
+// session; these tests aren't chasing a new bug there, they're closing the coverage gap — three
+// of #mainContent's own most re-render-heavy user interactions (marking a wager correct/
+// incorrect, sorting the halftime/final standings, opening the Craft Prize drawing) had no
+// regression test proving they actually anchor-pin rather than silently falling back to a flat
+// scrollTop restore. Same jsdom caveat as the sidebar tests above: getBoundingClientRect is
+// mocked to hand back two different values (pre-render vs. post-render) standing in for a real
+// browser's reflow, since jsdom itself does no layout.
+// ============================================================================
+describe("Main column re-render: question answering, halftime/final standings, and the Craft Prize drawing all stay anchored", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+
+  it("marking a wager correct/incorrect anchors on that exact team-answer row ([data-ta]), and #mainContent's scrollTop is compensated by the row's simulated on-screen shift", () => {
+    const out = evalIn(
+      window,
+      `(function(){
+        gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+        renderAll();
+        const m = document.getElementById("mainContent");
+        m.scrollTop = 50;
+
+        // Skip any wager button already disabled as "used elsewhere this round" — a disabled
+        // button doesn't dispatch a click at all (same as a real browser), which would make this
+        // test pass for the wrong reason (nothing ran, not "nothing moved").
+        const wagerBtn = document.querySelector(".team-answer[data-ta] .wager-btn:not([disabled])");
+        const ta = wagerBtn.closest(".team-answer").getAttribute("data-ta");
+
+        let calls = 0;
+        Element.prototype.getBoundingClientRect = function () {
+          calls++;
+          return { top: calls === 1 ? 200 : 225, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
+        };
+
+        wagerBtn.click();
+
+        return JSON.stringify({ ta, scrollTop: m.scrollTop, calls });
+      })();`,
+    );
+    const result = JSON.parse(out);
+    assert.ok(result.ta, "expected an enabled wager button inside a [data-ta] row");
+    // 50 (pre-click scrollTop) + 25 (the row's simulated shift) — not 50 (a flat restore that
+    // ignored the shift) and not 200/225 (the raw mocked measurements themselves).
+    assert.equal(result.scrollTop, 75);
+    assert.equal(result.calls, 2);
+  });
+
+  it("sorting the halftime standings anchors on its own sort-buttons row (#standings-sortbtns-halftime), compensating scrollTop the same way", () => {
+    const out = evalIn(
+      window,
+      `(function(){
+        gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+        renderAll();
+        const m = document.getElementById("mainContent");
+        m.scrollTop = 60;
+
+        const sortBtn = document.querySelector("#standings-sortbtns-halftime .standings-sort-btn");
+
+        let calls = 0;
+        Element.prototype.getBoundingClientRect = function () {
+          calls++;
+          return { top: calls === 1 ? 150 : 170, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
+        };
+
+        sortBtn.click();
+
+        return JSON.stringify({ scrollTop: m.scrollTop, calls });
+      })();`,
+    );
+    const result = JSON.parse(out);
+    assert.equal(result.scrollTop, 80); // 60 + the simulated 20px shift
+    assert.equal(result.calls, 2);
+  });
+
+  it("sorting the final standings anchors the same way (#standings-sortbtns-final), independent of the halftime block above it", () => {
+    const out = evalIn(
+      window,
+      `(function(){
+        gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+        renderAll();
+        const m = document.getElementById("mainContent");
+        m.scrollTop = 65;
+
+        const sortBtn = document.querySelector("#standings-sortbtns-final .standings-sort-btn");
+
+        let calls = 0;
+        Element.prototype.getBoundingClientRect = function () {
+          calls++;
+          return { top: calls === 1 ? 400 : 435, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
+        };
+
+        sortBtn.click();
+
+        return JSON.stringify({ scrollTop: m.scrollTop, calls });
+      })();`,
+    );
+    const result = JSON.parse(out);
+    assert.equal(result.scrollTop, 100); // 65 + the simulated 35px shift
+    assert.equal(result.calls, 2);
+  });
+
+  it("opening the Craft Prize drawing (the drumroll section) anchors on #sec-craftprize, the nearest ancestor the click listener recognizes", () => {
+    const out = evalIn(
+      window,
+      `(function(){
+        gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+        renderAll();
+        const m = document.getElementById("mainContent");
+        m.scrollTop = 90;
+
+        const drawBtn = document.querySelector("#sec-craftprize .cp-draw-btn");
+
+        let calls = 0;
+        Element.prototype.getBoundingClientRect = function () {
+          calls++;
+          return { top: calls === 1 ? 300 : 340, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
+        };
+
+        drawBtn.click();
+
+        return JSON.stringify({ scrollTop: m.scrollTop, calls, craftFlowOpen });
+      })();`,
+    );
+    const result = JSON.parse(out);
+    assert.equal(result.craftFlowOpen, true); // proves the click actually ran openCraftPrizeFlow()
+    assert.equal(result.scrollTop, 130); // 90 + the simulated 40px shift
+    assert.equal(result.calls, 2);
+  });
+
+  it("a re-render with no clicked anchor (e.g. a direct state change, not a tap) falls back to the plain pre-render scrollTop, same contract as renderSB's fallback", () => {
+    const out = evalIn(
+      window,
+      `(function(){
+        gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+        renderAll();
+        const m = document.getElementById("mainContent");
+        m.scrollTop = 33;
+        lastClickAnchorSel = null;
+        Element.prototype.getBoundingClientRect = function () {
+          return { top: 999, left: 0, right: 0, bottom: 0, width: 0, height: 0 };
+        };
+        renderLeft();
+        return m.scrollTop;
+      })();`,
+    );
+    assert.equal(out, 33);
+  });
+});
+
+// ============================================================================
 // Update check (checkForUpdate, js/app.js) — fetches version.json (cache-busted, cache:
 // "no-store") and, if it names a version different from APP_VERSION, sets latestVersion and
 // drives a quiet gear-icon dot + a "vX.X available" note under the version line in Settings
