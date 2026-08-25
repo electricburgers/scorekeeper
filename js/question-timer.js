@@ -17,6 +17,16 @@ let qtDurationSec = QT_DEFAULT_SEC,
   qtRemainMs = 0,
   qtState = "idle"; // idle | running | paused
 
+// The two .qtimer-display/.qtimer-toggle/.qtimer-reset pairs (desktop + mobile — see the file
+// note above) are static markup baked into index.html, outside #mainContent/#sidebarBody, so
+// unlike almost everything else in this app they're never torn down and rebuilt by an innerHTML
+// rewrite. That makes it safe to query them once and reuse the NodeList, instead of re-running
+// querySelectorAll on every 200ms tick (tickQTimer, ~5x/sec for the whole time a timer is
+// running or paused) just to find the same two nodes again.
+let qtDisplayEls = null,
+  qtLastDisplayText = null,
+  qtLastDisplayNeg = false;
+
 // Minutes never get a leading zero (single-digit minutes read as "3:05", not "03:05") — the
 // countdown never reaches double-digit minutes anyway (15 max), so there's nothing to align.
 // Seconds always keep theirs, same as any normal clock display.
@@ -32,7 +42,15 @@ function fmtQt(totalSec) {
 // jumps at the exact moment time runs out, which reads as a glitch rather than the intended
 // "time's up" signal.
 function qtSetDisplayText(fmt) {
-  document.querySelectorAll(".qtimer-display").forEach((d) => {
+  // tickQTimer calls this every 200ms while a timer is running/paused, but the formatted
+  // text only actually changes once a second (fmtQt rounds to whole seconds) — so ~80% of
+  // ticks were re-writing innerHTML with the exact text already on screen. Skipping the
+  // no-op case cuts real DOM writes down to once/sec without changing what's ever shown.
+  if (qtLastDisplayText === fmt.text && qtLastDisplayNeg === fmt.neg) return;
+  qtLastDisplayText = fmt.text;
+  qtLastDisplayNeg = fmt.neg;
+  if (!qtDisplayEls) qtDisplayEls = document.querySelectorAll(".qtimer-display");
+  qtDisplayEls.forEach((d) => {
     d.innerHTML = '<span class="qt-sign">−</span>' + fmt.text;
     d.classList.toggle("qt-neg", fmt.neg);
   });
@@ -47,7 +65,10 @@ function qtEndSettlePulse(e) {
   e.currentTarget.style.boxShadow = "";
 }
 function qtSetDisplayClass(cls) {
-  document.querySelectorAll(".qtimer-display").forEach((d) => {
+  // Reuses the same cached static NodeList qtSetDisplayText resolves above — see its
+  // declaration for why re-querying it is unnecessary (the elements never get torn down).
+  if (!qtDisplayEls) qtDisplayEls = document.querySelectorAll(".qtimer-display");
+  qtDisplayEls.forEach((d) => {
     // Whether this display is mid-pulse right now — either still in qt-crit's own infinite
     // animation, or already settling one out from a previous tick.
     const pulsing =

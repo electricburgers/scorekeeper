@@ -55,8 +55,53 @@ const TRStore = (function () {
   };
 })();
 
-function autosave() {
+function persistGameStateNow() {
   TRStore.setItem(STORAGE_KEY, JSON.stringify(gameState));
+}
+// autosave() itself stays synchronous — nearly every caller is an onchange/onclick handler
+// (one discrete user action = one commit), and callers throughout the app (loadFromFile,
+// loadSampleGame, the test suite, etc.) rely on the write having already landed by the time
+// autosave() returns. Delaying those would trade a real durability guarantee (the save surviving
+// an immediate refresh/close) for a save that's rarely called often enough to need debouncing.
+function autosave() {
+  // A pending debounced write (see autosaveDebounced() below) is now stale — this synchronous
+  // call is about to persist current gameState anyway, so drop the timer instead of letting it
+  // fire again later and do the identical write a second time.
+  if (autosaveDebounceTimer) {
+    clearTimeout(autosaveDebounceTimer);
+    autosaveDebounceTimer = null;
+  }
+  persistGameStateNow();
+}
+// The one real exception is Staff Names (js/content.js setStaffNames), wired to oninput rather
+// than onchange so both copies of the field stay in sync as the host types — that means one
+// synchronous localStorage write (a blocking main-thread call) per keystroke instead of per
+// field edit. autosaveDebounced() coalesces a typing burst into a single write after
+// AUTOSAVE_DEBOUNCE_MS of no further input, with flushAutosave() (below) guaranteeing that
+// write still happens if the page is hidden/closed mid-burst rather than being silently lost.
+const AUTOSAVE_DEBOUNCE_MS = 400;
+let autosaveDebounceTimer = null;
+function autosaveDebounced() {
+  if (autosaveDebounceTimer) clearTimeout(autosaveDebounceTimer);
+  autosaveDebounceTimer = setTimeout(() => {
+    autosaveDebounceTimer = null;
+    persistGameStateNow();
+  }, AUTOSAVE_DEBOUNCE_MS);
+}
+function flushAutosave() {
+  if (autosaveDebounceTimer) {
+    clearTimeout(autosaveDebounceTimer);
+    autosaveDebounceTimer = null;
+    persistGameStateNow();
+  }
+}
+if (typeof document !== "undefined") {
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") flushAutosave();
+  });
+}
+if (typeof window !== "undefined") {
+  window.addEventListener("pagehide", flushAutosave);
 }
 function loadSaved() {
   try {

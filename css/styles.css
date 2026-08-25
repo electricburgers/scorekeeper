@@ -596,6 +596,18 @@ button,[role="button"]{touch-action:manipulation}
      overflow-y:hidden on the panel itself hands scrolling to the body alone, so the header/footer
      never scroll out of view with the rows between them. */
   .settings-panel.settings-visible{display:flex;flex-direction:column;overflow-y:hidden}
+  /* .settings-panel.settings-visible switching to flex above already collapses the main list to
+     one column (grid-template-columns no longer applies once display isn't grid), but
+     .settings-advanced-group is its OWN display:grid element nested inside — its base rule
+     further down this file (repeat(auto-fill,minmax(220px,1fr))) still applies here, since
+     nothing between here and 600px ever overrode it the way the min-width:601px rule below does.
+     At a width that fits two 220px columns plus the 24px gap (~464px+ — a phone in landscape, or
+     a resized window) that meant Advanced Settings alone popped into two columns while
+     everything above and below it in the same panel stayed one, right in the gap between "mobile
+     enough to use the flex layout" and "wide enough to hit the desktop override". Pinning it to
+     one column here closes that gap: single column now holds everywhere on both sides of the
+     600px breakpoint, never two. */
+  .settings-advanced-group{grid-template-columns:1fr}
   /* overflow-x:hidden is load-bearing here too, same reasoning as the panel's own rule above it
      in the file: setting overflow-y to anything but visible makes the UA compute an unset
      overflow-x as auto instead, which would silently reopen the horizontal-scroll bug that rule
@@ -646,7 +658,13 @@ button,[role="button"]{touch-action:manipulation}
      used to (visually separating the version/disclaimer block from the scrolling settings rows
      above); moved to the wrapper since it separates the whole anchored footer from the body,
      not just .settings-meta specifically. */
-  .settings-panel-foot{border-top:1px solid var(--border-strong);margin-top:2px;padding-top:8px}
+  /* Same idea as .settings-panel-head's shadow above (see its comment), mirrored: a faint upward
+     fade off the footer's own top edge, hinting the row just above it is scrollable content
+     sliding in underneath a pinned bar rather than the panel simply ending there. Needs its own
+     opaque background for the same reason the head does — .settings-panel-body's rows scroll
+     behind this footer, not past it, so without one the shadow would read through whatever row
+     happens to be scrolled underneath instead of sitting on top of it. */
+  .settings-panel-foot{background:var(--bg-card);border-top:1px solid var(--border-strong);margin-top:2px;padding-top:8px;box-shadow:0 -8px 10px -8px rgba(0,0,0,.6)}
   .settings-meta{padding-top:0}
   /* .settings-controls is flex-shrink:0 by design (the slider needs its fixed 120px), and a few
      rows pack two buttons into it ("Copy"+"TXT", "Save"+"Load") or pair it with a long label

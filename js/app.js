@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.51"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.52"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 25, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -653,6 +653,14 @@ let lastClickAnchorSel = null;
 // renderLeft() before renderSB(), and renderLeft() reads-then-clears lastClickAnchorSel on every
 // call, which would silently eat a sidebar click's anchor before renderSB ever got to it.
 let lastSBClickAnchorSel = null;
+// Last string actually assigned to #mainContent/#sidebarBody's innerHTML — see the no-op-write
+// skip in renderLeft()/renderSB() for why this is compared against instead of reading the DOM's
+// own innerHTML back. Declared here (well before the auto-render this file triggers on load)
+// rather than down by renderLeft() itself, since `let` isn't hoisted with a usable value the
+// way a function declaration is — a render triggered during initial page load would otherwise
+// hit this before its own declaration ran.
+let lastRenderedLeftHTML = null,
+  lastRenderedSBHTML = null;
 document.addEventListener(
   "click",
   (e) => {
@@ -1175,7 +1183,22 @@ function renderLeft() {
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>
   </div></div>`;
 
-  m.innerHTML = h;
+  // Skipping the write when nothing actually changed avoids a full reparse+repaint of the
+  // entire left column on a render that turns out to be a no-op (e.g. two renderAll() calls
+  // back to back from the same event, or a re-render triggered by something that doesn't
+  // affect this section's markup). Compared against a cached copy of the last string actually
+  // ASSIGNED (lastRenderedLeftHTML), not against m.innerHTML read back from the DOM — the
+  // getter re-serializes the live tree, which is not guaranteed byte-identical to the template
+  // string that produced it (attribute-order/quoting normalization, form controls' live
+  // value/checked/selected state reflecting back differently than the HTML that set them,
+  // etc.), so comparing against it would almost never actually match and this would never skip
+  // anything. Harmless either way for the anchor/scroll-restore logic below: identical content
+  // means the anchor's rect can't have moved, so pinAnchor() below measures a delta of ~0 and
+  // writes nothing.
+  if (h !== lastRenderedLeftHTML) {
+    m.innerHTML = h;
+    lastRenderedLeftHTML = h;
+  }
   // Keeps --mini-progress-h in sync with .mini-progress's real rendered height, the same way
   // --header-h/--mobile-dock-h already are elsewhere — used by .section/.question-block/
   // .special-section's scroll-margin-top (styles.css) so jumpToSection/jumpToFirstUnanswered
@@ -1746,12 +1769,19 @@ function renderSB() {
   const anchorBefore = anchorSel
     ? body.querySelector(anchorSel)?.getBoundingClientRect().top
     : undefined;
-  body.innerHTML = `<div class="sort-controls">
+  const newBody = `<div class="sort-controls">
     <button class="sort-btn ${scoreSortMode === "entry" ? "active" : ""}" onclick="setSortMode('entry')">Entry</button>
     <button class="sort-btn ${scoreSortMode === "random" ? "active" : ""}" onclick="setSortMode('random')" title="Shuffle" aria-label="Shuffle">${ICON_SHUFFLE}<span class="sr-only">Shuffle</span></button>
     <button class="sort-btn ${scoreSortMode === "asc" ? "active" : ""}" onclick="setSortMode('asc')">${ICON_ARROW_UP} Asc</button>
     <button class="sort-btn ${scoreSortMode === "desc" ? "active" : ""}" onclick="setSortMode('desc')">${ICON_ARROW_DOWN} Desc</button>
   </div><div class="sort-mode-label">${sortModeLabel()}</div>${buildScores()}`;
+  // Same no-op-write skip as renderLeft() above — compared against the cached string actually
+  // assigned last time, not body.innerHTML read back from the DOM. See renderLeft()'s comment
+  // for why the DOM's own serialization isn't a reliable equality check here.
+  if (newBody !== lastRenderedSBHTML) {
+    body.innerHTML = newBody;
+    lastRenderedSBHTML = newBody;
+  }
   const list = body.querySelector(".scores-list");
   const anchorEl =
     anchorBefore === undefined ? null : body.querySelector(anchorSel);

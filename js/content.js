@@ -184,7 +184,10 @@ function cycleStaffThanks() {
    assigning .value to a focused textarea moves the cursor to the end. */
 function setStaffNames(v) {
   gameState.meta.staffNames = v;
-  autosave();
+  // Debounced, not autosave() — this runs on every keystroke (oninput), and coalescing a
+  // typing burst into one write after a pause avoids a synchronous localStorage write per
+  // character. See autosaveDebounced() in js/storage.js.
+  autosaveDebounced();
   document.querySelectorAll(".staff-names-input").forEach((el) => {
     if (el !== document.activeElement && el.value !== v) el.value = v;
   });
