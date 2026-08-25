@@ -1,8 +1,15 @@
-@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/inter-400.woff2') format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url('../fonts/inter-600.woff2') format('woff2')}
-@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/inter-700.woff2') format('woff2')}
-@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url('../fonts/space-grotesk-500.woff2') format('woff2')}
-@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/space-grotesk-700.woff2') format('woff2')}
+/* Both files below are variable fonts covering their whole weight range in one download — same
+   files/approach as faq/css/fonts.css. Inter's file is referenced by all three weights this app
+   uses (400/600/700) and Space Grotesk's by both of its (500/700); the browser resolves each
+   declared font-weight to the matching instance on the variable axis, so this is only two actual
+   font-file downloads even though there are five @font-face blocks. Previously five separate
+   static-weight files (~104KB total) — down to inter-var.woff2 + space-grotesk-var.woff2
+   (~70KB total, and 3 fewer requests) for the exact same rendered weights. */
+@font-face{font-family:'Inter';font-style:normal;font-weight:400;font-display:swap;src:url('../fonts/inter-var.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:600;font-display:swap;src:url('../fonts/inter-var.woff2') format('woff2')}
+@font-face{font-family:'Inter';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/inter-var.woff2') format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:500;font-display:swap;src:url('../fonts/space-grotesk-var.woff2') format('woff2')}
+@font-face{font-family:'Space Grotesk';font-style:normal;font-weight:700;font-display:swap;src:url('../fonts/space-grotesk-var.woff2') format('woff2')}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root,[data-theme="dark"]{

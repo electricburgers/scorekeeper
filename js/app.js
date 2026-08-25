@@ -30,8 +30,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.50"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Aug 24, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v19.51"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Aug 25, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -963,7 +963,12 @@ function setSortMode(mode) {
   scoreSortMode = mode;
   renderSB();
 }
-function getDisplayOrder() {
+// rm: an already-computed rankMap() result, when the caller has one handy (buildScores() below
+// always does) — skips a second full rankMap()/ranked() pass (each team's grandTotal(), each of
+// which itself sums 4 roundSub() calls) over every team purely to re-derive a value the caller
+// already had. Falls back to computing it fresh so any other/future caller without one still
+// works unchanged.
+function getDisplayOrder(rm) {
   const n = gameState.teams.length;
   if (scoreSortMode === "random" && randomOrder && randomOrder.length === n)
     return randomOrder.slice();
@@ -972,7 +977,7 @@ function getDisplayOrder() {
     // rather than grandTotal alone — otherwise a tied pair could land in an order that
     // contradicts their #1/#2 rank badges, and Ascending's "dramatic reveal" could end on the
     // 2nd-place team instead of the actual winner.
-    const rm = rankMap();
+    rm = rm || rankMap();
     const order = gameState.teams.map((_, i) => i);
     order.sort((a, b) => rm[a] - rm[b] || a - b);
     if (scoreSortMode === "asc") order.reverse();
@@ -1778,13 +1783,17 @@ function buildScores() {
   if (!gameState.teams.length)
     return '<div class="scores-list" style="color:var(--text-muted);padding:12px;">Add teams to begin.</div>';
   const rm = rankMap();
-  const order = getDisplayOrder();
+  const order = getDisplayOrder(rm);
   let h = '<div class="scores-list">';
   order.forEach((ti) => {
     const t = gameState.teams[ti],
-      tot = grandTotal(ti),
       rank = rm[ti],
       rc = rank <= 3 ? "sr-rank-" + rank : "";
+    // r1..r4/ht/fw/bi/nj/adj are exactly the addends grandTotal(ti) itself would sum — computed
+    // once here and reused for both the total and the tooltip's own breakdown, rather than
+    // calling grandTotal(ti) (which re-sums roundSub() across all 4 rounds internally) AND
+    // separately calling roundSub() another 4 times just for the tooltip, on every team, on
+    // every sidebar render.
     const r1 = roundSub(ti, 0),
       r2 = roundSub(ti, 1),
       r3 = roundSub(ti, 2),
@@ -1794,6 +1803,7 @@ function buildScores() {
       bi = t.bonusItem ? 5 : 0,
       nj = t.njcb ? 3 : 0,
       adj = t.adjustment || 0;
+    const tot = r1 + r2 + r3 + r4 + ht + fw + bi + nj + adj;
     const tip = [
       "R1:" + r1,
       "HT:" + (ht >= 0 ? "+" : "") + ht,

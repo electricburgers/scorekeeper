@@ -1,5 +1,39 @@
 "use strict";
 
+// Export libraries — fflate, jsPDF, and the embedded XLSX backup template — are ~500KB combined
+// (jsPDF alone is 412KB) and are only ever touched by the two buttons below, something most
+// visits never click. index.html no longer loads them as blocking <script> tags; this loads
+// each exactly once, on first actual use, as a real classic <script> (so it lands in the same
+// shared global scope every other file here does, same as if it had always been on the page —
+// see index.html's own comment on that), and caches the in-flight/settled promise so a second
+// export in the same session doesn't refetch anything. A failed load (offline, blocked) clears
+// the cached promise rather than poisoning it forever, so a later retry gets a fresh attempt.
+const EXPORT_LIB_SRCS = [
+  "js/vendor/fflate.min.js",
+  "js/vendor/jspdf.min.js",
+  "js/data/xlsx-templates.js",
+];
+let exportLibsPromise = null;
+function loadScriptOnce(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement("script");
+    s.src = src;
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error("Failed to load " + src));
+    document.head.appendChild(s);
+  });
+}
+function loadExportLibs() {
+  if (!exportLibsPromise) {
+    exportLibsPromise = Promise.all(EXPORT_LIB_SRCS.map(loadScriptOnce)).catch(
+      (err) => {
+        exportLibsPromise = null;
+        throw err;
+      },
+    );
+  }
+  return exportLibsPromise;
+}
 
 function buildRows() {
   const rm = rankMap();
@@ -123,8 +157,9 @@ function expCols() {
   ];
 }
 
-function exportPDF() {
+async function exportPDF() {
   try {
+    await loadExportLibs();
     if (typeof window.jspdf === "undefined" || !window.jspdf.jsPDF) {
       appAlert("PDF library not loaded — cannot build PDF.");
       return;
@@ -1027,8 +1062,9 @@ function trivInjectXlsx(templateBytes, gs, rk) {
   files["xl/workbook.xml"] = enc.encode(wb);
   return fflate.zipSync(files, { level: 6 });
 }
-function exportXLSXBackup() {
+async function exportXLSXBackup() {
   try {
+    await loadExportLibs();
     if (typeof fflate === "undefined") {
       appAlert("Zip library not loaded \u2014 cannot build XLSX.");
       return;

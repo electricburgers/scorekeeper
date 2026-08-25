@@ -27,8 +27,8 @@
 <meta name="twitter:title" content="Scorekeeper">
 <meta name="twitter:description" content="Live trivia night scorekeeping — works offline once installed.">
 <meta name="twitter:image" content="icons/icon-512.png">
-<link rel="preload" href="fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/space-grotesk-700.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/space-grotesk-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/tutorial.css">
 </head>
@@ -576,9 +576,15 @@
     </div>
   </div>
 </div>
-<script src="js/vendor/fflate.min.js"></script>
-<script src="js/vendor/jspdf.min.js"></script>
-<script src="js/data/xlsx-templates.js"></script>
+<!--
+  fflate.min.js, jspdf.min.js, and js/data/xlsx-templates.js used to load right here as blocking
+  <script> tags on every single page load — ~500KB combined (jsPDF alone is 412KB), for code only
+  ever touched by the Export & Data buttons' PDF/XLSX backup, something most visits never click.
+  js/export.js now fetches these three lazily, on first actual use of exportPDF()/
+  exportXLSXBackup(), and caches the result so a second export in the same session is instant.
+  sw.js still precaches all three under SHELL_FILES so a host who's used export once is covered
+  offline from then on.
+-->
 <script src="js/shared-ui.js"></script>
 <!--
   js/app.js used to be one 5,900-line, 2.4MB file (audio extraction — moved to real files under

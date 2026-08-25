@@ -1211,13 +1211,16 @@ describe("Export smoke test", () => {
   });
   after(() => window.close());
 
-  it("exportXLSXBackup() produces a zip fflate can read back, with the template's own entry count (no corruption)", () => {
+  it("exportXLSXBackup() produces a zip fflate can read back, with the template's own entry count (no corruption)", async () => {
     // Everything below runs inside the window's own realm via one evalIn() call, deliberately —
     // fflate.zipSync/unzipSync do their own `instanceof Uint8Array` checks against THEIR OWN
     // realm's Uint8Array (see beforeParse's TextEncoder comment for the same issue elsewhere),
     // so handing them a Node-side-reconstructed typed array here would risk masking exactly the
     // class of bug this test exists to catch. Only the small JSON summary crosses the boundary.
-    evalIn(window, "exportXLSXBackup()");
+    // exportXLSXBackup() is async now (it lazy-loads fflate/jsPDF/the XLSX template on first use
+    // — see js/export.js's loadExportLibs) — evalIn() hands back the promise it returns, and
+    // that's awaited here the same as it would be from a real onclick, just explicit about it.
+    await evalIn(window, "exportXLSXBackup()");
     const result = JSON.parse(
       evalIn(
         window,
@@ -1249,8 +1252,9 @@ describe("Export smoke test", () => {
     );
   });
 
-  it("exportPDF() runs to completion against an 11-team game without throwing", () => {
-    assert.doesNotThrow(() => evalIn(window, "exportPDF()"));
+  it("exportPDF() runs to completion against an 11-team game without throwing", async () => {
+    // Also async now, for the same lazy-load reason as exportXLSXBackup() above.
+    await assert.doesNotReject(() => evalIn(window, "exportPDF()"));
     const found = evalIn(
       window,
       '[...window.__mockBlobUrls.values()].some((b) => b.parts && b.parts.length > 0)',

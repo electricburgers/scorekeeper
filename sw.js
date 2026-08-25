@@ -29,15 +29,24 @@
 // this whole service worker exists for, so it's worth the few extra KB at install time. The FAQ's
 // 50+ screenshots are deliberately left out: they're still cached opportunistically on first view,
 // same as before, rather than ballooning what a fresh install has to fetch before it's usable.
-const CACHE_NAME='trivia-scorekeeper-shell-v12';
+// v13: js/vendor/fflate.min.js, js/vendor/jspdf.min.js, and js/data/xlsx-templates.js are no
+// longer <script>-tagged in index.html (js/export.js now fetches them lazily on first PDF/XLSX
+// export, off the page's initial load) — kept here anyway so a host who's exported once is still
+// covered offline after that. Also switches the app's own fonts from five static-weight files to
+// the same two variable fonts (inter-var.woff2/space-grotesk-var.woff2) the FAQ already used —
+// and precaches the app's copies, which — unlike the FAQ's — were never listed here before.
+const CACHE_NAME='trivia-scorekeeper-shell-v13';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
+  './fonts/inter-var.woff2','./fonts/space-grotesk-var.woff2',
   // The ten files js/app.js was split into — see index.html, above these same script tags,
   // for why.
   './js/storage.js','./js/icons.js','./js/content.js','./js/scoring.js','./js/dom-utils.js',
   './js/confirm-dialog.js','./js/team-audit.js','./js/question-timer.js','./js/craft-prize.js',
   './js/export.js',
   './js/app.js','./js/tutorial.js',
+  // Lazy-loaded by js/export.js on first PDF/XLSX export — see the v13 note above — but still
+  // precached here so that first export works offline too, not just every one after it.
   './js/vendor/fflate.min.js','./js/vendor/jspdf.min.js','./js/data/xlsx-templates.js',
   // v19.40 dropped the legacy HTML5-audio drumroll engine (silent/roll/finale/horn.mp3 plus
   // js/data/drum-clips.js, its fade-source base64 file) in favor of the Web Audio engine alone —
