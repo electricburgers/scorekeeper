@@ -35,7 +35,12 @@
 // covered offline after that. Also switches the app's own fonts from five static-weight files to
 // the same two variable fonts (inter-var.woff2/space-grotesk-var.woff2) the FAQ already used —
 // and precaches the app's copies, which — unlike the FAQ's — were never listed here before.
-const CACHE_NAME='trivia-scorekeeper-shell-v13';
+// v14: js/tutorial.js is no longer a blocking <script> tag either — same lazy-on-first-use
+// treatment as v13's export libs (js/app.js's loadTutorialLib(), triggered on first "Take the
+// Tour" click). The tiny bit that has to run on every page load regardless — deciding whether
+// to OFFER the tour to a first-time visitor — moved into its own new eager file,
+// js/tutorial-firstrun.js, added here alongside it.
+const CACHE_NAME='trivia-scorekeeper-shell-v14';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
   './fonts/inter-var.woff2','./fonts/space-grotesk-var.woff2',
@@ -44,7 +49,11 @@ const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png',
   './js/storage.js','./js/icons.js','./js/content.js','./js/scoring.js','./js/dom-utils.js',
   './js/confirm-dialog.js','./js/team-audit.js','./js/question-timer.js','./js/craft-prize.js',
   './js/export.js',
-  './js/app.js','./js/tutorial.js',
+  './js/app.js','./js/tutorial-firstrun.js',
+  // v19.54 lazy-loads this on first Take the Tour click (loadTutorialLib(), js/app.js) rather
+  // than a blocking <script> tag — kept here anyway, same as the export libs already were as of
+  // v19.51, so a host that has taken the tour once is still covered offline after that.
+  './js/tutorial.js',
   // Lazy-loaded by js/export.js on first PDF/XLSX export — see the v13 note above — but still
   // precached here so that first export works offline too, not just every one after it.
   './js/vendor/fflate.min.js','./js/vendor/jspdf.min.js','./js/data/xlsx-templates.js',

@@ -600,7 +600,10 @@ function startCraftPrizeDraw() {
     const numEl = document.getElementById("cpCountdownNum");
     if (numEl) numEl.textContent = Math.ceil(st.remaining / 1000) + "s";
     const barEl = document.getElementById("cpCountdownBar");
-    if (barEl) barEl.style.width = st.pct + "%";
+    // transform:scaleX(), not width — see .cp-countdown-fill's own comment (css/styles.css) for
+    // why: this fires every 100ms for the whole drumroll, and scaleX runs on the compositor
+    // instead of triggering a layout pass on every single tick.
+    if (barEl) barEl.style.transform = "scaleX(" + st.pct / 100 + ")";
   }, 100);
   // The finale and the winner selection share one timer so the reveal and the sound land together.
   // Audio first, and the winner deferred by a task rather than run inline: finalizeCraftPrizeWinner
@@ -752,7 +755,7 @@ function renderCraftPrizeBlock() {
         pct: 0,
       };
       h += `<div class="cp-countdown">
-      <div class="cp-countdown-track"><div class="cp-countdown-fill" id="cpCountdownBar" style="width:${st.pct}%"></div></div>
+      <div class="cp-countdown-track"><div class="cp-countdown-fill" id="cpCountdownBar" style="transform:scaleX(${st.pct / 100})"></div></div>
       <div class="cp-countdown-num" id="cpCountdownNum">${Math.ceil(st.remaining / 1000)}s</div>
     </div>`;
       if (prefs.craftManualEnd) {

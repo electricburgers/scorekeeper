@@ -750,7 +750,7 @@ describe("Icon Style: theme-dependent emoji selection", () => {
     try {
       const targets = evalIn(window, "STATIC_ICON_TARGETS");
       const tourTarget = targets.find((t) =>
-        t.sel.includes("Tutorial.start"),
+        t.sel.includes("startTutorial"),
       );
       assert.ok(tourTarget, "Take the Tour target not found in STATIC_ICON_TARGETS");
       assert.match(tourTarget.emoji, /👋/);
@@ -792,12 +792,16 @@ describe("Crowd-Wisdom Percentage naming", () => {
 // Tutorial (js/tutorial.js) step table structural validity
 // ============================================================================
 describe("Tutorial step table", () => {
-  // Tutorial is a top-level `const` (js/tutorial.js), same non-window-property lexical binding
-  // as APP_VERSION/gameState — evalIn() gets the real object reference once; calling its own
-  // methods off that reference works normally from there.
+  // js/tutorial.js is lazy-loaded on first use (loadTutorialLib(), js/app.js), not a blocking
+  // <script> tag — Tutorial doesn't exist as a global until that real dynamic <script> element
+  // has actually been fetched and run, same as jsdom already does for the export libs'
+  // identical loadScriptOnce() pattern. Tutorial is then a top-level `const` (js/tutorial.js),
+  // same non-window-property lexical binding as APP_VERSION/gameState — evalIn() gets the real
+  // object reference once; calling its own methods off that reference works normally from there.
   let window, Tutorial;
   before(async () => {
     window = await loadAppWindow();
+    await evalIn(window, "loadTutorialLib()");
     Tutorial = evalIn(window, "Tutorial");
   });
   after(() => window.close());
@@ -893,6 +897,11 @@ describe("Tutorial full walkthrough", () => {
          renderSB = function (...a) { window.__rc.sb++; return _sb.apply(this, a); };
        })();`,
     );
+    // js/tutorial.js is lazy-loaded on first use — see "Tutorial step table" describe's own
+    // comment above. Loaded AFTER the render-count hooks above are installed (so nothing
+    // Tutorial.start() itself triggers is missed) but BEFORE calling it, same real sequence a
+    // host clicking "Take the Tour" goes through.
+    await evalIn(window, "loadTutorialLib()");
     await evalIn(window, "Tutorial.start()");
     // The one thing next() can't simulate: real keystrokes into Quiz ID/Host Name. Without
     // these, canScore() (js/app.js) blocks every single scoring tap app-wide — the tour would

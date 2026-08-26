@@ -302,7 +302,7 @@ const STATIC_ICON_TARGETS = [
   { sel: '.toolbar button[onclick="triggerLoadFile()"]', emoji: '<span class="icon-emoji">📂</span>', label: " Load" },
   { sel: 'a[href="faq/index.html"]', emoji: '<span class="icon-emoji">❓</span>', label: " FAQ" },
   { sel: 'button[onclick="loadSampleGame()"]', emoji: '<span class="icon-emoji">🧪</span>', label: " Try Example" },
-  { sel: 'button[onclick="Tutorial.start()"]', emoji: '<span class="icon-emoji">👋</span>', label: " Take the Tour" },
+  { sel: 'button[onclick="startTutorial()"]', emoji: '<span class="icon-emoji">👋</span>', label: " Take the Tour" },
   // App Preferences (Advanced Settings) and Craft Prize Eligible List's Copy/TXT — four buttons
   // that never made it into this table at all, so Icon Style's Emoji mode silently skipped them
   // while every other icon-bearing static button in Settings swapped correctly.

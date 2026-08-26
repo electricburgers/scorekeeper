@@ -1001,27 +1001,87 @@ function trivXSet(xml, ref, kind, val) {
       "</t></is></c>";
   return xml.slice(0, f.i) + nw + xml.slice(f.i + f.len);
 }
+// trivXFind/trivXSet above do one fresh regex scan of the WHOLE sheet XML per cell — fine for a
+// one-off patch, but trivInjectXlsx below used to call trivXSet once per cell it touches (name,
+// guess, bonus, all 16 wager cells, 2 bonus/net cells per team, plus the ranked-standings
+// columns) — 20-30 calls per team, each rescanning the entire XML string from scratch and
+// rebuilding a new same-length copy of it. At MAX_TEAMS (100) that's ~2000-3000 full-string
+// passes over what can be a sizable sheet. trivXIndex scans the XML exactly ONCE, indexing
+// every <c r="REF">...</c> (self-closing or not) by its ref; trivXPatchAll then applies every
+// queued patch against that one index in a single reconstruction pass instead of one pass per
+// cell. trivXFind/trivXSet themselves are untouched — still used standalone (and by their own
+// tests) for a single ad-hoc patch, where the index-building overhead wouldn't pay for itself.
+function trivXIndex(xml) {
+  const idx = new Map();
+  // Same two shapes trivXFind checks for (self-closing vs open/close), combined into one pass:
+  // [^>]*? lazily stops right before whichever '>' actually closes the tag, and the alternation
+  // then matches EITHER '/>' immediately there (self-closing) OR '>' followed by the cell's
+  // content up to '</c>' (the non-self-closing form) — never both, since only one can be the
+  // very next character(s) for a given cell.
+  const re = /<c r="([A-Z]+\d+)"[^>]*?(?:\/>|>[\s\S]*?<\/c>)/g;
+  let m;
+  while ((m = re.exec(xml))) idx.set(m[1], { i: m.index, len: m[0].length, el: m[0] });
+  return idx;
+}
+// patches: array of [ref, kind, val] triples, same arguments trivXSet takes one at a time. A
+// ref not present in the template (idx has no entry) is silently skipped, matching trivXSet's
+// own "no match -> leave xml unchanged" behavior for that one cell.
+function trivXPatchAll(xml, patches) {
+  const idx = trivXIndex(xml);
+  const edits = [];
+  for (const [ref, kind, val] of patches) {
+    const f = idx.get(ref);
+    if (!f) continue;
+    const s = trivStyle(f.el);
+    const nw =
+      kind === "n"
+        ? '<c r="' + ref + '"' + s + "><v>" + val + "</v></c>"
+        : '<c r="' +
+          ref +
+          '"' +
+          s +
+          ' t="inlineStr"><is><t xml:space="preserve">' +
+          trivEsc(val) +
+          "</t></is></c>";
+    edits.push({ i: f.i, len: f.len, nw });
+  }
+  // Sorted by position so the single reconstruction pass below can walk the original string
+  // left-to-right once, splicing each edit in as it's reached.
+  edits.sort((a, b) => a.i - b.i);
+  let out = "",
+    pos = 0;
+  for (const e of edits) {
+    out += xml.slice(pos, e.i) + e.nw;
+    pos = e.i + e.len;
+  }
+  return out + xml.slice(pos);
+}
 function trivInjectXlsx(templateBytes, gs, rk) {
   const files = fflate.unzipSync(templateBytes);
   const dec = new TextDecoder("utf-8"),
     enc = new TextEncoder();
   let x = dec.decode(files["xl/worksheets/sheet1.xml"]);
-  if (gs.meta.hostName) x = trivXSet(x, "I1", "s", "HOST: " + gs.meta.hostName);
-  if (gs.meta.location) x = trivXSet(x, "C2", "s", gs.meta.location);
+  // Every cell this export touches is queued here instead of patched immediately (trivXSet)
+  // one at a time — see trivXPatchAll's own comment for why that mattered at real team counts.
+  // Order doesn't matter: trivXPatchAll indexes the XML once up front and sorts by position
+  // itself before splicing, so patches can be queued in whatever order is convenient here.
+  const patches = [];
+  if (gs.meta.hostName) patches.push(["I1", "s", "HOST: " + gs.meta.hostName]);
+  if (gs.meta.location) patches.push(["C2", "s", gs.meta.location]);
   if (gs.meta.quizId) {
-    x = trivXSet(x, "N2", "s", gs.meta.quizId);
-    x = trivXSet(x, "AE2", "s", gs.meta.quizId);
+    patches.push(["N2", "s", gs.meta.quizId]);
+    patches.push(["AE2", "s", gs.meta.quizId]);
   }
   const dtxt = isoToMDY(gs.meta.date);
-  if (dtxt) x = trivXSet(x, "G2", "s", dtxt);
+  if (dtxt) patches.push(["G2", "s", dtxt]);
   gs.teams.forEach((tm, t) => {
     const r = t + 5;
-    if (tm.name) x = trivXSet(x, "B" + r, "s", tm.name);
+    if (tm.name) patches.push(["B" + r, "s", tm.name]);
     const cb = (tm.njcb ? 3 : 0) + (parseInt(tm.adjustment, 10) || 0);
-    if (cb !== 0) x = trivXSet(x, "C" + r, "n", cb);
-    if (tm.bonusItem) x = trivXSet(x, "D" + r, "n", 5);
+    if (cb !== 0) patches.push(["C" + r, "n", cb]);
+    if (tm.bonusItem) patches.push(["D" + r, "n", 5]);
     if (tm.scoreGuess !== "" && tm.scoreGuess != null)
-      x = trivXSet(x, "AH" + r, "n", parseInt(tm.scoreGuess, 10));
+      patches.push(["AH" + r, "n", parseInt(tm.scoreGuess, 10)]);
     for (let ri = 0; ri < 4; ri++) {
       const wm = TRIVX_WMAPS[ri],
         qs = gs.rounds[ri].questions;
@@ -1030,29 +1090,25 @@ function trivInjectXlsx(templateBytes, gs, rk) {
         if (!a || a.wager === undefined) continue;
         const col = wm[a.wager];
         if (!col) continue;
-        if (a.correct === true) x = trivXSet(x, col + r, "n", a.wager);
-        else if (a.correct === false) x = trivXSet(x, col + r, "n", 0);
+        if (a.correct === true) patches.push([col + r, "n", a.wager]);
+        else if (a.correct === false) patches.push([col + r, "n", 0]);
       }
       if (ri === 0 || ri === 2) {
         const c = gs.rounds[ri].bonus[t];
-        if (c != null) x = trivXSet(x, TRIVX_BONUS[ri] + r, "n", c * 5);
+        if (c != null) patches.push([TRIVX_BONUS[ri] + r, "n", c * 5]);
       } else {
         const d = (ri === 1 ? gs.halftime : gs.finalWager)[t];
         if (d && d.wager != null && d.wager !== "" && d.correct != null)
-          x = trivXSet(
-            x,
-            TRIVX_NET[ri] + r,
-            "n",
-            d.correct ? +d.wager : -d.wager,
-          );
+          patches.push([TRIVX_NET[ri] + r, "n", d.correct ? +d.wager : -d.wager]);
       }
     }
   });
   rk.forEach((row, i) => {
     const rr = i + 5;
-    x = trivXSet(x, "AL" + rr, "n", row.total);
-    x = trivXSet(x, "AM" + rr, "s", row.name);
+    patches.push(["AL" + rr, "n", row.total]);
+    patches.push(["AM" + rr, "s", row.name]);
   });
+  x = trivXPatchAll(x, patches);
   files["xl/worksheets/sheet1.xml"] = enc.encode(x);
   let wb = dec.decode(files["xl/workbook.xml"]);
   wb = wb.replace(

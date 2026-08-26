@@ -2130,7 +2130,15 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    while manually raising the volume and talking over it, rather than guessing. */
 .cp-countdown{display:flex;align-items:center;gap:10px;margin-top:8px}
 .cp-countdown-track{flex:1;height:10px;border-radius:6px;background:var(--bg-input);border:1px solid var(--border);overflow:hidden}
-.cp-countdown-fill{height:100%;background:var(--accent-cyan-solid);transition:width .1s linear}
+/* transform:scaleX(), not width — this animates every 100ms for the whole drumroll countdown
+   (js/craft-prize.js's countdownTimer), and a width transition triggers layout on every single
+   tick; scaleX runs on the compositor thread instead, which matters most exactly here, the one
+   moment jank is most visible to a room full of people watching the bar fill. transform-origin
+   pins the scale to the left edge so it still visually GROWS left-to-right (the default center
+   origin would grow from the middle both ways instead) — same look as the old width-based bar,
+   cheaper to animate. width:100% is the unscaled full-track size scaleX() then shrinks down
+   from, taking over the role the JS-set inline width used to play. */
+.cp-countdown-fill{height:100%;width:100%;transform-origin:left;background:var(--accent-cyan-solid);transition:transform .1s linear}
 .cp-countdown-num{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--txt-cyan);min-width:2.8rem;text-align:right;font-variant-numeric:tabular-nums}
 .cp-manual-end-btn{width:100%;margin-top:8px}
 /* Faded, disabled preview of the manual Stop Drumroll / Play Horn controls shown before the draw

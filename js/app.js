@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.53"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.54"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 25, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -62,11 +62,28 @@ let collapsedBonusQuestions = new Set();
 let collapsedSpecialWagers = new Set();
 let questionSortOrder = {};
 
+// loadPrefs() is called constantly — several times from inside a single renderLeft() alone,
+// again from applyPrefs() right after it in renderAll() — and until now each call meant a fresh
+// JSON.parse() of the whole prefs blob PLUS ~15 migration/backfill checks, just to read one or
+// two fields. prefsCacheRaw/prefsCache cache the exact raw string last parsed and the
+// fully-migrated object that came from it: TRStore.getItem() (a synchronous localStorage read)
+// still runs on every call — it's cheap, and it's what makes this safe against prefs changing
+// underneath this tab without going through savePrefs(), e.g. another open tab writing the
+// same localStorage key, or (as this file's own test suite does) something writing PREFS_KEY
+// directly — only the parse+migrate work is skipped, and only when the raw string this read
+// back is byte-identical to what produced the cache. loadPrefs() still returns a shallow clone
+// either way, so callers mutating their own copy in place (as several do before calling
+// savePrefs()) can't corrupt the cache without going through savePrefs() — same "always get an
+// independent copy" contract this had before.
+let prefsCache = null,
+  prefsCacheRaw;
 function loadPrefs() {
+  const raw = TRStore.getItem(PREFS_KEY);
+  if (prefsCache && raw === prefsCacheRaw) return { ...prefsCache };
+  prefsCacheRaw = raw;
   try {
-    const r = TRStore.getItem(PREFS_KEY);
-    if (r) {
-      const p = JSON.parse(r);
+    if (raw) {
+      const p = JSON.parse(raw);
       // "hc-dark"/"hc-light" ("hc" for high contrast, from back when that was a separate,
       // optional theme rather than the only one) were the stored values every real returning
       // visitor's browser has under this key as of the rename that dropped the prefix — without
@@ -100,10 +117,11 @@ function loadPrefs() {
       if (p.craftFadeSec == null) p.craftFadeSec = CRAFT_FADE_DEFAULT;
       if (p.craftSoundTest == null) p.craftSoundTest = false;
       if (p.qResultToggle == null) p.qResultToggle = false;
-      return p;
+      prefsCache = p;
+      return { ...p };
     }
   } catch (e) {}
-  return {
+  prefsCache = {
     theme: "dark",
     sizeIndex: DEFAULT_SI,
     density: "normal",
@@ -123,10 +141,30 @@ function loadPrefs() {
     craftSoundTest: false,
     qResultToggle: false,
   };
+  return { ...prefsCache };
 }
 function savePrefs(p) {
   TRStore.setItem(PREFS_KEY, JSON.stringify(p));
+  // Invalidates the cache rather than seeding it directly from `p`: almost every caller passes
+  // an already-migrated object (loadPrefs()'s own return value, mutated in place), but
+  // loadPrefsFromFile (js/storage.js) calls savePrefs() with a raw uploaded blob that hasn't
+  // been through loadPrefs()'s migration/backfill checks at all — caching that shape directly
+  // would let an old exported prefs file's missing fields/legacy theme values leak straight
+  // through instead of getting backfilled. Setting prefsCache to null just makes the next
+  // loadPrefs() call do one real read+migrate, same as it always has; the cache only ever
+  // exists to skip repeat re-parses BETWEEN saves; it was never meant to skip the one right
+  // after this.
+  prefsCache = null;
 }
+// NOTE: applyPrefs() deliberately does NOT skip its own work when `p` matches the last call —
+// unlike renderLeft()/renderSB()'s no-op-write skip (v19.52), this function is used as an
+// idempotent RESYNC utility, not just a derive-from-state renderer: tests (and real call sites)
+// rely on calling it redundantly to restore these elements' DOM state after something else
+// mutated them directly, prefs unchanged or not (see "Settings round-trip" in
+// tests/js-behavior.test.js, which deliberately clobbers the DOM then calls applyPrefs() again
+// expecting a full resync). A "skip when prefs match last time" cache was tried here and
+// reverted for exactly that reason — it left a directly-mutated element unfixed whenever prefs
+// genuinely hadn't changed, which is the one case this function most needs to still cover.
 function applyPrefs() {
   const p = loadPrefs();
   // data-theme set BEFORE applyIconStyle below: ICON_DONE's own emoji picks between ✔️/☑️ by
@@ -661,6 +699,30 @@ let lastSBClickAnchorSel = null;
 // hit this before its own declaration ran.
 let lastRenderedLeftHTML = null,
   lastRenderedSBHTML = null;
+// renderLeft() and renderSB() each need one requestAnimationFrame-deferred pass after their own
+// render to re-assert the scroll anchor once layout has fully settled (fonts/container-queries
+// — see either function's own pinAnchor comment). renderAll() calls both back to back, and
+// scheduling two independent rAF callbacks meant two separate forced-layout passes landing in
+// the same frame (each pinAnchor() call forces layout via getBoundingClientRect) plus
+// refreshPointerHover() running twice — instead of once, redundantly. This batches every
+// reassert callback registered before the next animation frame into ONE requestAnimationFrame,
+// running them all back to back (each still operates on its own scroller/anchor independently,
+// so order between them doesn't matter) and calling refreshPointerHover() exactly once at the
+// end regardless of how many callers scheduled a reassert for this frame.
+let pendingScrollReasserts = [],
+  scrollReassertRAFScheduled = false;
+function scheduleScrollReassert(fn) {
+  pendingScrollReasserts.push(fn);
+  if (scrollReassertRAFScheduled) return;
+  scrollReassertRAFScheduled = true;
+  requestAnimationFrame(() => {
+    scrollReassertRAFScheduled = false;
+    const fns = pendingScrollReasserts;
+    pendingScrollReasserts = [];
+    fns.forEach((f) => f());
+    refreshPointerHover();
+  });
+}
 document.addEventListener(
   "click",
   (e) => {
@@ -868,6 +930,33 @@ function startNewGame() {
   craftFlowOpen = false;
   document.getElementById("resumeBanner").classList.remove("show");
   renderAll();
+}
+// js/tutorial.js (the ~1400-line guided-tour engine) is lazy-loaded on first actual use rather
+// than a blocking <script> tag — see its own top comment. loadScriptOnce (js/export.js) is the
+// exact same fetch-and-cache-the-promise helper already used there for jsPDF/fflate; reused
+// here rather than duplicated. Both the Settings > Take the Tour button and the first-run nudge
+// card's own button (js/tutorial-firstrun.js) call startTutorial(), not Tutorial.start()
+// directly, since Tutorial doesn't exist as a global until this has actually loaded it.
+let tutorialLibPromise = null;
+function loadTutorialLib() {
+  if (!tutorialLibPromise) {
+    tutorialLibPromise = loadScriptOnce("js/tutorial.js").catch((err) => {
+      tutorialLibPromise = null;
+      throw err;
+    });
+  }
+  return tutorialLibPromise;
+}
+async function startTutorial() {
+  try {
+    await loadTutorialLib();
+    return await Tutorial.start();
+  } catch (e) {
+    appAlert(
+      "Couldn't load the tutorial — check your connection and try again: " +
+        (e && e.message ? e.message : e),
+    );
+  }
 }
 function renderFinalResults() {
   if (!gameState.teams.length)
@@ -1241,12 +1330,13 @@ function renderLeft() {
     if (wy) window.scrollTo(0, wy);
   }
   // Re-assert after layout settles (fonts/container-queries) — same target, so no visible motion.
-  requestAnimationFrame(() => {
+  // Batched with renderSB()'s own reassert (see scheduleScrollReassert) rather than each
+  // scheduling its own requestAnimationFrame.
+  scheduleScrollReassert(() => {
     if (!pinAnchor()) {
       m.scrollTop = sy;
       if (wy) window.scrollTo(0, wy);
     }
-    refreshPointerHover();
   });
 }
 // Which round the host is presumably actively working on: the first one that isn't fully
@@ -1803,9 +1893,9 @@ function renderSB() {
     return true;
   };
   if (!pinAnchor() && list) list.scrollTop = sy;
-  requestAnimationFrame(() => {
+  // Batched with renderLeft()'s own reassert — see scheduleScrollReassert's comment.
+  scheduleScrollReassert(() => {
     if (!pinAnchor() && list) list.scrollTop = sy;
-    refreshPointerHover();
   });
 }
 

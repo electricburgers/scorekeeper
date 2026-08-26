@@ -322,11 +322,20 @@ test("js/app.js: Clear Session's button calls confirmClearSession(), not window.
 // exact directory this exact mistake can happen in — must have a matching <script src> in
 // index.html, checked by actually listing the directory, not by hand-maintaining a second list
 // that can drift from it the same way the missing tag itself did.
-test("every top-level js/*.js file (excluding js/vendor/** and js/data/**) has a <script src> tag in index.html", () => {
+// js/tutorial.js is the one deliberate exception (v19.54): it's lazy-loaded on first "Take the
+// Tour" click (loadTutorialLib(), js/app.js) via a real dynamically-inserted <script> element,
+// the same loadScriptOnce() pattern the export libs already used as of v19.51 — never as a
+// blocking <script src> tag in index.html. It's still required to exist on disk (checked
+// elsewhere: sw.js's SHELL_FILES-on-disk test, and the onclick-function-existence test below,
+// both still cover it) and is still listed in sw.js's SHELL_FILES for offline coverage — just
+// exempted from THIS specific "must have a blocking <script> tag" check.
+const LAZY_LOADED_JS_FILES = new Set(["js/tutorial.js"]);
+test("every top-level js/*.js file (excluding js/vendor/**, js/data/**, and lazy-loaded files) has a <script src> tag in index.html", () => {
   const jsFiles = fs
     .readdirSync(path.join(ROOT, "js"))
     .filter((f) => f.endsWith(".js"))
-    .map((f) => "js/" + f);
+    .map((f) => "js/" + f)
+    .filter((f) => !LAZY_LOADED_JS_FILES.has(f));
   assert.ok(jsFiles.length > 5, "expected to find several top-level js/*.js files");
   const doc = loadDoc("index.html");
   const scripts = new Set(
