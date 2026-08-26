@@ -292,6 +292,34 @@ describe("appConfirm / appAlert", () => {
     window.confirmDialogRespond(true);
     await p;
   });
+  // Regression test: okBtn's static HTML class is "btn btn-accent" (solid cyan fill), and
+  // .btn-accent's background/color/border are !important specifically so it wins against other
+  // .btn-* modifiers — which used to mean toggling .btn-danger ON TOP of it never actually
+  // reddened a danger confirm (Clear Session included): the solid accent fill kept winning
+  // regardless of the danger flag. btn-accent must come OFF, not just have btn-danger added.
+  it("appConfirm's danger option removes btn-accent, letting btn-danger's red actually show", async () => {
+    const p = window.appConfirm("msg", { danger: true });
+    await new Promise((r) => setTimeout(r, 10));
+    assert.equal(
+      window.document.getElementById("confirmOkBtn").classList.contains("btn-accent"),
+      false,
+    );
+    window.confirmDialogRespond(true);
+    await p;
+  });
+  it("a later non-danger appConfirm restores btn-accent (the OK button is reused across every confirm() call)", async () => {
+    const p1 = window.appConfirm("danger first", { danger: true });
+    await new Promise((r) => setTimeout(r, 10));
+    window.confirmDialogRespond(true);
+    await p1;
+    const p2 = window.appConfirm("then a normal confirm");
+    await new Promise((r) => setTimeout(r, 10));
+    const cls = window.document.getElementById("confirmOkBtn").classList;
+    assert.equal(cls.contains("btn-accent"), true);
+    assert.equal(cls.contains("btn-danger"), false);
+    window.confirmDialogRespond(true);
+    await p2;
+  });
   it("appConfirm without danger does not add btn-danger", async () => {
     const p = window.appConfirm("msg");
     await new Promise((r) => setTimeout(r, 10));

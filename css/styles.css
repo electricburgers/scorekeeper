@@ -556,14 +556,18 @@ button,[role="button"]{touch-action:manipulation}
    for why these replaced the old ☀️/🌑 emoji. --badge-gold-fg/--txt-cyan are this app's existing
    "AAA(7:1) text-safe on neutral surfaces" token pair, and --bg-card (this button's own
    background) is exactly that surface, so reusing them needs no new contrast check — and both
-   already carry their own [data-cb] swap, so the icon follows Settings > Color Vision for free. */
-#themeToggle{display:inline-flex;align-items:center;gap:4px}
+   already carry their own [data-cb] swap, so the icon follows Settings > Color Vision for free.
+   #faqThemeToggle (FAQ_THEME_SUN_SVG/FAQ_THEME_MOON_SVG, faq/js/faq.js) is the FAQ page's own
+   copy of this exact button — same geometry (the ic-sun/ic-moon <symbol> defs in faq/index.html
+   are byte-identical to these paths), so it gets the identical styling here rather than
+   rendering as a plain uncoloured icon-ui the way it did before this rule covered it too. */
+#themeToggle,#faqThemeToggle{display:inline-flex;align-items:center;gap:4px}
 /* .8em, not 1em+: unlike a Unicode glyph, this SVG has no built-in internal padding baked into
    its own bounding box, so it needs to render visibly SMALLER than the em square to end up the
    same on-page size the old 🌑/☀️ emoji was. */
-#themeToggle svg{width:.8em;height:.8em;flex-shrink:0}
-#themeToggle svg circle,#themeToggle svg path{fill:currentColor}
-#themeToggle svg line{stroke:currentColor}
+#themeToggle svg,#faqThemeToggle svg{width:.8em;height:.8em;flex-shrink:0}
+#themeToggle svg circle,#themeToggle svg path,#faqThemeToggle svg circle,#faqThemeToggle svg path{fill:currentColor}
+#themeToggle svg line,#faqThemeToggle svg line{stroke:currentColor}
 /* The sun is the one icon here painted from two tokens rather than one inherited colour:
    --sun-ray drives currentColor, so the eight rays (stroked <line>s) and the ring around
    the disc both take it, and --sun-disc fills the disc inside that ring. The ring is what
@@ -574,9 +578,9 @@ button,[role="button"]{touch-action:manipulation}
    are drawn with, so the ring and the rays are one continuous weight. The circle's own r=5
    is unchanged — the stroke straddles it, so the disc reads slightly larger against the
    rays than it did as a flat fill, which is the right direction for a sun. */
-#themeToggle .icon-sun{color:var(--sun-ray)}
-#themeToggle .icon-sun circle{fill:var(--sun-disc);stroke:var(--sun-ray);stroke-width:2}
-#themeToggle .icon-moon{color:var(--txt-cyan)}
+#themeToggle .icon-sun,#faqThemeToggle .icon-sun{color:var(--sun-ray)}
+#themeToggle .icon-sun circle,#faqThemeToggle .icon-sun circle{fill:var(--sun-disc);stroke:var(--sun-ray);stroke-width:2}
+#themeToggle .icon-moon,#faqThemeToggle .icon-moon{color:var(--txt-cyan)}
 /* Hidden by default (desktop's multi-column grid rarely needs to scroll, so a heading here would
    just be dead weight) — shown only in the mobile single-column layout below, where Advanced
    Settings expanding can push the panel well past the viewport height and the "Theme" row
@@ -675,6 +679,18 @@ button,[role="button"]{touch-action:manipulation}
   .settings-row{flex-wrap:wrap}
   .settings-controls{flex-wrap:wrap;justify-content:flex-end}
 }
+/* .settings-panel-head/.settings-panel-foot's own depth shadow (just above) is a fixed
+   rgba(0,0,0,.6) — reads fine in Light (white --bg-card behind it), but is nearly invisible in
+   Dark: --bg-card there is #0d0d0d, so a black shadow has almost nothing to contrast against,
+   and the "pinned bar with content scrolling behind it" depth cue silently disappeared, leaving
+   only the 1px border line to mark the edge. Same fix as .settings-panel's own halo (above,
+   near the top of this file): a pale shadow instead of a black one in Dark. Declared after the
+   mobile-breakpoint block (not nested inside it) purely so it always wins on selector order —
+   [data-theme="dark"] .settings-panel-head/-foot has higher specificity than the plain-class
+   rule either way, but keeping the override visually grouped with a plain override for once
+   (rather than duplicated per breakpoint) is simpler to scan. */
+[data-theme="dark"] .settings-panel-head{box-shadow:0 8px 14px -6px rgba(255,255,255,.55)}
+[data-theme="dark"] .settings-panel-foot{box-shadow:0 -8px 14px -6px rgba(255,255,255,.55)}
 .theme-select{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
 .theme-select:hover{background-color:var(--bg-hover)}
 .theme-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 13%,transparent)}

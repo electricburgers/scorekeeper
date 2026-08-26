@@ -19,7 +19,22 @@ function showConfirmDialog(message, opts) {
   modal.classList.toggle("confirm-alert", isAlert);
   const okBtn = document.getElementById("confirmOkBtn");
   okBtn.textContent = (opts && opts.okLabel) || (isAlert ? "OK" : "Confirm");
-  okBtn.classList.toggle("btn-danger", !!(opts && opts.danger));
+  // .btn-accent's background/color/border are !important (styles.css) specifically so it can
+  // win against every OTHER .btn-* modifier a button might also carry — which meant just
+  // toggling .btn-danger on top of okBtn's static "btn btn-accent" base class never actually
+  // reddened anything: .btn-accent's solid cyan fill kept winning regardless, so every "danger"
+  // confirm (Clear Session included) rendered as the same solid blue as a normal confirm, not
+  // the red the danger flag was supposed to signal — and in Light theme that blue
+  // (--accent-cyan-solid:#007ea8) read as a dark, out-of-place fill for what's meant to be a
+  // destructive-action warning. Removing btn-accent for a danger confirm lets .btn-danger's
+  // red border/text show against the button's plain default background instead, matching how
+  // the "Clear Session" button itself already looks outside this dialog. Both classes are
+  // explicitly set (not just toggled) since this same button is reused across every confirm()
+  // call in the app — a later non-danger confirm must restore btn-accent, not just leave
+  // whatever the previous call left behind.
+  const danger = !!(opts && opts.danger);
+  okBtn.classList.toggle("btn-danger", danger);
+  okBtn.classList.toggle("btn-accent", !danger);
   document.getElementById("confirmCancelBtn").textContent =
     (opts && opts.cancelLabel) || "Cancel";
   overlay.classList.add("show");

@@ -9,11 +9,14 @@ const FAQ_VERSION_DATE = "23 Aug 2026";
 
 // Same Lucide sun/moon geometry as the main app's THEME_ICON_SUN/MOON (js/app.js), tagged
 // data-emoji so Icon Style (see faqApplyIconStyle further down) can swap this page's Theme
-// button between the two the same way it swaps everything else.
+// button between the two the same way it swaps everything else. The icon-sun/icon-moon classes
+// (not just icon-ui) are load-bearing, not decorative: css/styles.css's #faqThemeToggle rules
+// are what paint these in the app's own gold-ray/cyan-disc colors instead of a flat
+// currentColor — without the class, this rendered as a plain uncoloured icon-ui.
 const FAQ_THEME_SUN_SVG =
-  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="☀️"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></svg>';
+  '<svg class="icon-ui icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="☀️"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></svg>';
 const FAQ_THEME_MOON_SVG =
-  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🌙"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+  '<svg class="icon-ui icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🌙"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
 (function () {
   var text = "FAQ " + FAQ_VERSION + " (" + FAQ_VERSION_DATE + ")";
   ["faqVersionLabel", "faqSettingsVersionLabel"].forEach(function (id) {
