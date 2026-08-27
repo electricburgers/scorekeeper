@@ -10,6 +10,12 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.58 - 2026-08-27
+- **XLSX and PDF exports are now square, icon-forward buttons** — a big glyph over a small label, a far bigger tap target on a phone (and click target on desktop) than a `.78rem` icon beside a short word. The "JD Upload Form" link beside them keeps its wide shape (it has a real sentence for a label).
+- **Enlarges the question-timer play/reset glyphs at tablet width, not just desktop.** The v19.55/56 bump was scoped to `min-width:769px`, so the expanded scores sheet's timer on a tablet still had the small base glyphs; it now applies from `min-width:601px`. Also fixes the play `<svg>` (a bare flex child, unlike the reset icon) collapsing to a sliver inside the enlarged button — it needed `flex-shrink:0` / `min-width`.
+- **Team Report only defines the terms it actually shows.** The note at the bottom always explained "Diff Adj" and "Adj. Score" and carried the `*` bonus-free-footing footnote — but those figures only appear for a team that has Bonus Item and/or NJCB points. For a team with no bonuses the report now drops those definitions and the footnote, and phrases Diff as measured against the Grand Total directly.
+- Full suite (452 tests) passes.
+
 ## v19.57 - 2026-08-27
 - **Fixes the beer pictograph's foam cap not showing in the FAQ** (it was already fixed in the app in v19.56). The FAQ draws its icons with `<use href="#ic-beer">`, and outer-document CSS selectors don't reach a `<use>` shadow tree — so `.icon-beer .ip-2` never matched and the foam rendered as the same amber as the mug. The `#ic-beer` `<symbol>` now carries its own `<style>.ip-2{fill:var(--vivid-beer-2);stroke:var(--icon-tint)}</style>`, which *is* cloned into every `<use>` instance, so the solid cream cap shows everywhere the FAQ draws it, both themes.
 - **Replaces the single Row Density / Row Zebra Stripes screenshot with two proper before/after trios.** Row Density shows the same Round 1 question and example teams at Relaxed / Normal / Compact in the same vertical space (≈5 / 6 / 7 rows visible); Row Zebra Stripes shows the same question at Subtle / Medium / High striping. Six new dark-theme screenshots; the old combined `row-density-zebra` pair is removed.

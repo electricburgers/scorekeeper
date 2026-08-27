@@ -1225,19 +1225,23 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    cue for the bottom of .scores-list (this bar overlays that edge) — the counterpart to the
    downward cast on .sort-mode-label. --shadow-lg stays as the outer lift of the whole bar. */
 .qtimer-desktop{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--border-strong);box-shadow:0 -7px 11px 0 var(--edge-fade),var(--shadow-lg)}
-/* Desktop only: the shared .qtimer look is sized for the cramped mobile peek-strip, which left
-   the countdown noticeably smaller than the mobile expanded-sheet copy (1.85rem) even though the
-   desktop sidebar has plenty of room. Scoped to min-width:769px so it only touches the sidebar
-   copy — .qtimer-desktop is reused, unresized, inside the mobile expanded scores sheet. */
-@media(min-width:769px){
+/* Tablet and up: the shared .qtimer look is sized for the cramped mobile peek-strip, which left
+   the countdown — and especially the play/reset glyphs — noticeably small everywhere .qtimer-
+   desktop actually renders at size: the desktop sidebar AND the tablet expanded scores sheet,
+   both of which have plenty of room. Scoped to min-width:601px (not 769px) so it also covers the
+   tablet sheet; only the ≤600 phone sheet, where vertical room is tighter and the dock is the
+   primary control anyway, keeps the base sizing. */
+@media(min-width:601px){
   .qtimer-desktop .qtimer-display{font-size:2.15rem;padding:6px 14px}
   .qtimer-desktop .qtimer-btn{min-height:2.5rem;padding:7px 14px;font-size:.95rem}
   .qtimer-desktop .qtimer-btn.qtimer-toggle,
   .qtimer-desktop .qtimer-btn.qtimer-reset{width:2.5rem;height:2.5rem;min-height:2.5rem;font-size:1.35rem}
   /* The toggle/reset glyphs (an SVG in Pictograph mode) inherit width:1em from the base rule —
-     ~1.35rem in a 2.5rem box, which reads undersized at this larger desktop size. Bump the icon
-     itself so it fills the enlarged button the way it does at the base mobile size. */
-  .qtimer-desktop .qtimer-btn.qtimer-toggle svg{width:1.5em;height:1.5em}
+     ~1.35rem in a 2.5rem box, which reads undersized at this larger button. Bump the icon itself
+     so it fills the enlarged button the way it does at the base mobile size. min-width + flex-
+     shrink:0 because the play/pause <svg> (unlike the reset icon, which carries .icon-ui) is a
+     bare flex child with no shrink guard of its own and was collapsing to a sliver. */
+  .qtimer-desktop .qtimer-btn.qtimer-toggle svg{width:1.5em;height:1.5em;min-width:1.5em;flex-shrink:0}
   .qtimer-desktop .qtimer-btn.qtimer-reset .icon-ui{width:1.5em;height:1.5em}
   .qtimer-desktop .qtimer-btn.qtimer-toggle .icon-emoji,
   .qtimer-desktop .qtimer-btn.qtimer-reset .icon-emoji{transform:scale(1.35)}
@@ -2034,6 +2038,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    nothing to do with each other. Applies at every width: the same reasoning holds once
    the three wrap onto separate lines on a phone. */
 .export-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px 0}
+/* XLSX / PDF export as square, icon-forward buttons — a big glyph stacked over a small label is
+   a far bigger tap target on a phone (and click target on desktop) than a .78rem icon beside a
+   short word. The JD Upload Form link beside them keeps its wide shape: it has a real sentence
+   for a label. font-size here sizes the glyph itself — .icon-ui is 1em, .icon-emoji inherits it. */
+.export-bar .export-sq{flex-direction:column;gap:3px;width:4.6rem;height:4.6rem;padding:6px 4px;font-size:1.9rem;line-height:1}
+.export-bar .export-sq .export-sq-label{font-family:var(--font-body);font-size:.62rem;font-weight:700;letter-spacing:.5px}
+.export-bar .export-sq .icon-emoji{line-height:1}
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
 .export-prompt.show{display:block}
 .export-prompt p{margin-bottom:6px;color:var(--badge-gold-fg);font-weight:600;font-size:.85rem}

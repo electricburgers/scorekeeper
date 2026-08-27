@@ -245,8 +245,27 @@ function buildAudit(ti) {
   h += auditOverallStats(ti);
   if (run !== gt)
     h += `<div class="aud-note">Note: running figure (${run}) and grand total (${gt}) differ \u2014 if you see this, take a screenshot.</div>`;
-  else
-    h += `<div class="aud-note">Each round shows that question's wager, whether it was marked correct or incorrect, and the team's running score. To fix a wrong wager, close this and tap the wager button in the round itself. </br> </br><strong>Diff Adj (Difference Adjustment)</strong> is the Bonuses coming back off — Bonus Item (+5) and NJCB (+3). </br><strong>Adj. Score (Adjusted Score)</strong> is the Grand Total with those stripped out. </br><strong>Diff</strong> is Adj. Score measured against the team's Score Guess. A plus (+) means they guessed high, a minus (−) means they guessed low, and 0 means they called it exactly. </br> </br>* Every team's guess is compared on the same bonus-free footing, which is why the bonuses come off before the guess is scored.</div>`;
+  else {
+    // Only define the terms this team's report actually shows. auditGuessDiff() renders the
+    // "Diff Adj *" and "Adj. Score" cells (and Diff is then measured off Adj. Score) only when the
+    // team has Bonus Item and/or NJCB points to strip back out — a manual adjustment alone
+    // doesn't. For a team with no bonuses those cells, and the * footnote, never appear, so their
+    // definitions are left out rather than explaining a figure that isn't on screen.
+    const hasBonuses = !!(item || nj);
+    let note =
+      "Each round shows that question's wager, whether it was marked correct or incorrect, and the team's running score. To fix a wrong wager, close this and tap the wager button in the round itself. </br> </br>";
+    if (hasBonuses)
+      note +=
+        "<strong>Diff Adj (Difference Adjustment)</strong> is the Bonuses coming back off — Bonus Item (+5) and NJCB (+3). </br><strong>Adj. Score (Adjusted Score)</strong> is the Grand Total with those stripped out. </br>";
+    note +=
+      "<strong>Diff</strong> is " +
+      (hasBonuses ? "Adj. Score" : "the Grand Total") +
+      " measured against the team's Score Guess. A plus (+) means they guessed high, a minus (−) means they guessed low, and 0 means they called it exactly.";
+    if (hasBonuses)
+      note +=
+        " </br> </br>* Every team's guess is compared on the same bonus-free footing, which is why the bonuses come off before the guess is scored.";
+    h += `<div class="aud-note">${note}</div>`;
+  }
   h += `</div>`;
   return h;
 }

@@ -50,7 +50,10 @@
 // v18: faq/index.html (beer <symbol> now carries its own foam-fill <style> so the cream cap
 // survives <use>; Row Density / Row Zebra Stripes tips get their own before/after screenshot
 // trios) + faq/js/faq.js FAQ_VERSION bump.
-const CACHE_NAME='trivia-scorekeeper-shell-v18';
+// v19: css/styles.css (square XLSX/PDF export buttons, question-timer play glyph enlarged from
+// tablet width up + a flex-shrink fix), js/app.js, js/team-audit.js (Team Report only defines
+// the Diff Adj / Adj. Score terms when that team's report actually shows them).
+const CACHE_NAME='trivia-scorekeeper-shell-v19';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
   './fonts/inter-var.woff2','./fonts/space-grotesk-var.woff2',
