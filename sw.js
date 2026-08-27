@@ -47,7 +47,10 @@
 // beer-foam fill, bigger desktop timer play glyph), faq/index.html + faq/css/faq.css (gear
 // moved next to Back link, tall-screenshot cap) all changed.
 // v17: faq/js/faq.js FAQ_VERSION bump for the v16 FAQ edits.
-const CACHE_NAME='trivia-scorekeeper-shell-v17';
+// v18: faq/index.html (beer <symbol> now carries its own foam-fill <style> so the cream cap
+// survives <use>; Row Density / Row Zebra Stripes tips get their own before/after screenshot
+// trios) + faq/js/faq.js FAQ_VERSION bump.
+const CACHE_NAME='trivia-scorekeeper-shell-v18';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
   './fonts/inter-var.woff2','./fonts/space-grotesk-var.woff2',

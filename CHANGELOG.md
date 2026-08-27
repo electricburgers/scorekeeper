@@ -10,6 +10,11 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.57 - 2026-08-27
+- **Fixes the beer pictograph's foam cap not showing in the FAQ** (it was already fixed in the app in v19.56). The FAQ draws its icons with `<use href="#ic-beer">`, and outer-document CSS selectors don't reach a `<use>` shadow tree — so `.icon-beer .ip-2` never matched and the foam rendered as the same amber as the mug. The `#ic-beer` `<symbol>` now carries its own `<style>.ip-2{fill:var(--vivid-beer-2);stroke:var(--icon-tint)}</style>`, which *is* cloned into every `<use>` instance, so the solid cream cap shows everywhere the FAQ draws it, both themes.
+- **Replaces the single Row Density / Row Zebra Stripes screenshot with two proper before/after trios.** Row Density shows the same Round 1 question and example teams at Relaxed / Normal / Compact in the same vertical space (≈5 / 6 / 7 rows visible); Row Zebra Stripes shows the same question at Subtle / Medium / High striping. Six new dark-theme screenshots; the old combined `row-density-zebra` pair is removed.
+- Full suite (452 tests) passes.
+
 ## v19.56 - 2026-08-27
 - **Retunes the mobile Settings panel drop shadows and shares one intensity across every scroll-edge cue.** The v19.55 header/footer shadows came out too loud; a new theme-aware `--edge-fade` token (pale in Dark, darker in Light) now drives them at a softer level and is reused by the mobile scores sheet, its dock, and the scrolling scores list so they all read at one weight.
 - **Moves the mobile Settings scrollbar to the panel's right edge.** `.settings-panel-body` now full-bleeds to the panel edges (with matching padding so the rows don't move), so its scrollbar rides the container edge instead of sitting 16px in, right against the controls.
