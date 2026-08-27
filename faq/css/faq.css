@@ -30,10 +30,6 @@
   flex-wrap: wrap;
   max-width: 900px;
   margin: 0 auto;
-  /* Reserves room for the gear so wrapped "Back to Scorekeeper" text (see .faq-settings-toggle,
-     now a sibling of this row rather than a child of it) never runs under it — sized to the
-     button's ~34px plus the row's own 10px gap. */
-  padding-right: 44px;
 }
 .faq-logo {
   font-family: var(--font-display);
@@ -138,18 +134,12 @@
   align-items: center;
   gap: 8px;
 }
-/* Pinned to .faq-header's own padding box (position:sticky further up already makes it a valid
-   containing block) — see the HTML comment above this button. top/right mirror .faq-header's own
-   padding values exactly, so the button lands at the same inset from the true page corner as
-   Save/Load/gear do in the main app's header, independent of how wide .faq-header-row's own
-   max-width:900px content happens to be at a given viewport. Not vertically centered by
-   percentage against .faq-header's full height on purpose — that height changes whenever the
-   settings panel (a sibling of .faq-header-row inside .faq-header) opens, which would otherwise
-   drag the button down mid-panel instead of leaving it at the row. */
+/* The gear now sits in .faq-header-actions right next to the Back link (see the HTML) — it used
+   to be pinned to the true page corner, which on a wide screen left a large gap between it and
+   the Back link at the re-centered row's edge. flex-shrink:0 so it keeps its square shape when
+   the row is tight. */
 .faq-settings-toggle {
-  position: absolute;
-  top: calc(10px + env(safe-area-inset-top));
-  right: 16px;
+  flex-shrink: 0;
 }
 /* Same button look the rest of the design system uses (font-body 600, .78rem, 1px --border,
    --radius, --bg-card resting/--bg-hover on hover) — an <a>, not a <button>, so it still needs
@@ -515,8 +505,15 @@ mark.faq-hl {
 }
 .faq-shot img {
   display: block;
-  width: 100%;
+  /* max-width, not width:100% — a tall portrait screenshot (some are ~1:3.4) forced to full
+     column width blew up to several thousand px tall, dwarfing the surrounding text even on a
+     desktop. Now the wide screenshots still fill the column (all sources are wider than it) while
+     tall ones are capped by max-height and sit centered in the slot instead. */
+  max-width: 100%;
+  max-height: 70vh;
+  width: auto;
   height: auto;
+  margin: 0 auto;
 }
 .faq-shot-caption {
   font-family: var(--font-body);

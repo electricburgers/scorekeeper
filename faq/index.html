@@ -32,37 +32,31 @@
     <div class="faq-header">
       <div class="faq-header-row">
         <div class="faq-logo">Score <span>Keeper</span> — FAQ</div>
+        <!-- Back link and the Display Settings gear sit together in the flow at the right end of
+             the row (the row caps at 900px and re-centers, so the pair stays with the logo/body
+             content rather than one being pinned to the true page corner far from the other), and
+             wrap together below the logo as one group on a narrow screen. -->
         <div class="faq-header-actions">
           <a class="faq-back" href="../index.html"> ← Back to Scorekeeper </a>
+          <button
+            type="button"
+            class="settings-toggle-btn faq-settings-toggle"
+            id="faqSettingsToggleBtn"
+            onclick="faqToggleSettings()"
+            aria-haspopup="true"
+            aria-expanded="false"
+            aria-controls="faqSettingsPanel"
+            title="Display settings"
+            aria-label="Display settings"
+          >
+            <svg class="icon-ui"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+             data-emoji="⚙️"><use href="#ic-gear"></use></svg>
+          </button>
         </div>
       </div>
-      <!-- A direct child of .faq-header itself now (not .faq-header-row, which caps out at
-           max-width:900px and re-centers on wide screens so the logo/back-link line up with the
-           body content below) — a previous pass pinned this to .faq-header-row instead, on the
-           mistaken belief that matched the main app's gear. It didn't: the app's own header has
-           no such content cap, so its gear sits at the true top-right corner of the page at every
-           width. Positioned absolutely against .faq-header's own padding box so it does the same
-           here — right:16px/top's offset mirror .faq-header's own padding exactly, the same inset
-           Save/Load/gear sit at in the app's header — regardless of how wide the centered row
-           beneath it happens to be. Still out of .faq-header-row's flex flow so it can't wrap
-           down with "Back to Scorekeeper" at narrow widths either, same reasoning as before. -->
-      <button
-        type="button"
-        class="settings-toggle-btn faq-settings-toggle"
-        id="faqSettingsToggleBtn"
-        onclick="faqToggleSettings()"
-        aria-haspopup="true"
-        aria-expanded="false"
-        aria-controls="faqSettingsPanel"
-        title="Display settings"
-        aria-label="Display settings"
-      >
-        <svg class="icon-ui"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-          focusable="false"
-         data-emoji="⚙️"><use href="#ic-gear"></use></svg>
-      </button>
       <div
         class="settings-panel"
         id="faqSettingsPanel"
@@ -2021,6 +2015,31 @@
             </p>
           </div>
         </details>
+
+        <div class="faq-shot-pair">
+          <div class="faq-shot">
+            <img
+              loading="lazy"
+              width="928" height="1140" decoding="async"
+              src="screenshots/row-density-zebra.webp"
+              data-shot-base="row-density-zebra"
+              alt="The scores list in Dark theme with Row Density set to Compact and Row Zebra Stripes set to High — tight rows with clearly alternating light and dark backgrounds"
+              onerror="faqShotFallback(this,'Scores list — Compact density + High zebra stripes (Dark)')"
+            />
+            <div class="faq-shot-caption">Compact density · High stripes — Dark</div>
+          </div>
+          <div class="faq-shot">
+            <img
+              loading="lazy"
+              width="928" height="1140" decoding="async"
+              src="screenshots/row-density-zebra-light.webp"
+              data-shot-base="row-density-zebra-light"
+              alt="The same scores list in Light theme with Compact density and High zebra stripes — tight rows with alternating white and grey backgrounds"
+              onerror="faqShotFallback(this,'Scores list — Compact density + High zebra stripes (Light)')"
+            />
+            <div class="faq-shot-caption">Compact density · High stripes — Light</div>
+          </div>
+        </div>
 
         <details class="faq-item" id="q-row-zebra-stripes">
           <summary>

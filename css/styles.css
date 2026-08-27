@@ -31,6 +31,11 @@
   --border-control:#6f6f6f;--text-primary:#fff;--text-secondary:#ccc;--text-muted:#aeaeae;
   --accent-cyan:#00ffff;--accent-magenta:#ff44aa;--accent-gold:#ffee00;--accent-green:#44ff44;
   --accent-red:#ff4444;--accent-orange:#ffaa00;--shadow:0 4px 24px rgba(0,0,0,.8);--shadow-lg:0 16px 48px rgba(0,0,0,.85),0 2px 10px rgba(0,0,0,.7);
+  /* Shared "edge fade" used by every scroll-boundary depth cue that should read at one intensity:
+     the mobile Settings panel's pinned head/foot, the mobile scores sheet (.col-right.open) and
+     its dock, and the top/bottom of the scrolling scores list. Pale in dark (glow against near
+     black), darker + slightly stronger in light. Tuned down from an earlier louder pass. */
+  --edge-fade:rgba(255,255,255,.24);
   --row-stripe:rgba(255,255,255,.055);--radius:8px;--radius-lg:12px;
   --font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;
   --transition:.18s ease;--row-pad:8px;
@@ -184,6 +189,7 @@
      against its own --btn-incorrect-bg fill. */
   --accent-cyan:#006688;--accent-magenta:#bb0055;--accent-gold:#ffb300;--accent-green:#008b02;
   --accent-red:#cc0000;--accent-orange:#c45900;--shadow:0 4px 24px rgba(0,0,0,.12);--shadow-lg:0 16px 48px rgba(0,0,0,.28),0 2px 10px rgba(0,0,0,.18);
+  --edge-fade:rgba(0,0,0,.3);
   --row-stripe:rgba(0,0,0,.048);
   --btn-idle-bg:#e8e8e8;--btn-correct-bg:#54f377;--btn-incorrect-bg:#f7a5a6;--btn-used-bg:#f0f0f0;
   --pts-pos-bg:#008802;--pts-pos-border:#007900;--pts-pos-fg:#fff;
@@ -517,6 +523,16 @@ button,[role="button"]{touch-action:manipulation}
   /* .settings-advanced-group is qualified by .settings-panel purely for specificity — its own
      auto-fill rule is declared later in this file and would otherwise win the tie. */
   .settings-panel.settings-visible,.settings-panel .settings-advanced-group{grid-template-columns:1fr}
+  /* Desktop keeps the plain scrolling-grid layout (no anchored head like the ≤600 sheet), but the
+     version/disclaimer line still gets pinned to the bottom the same way: when the panel is taller
+     than the window it scrolls (the panel's own max-height + overflow-y:auto), and this sticks
+     flush to its bottom edge with the settings scrolling under it. When it fits, sticky just sits
+     at the natural bottom and nothing changes. Scoped to #settingsPanel so the FAQ's short reused
+     panel (always overflow:visible, never scrolls) is untouched. padding-bottom moves off the
+     panel and onto this bar so it can sit truly flush; -16px margins + overflow-x:hidden clip the
+     full-bleed background/shadow to the panel edge, same as the ≤600 head/foot. */
+  #settingsPanel{padding-bottom:0}
+  #settingsPanel .settings-panel-foot{display:block;position:sticky;bottom:0;z-index:3;grid-column:1/-1;margin:8px -16px 0;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:var(--bg-card);border-top:1px solid var(--border-strong);box-shadow:0 -7px 11px 0 var(--edge-fade)}
 }
 .settings-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 4px;border-bottom:1px solid var(--border)}
 /* Marks a row as only meaningful once the toggle above it is on (Drumroll Crossfade and Sound
@@ -623,7 +639,11 @@ button,[role="button"]{touch-action:manipulation}
      line 16px into the scroll instead of right at it. As padding-top on the scrolling box itself,
      it scrolls away with the rest of the content, so the line and the first row's clip point are
      the same pixel from the very start of a scroll gesture. */
-  .settings-panel-body{display:block;flex:1 1 auto;min-height:0;padding-top:12px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  /* margin:0 -16px + matching padding full-bleeds the scrolling box to the panel's inner edges so
+     its scrollbar rides the right edge of the panel (was inset 16px, sitting right against the
+     controls); the 16px/18px padding puts the rows back where they were, with the extra 2px on
+     the right as clearance between the content and the scrollbar track. */
+  .settings-panel-body{display:block;flex:1 1 auto;min-height:0;margin:0 -16px;padding:12px 18px 0 16px;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
   .settings-panel-foot{display:block;flex-shrink:0}
   /* grid-column:1/-1 spans the single-column layout's full width. Negative margin cancels
      .settings-panel's own 10px/16px padding so the bar bleeds edge-to-edge instead of floating
@@ -644,7 +664,7 @@ button,[role="button"]{touch-action:manipulation}
      overflow-x:hidden clips it flush to the panel edge instead. position:relative + z-index lift
      the head (and its shadow) above .settings-panel-body, so the row buttons scrolling under the
      shadow's 9px overlap sit *beneath* it rather than punching through on top. */
-  .settings-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;grid-column:1/-1;flex-shrink:0;position:relative;z-index:3;margin:-10px -16px 0;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong);box-shadow:0 9px 12px 0 rgba(0,0,0,.5);transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+  .settings-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;grid-column:1/-1;flex-shrink:0;position:relative;z-index:3;margin:-10px -16px 0;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong);box-shadow:0 7px 11px 0 var(--edge-fade);transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
   .settings-panel-title{font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt-cyan)}
   /* X close button — same circular affordance as .resume-banner-close, reused here for visual
      consistency. With the panel now capped at max-height and scrolling only in the middle, the
@@ -678,7 +698,7 @@ button,[role="button"]{touch-action:manipulation}
      no horizontal negative margin before, so its shadow started 16px in from each side and fell
      even shorter of the edges than the head's). spread 0 + overflow-x:hidden clip, and
      position/z-index, mirror the head rule above for the same reasons. */
-  .settings-panel-foot{background:var(--bg-card);border-top:1px solid var(--border-strong);position:relative;z-index:3;margin:2px -16px 0;padding:8px 16px 0;box-shadow:0 -9px 12px 0 rgba(0,0,0,.5)}
+  .settings-panel-foot{background:var(--bg-card);border-top:1px solid var(--border-strong);position:relative;z-index:3;margin:2px -16px 0;padding:8px 16px 0;box-shadow:0 -7px 11px 0 var(--edge-fade)}
   .settings-meta{padding-top:0}
   /* .settings-controls is flex-shrink:0 by design (the slider needs its fixed 120px), and a few
      rows pack two buttons into it ("Copy"+"TXT", "Save"+"Load") or pair it with a long label
@@ -689,18 +709,9 @@ button,[role="button"]{touch-action:manipulation}
   .settings-row{flex-wrap:wrap}
   .settings-controls{flex-wrap:wrap;justify-content:flex-end}
 }
-/* .settings-panel-head/.settings-panel-foot's own depth shadow (just above) is a fixed
-   rgba(0,0,0,.6) — reads fine in Light (white --bg-card behind it), but is nearly invisible in
-   Dark: --bg-card there is #0d0d0d, so a black shadow has almost nothing to contrast against,
-   and the "pinned bar with content scrolling behind it" depth cue silently disappeared, leaving
-   only the 1px border line to mark the edge. Same fix as .settings-panel's own halo (above,
-   near the top of this file): a pale shadow instead of a black one in Dark. Declared after the
-   mobile-breakpoint block (not nested inside it) purely so it always wins on selector order —
-   [data-theme="dark"] .settings-panel-head/-foot has higher specificity than the plain-class
-   rule either way, but keeping the override visually grouped with a plain override for once
-   (rather than duplicated per breakpoint) is simpler to scan. */
-[data-theme="dark"] .settings-panel-head{box-shadow:0 9px 16px 0 rgba(255,255,255,.5)}
-[data-theme="dark"] .settings-panel-foot{box-shadow:0 -9px 16px 0 rgba(255,255,255,.5)}
+/* The head/foot depth shadow used to need a theme-split override here (a black shadow is nearly
+   invisible against Dark's #0d0d0d --bg-card). Both directions now use --edge-fade, which is
+   already defined per theme — pale in Dark, darker in Light — so the per-theme override is gone. */
 .theme-select{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
 .theme-select:hover{background-color:var(--bg-hover)}
 .theme-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 13%,transparent)}
@@ -833,8 +844,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    .settings-panel/.col-right.open: dark mode needs a pale glow to read as "floating above" its
    own near-black background, light mode gets a plain shadow instead. Scaled down from those
    bigger panels since this is a slim bar, not a full overlay. */
-[data-theme="dark"] .mini-progress{box-shadow:0 0 24px rgba(255,255,255,.18),0 0 8px rgba(255,255,255,.12)}
-[data-theme="light"] .mini-progress{box-shadow:0 0 24px rgba(0,0,0,.28),0 0 8px rgba(0,0,0,.20)}
+[data-theme="dark"] .mini-progress{box-shadow:0 5px 22px rgba(255,255,255,.24),0 0 8px rgba(255,255,255,.16)}
+[data-theme="light"] .mini-progress{box-shadow:0 5px 22px rgba(0,0,0,.38),0 0 8px rgba(0,0,0,.26)}
 .mini-progress:hover{background:var(--bg-hover)}
 .mp-round{font-family:var(--font-display);font-weight:700;font-size:.95rem;flex-shrink:0}
 .mp-count{font-family:var(--font-body);font-size:.8rem;font-weight:600;color:var(--text-secondary);white-space:nowrap}
@@ -978,6 +989,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-tinted [class^="ip-"]{fill:color-mix(in srgb,currentColor 38%,transparent);stroke:currentColor}
 .icon-tinted .ip-2{color:var(--icon-tint-2,var(--icon-tint))}
 .icon-tinted .ip-3{color:var(--icon-tint-3,var(--icon-tint))}
+/* The beer's foam cap specifically: a real beer's head is a solid pale cream, so this one part
+   opts out of the 38%-opacity "interior detail" treatment above — a full --vivid-beer-2 (#fff1cf,
+   deliberately NOT the light theme's darkened --tint-beer-2) fill with an amber (--icon-tint)
+   outline so the cream cap still reads on a white background instead of vanishing into it. Every
+   place the pictograph renders — main app, FAQ, both themes — picks this up. */
+.icon-beer .ip-2{fill:var(--vivid-beer-2);stroke:var(--icon-tint)}
 /* On a solid accent fill (Start Drumroll, Choose Craft Prize Winner) the tints above
    cannot be used as-is: --accent-cyan-solid runs from #00ffff to #00654c across the six
    theme x colour-vision combinations, so a value legible on one is invisible on another. Mixing
@@ -1204,7 +1221,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    absolute, so it's placed relative to #sidebar's padding BOX edge and ignores #sidebar's own
    padding-bottom entirely — without its own inset here, the mobile expanded sheet's Start/Reset
    buttons render flush against the true screen edge, under the iPhone Home Bar. */
-.qtimer-desktop{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--border-strong);box-shadow:var(--shadow-lg)}
+/* The leading --edge-fade layer is the upward "scrollable content passes under this pinned bar"
+   cue for the bottom of .scores-list (this bar overlays that edge) — the counterpart to the
+   downward cast on .sort-mode-label. --shadow-lg stays as the outer lift of the whole bar. */
+.qtimer-desktop{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--border-strong);box-shadow:0 -7px 11px 0 var(--edge-fade),var(--shadow-lg)}
 /* Desktop only: the shared .qtimer look is sized for the cramped mobile peek-strip, which left
    the countdown noticeably smaller than the mobile expanded-sheet copy (1.85rem) even though the
    desktop sidebar has plenty of room. Scoped to min-width:769px so it only touches the sidebar
@@ -1214,6 +1234,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .qtimer-desktop .qtimer-btn{min-height:2.5rem;padding:7px 14px;font-size:.95rem}
   .qtimer-desktop .qtimer-btn.qtimer-toggle,
   .qtimer-desktop .qtimer-btn.qtimer-reset{width:2.5rem;height:2.5rem;min-height:2.5rem;font-size:1.35rem}
+  /* The toggle/reset glyphs (an SVG in Pictograph mode) inherit width:1em from the base rule —
+     ~1.35rem in a 2.5rem box, which reads undersized at this larger desktop size. Bump the icon
+     itself so it fills the enlarged button the way it does at the base mobile size. */
+  .qtimer-desktop .qtimer-btn.qtimer-toggle svg{width:1.5em;height:1.5em}
+  .qtimer-desktop .qtimer-btn.qtimer-reset .icon-ui{width:1.5em;height:1.5em}
+  .qtimer-desktop .qtimer-btn.qtimer-toggle .icon-emoji,
+  .qtimer-desktop .qtimer-btn.qtimer-reset .icon-emoji{transform:scale(1.35)}
   .qtimer-desktop .qtimer-btn.qtimer-step{padding:6px 12px;font-size:.85rem}
 }
 
@@ -1301,14 +1328,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .sheet-grab-handle{width:100%;padding:8px 0 4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:none;cursor:grab}
   .sheet-grab-handle::after{content:'';width:36px;height:4px;border-radius:2px;background:var(--text-muted)}
 
-  /* Shadow on the sheet's 3 exposed sides (top/left/right — bottom is flush against the screen
-     edge, so a shadow there would never be visible anyway). Three separate directional layers
-     (not one 0/0-offset blur) so each side gets pushed outward into its own small margin instead
-     of a symmetric halo whose blur mostly bled past the narrow 8px inset and off the edge of the
-     screen, leaving next to nothing visible. Dark mode needs a pale glow to read as "floating"
-     against its near-black background; light mode gets a stronger plain shadow. */
-  [data-theme="dark"] .col-right.open{box-shadow:0 -4px 16px rgba(255,255,255,.22),4px 0 16px rgba(255,255,255,.16),-4px 0 16px rgba(255,255,255,.16)}
-  [data-theme="light"] .col-right.open{box-shadow:0 -4px 16px rgba(0,0,0,.30),4px 0 16px rgba(0,0,0,.22),-4px 0 16px rgba(0,0,0,.22)}
+  /* Shadow on all four sides so the sheet reads as fully lifted off the page. Four separate
+     directional layers (not one 0/0 blur) so each side gets pushed outward into its own small
+     margin instead of a symmetric halo whose blur mostly bled past the narrow 8px inset. Single
+     --edge-fade colour (per-theme: pale glow in Dark, darker in Light) so this sits at the same
+     intensity as the Settings panel's own edge shadows. */
+  .col-right.open{box-shadow:0 -5px 16px var(--edge-fade),0 5px 16px var(--edge-fade),5px 0 16px var(--edge-fade),-5px 0 16px var(--edge-fade)}
 
   /* BOTTOM DOCK — a single fixed, rounded card holding the peek strip and the question timer
      stacked top-to-bottom (a border divider between them, not a gap), so the two read as one
@@ -1324,10 +1349,10 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   /* 8px inset (was 16px) — see the matching .col-right comment above for why: this now lines up
      with the deployed sheet's own width instead of sitting noticeably narrower than it. */
   .mobile-bottom-dock{display:flex;flex-direction:column;position:fixed;left:8px;right:8px;bottom:0;z-index:245;background:var(--bg-card);border:1px solid var(--border-strong);border-bottom:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;padding-bottom:calc(10px + env(safe-area-inset-bottom))}
-  /* Same 3-directional shadow (top/left/right, no bottom) as .col-right.open above, so the
-     docked and deployed scores panels read as the same "floating above everything" surface. */
-  [data-theme="dark"] .mobile-bottom-dock{box-shadow:0 -4px 16px rgba(255,255,255,.22),4px 0 16px rgba(255,255,255,.16),-4px 0 16px rgba(255,255,255,.16)}
-  [data-theme="light"] .mobile-bottom-dock{box-shadow:0 -4px 16px rgba(0,0,0,.30),4px 0 16px rgba(0,0,0,.22),-4px 0 16px rgba(0,0,0,.22)}
+  /* Same directional --edge-fade shadow as .col-right.open above (top/left/right — the dock's
+     bottom genuinely is off the bottom of the screen), so the docked and deployed scores panels
+     read as the same "floating above everything" surface at the same intensity. */
+  .mobile-bottom-dock{box-shadow:0 -5px 16px var(--edge-fade),5px 0 16px var(--edge-fade),-5px 0 16px var(--edge-fade)}
   /* PEEK STRIP — always-visible top row of the dock (hidden only while the sheet itself is
      open). 3-column grid (not flex) so the centered label is centered against the FULL row
      width, not just the space left over after the chevron — a flex row with the chevron as a
@@ -1429,7 +1454,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .standings-sort-btn .icon-ui{width:1.32em;height:1.32em}
 .standings-sort-btn .icon-emoji{transform:scale(1.5)}
 .sort-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid);box-shadow:0 0 6px color-mix(in srgb,var(--accent-cyan) 30%,transparent)}
-.sort-mode-label{padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0}
+/* position/z-index + a downward --edge-fade cast the same "content scrolls in under a pinned bar"
+   cue onto the top of .scores-list that .settings-panel-head casts in the Settings panel — same
+   token, same intensity, on both mobile and desktop. The matching cue on the list's BOTTOM edge
+   is the upward --edge-fade on .qtimer-desktop (which overlays that edge — see its rule above). */
+.sort-mode-label{position:relative;z-index:1;padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0;box-shadow:0 7px 11px -1px var(--edge-fade)}
 
 /* padding-bottom reserves room for .qtimer-desktop (see LAYOUT above), which overlays this
    list's bottom edge — without it the last row would be permanently stranded behind the timer
