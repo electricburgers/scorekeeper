@@ -345,24 +345,24 @@ describe("XLSX export: GrandTotal (AL column) cells match grandTotal(ti) for eve
     }
   });
 
-  // The embedded XLSX backup template itself (js/data/xlsx-templates.js) only has pre-built
-  // cells through row 44 — team rows are index+5, so only its first 40 teams' worth of columns
-  // (AL/AM ranked-total cells included) actually exist in the raw sheet XML; trivXSet/
-  // trivXPatchAll both correctly no-op for a ref beyond that (same "no match -> leave
-  // unchanged" contract trivXSet already had), so a game past 40 teams silently loses THOSE
-  // teams' XLSX rows rather than erroring — a real, pre-existing template-capacity gap this
-  // test surfaced, not something introduced by the trivXPatchAll batching refactor it's meant
-  // to guard. Correctness is verified up to what the template actually supports.
-  it("within the template's actual supported row range (40 teams), every AL cell still matches grandTotal(ti) — not just the raw cell count", async () => {
+  // The embedded XLSX backup template (js/data/xlsx-templates.js) now carries pre-built, styled
+  // team rows through row 104 — team rows are index+5, so every team up to storage.js's
+  // MAX_TEAMS (100) has real B/…/AL/AM cells (and the shared-formula K/P/R/S/Z/AE/AG/AI ranges
+  // extend to match). This used to stop at row 44 (40 teams), and trivXSet/trivXPatchAll's
+  // correct "no match -> leave unchanged" no-op meant a game past 40 teams silently dropped
+  // those teams' rows from the XLSX with no error. This test drives a full MAX_TEAMS export and
+  // asserts every ranked AL GrandTotal cell exists and equals grandTotal(ti).
+  it("a full MAX_TEAMS (100) export writes an AL GrandTotal cell for every team matching grandTotal(ti)", async () => {
     const window = await loadAppWindow();
     try {
       evalIn(
         window,
         `gameState = freshState();
-         for (let i = 0; i < 40; i++) gameState.teams.push(freshTeam("Team " + i));
+         for (let i = 0; i < MAX_TEAMS; i++) gameState.teams.push(freshTeam("Team " + i));
          gameState.teams.forEach((t, i) => { t.adjustment = i % 5; });
          gameState.rounds[0].questions[0][0] = { wager: 4, correct: true };
-         gameState.rounds[0].questions[0][39] = { wager: 3, correct: true };
+         gameState.rounds[0].questions[0][MAX_TEAMS - 1] = { wager: 3, correct: true };
+         gameState.rounds[2].questions[1][MAX_TEAMS - 1] = { wager: 4, correct: true };
          renderAll();`,
       );
       await evalIn(window, "exportXLSXBackup()");
@@ -376,13 +376,13 @@ describe("XLSX export: GrandTotal (AL column) cells match grandTotal(ti) for eve
             const rk = ranked();
             return rk.map((row, i) => {
               const rr = i + 5;
-              const m = xml.match(new RegExp('<c r="AL' + rr + '"[^>]*><v>(\\\\d+)</v></c>'));
+              const m = xml.match(new RegExp('<c r="AL' + rr + '"[^>]*><v>(-?\\\\d+)</v></c>'));
               return { index: row.index, cellVal: m ? parseInt(m[1], 10) : null, expected: grandTotal(row.index) };
             });
           })())`,
         ),
       );
-      assert.equal(result.length, 40);
+      assert.equal(result.length, evalIn(window, "MAX_TEAMS"));
       for (const row of result) {
         assert.equal(row.cellVal, row.expected, `AL cell for team ${row.index} did not match grandTotal()`);
       }

@@ -638,7 +638,13 @@ button,[role="button"]{touch-action:manipulation}
   /* box-shadow is a faint downward fade under the border-line, hinting the row right below it is
      genuinely scrollable content and not just static space — picked over a plain flush edge once
      the 12px gap above moved inside the scroll box (V5 of the gap-fix variations). */
-  .settings-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;grid-column:1/-1;flex-shrink:0;margin:-10px -16px 0;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong);box-shadow:0 8px 10px -8px rgba(0,0,0,.6);transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+  /* box-shadow spread is 0 (not the old -8px): with a negative spread the fade pulled ~8px in
+     from each side and died well short of the panel's left/right edges, leaving a bare strip
+     under the corners. At spread 0 the shadow runs the head's full width and .settings-panel's
+     overflow-x:hidden clips it flush to the panel edge instead. position:relative + z-index lift
+     the head (and its shadow) above .settings-panel-body, so the row buttons scrolling under the
+     shadow's 9px overlap sit *beneath* it rather than punching through on top. */
+  .settings-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;grid-column:1/-1;flex-shrink:0;position:relative;z-index:3;margin:-10px -16px 0;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong);box-shadow:0 9px 12px 0 rgba(0,0,0,.5);transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
   .settings-panel-title{font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt-cyan)}
   /* X close button — same circular affordance as .resume-banner-close, reused here for visual
      consistency. With the panel now capped at max-height and scrolling only in the middle, the
@@ -668,7 +674,11 @@ button,[role="button"]{touch-action:manipulation}
      opaque background for the same reason the head does — .settings-panel-body's rows scroll
      behind this footer, not past it, so without one the shadow would read through whatever row
      happens to be scrolled underneath instead of sitting on top of it. */
-  .settings-panel-foot{background:var(--bg-card);border-top:1px solid var(--border-strong);margin-top:2px;padding-top:8px;box-shadow:0 -8px 10px -8px rgba(0,0,0,.6)}
+  /* margin:-16px sides + matching 16px padding full-bleeds the footer to the panel edges (it had
+     no horizontal negative margin before, so its shadow started 16px in from each side and fell
+     even shorter of the edges than the head's). spread 0 + overflow-x:hidden clip, and
+     position/z-index, mirror the head rule above for the same reasons. */
+  .settings-panel-foot{background:var(--bg-card);border-top:1px solid var(--border-strong);position:relative;z-index:3;margin:2px -16px 0;padding:8px 16px 0;box-shadow:0 -9px 12px 0 rgba(0,0,0,.5)}
   .settings-meta{padding-top:0}
   /* .settings-controls is flex-shrink:0 by design (the slider needs its fixed 120px), and a few
      rows pack two buttons into it ("Copy"+"TXT", "Save"+"Load") or pair it with a long label
@@ -689,8 +699,8 @@ button,[role="button"]{touch-action:manipulation}
    [data-theme="dark"] .settings-panel-head/-foot has higher specificity than the plain-class
    rule either way, but keeping the override visually grouped with a plain override for once
    (rather than duplicated per breakpoint) is simpler to scan. */
-[data-theme="dark"] .settings-panel-head{box-shadow:0 8px 14px -6px rgba(255,255,255,.55)}
-[data-theme="dark"] .settings-panel-foot{box-shadow:0 -8px 14px -6px rgba(255,255,255,.55)}
+[data-theme="dark"] .settings-panel-head{box-shadow:0 9px 16px 0 rgba(255,255,255,.5)}
+[data-theme="dark"] .settings-panel-foot{box-shadow:0 -9px 16px 0 rgba(255,255,255,.5)}
 .theme-select{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
 .theme-select:hover{background-color:var(--bg-hover)}
 .theme-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 13%,transparent)}
@@ -1195,6 +1205,17 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    padding-bottom entirely — without its own inset here, the mobile expanded sheet's Start/Reset
    buttons render flush against the true screen edge, under the iPhone Home Bar. */
 .qtimer-desktop{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:10px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--border-strong);box-shadow:var(--shadow-lg)}
+/* Desktop only: the shared .qtimer look is sized for the cramped mobile peek-strip, which left
+   the countdown noticeably smaller than the mobile expanded-sheet copy (1.85rem) even though the
+   desktop sidebar has plenty of room. Scoped to min-width:769px so it only touches the sidebar
+   copy — .qtimer-desktop is reused, unresized, inside the mobile expanded scores sheet. */
+@media(min-width:769px){
+  .qtimer-desktop .qtimer-display{font-size:2.15rem;padding:6px 14px}
+  .qtimer-desktop .qtimer-btn{min-height:2.5rem;padding:7px 14px;font-size:.95rem}
+  .qtimer-desktop .qtimer-btn.qtimer-toggle,
+  .qtimer-desktop .qtimer-btn.qtimer-reset{width:2.5rem;height:2.5rem;min-height:2.5rem;font-size:1.35rem}
+  .qtimer-desktop .qtimer-btn.qtimer-step{padding:6px 12px;font-size:.85rem}
+}
 
 /* Settings backdrop dims the page behind the dropdown exactly like the scores drawer's own
    backdrop dims the page behind it — same rgba/opacity/transition values, reused rather than

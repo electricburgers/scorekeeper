@@ -40,7 +40,10 @@
 // Tour" click). The tiny bit that has to run on every page load regardless — deciding whether
 // to OFFER the tour to a first-time visitor — moved into its own new eager file,
 // js/tutorial-firstrun.js, added here alongside it.
-const CACHE_NAME='trivia-scorekeeper-shell-v14';
+// v15: css/styles.css (settings-panel shadow/z-index fixes, larger desktop question timer),
+// js/app.js, and the embedded js/data/xlsx-templates.js (backup template extended from 40 to
+// 100 team rows) all changed — bump so an installed client refetches the shell.
+const CACHE_NAME='trivia-scorekeeper-shell-v15';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
   './fonts/inter-var.woff2','./fonts/space-grotesk-var.woff2',
