@@ -46,7 +46,8 @@
 // v16: css/styles.css (shadow retune + shared --edge-fade, desktop sticky settings footer,
 // beer-foam fill, bigger desktop timer play glyph), faq/index.html + faq/css/faq.css (gear
 // moved next to Back link, tall-screenshot cap) all changed.
-const CACHE_NAME='trivia-scorekeeper-shell-v16';
+// v17: faq/js/faq.js FAQ_VERSION bump for the v16 FAQ edits.
+const CACHE_NAME='trivia-scorekeeper-shell-v17';
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
   './fonts/inter-var.woff2','./fonts/space-grotesk-var.woff2',
