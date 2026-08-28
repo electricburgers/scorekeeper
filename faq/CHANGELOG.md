@@ -2,6 +2,17 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.37] - 28 Aug 2026
+
+### Changed
+
+- **Row Zebra Stripes**: the tip now marks **Medium** as the default (was Subtle) — the app's
+  default changed in v19.59.
+- **Advanced Settings** screenshots (Dark/Light) regenerated: the expanded toggle now takes its
+  enabled cyan fill, Row Zebra Stripes reads Medium, and the Sound Test Buttons row is included.
+- **Sound Test Buttons** screenshots (Dark/Light) regenerated for the filled drum pictograph
+  (solid red shell, cream head, tension rods) and the Crash burst's new yellow core.
+
 ## [1.36] - 27 Aug 2026
 
 ### Changed

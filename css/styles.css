@@ -460,8 +460,12 @@ button,[role="button"]{touch-action:manipulation}
 /* ADVANCED SETTINGS — collapsible group holding the rarer controls (point adjustments,
    legacy CSV/XLSM export) so the default settings list stays short. */
 .settings-advanced-toggle-row{grid-column:1/-1;margin-top:2px}
-.settings-advanced-toggle{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-body);font-size:.78rem;font-weight:700;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px}
+/* Off (collapsed) vs enabled (expanded) get distinct backgrounds so the state
+   reads at a glance, the same accent-fill convention the settings toggles use. */
+.settings-advanced-toggle{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-body);font-size:.78rem;font-weight:700;padding:8px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px}
 .settings-advanced-toggle:hover{background:var(--bg-hover);color:var(--text-primary)}
+.settings-advanced-toggle.open{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
+.settings-advanced-toggle.open:hover{background:var(--accent-cyan-solid);color:var(--on-accent-cyan)}
 .settings-advanced-toggle .adv-chevron{transition:transform .25s;display:inline-block}
 .settings-advanced-toggle.open .adv-chevron{transform:rotate(180deg)}
 .settings-advanced-group{grid-column:1/-1;display:none;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
@@ -820,13 +824,17 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    detail (it only has to separate from the burst it sits on, both themes). */
 .icon-snd-crash{--icon-tint:var(--tint-drum)}
 /* Solid (not the 38% .icon-tinted wash) and un-stroked so the eight points stay sharp — the
-   emoji is a saturated shape, not a faint one. Yellow core burst on top. */
+   emoji is a saturated shape, not a faint one. Yellow core star on top. The .ip-2 selector
+   carries .icon-tinted too so it outranks the generic `.icon-tinted [class^="ip-"]` interior
+   rule further down (equal specificity there, and that one wins on source order otherwise —
+   which is what was painting the core red instead of yellow). */
 .icon-snd-crash .snd-burst{fill:var(--icon-tint);stroke:none}
-.icon-snd-crash .ip-2{fill:var(--vivid-beer);stroke:none}
-/* Horn = 📢 loudspeaker, tinted silver. Body solid; the grip + sound-wave arcs are strokes. */
+.icon-snd-crash.icon-tinted .ip-2{fill:var(--vivid-beer);stroke:none}
+/* Horn = 📢 loudspeaker, tinted silver. Body solid; the grip + sound-wave arcs are strokes.
+   Same specificity bump as Crash above, for the same source-order reason. */
 .icon-snd-horn{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
 .icon-snd-horn .snd-body{fill:var(--icon-tint);stroke:none}
-.icon-snd-horn .ip-2{fill:none;stroke:var(--icon-tint-2)}
+.icon-snd-horn.icon-tinted .ip-2{fill:none;stroke:var(--icon-tint-2)}
 /* Settings > App Preferences (Save/Load) and > Craft Prize Eligible List (Copy/TXT) — the only
    four pictographs left with no colour of their own after every OTHER Settings row got one.
    --tint-cap reused for Save's floppy disk (this app's existing audited blue) and --tint-mic for
@@ -868,6 +876,14 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    outline so the cream cap still reads on a white background instead of vanishing into it. Every
    place the pictograph renders — main app, FAQ, both themes — picks this up. */
 .icon-beer .ip-2{fill:var(--vivid-beer-2);stroke:var(--icon-tint)}
+/* Drum: the red shell fills solid (not the 38% .icon-tinted wash) so it reads as the 🥁 emoji's
+   body rather than a hollow outline; the drumhead borrows the beer cap's cream opt-out above; and
+   three tension rods lace down the shell (.ip-3 for colour, .dr-rod only trims the stroke weight
+   so they don't blob at button size). All three land on every drum instance — sound test, Start
+   Drumroll, FAQ. */
+.icon-drum .dr-shell{fill:currentColor;stroke:currentColor}
+.icon-drum .ip-2{fill:var(--vivid-beer-2);stroke:var(--icon-tint)}
+.icon-drum .dr-rod{fill:none;stroke-width:1.9}
 /* On a solid accent fill (Start Drumroll, Choose Craft Prize Winner) the tints above
    cannot be used as-is: --accent-cyan-solid runs from #00ffff to #00654c across the six
    theme x colour-vision combinations, so a value legible on one is invisible on another. Mixing
@@ -2336,7 +2352,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
      badge and the Sort/Reset buttons reading as one control cluster at every FONT_SIZES step,
      down to the 12px floor. */
   .q-header,.sw-header{flex-wrap:wrap}
-  .q-header-right{flex-basis:100%;flex-wrap:wrap;row-gap:4px;justify-content:flex-end;margin-left:0;margin-top:2px}
+  .q-header-right{flex-basis:100%;flex-wrap:wrap;row-gap:4px;column-gap:10px;justify-content:flex-end;margin-left:0;margin-top:2px}
   .q-badge,.round-badge{font-size:.8rem}
   /* Sort/Reset drop their text label and shrink to icon-only squares here so the correct/
      incorrect stat pills (which carry the count+% the host actually needs) always have room

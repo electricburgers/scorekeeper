@@ -114,21 +114,27 @@ const ICON_HEART_PICT =
   '<svg class="icon-ui icon-tinted icon-heart" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>';
 const ICON_BEER_PICT =
   '<svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg>';
+// Red shell as a SOLID fill (not the 38% .icon-tinted wash) with a cream drumhead on top and
+// three full-height vertical tension rods laced down the shell — the 🥁 emoji's own red-body /
+// pale-top / laced-side look. The rods are drawn BEFORE the head so the cream oval covers their
+// tops and they only show on the shell side. .dr-shell / .dr-rod styled in styles.css; the head
+// reuses .icon-beer's cream-cap trick.
 const ICON_DRUM_PICT =
-  '<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg>';
+  '<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="dr-shell" d="M2 9v8a10 5 0 0 0 20 0V9"/><path class="ip-3 dr-rod" d="M6 9.4v8.1M12 9.8v8.8M18 9.4v8.1"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg>';
 const ICON_TROPHY_PICT =
   '<svg class="icon-ui icon-tinted icon-trophy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path class="ip-2" d="M4 22h16"/><path class="ip-2" d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path class="ip-2" d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
 // The Craft Prize "Test Sounds" bar's Crash / Horn buttons — drawn glyphs replacing the bare
 // 💥 / 🎺 emoji, shaped and tinted to echo them so they still read at a glance and follow the
 // app's theme + Icon Style. (Roll reuses ICON_DRUM, Fade reuses ICON_STOP — both already
 // drawn.) Emoji mode restores 💥 / 🎺.
-//   Crash 💥 → a solid, sharp eight-point jagged burst with a bright-yellow core burst on top,
-//              echoing the emoji's saturated orange-edge / yellow-centre look — --tint-drum
-//              red-orange + --vivid-beer yellow, both AA-audited both themes.
+//   Crash 💥 → a solid, sharp eight-point jagged burst with a bright-yellow eight-point core star
+//              sitting well inside it (r~7 of the 24 box, so the burst's red-orange points still
+//              show past it), echoing the emoji's saturated orange-edge / yellow-centre look —
+//              --tint-drum red-orange + --vivid-beer yellow, both AA-audited both themes.
 //   Horn  📢 → a loudspeaker/bullhorn: a small mouthpiece, a wide flaring cone, and two sound
 //              waves — tinted silver (--tint-mic, AA-audited both themes) to match 📢.
 const ICON_SND_CRASH_PICT =
-  '<svg class="icon-ui icon-tinted icon-snd-crash" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-burst" d="M12 .5 14.96 10.78 20.1 3.9 14.96 13.22 23.5 12 13.22 14.96 20.1 20.1 10.78 14.96 12 23.5 9.04 13.22 3.9 20.1 9.04 10.78 .5 12 10.78 9.04 3.9 3.9 13.22 9.04Z"/><path class="ip-2" d="M12 3.5 14.7 12.2 19.4 5.9 14.5 12.9 21.5 12 14 14 19 18.5 12.9 14.7 12 20.5 10.5 14.5 6 18 8.9 12.9 4.5 12 9.5 11 6.5 6.5 10 10.2Z"/></svg>';
+  '<svg class="icon-ui icon-tinted icon-snd-crash" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-burst" d="M12 .5 14.96 10.78 20.1 3.9 14.96 13.22 23.5 12 13.22 14.96 20.1 20.1 10.78 14.96 12 23.5 9.04 13.22 3.9 20.1 9.04 10.78 .5 12 10.78 9.04 3.9 3.9 13.22 9.04Z"/><path class="ip-2" d="M19 12 14.77 13.15 16.95 16.95 13.15 14.77 12 19 10.85 14.77 7.05 16.95 9.23 13.15 5 12 9.23 10.85 7.05 7.05 10.85 9.23 12 5 13.15 9.23 16.95 7.05 14.77 10.85Z"/></svg>';
 const ICON_SND_HORN_PICT =
   '<svg class="icon-ui icon-tinted icon-snd-horn" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-body" d="M2 10h2v4H2z"/><path class="snd-body" d="M4 8 15 3.6v16.8L4 16z"/><path class="ip-2" d="M17.7 8.4a4.6 4.6 0 0 1 0 7.2"/><path class="ip-2" d="M20.2 6.2a8.4 8.4 0 0 1 0 11.6" opacity=".5"/></svg>';
 // Final Results' checkered flag. Deliberately NOT one of the tinted pictographs: a racing flag

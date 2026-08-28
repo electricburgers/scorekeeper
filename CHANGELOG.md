@@ -10,6 +10,13 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.61 - 2026-08-28
+- **The Advanced Settings toggle now shows its state.** Collapsed it takes a plain `--bg-card` / muted-text "off" look; expanded it takes the same `--accent-cyan-solid` fill the rest of the settings toggles use when active, so open-vs-closed reads at a glance instead of only from the chevron.
+- **More gap between each question's Sort and Reset buttons on mobile.** The `.q-header-right` cluster gets a 10px `column-gap` at phone widths (was the shared 4px), so the two icon-only squares aren't crowded under a thumb.
+- **Drum pictograph filled in to match the emoji.** The shell is now a solid red fill (not a 38% wash that read as a hollow outline), the drumhead takes the beer cap's solid cream treatment, and three vertical tension rods lace down the shell. Lands on every drum instance — the Craft Prize "Roll" sound-test button, Start Drumroll, and the FAQ.
+- **Crash pictograph gets its yellow core back.** The `.icon-snd-crash .ip-2` rule was losing to the generic `.icon-tinted [class^="ip-"]` interior rule on source order, so the core painted red like the burst; it's now specificity-bumped (and redrawn as a smaller inset eight-point star) so the bright `--vivid-beer` centre shows through, echoing 💥. Same fix applied to the Horn pictograph's arcs.
+- **FAQ**: Row Zebra Stripes tip now marks Medium as the default; new Dark/Light `advanced-settings` and `sound-test-buttons` screenshots. FAQ bumped to v1.37.
+
 ## v19.60 - 2026-08-27
 - **Redraws the Guy Fawkes mask (JD Upload Form).** The mustache and goatee are now solid fills with no outline of their own — stroking them at `.icon-ui`'s 2.25 width had closed the gap between them into one blob at button/mobile size — and the plate's outline is thinned to 1.4. The JD Upload Form control also becomes a square, icon-forward button like XLSX / PDF (the mask over a two-line "JD Upload / Form" label), instead of a wide link.
 - **Real pictographs for the Craft Prize "Test Sounds" buttons.** Roll reuses the drum, Fade reuses the stop square, Crash is a solid red-orange eight-point burst with a yellow core (💥), and Horn is a silver loudspeaker/megaphone (📢) — all theme-aware, all following Icon Style, all WCAG AA in Dark and Light (`--tint-drum` / `--vivid-beer` / `--tint-mic`). Emoji mode restores 🥁 / ⏹️ / 💥 / 📢.
