@@ -123,8 +123,14 @@ describe("v19.59 — XLSX zebra striping", () => {
         "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();",
       );
       assert.match(styles, /<dxfs count="2">/);
-      assert.match(styles, /<fgColor rgb="FFFCE8B2"\/>/, "the original dxf 0 must be kept");
-      assert.match(styles, /<fgColor rgb="FFF2F2F2"\/>/, "the new zebra dxf 1");
+      const dxfs = styles.match(/<dxfs count="2">([\s\S]*?)<\/dxfs>/)[1];
+      const entries = dxfs.match(/<dxf>[\s\S]*?<\/dxf>/g);
+      assert.equal(entries.length, 2, "exactly two dxf entries");
+      assert.match(entries[0], /FCE8B2/, "the original dxf 0 (K-column highlight) must be kept");
+      // dxf 1 is the zebra fill — a conditional-format fill takes the bgColor-only form, NOT the
+      // patternType/fgColor form a normal cell fill uses (see trivXAddZebraDxf).
+      assert.match(entries[1], /<patternFill><bgColor rgb="FFE0E0E0"\/><\/patternFill>/);
+      assert.doesNotMatch(entries[1], /fgColor|patternType/);
     } finally {
       window.close();
     }

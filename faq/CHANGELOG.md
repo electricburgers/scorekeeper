@@ -2,6 +2,14 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.38] - 28 Aug 2026
+
+### Changed
+
+- **`xlsx-export` screenshot** regenerated from the real current export (it had gone stale before
+  v19.59): correct running totals, the grey zebra stripe, only as many team rows as the game has,
+  and the v19.59 example-game standings.
+
 ## [1.37] - 28 Aug 2026
 
 ### Changed

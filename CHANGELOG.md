@@ -10,6 +10,12 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.62 - 2026-08-28
+- **Fixes the XLSX backup export showing every running total as zero.** The template's K/P/R/Z/AE/AG (round subtotals and grand total) and AI (Diff) cells are formulas whose cached value ships as `<v>0</v>`; a viewer that recalculates on load (Excel, LibreOffice) fixed that itself, but one that doesn't (Numbers, macOS Quick Look, Excel in manual-calc mode) showed the stale zeros. `trivInjectXlsx` now tracks each data column's value as it patches and writes the correct cached `<v>` into every formula cell (the `<f>` is kept, so Excel still recomputes the same number). The team-name mirror column (S) is likewise filled with the name instead of its stale `=B` cache.
+- **Fixes the XLSX zebra stripe never rendering.** A conditional-format (differential) fill must use the `<patternFill><bgColor …/></patternFill>` form — no `patternType`, colour in `bgColor` — not the `patternType="solid"` + `fgColor` form a normal cell fill takes; the wrong form silently painted nothing in LibreOffice / Numbers / Quick Look. Also bumped the stripe from `#F2F2F2` (invisible) to `#E0E0E0`.
+- **FAQ**: regenerated the (long-stale) `xlsx-export` screenshot from the real current export — correct totals, the zebra stripe, the trimmed row count, and the v19.59 example-game standings. FAQ bumped to v1.38.
+- 5 new tests (454 total) pass.
+
 ## v19.61 - 2026-08-28
 - **The Advanced Settings toggle now shows its state.** Collapsed it takes a plain `--bg-card` / muted-text "off" look; expanded it takes the same `--accent-cyan-solid` fill the rest of the settings toggles use when active. Its chevron is bigger (a pure `scale()`, so the button never grows) and its resting direction flips — **up when collapsed, down when expanded** — so open-vs-closed reads at a glance.
 - **More gap between each question's Sort and Reset buttons on mobile.** The `.q-header-right` cluster gets a 10px `column-gap` at phone widths (was the shared 4px), so the two icon-only squares aren't crowded under a thumb.

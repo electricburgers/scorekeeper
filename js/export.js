@@ -987,6 +987,13 @@ function trivXFind(xml, ref) {
 function trivXSet(xml, ref, kind, val) {
   const f = trivXFind(xml, ref);
   if (!f) return xml;
+  // See trivXPatchAll for what "cv" (rewrite only the cached <v> of a formula cell) is for.
+  if (kind === "cv") {
+    const cell = /<v>[\s\S]*?<\/v>/.test(f.el)
+      ? f.el.replace(/<v>[\s\S]*?<\/v>/, "<v>" + val + "</v>")
+      : f.el.replace(/<\/c>$/, "<v>" + val + "</v></c>");
+    return xml.slice(0, f.i) + cell + xml.slice(f.i + f.len);
+  }
   const s = trivStyle(f.el);
   let nw;
   if (kind === "n") nw = '<c r="' + ref + '"' + s + "><v>" + val + "</v></c>";
@@ -1032,6 +1039,17 @@ function trivXPatchAll(xml, patches) {
   for (const [ref, kind, val] of patches) {
     const f = idx.get(ref);
     if (!f) continue;
+    // "cv" rewrites only the cached <v> of an existing FORMULA cell, leaving its <f …/> (and every
+    // attribute) untouched — so a viewer that doesn't recalc on load (Numbers, macOS Quick Look,
+    // Excel left in manual-calc mode) shows the real total instead of the template's stale
+    // <v>0</v>, while Excel/LibreOffice still recompute the same value from the formula.
+    if (kind === "cv") {
+      const cell = /<v>[\s\S]*?<\/v>/.test(f.el)
+        ? f.el.replace(/<v>[\s\S]*?<\/v>/, "<v>" + val + "</v>")
+        : f.el.replace(/<\/c>$/, "<v>" + val + "</v></c>");
+      edits.push({ i: f.i, len: f.len, nw: cell });
+      continue;
+    }
     const s = trivStyle(f.el);
     const nw =
       kind === "n"
@@ -1082,10 +1100,10 @@ function trivXTrimRows(xml, lastRow) {
   );
   return xml;
 }
-// Adds a light-grey zebra stripe over the even team rows (row 6 = team 2, row 8 = team 4, …),
-// matching the app's own :nth-child(even) row striping. Uses a conditional-format expression
-// rather than per-cell fills so it costs one dxf and one rule instead of a styled variant of
-// every cell style the team rows use. dxfId 1 is appended by trivXAddZebraDxf below.
+// Adds a grey zebra stripe over the even team rows (row 6 = team 2, row 8 = team 4, …), matching
+// the app's own :nth-child(even) row striping. Uses a conditional-format expression rather than
+// per-cell fills so it costs one dxf and one rule instead of a styled variant of every cell style
+// the team rows use. dxfId 1 is appended by trivXAddZebraDxf below.
 function trivXAddZebra(xml, lastRow) {
   if (lastRow < 6) return xml;
   const rule =
@@ -1101,6 +1119,12 @@ function trivXAddZebra(xml, lastRow) {
 }
 // The zebra fill the rule above points at — appended as dxfId 1 (the template ships exactly one
 // dxf, id 0, used by the K-column highlight).
+//
+// A conditional-format (differential) fill is NOT written like a normal cell fill: it takes the
+// canonical `<patternFill><bgColor .../></patternFill>` form — no patternType, and the colour in
+// bgColor, not fgColor. The earlier `patternType="solid"` + fgColor form (correct for a cellXfs
+// fill) silently rendered as nothing in LibreOffice / Numbers / Quick Look, which is why the
+// stripe never showed. Colour bumped from #F2F2F2 (invisible even once it did paint) to #E0E0E0.
 function trivXAddZebraDxf(stylesXml) {
   return stylesXml.replace(
     /<dxfs count="(\d+)">([\s\S]*?)<\/dxfs>/,
@@ -1109,7 +1133,7 @@ function trivXAddZebraDxf(stylesXml) {
       (Number(count) + 1) +
       '">' +
       body +
-      '<dxf><fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor rgb="FFF2F2F2"/></patternFill></fill></dxf></dxfs>',
+      '<dxf><fill><patternFill><bgColor rgb="FFE0E0E0"/></patternFill></fill></dxf></dxfs>',
   );
 }
 function trivInjectXlsx(templateBytes, gs, rk) {
@@ -1132,32 +1156,59 @@ function trivInjectXlsx(templateBytes, gs, rk) {
   if (dtxt) patches.push(["G2", "s", dtxt]);
   gs.teams.forEach((tm, t) => {
     const r = t + 5;
+    // cv[col] mirrors the numeric value written into each data column for this row, so the
+    // running-total FORMULA cells (K/P/R/Z/AE/AG/AI) can be given a correct cached <v> below —
+    // see the "cv" patch kind in trivXPatchAll for why that matters.
+    const cv = {};
+    const put = (colL, kind, val) => {
+      patches.push([colL + r, kind, val]);
+      if (kind === "n") cv[colL] = val;
+    };
     if (tm.name) patches.push(["B" + r, "s", tm.name]);
     const cb = (tm.njcb ? 3 : 0) + (parseInt(tm.adjustment, 10) || 0);
-    if (cb !== 0) patches.push(["C" + r, "n", cb]);
-    if (tm.bonusItem) patches.push(["D" + r, "n", 5]);
+    if (cb !== 0) put("C", "n", cb);
+    if (tm.bonusItem) put("D", "n", 5);
     if (tm.scoreGuess !== "" && tm.scoreGuess != null)
-      patches.push(["AH" + r, "n", parseInt(tm.scoreGuess, 10)]);
+      put("AH", "n", parseInt(tm.scoreGuess, 10));
     for (let ri = 0; ri < 4; ri++) {
       const wm = TRIVX_WMAPS[ri],
         qs = gs.rounds[ri].questions;
       for (let qi = 0; qi < 4; qi++) {
         const a = qs[qi][t];
         if (!a || a.wager === undefined) continue;
-        const col = wm[a.wager];
-        if (!col) continue;
-        if (a.correct === true) patches.push([col + r, "n", a.wager]);
-        else if (a.correct === false) patches.push([col + r, "n", 0]);
+        const wcol = wm[a.wager];
+        if (!wcol) continue;
+        if (a.correct === true) put(wcol, "n", a.wager);
+        else if (a.correct === false) put(wcol, "n", 0);
       }
       if (ri === 0 || ri === 2) {
         const c = gs.rounds[ri].bonus[t];
-        if (c != null) patches.push([TRIVX_BONUS[ri] + r, "n", c * 5]);
+        if (c != null) put(TRIVX_BONUS[ri], "n", c * 5);
       } else {
         const d = (ri === 1 ? gs.halftime : gs.finalWager)[t];
         if (d && d.wager != null && d.wager !== "" && d.correct != null)
-          patches.push([TRIVX_NET[ri] + r, "n", d.correct ? +d.wager : -d.wager]);
+          put(TRIVX_NET[ri], "n", d.correct ? +d.wager : -d.wager);
       }
     }
+    // Cache the running totals so a non-recalculating viewer shows real numbers, not <v>0</v>.
+    // Same arithmetic the template's own shared formulas carry (K=C+D+E+F+G+H+J, and so on).
+    const g = (c) => cv[c] || 0;
+    const K = g("C") + g("D") + g("E") + g("F") + g("G") + g("H") + g("J");
+    const P = K + g("L") + g("M") + g("N") + g("O");
+    const R = P + g("Q");
+    const Z = R + g("T") + g("U") + g("V") + g("W") + g("Y");
+    const AE = Z + g("AA") + g("AB") + g("AC") + g("AD");
+    const AG = AE + g("AF");
+    patches.push(["K" + r, "cv", K]);
+    patches.push(["P" + r, "cv", P]);
+    patches.push(["R" + r, "cv", R]);
+    patches.push(["Z" + r, "cv", Z]);
+    patches.push(["AE" + r, "cv", AE]);
+    patches.push(["AG" + r, "cv", AG]);
+    patches.push(["AI" + r, "cv", g("AH") - AG]);
+    // Column S is a plain "=B" mirror of the team name; a non-recalc viewer shows its stale 0.
+    // Overwrite it with the name outright rather than teaching "cv" about string formula results.
+    if (tm.name) patches.push(["S" + r, "s", tm.name]);
   });
   rk.forEach((row, i) => {
     const rr = i + 5;
