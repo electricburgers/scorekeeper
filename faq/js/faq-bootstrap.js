@@ -1,5 +1,5 @@
 // Same theme/prefs bootstrap the main app runs before paint, so this page opens already
-// matching whatever theme/color-vision mode/text size the host has set — not a flash of the
+// matching whatever theme/text size the host has set — not a flash of the
 // wrong theme, and not a page that's stuck in one look regardless of what Settings says.
 // Loaded as a plain blocking <script src> (no defer/async) so it still runs before first
 // paint, same timing as when this lived inline in <head>. FONT_SIZES/DEFAULT_SI come from
@@ -10,7 +10,6 @@
   var FONT_SIZES = SHARED_FONT_SIZES,
     DEFAULT_SI = SHARED_DEFAULT_SIZE_INDEX;
   var theme = "dark",
-    cbMode = 0,
     sizeIndex = DEFAULT_SI;
   try {
     var raw = window.localStorage.getItem(PREFS_KEY);
@@ -23,12 +22,10 @@
       // it instead of silently defaulting dark (this var's own initial value above) the first
       // time the renamed build loads. "light"/"bw" predate that, same reason, one rename back.
       else if (["light", "bw", "hc-light"].includes(p.theme)) theme = "light";
-      if (p.cbMode) cbMode = p.cbMode;
       if (p.sizeIndex != null) sizeIndex = p.sizeIndex;
     }
   } catch (e) {}
   document.documentElement.setAttribute("data-theme", theme);
-  if (cbMode) document.documentElement.setAttribute("data-cb", String(cbMode));
   var si = Math.max(0, Math.min(FONT_SIZES.length - 1, sizeIndex));
   document.documentElement.style.fontSize = FONT_SIZES[si] + "px";
 })();

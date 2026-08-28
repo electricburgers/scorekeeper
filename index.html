@@ -47,24 +47,12 @@
     <div class="settings-panel-head"><span class="settings-panel-title">Settings</span><button class="settings-x-btn" onclick="toggleSettings()" aria-label="Close settings" title="Close settings"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg></button></div>
     <div class="settings-panel-body">
     <!-- Regular settings, grouped by what a user actually comes here to do: how the app looks
-         (Theme → Size → Icon Style → Color Vision, most-impactful first), then the one gameplay
-         setting (Question Timer), then onboarding/reference (Sample Data, Help), then App
-         Preferences last as the meta setting that backs up all the others. -->
+         (Theme → Size → Icon Style, most-impactful first), then the one gameplay setting
+         (Question Timer), then onboarding/reference (Sample Data, Help), then App Preferences
+         last as the meta setting that backs up all the others. -->
     <div class="settings-row"><span class="size-label">Theme</span><div class="settings-controls"><button class="settings-btn" id="themeToggle" onclick="toggleTheme()"><svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Dark</button></div></div>
     <div class="settings-row"><span class="size-label">Size</span><div class="settings-controls"><button class="settings-btn" onclick="adjustFontSize(-1)">A−</button><button class="settings-btn" id="sizeResetBtn" onclick="adjustFontSize(0)">A</button><button class="settings-btn" onclick="adjustFontSize(1)">A+</button></div></div>
     <div class="settings-row"><span class="size-label">Icon Style</span><div class="settings-controls"><button class="settings-btn" id="iconStyleToggle" onclick="toggleIconStyle()" title="Swap every drawn pictograph in the app for the platform emoji it replaced"><svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></svg> Pictograph</button></div></div>
-    <div class="settings-row"><span class="size-label">Color Vision</span><div class="settings-controls">
-      <div class="cv-select" id="cbSelect">
-        <button type="button" class="cv-select-btn" aria-haspopup="listbox" aria-expanded="false" title="Adjust pass/fail colors for color blindness" onclick="toggleCvMenu(event)">
-          <span class="cv-select-label">Off</span><span class="cv-select-swatch" aria-hidden="true"></span><span class="cv-select-arrow" aria-hidden="true">▾</span>
-        </button>
-        <ul class="cv-select-menu" role="listbox" aria-label="Color vision mode">
-          <li role="option" data-value="0" data-short="Off" aria-selected="true" onclick="selectCvOption(this,'0')">Off</li>
-          <li role="option" data-value="1" data-short="Red-Green" aria-selected="false" onclick="selectCvOption(this,'1')"><span class="cv-opt-main">Red-Green<span class="cv-swatch-pair" aria-hidden="true"><span class="cv-swatch cv-swatch-rg-a"></span><span class="cv-swatch cv-swatch-rg-b"></span></span></span><span class="cv-opt-sub">(deuteranopia/protanopia)</span></li>
-          <li role="option" data-value="2" data-short="Blue-Yellow" aria-selected="false" onclick="selectCvOption(this,'2')"><span class="cv-opt-main">Blue-Yellow<span class="cv-swatch-pair" aria-hidden="true"><span class="cv-swatch cv-swatch-by-a"></span><span class="cv-swatch cv-swatch-by-b"></span></span></span><span class="cv-opt-sub">(tritanopia)</span></li>
-        </ul>
-      </div>
-    </div></div>
     <div class="settings-row"><span class="size-label">Question Timer</span><div class="settings-controls"><select id="qtDurationSelect" class="theme-select" aria-label="Question timer duration" onchange="setQtDurationSec(this.value)"><option value="60">1:00</option><option value="90">1:30</option><option value="120">2:00</option><option value="150">2:30</option><option value="180" selected>3:00</option><option value="210">3:30</option><option value="240">4:00</option><option value="270">4:30</option><option value="300">5:00</option><option value="330">5:30</option><option value="360">6:00</option><option value="390">6:30</option><option value="420">7:00</option><option value="450">7:30</option><option value="480">8:00</option><option value="510">8:30</option><option value="540">9:00</option><option value="570">9:30</option><option value="600">10:00</option><option value="630">10:30</option><option value="660">11:00</option><option value="690">11:30</option><option value="720">12:00</option><option value="750">12:30</option><option value="780">13:00</option><option value="810">13:30</option><option value="840">14:00</option><option value="870">14:30</option><option value="900">15:00</option></select></div></div>
     <div class="settings-row"><span class="size-label">Sample Data</span><div class="settings-controls"><button class="settings-btn" onclick="loadSampleGame()" title="Load a real completed game so you can explore the app"><svg class="icon-ui icon-tinted icon-flask" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="ip-2" d="M10 2v7.31"/><path class="ip-2" d="M14 9.3V1.99"/><path class="ip-2" d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></svg> Try Example</button><button class="settings-btn" onclick="startTutorial()" title="A guided practice run through a full game with 5 fake teams — nothing here touches your real session"><svg class="icon-ui icon-tinted icon-hand" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg> Take the Tour</button></div></div>
     <div class="settings-row"><span class="size-label">Help</span><div class="settings-controls"><a class="settings-btn" href="faq/index.html" target="_blank" rel="noopener" title="Open the FAQ and Tips &amp; Tricks guide in a new tab"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg> FAQ</a></div></div>
@@ -564,7 +552,7 @@
 
 <!-- Themed stand-in for window.confirm()/alert() — see appConfirm/appAlert (js/app.js). The
      native dialogs render in the OS/browser's own fixed light style regardless of this app's
-     Dark/Light theme or Color Vision mode, the one thing left in the app that did. Built once,
+     Dark/Light theme, the one thing left in the app that did. Built once,
      reused for every confirm/alert call site: the message and button labels are filled in by
      JS per call, not hard-coded here. -->
 <div class="confirm-overlay" id="confirmOverlay" onclick="if(event.target===this)confirmDialogRespond(false)">

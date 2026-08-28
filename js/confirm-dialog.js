@@ -3,7 +3,7 @@
 
 // ===== THEMED CONFIRM / ALERT (replaces window.confirm()/alert()) =====
 // window.confirm()/alert() render in the OS/browser's own fixed light popup style, no matter
-// this app's Dark/Light theme or Color Vision mode — the one thing left that ignored both, and
+// this app's Dark/Light theme — the one thing left that ignored it, and
 // a jarring bright-white flash against a dark room's screen besides. Both return a Promise
 // instead of blocking the thread the way the native calls do (impossible to replicate for a
 // custom element — nothing in the DOM can pause script execution), so every call site that used

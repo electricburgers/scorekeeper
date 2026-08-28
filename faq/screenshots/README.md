@@ -27,9 +27,9 @@ theme: `xlsx-export` (a workbook in a spreadsheet app), `pdf-export` (a rendered
 PDF page) and `jd-upload-form` (a third-party form). Giving them the attribute
 only makes the page probe for a file that will never exist.
 
-The `theme-*` and `color-vision-*` comparison shots below are likewise excluded
-— each one is deliberately showing a specific theme, so swapping it would
-defeat the comparison it exists to make.
+The `theme-*` comparison shots below are likewise excluded — each one is
+deliberately showing a specific theme, so swapping it would defeat the
+comparison it exists to make.
 
 | File | What to capture | Used in |
 |---|---|---|
@@ -50,11 +50,12 @@ defeat the comparison it exists to make.
 | `craft-prize.webp` | The Craft Prize Drawing section open, showing the Exclude Top stepper and Drumroll seconds control (either pre-draw or with a winner shown). | Craft Prize Drawing |
 | `craft-prize-drumroll.webp` | The Craft Prize drumroll actively playing, right after clicking "🥁 Start Drumroll". | Craft Prize Drawing |
 | `craft-prize-winner.webp` | The finished draw — winning team announced, with the **Clear** button visible next to the result. | Craft Prize Drawing |
-| `export-bar.webp` | The Export & Data section — 📄 XLSX / 📕 PDF / 🔗 JD Upload Form buttons. | Exporting |
-| `xlsx-export.webp` | The downloaded XLSX scoresheet, opened in a spreadsheet app — header (Location/Date/Quiz #/Host) and a few team rows visible. | Exporting |
+| `export-bar.webp` | The Export & Data section — the square 📄 XLSX / 📕 PDF buttons and the 🎭 JD Upload Form link. | Exporting |
+| `xlsx-export.webp` | The downloaded XLSX scoresheet, opened in a spreadsheet app — header (Location/Date/Quiz #/Host), a few zebra-striped team rows, and only as many team rows as the game has. | Exporting |
 | `pdf-export.webp` | The downloaded PDF scoresheet — same header plus full standings. | Exporting |
 | `jd-upload-form.webp` | The JD Upload Form page, opened in its own browser tab. | Exporting |
-| `settings-panel.webp` | The main Settings panel open (⚙️ gear icon) — Theme, Size, Icon Style, Color Vision, Question Timer, Sample Data (🧪 Try Example and ℹ️ Take the Tour), Help, App Preferences, and the collapsed Advanced Settings toggle. | Getting Started |
+| `sound-test-buttons.webp` | The Craft Prize Drawing's Test Sounds bar — the square Roll / Fade / Crash / Horn buttons (Advanced Settings → Manual Drumroll Control **and** Sound Test Buttons both on). | Tips & Tricks |
+| `settings-panel.webp` | The main Settings panel open (⚙️ gear icon) — Theme, Size, Icon Style, Question Timer, Sample Data (🧪 Try Example and ℹ️ Take the Tour), Help, App Preferences, and the collapsed Advanced Settings toggle. | Getting Started |
 | `tutorial-spotlight.webp` | Mid-tour: the dimmed spotlight overlay around a highlighted control, with the callout box (step text, "Step X of Y", Back/Next, Skip Tutorial) visible. | Interactive Tutorial |
 | `advanced-settings.webp` | Advanced Settings expanded — Row Density, Row Zebra Stripes, Craft Prize Eligible List, Crowd-Wisdom Percentage, Edit Locked Fields, timer controls, Manual Drumroll Control (on, so Drumroll Crossfade shows too), and Point Adjustments. | Tips & Tricks |
 | `manual-drumroll-control.webp` | The Craft Prize drawing with Manual Drumroll Control's Stop Drumroll / Play Victory Horn buttons visible (Advanced Settings → Manual Drumroll Control must be on). | Tips & Tricks |
@@ -62,6 +63,3 @@ defeat the comparison it exists to make.
 | `save-load-toolbar.webp` | The top toolbar — 💾 Save and 📂 Load buttons next to the ⚙️ Settings gear. | Manual Save & Load |
 | `theme-dark.webp` | The app in Dark theme (Settings → Theme → 🌑 Dark) — any full screen works, Event Details + a scored round is a good choice. | Light Mode & Dark Mode |
 | `theme-light.webp` | The same view, switched to Light theme (Settings → Theme → ☀️ Light), ideally the *same* screen as `theme-dark.webp` so the two are a true side-by-side comparison. | Light Mode & Dark Mode |
-| `color-vision-off.webp` | A scored round (with some correct/incorrect wagers visible) with Color Vision set to **Off**. | Light Mode & Dark Mode |
-| `color-vision-red-green.webp` | The same view with Color Vision set to **Red-Green**. | Light Mode & Dark Mode |
-| `color-vision-blue-yellow.webp` | The same view with Color Vision set to **Blue-Yellow**. | Light Mode & Dark Mode |

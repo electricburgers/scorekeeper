@@ -65,109 +65,27 @@ describe("shared-ui: font size scale", () => {
   });
 });
 
-describe("shared-ui: Color Vision dropdown (main app's #cbSelect)", () => {
-  let window;
-  before(async () => {
-    window = await loadAppWindow();
+describe("Color Vision was removed from both pages (v19.59)", () => {
+  it("the main app no longer defines #cbSelect or a cv-select widget", async () => {
+    const window = await loadAppWindow();
+    assert.equal(window.document.getElementById("cbSelect"), null);
+    assert.equal(window.document.querySelector(".cv-select"), null);
+    assert.equal(typeof window.setCbMode, "undefined");
+    assert.equal(typeof window.toggleCvMenu, "undefined");
+    window.close();
   });
-  after(() => window.close());
-
-  it("starts closed", () => {
-    assert.equal(
-      window.document.getElementById("cbSelect").classList.contains("open"),
-      false,
-    );
+  it("the FAQ no longer defines #faqCvSelect or a cv-select widget", async () => {
+    const window = await loadFaqWindow();
+    assert.equal(window.document.getElementById("faqCvSelect"), null);
+    assert.equal(window.document.querySelector(".cv-select"), null);
+    assert.equal(typeof window.faqToggleCvMenu, "undefined");
+    window.close();
   });
-  it("toggleCvMenu(event) opens the menu and re-parents it to <body>", () => {
-    window.toggleCvMenu({ stopPropagation() {} });
-    const w = window.document.getElementById("cbSelect");
-    const menu = window.document.querySelector(".cv-select-menu");
-    assert.equal(w.classList.contains("open"), true);
-    assert.equal(menu.parentElement.tagName, "BODY");
-    assert.equal(menu.classList.contains("cv-open"), true);
-  });
-  it("the open menu's aria-expanded reflects open state on the button", () => {
-    const btn = window.document.querySelector("#cbSelect .cv-select-btn");
-    assert.equal(btn.getAttribute("aria-expanded"), "true");
-  });
-  it("the open menu is positioned with explicit left/top styles (the viewport-clamped placement math actually ran)", () => {
-    const menu = window.document.querySelector(".cv-select-menu");
-    assert.ok(menu.style.left.endsWith("px"));
-    assert.ok(menu.style.top.endsWith("px"));
-  });
-  it("closeCvMenu() closes the menu and re-homes it back inside #cbSelect", () => {
-    window.closeCvMenu();
-    const w = window.document.getElementById("cbSelect");
-    const menu = window.document.querySelector(".cv-select-menu");
-    assert.equal(w.classList.contains("open"), false);
-    assert.equal(menu.parentElement.id, "cbSelect");
-    assert.equal(menu.classList.contains("cv-open"), false);
-  });
-  it("selectCvOption updates the closed button's label to the option's short name", () => {
-    const li = window.document.querySelector('#cbSelect li[data-value="1"]');
-    window.selectCvOption(li, "1");
-    const label = window.document.querySelector("#cbSelect .cv-select-label");
-    assert.equal(label.textContent, "Red-Green");
-  });
-  it("selectCvOption mirrors the chosen option's swatch pair into the closed button", () => {
-    const swatch = window.document.querySelector("#cbSelect .cv-select-swatch");
-    assert.ok(swatch.innerHTML.includes("cv-swatch"));
-  });
-  it("selecting Off clears the closed button's swatch (Off has no swatch pair of its own)", () => {
-    const li = window.document.querySelector('#cbSelect li[data-value="0"]');
-    window.selectCvOption(li, "0");
-    const swatch = window.document.querySelector("#cbSelect .cv-select-swatch");
-    assert.equal(swatch.innerHTML, "");
-  });
-  it("selectCvOption also applies the color-vision mode via data-cb on <html>", () => {
-    const li = window.document.querySelector('#cbSelect li[data-value="2"]');
-    window.selectCvOption(li, "2");
-    assert.equal(window.document.documentElement.getAttribute("data-cb"), "2");
-    // reset for any later test in this process
-    window.selectCvOption(
-      window.document.querySelector('#cbSelect li[data-value="0"]'),
-      "0",
-    );
-  });
-  it("the CV dropdown never positions itself past the right edge of the viewport (the bug this session fixed on the FAQ's own copy)", () => {
-    window.toggleCvMenu({ stopPropagation() {} });
-    const menu = window.document.querySelector(".cv-select-menu");
-    const right = parseFloat(menu.style.left) + menu.getBoundingClientRect().width;
-    assert.ok(right <= window.innerWidth - 8 + 1, `menu right edge ${right} vs viewport ${window.innerWidth}`);
-    window.closeCvMenu();
-  });
-});
-
-describe("shared-ui: Color Vision dropdown (FAQ's #faqCvSelect, same shared implementation)", () => {
-  let window;
-  before(async () => {
-    window = await loadFaqWindow();
-  });
-  after(() => window.close());
-
-  it("faqToggleCvMenu opens the menu and re-parents it to <body>, same as the app's", () => {
-    window.faqToggleCvMenu({ stopPropagation() {} });
-    const menu = window.document.querySelector(".cv-select-menu");
-    assert.equal(menu.parentElement.tagName, "BODY");
-  });
-  it("faqSetCvSelectDisplay updates the FAQ's own closed-button label", () => {
-    window.faqSetCvSelectDisplay("1");
-    const label = window.document.querySelector("#faqCvSelect .cv-select-label");
-    assert.equal(label.textContent, "Red-Green");
-  });
-  it("faqCloseCvMenu re-homes the menu back inside #faqCvSelect", () => {
-    window.faqCloseCvMenu();
-    assert.equal(
-      window.document.querySelector(".cv-select-menu").parentElement.id,
-      "faqCvSelect",
-    );
-  });
-  it("the FAQ's dropdown never positions itself past the right edge either (the actual regression this session found and fixed)", () => {
-    window.faqToggleCvMenu({ stopPropagation() {} });
-    const menu = window.document.querySelector(".cv-select-menu");
-    const right = parseFloat(menu.style.left) + menu.getBoundingClientRect().width;
-    assert.ok(right <= window.innerWidth - 8 + 1);
-    window.faqCloseCvMenu();
+  it("nothing sets a data-cb attribute on <html> after prefs are applied", async () => {
+    const window = await loadAppWindow();
+    window.applyPrefs();
+    assert.equal(window.document.documentElement.hasAttribute("data-cb"), false);
+    window.close();
   });
 });
 
@@ -1847,19 +1765,6 @@ describe("Settings round-trip: every Settings control's change survives reapplyi
     window.document.getElementById("stripeToggle").textContent = "bogus";
     evalIn(window, "applyPrefs()");
     assert.equal(window.document.getElementById("stripeToggle").textContent, text);
-  });
-  it("Color Vision", () => {
-    const li = window.document.querySelector('#cbSelect li[data-value="2"]');
-    window.selectCvOption(li, "2");
-    const attr = window.document.documentElement.getAttribute("data-cb");
-    window.document.documentElement.removeAttribute("data-cb");
-    evalIn(window, "applyPrefs()");
-    assert.equal(window.document.documentElement.getAttribute("data-cb"), attr);
-    // restore for any later test in this process
-    window.selectCvOption(
-      window.document.querySelector('#cbSelect li[data-value="0"]'),
-      "0",
-    );
   });
   it("Question Timer default duration", () => {
     window.setQtDurationSec(420);

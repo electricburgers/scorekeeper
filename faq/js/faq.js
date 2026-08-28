@@ -4,7 +4,7 @@
 // #versionLabel element. Here the same string feeds two spots — the page footer and the
 // Settings panel's settings-meta row — so bumping a release only means editing these two
 // constants instead of hunting down every place the version text is written out by hand.
-const FAQ_VERSION = "v1.34";
+const FAQ_VERSION = "v1.35";
 const FAQ_VERSION_DATE = "27 Aug 2026";
 
 // Same Lucide sun/moon geometry as the main app's THEME_ICON_SUN/MOON (js/app.js), tagged
@@ -148,9 +148,8 @@ function faqClearSearch() {
 // summary and the answer body, so a hit is visible without having to re-read the whole item.
 // mark.faq-hl (css/faq.css) is a fixed yellow/black pair rather than one of the theme's own
 // accent-* vars, specifically so the combination passes WCAG AAA (>=7:1) contrast in every
-// theme this page ships — Dark, Light, and both Color Vision modes — without having to
-// re-verify the ratio every time an accent color changes for cb-mode reasons unrelated to
-// search. See the comment on that rule for the actual contrast math.
+// theme this page ships — Dark and Light — without having to re-verify the ratio every time
+// an accent color changes. See the comment on that rule for the actual contrast math.
 function faqEscapeForRegExp(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -213,8 +212,8 @@ function faqHighlightMatches(root, query) {
 
 // ============================== THEMED SCREENSHOTS ==============================
 // Optional light-mode variant per screenshot: any .faq-shot img tagged with data-shot-base
-// (every screenshot except the dedicated theme-dark/theme-light and Color Vision comparison
-// shots, which must always show their fixed subject regardless of the reader's own theme)
+// (every screenshot except the dedicated theme-dark/theme-light comparison shots, which must
+// always show their fixed subject regardless of the reader's own theme)
 // gets swapped to "<base>-light.webp" when the page is in Light theme, IF that file exists,
 // and back to the plain "<base>.webp" dark-captured default otherwise. Dropping in
 // "<base>-light.webp" for a shot is all it takes to start showing it to Light-theme readers,
@@ -246,10 +245,10 @@ function faqApplyThemedShots() {
     });
 }
 
-// ============================== SETTINGS PANEL (Theme + Text Size + Color Vision) ==============================
+// ============================== SETTINGS PANEL (Theme + Text Size + Icon Style) ==============================
 // Persists into the same trivRev6_prefs localStorage key the main app reads/writes — only the
-// theme, cbMode, and sizeIndex fields are ever touched here, and every write merges onto
-// whatever is already stored, so a theme, size, or color-vision change made from this page
+// theme, iconStyle, and sizeIndex fields are ever touched here, and every write merges onto
+// whatever is already stored, so a theme, size, or icon-style change made from this page
 // carries over the next time either the FAQ or the main app is opened (and vice versa), the
 // same two-way match the theme bootstrap in js/faq-bootstrap.js already gives for free.
 // FONT_SIZES/DEFAULT_SI are kept identical to the main Scorekeeper app's own copy (js/app.js
@@ -346,10 +345,6 @@ function faqApplyDisplayPrefs() {
         ? FAQ_THEME_SUN_SVG + " Light"
         : FAQ_THEME_MOON_SVG + " Dark";
   faqApplyIconStyle(p.iconStyle === "emoji" ? "emoji" : "pictograph");
-  const cbm = p.cbMode || 0;
-  if (cbm) document.documentElement.setAttribute("data-cb", String(cbm));
-  else document.documentElement.removeAttribute("data-cb");
-  faqSetCvSelectDisplay(String(cbm));
   const si = Math.max(
     0,
     Math.min(FAQ_FONT_SIZES.length - 1, p.sizeIndex ?? FAQ_DEFAULT_SI),
@@ -385,33 +380,6 @@ function faqToggleTheme() {
   const current = document.documentElement.getAttribute("data-theme");
   faqSetTheme(current === "light" ? "dark" : "light");
 }
-function faqSetCbMode(v) {
-  const p = faqLoadPrefs();
-  p.cbMode = parseInt(v, 10) || 0;
-  faqSavePrefs(p);
-  faqApplyDisplayPrefs();
-}
-// Thin, page-named wrappers around js/shared-ui.js's sharedToggleCvMenu/sharedCloseCvMenu/
-// sharedSetCvSelectDisplay — same widget, same markup, same positioning logic as the main app's
-// own #cbSelect, so the actual implementation lives there once instead of as two independently
-// hand-maintained copies (see that file's own top comment for the bug history behind why). Kept
-// as same-named functions here rather than calling the shared ones directly from this page's
-// onclick="" attributes, so nothing in the markup had to change for this.
-function faqCloseCvMenu() {
-  sharedCloseCvMenu("faqCvSelect");
-}
-function faqToggleCvMenu(e) {
-  sharedToggleCvMenu(e, "faqCvSelect");
-}
-function faqSetCvSelectDisplay(v) {
-  sharedSetCvSelectDisplay("faqCvSelect", v);
-}
-function faqSelectCvOption(li, v) {
-  faqSetCvSelectDisplay(v);
-  faqCloseCvMenu();
-  faqSetCbMode(v);
-}
-
 function faqToggleSettings() {
   const panel = document.getElementById("faqSettingsPanel");
   const btn = document.getElementById("faqSettingsToggleBtn");
@@ -426,11 +394,8 @@ function faqCloseSettingsPanel() {
   const btn = document.getElementById("faqSettingsToggleBtn");
   btn?.setAttribute("aria-expanded", "false");
   btn?.classList.remove("active");
-  faqCloseCvMenu();
 }
 document.addEventListener("click", (e) => {
-  if (!e.target.closest(".cv-select") && !e.target.closest(".cv-select-menu"))
-    faqCloseCvMenu();
   if (
     !e.target.closest("#faqSettingsPanel") &&
     !e.target.closest("#faqSettingsToggleBtn")
@@ -439,7 +404,6 @@ document.addEventListener("click", (e) => {
 });
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
-    faqCloseCvMenu();
     faqCloseSettingsPanel();
   }
   // "/" focuses search, same shortcut GitHub/most search-heavy sites use — skipped while

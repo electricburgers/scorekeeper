@@ -162,7 +162,6 @@ const APP_CRITICAL_IDS = [
   "confirmMessage",
   "confirmOkBtn",
   "confirmCancelBtn",
-  "cbSelect",
   "fileLoadInput",
   "prefsLoadInput",
 ];
@@ -175,7 +174,6 @@ for (const id of APP_CRITICAL_IDS) {
 const FAQ_CRITICAL_IDS = [
   "faqSettingsPanel",
   "faqSettingsToggleBtn",
-  "faqCvSelect",
   "faqSearch",
   "faqSearchClear", // this session's addition
   "faqNoResults",

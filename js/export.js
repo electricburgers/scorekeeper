@@ -1056,6 +1056,62 @@ function trivXPatchAll(xml, patches) {
   }
   return out + xml.slice(pos);
 }
+// Drop every <row> past lastRow and pull every range that was sized for the 100-row template
+// (dimension, the 8 shared-formula ranges, the K-column conditional format, the AL:AM sortState)
+// back to the real last row, so the exported sheet ends right after the last team instead of
+// trailing hundreds of empty rows.
+function trivXTrimRows(xml, lastRow) {
+  xml = xml.replace(
+    /<row r="(\d+)"(?:[^>]*?)(?:\/>|>[\s\S]*?<\/row>)/g,
+    (m, r) => (Number(r) > lastRow ? "" : m),
+  );
+  xml = xml.replace(
+    /<dimension ref="A1:AN\d+"\/>/,
+    '<dimension ref="A1:AN' + lastRow + '"/>',
+  );
+  // Every template range that ends at row 104 (shared formulas K5:K104 … AI5:AI104, and the
+  // K4:K104 conditional-format sqref) — clamp the end row to lastRow. Guarded: a single-team
+  // export (lastRow 5) leaves K5:K5, still valid.
+  xml = xml.replace(
+    /((?:ref|sqref)="[A-Z]+\d+:[A-Z]+)104"/g,
+    "$1" + lastRow + '"',
+  );
+  xml = xml.replace(
+    /(<sortState ref="AL5:AM)\d+"/,
+    "$1" + lastRow + '"',
+  );
+  return xml;
+}
+// Adds a light-grey zebra stripe over the even team rows (row 6 = team 2, row 8 = team 4, …),
+// matching the app's own :nth-child(even) row striping. Uses a conditional-format expression
+// rather than per-cell fills so it costs one dxf and one rule instead of a styled variant of
+// every cell style the team rows use. dxfId 1 is appended by trivXAddZebraDxf below.
+function trivXAddZebra(xml, lastRow) {
+  if (lastRow < 6) return xml;
+  const rule =
+    '<conditionalFormatting sqref="A5:AN' +
+    lastRow +
+    '"><cfRule type="expression" dxfId="1" priority="2"><formula>MOD(ROW(),2)=0</formula></cfRule></conditionalFormatting>';
+  // Placed right after the template's existing K-column conditional format so its lower priority
+  // (2 vs 1) leaves that "cell has a value" highlight on top where the two overlap.
+  return xml.replace(
+    /(<\/conditionalFormatting>)(<pageMargins)/,
+    "$1" + rule + "$2",
+  );
+}
+// The zebra fill the rule above points at — appended as dxfId 1 (the template ships exactly one
+// dxf, id 0, used by the K-column highlight).
+function trivXAddZebraDxf(stylesXml) {
+  return stylesXml.replace(
+    /<dxfs count="(\d+)">([\s\S]*?)<\/dxfs>/,
+    (m, count, body) =>
+      '<dxfs count="' +
+      (Number(count) + 1) +
+      '">' +
+      body +
+      '<dxf><fill><patternFill patternType="solid"><fgColor rgb="FFF2F2F2"/><bgColor rgb="FFF2F2F2"/></patternFill></fill></dxf></dxfs>',
+  );
+}
 function trivInjectXlsx(templateBytes, gs, rk) {
   const files = fflate.unzipSync(templateBytes);
   const dec = new TextDecoder("utf-8"),
@@ -1109,7 +1165,15 @@ function trivInjectXlsx(templateBytes, gs, rk) {
     patches.push(["AM" + rr, "s", row.name]);
   });
   x = trivXPatchAll(x, patches);
+  // Only draw as many team rows as this game actually has — the embedded template ships a full
+  // MAX_TEAMS (100) block of styled team rows plus JD's own ~880 trailing filler rows, so a
+  // 12-team game otherwise exported a sheet ~975 rows tall, all but 12 of them empty. Trim
+  // everything past the last real team row and add a zebra stripe over what's left.
+  const lastRow = Math.max(gs.teams.length + 4, 5);
+  x = trivXTrimRows(x, lastRow);
+  x = trivXAddZebra(x, lastRow);
   files["xl/worksheets/sheet1.xml"] = enc.encode(x);
+  files["xl/styles.xml"] = enc.encode(trivXAddZebraDxf(dec.decode(files["xl/styles.xml"])));
   let wb = dec.decode(files["xl/workbook.xml"]);
   wb = wb.replace(
     /<calcPr calcId="(\d+)"\/>/,

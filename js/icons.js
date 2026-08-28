@@ -134,6 +134,14 @@ const ICON_PDF_PICT =
   '<svg class="icon-ui icon-tinted icon-pdf" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg>';
 const ICON_LINK_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+// JD Upload Form's own icon — a Guy Fawkes mask, drawn straight from the app's own PWA /
+// home-screen icon (icons/icon-source.svg): the flat-topped plate tapering to a rounded chin
+// point, the handlebar mustache, the narrow goatee below it — the same three paths, at the
+// same 24-unit scale that source is authored in. Tinted purple (--tint-flask, freed up when
+// the flask icon moved to green) so it echoes that icon's purple badge and reads as its own
+// thing beside the green XLSX / red PDF buttons. 🎭 as the Emoji-mode glyph.
+const ICON_FAWKES_PICT =
+  '<svg class="icon-ui icon-tinted icon-fawkes" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 4.2 16 4.2C19 4.2 20 8 20 11.3 20 16.5 15.5 21.6 12 21.6 8.5 21.6 4 16.5 4 11.3 4 8 5 4.2 8 4.2Z"/><path class="ip-2" d="M12 13.2c-.5-.9-1.6-1.3-2.6-.9-1.6.6-2.2 2.3-3.6 2.6-1 .2-1.9-.3-2.3-1.1-.3.9.1 2 1.1 2.5 1.7.8 3.5-.2 4.6-1.4.5-.6 1.1-1.1 1.8-1.4v-.3Zm0 0c.5-.9 1.6-1.3 2.6-.9 1.6.6 2.2 2.3 3.6 2.6 1 .2 1.9-.3 2.3-1.1.3.9-.1 2-1.1 2.5-1.7.8-3.5-.2-4.6-1.4-.5-.6-1.1-1.1-1.8-1.4v-.3Z"/><path class="ip-2" d="M10.1 16.4c.4 2.6 1 4.8 1.9 6.4 .9-1.6 1.5-3.8 1.9-6.4-.8.5-1.3.9-1.9 1.8-.6-.9-1.1-1.3-1.9-1.8Z"/></svg>';
 const ICON_TRASH_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
 // Play Horn's icon: a plain play triangle. No frame around it — the button already has a border
@@ -242,6 +250,7 @@ const ICON_TROPHY_EMOJI = '<span class="icon-emoji">🏆</span>';
 const ICON_FLAG_EMOJI = '<span class="icon-emoji">🏁</span>';
 const ICON_PDF_EMOJI = '<span class="icon-emoji">📕</span>';
 const ICON_LINK_EMOJI = '<span class="icon-emoji">🔗</span>';
+const ICON_FAWKES_EMOJI = '<span class="icon-emoji">🎭</span>';
 const ICON_TRASH_EMOJI = '<span class="icon-emoji">🗑️</span>';
 const ICON_HORN_EMOJI = '<span class="icon-emoji">🎉</span>';
 const ICON_STOP_EMOJI = '<span class="icon-emoji">⏹️</span>';
@@ -276,6 +285,7 @@ let ICON_TROPHY = ICON_TROPHY_PICT;
 let ICON_FLAG = ICON_FLAG_PICT;
 let ICON_PDF = ICON_PDF_PICT;
 let ICON_LINK = ICON_LINK_PICT;
+let ICON_FAWKES = ICON_FAWKES_PICT;
 let ICON_TRASH = ICON_TRASH_PICT;
 let ICON_HORN = ICON_HORN_PICT;
 let ICON_STOP = ICON_STOP_PICT;
@@ -345,6 +355,7 @@ function applyIconStyle(style) {
   ICON_FLAG = emoji ? ICON_FLAG_EMOJI : ICON_FLAG_PICT;
   ICON_PDF = emoji ? ICON_PDF_EMOJI : ICON_PDF_PICT;
   ICON_LINK = emoji ? ICON_LINK_EMOJI : ICON_LINK_PICT;
+  ICON_FAWKES = emoji ? ICON_FAWKES_EMOJI : ICON_FAWKES_PICT;
   ICON_TRASH = emoji ? ICON_TRASH_EMOJI : ICON_TRASH_PICT;
   ICON_HORN = emoji ? ICON_HORN_EMOJI : ICON_HORN_PICT;
   ICON_STOP = emoji ? ICON_STOP_EMOJI : ICON_STOP_PICT;

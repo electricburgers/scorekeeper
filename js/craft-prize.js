@@ -730,11 +730,13 @@ function renderCraftPrizeBlock() {
     ${
       prefs.craftManualEnd && prefs.craftSoundTest
         ? `<div class="cp-test-bar">
-      <span class="cp-field-label">Test Sounds:</span>
-      <button class="settings-btn btn-sm" onclick="testAudioClip('start')" title="Play drumroll intro + loop">🥁 Roll</button>
-      <button class="settings-btn btn-sm" onclick="testAudioClip('fade')" title="Fade out active drumroll">⏹ Fade</button>
-      <button class="settings-btn btn-sm" onclick="testAudioClip('end')" title="Play drumroll crash stinger">💥 Crash</button>
-      <button class="settings-btn btn-sm" onclick="testAudioClip('horn')" title="Play victory horn">🎺 Horn</button>
+      <span class="cp-field-label">Test Sounds</span>
+      <div class="cp-test-bar-btns">
+      <button class="settings-btn export-sq" onclick="testAudioClip('start')" title="Play drumroll intro + loop"><span class="icon-emoji">🥁</span><span class="export-sq-label">Roll</span></button>
+      <button class="settings-btn export-sq" onclick="testAudioClip('fade')" title="Fade out active drumroll"><span class="icon-emoji">⏹️</span><span class="export-sq-label">Fade</span></button>
+      <button class="settings-btn export-sq" onclick="testAudioClip('end')" title="Play drumroll crash stinger"><span class="icon-emoji">💥</span><span class="export-sq-label">Crash</span></button>
+      <button class="settings-btn export-sq" onclick="testAudioClip('horn')" title="Play victory horn"><span class="icon-emoji">🎺</span><span class="export-sq-label">Horn</span></button>
+      </div>
     </div>`
         : ""
     }

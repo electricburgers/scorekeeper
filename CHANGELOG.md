@@ -10,6 +10,19 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.59 - 2026-08-27
+- **Removes Color Vision from the app and the FAQ.** The Off / Red-Green / Blue-Yellow dropdown, the `data-cb` attribute and its `[data-cb="1"]/[data-cb="2"]` token overrides, the shared `.cv-select` widget (`js/shared-ui.js` keeps only the font-size scale now), the tutorial's Color Vision step, and the FAQ's Color Vision settings row, its "anything beyond Dark/Light" entry, and the three `color-vision-*` comparison screenshots are all gone. A saved `cbMode` pref is simply ignored.
+- **The FAQ header stacks the title, a new "FAQ" line, and the "Back to Scorekeeper" link in one left column** so the Display Settings gear stays pinned to the row's top-right corner at every width, desktop and mobile, instead of wrapping under the logo.
+- **The XLSX export now draws only as many team rows as the game has.** The embedded template ships a full 100-team block plus JD's own ~880 trailing filler rows, so a 12-team game exported a ~975-row sheet. `trivXTrimRows` drops every row past the last team and pulls the dimension, the 8 shared-formula ranges, the K-column conditional format and the `AL:AM` sortState back to that row.
+- **Adds a zebra stripe to the XLSX export** — a light-grey fill on the even team rows via a `MOD(ROW(),2)=0` conditional-format rule (`dxfId` 1, appended to `styles.xml`), matching the app's own row striping, layered below the existing "cell has a value" highlight.
+- **Row Zebra Stripes now defaults to Medium** (`stripeLevel` 1) instead of Subtle.
+- **The Example Game now has a genuine 3rd-place tie broken by score guess** — Powder Keg of Knowledge and Mastermind Alliance both finish on 125, and Powder Keg takes 3rd on the closer final guess (Diff 1 vs 5). Replaces the stale "2nd-place tie" the README still described.
+- **The JD Upload Form control is now a square, icon-forward button** like XLSX/PDF, with a new **Guy Fawkes mask pictograph** drawn straight from the app's own PWA icon (the flat-topped plate, handlebar mustache and goatee, tinted purple via the freed-up `--tint-flask`) stacked over a "JD Upload / Form" two-line label. New `ICON_FAWKES` in the Icon Style set (🎭 in Emoji mode).
+- **The Craft Prize "Test Sounds" buttons (Roll / Fade / Crash / Horn) are now square, icon-forward buttons** matching the export buttons, on their own row under the label, instead of a cramped `.btn-sm` text row.
+- **"Take the Tour"'s hand pictograph is tilted ~15°** to match the lean the 👋 emoji it stands in for is drawn with.
+- New Dark/Light `export-bar` screenshots and new Dark/Light `sound-test-buttons` screenshots for the FAQ. FAQ bumped to v1.35.
+- 11 new tests; full suite (449 tests) passes.
+
 ## v19.58 - 2026-08-27
 - **XLSX and PDF exports are now square, icon-forward buttons** — a big glyph over a small label, a far bigger tap target on a phone (and click target on desktop) than a `.78rem` icon beside a short word. The "JD Upload Form" link beside them keeps its wide shape (it has a real sentence for a label).
 - **Enlarges the question-timer play/reset glyphs at tablet width, not just desktop.** The v19.55/56 bump was scoped to `min-width:769px`, so the expanded scores sheet's timer on a tablet still had the small base glyphs; it now applies from `min-width:601px`. Also fixes the play `<svg>` (a bare flex child, unlike the reset icon) collapsing to a sliver inside the enlarged button — it needed `flex-shrink:0` / `min-width`.

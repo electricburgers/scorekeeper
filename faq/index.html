@@ -20,42 +20,42 @@
          folded back into the main app), which is exactly the kind of drift a copy invites. -->
     <link rel="stylesheet" href="../css/styles.css" />
     <link rel="stylesheet" href="css/faq.css" />
-    <!-- Same shared JS the main app loads (js/shared-ui.js — Color Vision dropdown, the
-         font-size scale) — before faq-bootstrap.js, which uses SHARED_FONT_SIZES too, and both
-         plain blocking <script src> (no defer/async) so they run before first paint, same
-         timing as when this bootstrap lived inline here. -->
+    <!-- Same shared JS the main app loads (js/shared-ui.js — the font-size scale) — before
+         faq-bootstrap.js, which uses SHARED_FONT_SIZES too, and both plain blocking
+         <script src> (no defer/async) so they run before first paint, same timing as when
+         this bootstrap lived inline here. -->
     <script src="../js/shared-ui.js"></script>
     <script src="js/faq-bootstrap.js"></script>
   </head>
   <body>
-    <svg style="display:none" aria-hidden="true"><symbol id="ic-gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="ic-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></symbol><symbol id="ic-beer" viewBox="0 0 24 24"><style>.ip-2{fill:var(--vivid-beer-2);stroke:var(--icon-tint)}</style><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></symbol><symbol id="ic-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol><symbol id="ic-flask" viewBox="0 0 24 24"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></symbol><symbol id="ic-hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></symbol><symbol id="ic-sort" viewBox="0 0 24 24"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></symbol><symbol id="ic-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol><symbol id="ic-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></symbol><symbol id="ic-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></symbol><symbol id="ic-chart" viewBox="0 0 24 24"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></symbol><symbol id="ic-shuffle" viewBox="0 0 24 24"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></symbol><symbol id="ic-check" viewBox="0 0 24 24"><polyline points="5,13 10,18 20,6"></polyline></symbol><symbol id="ic-drum" viewBox="0 0 24 24"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></symbol><symbol id="ic-sheet" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path class="sh-head" d="M4 5h16a2 2 0 0 1 2 2v3H2V7a2 2 0 0 1 2-2Z"/><path d="M2 14.5h20"/><path d="M8.5 10v9"/><path d="M15.5 10v9"/></symbol><symbol id="ic-pdf" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></symbol><symbol id="ic-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol><symbol id="ic-save" viewBox="0 0 24 24"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></symbol><symbol id="ic-load" viewBox="0 0 24 24"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></symbol><symbol id="ic-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol><symbol id="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></symbol><symbol id="ic-x" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></symbol><symbol id="ic-horn" viewBox="0 0 24 24"><path class="pl-tri" d="M8.5 5.5 19 12l-10.5 6.5z"/></symbol><symbol id="ic-clipboard" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol><symbol id="ic-txt" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol></svg>
+    <svg style="display:none" aria-hidden="true"><symbol id="ic-gear" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol><symbol id="ic-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></symbol><symbol id="ic-beer" viewBox="0 0 24 24"><style>.ip-2{fill:var(--vivid-beer-2);stroke:var(--icon-tint)}</style><path d="M5 8v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V8"/><path d="M17 9h1a3 5 0 0 1 0 10h-1"/><path d="M9 12v6"/><path d="M13 12v6"/><path class="ip-2" d="M14 7.5c-1 0-1.44.5-3 .5s-2-.5-3-.5-1.72.5-2.5.5a2.5 2.5 0 0 1 0-5c.78 0 1.57.5 2.5.5S9.44 3 11 3s2 .5 3 .5 1.72-.5 2.5-.5a2.5 2.5 0 0 1 0 5c-.78 0-1.5-.5-2.5-.5Z"/></symbol><symbol id="ic-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol><symbol id="ic-flask" viewBox="0 0 24 24"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/><path d="M5.52 16h12.96"/></symbol><symbol id="ic-hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></symbol><symbol id="ic-sort" viewBox="0 0 24 24"><path d="M7 4v16"></path><path d="m3 8 4-4 4 4"></path><path d="M17 20V4"></path><path d="m21 16-4 4-4-4"></path></symbol><symbol id="ic-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol><symbol id="ic-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol><symbol id="ic-pause" viewBox="0 0 24 24"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></symbol><symbol id="ic-reset" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></symbol><symbol id="ic-chart" viewBox="0 0 24 24"><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></symbol><symbol id="ic-shuffle" viewBox="0 0 24 24"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"></path><path d="m18 2 4 4-4 4"></path><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"></path><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"></path><path d="m18 14 4 4-4 4"></path></symbol><symbol id="ic-check" viewBox="0 0 24 24"><polyline points="5,13 10,18 20,6"></polyline></symbol><symbol id="ic-drum" viewBox="0 0 24 24"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></symbol><symbol id="ic-sheet" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path class="sh-head" d="M4 5h16a2 2 0 0 1 2 2v3H2V7a2 2 0 0 1 2-2Z"/><path d="M2 14.5h20"/><path d="M8.5 10v9"/><path d="M15.5 10v9"/></symbol><symbol id="ic-pdf" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></symbol><symbol id="ic-fawkes" viewBox="0 0 24 24"><style>.ip-2{fill:var(--icon-tint);stroke:var(--icon-tint)}</style><path d="M8 4.2 16 4.2C19 4.2 20 8 20 11.3 20 16.5 15.5 21.6 12 21.6 8.5 21.6 4 16.5 4 11.3 4 8 5 4.2 8 4.2Z"/><path class="ip-2" d="M12 13.2c-.5-.9-1.6-1.3-2.6-.9-1.6.6-2.2 2.3-3.6 2.6-1 .2-1.9-.3-2.3-1.1-.3.9.1 2 1.1 2.5 1.7.8 3.5-.2 4.6-1.4.5-.6 1.1-1.1 1.8-1.4v-.3Zm0 0c.5-.9 1.6-1.3 2.6-.9 1.6.6 2.2 2.3 3.6 2.6 1 .2 1.9-.3 2.3-1.1.3.9-.1 2-1.1 2.5-1.7.8-3.5-.2-4.6-1.4-.5-.6-1.1-1.1-1.8-1.4v-.3Z"/><path class="ip-2" d="M10.1 16.4c.4 2.6 1 4.8 1.9 6.4 .9-1.6 1.5-3.8 1.9-6.4-.8.5-1.3.9-1.9 1.8-.6-.9-1.1-1.3-1.9-1.8Z"/></symbol><symbol id="ic-save" viewBox="0 0 24 24"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></symbol><symbol id="ic-load" viewBox="0 0 24 24"><path d="m6 14 1.45-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.55 6a2 2 0 0 1-1.94 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></symbol><symbol id="ic-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol><symbol id="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><g stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></g></symbol><symbol id="ic-x" viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></symbol><symbol id="ic-horn" viewBox="0 0 24 24"><path class="pl-tri" d="M8.5 5.5 19 12l-10.5 6.5z"/></symbol><symbol id="ic-clipboard" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol><symbol id="ic-txt" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol></svg>
     <div class="faq-header">
       <div class="faq-header-row">
-        <div class="faq-logo">Score <span>Keeper</span> — FAQ</div>
-        <!-- Back link and the Display Settings gear sit together in the flow at the right end of
-             the row (the row caps at 900px and re-centers, so the pair stays with the logo/body
-             content rather than one being pinned to the true page corner far from the other), and
-             wrap together below the logo as one group on a narrow screen. -->
-        <div class="faq-header-actions">
-          <a class="faq-back" href="../index.html"> ← Back to Scorekeeper </a>
-          <button
-            type="button"
-            class="settings-toggle-btn faq-settings-toggle"
-            id="faqSettingsToggleBtn"
-            onclick="faqToggleSettings()"
-            aria-haspopup="true"
-            aria-expanded="false"
-            aria-controls="faqSettingsPanel"
-            title="Display settings"
-            aria-label="Display settings"
-          >
-            <svg class="icon-ui"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              focusable="false"
-             data-emoji="⚙️"><use href="#ic-gear"></use></svg>
-          </button>
+        <!-- Title, the "FAQ" sub-line, and the Back link stack in one left-hand column so the
+             Display Settings gear stays pinned to the top-right corner of the row at every
+             width, desktop and mobile, instead of wrapping under the logo. -->
+        <div class="faq-title-block">
+          <div class="faq-logo">Score <span>Keeper</span></div>
+          <div class="faq-logo-sub">FAQ</div>
+          <a class="faq-back" href="../index.html">← Back to Scorekeeper</a>
         </div>
+        <button
+          type="button"
+          class="settings-toggle-btn faq-settings-toggle"
+          id="faqSettingsToggleBtn"
+          onclick="faqToggleSettings()"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="faqSettingsPanel"
+          title="Display settings"
+          aria-label="Display settings"
+        >
+          <svg class="icon-ui"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+           data-emoji="⚙️"><use href="#ic-gear"></use></svg>
+        </button>
       </div>
       <div
         class="settings-panel"
@@ -137,64 +137,6 @@
                 title="Swap every drawn pictograph on this page for the platform emoji it replaced"
               ><svg class="icon-ui icon-tinted icon-beer" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🍺"><use href="#ic-beer"></use></svg> <span id="faqIconStyleLabel">Pictograph</span>
               </button>
-            </div>
-          </div>
-          <div class="settings-row">
-            <span class="size-label">Color Vision</span>
-            <div class="settings-controls">
-              <div class="cv-select" id="faqCvSelect">
-                <button
-                  type="button"
-                  class="cv-select-btn"
-                  onclick="faqToggleCvMenu(event)"
-                  aria-haspopup="listbox"
-                  aria-expanded="false"
-                  title="Adjust pass/fail colors for color blindness"
-                >
-                  <span class="cv-select-label">Off</span
-                  ><span class="cv-select-swatch" aria-hidden="true"></span
-                  ><span class="cv-select-arrow" aria-hidden="true">▾</span>
-                </button>
-                <ul class="cv-select-menu" role="listbox" aria-label="Color vision mode">
-                  <li
-                    role="option"
-                    data-value="0"
-                    data-short="Off"
-                    aria-selected="true"
-                    onclick="faqSelectCvOption(this,'0')"
-                  >
-                    Off
-                  </li>
-                  <li
-                    role="option"
-                    data-value="1"
-                    data-short="Red-Green"
-                    aria-selected="false"
-                    onclick="faqSelectCvOption(this,'1')"
-                  >
-                    <span class="cv-opt-main"
-                      >Red-Green<span class="cv-swatch-pair" aria-hidden="true"
-                        ><span class="cv-swatch cv-swatch-rg-a"></span
-                        ><span class="cv-swatch cv-swatch-rg-b"></span></span
-                    ></span>
-                    <span class="cv-opt-sub">(deuteranopia/protanopia)</span>
-                  </li>
-                  <li
-                    role="option"
-                    data-value="2"
-                    data-short="Blue-Yellow"
-                    aria-selected="false"
-                    onclick="faqSelectCvOption(this,'2')"
-                  >
-                    <span class="cv-opt-main"
-                      >Blue-Yellow<span class="cv-swatch-pair" aria-hidden="true"
-                        ><span class="cv-swatch cv-swatch-by-a"></span
-                        ><span class="cv-swatch cv-swatch-by-b"></span></span
-                    ></span>
-                    <span class="cv-opt-sub">(tritanopia)</span>
-                  </li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
@@ -448,7 +390,7 @@
               <strong>Step X of Y</strong> counter and Back / Next /
               <strong>Skip Tutorial</strong> controls sit in the callout the
               whole time, and it walks through essentially the entire app —
-              Event Details, Theme &amp; Color Vision in Settings, Teams,
+              Event Details, Theme in Settings, Teams,
               collapsing sections, Round scoring, the Halftime Wager, Round 3
               &amp; 4, the Final Wager, Final Results, the Craft Prize
               Drawing, and Exporting.
@@ -1298,11 +1240,11 @@
         <div class="faq-shot">
           <img
             loading="lazy"
-            width="1404" height="312" decoding="async"
+            width="1480" height="447" decoding="async"
             src="screenshots/export-bar.webp"
             data-shot-base="export-bar"
-            alt="Export section showing the XLSX, PDF, and JD Upload Form buttons"
-            onerror="faqShotFallback(this,'Export &amp; Data section — XLSX / PDF / JD Upload Form buttons')"
+            alt="Export section showing the square XLSX and PDF buttons and the JD Upload Form link"
+            onerror="faqShotFallback(this,'Export &amp; Data section — the square XLSX / PDF buttons and the JD Upload Form link')"
           />
         </div>
 
@@ -1323,7 +1265,7 @@
                 game results.
               </li>
               <li>
-                <strong><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🔗"><use href="#ic-link"></use></svg> JD Upload Form</strong> — opens JD's
+                <strong><svg class="icon-ui icon-tinted icon-fawkes" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="🎭"><use href="#ic-fawkes"></use></svg> JD Upload Form</strong> — opens JD's
                 results-submission form in a new tab; the scorekeeper app stays open
                 and untouched.
               </li>
@@ -1745,7 +1687,7 @@
             width="880" height="894" decoding="async"
             src="screenshots/settings-panel.webp"
             data-shot-base="settings-panel"
-            alt="Settings panel open, showing Theme, Size, Icon Style, Color Vision, Question Timer, Sample Data, Help, App Preferences, and the Advanced Settings toggle"
+            alt="Settings panel open, showing Theme, Size, Icon Style, Question Timer, Sample Data, Help, App Preferences, and the Advanced Settings toggle"
             onerror="faqShotFallback(this,'Settings panel open — the full main Settings list')"
           />
         </div>
@@ -1768,11 +1710,6 @@
                 originally replaced, if that's more your speed. This page has
                 the same toggle, in its own Settings panel, top right — the
                 icons throughout this FAQ swap right along with it.
-              </li>
-              <li>
-                <strong>Color Vision</strong> — Off / Red-Green / Blue-Yellow
-                modes that swap which colors carry pass/fail meaning, for hosts
-                or teammates who need it.
               </li>
               <li>
                 <strong>Question Timer</strong> — the default countdown length
@@ -1867,62 +1804,6 @@
           </div>
         </details>
 
-        <details class="faq-item" id="q-is-there-anything-beyond-just-dark-light-for">
-          <summary>
-            <span class="faq-q-text">Is there anything beyond just Dark/Light for accessibility?</span><span
-              class="faq-q-arrow"
-              >▼</span
-            >
-          </summary>
-          <div class="faq-a">
-            <p>
-              Yes, separately from theme — the <strong>Color Vision</strong>
-              setting (also in main Settings) swaps which colors are used for
-              pass/fail indicators for red-green or blue-yellow color vision.
-              See
-              <a href="#settings">Settings</a> above. Each option below is its
-              own four-panel image, all four showing a different part of the
-              app in that one mode — so you can see everywhere a mode changes
-              things at once instead of hunting for it screen by screen. These
-              are a fixed comparison, not live screenshots — they always show
-              the same crop regardless of your own theme, unlike the rest of
-              this page's screenshots (see <a href="#appearance">Light Mode
-              &amp; Dark Mode</a> for that).
-            </p>
-            <div class="faq-shot-trio">
-              <div class="faq-shot">
-                <img
-            loading="lazy"
-                  width="1978" height="990" decoding="async"
-            src="screenshots/color-vision-off.webp"
-                  alt="Off, four panels: wager correct/incorrect buttons, Bonus/NJCB checkboxes, the Beer Round section, and the Final Results tie badge"
-                  onerror="faqShotFallback(this,'Color Vision: Off — wager buttons, checkboxes, Beer Round, tie badge')"
-                />
-                <div class="faq-shot-caption">Off</div>
-              </div>
-              <div class="faq-shot">
-                <img
-            loading="lazy"
-                  width="1978" height="990" decoding="async"
-            src="screenshots/color-vision-red-green.webp"
-                  alt="Red-Green, four panels: wager correct/incorrect buttons in blue/orange, unchanged Bonus/NJCB checkboxes, unchanged Beer Round section, and the tie badge in blue"
-                  onerror="faqShotFallback(this,'Color Vision: Red-Green — wager buttons, checkboxes, Beer Round, tie badge')"
-                />
-                <div class="faq-shot-caption">Red-Green</div>
-              </div>
-              <div class="faq-shot">
-                <img
-            loading="lazy"
-                  width="1978" height="990" decoding="async"
-            src="screenshots/color-vision-blue-yellow.webp"
-                  alt="Blue-Yellow, four panels: wager buttons with a green Sort button, Bonus/NJCB checkboxes swapped to magenta/green, the Beer Round section swapped to magenta, and an unchanged green tie badge"
-                  onerror="faqShotFallback(this,'Color Vision: Blue-Yellow — wager buttons, checkboxes, Beer Round, tie badge')"
-                />
-                <div class="faq-shot-caption">Blue-Yellow</div>
-              </div>
-            </div>
-          </div>
-        </details>
       </section>
 
       <!-- ============================== TIPS & TRICKS ============================== -->
@@ -2270,12 +2151,22 @@
           </summary>
           <div class="faq-a">
             <p>
-              Adds Roll/Fade/Crash/Horn buttons inside the Craft Prize Drawing
-              section for previewing each of the drumroll's audio clips on
-              their own, without starting a real drawing. Same as Drumroll
+              Adds square Roll/Fade/Crash/Horn buttons inside the Craft Prize
+              Drawing section for previewing each of the drumroll's audio clips
+              on their own, without starting a real drawing. Same as Drumroll
               Crossfade, only shown once <strong>Manual Drumroll
               Control</strong> above it is on.
             </p>
+            <div class="faq-shot">
+              <img
+                loading="lazy"
+                width="1000" height="360" decoding="async"
+                src="screenshots/sound-test-buttons.webp"
+                data-shot-base="sound-test-buttons"
+                alt="The Test Sounds bar with square Roll, Fade, Crash, and Horn buttons"
+                onerror="faqShotFallback(this,'Test Sounds bar — the square Roll / Fade / Crash / Horn buttons')"
+              />
+            </div>
           </div>
         </details>
 

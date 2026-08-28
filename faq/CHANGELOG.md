@@ -2,6 +2,28 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.35] - 27 Aug 2026
+
+### Changed
+
+- **Header**: the title, a new "FAQ" line, and the "Back to Scorekeeper" link now stack in one
+  left-hand column so the Display Settings gear stays pinned to the row's top-right corner at
+  every width, desktop and mobile.
+- **Exporting**: new Dark/Light `export-bar` screenshots for the square XLSX/PDF buttons and the
+  new square Guy Fawkes "JD Upload Form" button; the prose icon for JD Upload Form is now the
+  Guy Fawkes mask.
+
+### Added
+
+- **Sound Test Buttons** entry gets a Dark/Light screenshot of the square Roll/Fade/Crash/Horn
+  buttons.
+
+### Removed
+
+- **Color Vision** — the Settings row, the "anything beyond Dark/Light for accessibility?" entry,
+  and the three `color-vision-*` comparison screenshots. The feature was removed from the app in
+  v19.59.
+
 ## [1.32] - 23 Aug 2026
 
 ### Changed

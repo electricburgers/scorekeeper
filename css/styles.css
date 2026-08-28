@@ -45,9 +45,7 @@
      since the badge floats over whatever wager-button color is underneath and needs to read as
      its own solid chip either way, not blend into a per-theme wash the way --btn-correct-bg does.
      #0c7a0c is the exact hex already used as --pts-pos-bg in light — reused here rather than
-     inventing a new green — and white on it clears ~5.5:1 (AA). #0067c5 is likewise light's
-     existing cb1 --pts-pos-bg; white clears ~5.6:1. Tritanopia (cb2) doesn't change green per the
-     COLOR VISION MODES rule below, so there's no cb2 override — only [data-cb="1"] further down. */
+     inventing a new green — and white on it clears ~5.5:1 (AA). */
   --correct-badge-bg:#0c7a0c;--correct-badge-fg:#fff;
   --pts-pos-bg:rgba(68,255,68,.18);--pts-pos-border:rgba(68,255,68,.55);--pts-pos-fg:#8dff8d;
   --pts-neg-bg:rgba(255,68,68,.2);--pts-neg-border:rgba(255,68,68,.6);--pts-neg-fg:#ffa3a3;
@@ -149,14 +147,6 @@
      magenta, muted gray, and the gold badge/border itself) still clears WCAG AA against it —
      see the contrast check run when this was added. */
   --beer-bg:#2a2410;--beer-border:#ffee00;
-  /* Color Vision dropdown swatches — a static preview of the pass/fail (or accent) colors each
-     mode actually swaps to, shown next to the option regardless of which mode is currently
-     active, so picking one is an informed choice instead of a guess. Values are duplicated from
-     the [data-cb="1"]/[data-cb="2"] tokens below (dark theme) rather than referenced live,
-     since the dropdown lists all modes at once and can't borrow color from a data-cb state that
-     may not be the active one. Both colors in both pairs clear >=6:1 against --bg-card here. */
-  --cv-preview-rg-a:#3399ff;--cv-preview-rg-b:#ff8800;
-  --cv-preview-by-a:#ff66cc;--cv-preview-by-b:#00cc88;
 }
 [data-theme="light"]{
   /* VIBRANCY / CONTRAST TARGET. Every accent below is the most saturated value its own hue can
@@ -251,95 +241,6 @@
      badge surface in the running app, not from computing the wash over the card. The wash sits on
      --beer-bg, not on the card, and guessing put the first value 9% too bright. */
   --beer-bg:#fff0c4;--beer-border:#b68000;
-  /* Same Color Vision dropdown swatches as the dark theme above, duplicated from the
-     [data-theme="light"][data-cb="1"]/[data-cb="2"] tokens below. --cv-preview-rg-b uses the
-     darker #b35900 (the cb1 pts-neg-bg) rather than the lighter #cc6600 accent-red so the swatch
-     still clears 3:1 against --bg-hover (#dcdcdc), not just the ~4.5:1 it'd get against the
-     lighter --bg-card the accent-red value itself clears. */
-  --cv-preview-rg-a:#0067c5;--cv-preview-rg-b:#b35900;
-  --cv-preview-by-a:#c2007a;--cv-preview-by-b:#008060;
-}
-/* COLOR VISION MODES — independent of theme.
-   1 = red-green (deuteranopia/protanopia): swaps green/red pass-fail colors for blue/orange.
-   2 = blue-yellow (tritanopia): keeps green/red (tritanopes see these fine) but swaps the
-       blue/gold accent pair, which is where tritanopes actually lose contrast. */
-[data-theme="dark"][data-cb="1"]{
-  --accent-green:#3399ff;--accent-red:#ff8800;
-  --btn-correct-bg:#0d1f2e;--btn-incorrect-bg:#2e1f0d;
-  --pts-pos-bg:rgba(51,153,255,.2);--pts-pos-border:rgba(51,153,255,.6);--pts-pos-fg:#8fc6ff;
-  --pts-neg-bg:rgba(255,136,0,.2);--pts-neg-border:rgba(255,136,0,.6);--pts-neg-fg:#ffc182;
-  --badge-green-fg:#55bbff;--txt-red:#ff9008;
-  /* Same fix as the base dark theme's --danger-solid-bg: #884900 was a solid fill that read at
-     only 2.2-2.4:1 against the surfaces it sits on, so nothing identified the Reset button or the
-     incorrect badge as a control. #b16000 is the most saturated orange at that hue keeping white
-     on it at AA (4.62:1) while clearing 3:1 on every dark surface (3.36-3.99:1). */
-  --danger-solid-bg:#b16000;
-}
-[data-theme="light"][data-cb="1"]{
-  --accent-green:#0067c5;--accent-red:#cc6600;
-  --btn-correct-bg:#cfe6fb;--btn-incorrect-bg:#ffe1bf;
-  --pts-pos-bg:#0067c5;--pts-pos-border:#005aae;--pts-pos-fg:#fff;
-  --pts-neg-bg:#b35900;--pts-neg-border:#9c4e00;--pts-neg-fg:#fff;
-  --badge-green-fg:#004585;--txt-red:#6d3600;--danger-solid-bg:#8c4600;
-}
-/* Unlike the theme-qualified blocks above/below, --correct-badge-bg isn't split per theme in the
-   first place (see its definition up top) — it's the same fixed blue in cb1 regardless of which
-   theme is active too, so one plain [data-cb="1"] rule covers both instead of two duplicates. */
-[data-cb="1"]{--correct-badge-bg:#0067c5}
-[data-theme="dark"][data-cb="2"]{
-  --accent-gold:#ff66cc;--accent-cyan:#00cc88;
-  --item-border:#ff66cc;--item-fill-checked:#ff66cc;
-  --njcb-border:#00cc88;--njcb-fill-checked:#00cc88;
-  /* --txt-cyan was missing from this block, so every piece of cyan TEXT — the Scores heading, the
-     score figures, Grand Total — kept the base theme's #00ffff in the one mode whose whole purpose
-     is to get blue out of the palette. Matched to this mode's own --accent-cyan; clears 7.4-10:1
-     on every dark surface. */
-  --badge-gold-fg:#ff96fc;--accent-cyan-solid:#00cc88;--txt-cyan:#00cc88;
-  /* The pink/magenta gold-substitute already clears 7:1 on the normal --bg-card-alt (unlike
-     real gold), so beer round doesn't need the special cream background here. */
-  --beer-bg:var(--bg-card-alt);--beer-border:#ff66cc;
-}
-[data-theme="light"][data-cb="2"]{
-  --accent-gold:#c2007a;--accent-cyan:#008060;
-  /* The beer mug's own amber, darkened for this mode alone. Its worst surface is the Beer Round
-     badge's wash, which is a color-mix off --accent-gold — magenta here rather than gold, so the
-     wash is pink and light (L .636) where every other variant's is a deeper gold. The base light
-     amber #a56a00 lands at 2.94:1 on it: a miss by 0.06, and the only one across all six modes.
-     #9a6300 clears it at 3.30 and still holds 3.68:1 on the darkest ordinary light surface it
-     renders on. Hue is untouched — this is the same amber, two steps darker. */
-  --tint-beer:#9a6300;
-  /* Pinned to the pre-vibrancy green. This mode swaps gold for magenta, which turns .fr-tie's
-     row wash (color-mix of --accent-gold with white) from cream into pink — and the brighter
-     #006a03 the base light theme now uses drops to 3.2:1 against that pink, under AA. The
-     darker green clears it at 4.53:1. Only this mode needs the exception; the cream row every
-     other light-mode variant uses is light enough for the vivid green. */
-  --badge-green-fg:#0a500a;
-  /* Each of these doubles as the chip's own TEXT color (on --bg-input) and, when the box is
-     ticked, as the fill sitting under --check-icon-color. The old pair was tuned for the fill
-     role and left the text role short of AA — 3.76:1 and 3.78:1 on --bg-input. Darkened just far
-     enough to clear it (4.60/4.65), which costs almost no chroma (.247->.226, .111->.102) and
-     improves the fill role too: white on them goes 4.7->5.6 and 4.8->5.7. Hues are untouched, so
-     the magenta/green split this mode relies on — a red-green distinction, which is exactly what
-     tritanopes still see — is unchanged. */
-  --item-border:#c7007d;--item-fill-checked:#c7007d;
-  --njcb-border:#007557;--njcb-fill-checked:#007557;
-  /* #004f3b landed at 4.49:1 on .fr-tie's row wash — this mode swaps gold for magenta, so that
-     wash is pink (#e799ca) rather than the cream every other variant gets, and it is the one
-     surface --txt-cyan sits on that is dark enough to bind. Two points of lightness clears it. */
-  --badge-gold-fg:#880056;--txt-cyan:#004d39;--accent-cyan-solid:#00654c;
-  /* The sun swaps with everything else gold in this mode. A yellow sun is exactly the
-     wrong thing here — blue-yellow mode exists to get yellow out of the palette — and the
-     old inherit-from---badge-gold-fg wiring got this swap for free, so the split pair has
-     to keep it deliberately. Both parts reuse magenta already in the palette: the rays take
-     this mode's own --accent-gold (4.28:1 on --bg-hover, clear of 3:1), and the disc takes
-     the brighter #ff66cc the DARK tritan block uses for the same token, which is the
-     closest thing this palette has to the vivid-fill role #ffc400 plays above. */
-  --sun-disc:#ff66cc;--sun-ray:#c2007a;
-  --beer-bg:var(--bg-card-alt);--beer-border:#c2007a;
-  /* #c2007a is too dark for black text at small sizes here (~3.6:1, under the 4.5:1 AA floor
-     for normal text — the base #000 only clears AA on LARGE text, e.g. the question timer's
-     own big countdown digits). White text clears 5.9:1 on this same background. */
-  --on-accent-gold:#fff;
 }
 
 [data-density="compact"]{--row-pad:4px}
@@ -716,55 +617,6 @@ button,[role="button"]{touch-action:manipulation}
 .theme-select:hover{background-color:var(--bg-hover)}
 .theme-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 13%,transparent)}
 .theme-select option{background:var(--bg-card);color:var(--text-primary)}
-/* Custom color-vision dropdown — a native <select> can't wrap an option's text onto a
-   second line, and its closed box auto-sizes to the longest option ("Red-Green
-   (deuteranopia/protanopia)"), which overflowed the viewport at narrower widths. This
-   shows only the short label when closed and wraps the detail onto its own line in the
-   open menu, with JS-computed top/left (toggleCvMenu) so the menu itself never runs
-   off-screen. position:fixed (not absolute) is load-bearing: .cv-select sits inside
-   .settings-panel/.settings-panel-body, both overflow-y:auto, and an absolutely-positioned
-   menu is still clipped by that scrollable ancestor's box even though it visually "floats"
-   above the row it opens from — cutting the menu off at the panel's bottom edge instead of
-   overlaying the rest of the page. Fixed positioning is laid out against the viewport, so it
-   escapes that clipping entirely; the JS also flips the menu above the button instead of
-   below when opening downward would run past the bottom of the viewport itself. */
-.cv-select{position:relative;display:inline-block}
-.cv-select-btn{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:var(--transition)}
-.cv-select-btn:hover{background:var(--bg-hover)}
-.cv-select-btn:focus-visible{outline:2px solid var(--accent-cyan-solid);outline-offset:2px}
-.cv-select-arrow{font-size:.6rem;color:var(--text-muted);transition:transform .15s}
-.cv-select.open .cv-select-arrow{transform:rotate(180deg)}
-/* z-index above the tutorial overlay's own layers (bars/ring 600, callout 601), not merely above
-   the settings panel it lives in. An open dropdown is the most transient, most foreground thing
-   on screen, and during the tutorial the Color Vision step spotlights this very control — at 300
-   the callout painted straight over the options the step is asking the host to look at. The step
-   also places its callout above the target now (see tutorial.js), so the two no longer overlap at
-   all at normal sizes; this is what keeps the options readable when the viewport is too short for
-   that and the callout has to fall back below. */
-.cv-select-menu{position:fixed;min-width:0;width:max-content;max-width:min(260px,calc(100vw - 24px));margin:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);z-index:700;list-style:none;padding:4px;display:none;max-height:60vh;overflow-y:auto}
-/* Two selectors, because the menu is re-parented to <body> while open (see toggleCvMenu in
-   app.js) and is no longer a descendant of .cv-select.open at that point. The descendant form is
-   kept as the belt-and-braces case for any path that adds .open without going through there. */
-.cv-select.open .cv-select-menu,.cv-select-menu.cv-open{display:block}
-.cv-select-menu li{padding:6px 8px;border-radius:6px;cursor:pointer;font-size:.78rem;color:var(--text-primary);display:flex;flex-direction:column;gap:1px;line-height:1.25}
-.cv-select-menu li:hover{background:var(--bg-hover)}
-.cv-select-menu li[aria-selected="true"]{font-weight:700;color:var(--txt-cyan)}
-.cv-opt-sub{font-size:.68rem;font-weight:500;color:var(--text-muted)}
-/* Swatch squares next to "Red-Green"/"Blue-Yellow" — a color preview so the label isn't just a
-   clinical name for the deficiency; see the --cv-preview-* tokens above for the values and their
-   contrast notes. aria-hidden since the option's own text already names the mode. */
-.cv-opt-main{display:inline-flex;align-items:center;gap:5px}
-.cv-swatch-pair{display:inline-flex;gap:2px}
-.cv-swatch{width:.6rem;height:.6rem;border-radius:2px;display:inline-block}
-.cv-swatch-rg-a{background:var(--cv-preview-rg-a)}
-.cv-swatch-rg-b{background:var(--cv-preview-rg-b)}
-.cv-swatch-by-a{background:var(--cv-preview-by-a)}
-.cv-swatch-by-b{background:var(--cv-preview-by-b)}
-/* The closed button's own preview, next to the label rather than only inside the open menu —
-   see setCvSelectDisplay in app.js, which copies the selected option's own .cv-swatch-pair
-   markup in here. Empty (and so zero-width) whenever "Off" is selected, since Off has no
-   swatch pair of its own either. */
-.cv-select-swatch:empty{display:none}
 .size-label{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 .sep{width:1px;height:18px;background:var(--border-light);margin:0 2px;flex-shrink:0}
 
@@ -952,7 +804,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    (gold/beer, cyan/accent, magenta/accent). One SVG, no separate light/dark variant — the
    --accent-gold token itself already carries the light/dark split, same as --icon-tint does for
    every other icon here. */
-.icon-hand{--icon-tint:var(--accent-gold)}
+/* transform: tilted ~15° to match the lean the 👋 platform emoji it stands in for is drawn with
+   (Settings > Take the Tour) — an upright hand read as a "stop" gesture rather than a wave. */
+.icon-hand{--icon-tint:var(--accent-gold);transform:rotate(-15deg)}
+/* JD Upload Form's Guy Fawkes mask — purple plate (--tint-flask, freed when the flask icon
+   moved to green), solid mustache/goatee. Echoes the app's own PWA icon. */
+.icon-fawkes{--icon-tint:var(--tint-flask)}
+.icon-fawkes .ip-2{fill:var(--icon-tint);stroke:var(--icon-tint)}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
 /* Settings > App Preferences (Save/Load) and > Craft Prize Eligible List (Copy/TXT) — the only
    four pictographs left with no colour of their own after every OTHER Settings row got one.
@@ -2040,11 +1898,16 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .export-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px 0}
 /* XLSX / PDF export as square, icon-forward buttons — a big glyph stacked over a small label is
    a far bigger tap target on a phone (and click target on desktop) than a .78rem icon beside a
-   short word. The JD Upload Form link beside them keeps its wide shape: it has a real sentence
-   for a label. font-size here sizes the glyph itself — .icon-ui is 1em, .icon-emoji inherits it. */
-.export-bar .export-sq{flex-direction:column;gap:3px;width:4.6rem;height:4.6rem;padding:6px 4px;font-size:1.9rem;line-height:1}
-.export-bar .export-sq .export-sq-label{font-family:var(--font-body);font-size:.62rem;font-weight:700;letter-spacing:.5px}
-.export-bar .export-sq .icon-emoji{line-height:1}
+   short word. Reused verbatim by the Craft Prize sound-test bar (.cp-test-bar). font-size here
+   sizes the glyph itself — .icon-ui is 1em, .icon-emoji inherits it. */
+.export-sq{flex-direction:column;gap:3px;width:4.6rem;height:4.6rem;padding:6px 4px;font-size:1.9rem;line-height:1}
+.export-sq .export-sq-label{font-family:var(--font-body);font-size:.62rem;font-weight:700;letter-spacing:.5px}
+.export-sq .icon-emoji{line-height:1}
+/* JD Upload Form is a square icon-forward button like XLSX/PDF now — the big Guy Fawkes mask
+   stacked over a "JD Upload / Form" label. Wider than the 4.6rem XLSX/PDF squares because its
+   label is longer, and its label line-height opens up for the wrap. */
+.export-sq.jd-upload-btn{width:auto;min-width:5.2rem;padding-left:12px;padding-right:12px;text-align:center;line-height:1.15}
+.export-sq.jd-upload-btn .export-sq-label{letter-spacing:.3px}
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
 .export-prompt.show{display:block}
 .export-prompt p{margin-bottom:6px;color:var(--badge-gold-fg);font-weight:600;font-size:.85rem}
@@ -2162,7 +2025,6 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .cb-tag{font-family:var(--font-body);font-size:.58rem;font-weight:700;color:var(--badge-gold-fg);background:color-mix(in srgb,var(--accent-gold) 14%,transparent);border:1px solid var(--badge-gold-fg);border-radius:4px;padding:1px 5px;margin-left:5px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle}
 /* .cb-tag can sit on a team row that is ALSO gold-tinted (.score-row.cb-prize), compounding
    the tint darker than badge-gold-fg was tuned for — bump brightness for that one case. */
-[data-theme="dark"][data-cb="2"] .score-row.cb-prize .cb-tag{color:#ffb3ff}
 
 /* CRAFT PRIZE RANDOMIZER */
 .cp-config{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-bottom:8px}
@@ -2224,9 +2086,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 @media(min-width:769px){
   .cp-clear-label{display:inline}
 }
-.cp-test-bar{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin:6px 0;padding:6px 8px;background:color-mix(in srgb,var(--text-primary) 3%,transparent);border-radius:var(--radius);border:1px solid var(--border)}
-.cp-test-bar .cp-field-label{margin-right:4px}
-.cp-test-bar .btn-sm{font-size:.72rem;padding:3px 8px;min-height:26px;border-radius:var(--radius)}
+/* Square, icon-forward test buttons matching the XLSX/PDF export buttons (.export-sq) — the
+   Roll/Fade/Crash/Horn glyphs read at a glance and give a real tap target, where the old
+   .btn-sm text buttons were a cramped .72rem row. The "Test Sounds" label sits on its own line
+   above the button row. */
+.cp-test-bar{display:flex;flex-direction:column;align-items:center;gap:6px;margin:6px 0;padding:8px;background:color-mix(in srgb,var(--text-primary) 3%,transparent);border-radius:var(--radius);border:1px solid var(--border)}
+.cp-test-bar .cp-field-label{margin-right:0}
+.cp-test-bar-btns{display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
 .cp-script-label{display:block;font-size:.66rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
 .cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
 

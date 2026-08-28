@@ -345,37 +345,10 @@ const Tutorial = (function () {
         },
       },
       {
-        target: "#cbSelect",
-        // Above, not the default below: this is the one step whose target OPENS something
-        // downward. The callout's default placement put it directly over the dropdown it is
-        // telling the host to look at — measured at 375x812, it covered 89% of the open menu
-        // (both named modes entirely, leaving only part of "Off" visible), and at z-index 601
-        // against the menu's own layer it painted on top rather than behind. Placing it above
-        // clears the menu completely. The menu also now outranks the tutorial layer (see
-        // .cv-select-menu in styles.css), which covers the case this flag cannot: a viewport
-        // too short for the callout to fit above, where reposition() falls back to below.
-        calloutPosition: "above",
-        calloutClears: ".cv-select-menu.cv-open",
-        text: `There's also a Color Vision mode here, for red-green or blue-yellow color blindness. ${tapWordCap()} Next when you're ready to keep going.`,
-        advance: "manual",
-        fill: (ready) => {
-          if (!loadPrefs().settingsOpen) toggleSettings();
-          // Nothing else notices the dropdown opening — it only flips a class and re-parents the
-          // menu — so the callout would otherwise keep the position it took while the menu was
-          // still shut. Same pattern as the gear icon on the theme step above.
-          const cvBtn = document.querySelector("#cbSelect .cv-select-btn");
-          if (cvBtn && !cvBtn.dataset.tutHooked) {
-            cvBtn.dataset.tutHooked = "1";
-            cvBtn.addEventListener("click", () => setTimeout(reposition, 0));
-          }
-          ready();
-        },
-      },
-      {
         target: "#addTeamBtn",
         text: `Scroll down to Teams. ${tapWordCap()} + Add Team to add your first team.`,
         advance: "on-click",
-        // Settings may still be open from the Color Vision step just before this one — close it
+        // Settings may still be open from the theme step just before this one — close it
         // here rather than leaving it open through the whole Teams section.
         fill: () => {
           if (loadPrefs().settingsOpen) toggleSettings();
@@ -1330,10 +1303,10 @@ const Tutorial = (function () {
     const gap = pad + 10;
     let top, left;
     // calloutClears: a selector for something the spotlighted control OPENS, which the callout
-    // has to clear as well as the control itself — the Color Vision dropdown is the only one so
-    // far. Placing against the button alone isn't enough: the whole point of that step is to look
-    // at the open menu, and the menu is taller than the button and lands on whichever side has
-    // room (toggleCvMenu flips it above when opening downward would overflow the viewport).
+    // has to clear as well as the control itself. Placing against the button alone isn't enough
+    // when the whole point of the step is to look at the opened element, and that element is
+    // taller than the button and lands on whichever side has room. No step uses this today (the
+    // Color Vision step that did was removed), but it's kept for any future dropdown-style step.
     // Unioning the two rects pushes the callout clear of whichever side the menu took, while
     // still leaving it directly against it. The ring and the dimming bars keep using the
     // control's own rect, so the spotlight itself doesn't grow.

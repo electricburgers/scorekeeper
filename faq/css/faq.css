@@ -1,6 +1,6 @@
 /* Page-specific layout for the FAQ page. Everything else (colors, fonts, buttons, the settings
-   panel, the color-vision select, etc.) comes from css/styles.css so this page always matches
-   the live app instead of drifting into its own palette. */
+   panel, etc.) comes from css/styles.css so this page always matches the live app instead of
+   drifting into its own palette. */
 /* Settings > Icon Style's emoji placeholder (js/faq.js's faqApplyIconStyle) — sized/aligned to
    sit in running text the same way .icon-ui's own svgs do, so swapping to emoji doesn't shift
    the baseline of whatever sentence it's inline with. */
@@ -24,12 +24,19 @@
 }
 .faq-header-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
-  flex-wrap: wrap;
   max-width: 900px;
   margin: 0 auto;
+}
+/* Title / "FAQ" / Back link stacked, so the gear stays in the row's top-right corner. */
+.faq-title-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
 }
 .faq-logo {
   font-family: var(--font-display);
@@ -42,14 +49,20 @@
 .faq-logo span {
   color: var(--accent-magenta);
 }
-/* This page's settings panel only ever holds two short rows (Text Size, Color Vision), so
-   unlike the main app's much longer Advanced Settings panel — which css/styles.css's shared
-   .settings-panel rule sizes overflow-y:auto/max-height for — it never needs to scroll. That
-   overflow:auto still clips the Color Vision dropdown whenever it opens past this small
-   panel's own box, even flipped upward (js/faq.js's faqToggleCvMenu), because the box itself
-   just isn't tall enough to contain it either direction. Overriding to overflow:visible here
-   removes the clipping outright, and the extra padding gives the dropdown room to open without
-   crowding the panel's edges. */
+.faq-logo-sub {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+/* This page's settings panel only ever holds a few short rows (Theme, Text Size, Icon Style),
+   so unlike the main app's much longer Advanced Settings panel — which css/styles.css's shared
+   .settings-panel rule sizes overflow-y:auto/max-height for — it never needs to scroll.
+   overflow:visible here keeps it from clipping anything, and the padding keeps the rows off
+   the panel's edges. */
 #faqSettingsPanel {
   overflow: visible;
   padding: 14px 16px 22px;
@@ -129,15 +142,9 @@
 #faqSettingsPanel .settings-x-btn:hover {
   background: color-mix(in srgb, var(--accent-red) 15%, transparent);
 }
-.faq-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-/* The gear now sits in .faq-header-actions right next to the Back link (see the HTML) — it used
-   to be pinned to the true page corner, which on a wide screen left a large gap between it and
-   the Back link at the re-centered row's edge. flex-shrink:0 so it keeps its square shape when
-   the row is tight. */
+/* The gear stays in the row's top-right corner at every width — the title, "FAQ" sub-line, and
+   Back link stack in .faq-title-block to its left. flex-shrink:0 so it keeps its square shape
+   when the row is tight. */
 .faq-settings-toggle {
   flex-shrink: 0;
 }
@@ -157,6 +164,7 @@
   text-decoration: none;
   white-space: nowrap;
   transition: var(--transition);
+  margin-top: 2px;
 }
 .faq-back:hover {
   background: var(--bg-hover);
@@ -550,8 +558,9 @@ mark.faq-hl {
     grid-template-columns: 1fr;
   }
 }
-/* Three-up Color Vision comparison (Off / Red-Green / Blue-Yellow) — same idea as
-   faq-shot-pair, one more column, one more breakpoint before it drops to one-per-row. */
+/* Three-up before/after comparison (e.g. Row Density's Relaxed / Normal / Compact, Row Zebra
+   Stripes' Subtle / Medium / High) — same idea as faq-shot-pair, one more column, one more
+   breakpoint before it drops to one-per-row. */
 .faq-shot-trio {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
