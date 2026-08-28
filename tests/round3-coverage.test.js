@@ -135,8 +135,8 @@ describe("Manual Drumroll Control: Stop Drumroll pauses the roll, Play Horn comm
       "Stop Drumroll must flip audioStopped so the button swaps to Play Horn",
     );
     const html = window.document.getElementById("mainContent").innerHTML;
-    assert.match(html, /Play Horn/);
-    assert.doesNotMatch(html, /Stop Drumroll<\/button>/);
+    assert.match(html, /Play<br>Horn/);
+    assert.doesNotMatch(html, /Stop<br>Drumroll<\/span><\/button>/);
 
     evalIn(window, "playCraftVictoryHorn();");
     await new Promise((r) => setTimeout(r, 50));

@@ -118,6 +118,19 @@ const ICON_DRUM_PICT =
   '<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M2 9v8a10 5 0 0 0 20 0V9"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg>';
 const ICON_TROPHY_PICT =
   '<svg class="icon-ui icon-tinted icon-trophy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path class="ip-2" d="M4 22h16"/><path class="ip-2" d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path class="ip-2" d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
+// The Craft Prize "Test Sounds" bar's Crash / Horn buttons — drawn glyphs replacing the bare
+// 💥 / 🎺 emoji, shaped and tinted to echo them so they still read at a glance and follow the
+// app's theme + Icon Style. (Roll reuses ICON_DRUM, Fade reuses ICON_STOP — both already
+// drawn.) Emoji mode restores 💥 / 🎺.
+//   Crash 💥 → a solid, sharp eight-point jagged burst with a bright-yellow core burst on top,
+//              echoing the emoji's saturated orange-edge / yellow-centre look — --tint-drum
+//              red-orange + --vivid-beer yellow, both AA-audited both themes.
+//   Horn  📢 → a loudspeaker/bullhorn: a small mouthpiece, a wide flaring cone, and two sound
+//              waves — tinted silver (--tint-mic, AA-audited both themes) to match 📢.
+const ICON_SND_CRASH_PICT =
+  '<svg class="icon-ui icon-tinted icon-snd-crash" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-burst" d="M12 .5 14.96 10.78 20.1 3.9 14.96 13.22 23.5 12 13.22 14.96 20.1 20.1 10.78 14.96 12 23.5 9.04 13.22 3.9 20.1 9.04 10.78 .5 12 10.78 9.04 3.9 3.9 13.22 9.04Z"/><path class="ip-2" d="M12 3.5 14.7 12.2 19.4 5.9 14.5 12.9 21.5 12 14 14 19 18.5 12.9 14.7 12 20.5 10.5 14.5 6 18 8.9 12.9 4.5 12 9.5 11 6.5 6.5 10 10.2Z"/></svg>';
+const ICON_SND_HORN_PICT =
+  '<svg class="icon-ui icon-tinted icon-snd-horn" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-body" d="M2 10h2v4H2z"/><path class="snd-body" d="M4 8 15 3.6v16.8L4 16z"/><path class="ip-2" d="M17.7 8.4a4.6 4.6 0 0 1 0 7.2"/><path class="ip-2" d="M20.2 6.2a8.4 8.4 0 0 1 0 11.6" opacity=".5"/></svg>';
 // Final Results' checkered flag. Deliberately NOT one of the tinted pictographs: a racing flag
 // has no colour of its own, and the two things it IS made of are "ink" and "not ink". The filled
 // squares take currentColor and the alternating ones are left empty, so the empty half is
@@ -136,12 +149,14 @@ const ICON_LINK_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
 // JD Upload Form's own icon — a Guy Fawkes mask, drawn straight from the app's own PWA /
 // home-screen icon (icons/icon-source.svg): the flat-topped plate tapering to a rounded chin
-// point, the handlebar mustache, the narrow goatee below it — the same three paths, at the
+// point, the handlebar mustache, the narrow goatee below it — the same three shapes, at the
 // same 24-unit scale that source is authored in. Tinted purple (--tint-flask, freed up when
-// the flask icon moved to green) so it echoes that icon's purple badge and reads as its own
-// thing beside the green XLSX / red PDF buttons. 🎭 as the Emoji-mode glyph.
+// the flask icon moved to green) so it echoes that icon's purple badge. The mustache and
+// goatee are SOLID FILLS with no stroke of their own (.icon-fawkes .ip-2 in styles.css) —
+// stroking them too, at .icon-ui's 2.25 width, closed the thin gap between them into one blob
+// at button/mobile size. The plate keeps a thin (1.4) outline. 🎭 as the Emoji-mode glyph.
 const ICON_FAWKES_PICT =
-  '<svg class="icon-ui icon-tinted icon-fawkes" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 4.2 16 4.2C19 4.2 20 8 20 11.3 20 16.5 15.5 21.6 12 21.6 8.5 21.6 4 16.5 4 11.3 4 8 5 4.2 8 4.2Z"/><path class="ip-2" d="M12 13.2c-.5-.9-1.6-1.3-2.6-.9-1.6.6-2.2 2.3-3.6 2.6-1 .2-1.9-.3-2.3-1.1-.3.9.1 2 1.1 2.5 1.7.8 3.5-.2 4.6-1.4.5-.6 1.1-1.1 1.8-1.4v-.3Zm0 0c.5-.9 1.6-1.3 2.6-.9 1.6.6 2.2 2.3 3.6 2.6 1 .2 1.9-.3 2.3-1.1.3.9-.1 2-1.1 2.5-1.7.8-3.5-.2-4.6-1.4-.5-.6-1.1-1.1-1.8-1.4v-.3Z"/><path class="ip-2" d="M10.1 16.4c.4 2.6 1 4.8 1.9 6.4 .9-1.6 1.5-3.8 1.9-6.4-.8.5-1.3.9-1.9 1.8-.6-.9-1.1-1.3-1.9-1.8Z"/></svg>';
+  '<svg class="icon-ui icon-tinted icon-fawkes" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 4.2H16C19.2 4.2 20 8.2 20 11.4 20 16.6 15.6 21.8 12 21.8 8.4 21.8 4 16.6 4 11.4 4 8.2 4.8 4.2 8 4.2Z"/><path class="ip-2" d="M12 13.1c-.5-.9-1.6-1.3-2.6-.9-1.6.6-2.2 2.3-3.6 2.6-1 .2-1.9-.3-2.3-1.1-.3.9.1 2 1.1 2.5 1.7.8 3.5-.2 4.6-1.4.5-.6 1.1-1.1 1.8-1.4v-.3Zm0 0c.5-.9 1.6-1.3 2.6-.9 1.6.6 2.2 2.3 3.6 2.6 1 .2 1.9-.3 2.3-1.1.3.9-.1 2-1.1 2.5-1.7.8-3.5-.2-4.6-1.4-.5-.6-1.1-1.1-1.8-1.4v-.3Z"/><path class="ip-2" d="M10.1 16.6c.4 2.5 1 4.6 1.9 6.1.9-1.5 1.5-3.6 1.9-6.1-.8.4-1.3.8-1.9 1.7-.6-.9-1.1-1.3-1.9-1.7Z"/></svg>';
 const ICON_TRASH_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
 // Play Horn's icon: a plain play triangle. No frame around it — the button already has a border
@@ -251,6 +266,8 @@ const ICON_FLAG_EMOJI = '<span class="icon-emoji">🏁</span>';
 const ICON_PDF_EMOJI = '<span class="icon-emoji">📕</span>';
 const ICON_LINK_EMOJI = '<span class="icon-emoji">🔗</span>';
 const ICON_FAWKES_EMOJI = '<span class="icon-emoji">🎭</span>';
+const ICON_SND_CRASH_EMOJI = '<span class="icon-emoji">💥</span>';
+const ICON_SND_HORN_EMOJI = '<span class="icon-emoji">📢</span>';
 const ICON_TRASH_EMOJI = '<span class="icon-emoji">🗑️</span>';
 const ICON_HORN_EMOJI = '<span class="icon-emoji">🎉</span>';
 const ICON_STOP_EMOJI = '<span class="icon-emoji">⏹️</span>';
@@ -286,6 +303,8 @@ let ICON_FLAG = ICON_FLAG_PICT;
 let ICON_PDF = ICON_PDF_PICT;
 let ICON_LINK = ICON_LINK_PICT;
 let ICON_FAWKES = ICON_FAWKES_PICT;
+let ICON_SND_CRASH = ICON_SND_CRASH_PICT;
+let ICON_SND_HORN = ICON_SND_HORN_PICT;
 let ICON_TRASH = ICON_TRASH_PICT;
 let ICON_HORN = ICON_HORN_PICT;
 let ICON_STOP = ICON_STOP_PICT;
@@ -356,6 +375,8 @@ function applyIconStyle(style) {
   ICON_PDF = emoji ? ICON_PDF_EMOJI : ICON_PDF_PICT;
   ICON_LINK = emoji ? ICON_LINK_EMOJI : ICON_LINK_PICT;
   ICON_FAWKES = emoji ? ICON_FAWKES_EMOJI : ICON_FAWKES_PICT;
+  ICON_SND_CRASH = emoji ? ICON_SND_CRASH_EMOJI : ICON_SND_CRASH_PICT;
+  ICON_SND_HORN = emoji ? ICON_SND_HORN_EMOJI : ICON_SND_HORN_PICT;
   ICON_TRASH = emoji ? ICON_TRASH_EMOJI : ICON_TRASH_PICT;
   ICON_HORN = emoji ? ICON_HORN_EMOJI : ICON_HORN_PICT;
   ICON_STOP = emoji ? ICON_STOP_EMOJI : ICON_STOP_PICT;

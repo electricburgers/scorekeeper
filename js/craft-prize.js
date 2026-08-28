@@ -732,10 +732,10 @@ function renderCraftPrizeBlock() {
         ? `<div class="cp-test-bar">
       <span class="cp-field-label">Test Sounds</span>
       <div class="cp-test-bar-btns">
-      <button class="settings-btn export-sq" onclick="testAudioClip('start')" title="Play drumroll intro + loop"><span class="icon-emoji">🥁</span><span class="export-sq-label">Roll</span></button>
-      <button class="settings-btn export-sq" onclick="testAudioClip('fade')" title="Fade out active drumroll"><span class="icon-emoji">⏹️</span><span class="export-sq-label">Fade</span></button>
-      <button class="settings-btn export-sq" onclick="testAudioClip('end')" title="Play drumroll crash stinger"><span class="icon-emoji">💥</span><span class="export-sq-label">Crash</span></button>
-      <button class="settings-btn export-sq" onclick="testAudioClip('horn')" title="Play victory horn"><span class="icon-emoji">🎺</span><span class="export-sq-label">Horn</span></button>
+      <button class="settings-btn export-sq" onclick="testAudioClip('start')" title="Play drumroll intro + loop">${ICON_DRUM}<span class="export-sq-label">Roll</span></button>
+      <button class="settings-btn export-sq" onclick="testAudioClip('fade')" title="Fade out active drumroll">${ICON_STOP}<span class="export-sq-label">Fade</span></button>
+      <button class="settings-btn export-sq" onclick="testAudioClip('end')" title="Play drumroll crash stinger">${ICON_SND_CRASH}<span class="export-sq-label">Crash</span></button>
+      <button class="settings-btn export-sq" onclick="testAudioClip('horn')" title="Play victory horn">${ICON_SND_HORN}<span class="export-sq-label">Horn</span></button>
       </div>
     </div>`
         : ""
@@ -750,7 +750,7 @@ function renderCraftPrizeBlock() {
   if (drawing) {
     h += `<div class="cp-intro">${ICON_MIC} Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName || "")}</div>`;
     if (craftDrawState.audioStopped) {
-      h += `<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Pick the winner and play the victory horn now">${ICON_HORN} Play Horn</button>`;
+      h += `<div class="cp-btn-row"><button class="btn btn-accent export-sq cp-sq-btn cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Pick the winner and play the victory horn now">${ICON_HORN}<span class="export-sq-label">Play<br>Horn</span></button></div>`;
     } else {
       const st = craftCountdownState() || {
         remaining: craftDrawState.totalMs,
@@ -761,22 +761,24 @@ function renderCraftPrizeBlock() {
       <div class="cp-countdown-num" id="cpCountdownNum">${Math.ceil(st.remaining / 1000)}s</div>
     </div>`;
       if (prefs.craftManualEnd) {
-        h += `<button class="btn btn-danger cp-manual-end-btn" onclick="stopDrumrollOnly()" title="Stop just the drumroll sound, e.g. once a staff member reveals a paper from the stack — then play the horn whenever you're ready">${ICON_STOP} Stop Drumroll</button>`;
+        h += `<div class="cp-btn-row"><button class="btn btn-danger export-sq cp-sq-btn cp-manual-end-btn" onclick="stopDrumrollOnly()" title="Stop just the drumroll sound, e.g. once a staff member reveals a paper from the stack — then play the horn whenever you're ready">${ICON_STOP}<span class="export-sq-label">Stop<br>Drumroll</span></button></div>`;
       }
     }
   } else {
     // The only control in the app that starts audio — see startCraftPrizeDraw's gesture note.
-    h += `<button class="btn btn-accent cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>${ICON_DRUM} Start Drumroll</button>`;
-    if (!winner && poolLeft <= 0)
-      h += `<p class="fr-note">No teams left in the eligible pool — lower Exclude Top above, or add another team.</p>`;
+    // Square, icon-forward buttons (.export-sq) — a big drum/stop/horn glyph over a two-line
+    // label is a far easier phone tap than a full-width text bar, and matches the export and
+    // sound-test buttons elsewhere.
+    h += `<div class="cp-btn-row"><button class="btn btn-accent export-sq cp-sq-btn cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>${ICON_DRUM}<span class="export-sq-label">Start<br>Drumroll</span></button>`;
     if (prefs.craftManualEnd && !winner) {
       // Previewed here, faded and disabled, so the host knows these controls exist before the
       // drumroll is even running — rather than only discovering them once a draw is underway.
-      h += `<div class="cp-manual-preview">
-        <button class="btn btn-danger cp-preview-btn" disabled title="Available once the drumroll is running">${ICON_STOP} Stop Drumroll</button>
-        <button class="btn btn-accent cp-preview-btn" disabled title="Available once the drumroll is running">${ICON_HORN} Play Horn</button>
-      </div>`;
+      h += `<button class="btn btn-danger export-sq cp-sq-btn cp-preview-btn" disabled title="Available once the drumroll is running">${ICON_STOP}<span class="export-sq-label">Stop<br>Drumroll</span></button>
+        <button class="btn btn-accent export-sq cp-sq-btn cp-preview-btn" disabled title="Available once the drumroll is running">${ICON_HORN}<span class="export-sq-label">Play<br>Horn</span></button>`;
     }
+    h += `</div>`;
+    if (!winner && poolLeft <= 0)
+      h += `<p class="fr-note">No teams left in the eligible pool — lower Exclude Top above, or add another team.</p>`;
   }
   if (winner && !drawing) {
     const wname = gameState.teams[winner.ti]?.name || "Team " + (winner.ti + 1);
@@ -786,9 +788,9 @@ function renderCraftPrizeBlock() {
           ? // Concatenation, not a ${} placeholder: this arm is a plain single-quoted string,
             // not a template literal, and pasting a placeholder into one is exactly how v18.57
             // shipped a button that rendered the literal text "${ICON_HORN} Play Horn" on screen.
-            '<button class="btn btn-accent cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Play the victory horn on demand">' +
+            '<div class="cp-btn-row"><button class="btn btn-accent export-sq cp-sq-btn cp-horn-btn cp-manual-end-btn" onclick="playCraftVictoryHorn()" title="Play the victory horn on demand">' +
             ICON_HORN +
-            ' Play Horn</button>'
+            '<span class="export-sq-label">Play<br>Horn</span></button></div>'
           : ""
       }
       <label class="cp-script-label">Winner Announcement Script</label>

@@ -808,10 +808,25 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    (Settings > Take the Tour) — an upright hand read as a "stop" gesture rather than a wave. */
 .icon-hand{--icon-tint:var(--accent-gold);transform:rotate(-15deg)}
 /* JD Upload Form's Guy Fawkes mask — purple plate (--tint-flask, freed when the flask icon
-   moved to green), solid mustache/goatee. Echoes the app's own PWA icon. */
-.icon-fawkes{--icon-tint:var(--tint-flask)}
-.icon-fawkes .ip-2{fill:var(--icon-tint);stroke:var(--icon-tint)}
+   moved to green) with a thin 1.4 outline, and the mustache/goatee as SOLID fills with no
+   stroke: at .icon-ui's 2.25 stroke the two features merged into one blob at button size. */
+.icon-fawkes{--icon-tint:var(--tint-flask);stroke-width:1.4}
+.icon-fawkes .ip-2{fill:currentColor;stroke:none}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
+/* Test Sounds bar: Crash echoes 💥 — a red-orange outer burst (--tint-drum) with a solid
+   bright-yellow core burst (--vivid-beer) on top, the emoji's own orange-edge/yellow-centre
+   look. Horn echoes 🎺 in the trophy's brass gold. --tint-drum and --tint-trophy are both
+   contrast-audited (>=4.5:1, WCAG AA) on --bg-card in Dark and Light; --vivid-beer is interior
+   detail (it only has to separate from the burst it sits on, both themes). */
+.icon-snd-crash{--icon-tint:var(--tint-drum)}
+/* Solid (not the 38% .icon-tinted wash) and un-stroked so the eight points stay sharp — the
+   emoji is a saturated shape, not a faint one. Yellow core burst on top. */
+.icon-snd-crash .snd-burst{fill:var(--icon-tint);stroke:none}
+.icon-snd-crash .ip-2{fill:var(--vivid-beer);stroke:none}
+/* Horn = 📢 loudspeaker, tinted silver. Body solid; the grip + sound-wave arcs are strokes. */
+.icon-snd-horn{--icon-tint:var(--tint-mic);--icon-tint-2:var(--tint-mic-2)}
+.icon-snd-horn .snd-body{fill:var(--icon-tint);stroke:none}
+.icon-snd-horn .ip-2{fill:none;stroke:var(--icon-tint-2)}
 /* Settings > App Preferences (Save/Load) and > Craft Prize Eligible List (Copy/TXT) — the only
    four pictographs left with no colour of their own after every OTHER Settings row got one.
    --tint-cap reused for Save's floppy disk (this app's existing audited blue) and --tint-mic for
@@ -1470,9 +1485,12 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    (here, "this is a separate team"). --border-control already exists precisely because ordinary
    --border/--border-strong don't reliably clear 3:1 on every surface — reusing it rather than
    inventing a one-off color for this one divider. */
-.team-entry{display:grid;grid-template-columns:1fr 5.4rem auto;gap:8px;align-items:start;padding:10px 0;border-bottom:1px solid var(--border-control)}
+.team-entry{display:grid;grid-template-columns:1fr 5.4rem auto;gap:8px;align-items:start;padding:10px 8px;border-bottom:1px solid var(--border-control)}
 .team-entry.has-adj{grid-template-columns:1fr 5.4rem auto auto}
 .team-entry:last-of-type{border-bottom:none}
+/* Zebra stripe on the even team rows, same --row-stripe (Row Zebra Stripes setting) the score
+   rows / round answers / standings already use, so the Teams list scans the same way. */
+.team-entry:nth-child(even){background:var(--row-stripe);border-radius:6px}
 .team-name-cell{display:flex;flex-direction:column;gap:7px;min-width:0}
 /* Same treatment as the Guess label beside it, because they are the same thing: a field label
    over an input, on one row. They had been diverging on five counts at once — display font vs
@@ -2064,11 +2082,15 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .cp-countdown-fill{height:100%;width:100%;transform-origin:left;background:var(--accent-cyan-solid);transition:transform .1s linear}
 .cp-countdown-num{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--txt-cyan);min-width:2.8rem;text-align:right;font-variant-numeric:tabular-nums}
 .cp-manual-end-btn{width:100%;margin-top:8px}
-/* Faded, disabled preview of the manual Stop Drumroll / Play Horn controls shown before the draw
-   starts, so the host knows they're available without having to press Choose Craft Prize Winner
-   first to discover them. */
-.cp-manual-preview{display:flex;gap:8px;margin-top:8px}
-.cp-preview-btn{flex:1;opacity:.35;cursor:not-allowed}
+/* Start Drumroll / Stop Drumroll / Play Horn as square, icon-forward buttons (the same
+   .export-sq treatment as XLSX/PDF and the sound-test bar) so they're an easy phone tap. A hair
+   wider/taller than the 4.6rem export squares to fit a two-line "Start / Drumroll" label. The
+   compound selector out-specifics the older single-class .cp-draw-btn/.cp-manual-end-btn/
+   .cp-horn-btn width and font-size rules; .cp-preview-btn's own .35 opacity still shows through
+   (it isn't touched here). */
+.cp-btn-row{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:10px}
+.export-sq.cp-sq-btn{width:auto;min-width:5rem;height:auto;min-height:5rem;font-size:1.9rem;line-height:1.1;padding:8px 10px;margin-top:0;flex:0 0 auto}
+.cp-preview-btn{opacity:.35;cursor:not-allowed}
 /* Trophy+name+"won!" are one flowing text span (not separate flex items) so a long team name
    wraps onto a second line on its own, with "won!" following right after it — the Clear
    button is the only other flex item, so it stays put on the first line instead of also

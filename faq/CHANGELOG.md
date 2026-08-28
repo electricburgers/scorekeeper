@@ -2,6 +2,15 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.36] - 27 Aug 2026
+
+### Changed
+
+- **`ic-fawkes` sprite symbol** redrawn to match the app's v19.60 mask (solid, un-stroked
+  mustache/goatee; thinner plate outline).
+- **Exporting** and **Sound Test Buttons** screenshots regenerated for the redrawn Guy Fawkes
+  mask, the square "JD Upload Form" button, and the new Roll/Fade/Crash/Horn pictographs.
+
 ## [1.35] - 27 Aug 2026
 
 ### Changed

@@ -10,6 +10,14 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.60 - 2026-08-27
+- **Redraws the Guy Fawkes mask (JD Upload Form).** The mustache and goatee are now solid fills with no outline of their own — stroking them at `.icon-ui`'s 2.25 width had closed the gap between them into one blob at button/mobile size — and the plate's outline is thinned to 1.4. The JD Upload Form control also becomes a square, icon-forward button like XLSX / PDF (the mask over a two-line "JD Upload / Form" label), instead of a wide link.
+- **Real pictographs for the Craft Prize "Test Sounds" buttons.** Roll reuses the drum, Fade reuses the stop square, Crash is a solid red-orange eight-point burst with a yellow core (💥), and Horn is a silver loudspeaker/megaphone (📢) — all theme-aware, all following Icon Style, all WCAG AA in Dark and Light (`--tint-drum` / `--vivid-beer` / `--tint-mic`). Emoji mode restores 🥁 / ⏹️ / 💥 / 📢.
+- **Start Drumroll, Stop Drumroll and Play Horn are square, icon-forward buttons** in a centred row — a real phone tap target, matching the export and sound-test buttons — instead of full-width text bars.
+- **Zebra stripe on the Teams list.** Even team rows now take the same `--row-stripe` (Row Zebra Stripes setting) the score rows, round answers and standings already use.
+- New Dark/Light `export-bar` and `sound-test-buttons` screenshots. FAQ bumped to v1.36.
+- Full suite (449 tests) passes.
+
 ## v19.59 - 2026-08-27
 - **Removes Color Vision from the app and the FAQ.** The Off / Red-Green / Blue-Yellow dropdown, the `data-cb` attribute and its `[data-cb="1"]/[data-cb="2"]` token overrides, the shared `.cv-select` widget (`js/shared-ui.js` keeps only the font-size scale now), the tutorial's Color Vision step, and the FAQ's Color Vision settings row, its "anything beyond Dark/Light" entry, and the three `color-vision-*` comparison screenshots are all gone. A saved `cbMode` pref is simply ignored.
 - **The FAQ header stacks the title, a new "FAQ" line, and the "Back to Scorekeeper" link in one left column** so the Display Settings gear stays pinned to the row's top-right corner at every width, desktop and mobile, instead of wrapping under the logo.
