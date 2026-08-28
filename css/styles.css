@@ -134,7 +134,7 @@
   /* AAA (7:1) text-safe variants of the brand accents, for use as TEXT on neutral surfaces
      (bg-card/bg-card-alt/bg-input) — kept separate from --accent-* so borders, focus rings,
      and button fills can stay at full brand saturation without dragging text below AAA. */
-  --txt-cyan:#00ffff;--txt-magenta:#ff72d8;--txt-red:#ff8282;--txt-orange:#ffaa00;
+  --txt-cyan:#00ffff;--txt-magenta:#ff72d8;--txt-red:#ff8282;--txt-orange:#ffaa00;--txt-purple:#caa8ff;
   /* #a52c2c was too dark to read as a control against the surfaces it sits on: the Reset button
      and the incorrect badge are solid fills, and a fill is what identifies them, but it managed
      only 2.4-2.6:1 against --bg-input/--bg-card-alt (WCAG 1.4.11 wants 3:1). #eb0025 is the most
@@ -228,7 +228,7 @@
   /* Light counterparts — see the dark block's note. Darkened to clear 3:1 against a near-white
      card instead of near-black: 4.4-6.0:1 and 4.0-5.5:1. */
   --tint-flask:#7a3fd6;--tint-cap:#0d6fa8;--tint-shuffle:#a3006b;
-  --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;
+  --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;--txt-purple:#6d28c9;
   --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
   /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
      background this dark — anything as light as --bg-card-alt forces the border down to a
@@ -1229,12 +1229,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    which is what it looked like: a dark overlay sitting on top of the timer rather than the timer
    itself pulsing. An inset box-shadow filled with the box's own radius (a huge spread, zero blur)
    is a normal paint op with no such layer, and rgba(0,0,0,.25) over the fill is the exact
-   equivalent darkening — result = original x (1-.25) is the same arithmetic brightness(.75)'s
-   original x .75 was already doing. Border and text are untouched either way: the border already
-   had its own resting colour transition, never part of this pulse, and white text over a
-   darkening red only gains contrast as the fill goes darker, so nothing here reopens the
-   contrast floor the old comment on this block used to defend. */
-@keyframes qtFlash{0%,100%{box-shadow:inset 0 0 0 0 rgba(0,0,0,0)}50%{box-shadow:inset 0 0 0 999px rgba(0,0,0,.25)}}
+   equivalent darkening — result = original x (1-.45) is the same arithmetic a brightness(.55)
+   would be doing. Border and text are untouched either way: the border already had its own
+   resting colour transition, never part of this pulse, and white text over a darkening red only
+   gains contrast as the fill goes darker, so nothing here reopens the contrast floor the old
+   comment on this block used to defend. The dip is .45 (was .25 — too faint to register at a
+   glance across a room); only qt-crit pulses, and its white-on-red only improves as it darkens. */
+@keyframes qtFlash{0%,100%{box-shadow:inset 0 0 0 0 rgba(0,0,0,0)}50%{box-shadow:inset 0 0 0 999px rgba(0,0,0,.45)}}
 /* qt-over doesn't pulse — but crossing 0:01 -> 0:00 used to chop the flash off wherever it
    happened to be in its cycle and snap the box back with no transition, and waiting out however
    much of a 2.9s cycle was left (the fix before this one) traded that snap for a settle that
@@ -1762,14 +1763,26 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    4" pill kept a blue background under green text, and the gold badges kept a yellow one. Mixing
    from the token means each tint follows whatever its accent resolves to.
    Only the two accents that a colour-vision mode actually swaps are mixed this way. rl-2 and rl-4
-   stay literal: magenta and orange are untouched by both modes, so they had nothing to follow —
-   and mixing them anyway made things worse, because the light theme's --accent-magenta (#bb0055)
-   is far darker than the dark theme's (#ff44aa) that these literals were picked against, so 13%
-   of it over white produced a deeper pink that dropped the pill's own text to 4.41:1, under AA. */
+   stay literal: magenta and purple are untouched by both modes, so they have nothing to follow —
+   and mixing rl-2 anyway made things worse, because the light theme's --accent-magenta (#bb0055)
+   is far darker than the dark theme's (#ff44aa) that literal was picked against, so 13% of it
+   over white produced a deeper pink that dropped the pill's own text to 4.41:1, under AA.
+   rl-4 is PURPLE, not the orange it used to be: orange sat right next to rl-3's gold and the two
+   Wagers pills read as the same colour at a glance. Purple is clear of every other round hue and
+   of both colour-vision swaps. --txt-purple is theme-split (light #6d28c9 / dark #caa8ff); the
+   wash stays a literal violet since purple, like magenta, isn't a token a mode ever remaps. */
 .rl-1{background:color-mix(in srgb,var(--accent-cyan) 13%,transparent);color:var(--txt-cyan)}
 .rl-2{background:rgba(255,68,170,.13);color:var(--txt-magenta)}
 .rl-3{background:color-mix(in srgb,var(--accent-gold) 13%,transparent);color:var(--badge-gold-fg)}
-.rl-4{background:rgba(255,170,0,.13);color:var(--txt-orange)}
+.rl-4{background:rgba(150,90,245,.16);color:var(--txt-purple)}
+/* cb2 (blue-yellow / tritanopia) remaps --accent-gold to magenta, which rl-3 was inheriting —
+   landing it on the same pink as rl-2's magenta (the round-2/round-3 collision). In that one mode
+   rl-3 takes a deep, cyan-leaning blue instead: a tritanope reads it apart from rl-1's bright
+   green (much darker, and greens/blues that DO collapse for a tritanope still separate on
+   lightness here), from rl-2's pink (long- vs short-wavelength), and from rl-4's lavender (darker
+   and bluer, not violet). Text clears >=7:1 on both the wash and the card in both themes. */
+[data-theme="dark"][data-cb="2"] .rl-3{background:rgba(60,110,235,.24);color:#8fb2f7}
+[data-theme="light"][data-cb="2"] .rl-3{background:rgba(30,70,180,.15);color:#234690}
 /* line-height:1 keeps the taller 1rem badge from adding extra height to its header row —
    without it, a header with a badge (e.g. Final Results' "ascending") ends up a few px taller
    than a plain header with none (e.g. Craft Prize Drawing). */

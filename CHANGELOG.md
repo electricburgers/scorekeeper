@@ -10,6 +10,11 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.64 - 2026-08-28
+- **The question timer's low-time pulse dips harder** — the `qtFlash` darkening goes from a 25% to a 45% inset over the red fill, so it actually reads as a flash across a room instead of a faint shimmer. Only `qt-crit` pulses and its white-on-red only gains contrast as the fill darkens, so no floor is reopened.
+- **Round 4's "Wagers: 3, 6, 9, 12" pill is now purple** (`--txt-purple`, theme-split light `#6d28c9` / dark `#caa8ff`, on a violet wash) instead of an orange that sat right next to Round 3's gold and read as the same colour at a glance.
+- **Fixes Round 2 vs Round 3 wager pills colliding in Blue-Yellow (tritanopia) mode.** `data-cb="2"` remaps `--accent-gold` to magenta, which Round 3 was inheriting — landing it on the same pink as Round 2. In that one mode Round 3 now takes a deep cyan-leaning blue instead, distinct from Round 1's green, Round 2's pink and Round 4's lavender. All four round pills are now clearly distinct in every theme × colour-vision combination, each clearing WCAG AA (>=4.6:1) against its own wash and card.
+
 ## v19.63 - 2026-08-28
 - **Restores Color Vision to the web app.** v19.59 removed it from both the app and the FAQ; the FAQ removal was intentional, but the app lost a real accessibility feature. Back in the main app's Settings (the same Off / Red-Green / Blue-Yellow dropdown, `#cbSelect`): the `[data-cb="1"]` / `[data-cb="2"]` token overrides in `css/styles.css`, the `.cv-select` widget and its swatch previews, the `cbMode` pref (migrated from the legacy `colorblind` flag) and its pre-render `data-cb` application, `applyPrefs()`'s sync, the shared `sharedToggleCvMenu` / `sharedCloseCvMenu` / `sharedSetCvSelectDisplay` helpers in `js/shared-ui.js`, and the tutorial's Color Vision step. The FAQ stays as it is — no Color Vision row, no comparison screenshots.
 - Tests: the "Color Vision removed from both pages" assertions are re-scoped to the FAQ only, and the app's `#cbSelect` dropdown behaviour + Settings round-trip coverage is restored (459 tests pass).
