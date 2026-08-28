@@ -733,7 +733,7 @@ function renderCraftPrizeBlock() {
       <span class="cp-field-label">Test Sounds</span>
       <div class="cp-test-bar-btns">
       <button class="settings-btn export-sq" onclick="testAudioClip('start')" title="Play drumroll intro + loop">${ICON_DRUM}<span class="export-sq-label">Roll</span></button>
-      <button class="settings-btn export-sq" onclick="testAudioClip('fade')" title="Fade out active drumroll">${ICON_STOP}<span class="export-sq-label">Fade</span></button>
+      <button class="settings-btn export-sq" onclick="testAudioClip('fade')" title="Fade out active drumroll">${ICON_STOP}<span class="export-sq-label">Fade<br>out</span></button>
       <button class="settings-btn export-sq" onclick="testAudioClip('end')" title="Play drumroll crash stinger">${ICON_SND_CRASH}<span class="export-sq-label">Crash</span></button>
       <button class="settings-btn export-sq" onclick="testAudioClip('horn')" title="Play victory horn">${ICON_SND_HORN}<span class="export-sq-label">Horn</span></button>
       </div>

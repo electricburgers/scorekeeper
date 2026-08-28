@@ -466,8 +466,10 @@ button,[role="button"]{touch-action:manipulation}
 .settings-advanced-toggle:hover{background:var(--bg-hover);color:var(--text-primary)}
 .settings-advanced-toggle.open{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .settings-advanced-toggle.open:hover{background:var(--accent-cyan-solid);color:var(--on-accent-cyan)}
-.settings-advanced-toggle .adv-chevron{transition:transform .25s;display:inline-block}
-.settings-advanced-toggle.open .adv-chevron{transform:rotate(180deg)}
+/* scale(), not font-size, so a bigger chevron is purely visual and never grows the button's
+   line box / height. */
+.settings-advanced-toggle .adv-chevron{transition:transform .25s;display:inline-block;transform:scale(1.55)}
+.settings-advanced-toggle.open .adv-chevron{transform:rotate(180deg) scale(1.55)}
 .settings-advanced-group{grid-column:1/-1;display:none;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
 .settings-advanced-group.open{display:grid}
 
@@ -817,18 +819,19 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-fawkes{--icon-tint:var(--tint-flask);stroke-width:1.4}
 .icon-fawkes .ip-2{fill:currentColor;stroke:none}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
-/* Test Sounds bar: Crash echoes 💥 — a red-orange outer burst (--tint-drum) with a solid
-   bright-yellow core burst (--vivid-beer) on top, the emoji's own orange-edge/yellow-centre
-   look. Horn echoes 🎺 in the trophy's brass gold. --tint-drum and --tint-trophy are both
-   contrast-audited (>=4.5:1, WCAG AA) on --bg-card in Dark and Light; --vivid-beer is interior
-   detail (it only has to separate from the burst it sits on, both themes). */
+/* Test Sounds bar: Crash echoes 💥 — a jagged red-orange outer burst (--tint-drum, the identifying
+   outline held to WCAG AA), an orange mid layer (--vivid-drum) and a small bright-yellow core star
+   (--vivid-beer), the emoji's own red-body / hot-centre gradient. Horn echoes 🎺 in the trophy's
+   brass gold. --tint-drum and --tint-trophy are both contrast-audited (>=4.5:1, WCAG AA) on
+   --bg-card in Dark and Light; --vivid-drum / --vivid-beer are interior detail (each only has to
+   separate from the layer it sits on, both themes). */
 .icon-snd-crash{--icon-tint:var(--tint-drum)}
-/* Solid (not the 38% .icon-tinted wash) and un-stroked so the eight points stay sharp — the
-   emoji is a saturated shape, not a faint one. Yellow core star on top. The .ip-2 selector
-   carries .icon-tinted too so it outranks the generic `.icon-tinted [class^="ip-"]` interior
-   rule further down (equal specificity there, and that one wins on source order otherwise —
-   which is what was painting the core red instead of yellow). */
+/* Each layer solid (not the 38% .icon-tinted wash) and un-stroked so the spikes stay sharp — the
+   emoji is a saturated shape, not a faint one. The .ip-2 selector carries .icon-tinted too so it
+   outranks the generic `.icon-tinted [class^="ip-"]` interior rule further down (equal specificity
+   there, and that one wins on source order otherwise — which had painted the core red not yellow). */
 .icon-snd-crash .snd-burst{fill:var(--icon-tint);stroke:none}
+.icon-snd-crash .snd-mid{fill:var(--vivid-drum);stroke:none}
 .icon-snd-crash.icon-tinted .ip-2{fill:var(--vivid-beer);stroke:none}
 /* Horn = 📢 loudspeaker, tinted silver. Body solid; the grip + sound-wave arcs are strokes.
    Same specificity bump as Crash above, for the same source-order reason. */
@@ -884,6 +887,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-drum .dr-shell{fill:currentColor;stroke:currentColor}
 .icon-drum .ip-2{fill:var(--vivid-beer-2);stroke:var(--icon-tint)}
 .icon-drum .dr-rod{fill:none;stroke-width:1.9}
+/* On the accent button the shared `[class^="ip-"]` stroke rule pulls every stick/rod stroke
+   toward --icon-stroke-ink, which in Light mode is nearly white — the drumsticks then blend into
+   the cream drumhead's own outline where they meet it. Keep the sticks a real brown instead
+   (mixed toward black, not white), dark enough to read against both the cream head and the teal
+   Light-mode button. The rods sit on the dark-red shell and don't have this problem, so they're
+   left alone. */
+.btn-accent .icon-drum .dr-stick{stroke:color-mix(in srgb,currentColor 68%,#000)}
 /* On a solid accent fill (Start Drumroll, Choose Craft Prize Winner) the tints above
    cannot be used as-is: --accent-cyan-solid runs from #00ffff to #00654c across the six
    theme x colour-vision combinations, so a value legible on one is invisible on another. Mixing

@@ -120,21 +120,22 @@ const ICON_BEER_PICT =
 // tops and they only show on the shell side. .dr-shell / .dr-rod styled in styles.css; the head
 // reuses .icon-beer's cream-cap trick.
 const ICON_DRUM_PICT =
-  '<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="dr-shell" d="M2 9v8a10 5 0 0 0 20 0V9"/><path class="ip-3 dr-rod" d="M6 9.4v8.1M12 9.8v8.8M18 9.4v8.1"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3" d="m2 2 6 6"/><path class="ip-3" d="m22 2-6 6"/></svg>';
+  '<svg class="icon-ui icon-tinted icon-drum" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="dr-shell" d="M2 9v8a10 5 0 0 0 20 0V9"/><path class="ip-3 dr-rod" d="M6 9.4v8.1M12 9.8v8.8M18 9.4v8.1"/><ellipse class="ip-2" cx="12" cy="9" rx="10" ry="5"/><path class="ip-3 dr-stick" d="m2 2 6 6"/><path class="ip-3 dr-stick" d="m22 2-6 6"/></svg>';
 const ICON_TROPHY_PICT =
   '<svg class="icon-ui icon-tinted icon-trophy" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path class="ip-2" d="M4 22h16"/><path class="ip-2" d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path class="ip-2" d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>';
 // The Craft Prize "Test Sounds" bar's Crash / Horn buttons — drawn glyphs replacing the bare
 // 💥 / 🎺 emoji, shaped and tinted to echo them so they still read at a glance and follow the
 // app's theme + Icon Style. (Roll reuses ICON_DRUM, Fade reuses ICON_STOP — both already
 // drawn.) Emoji mode restores 💥 / 🎺.
-//   Crash 💥 → a solid, sharp eight-point jagged burst with a bright-yellow eight-point core star
-//              sitting well inside it (r~7 of the 24 box, so the burst's red-orange points still
-//              show past it), echoing the emoji's saturated orange-edge / yellow-centre look —
-//              --tint-drum red-orange + --vivid-beer yellow, both AA-audited both themes.
+//   Crash 💥 → a jagged, irregular nine-spike burst — an actual explosion silhouette rather than a
+//              regular star, computed to fit the 24 box — layered red-orange (--tint-drum, the
+//              identifying/AA-carrying outline) → orange mid (--vivid-drum, at 60% scale) → a small
+//              bright-yellow eight-point core star (--vivid-beer), the emoji's own red-body /
+//              hot-centre gradient. All three tokens AA-audited both themes.
 //   Horn  📢 → a loudspeaker/bullhorn: a small mouthpiece, a wide flaring cone, and two sound
 //              waves — tinted silver (--tint-mic, AA-audited both themes) to match 📢.
 const ICON_SND_CRASH_PICT =
-  '<svg class="icon-ui icon-tinted icon-snd-crash" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-burst" d="M12 .5 14.96 10.78 20.1 3.9 14.96 13.22 23.5 12 13.22 14.96 20.1 20.1 10.78 14.96 12 23.5 9.04 13.22 3.9 20.1 9.04 10.78 .5 12 10.78 9.04 3.9 3.9 13.22 9.04Z"/><path class="ip-2" d="M19 12 14.77 13.15 16.95 16.95 13.15 14.77 12 19 10.85 14.77 7.05 16.95 9.23 13.15 5 12 9.23 10.85 7.05 7.05 10.85 9.23 12 5 13.15 9.23 16.95 7.05 14.77 10.85Z"/></svg>';
+  '<svg class="icon-ui icon-tinted icon-snd-crash" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-burst" d="M12.41 3.87 14.11 6.42 18.51 5.24 17.56 9.22 20.62 10.92 16.4 12.97 21.98 17.51 14.7 15.61 16.37 22.11 12.01 18.1 8.58 20.62 7.75 17.23 2.71 17.38 7.92 12.91 1.57 10.05 7.09 8.7 6.7 5.29 10.18 7.47Z"/><path class="snd-mid" d="M12.25 7.12 13.27 8.65 15.91 7.94 15.34 10.33 17.17 11.35 14.64 12.58 17.99 15.31 13.62 14.17 14.62 18.07 12.01 15.66 9.95 17.17 9.45 15.14 6.43 15.23 9.55 12.55 5.74 10.83 9.05 10.02 8.82 7.97 10.91 9.28Z"/><path class="ip-2" d="M12 8.4 12.57 10.61 14.55 9.45 13.39 11.43 15.6 12 13.39 12.57 14.55 14.55 12.57 13.39 12 15.6 11.43 13.39 9.45 14.55 10.61 12.57 8.4 12 10.61 11.43 9.45 9.45 11.43 10.61Z"/></svg>';
 const ICON_SND_HORN_PICT =
   '<svg class="icon-ui icon-tinted icon-snd-horn" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-body" d="M2 10h2v4H2z"/><path class="snd-body" d="M4 8 15 3.6v16.8L4 16z"/><path class="ip-2" d="M17.7 8.4a4.6 4.6 0 0 1 0 7.2"/><path class="ip-2" d="M20.2 6.2a8.4 8.4 0 0 1 0 11.6" opacity=".5"/></svg>';
 // Final Results' checkered flag. Deliberately NOT one of the tinted pictographs: a racing flag

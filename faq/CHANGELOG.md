@@ -8,10 +8,14 @@ All notable changes to the Scorekeeper FAQ site are documented here.
 
 - **Row Zebra Stripes**: the tip now marks **Medium** as the default (was Subtle) — the app's
   default changed in v19.59.
-- **Advanced Settings** screenshots (Dark/Light) regenerated: the expanded toggle now takes its
-  enabled cyan fill, Row Zebra Stripes reads Medium, and the Sound Test Buttons row is included.
-- **Sound Test Buttons** screenshots (Dark/Light) regenerated for the filled drum pictograph
-  (solid red shell, cream head, tension rods) and the Crash burst's new yellow core.
+- **`ic-drum` sprite symbol** rebuilt to match the app's v19.61 drum — solid red shell, cream
+  head, three tension rods — with its own embedded `<style>` (the `<use>` shadow tree that outer
+  CSS can't reach, same fix `ic-beer` already carries).
+- **Advanced Settings** screenshots (Dark/Light) regenerated: the expanded toggle takes its
+  enabled cyan fill with the bigger, now-downward chevron, Row Zebra Stripes reads Medium, and
+  the Sound Test Buttons row is included.
+- **Sound Test Buttons** screenshots (Dark/Light) regenerated for the filled drum pictograph, the
+  redrawn jagged three-tone Crash burst, and the button's new "Fade out" label.
 
 ## [1.36] - 27 Aug 2026
 
