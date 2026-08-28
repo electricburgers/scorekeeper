@@ -65,26 +65,64 @@ describe("shared-ui: font size scale", () => {
   });
 });
 
-describe("Color Vision was removed from both pages (v19.59)", () => {
-  it("the main app no longer defines #cbSelect or a cv-select widget", async () => {
-    const window = await loadAppWindow();
-    assert.equal(window.document.getElementById("cbSelect"), null);
-    assert.equal(window.document.querySelector(".cv-select"), null);
-    assert.equal(typeof window.setCbMode, "undefined");
-    assert.equal(typeof window.toggleCvMenu, "undefined");
-    window.close();
+// Color Vision was removed from BOTH pages in v19.59, then restored to the MAIN APP ONLY in
+// v19.63 (the FAQ removal was intentional and stays). These guard that split.
+describe("shared-ui: Color Vision dropdown (main app's #cbSelect, restored v19.63)", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
   });
-  it("the FAQ no longer defines #faqCvSelect or a cv-select widget", async () => {
+  after(() => window.close());
+
+  it("the widget and its wrapper functions exist", () => {
+    assert.ok(window.document.getElementById("cbSelect"));
+    assert.equal(typeof window.toggleCvMenu, "function");
+    assert.equal(typeof window.selectCvOption, "function");
+    assert.equal(typeof window.setCbMode, "function");
+  });
+  it("toggleCvMenu(event) opens the menu and re-parents it to <body>", () => {
+    window.toggleCvMenu({ stopPropagation() {} });
+    const w = window.document.getElementById("cbSelect");
+    const menu = window.document.querySelector(".cv-select-menu");
+    assert.equal(w.classList.contains("open"), true);
+    assert.equal(menu.parentElement.tagName, "BODY");
+    assert.equal(menu.classList.contains("cv-open"), true);
+  });
+  it("the open menu is positioned with explicit left/top styles (the viewport-clamped placement math ran)", () => {
+    const menu = window.document.querySelector(".cv-select-menu");
+    assert.ok(menu.style.left.endsWith("px"));
+    assert.ok(menu.style.top.endsWith("px"));
+  });
+  it("closeCvMenu() closes the menu and re-homes it back inside #cbSelect", () => {
+    window.closeCvMenu();
+    const w = window.document.getElementById("cbSelect");
+    const menu = window.document.querySelector(".cv-select-menu");
+    assert.equal(w.classList.contains("open"), false);
+    assert.equal(menu.parentElement.id, "cbSelect");
+  });
+  it("selectCvOption updates the closed button's label and applies data-cb on <html>", () => {
+    const li = window.document.querySelector('#cbSelect li[data-value="1"]');
+    window.selectCvOption(li, "1");
+    assert.equal(
+      window.document.querySelector("#cbSelect .cv-select-label").textContent,
+      "Red-Green",
+    );
+    assert.equal(window.document.documentElement.getAttribute("data-cb"), "1");
+    // reset for any later test in this process
+    window.selectCvOption(
+      window.document.querySelector('#cbSelect li[data-value="0"]'),
+      "0",
+    );
+    assert.equal(window.document.documentElement.hasAttribute("data-cb"), false);
+  });
+});
+
+describe("Color Vision stays removed from the FAQ (v19.59)", () => {
+  it("the FAQ ships no #faqCvSelect or cv-select widget", async () => {
     const window = await loadFaqWindow();
     assert.equal(window.document.getElementById("faqCvSelect"), null);
     assert.equal(window.document.querySelector(".cv-select"), null);
     assert.equal(typeof window.faqToggleCvMenu, "undefined");
-    window.close();
-  });
-  it("nothing sets a data-cb attribute on <html> after prefs are applied", async () => {
-    const window = await loadAppWindow();
-    window.applyPrefs();
-    assert.equal(window.document.documentElement.hasAttribute("data-cb"), false);
     window.close();
   });
 });
@@ -1765,6 +1803,19 @@ describe("Settings round-trip: every Settings control's change survives reapplyi
     window.document.getElementById("stripeToggle").textContent = "bogus";
     evalIn(window, "applyPrefs()");
     assert.equal(window.document.getElementById("stripeToggle").textContent, text);
+  });
+  it("Color Vision", () => {
+    const li = window.document.querySelector('#cbSelect li[data-value="2"]');
+    window.selectCvOption(li, "2");
+    const attr = window.document.documentElement.getAttribute("data-cb");
+    window.document.documentElement.removeAttribute("data-cb");
+    evalIn(window, "applyPrefs()");
+    assert.equal(window.document.documentElement.getAttribute("data-cb"), attr);
+    // restore for any later test in this process
+    window.selectCvOption(
+      window.document.querySelector('#cbSelect li[data-value="0"]'),
+      "0",
+    );
   });
   it("Question Timer default duration", () => {
     window.setQtDurationSec(420);

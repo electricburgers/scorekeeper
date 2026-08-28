@@ -183,18 +183,12 @@ describe("v19.59 — Example Game 3rd-place tie", () => {
   });
 });
 
-describe("v19.59 — Color Vision removed", () => {
-  it("neither page ships a cv-select widget, a data-cb attribute, or the cbMode pref default", async () => {
-    const app = await loadAppWindow();
+describe("v19.59 — Color Vision removed from the FAQ (restored to the app in v19.63)", () => {
+  it("the FAQ ships no cv-select widget", async () => {
     const faq = await loadFaqWindow();
     try {
-      assert.equal(app.document.querySelector(".cv-select"), null);
       assert.equal(faq.document.querySelector(".cv-select"), null);
-      assert.equal(app.document.documentElement.hasAttribute("data-cb"), false);
-      assert.equal("cbMode" in JSON.parse(evalIn(app, "JSON.stringify(loadPrefs())")), false);
-      assert.ok(!read("css/styles.css").includes("[data-cb="), "no data-cb CSS rules remain");
     } finally {
-      app.close();
       faq.close();
     }
   });

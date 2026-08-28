@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.62"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.63"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Aug 28, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -100,6 +100,7 @@ function loadPrefs() {
       if (!p.density) p.density = "normal";
       if (p.settingsOpen == null) p.settingsOpen = false;
       if (p.stripeLevel == null) p.stripeLevel = 1;
+      if (p.cbMode == null) p.cbMode = p.colorblind ? 1 : 0;
       if (!p.craftDrawSeconds) p.craftDrawSeconds = 6;
       if (p.showAdjustments == null) p.showAdjustments = false;
       if (p.advancedOpen == null) p.advancedOpen = false;
@@ -126,6 +127,7 @@ function loadPrefs() {
     density: "normal",
     settingsOpen: false,
     stripeLevel: 1,
+    cbMode: 0,
     craftDrawSeconds: 6,
     showAdjustments: false,
     advancedOpen: false,
@@ -184,6 +186,10 @@ function applyPrefs() {
       p.theme === "light"
         ? THEME_ICON_SUN + " Light"
         : THEME_ICON_MOON + " Dark";
+  const cbm = p.cbMode || 0;
+  if (cbm) document.documentElement.setAttribute("data-cb", String(cbm));
+  else document.documentElement.removeAttribute("data-cb");
+  setCvSelectDisplay(String(cbm));
   const si = Math.max(
     0,
     Math.min(FONT_SIZES.length - 1, p.sizeIndex ?? DEFAULT_SI),
@@ -416,6 +422,52 @@ function setCraftFadeSec(v) {
   savePrefs(p);
   applyPrefs();
 }
+function setCbMode(v) {
+  const p = loadPrefs();
+  p.cbMode = parseInt(v, 10) || 0;
+  savePrefs(p);
+  applyPrefs();
+}
+
+// Thin, page-named wrappers around js/shared-ui.js's sharedToggleCvMenu/sharedCloseCvMenu/
+// sharedSetCvSelectDisplay — same widget, same markup, same positioning logic as the FAQ's own
+// #faqCvSelect, so the actual implementation lives there once instead of as two independently
+// hand-maintained copies (see that file's own top comment for why). Kept as same-named
+// functions here rather than calling the shared ones directly from index.html's onclick=""
+// attributes, so nothing in the markup had to change for this.
+function closeCvMenu() {
+  sharedCloseCvMenu("cbSelect");
+}
+function toggleCvMenu(e) {
+  sharedToggleCvMenu(e, "cbSelect");
+}
+function selectCvOption(li, v) {
+  setCvSelectDisplay(v);
+  closeCvMenu();
+  setCbMode(v);
+}
+function setCvSelectDisplay(v) {
+  sharedSetCvSelectDisplay("cbSelect", v);
+}
+document.addEventListener("click", (e) => {
+  // .cv-select-menu is checked separately from .cv-select: while open the menu is a child of
+  // <body>, so it is no longer inside .cv-select for closest() to find.
+  if (!e.target.closest(".cv-select") && !e.target.closest(".cv-select-menu"))
+    closeCvMenu();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeCvMenu();
+});
+// The menu is now position:fixed (placed against the viewport, not the Settings panel — see
+// .cv-select-menu's CSS comment), so it no longer scrolls along with the button that opened it.
+// Close it on scroll rather than let it drift away from — or overlap — its own button. Capture
+// phase is required: scroll doesn't bubble, and .settingsPanel/.settings-panel-body, not
+// document, are what actually receive it.
+document.getElementById("settingsPanel")?.addEventListener(
+  "scroll",
+  closeCvMenu,
+  true,
+);
 function toggleDensity() {
   const p = loadPrefs();
   const ci = DENSITIES.indexOf(p.density || "normal");
@@ -464,6 +516,8 @@ function closeSettingsPanel() {
 (function () {
   const p = loadPrefs();
   document.documentElement.setAttribute("data-theme", p.theme);
+  if (p.cbMode)
+    document.documentElement.setAttribute("data-cb", String(p.cbMode));
   if (p.density && p.density !== "normal")
     document.documentElement.setAttribute("data-density", p.density);
   if (p.stripeLevel && p.stripeLevel > 0)

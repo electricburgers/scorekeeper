@@ -162,6 +162,7 @@ const APP_CRITICAL_IDS = [
   "confirmMessage",
   "confirmOkBtn",
   "confirmCancelBtn",
+  "cbSelect",
   "fileLoadInput",
   "prefsLoadInput",
 ];
