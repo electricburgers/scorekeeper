@@ -2,6 +2,18 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.39] - 28 Aug 2026
+
+### Changed
+
+- **The "FAQ" page title moved out of the sticky header to the top of the body.** Stacked under
+  the "Score Keeper" logo and above the "Back to Scorekeeper" link, it made the sticky bar
+  ~100px tall on every screen; the bar is now ~76px (logo + Back link only) and "FAQ" is an
+  `<h1>` that scrolls away with the content. Anchor-target `scroll-margin-top` bumped to match.
+- **Craft Prize Drawing screenshots regenerated (Dark/Light)** for the v19.60 square icon-forward
+  buttons: `craft-prize` (the square Start Drumroll button), `craft-prize-winner`,
+  `craft-prize-drumroll`, and `manual-drumroll-control` (the square Play Horn button).
+
 ## [1.38] - 28 Aug 2026
 
 ### Changed

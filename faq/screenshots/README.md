@@ -47,9 +47,9 @@ comparison it exists to make.
 | `mobile-bottom-dock.webp` | The mobile bottom dock — the scores peek strip pinned to the bottom of a phone-width screen. Resize the browser window (or use device emulation) to phone width first. | Scores & Standings |
 | `final-results.webp` | The Final Results table. The sample game has a genuine tie for 2nd place built in (Parliamentary Procedure / The Fifth of November) — capture it so the tie badge and "✓ closer"/"tie" labels are visible, along with the "*Diff is minus Bonuses" footnote. | Final Results & Ties |
 | `score-audit.webp` | The Team Report modal open for one team (tap any team name to open it) — the full round-by-round breakdown and the Guess/Diff tiles at the top. | Final Results & Ties, Tips & Tricks |
-| `craft-prize.webp` | The Craft Prize Drawing section open, showing the Exclude Top stepper and Drumroll seconds control (either pre-draw or with a winner shown). | Craft Prize Drawing |
-| `craft-prize-drumroll.webp` | The Craft Prize drumroll actively playing, right after clicking "🥁 Start Drumroll". | Craft Prize Drawing |
-| `craft-prize-winner.webp` | The finished draw — winning team announced, with the **Clear** button visible next to the result. | Craft Prize Drawing |
+| `craft-prize.webp` | The Craft Prize Drawing section open pre-draw, showing the Exclude Top / Drumroll-seconds steppers and the square **Start Drumroll** button (v19.60). | Craft Prize Drawing |
+| `craft-prize-drumroll.webp` | The Craft Prize drumroll actively playing, right after clicking Start Drumroll — the spinning name and countdown bar. | Craft Prize Drawing |
+| `craft-prize-winner.webp` | The finished draw — winning team announced, with the **Clear** button next to the result and the Winner Announcement Script below. | Craft Prize Drawing |
 | `export-bar.webp` | The Export & Data section — the square 📄 XLSX / 📕 PDF buttons and the 🎭 JD Upload Form link. | Exporting |
 | `xlsx-export.webp` | The downloaded XLSX scoresheet, opened in a spreadsheet app — header (Location/Date/Quiz #/Host), a few zebra-striped team rows, and only as many team rows as the game has. | Exporting |
 | `pdf-export.webp` | The downloaded PDF scoresheet — same header plus full standings. | Exporting |
@@ -58,7 +58,7 @@ comparison it exists to make.
 | `settings-panel.webp` | The main Settings panel open (⚙️ gear icon) — Theme, Size, Icon Style, Question Timer, Sample Data (🧪 Try Example and ℹ️ Take the Tour), Help, App Preferences, and the collapsed Advanced Settings toggle. | Getting Started |
 | `tutorial-spotlight.webp` | Mid-tour: the dimmed spotlight overlay around a highlighted control, with the callout box (step text, "Step X of Y", Back/Next, Skip Tutorial) visible. | Interactive Tutorial |
 | `advanced-settings.webp` | Advanced Settings expanded (the toggle takes its enabled cyan fill) — Row Density, Row Zebra Stripes, Craft Prize Eligible List, Crowd-Wisdom Percentage, Edit Locked Fields, timer controls, Manual Drumroll Control (on, so Drumroll Crossfade and Sound Test Buttons both show too), and Point Adjustments. | Tips & Tricks |
-| `manual-drumroll-control.webp` | The Craft Prize drawing with Manual Drumroll Control's Stop Drumroll / Play Victory Horn buttons visible (Advanced Settings → Manual Drumroll Control must be on). | Tips & Tricks |
+| `manual-drumroll-control.webp` | The Craft Prize drawing paused mid-roll with Manual Drumroll Control on — the square **Play Horn** button where Stop Drumroll was (Advanced Settings → Manual Drumroll Control must be on). | Tips & Tricks |
 | `resume-banner.webp` | The "⚠️ Saved session found" banner with its Resume / New Game buttons (reload the page mid-session to see it). | Autosave & Resume |
 | `save-load-toolbar.webp` | The top toolbar — 💾 Save and 📂 Load buttons next to the ⚙️ Settings gear. | Manual Save & Load |
 | `theme-dark.webp` | The app in Dark theme (Settings → Theme → 🌑 Dark) — any full screen works, Event Details + a scored round is a good choice. | Light Mode & Dark Mode |

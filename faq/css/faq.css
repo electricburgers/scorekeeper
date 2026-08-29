@@ -30,7 +30,7 @@
   max-width: 900px;
   margin: 0 auto;
 }
-/* Title / "FAQ" / Back link stacked, so the gear stays in the row's top-right corner. */
+/* Logo + Back link stacked, so the gear stays in the row's top-right corner. */
 .faq-title-block {
   display: flex;
   flex-direction: column;
@@ -49,14 +49,18 @@
 .faq-logo span {
   color: var(--accent-magenta);
 }
-.faq-logo-sub {
+/* The page's "FAQ" title. Moved out of the sticky header (where, stacked under the logo and
+   above the Back link, it made the bar too tall) to the top of the non-sticky body, so it
+   scrolls away with the content instead of costing header height on every screen. */
+.faq-page-title {
   font-family: var(--font-display);
-  font-size: 1.45rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 1px;
   line-height: 1;
+  margin: 0 0 14px;
 }
 /* This page's settings panel only ever holds a few short rows (Theme, Text Size, Icon Style),
    so unlike the main app's much longer Advanced Settings panel — which css/styles.css's shared
@@ -142,9 +146,9 @@
 #faqSettingsPanel .settings-x-btn:hover {
   background: color-mix(in srgb, var(--accent-red) 15%, transparent);
 }
-/* The gear stays in the row's top-right corner at every width — the title, "FAQ" sub-line, and
-   Back link stack in .faq-title-block to its left. flex-shrink:0 so it keeps its square shape
-   when the row is tight. */
+/* The gear stays in the row's top-right corner at every width — the logo and Back link stack in
+   .faq-title-block to its left. flex-shrink:0 so it keeps its square shape when the row is
+   tight. */
 .faq-settings-toggle {
   flex-shrink: 0;
 }
@@ -332,7 +336,7 @@ mark.faq-hl {
 
 .faq-section {
   margin-bottom: 34px;
-  scroll-margin-top: 70px;
+  scroll-margin-top: calc(80px + env(safe-area-inset-top));
 }
 .faq-section-title {
   font-family: var(--font-display);
@@ -380,7 +384,7 @@ mark.faq-hl {
      straight at one answer instead of only a whole section — browsers auto-open a <details>
      when a fragment link targets it or its id, no JS needed. Same scroll-margin-top as
      .faq-section, so landing on one doesn't tuck it under the sticky header. */
-  scroll-margin-top: 70px;
+  scroll-margin-top: calc(80px + env(safe-area-inset-top));
 }
 .faq-item[hidden] {
   display: none;
