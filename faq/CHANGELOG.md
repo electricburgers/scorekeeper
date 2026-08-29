@@ -2,6 +2,15 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.40] - 28 Aug 2026
+
+### Changed
+
+- **Lightbox**: every screenshot is now clickable, not just the paired/trio comparison shots.
+  A click opens the image filling the viewport's full width or height (whichever it hits first),
+  over a dimmed backdrop, with an X-in-a-circle close button pinned to the top-right. Works the
+  same on desktop and mobile.
+
 ## [1.39] - 28 Aug 2026
 
 ### Changed

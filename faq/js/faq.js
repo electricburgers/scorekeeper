@@ -4,7 +4,7 @@
 // #versionLabel element. Here the same string feeds two spots — the page footer and the
 // Settings panel's settings-meta row — so bumping a release only means editing these two
 // constants instead of hunting down every place the version text is written out by hand.
-const FAQ_VERSION = "v1.39";
+const FAQ_VERSION = "v1.40";
 const FAQ_VERSION_DATE = "28 Aug 2026";
 
 // Same Lucide sun/moon geometry as the main app's THEME_ICON_SUN/MOON (js/app.js), tagged
@@ -44,13 +44,11 @@ const FAQ_THEME_MOON_SVG =
 
 // ============================== LIGHTBOX ==============================
 // Event delegation on the whole page rather than an onclick per <img> so every current and
-// future .faq-shot-pair/.faq-shot-trio image gets this for free, and a broken image (already
-// swapped for a placeholder by faqShotFallback before this ever fires, since that removes the
-// <img> node entirely) can never end up opening an empty lightbox.
+// future .faq-shot image — standalone, paired, or trio — gets this for free, and a broken image
+// (already swapped for a placeholder by faqShotFallback before this ever fires, since that
+// removes the <img> node entirely) can never end up opening an empty lightbox.
 document.addEventListener("click", function (e) {
-  const img = e.target.closest(
-    ".faq-shot-pair .faq-shot img, .faq-shot-trio .faq-shot img",
-  );
+  const img = e.target.closest(".faq-shot img");
   if (img) openFaqLightbox(img);
 });
 function openFaqLightbox(img) {
