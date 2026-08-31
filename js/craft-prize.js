@@ -713,7 +713,7 @@ function renderCraftPrizeBlock() {
   // a winner already picked (e.g. restored from autosave) opens the flow on its own, so a
   // reload never hides a result behind the gate.
   if (!craftFlowOpen && !drawing && !winner) {
-    return `<button class="btn btn-accent cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>${ICON_BEER} Choose Craft Prize Winner</button>${poolLeft <= 0 ? `<p class="fr-note">No teams left to draw from — top ${excludeN} place${excludeN > 1 ? "s" : ""} excluded covers everyone entered. Add a team, or open this to lower Exclude Top.</p>` : ""}`;
+    return `<div class="cp-btn-row"><button class="btn btn-accent export-sq cp-sq-btn cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>${ICON_BEER}<span class="export-sq-label">Choose<br>Craft Prize<br>Winner</span></button></div>${poolLeft <= 0 ? `<p class="fr-note">No teams left to draw from — top ${excludeN} place${excludeN > 1 ? "s" : ""} excluded covers everyone entered. Add a team, or open this to lower Exclude Top.</p>` : ""}`;
   }
   let h = `<div class="cp-config">
       <div class="cp-field"><span class="cp-field-label">Exclude Top</span><div class="stepper">

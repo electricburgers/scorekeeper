@@ -38,7 +38,7 @@
   --edge-fade:rgba(255,255,255,.24);
   --row-stripe:rgba(255,255,255,.055);--radius:8px;--radius-lg:12px;
   --font-display:'Space Grotesk',sans-serif;--font-body:'Inter',sans-serif;
-  --transition:.18s ease;--row-pad:8px;
+  --transition:.18s ease;--row-pad:8px;--wager-size:2.6rem;--cp-sq-size:5rem;
   --btn-idle-bg:#1c1c1c;--btn-correct-bg:#0d2e0d;--btn-incorrect-bg:#2e0d0d;--btn-used-bg:#141414;
   /* Correct-badge square (.wager-badge.bg-correct, app.js's CORRECT_BADGE_SVG) — opaque and
      theme-independent (same value for dark and light, no override in the light block below)
@@ -342,8 +342,11 @@
   --on-accent-gold:#fff;
 }
 
-[data-density="compact"]{--row-pad:4px}
-[data-density="relaxed"]{--row-pad:12px}
+/* --wager-size drives the square wager / result buttons (kept width == height so they stay
+   square) and the square Craft Prize buttons — Relaxed grows them into the extra row space,
+   Compact shrinks them. */
+[data-density="compact"]{--row-pad:4px;--wager-size:2.3rem;--cp-sq-size:4.4rem}
+[data-density="relaxed"]{--row-pad:12px;--wager-size:3.3rem;--cp-sq-size:5.6rem}
 
 [data-theme="dark"][data-stripe="1"],[data-stripe="1"]{--row-stripe:rgba(255,255,255,.11)}
 [data-theme="dark"][data-stripe="2"],[data-stripe="2"]{--row-stripe:rgba(255,255,255,.19)}
@@ -1915,7 +1918,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 
 /* WAGER BUTTONS */
 .ta-wagers{display:flex;gap:.2rem;flex-shrink:0;margin-left:auto}
-.wager-btn{min-width:2.6rem;min-height:2.6rem;border:1px solid var(--border-control);border-radius:6px;background:var(--btn-idle-bg);color:var(--text-primary);font-family:var(--font-display);font-size:1.1rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation}
+.wager-btn{min-width:var(--wager-size);min-height:var(--wager-size);width:var(--wager-size);height:var(--wager-size);border:1px solid var(--border-control);border-radius:6px;background:var(--btn-idle-bg);color:var(--text-primary);font-family:var(--font-display);font-size:1.1rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation}
 .wager-btn:hover:not(.used):not(.correct):not(.incorrect){background:var(--bg-hover);border-color:var(--accent-cyan)}
 .wager-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
 .wager-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red)}
@@ -2277,7 +2280,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    .cp-horn-btn width and font-size rules; .cp-preview-btn's own .35 opacity still shows through
    (it isn't touched here). */
 .cp-btn-row{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:10px}
-.export-sq.cp-sq-btn{width:auto;min-width:5rem;height:auto;min-height:5rem;font-size:1.9rem;line-height:1.1;padding:8px 10px;margin-top:0;flex:0 0 auto}
+.export-sq.cp-sq-btn{width:auto;min-width:var(--cp-sq-size);height:auto;min-height:var(--cp-sq-size);font-size:1.9rem;line-height:1.1;padding:8px 10px;margin-top:0;flex:0 0 auto}
 .cp-preview-btn{opacity:.35;cursor:not-allowed}
 /* Trophy+name+"won!" are one flowing text span (not separate flex items) so a long team name
    wraps onto a second line on its own, with "won!" following right after it — the Clear
@@ -2487,7 +2490,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .team-answer>.ta-wagers,.bonus-row>.bonus-right,.special-wager-row>.sw-select{margin-left:auto}
 
   /* wager / result buttons: clamp so they can't balloon past the column */
-  .wager-btn,.result-btn{min-width:clamp(2rem,9cqw,2.6rem);min-height:clamp(2rem,9cqw,2.6rem);width:clamp(2rem,9cqw,2.6rem);height:clamp(2rem,9cqw,2.6rem);font-size:1rem}
+  .wager-btn,.result-btn{min-width:clamp(2rem,9cqw,var(--wager-size));min-height:clamp(2rem,9cqw,var(--wager-size));width:clamp(2rem,9cqw,var(--wager-size));height:clamp(2rem,9cqw,var(--wager-size));font-size:1rem}
   /* Re-tuned for this rule's own 1rem, not inherited from the -.24em above — checked separately
      at this narrower size (screenshot, not box math; see that rule's own comment) rather than
      assumed to scale evenly from the wide-desktop value, since it doesn't. */

@@ -2,6 +2,17 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.40] - 30 Aug 2026
+
+### Changed
+
+- **New `craft-prize-choose` screenshots (Dark/Light)** for the v19.65 square **Choose / Craft
+  Prize / Winner** button, added to the top of the Craft Prize Drawing section with a line
+  explaining that the section is just that one square button until it's opened.
+- **Row Density trio regenerated** (`row-density-relaxed` / `-normal` / `-compact`). The square
+  wager buttons now scale with density — bigger on Relaxed (filling the taller rows), smaller on
+  Compact — so the shots and their alt text / caption were updated to describe that.
+
 ## [1.39] - 28 Aug 2026
 
 ### Changed

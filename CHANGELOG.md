@@ -10,6 +10,11 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.65 - 2026-08-30
+- **The "Choose Craft Prize Winner" button is now a square, icon-forward button** matching Start Drumroll — a big beer glyph (picto or 🍺, following Icon Style) over a three-line "Choose / Craft Prize / Winner" label, centred in a `.cp-btn-row` instead of a full-width text bar. Reuses the `.btn-accent .export-sq .cp-sq-btn` treatment, so it clears WCAG AA in both themes exactly as the other square buttons do.
+- **The square wager buttons now scale with Row Density.** New `--wager-size` token (Compact 2.3rem / Normal 2.6rem — unchanged / Relaxed 3.3rem) drives `.wager-btn` width **and** height, so on Relaxed they grow to fill the extra room in the taller rows and on Compact they shrink, always staying square. The narrow-column `@container` clamp uses the token as its max too. `--cp-sq-size` scales the square Craft Prize buttons the same way.
+- FAQ v1.40: new `craft-prize-choose` screenshots (Dark/Light) for the square button, and the Row Density trio regenerated to show the wager buttons growing/shrinking with density.
+
 ## v19.64 - 2026-08-28
 - **The question timer's low-time pulse dips harder** — the `qtFlash` darkening goes from a 25% to a 45% inset over the red fill, so it actually reads as a flash across a room instead of a faint shimmer. Only `qt-crit` pulses and its white-on-red only gains contrast as the fill darkens, so no floor is reopened.
 - **Round 4's "Wagers: 3, 6, 9, 12" pill is now purple** (`--txt-purple`, theme-split light `#6d28c9` / dark `#caa8ff`, on a violet wash) instead of an orange that sat right next to Round 3's gold and read as the same colour at a glance.
