@@ -44,13 +44,11 @@ const FAQ_THEME_MOON_SVG =
 
 // ============================== LIGHTBOX ==============================
 // Event delegation on the whole page rather than an onclick per <img> so every current and
-// future .faq-shot-pair/.faq-shot-trio image gets this for free, and a broken image (already
-// swapped for a placeholder by faqShotFallback before this ever fires, since that removes the
-// <img> node entirely) can never end up opening an empty lightbox.
+// future .faq-shot image — standalone, paired, or trio — gets this for free, and a broken image
+// (already swapped for a placeholder by faqShotFallback before this ever fires, since that
+// removes the <img> node entirely) can never end up opening an empty lightbox.
 document.addEventListener("click", function (e) {
-  const img = e.target.closest(
-    ".faq-shot-pair .faq-shot img, .faq-shot-trio .faq-shot img",
-  );
+  const img = e.target.closest(".faq-shot img");
   if (img) openFaqLightbox(img);
 });
 function openFaqLightbox(img) {
@@ -183,7 +181,9 @@ function faqHighlightMatches(root, query) {
       if (cs && (cs.display === "flex" || cs.display === "inline-flex"))
         return NodeFilter.FILTER_REJECT;
       re.lastIndex = 0;
-      return re.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      return re.test(node.nodeValue)
+        ? NodeFilter.FILTER_ACCEPT
+        : NodeFilter.FILTER_REJECT;
     },
   });
   var targets = [];
@@ -197,7 +197,9 @@ function faqHighlightMatches(root, query) {
     re.lastIndex = 0;
     while ((m = re.exec(text))) {
       if (m.index > lastIndex)
-        frag.appendChild(document.createTextNode(text.slice(lastIndex, m.index)));
+        frag.appendChild(
+          document.createTextNode(text.slice(lastIndex, m.index)),
+        );
       var mark = document.createElement("mark");
       mark.className = "faq-hl";
       mark.textContent = m[0];
@@ -226,8 +228,7 @@ function faqHighlightMatches(root, query) {
 // onerror/faqShotFallback — the visible screenshot just silently stays on the existing
 // dark-captured default.
 function faqApplyThemedShots() {
-  var isLight =
-    document.documentElement.getAttribute("data-theme") === "light";
+  var isLight = document.documentElement.getAttribute("data-theme") === "light";
   document
     .querySelectorAll(".faq-shot img[data-shot-base]")
     .forEach(function (img) {
@@ -289,7 +290,10 @@ function faqApplyIconStyle(style) {
       const e = svg.getAttribute("data-emoji");
       const span = document.createElement("span");
       span.className = "faq-emoji-ph";
-      span.setAttribute("aria-hidden", svg.getAttribute("aria-hidden") || "true");
+      span.setAttribute(
+        "aria-hidden",
+        svg.getAttribute("aria-hidden") || "true",
+      );
       span.dataset.pict = svg.outerHTML;
       span.textContent = e;
       svg.replaceWith(span);
@@ -351,7 +355,8 @@ function faqApplyDisplayPrefs() {
   );
   document.documentElement.style.fontSize = FAQ_FONT_SIZES[si] + "px";
   const sr = document.getElementById("faqSizeResetBtn");
-  if (sr) sr.textContent = si === FAQ_DEFAULT_SI ? "A" : FAQ_FONT_SIZES[si] + "px";
+  if (sr)
+    sr.textContent = si === FAQ_DEFAULT_SI ? "A" : FAQ_FONT_SIZES[si] + "px";
 }
 function faqAdjustFontSize(d) {
   const p = faqLoadPrefs();
@@ -390,7 +395,9 @@ function faqToggleSettings() {
   btn?.classList.toggle("active", willOpen);
 }
 function faqCloseSettingsPanel() {
-  document.getElementById("faqSettingsPanel")?.classList.remove("settings-visible");
+  document
+    .getElementById("faqSettingsPanel")
+    ?.classList.remove("settings-visible");
   const btn = document.getElementById("faqSettingsToggleBtn");
   btn?.setAttribute("aria-expanded", "false");
   btn?.classList.remove("active");
