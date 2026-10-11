@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.67 - 2026-10-11
+- **Settings About "What's new"** now lists only high-level changes (no file/implementation detail), for the last two versions.
+
 ## v19.66 - 2026-10-11
 - **Service worker v20:** fonts, audio, icons, vendored libs and FAQ screenshots are served cache-first (background refresh) instead of racing the network, so they paint instantly and work fully offline.
 - **O(n²) → O(n)** team-order backfill on question, bonus and sweep cards (`Array.includes` inside a loop replaced by a `Set`).
