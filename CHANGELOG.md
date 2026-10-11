@@ -10,6 +10,11 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.66 - 2026-10-11
+- **Service worker v20:** fonts, audio, icons, vendored libs and FAQ screenshots are served cache-first (background refresh) instead of racing the network, so they paint instantly and work fully offline.
+- **O(n²) → O(n)** team-order backfill on question, bonus and sweep cards (`Array.includes` inside a loop replaced by a `Set`).
+- **Settings About** now has a "What's new" list covering the last two versions.
+
 ## v19.65 - 2026-08-30
 - **The "Choose Craft Prize Winner" button is now a square, icon-forward button** matching Start Drumroll — a big beer glyph (picto or 🍺, following Icon Style) over a three-line "Choose / Craft Prize / Winner" label, centred in a `.cp-btn-row` instead of a full-width text bar. Reuses the `.btn-accent .export-sq .cp-sq-btn` treatment, so it clears WCAG AA in both themes exactly as the other square buttons do.
 - **The square wager buttons now scale with Row Density.** New `--wager-size` token (Compact 2.3rem / Normal 2.6rem — unchanged / Relaxed 3.3rem) drives `.wager-btn` width **and** height, so on Relaxed they grow to fill the extra room in the taller rows and on Compact they shrink, always staying square. The narrow-column `@container` clamp uses the token as its max too. `--cp-sq-size` scales the square Craft Prize buttons the same way.

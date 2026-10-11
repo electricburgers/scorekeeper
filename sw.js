@@ -53,7 +53,11 @@
 // v19: css/styles.css (square XLSX/PDF export buttons, question-timer play glyph enlarged from
 // tablet width up + a flex-shrink fix), js/app.js, js/team-audit.js (Team Report only defines
 // the Diff Adj / Adj. Score terms when that team's report actually shows them).
-const CACHE_NAME='trivia-scorekeeper-shell-v19';
+// v20: static assets that never change in place (fonts, vendored libs, audio, icons, FAQ
+// screenshots) are now served cache-first with a background refresh instead of racing the network
+// — no 1.5s wait on a bad connection and no wasted request before painting.
+const CACHE_NAME='trivia-scorekeeper-shell-v20';
+const STATIC_RE=/\.(?:woff2|wav|png|webp|ico)$|\/js\/vendor\/|\/js\/data\//;
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',
   './fonts/inter-var.woff2','./fonts/space-grotesk-var.woff2',
@@ -128,6 +132,8 @@ self.addEventListener('fetch',(e)=>{
     // Keep the request alive past whatever we answer with, so a slow connection still refreshes
     // the cache for next time — the one genuinely good property of the old strategy.
     e.waitUntil(network.catch(()=>{}));
+    // Immutable static assets: cache wins outright, the refresh happens behind it.
+    if(cached&&STATIC_RE.test(url.pathname))return cached;
     // Nothing cached: the network is the only answer available, however long it takes.
     if(!cached)return network.catch(()=>cache.match('./index.html'));
     if(currentDecision()==='cache')return cached;

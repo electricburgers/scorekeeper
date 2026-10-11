@@ -30,8 +30,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.65"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Aug 30, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v19.66"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Oct 11, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1515,8 +1515,9 @@ function renderWQ(ri, qi) {
     : entryOrder;
   if (questionSortOrder[qKey]) {
     // include any teams added after the sort was taken (e.g. new team) at the end
+    const have = new Set(teamOrder);
     entryOrder.forEach((ti) => {
-      if (!teamOrder.includes(ti)) teamOrder.push(ti);
+      if (!have.has(ti)) teamOrder.push(ti);
     });
   }
   teamOrder.forEach((ti) => {
@@ -1682,8 +1683,9 @@ function renderBQ(ri) {
     ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
     : bqEntryOrder;
   if (questionSortOrder[bqKey]) {
+    const have = new Set(bqTeamOrder);
     bqEntryOrder.forEach((ti) => {
-      if (!bqTeamOrder.includes(ti)) bqTeamOrder.push(ti);
+      if (!have.has(ti)) bqTeamOrder.push(ti);
     });
   }
   bqTeamOrder.forEach((ti) => {
@@ -1770,8 +1772,9 @@ function renderSpecialWager(type) {
     ? questionSortOrder[swKey].filter((ti) => ti < gameState.teams.length)
     : swEntryOrder;
   if (questionSortOrder[swKey]) {
+    const have = new Set(swTeamOrder);
     swEntryOrder.forEach((ti) => {
-      if (!swTeamOrder.includes(ti)) swTeamOrder.push(ti);
+      if (!have.has(ti)) swTeamOrder.push(ti);
     });
   }
   swTeamOrder.forEach((ti) => {
