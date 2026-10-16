@@ -125,4 +125,8 @@ describe("Teams row CSS", () => {
     assert.match(css, /\.team-checks\s+\.check-label\s*\{[^}]*flex:\s*1 1 0/);
     assert.match(css, /\.lbl-short/);
   });
+
+  it("unticked CB/Bonus chips are neutral (quiet chips)", () => {
+    assert.match(css, /\.team-checks \.check-label:not\(\.is-checked\)\{border-color:var\(--border-control\);color:var\(--text-secondary\)\}/);
+  });
 });
