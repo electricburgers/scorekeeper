@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.74 - 2026-10-16
+- **CB / Bonus checkboxes fit side by side again:** v19.71's wrap point was too eager and stacked them on most phones. Now both labels sit side by side at equal width, "Bonus" becomes "BON" when it no longer fits, and they stack one per row only on very narrow rows.
+
 ## v19.73 - 2026-10-16
 - **A-Z sort on bonus questions:** the Q5 Bonus cards now have the same A-Z / Z-A / off name sort button, and it combines with the unanswered-first Sort there too. Reset clears both.
 

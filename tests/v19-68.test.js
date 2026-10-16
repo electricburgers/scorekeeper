@@ -119,9 +119,10 @@ describe("Paused teams (UI)", () => {
 
 describe("Teams row CSS", () => {
   const css = fs.readFileSync(path.join(__dirname, "..", "css", "styles.css"), "utf8");
-  it("makes the two checkboxes equal width and swaps to BON only when the row is too narrow", () => {
+  it("makes the two checkboxes equal width, swaps to BON when tight, stacks when tighter", () => {
+    assert.match(css, /@container \(max-width:12\.5rem\)\s*\{[^}]*flex-basis:100%/);
     assert.match(css, /@container \(max-width:[^)]*\)\s*\{[^}]*\.lbl-full\{display:none\}/);
-    assert.match(css, /\.team-checks\s+\.check-label\s*\{[^}]*flex:\s*1 1 7\.5rem/);
+    assert.match(css, /\.team-checks\s+\.check-label\s*\{[^}]*flex:\s*1 1 0/);
     assert.match(css, /\.lbl-short/);
   });
 });
