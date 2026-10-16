@@ -1683,6 +1683,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    so the visible box + checkmark below is fully custom-drawn and contrast-audited instead. */
 .team-checks .check-label{flex:1 1 0;min-width:0;justify-content:flex-start}
 .lbl-short{display:none}
+/* BON swaps in only when the row is too narrow for both full labels side by side, i.e. when
+   "Bonus" would otherwise have to wrap or overflow. A container query on the checks row (not a
+   viewport media query) so it follows the real space left beside the name field, and 15rem
+   scales with the font-size setting. */
+.team-checks{container-type:inline-size}
+@container (max-width:15rem){
+  .lbl-full{display:none}
+  .lbl-short{display:inline}
+}
 .check-input{position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;margin:0;cursor:pointer}
 .check-box{width:22px;height:22px;flex-shrink:0;border-radius:5px;box-sizing:border-box;position:relative;background:transparent;transition:var(--transition)}
 /* Outline-until-checked: unchecked is a bordered outline with no fill, checked is a
@@ -2523,8 +2532,6 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .team-entry{grid-template-columns:1fr 4.3rem auto;gap:5px}
   .team-entry.has-adj{grid-template-columns:1fr 4.3rem auto auto}
   .check-label{font-size:.72rem;padding:5px 8px;gap:5px}
-  .lbl-full{display:none}
-  .lbl-short{display:inline}
   .check-box{width:20px;height:20px}
 
   /* Q1-4 / Q5 Bonus / Q5 Wager headers: title + badge + two Sort/Reset buttons don't fit on
