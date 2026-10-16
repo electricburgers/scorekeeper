@@ -89,3 +89,41 @@ describe("Sort button states (CSS)", () => {
     assert.match(css, /\.q-sort-btn\.active,\.q-alpha-btn\.active\{background:var\(--accent-cyan-solid\)/);
   });
 });
+
+describe("A-Z sort on bonus questions", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+  const names = () =>
+    [...window.document.querySelectorAll("#bqblock-0 .bonus-row .ta-name")].map((e) => e.textContent.trim());
+  const abtn = () => window.document.querySelector("#bqblock-0 .q-alpha-btn");
+
+  it("bonus card has an A-Z button that cycles A-Z, Z-A, off and combines with Sort", () => {
+    evalIn(
+      window,
+      `gameState = freshState();
+       gameState.teams = ["Charlie", "alpha", "Bravo"].map(freshTeam);
+       questionSortOrder = {}; questionAlphaSort = {}; questionSortPending = {};
+       renderAll();`,
+    );
+    assert.ok(abtn(), "button exists");
+    assert.equal(abtn().getAttribute("data-state"), "off");
+    window.toggleBonusAlphaSort(0);
+    assert.equal(abtn().getAttribute("data-state"), "az");
+    assert.deepEqual(names(), ["alpha", "Bravo", "Charlie"]);
+    window.toggleBonusAlphaSort(0);
+    assert.deepEqual(names(), ["Charlie", "Bravo", "alpha"]);
+    // with unanswered-first also on: Charlie answered stays last
+    evalIn(window, "gameState.rounds[0].bonus[0] = 3;");
+    window.sortBonusQuestion(0);
+    assert.ok(window.document.querySelector("#bqblock-0 .q-sort-btn").classList.contains("active"));
+    assert.deepEqual(names(), ["Bravo", "alpha", "Charlie"]);
+    window.toggleBonusAlphaSort(0);
+    assert.equal(abtn().getAttribute("data-state"), "off");
+    window.toggleBonusAlphaSort(0);
+    window.resetBonusQuestionSort(0);
+    assert.equal(abtn().getAttribute("data-state"), "off");
+  });
+});

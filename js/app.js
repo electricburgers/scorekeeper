@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.72"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.73"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 16, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1622,7 +1622,12 @@ function sortQuestion(ri, qi) {
   renderAll();
 }
 function toggleAlphaSort(ri, qi) {
-  const key = ri + "-" + qi;
+  cycleAlphaSort(ri + "-" + qi);
+}
+function toggleBonusAlphaSort(ri) {
+  cycleAlphaSort("b" + ri);
+}
+function cycleAlphaSort(key) {
   const next = { undefined: "az", az: "za", za: undefined }[questionAlphaSort[key]];
   if (next) questionAlphaSort[key] = next;
   else delete questionAlphaSort[key];
@@ -1644,10 +1649,15 @@ function sortBonusQuestion(ri) {
         bb = answered(b) ? 1 : 0;
       return aa - bb || a - b;
     });
+  questionSortPending[key] = new Set(
+    gameState.teams.map((_, ti) => ti).filter((ti) => !answered(ti)),
+  );
   renderAll();
 }
 function resetBonusQuestionSort(ri) {
   delete questionSortOrder["b" + ri];
+  delete questionSortPending["b" + ri];
+  delete questionAlphaSort["b" + ri];
   renderAll();
 }
 function sortSpecialWager(type) {
@@ -1706,7 +1716,7 @@ function renderBQ(ri) {
   if (isCollapsedBQ) blockCls += " bq-collapsed";
   const bqStyle = BONUS_Q_STYLE[ri] || { cls: "" };
   const bqKey = "b" + ri;
-  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div><div class="q-body">`;
+  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-alpha-btn${questionAlphaSort[bqKey] ? " active" : ""}" data-state="${questionAlphaSort[bqKey] || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${questionAlphaSort[bqKey] === "az" ? "A to Z" : questionAlphaSort[bqKey] === "za" ? "Z to A" : "off"}">${questionAlphaSort[bqKey] === "az" ? ICON_ARROW_UP : questionAlphaSort[bqKey] === "za" ? ICON_ARROW_DOWN : ""}<span class="qa-text">${questionAlphaSort[bqKey] === "za" ? "Z-A" : "A-Z"}</span></button><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div><div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
     ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
@@ -1717,6 +1727,11 @@ function renderBQ(ri) {
       if (!have.has(ti)) bqTeamOrder.push(ti);
     });
   }
+  bqTeamOrder = applyAlphaSort(
+    bqTeamOrder,
+    questionAlphaSort[bqKey],
+    questionSortOrder[bqKey] ? questionSortPending[bqKey] : null,
+  );
   bqTeamOrder.forEach((ti) => {
     const t = gameState.teams[ti];
     if (t.paused) return;

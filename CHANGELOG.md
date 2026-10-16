@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.73 - 2026-10-16
+- **A-Z sort on bonus questions:** the Q5 Bonus cards now have the same A-Z / Z-A / off name sort button, and it combines with the unanswered-first Sort there too. Reset clears both.
+
 ## v19.72 - 2026-10-16
 - **Question sort buttons:** Sort and A-Z are now blank with a coloured outline and icon when off, and solid-filled with a contrasting icon when on (A-Z vs Z-A is shown by the arrow).
 
