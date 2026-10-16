@@ -30,7 +30,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.69"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.70"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 16, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -61,6 +61,10 @@ let collapsedQuestions = new Set();
 let collapsedBonusQuestions = new Set();
 let collapsedSpecialWagers = new Set();
 let questionSortOrder = {};
+// Per-question name sort ("az" | "za"), independent of questionSortOrder so both can be on at once;
+// questionSortPending remembers which teams were unanswered when the unanswered-first sort ran.
+let questionAlphaSort = {};
+let questionSortPending = {};
 
 // loadPrefs() is called constantly — several times from inside a single renderLeft() alone,
 // again from applyPrefs() right after it in renderAll() — and until now each call meant a fresh
@@ -922,6 +926,8 @@ function startNewGame() {
   collapsedBonusQuestions = new Set();
   collapsedSpecialWagers = new Set();
   questionSortOrder = {};
+  questionAlphaSort = {};
+  questionSortPending = {};
   beerRoundToasted = new Set();
   adjOpenTeams = new Set();
   clearCraftDrawTimers();
@@ -1505,6 +1511,7 @@ function renderWQ(ri, qi) {
     </div>
     <div class="q-header-right">
       ${qResultToggle ? renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length)) : ""}
+      <button class="q-alpha-btn${questionAlphaSort[qKey] ? " active" : ""}" data-state="${questionAlphaSort[qKey] || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${questionAlphaSort[qKey] === "az" ? "A to Z" : questionAlphaSort[qKey] === "za" ? "Z to A" : "off"}">${questionAlphaSort[qKey] === "az" ? ICON_ARROW_UP : questionAlphaSort[qKey] === "za" ? ICON_ARROW_DOWN : ""}<span class="qa-text">${questionAlphaSort[qKey] === "za" ? "Z-A" : "A-Z"}</span></button>
       <button class="q-sort-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button>
       <button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>
     </div>
@@ -1523,6 +1530,11 @@ function renderWQ(ri, qi) {
       if (!have.has(ti)) teamOrder.push(ti);
     });
   }
+  teamOrder = applyAlphaSort(
+    teamOrder,
+    questionAlphaSort[qKey],
+    questionSortOrder[qKey] ? questionSortPending[qKey] : null,
+  );
   teamOrder.forEach((ti) => {
     const t = gameState.teams[ti];
     if (t.paused) return;
@@ -1604,10 +1616,22 @@ function sortQuestion(ri, qi) {
         bb = answered(b) ? 1 : 0;
       return aa - bb || a - b;
     });
+  questionSortPending[key] = new Set(
+    gameState.teams.map((_, ti) => ti).filter((ti) => !answered(ti)),
+  );
+  renderAll();
+}
+function toggleAlphaSort(ri, qi) {
+  const key = ri + "-" + qi;
+  const next = { undefined: "az", az: "za", za: undefined }[questionAlphaSort[key]];
+  if (next) questionAlphaSort[key] = next;
+  else delete questionAlphaSort[key];
   renderAll();
 }
 function resetQuestionSort(ri, qi) {
   delete questionSortOrder[ri + "-" + qi];
+  delete questionSortPending[ri + "-" + qi];
+  delete questionAlphaSort[ri + "-" + qi];
   renderAll();
 }
 function sortBonusQuestion(ri) {

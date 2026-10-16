@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.70 - 2026-10-16
+- **Name sort on each question:** a new A-Z button beside the existing sort cycles A-Z, Z-A, off (outlined / arrow-up filled / inverted ring). It works alongside "unanswered first": with both on, unanswered teams stay on top and each group is sorted by name. Reset clears both.
+
 ## v19.69 - 2026-10-16
 - **"Bonus" → "BON" only when needed:** the shortening now keys off the width of the checkbox row (container query) instead of the phone breakpoint, so it only happens when "Bonus" wouldn't fit on one line.
 

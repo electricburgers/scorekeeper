@@ -52,6 +52,22 @@ function isPaused(ti) {
 function activeTeamCount() {
   return gameState.teams.filter((t) => !t.paused).length;
 }
+// Name sort for a question card's team list. dir is "az" / "za" / falsy (off). pending, when the
+// "unanswered first" sort is also on, is the set of teams that were unanswered when it was taken:
+// they stay grouped above the answered ones and the name sort orders within each group.
+function applyAlphaSort(order, dir, pending) {
+  if (!dir) return order;
+  const sign = dir === "za" ? -1 : 1;
+  return order.slice().sort((a, b) => {
+    const g = pending ? (pending.has(a) ? 0 : 1) - (pending.has(b) ? 0 : 1) : 0;
+    if (g) return g;
+    const c = teamLabel(a).localeCompare(teamLabel(b), undefined, {
+      sensitivity: "base",
+      numeric: true,
+    });
+    return sign * c || a - b;
+  });
+}
 function teamLabel(ti) {
   return (gameState.teams[ti] && gameState.teams[ti].name) || "Team " + (ti + 1);
 }

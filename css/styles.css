@@ -1858,9 +1858,16 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    main axis by justify-content, so the icon is centred horizontally and vertically by layout
    rather than by whatever the glyph's metrics happened to be. gap replaces the leading space that
    used to be baked into the label text. */
-.q-sort-btn,.q-reset-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
+.q-sort-btn,.q-reset-btn,.q-alpha-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
 .settings-toggle-btn.active,.settings-btn.active,.q-sort-btn{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .q-sort-btn:hover{filter:brightness(1.1)}
+/* Name sort: outlined when off, solid cyan + arrow when A-Z, solid cyan + inverted ring when Z-A,
+   so each of the three states reads differently without relying on colour alone. */
+.q-alpha-btn{background:transparent;color:var(--accent-cyan-solid);border-color:var(--accent-cyan-solid)}
+.q-alpha-btn[data-state="az"]{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);box-shadow:0 0 0 2px var(--on-accent-cyan) inset}
+.q-alpha-btn[data-state="za"]{background:var(--on-accent-cyan);color:var(--accent-cyan-solid);border:2px solid var(--accent-cyan-solid);box-shadow:none}
+.q-alpha-btn:hover{filter:brightness(1.1)}
+.q-alpha-btn .icon-ui{width:1em;height:1em}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
 .q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
 .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.15)}
@@ -2553,6 +2560,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   /* Icon is the button's whole visible content now that its label is hidden, so it gets its
      own larger font-size (not the .78rem sized for the old icon+text pairing) to actually
      read at a glance instead of looking lost in the middle of a same-sized tap target. */
+  .q-alpha-btn{width:auto;min-width:clamp(1.9rem,7.5cqw,2.3rem);padding:0 6px;font-size:.7rem}
   .q-sort-btn,.q-reset-btn{font-size:1.1rem;line-height:1;padding:0;width:clamp(1.9rem,7.5cqw,2.3rem);height:clamp(1.9rem,7.5cqw,2.3rem);display:inline-flex;align-items:center;justify-content:center}
   /* height matches .q-sort-btn/.q-reset-btn's own (now smaller) clamp exactly, same reasoning
      as the desktop rule above — width isn't matched (unlike the buttons) since the pill's text
