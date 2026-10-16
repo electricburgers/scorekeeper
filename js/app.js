@@ -30,8 +30,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.67"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Oct 11, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v19.68"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Oct 16, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1200,27 +1200,27 @@ function renderLeft() {
   // anything once scoring begins, but it still silently shows as "—" in Final Results, which
   // reads as a display bug rather than a data-entry gap if the host was never told.
   const missingGuessCount = gameState.teams.filter(
-    (t) => t.scoreGuess === "" || t.scoreGuess == null,
+    (t) => !t.paused && (t.scoreGuess === "" || t.scoreGuess == null),
   ).length;
   h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2><span class="chevron">▼</span></div><div class="section-body">`;
   const showAdj = !!loadPrefs().showAdjustments;
   gameState.teams.forEach((t, i) => {
     const adj = t.adjustment || 0,
       adjOpen = adjOpenTeams.has(i);
-    h += `<div class="team-entry${showAdj ? " has-adj" : ""}" data-ti="${i}">
+    h += `<div class="team-entry${showAdj ? " has-adj" : ""}${t.paused ? " is-paused" : ""}" data-ti="${i}">
       <div class="team-name-cell">
         <span class="team-number">Team ${i + 1}</span>
         <input type="text" maxlength="40" value="${esc(t.name)}" placeholder="Team name" aria-label="Team ${i + 1} name" onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
         <div class="team-checks">
-          <label class="check-label item-check${t.bonusItem ? " is-checked" : ""}">
-            <input type="checkbox" class="check-input" id="bi${i}" ${t.bonusItem ? "checked" : ""} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+5 Bonus
-          </label>
           <label class="check-label njcb-check${t.njcb ? " is-checked" : ""}">
-            <input type="checkbox" class="check-input" id="nj${i}" ${t.njcb ? "checked" : ""} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+3 NJCB
+            <input type="checkbox" class="check-input" id="nj${i}" ${t.njcb ? "checked" : ""} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+3 CB
+          </label>
+          <label class="check-label item-check${t.bonusItem ? " is-checked" : ""}">
+            <input type="checkbox" class="check-input" id="bi${i}" ${t.bonusItem ? "checked" : ""} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+5 <span class="lbl-full">Bonus</span><span class="lbl-short" aria-hidden="true">BON</span>
           </label>
         </div>
       </div>
-      <div class="team-guess-cell${t.scoreGuess === "" || t.scoreGuess == null ? " guess-missing" : ""}"><label>Guess</label><input type="number" aria-label="Team ${i + 1} final score guess, 1 to 146" min="1" max="146" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-146" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class="guess-warn">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
+      <div class="team-guess-cell${!t.paused && (t.scoreGuess === "" || t.scoreGuess == null) ? " guess-missing" : ""}"><label>Guess</label><input type="number" aria-label="Team ${i + 1} final score guess, 1 to 146" min="1" max="146" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-146" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class="guess-warn">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
       ${
         showAdj
           ? `<div class="adj-wrap">
@@ -1229,7 +1229,7 @@ function renderLeft() {
       </div>`
           : ""
       }
-      <div class="remove-team"><button onclick="removeTeam(${i})" title="Remove team" aria-label="Remove team ${i + 1}">${X_ICON_SVG}</button></div>
+      <div class="remove-team"><button class="pause-team${t.paused ? " is-on" : ""}" aria-pressed="${t.paused ? "true" : "false"}" onclick="togglePause(${i})" title="${t.paused ? "Resume team" : "Pause team (keeps them in the report)"}" aria-label="${t.paused ? "Resume" : "Pause"} team ${i + 1}">${PAUSE_ICON_SVG}</button><button onclick="removeTeam(${i})" title="Remove team" aria-label="Remove team ${i + 1}">${X_ICON_SVG}</button></div>
     </div>`;
   });
   if (gameState.teams.length < MAX_TEAMS)
@@ -1388,11 +1388,12 @@ function jumpToFirstUnanswered() {
   const s = currentProgressSummary();
   if (!s || s.ri == null) return jumpToSection("sec-final");
   const ri = s.ri,
-    n = gameState.teams.length;
+    n = activeTeamCount();
   let targetSel = null;
   for (let qi = 0; qi < 4 && !targetSel; qi++) {
     let done = 0;
-    for (let ti = 0; ti < n; ti++) {
+    for (let ti = 0; ti < gameState.teams.length; ti++) {
+      if (isPaused(ti)) continue;
       const a = gameState.rounds[ri].questions[qi][ti];
       if (a && a.wager !== undefined && a.correct !== undefined) done++;
     }
@@ -1405,7 +1406,8 @@ function jumpToFirstUnanswered() {
     const type = ri === 1 ? "halftime" : "final";
     const store = ri === 1 ? gameState.halftime : gameState.finalWager;
     let done = 0;
-    for (let ti = 0; ti < n; ti++) {
+    for (let ti = 0; ti < gameState.teams.length; ti++) {
+      if (isPaused(ti)) continue;
       const d = store[ti];
       if (d && d.wager != null && d.wager !== "" && d.correct != null) done++;
     }
@@ -1416,7 +1418,8 @@ function jumpToFirstUnanswered() {
   }
   if (!targetSel && BONUS_ROUNDS.has(ri)) {
     let done = 0;
-    for (let ti = 0; ti < n; ti++) {
+    for (let ti = 0; ti < gameState.teams.length; ti++) {
+      if (isPaused(ti)) continue;
       if (gameState.rounds[ri].bonus[ti] != null) done++;
     }
     if (done < n) {
@@ -1522,6 +1525,7 @@ function renderWQ(ri, qi) {
   }
   teamOrder.forEach((ti) => {
     const t = gameState.teams[ti];
+    if (t.paused) return;
     const ans = gameState.rounds[ri].questions[qi][ti] || {};
     const uw = usedW(ti, ri);
     const sel = ans.wager;
@@ -1653,9 +1657,10 @@ function toggleBonusQ(ri) {
 }
 
 function renderBQ(ri) {
-  const n = gameState.teams.length;
+  const n = activeTeamCount();
   let subDone = 0;
-  for (let ti = 0; ti < n; ti++) {
+  for (let ti = 0; ti < gameState.teams.length; ti++) {
+    if (isPaused(ti)) continue;
     if (gameState.rounds[ri].bonus[ti] != null) subDone++;
   }
   const beer = isBonusBeerRound(ri);
@@ -1690,6 +1695,7 @@ function renderBQ(ri) {
   }
   bqTeamOrder.forEach((ti) => {
     const t = gameState.teams[ti];
+    if (t.paused) return;
     const v = gameState.rounds[ri].bonus[ti];
     const submitted = v != null;
     const c = submitted ? v : 0;
@@ -1739,9 +1745,10 @@ function renderSpecialWager(type) {
   const wSet = isFinal ? "setFW" : "setHW",
     cSet = isFinal ? "setFC" : "setHC";
   const beer = isSpecialBeerRound(type);
-  const swN = gameState.teams.length;
+  const swN = activeTeamCount();
   let swDone = 0;
-  for (let ti = 0; ti < swN; ti++) {
+  for (let ti = 0; ti < gameState.teams.length; ti++) {
+    if (isPaused(ti)) continue;
     const d = data[ti];
     if (d && d.wager != null && d.wager !== "" && d.correct != null) swDone++;
   }
@@ -1779,6 +1786,7 @@ function renderSpecialWager(type) {
   }
   swTeamOrder.forEach((ti) => {
     const t = gameState.teams[ti];
+    if (t.paused) return;
     const d = data[ti] || {};
     const w = d.wager != null && d.wager !== "" ? +d.wager : null;
     let pts = `<span class="ta-pts pts-zero">\u2014</span>`;
@@ -1963,6 +1971,16 @@ function reindexAfterRemoval(map, ti) {
   }
   return out;
 }
+const PAUSE_ICON_SVG =
+  '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><line x1="9" y1="6" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="18"/></svg>';
+function togglePause(ti) {
+  const t = gameState.teams[ti];
+  if (!t) return;
+  t.paused = !t.paused;
+  announce(`${teamLabel(ti)} ${t.paused ? "paused" : "resumed"}`);
+  autosave();
+  renderAll();
+}
 async function removeTeam(ti) {
   const name = gameState.teams[ti]?.name || "Team " + (ti + 1);
   const msg = checkGameStarted()
@@ -2124,7 +2142,7 @@ function canScore() {
     return false;
   }
   const missing = gameState.teams.reduce((acc, t, i) => {
-    if (t.scoreGuess === "" || t.scoreGuess == null)
+    if (!t.paused && (t.scoreGuess === "" || t.scoreGuess == null))
       acc.push(t.name || "Team " + (i + 1));
     return acc;
   }, []);

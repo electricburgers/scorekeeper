@@ -10,6 +10,10 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.68 - 2026-10-16
+- **Pause a team:** a pause button next to each team's remove button sits them out without deleting them. Paused teams get no score-entry rows, don't block the Beer Round badge or "left" counts, and aren't required to have a guess — but stay on the roster and in Final Results and exports.
+- **Teams row checkboxes:** order is now CB then Bonus (matching the registration sheet); "NJCB" renamed to "CB". Both are equal width, and "Bonus" shortens to "BON" on narrow screens.
+
 ## v19.67 - 2026-10-11
 - **Settings About "What's new"** now lists only high-level changes (no file/implementation detail), for the last two versions.
 

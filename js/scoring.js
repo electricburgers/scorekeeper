@@ -39,9 +39,18 @@ function freshTeam(n) {
     scoreGuess: "",
     bonusItem: false,
     njcb: false,
+    paused: false,
     adjustment: 0,
     craftPrize: false,
   };
+}
+// A paused team stays on the roster (and in the report) but sits out scoring: no entry rows,
+// and it never holds up a Beer Round or a "left" count for a question it can't answer.
+function isPaused(ti) {
+  return !!gameState.teams[ti]?.paused;
+}
+function activeTeamCount() {
+  return gameState.teams.filter((t) => !t.paused).length;
 }
 function teamLabel(ti) {
   return (gameState.teams[ti] && gameState.teams[ti].name) || "Team " + (ti + 1);
@@ -88,6 +97,7 @@ function migrateState(s) {
   s.teams.forEach((t) => {
     if (t.adjustment === undefined) t.adjustment = 0;
     if (t.njcb === undefined) t.njcb = false;
+    if (t.paused === undefined) t.paused = false;
     if (t.craftPrize === undefined) t.craftPrize = false;
   });
   if (!s.rounds || s.rounds.length < 4)
@@ -148,8 +158,9 @@ function checkGameStarted() {
 // BEER ROUND: question is a beer round if every team has been marked AND all are correct
 function isBeerRound(ri, qi) {
   const n = gameState.teams.length;
-  if (n === 0) return false;
+  if (activeTeamCount() === 0) return false;
   for (let ti = 0; ti < n; ti++) {
+    if (isPaused(ti)) continue;
     const a = gameState.rounds[ri].questions[qi][ti];
     if (!a || a.wager === undefined || a.correct !== true) return false;
   }
@@ -329,17 +340,19 @@ function preWagerTotal(ti, type) {
 
 function isBonusBeerRound(ri) {
   const n = gameState.teams.length;
-  if (!n) return false;
+  if (!activeTeamCount()) return false;
   for (let ti = 0; ti < n; ti++) {
+    if (isPaused(ti)) continue;
     if (gameState.rounds[ri].bonus[ti] !== 4) return false;
   }
   return true;
 }
 function isSpecialBeerRound(type) {
   const n = gameState.teams.length;
-  if (!n) return false;
+  if (!activeTeamCount()) return false;
   const data = type === "halftime" ? gameState.halftime : gameState.finalWager;
   for (let ti = 0; ti < n; ti++) {
+    if (isPaused(ti)) continue;
     const d = data[ti];
     if (!d || d.correct !== true) return false;
   }
@@ -350,35 +363,41 @@ function qScored(ri, qi) {
   const n = gameState.teams.length;
   let done = 0;
   for (let ti = 0; ti < n; ti++) {
+    if (isPaused(ti)) continue;
     const a = gameState.rounds[ri].questions[qi][ti];
     if (a && a.wager !== undefined && a.correct !== undefined) done++;
   }
-  return { done, total: n };
+  return { done, total: activeTeamCount() };
 }
 function roundProgress(ri) {
-  const n = gameState.teams.length;
+  const n = activeTeamCount(),
+    len = gameState.teams.length;
   if (!n) return { done: 0, total: 0 };
   let done = 0,
     total = n * 4;
   for (let qi = 0; qi < 4; qi++)
-    for (let ti = 0; ti < n; ti++) {
+    for (let ti = 0; ti < len; ti++) {
+      if (isPaused(ti)) continue;
       const a = gameState.rounds[ri].questions[qi][ti];
       if (a && a.wager !== undefined && a.correct !== undefined) done++;
     }
   if (BONUS_ROUNDS.has(ri)) {
     total += n;
-    for (let ti = 0; ti < n; ti++) {
+    for (let ti = 0; ti < len; ti++) {
+      if (isPaused(ti)) continue;
       if (gameState.rounds[ri].bonus[ti] != null) done++;
     }
   } else if (ri === 1) {
     total += n;
-    for (let ti = 0; ti < n; ti++) {
+    for (let ti = 0; ti < len; ti++) {
+      if (isPaused(ti)) continue;
       const h = gameState.halftime[ti];
       if (h && h.wager != null && h.wager !== "" && h.correct != null) done++;
     }
   } else if (ri === 3) {
     total += n;
-    for (let ti = 0; ti < n; ti++) {
+    for (let ti = 0; ti < len; ti++) {
+      if (isPaused(ti)) continue;
       const f = gameState.finalWager[ti];
       if (f && f.wager != null && f.wager !== "" && f.correct != null) done++;
     }
@@ -392,6 +411,7 @@ function qVerdict(ri, qi) {
   let ans = 0,
     wrong = 0;
   for (let ti = 0; ti < n; ti++) {
+    if (isPaused(ti)) continue;
     const a = gameState.rounds[ri].questions[qi][ti];
     if (a && a.correct !== undefined) {
       ans++;
@@ -411,6 +431,7 @@ function scoreBreakdown(dataObj, n) {
   let correct = 0,
     incorrect = 0;
   for (let ti = 0; ti < n; ti++) {
+    if (isPaused(ti)) continue;
     const a = dataObj[ti];
     if (a && a.correct != null) {
       if (a.correct) correct++;
