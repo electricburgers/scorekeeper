@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.71 - 2026-10-16
+- **CB / Bonus checkboxes no longer overflow when narrow:** they stay equal width side by side while both fit, then Bonus wraps onto its own row; "BON" is only used if even a full row is too narrow for "Bonus".
+
 ## v19.70 - 2026-10-16
 - **Name sort on each question:** a new A-Z button beside the existing sort cycles A-Z, Z-A, off (outlined / arrow-up filled / inverted ring). It works alongside "unanswered first": with both on, unanswered teams stay on top and each group is sorted by name. Reset clears both.
 
