@@ -1860,19 +1860,16 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    rather than by whatever the glyph's metrics happened to be. gap replaces the leading space that
    used to be baked into the label text. */
 .q-sort-btn,.q-reset-btn,.q-alpha-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
-.settings-toggle-btn.active,.settings-btn.active,.q-sort-btn{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
-.q-sort-btn:hover{filter:brightness(1.1)}
-/* Name sort: outlined when off, solid cyan + arrow when A-Z, solid cyan + inverted ring when Z-A,
-   so each of the three states reads differently without relying on colour alone. */
-.q-alpha-btn{background:transparent;color:var(--accent-cyan-solid);border-color:var(--accent-cyan-solid)}
-.q-alpha-btn[data-state="az"]{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);box-shadow:0 0 0 2px var(--on-accent-cyan) inset}
-.q-alpha-btn[data-state="za"]{background:var(--on-accent-cyan);color:var(--accent-cyan-solid);border:2px solid var(--accent-cyan-solid);box-shadow:none}
-.q-alpha-btn:hover{filter:brightness(1.1)}
+.settings-toggle-btn.active,.settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
+/* Sort buttons (unanswered-first and name): blank with a coloured outline + icon when off, solid
+   fill with a contrasting icon when on. Name sort tells A-Z from Z-A by its arrow, not by fill. */
+.q-sort-btn,.q-alpha-btn{background:transparent;color:var(--accent-cyan-solid);border-color:var(--accent-cyan-solid)}
+.q-sort-btn.active,.q-alpha-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan)}
+.q-sort-btn:hover,.q-alpha-btn:hover{filter:brightness(1.1)}
 .q-alpha-btn .icon-ui{width:1em;height:1em}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
 .q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
 .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.15)}
-.q-sort-btn.active{box-shadow:0 0 0 2px var(--on-accent-cyan) inset}
 .q-reset-btn{background:var(--danger-solid-bg);color:#fff;border-color:var(--danger-solid-bg)}
 .q-reset-btn:hover{filter:brightness(1.15)}
 .q-badge{font-family:var(--font-body);font-size:1rem;line-height:1;font-weight:700;padding:1px 9px;border-radius:4px;border:1px solid currentColor}

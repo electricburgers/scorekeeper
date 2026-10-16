@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.72 - 2026-10-16
+- **Question sort buttons:** Sort and A-Z are now blank with a coloured outline and icon when off, and solid-filled with a contrasting icon when on (A-Z vs Z-A is shown by the arrow).
+
 ## v19.71 - 2026-10-16
 - **CB / Bonus checkboxes no longer overflow when narrow:** they stay equal width side by side while both fit, then Bonus wraps onto its own row; "BON" is only used if even a full row is too narrow for "Bonus".
 

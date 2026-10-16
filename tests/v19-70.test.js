@@ -81,3 +81,11 @@ describe("Per-question A-Z sort", () => {
     assert.equal(btn(window).getAttribute("data-state"), "off");
   });
 });
+
+describe("Sort button states (CSS)", () => {
+  const css = require("node:fs").readFileSync(require("node:path").join(__dirname, "..", "css", "styles.css"), "utf8");
+  it("sort buttons are blank when off and solid when active", () => {
+    assert.match(css, /\.q-sort-btn,\.q-alpha-btn\{background:transparent;/);
+    assert.match(css, /\.q-sort-btn\.active,\.q-alpha-btn\.active\{background:var\(--accent-cyan-solid\)/);
+  });
+});
