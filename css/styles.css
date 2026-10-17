@@ -2565,7 +2565,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   /* Icon is the button's whole visible content now that its label is hidden, so it gets its
      own larger font-size (not the .78rem sized for the old icon+text pairing) to actually
      read at a glance instead of looking lost in the middle of a same-sized tap target. */
-  .q-alpha-btn{width:auto;min-width:clamp(1.9rem,7.5cqw,2.3rem);padding:0 6px;font-size:.7rem}
+  .q-alpha-btn{width:auto;min-width:clamp(1.9rem,7.5cqw,2.3rem);height:clamp(1.9rem,7.5cqw,2.3rem);padding:0 6px;font-size:.7rem}
   .q-sort-btn,.q-reset-btn{font-size:1.1rem;line-height:1;padding:0;width:clamp(1.9rem,7.5cqw,2.3rem);height:clamp(1.9rem,7.5cqw,2.3rem);display:inline-flex;align-items:center;justify-content:center}
   /* height matches .q-sort-btn/.q-reset-btn's own (now smaller) clamp exactly, same reasoning
      as the desktop rule above — width isn't matched (unlike the buttons) since the pill's text
