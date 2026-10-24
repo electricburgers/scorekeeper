@@ -30,8 +30,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.76"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Oct 17, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v19.77"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Oct 24, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1674,11 +1674,19 @@ function sortSpecialWager(type) {
         bb = answered(b) ? 1 : 0;
       return aa - bb || a - b;
     });
+  questionSortPending[key] = new Set(
+    gameState.teams.map((_, ti) => ti).filter((ti) => !answered(ti)),
+  );
   renderAll();
 }
 function resetSpecialWagerSort(type) {
   delete questionSortOrder["sw-" + type];
+  delete questionSortPending["sw-" + type];
+  delete questionAlphaSort["sw-" + type];
   renderAll();
+}
+function toggleSpecialWagerAlphaSort(type) {
+  cycleAlphaSort("sw-" + type);
 }
 function toggleBonusQ(ri) {
   const key = "b" + ri;
@@ -1807,7 +1815,7 @@ function renderSpecialWager(type) {
   // ignoring the toggle entirely, so turning the setting Off didn't hide it here like it does
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-alpha-btn${questionAlphaSort[swKey] ? " active" : ""}" data-state="${questionAlphaSort[swKey] || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${questionAlphaSort[swKey] === "az" ? "A to Z" : questionAlphaSort[swKey] === "za" ? "Z to A" : "off"}">${questionAlphaSort[swKey] === "az" ? ICON_ARROW_DOWN : questionAlphaSort[swKey] === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${questionAlphaSort[swKey] === "za" ? "Z-A" : "A-Z"}</span></button><button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>`;
   // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
   // badge is two inches away and says the same thing, and the whole block is already washed gold
   // with a gold border — three statements of one fact. Same call, same reasoning, as removing the
@@ -1823,6 +1831,11 @@ function renderSpecialWager(type) {
       if (!have.has(ti)) swTeamOrder.push(ti);
     });
   }
+  swTeamOrder = applyAlphaSort(
+    swTeamOrder,
+    questionAlphaSort[swKey],
+    questionSortOrder[swKey] ? questionSortPending[swKey] : null,
+  );
   swTeamOrder.forEach((ti) => {
     const t = gameState.teams[ti];
     if (t.paused) return;

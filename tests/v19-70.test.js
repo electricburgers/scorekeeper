@@ -127,3 +127,42 @@ describe("A-Z sort on bonus questions", () => {
     assert.equal(abtn().getAttribute("data-state"), "off");
   });
 });
+
+describe("A-Z sort on Round 2 and 4 bonus (special wager) cards", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+  const names = (type) =>
+    [...window.document.querySelectorAll(`#swblock-${type} .special-wager-row .ta-name`)].map((e) =>
+      e.textContent.trim(),
+    );
+  const abtn = (type) => window.document.querySelector(`#swblock-${type} .q-alpha-btn`);
+
+  for (const type of ["halftime", "final"]) {
+    it(`${type} card cycles A-Z, Z-A, off and combines with Sort`, () => {
+      evalIn(
+        window,
+        `gameState = freshState();
+         gameState.teams = ["Charlie", "alpha", "Bravo"].map(freshTeam);
+         questionSortOrder = {}; questionAlphaSort = {}; questionSortPending = {};
+         renderAll();`,
+      );
+      assert.ok(abtn(type), "button exists");
+      assert.equal(abtn(type).getAttribute("data-state"), "off");
+      window.toggleSpecialWagerAlphaSort(type);
+      assert.deepEqual(names(type), ["alpha", "Bravo", "Charlie"]);
+      window.toggleSpecialWagerAlphaSort(type);
+      assert.deepEqual(names(type), ["Charlie", "Bravo", "alpha"]);
+      evalIn(
+        window,
+        `(${JSON.stringify(type)} === "final" ? gameState.finalWager : gameState.halftime)[0] = {wager: 1, correct: true};`,
+      );
+      window.sortSpecialWager(type);
+      assert.deepEqual(names(type), ["Bravo", "alpha", "Charlie"]);
+      window.resetSpecialWagerSort(type);
+      assert.equal(abtn(type).getAttribute("data-state"), "off");
+    });
+  }
+});

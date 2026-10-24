@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.77 - 2026-10-24
+- **A-Z sort on Round 2 and 4 bonus questions:** the halftime (Round 2) and final (Round 4) wager cards now have the same A-Z / Z-A / off name sort button as the other question cards, combining with the unanswered-first Sort. Reset clears both.
+
 ## v19.76 - 2026-10-17
 - **A-Z button:** arrow reversed (A-Z now points down, Z-A up) and its height matches Sort and Reset on narrow screens.
 
