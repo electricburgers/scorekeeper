@@ -27,11 +27,12 @@ const FIELD_MAX = {
   craftPartnerTown: 40,
   bonusItem: 60,
   staffNames: 200,
+  themeName: 60,
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.77"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Oct 24, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v19.78"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Oct 26, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -347,6 +348,30 @@ function toggleAdvancedSettings() {
     document.getElementById("advToggleBtn"),
     () => applyPrefs(),
   );
+}
+// Regular <-> Theme Night. Lives on the game (meta.mode) rather than in prefs so it travels with
+// a saved/exported game; a new game keeps whichever mode the host was last in.
+async function toggleGameMode() {
+  const toTheme = !isTheme();
+  if (
+    gameState.gameStarted &&
+    !(await appConfirm(
+      "Switch to " +
+        (toTheme ? "Theme Night" : "Regular") +
+        " trivia? Scores already entered are kept, but the round layout changes and some entries may be hidden.",
+      { okLabel: "Switch" },
+    ))
+  )
+    return;
+  gameState.meta.mode = toTheme ? "theme" : "regular";
+  autosave();
+  renderAll();
+}
+function syncGameModeToggle() {
+  const b = document.getElementById("gameModeToggle");
+  if (!b) return;
+  b.classList.toggle("active", isTheme());
+  b.textContent = isTheme() ? "Theme Night" : "Regular";
 }
 function toggleUnlockEventDetails() {
   const p = loadPrefs();
@@ -908,7 +933,9 @@ function resumeSession() {
 }
 function startNewGame() {
   clearSaved();
+  const prevMode = gameState.meta.mode;
   gameState = freshState();
+  gameState.meta.mode = prevMode === "theme" ? "theme" : "regular";
   scoreSortMode = "entry";
   randomOrder = null;
   standingsSortMode = { halftime: "entry", final: "entry" };
@@ -1003,8 +1030,12 @@ function renderStandings(type) {
   if (!gameState.teams.length) return "";
   const label =
     type === "halftime"
-      ? "Scores \u2014 Before Halftime Wager"
-      : "Scores \u2014 Before Final Wager";
+      ? isTheme()
+        ? "Scores \u2014 Before Round 2 Wager"
+        : "Scores \u2014 Before Halftime Wager"
+      : isTheme()
+        ? "Scores \u2014 Before Round 3 Wager"
+        : "Scores \u2014 Before Final Wager";
   const mode = standingsSortMode[type] || "entry";
   const base = gameState.teams.map((t, ti) => ({
     ti,
@@ -1118,6 +1149,7 @@ function renderAll() {
   renderLeft();
   renderSB();
   applyPrefs();
+  syncGameModeToggle();
 }
 
 function renderLeft() {
@@ -1198,6 +1230,7 @@ function renderLeft() {
     <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" maxlength="60" aria-label="Location" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
     <div class="field"><label>Craft Partner</label><input type="text" maxlength="50" aria-label="Craft Partner" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
     <div class="field"><label>Partner Town</label><input type="text" maxlength="40" aria-label="Partner Town" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
+    ${isTheme() ? `<div class="field full"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Night, Harry Potter" onchange="gameState.meta.themeName=this.value;autosave();"></div>` : ""}
     <div class="field full"><label>Bonus Item (+5)</label><input type="text" maxlength="60" aria-label="Bonus Item description" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
     <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" maxlength="200" aria-label="Restaurant staff names" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
   </div><p class="fr-note${metaLocked ? "" : " fr-note-pending"}"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Locked once scoring starts, so it can't drift mid-game. Typo? <a href="#" onclick="event.preventDefault();toggleUnlockEventDetails();">Unlock to fix it</a>.</p></div></div>`;
@@ -1210,6 +1243,8 @@ function renderLeft() {
   ).length;
   h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2><span class="chevron">▼</span></div><div class="section-body">`;
   const showAdj = !!loadPrefs().showAdjustments;
+  // 146 = a perfect Regular night; the Theme Night script calls 95 a perfect score.
+  const guessMax = isTheme() ? 95 : 146;
   gameState.teams.forEach((t, i) => {
     const adj = t.adjustment || 0,
       adjOpen = adjOpenTeams.has(i);
@@ -1226,7 +1261,7 @@ function renderLeft() {
           </label>
         </div>
       </div>
-      <div class="team-guess-cell${!t.paused && (t.scoreGuess === "" || t.scoreGuess == null) ? " guess-missing" : ""}"><label>Guess</label><input type="number" aria-label="Team ${i + 1} final score guess, 1 to 146" min="1" max="146" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-146" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class="guess-warn">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
+      <div class="team-guess-cell${!t.paused && (t.scoreGuess === "" || t.scoreGuess == null) ? " guess-missing" : ""}"><label>Guess</label><input type="number" aria-label="Team ${i + 1} final score guess, 1 to ${guessMax}" min="1" max="${guessMax}" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-${guessMax}" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class="guess-warn">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
       ${
         showAdj
           ? `<div class="adj-wrap">
@@ -1244,7 +1279,7 @@ function renderLeft() {
     h += `<p class="fr-note">${MAX_TEAMS}-team max reached — remove a team to add another.</p>`;
   h += `</div></div>`;
 
-  for (let ri = 0; ri < 4; ri++) {
+  for (let ri = 0; ri < roundCount(); ri++) {
     const rn = ri + 1,
       rp = roundProgress(ri),
       rComplete = rp.total > 0 && rp.done === rp.total;
@@ -1260,11 +1295,13 @@ function renderLeft() {
     }
     h += `<div class="section ${collapsedSections.has("sec-r" + rn) ? "collapsed" : ""} ${rComplete ? "round-complete" : ""}" id="sec-r${rn}"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-r${rn}')"><h2><span>Round ${rn}</span>${rpBadge}<span class="round-break"></span><span class="round-label ${ROUND_COLORS[ri]} round-wager-label">Wagers: ${ROUND_WAGERS[ri].join(", ")}</span></h2><span class="chevron">▼</span></div><div class="section-body">`;
     for (let qi = 0; qi < 4; qi++) h += renderWQ(ri, qi);
-    if (ri === 1)
+    const wt = roundWagerType(ri);
+    if (wt === "wager1") h += renderSpecialWager("wager1");
+    else if (wt === "halftime")
       h += renderStandings("halftime") + renderHT() + renderStaffThanks();
-    else if (ri === 3) h += renderStandings("final") + renderFW();
-    if (BONUS_ROUNDS.has(ri)) h += renderBQ(ri);
-    if (ri < 3) h += renderBanter("round", "rbot-" + ri, {}); // outro after every round except the last
+    else if (wt === "final") h += renderStandings("final") + renderFW();
+    if (hasBonusQ(ri)) h += renderBQ(ri);
+    if (ri < roundCount() - 1) h += renderBanter("round", "rbot-" + ri, {}); // outro after every round except the last
     h += `</div></div>`;
   }
 
@@ -1351,7 +1388,7 @@ function renderLeft() {
 // Results), which is simpler and more useful than trying to detect "what's on screen".
 function currentProgressSummary() {
   if (!gameState.teams.length) return null;
-  for (let ri = 0; ri < 4; ri++) {
+  for (let ri = 0; ri < roundCount(); ri++) {
     const rp = roundProgress(ri);
     if (rp.done < rp.total) return { ri, done: rp.done, total: rp.total };
   }
@@ -1359,7 +1396,7 @@ function currentProgressSummary() {
   // finished bar can show the same scored/total figure the per-round bar was showing a
   // moment earlier instead of jumping to a sentence.
   let all = 0;
-  for (let ri = 0; ri < 4; ri++) all += roundProgress(ri).total;
+  for (let ri = 0; ri < roundCount(); ri++) all += roundProgress(ri).total;
   return { ri: null, done: all, total: all };
 }
 // Shared by jumpToSection/jumpToFirstUnanswered below: scrolls to whatever matches selector.
@@ -1408,9 +1445,9 @@ function jumpToFirstUnanswered() {
       collapsedQuestions.delete(ri + "-" + qi);
     }
   }
-  if (!targetSel && (ri === 1 || ri === 3)) {
-    const type = ri === 1 ? "halftime" : "final";
-    const store = ri === 1 ? gameState.halftime : gameState.finalWager;
+  if (!targetSel && roundWagerType(ri)) {
+    const type = roundWagerType(ri);
+    const store = wagerStore(type);
     let done = 0;
     for (let ti = 0; ti < gameState.teams.length; ti++) {
       if (isPaused(ti)) continue;
@@ -1422,7 +1459,7 @@ function jumpToFirstUnanswered() {
       collapsedSpecialWagers.delete(type);
     }
   }
-  if (!targetSel && BONUS_ROUNDS.has(ri)) {
+  if (!targetSel && hasBonusQ(ri)) {
     let done = 0;
     for (let ti = 0; ti < gameState.teams.length; ti++) {
       if (isPaused(ti)) continue;
@@ -1662,7 +1699,7 @@ function resetBonusQuestionSort(ri) {
 }
 function sortSpecialWager(type) {
   const key = "sw-" + type;
-  const data = type === "final" ? gameState.finalWager : gameState.halftime;
+  const data = wagerStore(type);
   const answered = (ti) => {
     const d = data[ti];
     return !!(d && d.wager != null && d.wager !== "" && d.correct != null);
@@ -1783,14 +1820,14 @@ function renderBQ(ri) {
 // Halftime and final wagers are identical except for range, labels and setters.
 function renderSpecialWager(type) {
   const isFinal = type === "final";
-  const data = isFinal ? gameState.finalWager : gameState.halftime;
-  const max = isFinal ? 20 : 10;
+  const data = wagerStore(type);
+  const max = wagerMax(type);
   const sectionCls = isFinal
     ? "special-section final-wager"
     : "special-section";
-  const titleSub = isFinal ? "BONUS WAGER (1-20)" : "BONUS WAGER (1-10)";
-  const wSet = isFinal ? "setFW" : "setHW",
-    cSet = isFinal ? "setFC" : "setHC";
+  const titleSub = `BONUS WAGER (1-${max})`;
+  const wSet = isFinal ? "setFW" : type === "wager1" ? "setW1" : "setHW",
+    cSet = isFinal ? "setFC" : type === "wager1" ? "setC1" : "setHC";
   const beer = isSpecialBeerRound(type);
   const swN = activeTeamCount();
   let swDone = 0;
@@ -2059,6 +2096,7 @@ async function removeTeam(ti) {
       ti,
     );
   }
+  gameState.wager1 = reindexAfterRemoval(gameState.wager1, ti);
   gameState.halftime = reindexAfterRemoval(gameState.halftime, ti);
   gameState.finalWager = reindexAfterRemoval(gameState.finalWager, ti);
   // Exclude Top can never cover the whole remaining roster (at least one team must stay
@@ -2250,6 +2288,29 @@ function setHC(ti, v) {
   if (!d || d.wager == null || d.wager === "") return;
   /* need a wager first */ const c = d.correct;
   if (c === v) delete d.correct;
+  else d.correct = v;
+  gameState.gameStarted = true;
+  autosave();
+  renderAll();
+}
+// Theme Night's Round 1 Q5 wager (cap 5) — same shape as setHW/setHC, own store.
+function setW1(ti, v) {
+  if (!canScore()) return;
+  if (!gameState.wager1[ti]) gameState.wager1[ti] = {};
+  if (("" + v).trim() === "") {
+    delete gameState.wager1[ti].wager;
+  } else {
+    gameState.wager1[ti].wager = Math.max(1, Math.min(5, +v || 1));
+  }
+  gameState.gameStarted = true;
+  autosave();
+  renderAll();
+}
+function setC1(ti, v) {
+  if (!canScore()) return;
+  const d = gameState.wager1[ti];
+  if (!d || d.wager == null || d.wager === "") return;
+  if (d.correct === v) delete d.correct;
   else d.correct = v;
   gameState.gameStarted = true;
   autosave();

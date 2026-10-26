@@ -203,6 +203,7 @@
         <a href="#rounds">Scoring Rounds</a>
         <a href="#question-timer">Question Timer</a>
         <a href="#wagers">Halftime &amp; Final Wager</a>
+        <a href="#theme-night">Theme Night</a>
         <a href="#standings">Scores &amp; Standings</a>
         <a href="#final-results">Final Results &amp; Ties</a>
         <a href="#team-report">Team Report</a>
@@ -451,6 +452,11 @@
           <div class="faq-a">
             <ul>
               <li><strong>Date</strong> — the date of the event.</li>
+              <li>
+                <strong>Theme Name</strong> — Theme Night only (Settings →
+                Game Mode). Printed on the PDF and XLSX exports.
+                See <a href="#theme-night">Theme Night</a>.
+              </li>
               <li>
                 <strong>Quiz ID</strong> — required before scoring can start,
                 but its format is free-entry; typing something that doesn't look
@@ -860,6 +866,85 @@
               <em>added</em> to their score; if marked incorrect, it's
               <em>subtracted</em>. Leaving a team's wager blank gives them a
               zero.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== THEME NIGHT ============================== -->
+      <section class="faq-section" id="theme-night">
+        <h2 class="faq-section-title">Theme Night</h2>
+        <p class="faq-section-sub">
+          A shorter format: three rounds, each ending in a bonus wager.
+        </p>
+
+        <details class="faq-item" id="q-how-do-i-switch-to-theme-night">
+          <summary>
+            <span class="faq-q-text">How do I switch to Theme Night?</span><span class="faq-q-arrow"
+              >▼</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Open <strong>Settings</strong> and tap <strong>Game Mode</strong>
+              to flip between <em>Regular</em> and <em>Theme Night</em>. The
+              choice is saved with the game (and in Save/Load files), and
+              <em>New Game</em> stays in whichever mode you were using. If
+              scoring has already started, the app asks you to confirm first;
+              nothing you entered is deleted, but some entries may be hidden
+              while you're in the other mode.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item" id="q-how-is-theme-night-scored-differently">
+          <summary>
+            <span class="faq-q-text">How is Theme Night different from Regular trivia?</span><span class="faq-q-arrow"
+              >▼</span
+            >
+          </summary>
+          <div class="faq-a">
+            <ul>
+              <li>
+                <strong>Three rounds, not four.</strong> Each round has Q1–Q4
+                with the same point budgets as Regular Rounds 1–3 (1-2-3-4,
+                1-3-5-7, and 2-4-6-8).
+              </li>
+              <li>
+                <strong>Every round ends with a Q5 bonus wager</strong> in
+                place of Regular's four-part bonus, halftime and final wagers.
+                Teams must bet at least 1; correct adds the bet, incorrect
+                subtracts it. Round 1 can bet up to 5, Round 2 up to 10 and
+                Round 3 up to 20.
+              </li>
+              <li>
+                <strong>Theme Name</strong> appears in Event Details (see
+                below). The Scores &mdash; Before Wager blocks, the Team
+                Report and Final Results all work as usual.
+              </li>
+              <li>
+                The Final Score Guess runs from 1 to 95, the perfect score in
+                the Theme Night script.
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item" id="q-where-does-the-theme-name-go">
+          <summary>
+            <span class="faq-q-text">Where does the Theme Name go?</span><span class="faq-q-arrow"
+              >▼</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              In Theme Night, Event Details gets a <strong>Theme Name</strong>
+              field. It's printed on the <strong>PDF</strong> header (next to
+              Location, Date, Quiz # and Host) and on the
+              <strong>XLSX</strong> (top row, as &ldquo;THEME: &hellip;&rdquo;).
+              Both exports drop the Round 4 columns and show each round's Q5
+              wager in the slot Regular uses for that round's bonus or
+              halftime points.
             </p>
           </div>
         </details>
@@ -1727,6 +1812,11 @@
                 originally replaced, if that's more your speed. This page has
                 the same toggle, in its own Settings panel, top right — the
                 icons throughout this FAQ swap right along with it.
+              </li>
+              <li>
+                <strong>Game Mode</strong> — Regular (four rounds) or Theme
+                Night (three rounds, each ending in a bonus wager). See
+                <a href="#theme-night">Theme Night</a>.
               </li>
               <li>
                 <strong>Question Timer</strong> — the default countdown length

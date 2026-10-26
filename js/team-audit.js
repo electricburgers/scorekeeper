@@ -60,7 +60,7 @@ function auditOverallStats(ti) {
         else incorrect++;
       }
     }
-    if (BONUS_ROUNDS.has(ri)) {
+    if (hasBonusQ(ri)) {
       const v = gameState.rounds[ri].bonus[ti];
       if (v != null) {
         correct += v;
@@ -68,16 +68,14 @@ function auditOverallStats(ti) {
       }
     }
   }
-  const h = gameState.halftime[ti];
-  if (h && h.wager != null && h.wager !== "" && h.correct != null) {
-    if (h.correct) correct++;
-    else incorrect++;
-  }
-  const f = gameState.finalWager[ti];
-  if (f && f.wager != null && f.wager !== "" && f.correct != null) {
-    if (f.correct) correct++;
-    else incorrect++;
-  }
+  [gameState.wager1[ti], gameState.halftime[ti], gameState.finalWager[ti]].forEach(
+    (w) => {
+      if (w && w.wager != null && w.wager !== "" && w.correct != null) {
+        if (w.correct) correct++;
+        else incorrect++;
+      }
+    },
+  );
   const total = correct + incorrect;
   if (!total) return "";
   const correctPct = Math.round((correct / total) * 100);
@@ -131,7 +129,7 @@ function buildAudit(ti) {
   function roundBlock(ri, label, colorCls) {
     let b = `<div class="aud-round"><div class="aud-round-h"><span class="round-label ${colorCls}">${label}</span><span style="color:var(--text-muted);font-weight:400;font-size:.68rem;letter-spacing:0;text-transform:none">wagers ${ROUND_WAGERS[ri].join(", ")}</span></div>`;
     for (let qi = 0; qi < 4; qi++) b += auditQLine(ri, qi, ti);
-    if (BONUS_ROUNDS.has(ri)) {
+    if (hasBonusQ(ri)) {
       const v = gameState.rounds[ri].bonus[ti];
       let res, pts, pcls;
       if (v == null) {
@@ -220,23 +218,34 @@ function buildAudit(ti) {
   // Two-column desktop layout: column 1 runs through Halftime Bonus, column 2 picks up at
   // Round 3 \u2014 Grand Total and everything after it (Guess/Diff, overall stats, note) stays
   // full-width below both columns rather than living inside either one.
-  let col1 = roundBlock(0, "Round 1", "rl-1");
-  col1 += roundBlock(1, "Round 2", "rl-2");
-  col1 += wagerBlock(
-    gameState.halftime[ti],
-    "Halftime Bonus",
-    "rl-2",
-    "win or lose, 1\u201310",
-  );
-  let col2 = roundBlock(2, "Round 3", "rl-3");
-  col2 += roundBlock(3, "Round 4", "rl-4");
-  col2 += wagerBlock(
-    gameState.finalWager[ti],
-    "Final Wager",
-    "rl-4",
-    "win or lose, 1\u201320",
-    true,
-  );
+  let col1, col2;
+  if (isTheme()) {
+    // Theme Night: three rounds, each closed by its Q5 wager (Round 1 / 2 / 3 wagers cap at 5 / 10 / 20).
+    col1 = roundBlock(0, "Round 1", "rl-1");
+    col1 += wagerBlock(gameState.wager1[ti], "Round 1 Wager", "rl-1", "win or lose, 1\u20135");
+    col1 += roundBlock(1, "Round 2", "rl-2");
+    col1 += wagerBlock(gameState.halftime[ti], "Round 2 Wager", "rl-2", "win or lose, 1\u201310");
+    col2 = roundBlock(2, "Round 3", "rl-3");
+    col2 += wagerBlock(gameState.finalWager[ti], "Round 3 Wager", "rl-3", "win or lose, 1\u201320", true);
+  } else {
+    col1 = roundBlock(0, "Round 1", "rl-1");
+    col1 += roundBlock(1, "Round 2", "rl-2");
+    col1 += wagerBlock(
+      gameState.halftime[ti],
+      "Halftime Bonus",
+      "rl-2",
+      "win or lose, 1\u201310",
+    );
+    col2 = roundBlock(2, "Round 3", "rl-3");
+    col2 += roundBlock(3, "Round 4", "rl-4");
+    col2 += wagerBlock(
+      gameState.finalWager[ti],
+      "Final Wager",
+      "rl-4",
+      "win or lose, 1\u201320",
+      true,
+    );
+  }
   h += `<div class="aud-columns"><div class="aud-col">${col1}</div><div class="aud-col">${col2}</div></div>`;
 
   const gt = grandTotal(ti);

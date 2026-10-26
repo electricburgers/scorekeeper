@@ -10,6 +10,10 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.78 - 2026-10-26
+- **Theme Night mode:** new **Settings → Game Mode** toggle between Regular and Theme Night. Theme Night is three rounds (Q1-4 with the Regular Round 1-3 point budgets), each closed by a Q5 bonus wager capped at 5 / 10 / 20 (min 1, win adds, lose subtracts). It reuses the existing round, wager, standings, Team Report and Final Results code (Round 2/3 wagers use the halftime/final wager stores; Round 1 adds a `wager1` store), and Round 4 is simply hidden. The mode is saved with the game and kept by New Game; Regular is unchanged.
+- **Theme Name:** Theme Night adds a Theme Name field to Event Details, printed on the PDF header and the XLSX top row. In Theme Night the exports drop Round 4 and show each Q5 wager in that round's bonus/halftime column. Score guess range is 1-95.
+
 ## v19.77 - 2026-10-24
 - **A-Z sort on Round 2 and 4 bonus questions:** the halftime (Round 2) and final (Round 4) wager cards now have the same A-Z / Z-A / off name sort button as the other question cards, combining with the unanswered-first Sort. Reset clears both.
 

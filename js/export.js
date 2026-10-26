@@ -462,6 +462,17 @@ async function exportPDF() {
       [17, 22, "Round 3", "E3B5CF", "000000"],
       [23, 29, "Round 4", "E8A673", "000000"],
     ];
+    // Theme Night has three rounds and no Round 4 / Final columns: each round's Q5 wager takes
+    // the slot Regular uses for that round's bonus / halftime net points (r1bonus, htpts,
+    // r3bonus), and the Round 4 columns drop out, so the same table serves both modes.
+    if (isTheme()) {
+      SPEC.splice(23, 6); // r4q0-3, tAD, fwpts — leaves tAF (grand total) last
+      GROUPS.splice(3, 1);
+      GROUPS[2][1] = 23; // Round 3 band now spans through the grand total
+      SPEC.find((c) => c.k === "r1bonus").l4 = "W 1-5";
+      SPEC.find((c) => c.k === "htpts").l4 = "W 1-10";
+      SPEC.find((c) => c.k === "r3bonus").l4 = "W 1-20";
+    }
     const TRIV_WAGERS = [
       [1, 2, 3, 4],
       [1, 3, 5, 7],
@@ -516,10 +527,11 @@ async function exportPDF() {
         r2 = qpts(1, t),
         r3 = qpts(2, t),
         r4 = qpts(3, t);
-      const r1b = (gameState.rounds[0].bonus[t] || 0) * 5,
-        r3b = (gameState.rounds[2].bonus[t] || 0) * 5;
+      const theme = isTheme();
+      const r1b = theme ? w1Pts(t) : (gameState.rounds[0].bonus[t] || 0) * 5,
+        r3b = theme ? fwPts(t) : (gameState.rounds[2].bonus[t] || 0) * 5;
       const ht = htPts(t),
-        fw = fwPts(t);
+        fw = theme ? 0 : fwPts(t);
       const njcb3 = tm.njcb ? 3 : 0,
         item5 = tm.bonusItem ? 5 : 0;
       const sum = (a) => a[0] + a[1] + a[2] + a[3];
@@ -693,6 +705,7 @@ async function exportPDF() {
         ["QUIZ #", meta.quizId || "—"],
         ["HOST", meta.hostName || "—"],
       ];
+      if (isTheme()) headerFields.push(["THEME", (meta.themeName || "").trim() || "—"]);
       // One row of four, as before. Craft Partner and Bonus Item are NOT here — they sit beside
       // the Standings table instead (see drawSideInfo), in the ~360pt of empty page that the
       // 432pt-wide table leaves to its right. A second header row cost 40pt of vertical space on
@@ -711,7 +724,7 @@ async function exportPDF() {
           doc.text(value, fx, rowY + 28, { maxWidth: fieldW - 6 });
         });
       };
-      drawRow(headerFields, y, 4);
+      drawRow(headerFields, y, headerFields.length);
       y += 44;
     }
     function drawMainHeaderRows() {
@@ -976,7 +989,8 @@ var TRIVX_R1 = { 1: "E", 2: "F", 3: "G", 4: "H" },
   TRIVX_R4 = { 3: "AA", 6: "AB", 9: "AC", 12: "AD" };
 var TRIVX_WMAPS = [TRIVX_R1, TRIVX_R2, TRIVX_R3, TRIVX_R4],
   TRIVX_BONUS = { 0: "J", 2: "Y" },
-  TRIVX_NET = { 1: "Q", 3: "AF" };
+  TRIVX_NET = { 1: "Q", 3: "AF" },
+  TRIVX_THEME_NET = { 0: "J", 1: "Q", 2: "Y" };
 function trivXFind(xml, ref) {
   let m = xml.match(new RegExp('<c r="' + ref + '"[^>]*?/>'));
   if (m) return { i: m.index, len: m[0].length, el: m[0] };
@@ -1147,6 +1161,13 @@ function trivInjectXlsx(templateBytes, gs, rk) {
   // itself before splicing, so patches can be queued in whatever order is convenient here.
   const patches = [];
   if (gs.meta.hostName) patches.push(["I1", "s", "HOST: " + gs.meta.hostName]);
+  const theme = gs.meta.mode === "theme";
+  if (theme) {
+    if ((gs.meta.themeName || "").trim())
+      patches.push(["R1", "s", "THEME: " + gs.meta.themeName.trim()]);
+    // Theme Night's Q5 wagers use the template's Bonus / HT / Bonus net-points columns.
+    patches.push(["I4", "s", "Wager 1-5"], ["Q4", "s", "W 1-10"], ["X4", "s", "Wager 1-20"]);
+  }
   if (gs.meta.location) patches.push(["C2", "s", gs.meta.location]);
   if (gs.meta.quizId) {
     patches.push(["N2", "s", gs.meta.quizId]);
@@ -1171,6 +1192,7 @@ function trivInjectXlsx(templateBytes, gs, rk) {
     if (tm.scoreGuess !== "" && tm.scoreGuess != null)
       put("AH", "n", parseInt(tm.scoreGuess, 10));
     for (let ri = 0; ri < 4; ri++) {
+      if (theme && ri === 3) continue;
       const wm = TRIVX_WMAPS[ri],
         qs = gs.rounds[ri].questions;
       for (let qi = 0; qi < 4; qi++) {
@@ -1181,7 +1203,11 @@ function trivInjectXlsx(templateBytes, gs, rk) {
         if (a.correct === true) put(wcol, "n", a.wager);
         else if (a.correct === false) put(wcol, "n", 0);
       }
-      if (ri === 0 || ri === 2) {
+      if (theme) {
+        const d = [gs.wager1, gs.halftime, gs.finalWager][ri][t];
+        if (d && d.wager != null && d.wager !== "" && d.correct != null)
+          put(TRIVX_THEME_NET[ri], "n", d.correct ? +d.wager : -d.wager);
+      } else if (ri === 0 || ri === 2) {
         const c = gs.rounds[ri].bonus[t];
         if (c != null) put(TRIVX_BONUS[ri], "n", c * 5);
       } else {

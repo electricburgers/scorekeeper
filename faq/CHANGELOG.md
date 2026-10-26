@@ -2,6 +2,13 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.41] - 26 Oct 2026
+
+### Added
+
+- **New "Theme Night" section** (3 entries: switching modes, how it differs from Regular, where the Theme Name
+  prints) plus a Theme Name bullet in Event Details and a Game Mode bullet in Settings. No new screenshots.
+
 ## [1.40] - 30 Aug 2026
 
 ### Changed

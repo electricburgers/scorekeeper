@@ -9,6 +9,38 @@ const ROUND_WAGERS = [
 const ROUND_COLORS = ["rl-1", "rl-2", "rl-3", "rl-4"];
 const BONUS_ROUNDS = new Set([0, 2]);
 
+// Theme Night: 3 rounds, each Q1-4 (same point budgets as Regular rounds 1-3) closed by a single
+// Q5 bonus WAGER instead of Regular's 4-part bonus / halftime / final. Same game-state shape
+// either way (4 round slots, Round 4 simply unused), so a saved game is never lost by flipping
+// the mode and every scoring loop below stays correct without knowing about the mode.
+// The three Q5 wagers reuse the two existing wager stores (halftime = Round 2, finalWager =
+// Round 3 in Theme Night, caps 10 and 20 already match) plus a new wager1 store for Round 1 (cap 5).
+const THEME_WAGER_MAX = { wager1: 5, halftime: 10, final: 20 };
+function isTheme() {
+  return gameState.meta.mode === "theme";
+}
+function roundCount() {
+  return isTheme() ? 3 : 4;
+}
+function hasBonusQ(ri) {
+  return !isTheme() && BONUS_ROUNDS.has(ri);
+}
+// Which special-wager block (if any) closes round ri in the current mode.
+function roundWagerType(ri) {
+  if (isTheme()) return ["wager1", "halftime", "final"][ri] || null;
+  return ri === 1 ? "halftime" : ri === 3 ? "final" : null;
+}
+function wagerStore(type) {
+  return type === "wager1"
+    ? gameState.wager1
+    : type === "final"
+      ? gameState.finalWager
+      : gameState.halftime;
+}
+function wagerMax(type) {
+  return isTheme() ? THEME_WAGER_MAX[type] : type === "final" ? 20 : 10;
+}
+
 function freshState() {
   return {
     meta: {
@@ -21,6 +53,8 @@ function freshState() {
       bonusItem: "",
       staffNames: "",
       excludeTopN: 2,
+      mode: "regular",
+      themeName: "",
     },
     teams: [],
     rounds: [0, 1, 2, 3].map(() => ({
@@ -29,6 +63,7 @@ function freshState() {
     })),
     halftime: {},
     finalWager: {},
+    wager1: {},
     gameStarted: false,
     craftPrizeWinner: null,
   };
@@ -90,9 +125,11 @@ function migrateState(s) {
     "craftPartnerTown",
     "bonusItem",
     "staffNames",
+    "themeName",
   ].forEach((k) => {
     s.meta[k] = s.meta[k] || "";
   });
+  if (s.meta.mode !== "theme") s.meta.mode = "regular";
   // The same limits the inputs carry as maxlength, applied again to whatever comes IN. maxlength
   // only stops a person typing past it — it does nothing for a value arriving from a loaded .json
   // file, an older session saved before these limits existed, or a paste handled by script. The
@@ -126,6 +163,7 @@ function migrateState(s) {
   });
   if (!s.halftime) s.halftime = {};
   if (!s.finalWager) s.finalWager = {};
+  if (!s.wager1) s.wager1 = {};
   if (s.gameStarted === undefined) s.gameStarted = false;
   if (s.craftPrizeWinner === undefined)
     s.craftPrizeWinner =
@@ -146,7 +184,7 @@ function checkGameStarted() {
         }
       }
     }
-    if (BONUS_ROUNDS.has(ri)) {
+    if (hasBonusQ(ri)) {
       const b = gameState.rounds[ri].bonus;
       for (const k in b) {
         if (b[k] != null) {
@@ -154,6 +192,12 @@ function checkGameStarted() {
           return true;
         }
       }
+    }
+  }
+  for (const k in gameState.wager1) {
+    if (gameState.wager1[k]?.wager) {
+      gameState.gameStarted = true;
+      return true;
     }
   }
   for (const k in gameState.halftime) {
@@ -196,7 +240,7 @@ function roundSub(ti, ri) {
     if (a && a.wager !== undefined && a.correct !== undefined)
       t += a.correct ? a.wager : 0;
   }
-  if (BONUS_ROUNDS.has(ri)) {
+  if (hasBonusQ(ri)) {
     const bc = rd.bonus[ti];
     if (bc != null) t += bc * 5;
   }
@@ -214,10 +258,15 @@ function fwPts(ti) {
   if (f.correct == null) return 0;
   return f.correct ? +f.wager : -f.wager;
 }
+function w1Pts(ti) {
+  const w = gameState.wager1[ti];
+  if (!w || w.wager == null || w.wager === "" || w.correct == null) return 0;
+  return w.correct ? +w.wager : -w.wager;
+}
 function grandTotal(ti) {
   let t = 0;
   for (let ri = 0; ri < 4; ri++) t += roundSub(ti, ri);
-  t += htPts(ti) + fwPts(ti);
+  t += htPts(ti) + fwPts(ti) + w1Pts(ti);
   if (gameState.teams[ti]?.bonusItem) t += 5;
   if (gameState.teams[ti]?.njcb) t += 3;
   t += gameState.teams[ti]?.adjustment || 0;
@@ -346,7 +395,7 @@ function usedW(ti, ri) {
   return u;
 }
 function preWagerTotal(ti, type) {
-  let t = roundSub(ti, 0) + roundSub(ti, 1);
+  let t = roundSub(ti, 0) + roundSub(ti, 1) + w1Pts(ti);
   if (type === "final") t += htPts(ti) + roundSub(ti, 2) + roundSub(ti, 3);
   if (gameState.teams[ti]?.bonusItem) t += 5;
   if (gameState.teams[ti]?.njcb) t += 3;
@@ -366,7 +415,7 @@ function isBonusBeerRound(ri) {
 function isSpecialBeerRound(type) {
   const n = gameState.teams.length;
   if (!activeTeamCount()) return false;
-  const data = type === "halftime" ? gameState.halftime : gameState.finalWager;
+  const data = wagerStore(type);
   for (let ti = 0; ti < n; ti++) {
     if (isPaused(ti)) continue;
     const d = data[ti];
@@ -397,25 +446,19 @@ function roundProgress(ri) {
       const a = gameState.rounds[ri].questions[qi][ti];
       if (a && a.wager !== undefined && a.correct !== undefined) done++;
     }
-  if (BONUS_ROUNDS.has(ri)) {
+  if (hasBonusQ(ri)) {
     total += n;
     for (let ti = 0; ti < len; ti++) {
       if (isPaused(ti)) continue;
       if (gameState.rounds[ri].bonus[ti] != null) done++;
     }
-  } else if (ri === 1) {
+  } else if (roundWagerType(ri)) {
+    const store = wagerStore(roundWagerType(ri));
     total += n;
     for (let ti = 0; ti < len; ti++) {
       if (isPaused(ti)) continue;
-      const h = gameState.halftime[ti];
+      const h = store[ti];
       if (h && h.wager != null && h.wager !== "" && h.correct != null) done++;
-    }
-  } else if (ri === 3) {
-    total += n;
-    for (let ti = 0; ti < len; ti++) {
-      if (isPaused(ti)) continue;
-      const f = gameState.finalWager[ti];
-      if (f && f.wager != null && f.wager !== "" && f.correct != null) done++;
     }
   }
   return { done, total };
