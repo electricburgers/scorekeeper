@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.82 - 2026-10-26
+- **Try Example names its mode:** the confirmation now reads "Load the sample game for Regular Trivia?" or "...for Theme Night?" so it's clear which example you're about to get.
+
 ## v19.81 - 2026-10-26
 - **Theme Night point budgets:** Round 1 stays 1-2-3-4, Round 2 is now 2-4-6-8 and Round 3 is 3-6-9-12, so a perfect night is 10 + 20 + 30 budgets + 5 + 10 + 20 Q5 wagers = 95 (not counting CB / Bonus). The PDF column headers and the XLSX template's wager headers and columns follow; Regular is unchanged.
 - **Take the Tour works in Theme Night:** the tour follows the mode you're in. It adds a required Theme Name step, uses the 1-95 guess range and new wager amounts, replaces the multi-part bonus with a "scores before the wager" read-out plus a Q5 wager at the end of each of the three rounds, and has no Round 4. Every other step is shared with the Regular tour.

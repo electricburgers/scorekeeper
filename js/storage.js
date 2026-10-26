@@ -237,9 +237,10 @@ function toThemeSample(s) {
   return s;
 }
 async function loadSampleGame() {
+  const modeName = isTheme() ? "Theme Night" : "Regular Trivia";
   const msg = gameState.teams.length
-    ? "Load the sample game? This wipes every team, score, and Event Details field currently entered \u2014 it can\u2019t be undone."
-    : "Load the sample game? This replaces your current session.";
+    ? "Load the sample game for " + modeName + "? This wipes every team, score, and Event Details field currently entered \u2014 it can\u2019t be undone."
+    : "Load the sample game for " + modeName + "? This replaces your current session.";
   if (!(await appConfirm(msg, { okLabel: "Load" }))) return;
   const theme = isTheme();
   gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
