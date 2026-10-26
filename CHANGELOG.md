@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v20.8 - 2026-10-26
+- **Theme Night PDF: a Sub column in every round.** Round 1 and Round 3 now show a Sub (running total after Q1-4, before the Q5 wager) just before their wager column, like Round 2 already did. Round 3's band ends with Final.
+
 ## v20.7 - 2026-10-26
 - **Theme Night XLSX fixed:** Round 1's wager column header and cap now read 5 (the template printed its Regular "20"); the Round 2 and 3 wager headers read "Wager 1-10" / "Wager 1-20"; the unused Round 4 columns and band are blanked and hidden; the last column is labelled "Final" and equals Round 3's total instead of repeating it through empty Sub/Bonus columns.
 - **Theme Night example fixed:** the sample's Round 2 and 3 answers were still on Regular's wager amounts (1-3-5-7 / 2-4-6-8), so they didn't match Theme Night's budgets and showed up blank in exports. They're now mapped to 2-4-6-8 / 3-6-9-12, keeping each team's right/wrong pattern.

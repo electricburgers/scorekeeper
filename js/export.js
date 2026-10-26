@@ -470,7 +470,18 @@ async function exportPDF() {
       // final total (tAF, "Final") are always the same number, so only the latter stays.
       SPEC.splice(22, 7);
       GROUPS.splice(3, 1);
-      GROUPS[2][1] = 22; // Round 3 band now spans through Final
+      // Every round gets a Sub (running total after Q1-4, before the Q5 wager) like Round 2
+      // already has: Round 1 and Round 3 gain one just before their wager column.
+      const subCol = (k) => ({ w: 28, k, df: "EFEFEF", dc: "8B0000", b: true, l4: "Sub", a: "C" });
+      SPEC.splice(SPEC.findIndex((c) => c.k === "r1bonus"), 0, subCol("tS1"));
+      SPEC.splice(SPEC.findIndex((c) => c.k === "r3bonus"), 0, subCol("tS3"));
+      const ix = (k) => SPEC.findIndex((c) => c.k === k);
+      GROUPS[0][0] = ix("r1q0");
+      GROUPS[0][1] = ix("tK");
+      GROUPS[1][0] = ix("r2q0");
+      GROUPS[1][1] = ix("tR");
+      GROUPS[2][0] = ix("r3q0");
+      GROUPS[2][1] = ix("tAF"); // Round 3 band spans through Final
       THEME_ROUND_WAGERS[1].forEach((w, i) => (SPEC.find((c) => c.k === "r2q" + i).l4 = String(w)));
       THEME_ROUND_WAGERS[2].forEach((w, i) => (SPEC.find((c) => c.k === "r3q" + i).l4 = String(w)));
       SPEC.find((c) => c.k === "r1bonus").l4 = "W 1-5";
@@ -567,6 +578,8 @@ async function exportPDF() {
         tK,
         tP,
         tR,
+        sub1: tK - r1b,
+        sub3: tR + sum(r3),
         tY,
         tAD,
         fw2: fw,
@@ -611,6 +624,10 @@ async function exportPDF() {
           return String(r.r2[2]);
         case "r2q3":
           return String(r.r2[3]);
+        case "tS1":
+          return String(r.sub1);
+        case "tS3":
+          return String(r.sub3);
         case "tP":
           return String(r.tP);
         case "htpts":
@@ -754,7 +771,7 @@ async function exportPDF() {
       SPEC.forEach((c, ix) => {
         let fill = "FFFFFF";
         if (["tK", "tR", "tY", "tAF"].includes(c.k)) fill = "FFC000";
-        else if (["tP", "tAD"].includes(c.k)) fill = "EFEFEF";
+        else if (["tP", "tAD", "tS1", "tS3"].includes(c.k)) fill = "EFEFEF";
         setFill(fill);
         doc.rect(cx[ix], labelY, cw[ix], rowH, "F");
         if (c.l4)
