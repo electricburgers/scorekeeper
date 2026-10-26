@@ -227,6 +227,10 @@ function toThemeSample(s) {
   s.meta.mode = "theme";
   s.meta.themeName = "The Simpsons";
   s.wager1 = {};
+  // Guesses from the Regular example can exceed Theme Night's 95-point ceiling.
+  s.teams.forEach((t) => {
+    if (t.scoreGuess !== "" && t.scoreGuess != null) t.scoreGuess = Math.min(95, t.scoreGuess);
+  });
   s.teams.forEach((_, ti) => {
     const b = s.rounds[0].bonus[ti] || 0;
     s.wager1[ti] = { wager: Math.min(5, b + 1), correct: b >= 2 };

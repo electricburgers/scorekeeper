@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.83 - 2026-10-26
+- **Theme Night example guesses capped at 95:** the sample teams' score guesses are limited to Theme Night's 1-95 range.
+
 ## v19.82 - 2026-10-26
 - **Try Example names its mode:** the confirmation now reads "Load the sample game for Regular Trivia?" or "...for Theme Night?" so it's clear which example you're about to get.
 
