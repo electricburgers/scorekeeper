@@ -240,6 +240,17 @@ function toThemeSample(s) {
     const b = s.rounds[0].bonus[ti] || 0;
     s.wager1[ti] = { wager: Math.min(5, b + 1), correct: b >= 2 };
   });
+  // The Regular example was played on Regular's point budgets; re-key each answer to the same
+  // position in Theme Night's set (Round 2: 1-3-5-7 -> 2-4-6-8, Round 3: 2-4-6-8 -> 3-6-9-12) so
+  // the sheet matches this mode's rules and every team keeps its right/wrong pattern.
+  [1, 2].forEach((ri) =>
+    s.rounds[ri].questions.forEach((q) =>
+      Object.values(q).forEach((a) => {
+        const i = ROUND_WAGERS[ri].indexOf(a.wager);
+        if (i >= 0) a.wager = THEME_ROUND_WAGERS[ri][i];
+      }),
+    ),
+  );
   s.rounds[0].bonus = {};
   s.rounds[2].bonus = {};
   s.rounds[3] = { questions: [{}, {}, {}, {}], bonus: {} };

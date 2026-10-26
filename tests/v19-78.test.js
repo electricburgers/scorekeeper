@@ -138,6 +138,8 @@ describe("Theme Night: heading, icons, Try Example", () => {
     assert.equal(r.theme, "The Simpsons");
     assert.equal(r.n, 11);
     assert.equal(r.first, "Parliamentary Procedure");
+    assert.ok(evalIn(window, "gameState.rounds[1].questions.every(q => Object.values(q).every(a => [2,4,6,8].includes(a.wager)))"), "R2 wagers on theme budget");
+    assert.ok(evalIn(window, "gameState.rounds[2].questions.every(q => Object.values(q).every(a => [3,6,9,12].includes(a.wager)))"), "R3 wagers on theme budget");
     assert.equal(evalIn(window, "Math.max(...gameState.teams.map(t => t.scoreGuess))"), 95);
     assert.ok(evalIn(window, "new Set(gameState.teams.map(t => t.scoreGuess)).size") > 5, "guesses are scaled, not all clamped to 95");
     assert.ok(r.r4);

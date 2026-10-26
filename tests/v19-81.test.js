@@ -44,6 +44,10 @@ describe("Theme Night point budgets", () => {
     assert.match(sheet, /<c r="L5"[^>]*><v>2<\/v>/);
     assert.match(sheet, /<c r="W5"[^>]*><v>12<\/v>/);
     assert.match(sheet, /<c r="AG5"[^>]*>(<f[^>]*>[^<]*<\/f>)?<v>95<\/v>/);
+    assert.match(sheet, /<c r="I5"[^>]*><v>5<\/v>/, "R1 wager cap");
+    assert.match(sheet, /<c r="AG4"[^>]*><is><t[^>]*>Final</, "Final header");
+    assert.match(sheet, /<c r="AE5"[^>]*\/>/, "Round 4 Sub blanked");
+    assert.match(sheet, /<col min="27" max="31"[^>]*hidden="1"/, "Round 4 columns hidden");
     await assert.doesNotReject(() => evalIn(window, "exportPDF()"));
   });
 });

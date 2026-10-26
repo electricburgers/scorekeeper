@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v20.7 - 2026-10-26
+- **Theme Night XLSX fixed:** Round 1's wager column header and cap now read 5 (the template printed its Regular "20"); the Round 2 and 3 wager headers read "Wager 1-10" / "Wager 1-20"; the unused Round 4 columns and band are blanked and hidden; the last column is labelled "Final" and equals Round 3's total instead of repeating it through empty Sub/Bonus columns.
+- **Theme Night example fixed:** the sample's Round 2 and 3 answers were still on Regular's wager amounts (1-3-5-7 / 2-4-6-8), so they didn't match Theme Night's budgets and showed up blank in exports. They're now mapped to 2-4-6-8 / 3-6-9-12, keeping each team's right/wrong pattern.
+
 ## v20.6 - 2026-10-26
 - **Theme Night example guesses are scaled, not clamped:** all sample guesses shrink proportionally so the highest is 95 and the teams keep their spread (v20.5 had piled several onto 95).
 - **Mode named in more prompts:** switching modes says "Switch from Regular Trivia to Theme Night?" (or the reverse); Take the Tour says which mode's practice game it will start; Clear Session says the next game stays in the current mode; and the Resume banner shows "(Regular Trivia)" or "(Theme Night: <theme>)" for the saved session.

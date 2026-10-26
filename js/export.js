@@ -1073,8 +1073,13 @@ function trivXPatchAll(xml, patches) {
       continue;
     }
     const s = trivStyle(f.el);
+    // "blank": empty styled cell. "f": [formulaText, cachedValue] as a plain (non-shared) formula.
     const nw =
-      kind === "n"
+      kind === "blank"
+        ? '<c r="' + ref + '"' + s + "/>"
+        : kind === "f"
+          ? '<c r="' + ref + '"' + s + "><f>" + val[0] + "</f><v>" + val[1] + "</v></c>"
+          : kind === "n"
         ? '<c r="' + ref + '"' + s + "><v>" + val + "</v></c>"
         : '<c r="' +
           ref +
@@ -1176,7 +1181,10 @@ function trivInjectXlsx(templateBytes, gs, rk) {
     // Theme Night's Q5 wagers use the template's Bonus / HT / Bonus net-points columns.
     Object.entries(TRIVX_THEME_R2).forEach(([w, c]) => patches.push([c + "4", "n", +w]));
     Object.entries(TRIVX_THEME_R3).forEach(([w, c]) => patches.push([c + "4", "n", +w]));
-    patches.push(["I4", "s", "Wager 1-5"], ["Q4", "s", "W 1-10"], ["X4", "s", "Wager 1-20"]);
+    patches.push(["I4", "s", "Wager 1-5"], ["Q4", "s", "Wager 1-10"], ["X4", "s", "Wager 1-20"]);
+    // No Round 4: blank its band and columns (AA-AF), and relabel the grand-total column "Final".
+    ["AA3", "AA4", "AB4", "AC4", "AD4", "AE4", "AF4"].forEach((c) => patches.push([c, "blank"]));
+    patches.push(["AG4", "s", "Final"]);
   }
   if (gs.meta.location) patches.push(["C2", "s", gs.meta.location]);
   if (gs.meta.quizId) {
@@ -1241,8 +1249,17 @@ function trivInjectXlsx(templateBytes, gs, rk) {
     patches.push(["P" + r, "cv", P]);
     patches.push(["R" + r, "cv", R]);
     patches.push(["Z" + r, "cv", Z]);
-    patches.push(["AE" + r, "cv", AE]);
-    patches.push(["AG" + r, "cv", AG]);
+    if (theme) {
+      // Final = Round 3's running total; AE (R4 Sub) and AF (R4 bonus) are blanked, I (the R1
+      // bonus cap the template prints as 20) becomes this mode's Round 1 wager cap of 5.
+      patches.push(["AE" + r, "blank"], ["AF" + r, "blank"]);
+      ["AA", "AB", "AC", "AD"].forEach((c) => patches.push([c + r, "blank"]));
+      patches.push(["AG" + r, "f", ["Z" + r, Z]]);
+      patches.push(["I" + r, "n", 5]);
+    } else {
+      patches.push(["AE" + r, "cv", AE]);
+      patches.push(["AG" + r, "cv", AG]);
+    }
     patches.push(["AI" + r, "cv", g("AH") - AG]);
     // Column S is a plain "=B" mirror of the team name; a non-recalc viewer shows its stale 0.
     // Overwrite it with the name outright rather than teaching "cv" about string formula results.
@@ -1254,6 +1271,16 @@ function trivInjectXlsx(templateBytes, gs, rk) {
     patches.push(["AM" + rr, "s", row.name]);
   });
   x = trivXPatchAll(x, patches);
+  if (theme) {
+    // Hide the now-empty Round 4 columns (AA-AF) so Final sits right after Round 3.
+    x = x.replace(
+      /<col min="27" max="31" ([^>]*?)\/>/,
+      '<col min="27" max="31" $1 hidden="1"/>',
+    ).replace(
+      /<col min="32" max="32" ([^>]*?)\/>/,
+      '<col min="32" max="32" $1 hidden="1"/>',
+    );
+  }
   // Only draw as many team rows as this game actually has — the embedded template ships a full
   // MAX_TEAMS (100) block of styled team rows plus JD's own ~880 trailing filler rows, so a
   // 12-team game otherwise exported a sheet ~975 rows tall, all but 12 of them empty. Trim
