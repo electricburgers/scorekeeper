@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.44] - 26 Oct 2026
+
+### Changed
+
+- **Theme Night section:** new point budgets (Round 1: 1-4, Round 2: 2-4-6-8, Round 3: 3-6-9-12) and a 95-point perfect night (CB/Bonus not counted), plus a new entry saying Take the Tour follows whichever mode you're in.
+
 ## [1.43] - 26 Oct 2026
 
 ### Changed

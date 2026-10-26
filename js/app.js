@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.80"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.81"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 26, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1150,13 +1150,19 @@ function setStandingsSort(type, mode) {
 }
 
 function renderAll() {
-  renderLeft();
-  renderSB();
+  // One memo scope across both panes, so the sidebar and the left column share each total.
+  withScoreMemo(() => {
+    renderLeft();
+    renderSB();
+  });
   applyPrefs();
   syncGameModeToggle();
 }
 
 function renderLeft() {
+  return withScoreMemo(renderLeftBody);
+}
+function renderLeftBody() {
   const m = document.getElementById("mainContent");
   if (!m) return;
   let sy = m.scrollTop;
@@ -1298,7 +1304,7 @@ function renderLeft() {
           (rp.total - rp.done) +
           " left</span>";
     }
-    h += `<div class="section ${collapsedSections.has("sec-r" + rn) ? "collapsed" : ""} ${rComplete ? "round-complete" : ""}" id="sec-r${rn}"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-r${rn}')"><h2><span>Round ${rn}</span>${rpBadge}<span class="round-break"></span><span class="round-label ${ROUND_COLORS[ri]} round-wager-label">Wagers: ${ROUND_WAGERS[ri].join(", ")}</span></h2><span class="chevron">▼</span></div><div class="section-body">`;
+    h += `<div class="section ${collapsedSections.has("sec-r" + rn) ? "collapsed" : ""} ${rComplete ? "round-complete" : ""}" id="sec-r${rn}"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-r${rn}')"><h2><span>Round ${rn}</span>${rpBadge}<span class="round-break"></span><span class="round-label ${ROUND_COLORS[ri]} round-wager-label">Wagers: ${roundWagers(ri).join(", ")}</span></h2><span class="chevron">▼</span></div><div class="section-body">`;
     for (let qi = 0; qi < 4; qi++) h += renderWQ(ri, qi);
     const wt = roundWagerType(ri);
     if (wt === "wager1")
@@ -1511,7 +1517,7 @@ function renderQStatsRow(s) {
   </span>`;
 }
 function renderWQ(ri, qi) {
-  const wagers = ROUND_WAGERS[ri];
+  const wagers = roundWagers(ri);
   const qs = qScored(ri, qi);
   const beer = isBeerRound(ri, qi);
   const qKey = ri + "-" + qi;
@@ -1944,6 +1950,9 @@ function toggleSidebar() {
 }
 
 function renderSB() {
+  return withScoreMemo(renderSBBody);
+}
+function renderSBBody() {
   const body = document.getElementById("sidebarBody");
   if (!body) return;
   // .scores-list — not sidebarBody — is the element that actually scrolls (see its own CSS

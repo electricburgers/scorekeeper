@@ -127,7 +127,7 @@ function buildAudit(ti) {
 
   let run = 0;
   function roundBlock(ri, label, colorCls) {
-    let b = `<div class="aud-round"><div class="aud-round-h"><span class="round-label ${colorCls}">${label}</span><span style="color:var(--text-muted);font-weight:400;font-size:.68rem;letter-spacing:0;text-transform:none">wagers ${ROUND_WAGERS[ri].join(", ")}</span></div>`;
+    let b = `<div class="aud-round"><div class="aud-round-h"><span class="round-label ${colorCls}">${label}</span><span style="color:var(--text-muted);font-weight:400;font-size:.68rem;letter-spacing:0;text-transform:none">wagers ${roundWagers(ri).join(", ")}</span></div>`;
     for (let qi = 0; qi < 4; qi++) b += auditQLine(ri, qi, ti);
     if (hasBonusQ(ri)) {
       const v = gameState.rounds[ri].bonus[ti];

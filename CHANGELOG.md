@@ -10,6 +10,11 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.81 - 2026-10-26
+- **Theme Night point budgets:** Round 1 stays 1-2-3-4, Round 2 is now 2-4-6-8 and Round 3 is 3-6-9-12, so a perfect night is 10 + 20 + 30 budgets + 5 + 10 + 20 Q5 wagers = 95 (not counting CB / Bonus). The PDF column headers and the XLSX template's wager headers and columns follow; Regular is unchanged.
+- **Take the Tour works in Theme Night:** the tour follows the mode you're in. It adds a required Theme Name step, uses the 1-95 guess range and new wager amounts, replaces the multi-part bonus with a "scores before the wager" read-out plus a Q5 wager at the end of each of the three rounds, and has no Round 4. Every other step is shared with the Regular tour.
+- **Performance (Big O):** totals are now computed once per render pass instead of several times (each team's grand total and round subtotals were re-summed for the sidebar, Final Results, the standings blocks and the tooltips; `ranked()` is also reused), and the A-Z team sort builds each label once and uses a single shared collator instead of a locale lookup on every comparison. No behavior change; the memo only exists during a render, so reads from setters/exports always see live scores. Profiling a 100-team game shows what's left is the browser building the DOM, not scoring code.
+
 ## v19.80 - 2026-10-26
 - **Theme Name is required in Theme Night:** scoring is blocked (same alert-and-scroll as Quiz ID, Host and Location) until one is entered, and the field shows the orange "required" hint. It now sits between Date and Quiz ID. Its length is capped at 40 characters (enforced on typing and on loaded files) so it fits the PDF header.
 

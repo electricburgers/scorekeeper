@@ -6,6 +6,13 @@ const ROUND_WAGERS = [
   [2, 4, 6, 8],
   [3, 6, 9, 12],
 ];
+// Theme Night's point budgets (perfect night = 95 without CB/Bonus extras: 10+20+30 budgets +
+// 5+10+20 Q5 wagers). Round 1 matches Regular; Rounds 2 and 3 use Regular's Round 3 and 4 sets.
+const THEME_ROUND_WAGERS = [
+  [1, 2, 3, 4],
+  [2, 4, 6, 8],
+  [3, 6, 9, 12],
+];
 const ROUND_COLORS = ["rl-1", "rl-2", "rl-3", "rl-4"];
 const BONUS_ROUNDS = new Set([0, 2]);
 
@@ -18,6 +25,9 @@ const BONUS_ROUNDS = new Set([0, 2]);
 const THEME_WAGER_MAX = { wager1: 5, halftime: 10, final: 20 };
 function isTheme() {
   return gameState.meta.mode === "theme";
+}
+function roundWagers(ri) {
+  return isTheme() ? THEME_ROUND_WAGERS[ri] || [] : ROUND_WAGERS[ri];
 }
 function roundCount() {
   return isTheme() ? 3 : 4;
@@ -90,16 +100,21 @@ function activeTeamCount() {
 // Name sort for a question card's team list. dir is "az" / "za" / falsy (off). pending, when the
 // "unanswered first" sort is also on, is the set of teams that were unanswered when it was taken:
 // they stay grouped above the answered ones and the name sort orders within each group.
+const ALPHA_COLLATOR = new Intl.Collator(undefined, {
+  sensitivity: "base",
+  numeric: true,
+});
 function applyAlphaSort(order, dir, pending) {
   if (!dir) return order;
   const sign = dir === "za" ? -1 : 1;
+  // Labels built once per sort (O(n)) instead of re-derived inside every comparison
+  // (O(n log n) lookups), and one shared Collator instead of a fresh locale resolution per
+  // localeCompare call — same ordering as localeCompare(…, {sensitivity:"base", numeric:true}).
+  const labels = new Map(order.map((ti) => [ti, teamLabel(ti)]));
   return order.slice().sort((a, b) => {
     const g = pending ? (pending.has(a) ? 0 : 1) - (pending.has(b) ? 0 : 1) : 0;
     if (g) return g;
-    const c = teamLabel(a).localeCompare(teamLabel(b), undefined, {
-      sensitivity: "base",
-      numeric: true,
-    });
+    const c = ALPHA_COLLATOR.compare(labels.get(a), labels.get(b));
     return sign * c || a - b;
   });
 }
@@ -232,7 +247,33 @@ function checkBeerRound(ri, qi) {
   if (isBeerRound(ri, qi)) beerRoundToasted.add(key);
 }
 
+// Per-render-pass memo for the totals every render asks for again and again. One renderAll used
+// to recompute each team's grandTotal ~3x (sidebar ranking, Final Results, standings blocks) and
+// each roundSub ~2x more through preWagerTotal and the sidebar tooltip; with the memo each
+// (team, round) is summed once per pass. It exists ONLY while a render is running (see
+// withScoreMemo) — nothing mutates scores mid-render, and any read outside a render (setters,
+// exports, the tour's tie-break demo) always recomputes from live state, so it can never go stale.
+let scoreMemo = null;
+function withScoreMemo(fn) {
+  if (scoreMemo) return fn();
+  scoreMemo = { rs: new Map(), gt: new Map(), rk: null };
+  try {
+    return fn();
+  } finally {
+    scoreMemo = null;
+  }
+}
 function roundSub(ti, ri) {
+  if (!scoreMemo) return roundSubRaw(ti, ri);
+  const key = ti * 4 + ri;
+  let v = scoreMemo.rs.get(key);
+  if (v === undefined) {
+    v = roundSubRaw(ti, ri);
+    scoreMemo.rs.set(key, v);
+  }
+  return v;
+}
+function roundSubRaw(ti, ri) {
   if (ri >= roundCount()) return 0; // Theme Night hides Round 4; its entries never count
   const rd = gameState.rounds[ri];
   let t = 0;
@@ -266,6 +307,15 @@ function w1Pts(ti) {
   return w.correct ? +w.wager : -w.wager;
 }
 function grandTotal(ti) {
+  if (!scoreMemo) return grandTotalRaw(ti);
+  let v = scoreMemo.gt.get(ti);
+  if (v === undefined) {
+    v = grandTotalRaw(ti);
+    scoreMemo.gt.set(ti, v);
+  }
+  return v;
+}
+function grandTotalRaw(ti) {
   let t = 0;
   for (let ri = 0; ri < 4; ri++) t += roundSub(ti, ri);
   t += htPts(ti) + fwPts(ti) + w1Pts(ti);
@@ -280,6 +330,12 @@ function grandTotal(ti) {
 // both have no guess at all) are a genuine, unbreakable tie and stay grouped for rankMap()
 // below; a.index as the final fallback just keeps the sort stable/deterministic.
 function ranked() {
+  if (scoreMemo && scoreMemo.rk) return scoreMemo.rk;
+  const out = rankedRaw();
+  if (scoreMemo) scoreMemo.rk = out;
+  return out;
+}
+function rankedRaw() {
   return gameState.teams
     .map((t, i) => {
       const total = grandTotal(i);

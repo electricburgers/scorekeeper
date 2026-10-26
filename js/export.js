@@ -469,16 +469,20 @@ async function exportPDF() {
       SPEC.splice(23, 6); // r4q0-3, tAD, fwpts — leaves tAF (grand total) last
       GROUPS.splice(3, 1);
       GROUPS[2][1] = 23; // Round 3 band now spans through the grand total
+      THEME_ROUND_WAGERS[1].forEach((w, i) => (SPEC.find((c) => c.k === "r2q" + i).l4 = String(w)));
+      THEME_ROUND_WAGERS[2].forEach((w, i) => (SPEC.find((c) => c.k === "r3q" + i).l4 = String(w)));
       SPEC.find((c) => c.k === "r1bonus").l4 = "W 1-5";
       SPEC.find((c) => c.k === "htpts").l4 = "W 1-10";
       SPEC.find((c) => c.k === "r3bonus").l4 = "W 1-20";
     }
-    const TRIV_WAGERS = [
-      [1, 2, 3, 4],
-      [1, 3, 5, 7],
-      [2, 4, 6, 8],
-      [3, 6, 9, 12],
-    ];
+    const TRIV_WAGERS = isTheme()
+      ? [...THEME_ROUND_WAGERS, []]
+      : [
+          [1, 2, 3, 4],
+          [1, 3, 5, 7],
+          [2, 4, 6, 8],
+          [3, 6, 9, 12],
+        ];
 
     function hx(h) {
       return [
@@ -987,6 +991,8 @@ var TRIVX_R1 = { 1: "E", 2: "F", 3: "G", 4: "H" },
   TRIVX_R2 = { 1: "L", 3: "M", 5: "N", 7: "O" },
   TRIVX_R3 = { 2: "T", 4: "U", 6: "V", 8: "W" },
   TRIVX_R4 = { 3: "AA", 6: "AB", 9: "AC", 12: "AD" };
+var TRIVX_THEME_R2 = { 2: "L", 4: "M", 6: "N", 8: "O" },
+  TRIVX_THEME_R3 = { 3: "T", 6: "U", 9: "V", 12: "W" };
 var TRIVX_WMAPS = [TRIVX_R1, TRIVX_R2, TRIVX_R3, TRIVX_R4],
   TRIVX_BONUS = { 0: "J", 2: "Y" },
   TRIVX_NET = { 1: "Q", 3: "AF" },
@@ -1166,6 +1172,8 @@ function trivInjectXlsx(templateBytes, gs, rk) {
     if ((gs.meta.themeName || "").trim())
       patches.push(["R1", "s", "THEME: " + gs.meta.themeName.trim()]);
     // Theme Night's Q5 wagers use the template's Bonus / HT / Bonus net-points columns.
+    Object.entries(TRIVX_THEME_R2).forEach(([w, c]) => patches.push([c + "4", "n", +w]));
+    Object.entries(TRIVX_THEME_R3).forEach(([w, c]) => patches.push([c + "4", "n", +w]));
     patches.push(["I4", "s", "Wager 1-5"], ["Q4", "s", "W 1-10"], ["X4", "s", "Wager 1-20"]);
   }
   if (gs.meta.location) patches.push(["C2", "s", gs.meta.location]);
@@ -1193,7 +1201,9 @@ function trivInjectXlsx(templateBytes, gs, rk) {
       put("AH", "n", parseInt(tm.scoreGuess, 10));
     for (let ri = 0; ri < 4; ri++) {
       if (theme && ri === 3) continue;
-      const wm = TRIVX_WMAPS[ri],
+      const wm = theme
+        ? [TRIVX_R1, TRIVX_THEME_R2, TRIVX_THEME_R3][ri]
+        : TRIVX_WMAPS[ri],
         qs = gs.rounds[ri].questions;
       for (let qi = 0; qi < 4; qi++) {
         const a = qs[qi][t];

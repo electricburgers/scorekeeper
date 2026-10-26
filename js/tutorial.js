@@ -69,6 +69,9 @@ const Tutorial = (function () {
   // score empty — the tour fills them in live instead of loading a finished game.
   function buildPracticeState() {
     const s = migrateState(freshState());
+    // Tour the mode the host is actually in. Theme Name is left blank like Quiz ID and Host Name:
+    // it gates scoring too, so the tour has the host type it in for real.
+    if (isTheme()) s.meta.mode = "theme";
     s.meta.date = new Date().toISOString().slice(0, 10);
     s.meta.location = "The Tutorial Tavern";
     s.meta.craftPartner = "Practice Run Brewing";
@@ -131,7 +134,7 @@ const Tutorial = (function () {
   // The first unused wager for this team/round — shared by every fill helper below so none of
   // them ever hand out a wager amount a team has already spent on another question this round.
   function nextUnusedWager(ri, ti) {
-    return ROUND_WAGERS[ri].find(
+    return roundWagers(ri).find(
       (w) => !usedW(ti, ri).some((u) => u.wager === w),
     );
   }
@@ -139,7 +142,7 @@ const Tutorial = (function () {
   // hand-scores Q1 for their own team (through the full correct/incorrect/clear cycle) and this
   // only has to fill in that one skipped slot's teammates, the same team's other 3 questions.
   function autoFillRound(ri, skipCell) {
-    const wagers = ROUND_WAGERS[ri].slice();
+    const wagers = roundWagers(ri).slice();
     gameState.teams.forEach((_, ti) => {
       const order = wagers.slice().sort(() => Math.random() - 0.5);
       let wi = 0;
@@ -157,7 +160,7 @@ const Tutorial = (function () {
         if (!plausibleCorrect()) cycleW(ri, qi, ti, w); // 2nd tap on same wager: flip to incorrect
       }
     });
-    if (BONUS_ROUNDS.has(ri)) autoFillBonus(ri);
+    if (hasBonusQ(ri)) autoFillBonus(ri);
   }
   function autoFillBonus(ri) {
     gameState.teams.forEach((_, ti) => {
@@ -166,12 +169,12 @@ const Tutorial = (function () {
     });
   }
   function autoFillSpecialWager(type, skipTi) {
-    const max = type === "final" ? 20 : 10;
-    const wSet = type === "final" ? setFW : setHW;
-    const cSet = type === "final" ? setFC : setHC;
+    const max = wagerMax(type);
+    const wSet = type === "final" ? setFW : type === "wager1" ? setW1 : setHW;
+    const cSet = type === "final" ? setFC : type === "wager1" ? setC1 : setHC;
+    const data = wagerStore(type);
     gameState.teams.forEach((_, ti) => {
       if (skipTi === ti) return; // already placed live
-      const data = type === "final" ? gameState.finalWager : gameState.halftime;
       if (data[ti] && data[ti].wager != null) return;
       wSet(ti, randInt(1, max));
       cSet(ti, plausibleCorrect());
@@ -186,7 +189,7 @@ const Tutorial = (function () {
       // Picking nextUnusedWager() straight would hand every team the same lowest amount, since
       // nothing's used yet this early in the round — shuffle towards the higher wagers instead
       // so the forced beer round doesn't look suspiciously uniform.
-      const preferred = [7, 5, 3].sort(() => Math.random() - 0.5);
+      const preferred = roundWagers(ri).slice(-3).sort(() => Math.random() - 0.5);
       const w =
         preferred.find((x) => !usedW(ti, ri).some((u) => u.wager === x)) ??
         nextUnusedWager(ri, ti);
@@ -301,6 +304,104 @@ const Tutorial = (function () {
   //     to place it below, for steps where the host needs to watch content sitting just below
   //     the target itself (e.g. the Sort demo) that the callout would otherwise cover.
   function steps() {
+    return isTheme() ? themeSteps(regularSteps()) : regularSteps();
+  }
+  // Theme Night's tour is the Regular tour with surgery, so every shared step (teams, sorting,
+  // Final Results, Team Report, Craft Prize, export...) stays a single source of truth. The
+  // differences: a required Theme Name step, a Q5 wager (with its "scores before" read-out) at
+  // the end of EACH of the three rounds in place of the multi-part bonus, new point budgets, a
+  // 1-95 guess range, and no Round 4.
+  function themeSteps(base) {
+    const wagerSteps = (type, n, cap, filler) => [
+      {
+        target: "#standings-" + type,
+        text: `Scroll down to the end of Round ${n} and you'll see the Scores before this round's wager. Read them out so teams know how many points to bet on Q5.`,
+        advance: "manual",
+      },
+      {
+        target: `#swblock-${type} .sw-header`,
+        targetEnd: `#swblock-${type} .special-wager-row:first-child`,
+        text: `Every round ends with a Q5 bonus wager. Pick an amount from 1 to ${cap} for ${team0Name()}, mark it right or wrong, then ${tapWord()} Next.`,
+        advance: "confirm",
+        doneLabel: "Next →",
+        waitHint: "Pick a wager and a result to continue",
+        done: () => {
+          const d = wagerStore(type)[0];
+          return !!(d && d.wager != null && d.correct != null);
+        },
+      },
+      {
+        target: "#swblock-" + type,
+        text: `I'll fill in everyone else's Round ${n} wagers.`,
+        advance: "manual",
+        fill: (ready) => {
+          runBatched(() => {
+            autoFillSpecialWager(type, 0);
+            if (filler) filler();
+          });
+          ready();
+        },
+      },
+    ];
+    const out = [];
+    base.forEach((s) => {
+      const t = s.target;
+      if (t === ".quiz-id-input") {
+        out.push({
+          target: "input[aria-label='Theme Name']",
+          calloutPosition: "above",
+          text: `Theme Night games need a Theme Name — something like 80s Music, Simpsons or Star Wars. Type one, then ${tapWord()} Next.`,
+          advance: "manual",
+          alwaysShowDone: true,
+          done: () => !!(gameState.meta.themeName || "").trim(),
+        });
+        out.push(s);
+      } else if (t === "#sec-meta") {
+        out.push({
+          ...s,
+          text: "Every game starts with Event Details — I've pre-filled the date, location, craft partner, bonus item, and restaurant staff. You'll fill in Theme Name, Quiz ID and Host Name next.",
+        });
+      } else if (t === '.team-entry:first-child input[type="number"]') {
+        out.push({ ...s, text: s.text.replace("1-146", "1-95") });
+      } else if (t === "#bqblock-0 .q-header") {
+        wagerSteps("wager1", 1, 5).forEach((w, i) => {
+          // Round 1's own Q5 wager is the first one the host places, so it gets the long intro.
+          if (i === 1) w.text = `Scroll down to the Q5 bonus wager at the end of Round 1. It's the first time teams put points on the line: win and the bet is added, lose and it's subtracted. Pick an amount from 1 to 5 for ${team0Name()}, mark it right or wrong, then ${tapWord()} Next.`;
+          out.push(w);
+        });
+      } else if (t === "#sec-r2" && /Scroll down to Round 2/.test(s.text)) {
+        out.push({
+          ...s,
+          text: "Scroll down to Round 2. Everything's the same, only the wager amounts change (2, 4, 6, 8). I'll fill in everyone's Q1.",
+        });
+      } else if (t === "#sec-r2") {
+        out.push({
+          ...s,
+          text: "I'll fill the rest of Round 2. Next, we'll cover the scores before the Round 2 wager and the wager itself.",
+        });
+      } else if (t === "#standings-halftime") {
+        wagerSteps("halftime", 2, 10).forEach((w) => out.push(w));
+      } else if (t === "#swblock-halftime .sw-header" || t === "#swblock-halftime") {
+        // replaced by wagerSteps("halftime") above
+      } else if (t === "#sec-r3") {
+        out.push({
+          ...s,
+          text: "Scroll down to Round 3. The wagers are 3, 6, 9 and 12, and it ends with the biggest Q5 wager of the night. I'll fill in Q1-4.",
+          fill: (ready) => {
+            runBatched(() => autoFillRound(2));
+            ready();
+          },
+        });
+        wagerSteps("final", 3, 20, () => forceTieBreakDemo()).forEach((w) => out.push(w));
+      } else if (t === "#sec-r4") {
+        // no Round 4 in Theme Night
+      } else {
+        out.push(s);
+      }
+    });
+    return out;
+  }
+  function regularSteps() {
     return [
       {
         target: null,
