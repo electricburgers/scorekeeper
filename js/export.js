@@ -445,7 +445,7 @@ async function exportPDF() {
         df: "FFC000",
         dc: "000000",
         b: true,
-        l4: "Total",
+        l4: "Final",
         a: "C",
       },
     ];
@@ -466,9 +466,11 @@ async function exportPDF() {
     // the slot Regular uses for that round's bonus / halftime net points (r1bonus, htpts,
     // r3bonus), and the Round 4 columns drop out, so the same table serves both modes.
     if (isTheme()) {
-      SPEC.splice(23, 6); // r4q0-3, tAD, fwpts — leaves tAF (grand total) last
+      // r3's own running total (tY), r4q0-3, tAD, fwpts all go: with no Round 4, tY and the
+      // final total (tAF, "Final") are always the same number, so only the latter stays.
+      SPEC.splice(22, 7);
       GROUPS.splice(3, 1);
-      GROUPS[2][1] = 23; // Round 3 band now spans through the grand total
+      GROUPS[2][1] = 22; // Round 3 band now spans through Final
       THEME_ROUND_WAGERS[1].forEach((w, i) => (SPEC.find((c) => c.k === "r2q" + i).l4 = String(w)));
       THEME_ROUND_WAGERS[2].forEach((w, i) => (SPEC.find((c) => c.k === "r3q" + i).l4 = String(w)));
       SPEC.find((c) => c.k === "r1bonus").l4 = "W 1-5";

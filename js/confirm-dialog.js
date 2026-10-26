@@ -68,7 +68,7 @@ function appAlert(message) {
 // pulled out to a named function since an inline onclick="" attribute can't await a Promise.
 async function confirmClearSession() {
   if (
-    await appConfirm("Clear all data?", {
+    await appConfirm("Clear all data? The next game stays in " + (isTheme() ? "Theme Night" : "Regular Trivia") + ".", {
       danger: true,
       okLabel: "Clear Session",
     })

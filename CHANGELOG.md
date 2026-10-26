@@ -10,6 +10,11 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.84 - 2026-10-26
+- **Theme Night example guesses are scaled, not clamped:** all sample guesses shrink proportionally so the highest is 95 and the teams keep their spread (v19.83 had piled several onto 95).
+- **Mode named in more prompts:** switching modes says "Switch from Regular Trivia to Theme Night?" (or the reverse); Take the Tour says which mode's practice game it will start; Clear Session says the next game stays in the current mode; and the Resume banner shows "(Regular Trivia)" or "(Theme Night: <theme>)" for the saved session.
+- **PDF export:** the last column is now "Final" in both modes, and Theme Night drops Round 3's own running Total, which was always identical to Final.
+
 ## v19.83 - 2026-10-26
 - **Theme Night example guesses capped at 95:** the sample teams' score guesses are limited to Theme Night's 1-95 range.
 

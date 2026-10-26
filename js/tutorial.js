@@ -991,7 +991,7 @@ const Tutorial = (function () {
     if (
       gameState.teams.length &&
       !(await appConfirm(
-        "Starting the tutorial clears your current game in progress and starts a fresh practice one. Skipping the tour brings your real game back, but finishing it normally keeps the practice game instead — export or save first if you need to keep this one. Continue?",
+        "Starting the tutorial clears your current game in progress and starts a fresh " + (isTheme() ? "Theme Night" : "Regular Trivia") + " practice one. Skipping the tour brings your real game back, but finishing it normally keeps the practice game instead — export or save first if you need to keep this one. Continue?",
         { okLabel: "Start Tutorial" },
       ))
     )

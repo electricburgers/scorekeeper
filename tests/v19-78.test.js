@@ -139,6 +139,7 @@ describe("Theme Night: heading, icons, Try Example", () => {
     assert.equal(r.n, 11);
     assert.equal(r.first, "Parliamentary Procedure");
     assert.equal(evalIn(window, "Math.max(...gameState.teams.map(t => t.scoreGuess))"), 95);
+    assert.ok(evalIn(window, "new Set(gameState.teams.map(t => t.scoreGuess)).size") > 5, "guesses are scaled, not all clamped to 95");
     assert.ok(r.r4);
     assert.equal(window.document.querySelectorAll("[id^='sec-r']").length, 3);
     // Regular Try Example is unchanged
