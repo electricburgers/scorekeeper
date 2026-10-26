@@ -10,33 +10,37 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
-## v19.84 - 2026-10-26
-- **Theme Night example guesses are scaled, not clamped:** all sample guesses shrink proportionally so the highest is 95 and the teams keep their spread (v19.83 had piled several onto 95).
+Theme Night is a major change, so its first release (commit subject "v19.78") is numbered
+v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
+v19.79 through v19.84; git history isn't rewritten).
+
+## v20.6 - 2026-10-26
+- **Theme Night example guesses are scaled, not clamped:** all sample guesses shrink proportionally so the highest is 95 and the teams keep their spread (v20.5 had piled several onto 95).
 - **Mode named in more prompts:** switching modes says "Switch from Regular Trivia to Theme Night?" (or the reverse); Take the Tour says which mode's practice game it will start; Clear Session says the next game stays in the current mode; and the Resume banner shows "(Regular Trivia)" or "(Theme Night: <theme>)" for the saved session.
 - **PDF export:** the last column is now "Final" in both modes, and Theme Night drops Round 3's own running Total, which was always identical to Final.
 
-## v19.83 - 2026-10-26
+## v20.5 - 2026-10-26
 - **Theme Night example guesses capped at 95:** the sample teams' score guesses are limited to Theme Night's 1-95 range.
 
-## v19.82 - 2026-10-26
+## v20.4 - 2026-10-26
 - **Try Example names its mode:** the confirmation now reads "Load the sample game for Regular Trivia?" or "...for Theme Night?" so it's clear which example you're about to get.
 
-## v19.81 - 2026-10-26
+## v20.3 - 2026-10-26
 - **Theme Night point budgets:** Round 1 stays 1-2-3-4, Round 2 is now 2-4-6-8 and Round 3 is 3-6-9-12, so a perfect night is 10 + 20 + 30 budgets + 5 + 10 + 20 Q5 wagers = 95 (not counting CB / Bonus). The PDF column headers and the XLSX template's wager headers and columns follow; Regular is unchanged.
 - **Take the Tour works in Theme Night:** the tour follows the mode you're in. It adds a required Theme Name step, uses the 1-95 guess range and new wager amounts, replaces the multi-part bonus with a "scores before the wager" read-out plus a Q5 wager at the end of each of the three rounds, and has no Round 4. Every other step is shared with the Regular tour.
 - **Performance (Big O):** totals are now computed once per render pass instead of several times (each team's grand total and round subtotals were re-summed for the sidebar, Final Results, the standings blocks and the tooltips; `ranked()` is also reused), and the A-Z team sort builds each label once and uses a single shared collator instead of a locale lookup on every comparison. No behavior change; the memo only exists during a render, so reads from setters/exports always see live scores. Profiling a 100-team game shows what's left is the browser building the DOM, not scoring code.
 
-## v19.80 - 2026-10-26
+## v20.2 - 2026-10-26
 - **Theme Name is required in Theme Night:** scoring is blocked (same alert-and-scroll as Quiz ID, Host and Location) until one is entered, and the field shows the orange "required" hint. It now sits between Date and Quiz ID. Its length is capped at 40 characters (enforced on typing and on loaded files) so it fits the PDF header.
 
-## v19.79 - 2026-10-26
+## v20.1 - 2026-10-26
 - **Theme Night polish:** Theme Name now sits at the top of Event Details, whose heading reads "Event Details - Theme Night" in that mode (Regular keeps "Event Details"); Theme Name placeholder is "e.g., 80s Music, Simpsons, Star Wars".
 - **Game Mode** moved above Theme in Settings and got icons: a target (🎯 in Emoji style) for Regular, sparkles (🎭) for Theme Night.
 - **Scores before every wager:** Theme Night now shows the "Scores - Before Wager" block ahead of the Round 1 wager too, not just Rounds 2 and 3.
 - **Try Example works in Theme Night:** same 11 teams, guesses and Q1-4 results, as a "The Simpsons" theme night; Round 1's Q5 wager is derived from that round's bonus score, Rounds 2/3 reuse the halftime/final wagers. Regular Try Example is unchanged.
 - Round 4 entries no longer count toward totals while in Theme Night.
 
-## v19.78 - 2026-10-26
+## v20.0 - 2026-10-26
 - **Theme Night mode:** new **Settings → Game Mode** toggle between Regular and Theme Night. Theme Night is three rounds (Q1-4 with the Regular Round 1-3 point budgets), each closed by a Q5 bonus wager capped at 5 / 10 / 20 (min 1, win adds, lose subtracts). It reuses the existing round, wager, standings, Team Report and Final Results code (Round 2/3 wagers use the halftime/final wager stores; Round 1 adds a `wager1` store), and Round 4 is simply hidden. The mode is saved with the game and kept by New Game; Regular is unchanged.
 - **Theme Name:** Theme Night adds a Theme Name field to Event Details, printed on the PDF header and the XLSX top row. In Theme Night the exports drop Round 4 and show each Q5 wager in that round's bonus/halftime column. Score guess range is 1-95.
 

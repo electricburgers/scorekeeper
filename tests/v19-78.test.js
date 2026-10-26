@@ -1,4 +1,4 @@
-// v19.78 — Theme Night game mode: 3 rounds, each Q1-4 then a Q5 bonus wager (caps 5 / 10 / 20),
+// v20.0 — Theme Night game mode: 3 rounds, each Q1-4 then a Q5 bonus wager (caps 5 / 10 / 20),
 // a Theme Name event field, and the XLSX / PDF exports carrying both.
 "use strict";
 const { describe, it, before, after } = require("node:test");

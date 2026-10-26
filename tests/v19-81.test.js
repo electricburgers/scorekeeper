@@ -1,4 +1,4 @@
-// v19.81 — Theme Night tour, Theme Night point budgets, and the O(n) scoring pass.
+// v20.3 — Theme Night tour, Theme Night point budgets, and the O(n) scoring pass.
 "use strict";
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
