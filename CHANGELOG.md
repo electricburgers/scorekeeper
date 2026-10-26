@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v20.9 - 2026-10-26
+- **What's new** in Settings now lists only the last two versions (it had grown to five, including a stale v19.77).
+
 ## v20.8 - 2026-10-26
 - **Theme Night PDF: a Sub column in every round.** Round 1 and Round 3 now show a Sub (running total after Q1-4, before the Q5 wager) just before their wager column, like Round 2 already did. Round 3's band ends with Final.
 
