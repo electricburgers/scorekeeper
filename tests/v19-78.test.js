@@ -29,7 +29,7 @@ describe("Theme Night mode", () => {
     const d = window.document;
     assert.equal(d.querySelectorAll("[id^='sec-r']").length, 4);
     assert.ok(!d.querySelector("input[aria-label='Theme Name']"));
-    assert.equal(d.getElementById("gameModeToggle").textContent, "Regular");
+    assert.match(d.getElementById("gameModeToggle").textContent, /Regular/);
     assert.ok(d.getElementById("bqblock-0"));
   });
 
@@ -38,7 +38,7 @@ describe("Theme Night mode", () => {
     const d = window.document;
     assert.equal(d.querySelectorAll("[id^='sec-r']").length, 3);
     assert.ok(d.querySelector("input[aria-label='Theme Name']"));
-    assert.equal(d.getElementById("gameModeToggle").textContent, "Theme Night");
+    assert.match(d.getElementById("gameModeToggle").textContent, /Theme Night/);
     ["wager1", "halftime", "final"].forEach((t) => assert.ok(d.getElementById("swblock-" + t), t));
     assert.ok(!d.getElementById("bqblock-0"), "no 4-part bonus in Theme Night");
     assert.match(d.getElementById("swblock-wager1").textContent, /1-5/);
@@ -58,6 +58,8 @@ describe("Theme Night mode", () => {
     assert.equal(evalIn(window, "grandTotal(0)"), 5 - 10 + 7);
     assert.deepEqual(JSON.parse(evalIn(window, "JSON.stringify(roundProgress(0))")), { done: 1, total: 2 * 5 });
     assert.equal(evalIn(window, "preWagerTotal(0,'halftime')"), 5);
+    assert.equal(evalIn(window, "preWagerTotal(0,'wager1')"), 0);
+    assert.ok(window.document.getElementById("standings-wager1"), "score block before the Round 1 wager");
   });
 
   it("toggleGameMode flips the mode and keeps scores; new game keeps the mode", async () => {
@@ -93,5 +95,54 @@ describe("Theme Night mode", () => {
     assert.match(sheet, /<c r="Q5"[^>]*><v>-4<\/v>/);
     assert.match(sheet, /<c r="Y5"[^>]*><v>6<\/v>/);
     await assert.doesNotReject(() => evalIn(window, "exportPDF()"));
+  });
+});
+
+describe("Theme Night: heading, icons, Try Example", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+
+  it("heading and Theme Name field order follow the mode", () => {
+    evalIn(window, 'gameState = freshState(); gameState.meta.mode = "theme"; renderAll();');
+    const d = window.document;
+    assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details - Theme Night");
+    const labels = [...d.querySelectorAll("#sec-meta .meta-grid .field label")].map((l) => l.textContent);
+    assert.ok(labels.indexOf("Theme Name") < labels.indexOf("Quiz ID"));
+    evalIn(window, 'gameState.meta.mode = "regular"; renderAll();');
+    assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details");
+  });
+
+  it("Game Mode button has a pictograph, and an emoji in Emoji icon style", () => {
+    const d = window.document;
+    assert.ok(d.querySelector("#gameModeToggle svg.icon-mode-regular"));
+    evalIn(window, 'setIconStyle("emoji")');
+    assert.match(d.getElementById("gameModeToggle").textContent, /🎯/);
+    evalIn(window, 'gameState.meta.mode = "theme"; renderAll();');
+    assert.match(d.getElementById("gameModeToggle").textContent, /🎭/);
+    evalIn(window, 'setIconStyle("pictograph")');
+    assert.ok(d.querySelector("#gameModeToggle svg.icon-mode-theme"));
+  });
+
+  it("Try Example in Theme Night loads the same teams as a Simpsons theme night", async () => {
+    window.appConfirm = async () => true;
+    evalIn(window, 'gameState = freshState(); gameState.meta.mode = "theme"; renderAll();');
+    await evalIn(window, "loadSampleGame()");
+    const r = JSON.parse(
+      evalIn(window, `JSON.stringify({ mode: gameState.meta.mode, theme: gameState.meta.themeName, n: gameState.teams.length, first: gameState.teams[0].name, r4: grandTotal(0) === (roundSub(0,0)+roundSub(0,1)+roundSub(0,2)+htPts(0)+fwPts(0)+w1Pts(0)+5+3) })`),
+    );
+    assert.equal(r.mode, "theme");
+    assert.equal(r.theme, "The Simpsons");
+    assert.equal(r.n, 11);
+    assert.equal(r.first, "Parliamentary Procedure");
+    assert.ok(r.r4);
+    assert.equal(window.document.querySelectorAll("[id^='sec-r']").length, 3);
+    // Regular Try Example is unchanged
+    evalIn(window, 'gameState.meta.mode = "regular"; renderAll();');
+    await evalIn(window, "loadSampleGame()");
+    assert.equal(evalIn(window, "gameState.meta.mode"), "regular");
+    assert.equal(evalIn(window, "gameState.meta.themeName"), "");
   });
 });

@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.78"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.79"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 26, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -371,7 +371,9 @@ function syncGameModeToggle() {
   const b = document.getElementById("gameModeToggle");
   if (!b) return;
   b.classList.toggle("active", isTheme());
-  b.textContent = isTheme() ? "Theme Night" : "Regular";
+  b.innerHTML = isTheme()
+    ? ICON_MODE_THEME + " Theme Night"
+    : ICON_MODE_REGULAR + " Regular";
 }
 function toggleUnlockEventDetails() {
   const p = loadPrefs();
@@ -1029,7 +1031,9 @@ function renderFinalResults() {
 function renderStandings(type) {
   if (!gameState.teams.length) return "";
   const label =
-    type === "halftime"
+    type === "wager1"
+      ? "Scores \u2014 Before Round 1 Wager"
+      : type === "halftime"
       ? isTheme()
         ? "Scores \u2014 Before Round 2 Wager"
         : "Scores \u2014 Before Halftime Wager"
@@ -1223,14 +1227,14 @@ function renderLeft() {
   // Once scoring starts, Event Details normally locks (so it can't drift mid-game) — but a
   // typo can still happen, so the "Edit Locked Fields" setting lets the host reopen just these.
   const metaLocked = gs && !loadPrefs().unlockEventDetails;
-  h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
+  h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details${isTheme() ? " - Theme Night" : ""}</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
+    ${isTheme() ? `<div class="field full"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Music, Simpsons, Star Wars" onchange="gameState.meta.themeName=this.value;autosave();"></div>` : ""}
     <div class="field"><label>Date</label><div class="date-native-wrap"><input type="date" class="date-native" aria-label="Date" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"><span class="date-display-text${gameState.meta.date ? "" : " is-placeholder"}">${esc(isoToPretty(gameState.meta.date) || "Select date")}</span></div></div>
     <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" maxlength="24" aria-label="Quiz ID" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
     <div class="field${hostInvalid ? " field-invalid" : ""}"><label>Host Name</label><input type="text" maxlength="40" aria-label="Host Name" value="${esc(gameState.meta.hostName || "")}" placeholder="Who's hosting" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.hostName=this.value;autosave();renderLeft();">${hostInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
     <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" maxlength="60" aria-label="Location" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
     <div class="field"><label>Craft Partner</label><input type="text" maxlength="50" aria-label="Craft Partner" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
     <div class="field"><label>Partner Town</label><input type="text" maxlength="40" aria-label="Partner Town" list="partnerTownList" autocomplete="off" value="${esc(gameState.meta.craftPartnerTown)}" placeholder="Town — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartnerTown=this.value;autosave();"></div>
-    ${isTheme() ? `<div class="field full"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Night, Harry Potter" onchange="gameState.meta.themeName=this.value;autosave();"></div>` : ""}
     <div class="field full"><label>Bonus Item (+5)</label><input type="text" maxlength="60" aria-label="Bonus Item description" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
     <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" maxlength="200" aria-label="Restaurant staff names" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
   </div><p class="fr-note${metaLocked ? "" : " fr-note-pending"}"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Locked once scoring starts, so it can't drift mid-game. Typo? <a href="#" onclick="event.preventDefault();toggleUnlockEventDetails();">Unlock to fix it</a>.</p></div></div>`;
@@ -1296,7 +1300,8 @@ function renderLeft() {
     h += `<div class="section ${collapsedSections.has("sec-r" + rn) ? "collapsed" : ""} ${rComplete ? "round-complete" : ""}" id="sec-r${rn}"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-r${rn}')"><h2><span>Round ${rn}</span>${rpBadge}<span class="round-break"></span><span class="round-label ${ROUND_COLORS[ri]} round-wager-label">Wagers: ${ROUND_WAGERS[ri].join(", ")}</span></h2><span class="chevron">▼</span></div><div class="section-body">`;
     for (let qi = 0; qi < 4; qi++) h += renderWQ(ri, qi);
     const wt = roundWagerType(ri);
-    if (wt === "wager1") h += renderSpecialWager("wager1");
+    if (wt === "wager1")
+      h += renderStandings("wager1") + renderSpecialWager("wager1");
     else if (wt === "halftime")
       h += renderStandings("halftime") + renderHT() + renderStaffThanks();
     else if (wt === "final") h += renderStandings("final") + renderFW();

@@ -10,6 +10,13 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.79 - 2026-10-26
+- **Theme Night polish:** Theme Name now sits at the top of Event Details, whose heading reads "Event Details - Theme Night" in that mode (Regular keeps "Event Details"); Theme Name placeholder is "e.g., 80s Music, Simpsons, Star Wars".
+- **Game Mode** moved above Theme in Settings and got icons: a target (🎯 in Emoji style) for Regular, sparkles (🎭) for Theme Night.
+- **Scores before every wager:** Theme Night now shows the "Scores - Before Wager" block ahead of the Round 1 wager too, not just Rounds 2 and 3.
+- **Try Example works in Theme Night:** same 11 teams, guesses and Q1-4 results, as a "The Simpsons" theme night; Round 1's Q5 wager is derived from that round's bonus score, Rounds 2/3 reuse the halftime/final wagers. Regular Try Example is unchanged.
+- Round 4 entries no longer count toward totals while in Theme Night.
+
 ## v19.78 - 2026-10-26
 - **Theme Night mode:** new **Settings → Game Mode** toggle between Regular and Theme Night. Theme Night is three rounds (Q1-4 with the Regular Round 1-3 point budgets), each closed by a Q5 bonus wager capped at 5 / 10 / 20 (min 1, win adds, lose subtracts). It reuses the existing round, wager, standings, Team Report and Final Results code (Round 2/3 wagers use the halftime/final wager stores; Round 1 adds a `wager1` store), and Round 4 is simply hidden. The mode is saved with the game and kept by New Game; Regular is unchanged.
 - **Theme Name:** Theme Night adds a Theme Name field to Event Details, printed on the PDF header and the XLSX top row. In Theme Night the exports drop Round 4 and show each Q5 wager in that round's bonus/halftime column. Score guess range is 1-95.

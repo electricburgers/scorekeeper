@@ -954,6 +954,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    hex values: this app already has an audited green (XLSX's own icon) and an audited silver
    (the mic), and neither needs its own one-off variant just for this icon to borrow it. */
 .icon-flask{--icon-tint:var(--tint-sheet);--icon-tint-2:var(--tint-mic)}
+/* Game Mode: Regular = trophy-gold target, Theme Night = flask-purple sparkles with gold glints. */
+.icon-mode-regular{--icon-tint:var(--tint-trophy);--icon-tint-2:var(--tint-trophy-2)}
+.icon-mode-theme{--icon-tint:var(--tint-flask);--icon-tint-2:var(--accent-gold)}
 /* Take the Tour's own icon — a waving hand, since the ℹ️ it had before this read as an
    unlabeled dot at mobile sizes. --accent-gold rather than a bespoke tint: it's already
    contrast-audited for both themes and every color-vision mode (unlike a new one-off hex pair),

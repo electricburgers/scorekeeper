@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.42] - 26 Oct 2026
+
+### Changed
+
+- **Theme Night section** updated: Game Mode now sits at the top of Settings, Try Example loads a Simpsons theme night when in Theme Night, and a score block appears before every round's wager.
+
 ## [1.41] - 26 Oct 2026
 
 ### Added

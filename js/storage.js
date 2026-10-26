@@ -219,12 +219,31 @@ function loadPrefsFromFile(e) {
   r.readAsText(f);
   e.target.value = "";
 }
+// The same finished game, as a Theme Night: identical teams, guesses and Q1-4 results for
+// Rounds 1-3, Simpsons as the theme. Round 1's Q5 wager is derived from that round's bonus score
+// (the sample has no Round 1 wager of its own); Round 2/3 reuse the halftime/final wagers, whose
+// sizes already fit the 10 / 20 caps. Round 4 and the 4-part bonuses don't exist in this mode.
+function toThemeSample(s) {
+  s.meta.mode = "theme";
+  s.meta.themeName = "The Simpsons";
+  s.wager1 = {};
+  s.teams.forEach((_, ti) => {
+    const b = s.rounds[0].bonus[ti] || 0;
+    s.wager1[ti] = { wager: Math.min(5, b + 1), correct: b >= 2 };
+  });
+  s.rounds[0].bonus = {};
+  s.rounds[2].bonus = {};
+  s.rounds[3] = { questions: [{}, {}, {}, {}], bonus: {} };
+  return s;
+}
 async function loadSampleGame() {
   const msg = gameState.teams.length
     ? "Load the sample game? This wipes every team, score, and Event Details field currently entered \u2014 it can\u2019t be undone."
     : "Load the sample game? This replaces your current session.";
   if (!(await appConfirm(msg, { okLabel: "Load" }))) return;
+  const theme = isTheme();
   gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
+  if (theme) toThemeSample(gameState);
   autosave();
   renderAll();
   document.getElementById("resumeBanner")?.classList.remove("show");

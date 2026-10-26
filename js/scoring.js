@@ -233,6 +233,7 @@ function checkBeerRound(ri, qi) {
 }
 
 function roundSub(ti, ri) {
+  if (ri >= roundCount()) return 0; // Theme Night hides Round 4; its entries never count
   const rd = gameState.rounds[ri];
   let t = 0;
   for (let qi = 0; qi < 4; qi++) {
@@ -259,6 +260,7 @@ function fwPts(ti) {
   return f.correct ? +f.wager : -f.wager;
 }
 function w1Pts(ti) {
+  if (!isTheme()) return 0;
   const w = gameState.wager1[ti];
   if (!w || w.wager == null || w.wager === "" || w.correct == null) return 0;
   return w.correct ? +w.wager : -w.wager;
@@ -395,7 +397,8 @@ function usedW(ti, ri) {
   return u;
 }
 function preWagerTotal(ti, type) {
-  let t = roundSub(ti, 0) + roundSub(ti, 1) + w1Pts(ti);
+  let t = roundSub(ti, 0);
+  if (type !== "wager1") t += w1Pts(ti) + roundSub(ti, 1);
   if (type === "final") t += htPts(ti) + roundSub(ti, 2) + roundSub(ti, 3);
   if (gameState.teams[ti]?.bonusItem) t += 5;
   if (gameState.teams[ti]?.njcb) t += 3;
