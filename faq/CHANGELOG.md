@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.43] - 26 Oct 2026
+
+### Changed
+
+- Theme Night: Theme Name is now required before scoring, and sits between Date and Quiz ID.
+
 ## [1.42] - 26 Oct 2026
 
 ### Changed

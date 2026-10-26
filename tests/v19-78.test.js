@@ -111,6 +111,7 @@ describe("Theme Night: heading, icons, Try Example", () => {
     assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details - Theme Night");
     const labels = [...d.querySelectorAll("#sec-meta .meta-grid .field label")].map((l) => l.textContent);
     assert.ok(labels.indexOf("Theme Name") < labels.indexOf("Quiz ID"));
+    assert.ok(labels.indexOf("Theme Name") > labels.indexOf("Date"));
     evalIn(window, 'gameState.meta.mode = "regular"; renderAll();');
     assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details");
   });
@@ -144,5 +145,36 @@ describe("Theme Night: heading, icons, Try Example", () => {
     await evalIn(window, "loadSampleGame()");
     assert.equal(evalIn(window, "gameState.meta.mode"), "regular");
     assert.equal(evalIn(window, "gameState.meta.themeName"), "");
+  });
+});
+
+describe("Theme Name gates scoring in Theme Night", () => {
+  let window;
+  before(async () => {
+    window = await loadAppWindow();
+  });
+  after(() => window.close());
+
+  it("canScore blocks without a Theme Name, passes once entered; Regular is unaffected", () => {
+    const base = `gameState = freshState(); gameState.meta.quizId="AB-123"; gameState.meta.hostName="Host"; gameState.meta.location="Test Tap";
+      gameState.teams=[freshTeam("A")]; gameState.teams[0].scoreGuess=40;`;
+    evalIn(window, base + 'gameState.meta.mode="theme"; renderAll();');
+    assert.equal(evalIn(window, "canScore()"), false);
+    assert.ok(window.document.querySelector("#sec-meta .field-invalid input[aria-label='Theme Name']"));
+    evalIn(window, 'gameState.meta.themeName="Star Wars"');
+    assert.equal(evalIn(window, "canScore()"), true);
+    evalIn(window, base + "renderAll();");
+    assert.equal(evalIn(window, "canScore()"), true);
+  });
+});
+
+describe("Theme Name length cap", () => {
+  it("input maxlength is 40 and loaded games are clamped", async () => {
+    const window = await loadAppWindow();
+    evalIn(window, 'gameState = freshState(); gameState.meta.mode = "theme"; renderAll();');
+    assert.equal(window.document.querySelector("input[aria-label='Theme Name']").maxLength, 40);
+    const len = evalIn(window, 'migrateState({ meta: { themeName: "x".repeat(99) }, teams: [] }).meta.themeName.length');
+    assert.equal(len, 40);
+    window.close();
   });
 });

@@ -10,6 +10,9 @@ rewritten) are renumbered here as v19.0 through v19.27, so the FAQ's move from
 its own separate site into this app lands on v19.0 instead of sitting mid-run
 as an arbitrary v18.74.
 
+## v19.80 - 2026-10-26
+- **Theme Name is required in Theme Night:** scoring is blocked (same alert-and-scroll as Quiz ID, Host and Location) until one is entered, and the field shows the orange "required" hint. It now sits between Date and Quiz ID. Its length is capped at 40 characters (enforced on typing and on loaded files) so it fits the PDF header.
+
 ## v19.79 - 2026-10-26
 - **Theme Night polish:** Theme Name now sits at the top of Event Details, whose heading reads "Event Details - Theme Night" in that mode (Regular keeps "Event Details"); Theme Name placeholder is "e.g., 80s Music, Simpsons, Star Wars".
 - **Game Mode** moved above Theme in Settings and got icons: a target (🎯 in Emoji style) for Regular, sparkles (🎭) for Theme Night.

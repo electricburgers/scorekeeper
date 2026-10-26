@@ -27,11 +27,11 @@ const FIELD_MAX = {
   craftPartnerTown: 40,
   bonusItem: 60,
   staffNames: 200,
-  themeName: 60,
+  themeName: 40,
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v19.79"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v19.80"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 26, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1224,12 +1224,13 @@ function renderLeft() {
   const quizIdInvalid = !gs && !quizIdEntered;
   const locInvalid = !gs && !isLocationValid(gameState.meta.location);
   const hostInvalid = !gs && !isHostNameValid(gameState.meta.hostName);
+  const themeInvalid = isTheme() && !gs && !(gameState.meta.themeName || "").trim();
   // Once scoring starts, Event Details normally locks (so it can't drift mid-game) — but a
   // typo can still happen, so the "Edit Locked Fields" setting lets the host reopen just these.
   const metaLocked = gs && !loadPrefs().unlockEventDetails;
   h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details${isTheme() ? " - Theme Night" : ""}</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
-    ${isTheme() ? `<div class="field full"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Music, Simpsons, Star Wars" onchange="gameState.meta.themeName=this.value;autosave();"></div>` : ""}
     <div class="field"><label>Date</label><div class="date-native-wrap"><input type="date" class="date-native" aria-label="Date" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"><span class="date-display-text${gameState.meta.date ? "" : " is-placeholder"}">${esc(isoToPretty(gameState.meta.date) || "Select date")}</span></div></div>
+    ${isTheme() ? `<div class="field full${themeInvalid ? " field-invalid" : ""}"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Music, Simpsons, Star Wars" onchange="gameState.meta.themeName=this.value;autosave();renderLeft();">${themeInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>` : ""}
     <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" maxlength="24" aria-label="Quiz ID" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
     <div class="field${hostInvalid ? " field-invalid" : ""}"><label>Host Name</label><input type="text" maxlength="40" aria-label="Host Name" value="${esc(gameState.meta.hostName || "")}" placeholder="Who's hosting" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.hostName=this.value;autosave();renderLeft();">${hostInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
     <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" maxlength="60" aria-label="Location" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
@@ -2205,6 +2206,17 @@ function canScore() {
   // advisory (v16.41), so a value that just doesn't look typical still satisfies this gate.
   if (!isQuizIdEntered(gameState.meta.quizId)) {
     appAlert("Please enter a Quiz ID in Event Details before scoring begins.");
+    const sec = document.getElementById("sec-meta");
+    if (sec) {
+      if (sec.classList.contains("collapsed"))
+        sec.classList.remove("collapsed");
+      sec.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    renderLeft();
+    return false;
+  }
+  if (isTheme() && !(gameState.meta.themeName || "").trim()) {
+    appAlert("Please enter a Theme Name in Event Details before scoring begins.");
     const sec = document.getElementById("sec-meta");
     if (sec) {
       if (sec.classList.contains("collapsed"))
