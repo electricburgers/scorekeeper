@@ -528,6 +528,10 @@ async function exportPDF() {
       ];
     }
 
+    // "Theme Night - Simpsons": Theme Night carries its theme in the mode label itself (header GAME
+    // field and Standings title) instead of a separate THEME field.
+    const pdfModeLabel = () =>
+      gameModeName() + (isTheme() && (gameState.meta.themeName || "").trim() ? " - " + gameState.meta.themeName.trim() : "");
     const doc = new jsPDF({
       orientation: "landscape",
       unit: "pt",
@@ -752,8 +756,7 @@ async function exportPDF() {
         ["QUIZ #", meta.quizId || "—"],
         ["HOST", meta.hostName || "—"],
       ];
-      headerFields.push(["GAME", gameModeName()]);
-      if (isTheme()) headerFields.push(["THEME", (meta.themeName || "").trim() || "—"]);
+      headerFields.push(["GAME", pdfModeLabel()]);
       // One row of four, as before. Craft Partner and Bonus Item are NOT here — they sit beside
       // the Standings table instead (see drawSideInfo), in the ~360pt of empty page that the
       // 432pt-wide table leaves to its right. A second header row cost 40pt of vertical space on
@@ -886,7 +889,7 @@ async function exportPDF() {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(11);
       setText("000000");
-      doc.text("STANDINGS - " + gameModeName().toUpperCase(), M, y);
+      doc.text("STANDINGS - " + pdfModeLabel().toUpperCase(), M, y);
       y += 12;
       const sHeadY = y;
       SCOLS.forEach((c, ix) => {

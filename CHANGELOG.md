@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.4 - 2026-10-27
+- **Theme Night PDF:** the theme is appended to the mode ("Theme Night - Simpsons") in the header's GAME field and the Standings title, instead of a separate THEME field.
+
 ## v21.3 - 2026-10-27
 - Final Results heading no longer carries the mode name (back to plain "Final Results"); the mode is still named in the header accent, Event Details, Scores, tab title, exports and Team Report.
 
