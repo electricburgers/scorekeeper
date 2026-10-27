@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.0"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.1"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 27, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -422,10 +422,37 @@ async function setGameMode(mode) {
   renderAll();
   return true;
 }
-// Game Mode dropdown + its pictograph follow gameState.meta.mode (called from every render).
+// What the Game Mode dropdown's tooltip says about each mode.
+const MODE_BLURBS = {
+  regular: "4 rounds, a multi-part bonus in Rounds 1 and 3, halftime and final wagers",
+  theme: "3 rounds, each ending in a bonus wager, with a Theme Name",
+  tune: "4 rounds of music questions, each ending in a bonus wager (perfect score 126)",
+};
+// Everything that tells the host which mode they are in, refreshed on every render: the dropdown
+// and its pictograph, the accent colour (data-mode on <html>), the tab title, the Scores heading
+// and the Settings tooltips.
 function syncGameModeSelect() {
+  const mode = gameMode(),
+    name = gameModeName();
+  document.documentElement.setAttribute("data-mode", mode);
+  document.title = "Scorekeeper - " + name;
+  const setText = (id, t) => {
+    const el = document.getElementById(id);
+    if (el && el.textContent !== t) el.textContent = t;
+  };
+  const setTitle = (id, t) => document.getElementById(id)?.setAttribute("title", t);
+  setText("scoresHeading", "Scores - " + name);
+  setTitle(
+    "gameModeSelect",
+    name + ": " + MODE_BLURBS[mode] + ". Changing the mode erases the current scores.",
+  );
+  setTitle("tryExampleBtn", "Load a completed sample " + name + " game so you can explore the app");
+  setTitle(
+    "takeTourBtn",
+    "A guided practice run through a full " + name + " game with 5 fake teams \u2014 nothing here touches your real session",
+  );
   const sel = document.getElementById("gameModeSelect");
-  if (sel) sel.value = gameMode();
+  if (sel) sel.value = mode;
   const icon = document.getElementById("gameModeIcon");
   if (icon)
     icon.innerHTML = { regular: ICON_MODE_REGULAR, theme: ICON_MODE_THEME, tune: ICON_MODE_TUNE }[
@@ -1316,7 +1343,7 @@ function renderLeftBody() {
   // Once scoring starts, Event Details normally locks (so it can't drift mid-game) — but a
   // typo can still happen, so the "Edit Locked Fields" setting lets the host reopen just these.
   const metaLocked = gs && !loadPrefs().unlockEventDetails;
-  h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details${gameMode() === "regular" ? "" : " - " + gameModeName()}</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
+  h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details - ${gameModeName()}</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
     <div class="field"><label>Date</label><div class="date-native-wrap"><input type="date" class="date-native" aria-label="Date" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"><span class="date-display-text${gameState.meta.date ? "" : " is-placeholder"}">${esc(isoToPretty(gameState.meta.date) || "Select date")}</span></div></div>
     ${isTheme() ? `<div class="field full${themeInvalid ? " field-invalid" : ""}"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Music, Simpsons, Star Wars" onchange="gameState.meta.themeName=this.value;autosave();renderLeft();">${themeInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>` : ""}
     <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" maxlength="24" aria-label="Quiz ID" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
@@ -1399,7 +1426,7 @@ function renderLeftBody() {
     h += `</div></div>`;
   }
 
-  h += `<div class="section ${collapsedSections.has("sec-final") ? "collapsed" : ""}" id="sec-final"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-final')"><h2>${ICON_FLAG} Final Results</h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
+  h += `<div class="section ${collapsedSections.has("sec-final") ? "collapsed" : ""}" id="sec-final"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-final')"><h2>${ICON_FLAG} Final Results - ${gameModeName()}</h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
 
   h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><h2>${ICON_BEER} Craft Prize Drawing</h2><span class="chevron">\u25BC</span></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
 

@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.1 - 2026-10-27
+- **The current game mode is named everywhere.** Each mode has a subtle accent colour (Regular gold, Theme Night purple, Name That Tune blue) as a bar under the header and on the left edge of every section header; every tint is checked at 3:1 in all six theme x color-vision combinations.
+- **"Regular Trivia" is named too, not just the other two:** Event Details - Regular Trivia, a GAME field in every PDF header, "REGULAR TRIVIA" in the XLSX title cell, and the mode at the end of every export / save / Craft Prize filename (e.g. "Bar - 10-27-2026 - Name That Tune.pdf").
+- Browser tab title ("Scorekeeper - Name That Tune"), Final Results - <mode>, Scores - <mode>, and the Team Report header all name the mode.
+- Settings tooltips (Game Mode, Try Example, Take the Tour) follow the current mode.
+
 ## v21.0 - 2026-10-27
 Name That Tune is a second new game mode, so it starts the v21 series (like Theme Night did for v20).
 - **Name That Tune mode.** Four rounds of five questions on Regular's point budgets (1-2-3-4, 1-3-5-7, 2-4-6-8, 3-6-9-12), every round closed by a Q5 bonus wager capped 5 / 10 / 15 / 20 (no four-part bonus). A perfect night is 126, so Final Score Guess accepts 1-126. Round headers say what the teams must name: Round 1 - Song Title, Round 2 - Artist, Round 3 - Song Title, Round 4 - Song Title & Artist (app, Team Report, PDF bands, XLSX bands).

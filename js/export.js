@@ -752,8 +752,8 @@ async function exportPDF() {
         ["QUIZ #", meta.quizId || "—"],
         ["HOST", meta.hostName || "—"],
       ];
+      headerFields.push(["GAME", gameModeName()]);
       if (isTheme()) headerFields.push(["THEME", (meta.themeName || "").trim() || "—"]);
-      if (isTune()) headerFields.push(["GAME", "Name That Tune"]);
       // One row of four, as before. Craft Partner and Bonus Item are NOT here — they sit beside
       // the Standings table instead (see drawSideInfo), in the ~360pt of empty page that the
       // 432pt-wide table leaves to its right. A second header row cost 40pt of vertical space on
@@ -1036,9 +1036,10 @@ function sanitizeFile(s) {
 }
 function exportFn(ext) {
   const loc = sanitizeFile(gameState.meta.location) || "Trivia";
+  const mode = gameModeName(); // every export says which game mode it came from
   const d =
     isoToMDY(gameState.meta.date) || new Date().toISOString().slice(0, 10);
-  return loc + " - " + d + "." + ext;
+  return loc + " - " + d + " - " + mode + "." + ext;
 }
 
 // ---- old flat single-sheet XLSX backup (inject into prior template) ----
@@ -1231,6 +1232,7 @@ function trivInjectXlsx(templateBytes, gs, rk) {
   if (gs.meta.hostName) patches.push(["I1", "s", "HOST: " + gs.meta.hostName]);
   const theme = gs.meta.mode === "theme";
   const tune = gs.meta.mode === "tune";
+  if (!theme && !tune) patches.push(["R1", "s", "REGULAR TRIVIA"]);
   if (tune) {
     // Name That Tune: Regular's four rounds and wager columns, with the Bonus / HT / Bonus / Final
     // net-points columns (J, Q, Y, AF) carrying the Q5 wagers. Headers and the two cap cells

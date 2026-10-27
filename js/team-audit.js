@@ -122,7 +122,7 @@ function buildAudit(ti) {
   const name = esc(t.name || "Team " + (ti + 1));
   const rm = rankMap();
   const rank = rm[ti];
-  let h = `<div class="audit-head"><h2>${name}<span class="aud-sub">Team Report \u2014 rank #${rank} of ${gameState.teams.length} \u00B7 ${esc(gameState.meta.location || "")}${gameState.meta.quizId ? " \u00B7 Quiz " + esc(gameState.meta.quizId) : ""}</span></h2><button class="audit-close" onclick="closeAudit()" aria-label="Close" title="Close">${X_ICON_SVG}</button></div>`;
+  let h = `<div class="audit-head"><h2>${name}<span class="aud-sub">Team Report \u2014 ${gameModeName()} \u00B7 rank #${rank} of ${gameState.teams.length} \u00B7 ${esc(gameState.meta.location || "")}${gameState.meta.quizId ? " \u00B7 Quiz " + esc(gameState.meta.quizId) : ""}</span></h2><button class="audit-close" onclick="closeAudit()" aria-label="Close" title="Close">${X_ICON_SVG}</button></div>`;
   h += `<div class="audit-body">`;
 
   let run = 0;

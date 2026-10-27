@@ -114,7 +114,7 @@ describe("Theme Night: heading, icons, Try Example", () => {
     assert.ok(labels.indexOf("Theme Name") < labels.indexOf("Quiz ID"));
     assert.ok(labels.indexOf("Theme Name") > labels.indexOf("Date"));
     evalIn(window, 'gameState.meta.mode = "regular"; renderAll();');
-    assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details");
+    assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details - Regular Trivia");
   });
 
   it("Game Mode shows a pictograph, and an emoji in Emoji icon style", () => {

@@ -409,7 +409,7 @@ button,[role="button"]{touch-action:manipulation}
    whatever position it last (mis)computed instead of self-correcting. Promoting it to its own
    layer keeps its position tracked independently instead of depending on that browser-chrome
    side effect to paper over it. */
-.header{position:sticky;top:0;z-index:260;background:var(--bg-primary);padding:calc(10px + env(safe-area-inset-top)) 16px 10px;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.header{position:sticky;top:0;z-index:260;background:var(--bg-primary);border-bottom:3px solid var(--mode-accent,transparent);padding:calc(10px + env(safe-area-inset-top)) 16px 10px;transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
 /* flex-wrap here (not on .toolbar) means Save/Load/Gear wrap onto a new line as one group
    under the logo when they don't fit — .toolbar itself no longer wraps its own buttons
    individually, so it's all-or-nothing instead of one icon peeling off at a time. */
@@ -957,6 +957,13 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    hex values: this app already has an audited green (XLSX's own icon) and an audited silver
    (the mic), and neither needs its own one-off variant just for this icon to borrow it. */
 .icon-flask{--icon-tint:var(--tint-sheet);--icon-tint-2:var(--tint-mic)}
+/* Per-mode accent (set by data-mode on <html>, see syncGameModeSelect in app.js): a bar under the
+   header and the left edge of every section header, so the mode is readable at a glance. The same
+   three audited tints as the Game Mode pictograms; tests/v21-1.test.js holds each to 3:1 against the
+   header and card backgrounds in every theme x color vision combination. */
+[data-mode="regular"]{--mode-accent:var(--tint-trophy)}
+[data-mode="theme"]{--mode-accent:var(--tint-flask)}
+[data-mode="tune"]{--mode-accent:var(--tint-cap)}
 /* Game Mode: Regular = trophy-gold target, Theme Night = flask-purple sparkles with gold glints
    (--tint-theme-2, not --accent-gold: the light theme's #ffb300 is only 1.8:1 on white),
    Name That Tune = cap-blue note. Every tint is checked against --bg-card in all six theme x color
@@ -1604,7 +1611,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    not the 3px it used to be, growing to 6px only once complete. That width JUMP shifted this
    header's own content by the same 3px the moment a round finished scoring; keeping the width
    constant and only ever swapping the COLOR means completing a round never moves anything. */
-.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;transition:var(--transition);border-left:6px solid transparent;background:var(--bg-card-alt)}
+.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;transition:var(--transition);border-left:6px solid var(--mode-accent,transparent);background:var(--bg-card-alt)}
 .section-header:hover{background:var(--bg-hover)}
 .section-header h2{font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 .section-header .chevron{transition:transform .3s;color:var(--text-muted);font-size:1.1rem;flex-shrink:0}

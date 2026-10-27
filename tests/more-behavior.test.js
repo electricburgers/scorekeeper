@@ -254,7 +254,7 @@ describe("exportFn: export filename generation", () => {
        gameState.meta.location = "Bob's Pub";
        gameState.meta.date = "2026-08-05";`,
     );
-    assert.equal(evalIn(window, 'exportFn("pdf")'), "Bobs Pub - 08-05-2026.pdf");
+    assert.equal(evalIn(window, 'exportFn("pdf")'), "Bobs Pub - 08-05-2026 - Regular Trivia.pdf");
   });
   it('falls back to "Trivia" when Location is blank', () => {
     evalIn(
@@ -263,7 +263,7 @@ describe("exportFn: export filename generation", () => {
        gameState.meta.location = "";
        gameState.meta.date = "2026-08-05";`,
     );
-    assert.equal(evalIn(window, 'exportFn("xlsx")'), "Trivia - 08-05-2026.xlsx");
+    assert.equal(evalIn(window, 'exportFn("xlsx")'), "Trivia - 08-05-2026 - Regular Trivia.xlsx");
   });
 });
 
