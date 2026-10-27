@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v20.10 - 2026-10-26
+- **PDF Standings:** new **Adjustment** column right of Diff (both modes) showing the Bonus Item (+5) and NJCB (+3) points removed before comparing to the guess, e.g. -8; the title now reads "Standings - Regular Trivia" / "Standings - Theme Night"; and the Team Name column is sized to the longest name instead of a fixed width, closing the gap before Guess.
+- **Guess entry is bounded:** 1-95 in Theme Night, 1-146 in Regular. 0, negatives, decimals and too-high values are rejected with a message and the box reverts to the previous guess.
+
 ## v20.9 - 2026-10-26
 - **What's new** in Settings now lists only the last two versions (it had grown to five, including a stale v19.77).
 

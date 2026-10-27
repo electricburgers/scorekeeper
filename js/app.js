@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v20.9"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v20.10"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 26, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -349,6 +349,29 @@ function toggleAdvancedSettings() {
     () => applyPrefs(),
   );
 }
+// Final-score guess entry. Anything outside 1..max (0, negatives, too high, decimals, junk) is
+// rejected: the box snaps back to the team's previous guess and the user is told the range.
+function guessLimit() {
+  return isTheme() ? 95 : 146;
+}
+function setGuess(i, input) {
+  const t = gameState.teams[i];
+  const raw = String(input.value).trim();
+  if (raw === "") {
+    t.scoreGuess = "";
+  } else {
+    const n = Number(raw);
+    if (!Number.isInteger(n) || n < 1 || n > guessLimit()) {
+      input.value = t.scoreGuess === "" || t.scoreGuess == null ? "" : t.scoreGuess;
+      appAlert(`Guess must be a whole number from 1 to ${guessLimit()}.`);
+      return;
+    }
+    t.scoreGuess = n;
+  }
+  autosave();
+  renderLeft();
+}
+
 // Regular <-> Theme Night. Lives on the game (meta.mode) rather than in prefs so it travels with
 // a saved/exported game; a new game keeps whichever mode the host was last in.
 async function toggleGameMode() {
@@ -1260,7 +1283,7 @@ function renderLeftBody() {
   h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2><span class="chevron">▼</span></div><div class="section-body">`;
   const showAdj = !!loadPrefs().showAdjustments;
   // 146 = a perfect Regular night; the Theme Night script calls 95 a perfect score.
-  const guessMax = isTheme() ? 95 : 146;
+  const guessMax = guessLimit();
   gameState.teams.forEach((t, i) => {
     const adj = t.adjustment || 0,
       adjOpen = adjOpenTeams.has(i);
@@ -1277,7 +1300,7 @@ function renderLeftBody() {
           </label>
         </div>
       </div>
-      <div class="team-guess-cell${!t.paused && (t.scoreGuess === "" || t.scoreGuess == null) ? " guess-missing" : ""}"><label>Guess</label><input type="number" aria-label="Team ${i + 1} final score guess, 1 to ${guessMax}" min="1" max="${guessMax}" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-${guessMax}" onchange="gameState.teams[${i}].scoreGuess=this.value?parseInt(this.value):'';autosave();renderLeft();">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class="guess-warn">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
+      <div class="team-guess-cell${!t.paused && (t.scoreGuess === "" || t.scoreGuess == null) ? " guess-missing" : ""}"><label>Guess</label><input type="number" aria-label="Team ${i + 1} final score guess, 1 to ${guessMax}" min="1" max="${guessMax}" value="${t.scoreGuess !== "" ? t.scoreGuess : ""}" placeholder="1-${guessMax}" onchange="setGuess(${i},this)">${t.scoreGuess === "" || t.scoreGuess == null ? `<span class="guess-warn">&#9888; ${gs ? "missing" : "required"}</span>` : ""}</div>
       ${
         showAdj
           ? `<div class="adj-wrap">

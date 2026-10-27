@@ -827,13 +827,23 @@ async function exportPDF() {
     drawGridLines(dataTop, y, cx, M + usableW);
     y += 16;
 
-    // ---- standings table (Place / Score / Team Name / Guess / Diff) ----
+    // ---- standings table (Place / Score / Team Name / Guess / Diff / Adjustment) ----
+    // Team Name is sized to the longest name plus a little slack (capped at the old 220pt), not a
+    // fixed 220, so short names don't leave a wide gap before the Guess column.
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(fsData);
+    const longestName = standings.reduce(
+      (m, s) => Math.max(m, doc.getTextWidth(s.name)),
+      doc.getTextWidth("Team Name"),
+    );
+    const nameW = Math.min(220, Math.max(90, Math.ceil(longestName) + 24));
     const SCOLS = [
       { w: 44, k: "place", l: "Place", fill: "92D050" },
       { w: 56, k: "score", l: "Score", fill: "FFFFFF" },
-      { w: 220, k: "name", l: "Team Name", fill: "FFFFFF" },
+      { w: nameW, k: "name", l: "Team Name", fill: "FFFFFF" },
       { w: 56, k: "guess", l: "Guess", fill: "FFFFFF" },
       { w: 56, k: "diff", l: "Diff", fill: "FFFFFF" },
+      { w: 76, k: "adj", l: "Adjustment", fill: "FFFFFF" },
     ];
     const scx = [];
     let sacc = M;
@@ -851,7 +861,7 @@ async function exportPDF() {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(11);
       setText("000000");
-      doc.text("STANDINGS", M, y);
+      doc.text(isTheme() ? "STANDINGS - THEME NIGHT" : "STANDINGS - REGULAR TRIVIA", M, y);
       y += 12;
       const sHeadY = y;
       SCOLS.forEach((c, ix) => {
@@ -916,6 +926,7 @@ async function exportPDF() {
         name: s.name,
         guess: String(s.guess),
         diff: String(s.tAH),
+        adj: s.njcb3 + s.item5 ? "-" + (s.njcb3 + s.item5) : "0",
       };
       const sStripe = i % 2 === 1;
       SCOLS.forEach((c, ix) => {
@@ -949,7 +960,7 @@ async function exportPDF() {
     doc.setFontSize(7.5);
     setText("8B0000");
     doc.text(
-      "* Diff is minus Bonuses — Bonus Item and NJCB points are excluded from the score before comparing it to the team's guess.",
+      "* Diff is minus Bonuses — Bonus Item and NJCB points are excluded from the score before comparing it to the team's guess. Adjustment is the points removed.",
       M,
       y,
     );
