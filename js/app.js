@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.2"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.3"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 27, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1426,7 +1426,7 @@ function renderLeftBody() {
     h += `</div></div>`;
   }
 
-  h += `<div class="section ${collapsedSections.has("sec-final") ? "collapsed" : ""}" id="sec-final"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-final')"><h2>${ICON_FLAG} Final Results - ${gameModeName()}</h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
+  h += `<div class="section ${collapsedSections.has("sec-final") ? "collapsed" : ""}" id="sec-final"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-final')"><h2>${ICON_FLAG} Final Results</h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
 
   h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><h2>${ICON_BEER} Craft Prize Drawing</h2><span class="chevron">\u25BC</span></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
 

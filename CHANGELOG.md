@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.3 - 2026-10-27
+- Final Results heading no longer carries the mode name (back to plain "Final Results"); the mode is still named in the header accent, Event Details, Scores, tab title, exports and Team Report.
+
 ## v21.2 - 2026-10-27
 - **The mode accent colours follow Color Vision.** Red-green mode uses orange / blue / rose for Regular / Theme Night / Name That Tune; blue-yellow mode uses magenta / vermilion / green. Every palette is checked at 3:1 against the header and card backgrounds, is three distinct colours, and differs from the default palette and from the other vision mode.
 - **Light theme is less drab, app-wide:** the flat greys are now blue-tinted (page, card-alt, input and hover surfaces, borders, row stripes, shadows, button fills), the solid cyan is a richer blue, the mode accents are vivid, and section headers carry a wash of the mode accent. Surface lightness is unchanged, so contrast holds: re-audited in a real browser for text AA across all three modes x light theme x 3 color-vision settings (main view, Settings, Team Report, dialogs): 0 failures.

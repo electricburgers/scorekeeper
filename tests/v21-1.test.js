@@ -26,7 +26,7 @@ describe("mode is named in the chrome", () => {
       assert.equal(d.documentElement.getAttribute("data-mode"), mode);
       assert.equal(d.title, "Scorekeeper - " + name);
       assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details - " + name);
-      assert.equal(d.querySelector("#sec-final h2").textContent.trim(), "Final Results - " + name);
+      assert.equal(d.querySelector("#sec-final h2").textContent.trim(), "Final Results");
       assert.match(d.getElementById("scoresHeading").textContent, new RegExp("Scores - " + name));
       assert.match(d.getElementById("gameModeSelect").title, new RegExp(name));
       assert.match(d.getElementById("tryExampleBtn").title, new RegExp(name));
