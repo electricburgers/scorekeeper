@@ -843,7 +843,7 @@ async function exportPDF() {
       { w: nameW, k: "name", l: "Team Name", fill: "FFFFFF" },
       { w: 56, k: "guess", l: "Guess", fill: "FFFFFF" },
       { w: 56, k: "diff", l: "Diff", fill: "FFFFFF" },
-      { w: 76, k: "adj", l: "Adjustment", fill: "FFFFFF" },
+      { w: 56, k: "adj", l: "Adj", fill: "FFFFFF" },
     ];
     const scx = [];
     let sacc = M;
@@ -960,7 +960,7 @@ async function exportPDF() {
     doc.setFontSize(7.5);
     setText("8B0000");
     doc.text(
-      "* Diff is minus Bonuses — Bonus Item and NJCB points are excluded from the score before comparing it to the team's guess. Adjustment is the points removed.",
+      "* Diff is minus Bonuses — Bonus Item and NJCB points are excluded from the score before comparing it to the team's guess. Adj is the points removed.",
       M,
       y,
     );
