@@ -175,12 +175,12 @@
      4.0:1, which the new value fixes as a side effect of being more saturated.
      Dark mode is deliberately not part of this — it has the opposite problem (light ink on black
      has lightness to spare) and its accents are already at full brand saturation. */
-  --bg-primary:#f5f5f5;--bg-card:#fff;--bg-card-alt:#f0f0f0;--bg-input:#e8e8e8;--bg-hover:#dcdcdc;
-  --border:#b0b0b0;--border-light:#949494;--border-strong:#8a8a8a;
+  --bg-primary:#e9f0fb;--bg-card:#fff;--bg-card-alt:#e8f0fb;--bg-input:#dfe9f8;--bg-hover:#d2e1f6;
+  --border:#a6b9d4;--border-light:#8aa0c2;--border-strong:#7a92b8;
   /* Light-theme counterpart — see the note in the dark block. #7b7b7b is the darkest neutral that
      clears 3:1 on every light surface a control sits on, from --bg-card (#fff, 4.23:1) down to
      --bg-hover (#dcdcdc, 3.09:1). */
-  --border-control:#7b7b7b;--text-primary:#000;--text-secondary:#2a2a2a;--text-muted:#454545;
+  --border-control:#5d779f;--text-primary:#000;--text-secondary:#2a2a2a;--text-muted:#454545;
   /* #10a710 read at only 2.21:1 against --btn-correct-bg, the mint fill of the very button it
      outlines, so the selected state's own boundary was the least visible thing about it (WCAG
      1.4.11 covers component STATES, not just components). #008b02 clears 3:1 there (3.08) and
@@ -188,10 +188,10 @@
      chroma at an unchanged hue. --accent-red needs no such move: it already sits at 3.05:1
      against its own --btn-incorrect-bg fill. */
   --accent-cyan:#006688;--accent-magenta:#bb0055;--accent-gold:#ffb300;--accent-green:#008b02;
-  --accent-red:#cc0000;--accent-orange:#c45900;--shadow:0 4px 24px rgba(0,0,0,.12);--shadow-lg:0 16px 48px rgba(0,0,0,.28),0 2px 10px rgba(0,0,0,.18);
+  --accent-red:#cc0000;--accent-orange:#c45900;--shadow:0 4px 24px rgba(20,60,140,.16);--shadow-lg:0 16px 48px rgba(0,0,0,.28),0 2px 10px rgba(0,0,0,.18);
   --edge-fade:rgba(0,0,0,.3);
-  --row-stripe:rgba(0,0,0,.048);
-  --btn-idle-bg:#e8e8e8;--btn-correct-bg:#54f377;--btn-incorrect-bg:#f7a5a6;--btn-used-bg:#f0f0f0;
+  --row-stripe:rgba(20,70,160,.065);
+  --btn-idle-bg:#dfe9f8;--btn-correct-bg:#54f377;--btn-incorrect-bg:#f7a5a6;--btn-used-bg:#e8f0fb;
   --pts-pos-bg:#008802;--pts-pos-border:#007900;--pts-pos-fg:#fff;
   --pts-neg-bg:#eb0012;--pts-neg-border:#d80000;--pts-neg-fg:#fff;
   --pts-nil-bg:rgba(0,0,0,.07);--pts-nil-border:rgba(0,0,0,.22);
@@ -229,7 +229,7 @@
      card instead of near-black: 4.4-6.0:1 and 4.0-5.5:1. */
   --tint-flask:#7a3fd6;--tint-cap:#0d6fa8;--tint-theme-2:#8a6100;--tint-shuffle:#a3006b;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;--txt-purple:#6d28c9;
-  --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
+  --accent-cyan-solid:#0077b6;--danger-solid-bg:#eb0000;
   /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
      background this dark — anything as light as --bg-card-alt forces the border down to a
      muddy, muted brown-olive to pass at all. Rather than accept that duller color, give the
@@ -964,6 +964,24 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 [data-mode="regular"]{--mode-accent:var(--tint-trophy)}
 [data-mode="theme"]{--mode-accent:var(--tint-flask)}
 [data-mode="tune"]{--mode-accent:var(--tint-cap)}
+/* Light theme: vivid accents. They are borders/bars, not text, so they only need 3:1 (checked in tests/v21-1.test.js), which leaves far more saturation than the text-safe tints above. Color Vision modes get their own palettes: red-green = orange / blue / rose, blue-yellow = magenta / vermilion / green (Okabe-Ito based, each set kept apart for that deficiency). */
+[data-theme="light"][data-mode="regular"]{--mode-accent:#b57d00}
+[data-theme="light"][data-mode="theme"]{--mode-accent:#8a3ffc}
+[data-theme="light"][data-mode="tune"]{--mode-accent:#0a84cc}
+/* Light theme section headers pick up a faint wash of the mode accent instead of flat grey (9% keeps every header text pair above AA; audited in the browser). */
+[data-theme="light"] .section-header{background:color-mix(in srgb,var(--mode-accent) 9%,var(--bg-card-alt))}
+[data-theme="light"][data-cb="1"][data-mode="regular"]{--mode-accent:#c76b00}
+[data-theme="light"][data-cb="1"][data-mode="theme"]{--mode-accent:#0a6fe0}
+[data-theme="light"][data-cb="1"][data-mode="tune"]{--mode-accent:#c4177f}
+[data-theme="light"][data-cb="2"][data-mode="regular"]{--mode-accent:#d6007f}
+[data-theme="light"][data-cb="2"][data-mode="theme"]{--mode-accent:#c4510a}
+[data-theme="light"][data-cb="2"][data-mode="tune"]{--mode-accent:#00946a}
+[data-theme="dark"][data-cb="1"][data-mode="regular"]{--mode-accent:#e69f00}
+[data-theme="dark"][data-cb="1"][data-mode="theme"]{--mode-accent:#56b4e9}
+[data-theme="dark"][data-cb="1"][data-mode="tune"]{--mode-accent:#cc79a7}
+[data-theme="dark"][data-cb="2"][data-mode="regular"]{--mode-accent:#ff66cc}
+[data-theme="dark"][data-cb="2"][data-mode="theme"]{--mode-accent:#ff8a5c}
+[data-theme="dark"][data-cb="2"][data-mode="tune"]{--mode-accent:#00cc88}
 /* Game Mode: Regular = trophy-gold target, Theme Night = flask-purple sparkles with gold glints
    (--tint-theme-2, not --accent-gold: the light theme's #ffb300 is only 1.8:1 on white),
    Name That Tune = cap-blue note. Every tint is checked against --bg-card in all six theme x color

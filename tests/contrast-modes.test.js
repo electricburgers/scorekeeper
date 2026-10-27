@@ -44,6 +44,17 @@ describe("Game Mode picker meets WCAG 2.1 AA in every theme", () => {
     });
   });
 
+  it("light theme: tinted surfaces keep text AA and control borders 3:1 on every surface", () => {
+    const t = tokensFor("light", 0);
+    const surfaces = ["bg-primary", "bg-card", "bg-card-alt", "bg-input", "bg-hover", "btn-idle-bg"].map((n) => tok(t, n));
+    for (const bg of surfaces) {
+      for (const txt of ["text-primary", "text-secondary", "text-muted", "txt-cyan", "txt-red", "txt-purple"]) {
+        assert.ok(contrast(tok(t, txt), bg) >= 4.5, `${txt} on ${bg}`);
+      }
+      assert.ok(contrast(tok(t, "border-control"), bg) >= 3, `border-control on ${bg}`);
+    }
+  });
+
   it("the dropdown chevron (#888888) clears 3:1 on both card backgrounds", () => {
     assert.match(CSS, /\.theme-select\{[^}]*fill='%23888888'/);
     assert.ok(contrast("#888888", "#0d0d0d") >= 3);

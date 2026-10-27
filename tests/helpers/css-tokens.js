@@ -30,23 +30,24 @@ function topLevelRules(css) {
 }
 const RULES = topLevelRules(CSS);
 
-function matches(compound, theme, cb) {
-  const pieces = compound.match(/^(?::root|\[data-(?:theme|cb)="[^"]*"\])+$/) ? compound.match(/:root|\[data-(?:theme|cb)="[^"]*"\]/g) : null;
+function matches(compound, theme, cb, mode) {
+  const pieces = compound.match(/^(?::root|\[data-(?:theme|cb|mode)="[^"]*"\])+$/) ? compound.match(/:root|\[data-(?:theme|cb|mode)="[^"]*"\]/g) : null;
   if (!pieces) return 0;
   for (const p of pieces) {
-    const m = p.match(/\[data-(theme|cb)="([^"]*)"\]/);
+    const m = p.match(/\[data-(theme|cb|mode)="([^"]*)"\]/);
     if (!m) continue; // :root
     if (m[1] === "theme" && m[2] !== theme) return 0;
     if (m[1] === "cb" && m[2] !== String(cb)) return 0;
+    if (m[1] === "mode" && m[2] !== mode) return 0;
   }
   return pieces.length;
 }
 
-function tokensFor(theme, cb) {
+function tokensFor(theme, cb, mode) {
   const hits = [];
   RULES.forEach((r, order) => {
     if (r.selector.startsWith("@")) return;
-    const spec = Math.max(0, ...r.selector.split(",").map((s) => matches(s.trim(), theme, cb)));
+    const spec = Math.max(0, ...r.selector.split(",").map((s) => matches(s.trim(), theme, cb, mode)));
     if (spec) hits.push({ spec, order, body: r.body });
   });
   hits.sort((a, b) => a.spec - b.spec || a.order - b.order);

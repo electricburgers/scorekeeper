@@ -68,22 +68,35 @@ describe("exports name the mode in every mode", () => {
 });
 
 describe("per-mode accent colour", () => {
+  const MODES = ["regular", "theme", "tune"];
+  const accent = (theme, cb, mode) => {
+    const t = tokensFor(theme, cb, mode);
+    return { t, col: resolve(t, t["--mode-accent"]) };
+  };
   it("each mode has its own accent, used on the header and section edges", () => {
-    for (const m of ["regular", "theme", "tune"]) assert.match(CSS, new RegExp(`\\[data-mode="${m}"\\]\\{[^}]*--mode-accent:`));
+    for (const m of MODES) assert.match(CSS, new RegExp(`\\[data-mode="${m}"\\]\\{[^}]*--mode-accent:`));
     assert.match(CSS, /\.header\{[^}]*var\(--mode-accent/);
     assert.match(CSS, /\.section-header\{[^}]*var\(--mode-accent/);
   });
   COMBOS.forEach(({ theme, cb, name }) => {
     it(`accents clear 3:1 against header and card backgrounds (${name})`, () => {
-      const t = tokensFor(theme, cb);
-      for (const m of ["regular", "theme", "tune"]) {
-        const decl = CSS.match(new RegExp(`\\[data-mode="${m}"\\]\\{([^}]*)\\}`))[1].match(/--mode-accent:\s*([^;]+)/)[1].trim();
-        const col = resolve(t, decl);
+      for (const m of MODES) {
+        const { t, col } = accent(theme, cb, m);
         for (const bgTok of ["--bg-primary", "--bg-card"]) {
           const c = contrast(col, resolve(t, t[bgTok]));
           assert.ok(c >= 3, `${m} ${col} on ${bgTok} is ${c.toFixed(2)}:1`);
         }
       }
     });
+    it(`the three accents are three different colours (${name})`, () => {
+      assert.equal(new Set(MODES.map((m) => accent(theme, cb, m).col)).size, 3);
+    });
+    if (cb) {
+      it(`Color Vision ${cb} swaps every accent for its own palette (${theme})`, () => {
+        for (const m of MODES) assert.notEqual(accent(theme, cb, m).col, accent(theme, 0, m).col, m);
+        // and the two vision modes don't share a palette either
+        for (const m of MODES) assert.notEqual(accent(theme, 1, m).col, accent(theme, 2, m).col, m);
+      });
+    }
   });
 });
