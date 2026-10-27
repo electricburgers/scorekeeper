@@ -23,8 +23,37 @@ const BONUS_ROUNDS = new Set([0, 2]);
 // The three Q5 wagers reuse the two existing wager stores (halftime = Round 2, finalWager =
 // Round 3 in Theme Night, caps 10 and 20 already match) plus a new wager1 store for Round 1 (cap 5).
 const THEME_WAGER_MAX = { wager1: 5, halftime: 10, final: 20 };
+// Name That Tune: 4 rounds on Regular's point budgets (ROUND_WAGERS), every round closed by a Q5
+// wager capped 5 / 10 / 15 / 20 (no 4-part bonus). Perfect night = 10+16+20+30 budgets + 50 of
+// wagers = 126. Round 1 and 2 and 4 reuse the wager1 / halftime / finalWager stores (caps 5, 10 and
+// 20 line up with their Regular / Theme Night caps); Round 3 gets its own wager3 store.
+const TUNE_WAGER_MAX = { wager1: 5, halftime: 10, wager3: 15, final: 20 };
+// What a team has to name in each Name That Tune round (shown next to "Round N").
+const TUNE_ROUND_TITLES = ["Song Title", "Artist", "Song Title", "Song Title & Artist"];
+const GAME_MODES = ["regular", "theme", "tune"];
+const MODE_NAMES = { regular: "Regular Trivia", theme: "Theme Night", tune: "Name That Tune" };
+// Highest score guess a team may enter: a perfect night in that mode (Regular's 146 also covers
+// its 4-part bonuses).
+const GUESS_LIMITS = { regular: 146, theme: 95, tune: 126 };
+function gameMode() {
+  const m = gameState.meta.mode;
+  return GAME_MODES.includes(m) ? m : "regular";
+}
+function gameModeName(mode) {
+  return MODE_NAMES[mode || gameMode()];
+}
+function guessLimit() {
+  return GUESS_LIMITS[gameMode()];
+}
 function isTheme() {
   return gameState.meta.mode === "theme";
+}
+function isTune() {
+  return gameState.meta.mode === "tune";
+}
+// Theme Night and Name That Tune both close every round with a Q5 wager (no 4-part bonus).
+function hasQ5Wagers() {
+  return isTheme() || isTune();
 }
 function roundWagers(ri) {
   return isTheme() ? THEME_ROUND_WAGERS[ri] || [] : ROUND_WAGERS[ri];
@@ -33,21 +62,29 @@ function roundCount() {
   return isTheme() ? 3 : 4;
 }
 function hasBonusQ(ri) {
-  return !isTheme() && BONUS_ROUNDS.has(ri);
+  return !hasQ5Wagers() && BONUS_ROUNDS.has(ri);
+}
+// "Round 1", or in Name That Tune "Round 1 - Song Title".
+function roundTitle(ri) {
+  return "Round " + (ri + 1) + (isTune() ? " - " + TUNE_ROUND_TITLES[ri] : "");
 }
 // Which special-wager block (if any) closes round ri in the current mode.
 function roundWagerType(ri) {
   if (isTheme()) return ["wager1", "halftime", "final"][ri] || null;
+  if (isTune()) return ["wager1", "halftime", "wager3", "final"][ri] || null;
   return ri === 1 ? "halftime" : ri === 3 ? "final" : null;
 }
 function wagerStore(type) {
   return type === "wager1"
     ? gameState.wager1
-    : type === "final"
-      ? gameState.finalWager
-      : gameState.halftime;
+    : type === "wager3"
+      ? gameState.wager3
+      : type === "final"
+        ? gameState.finalWager
+        : gameState.halftime;
 }
 function wagerMax(type) {
+  if (isTune()) return TUNE_WAGER_MAX[type];
   return isTheme() ? THEME_WAGER_MAX[type] : type === "final" ? 20 : 10;
 }
 
@@ -74,6 +111,7 @@ function freshState() {
     halftime: {},
     finalWager: {},
     wager1: {},
+    wager3: {},
     gameStarted: false,
     craftPrizeWinner: null,
   };
@@ -144,7 +182,7 @@ function migrateState(s) {
   ].forEach((k) => {
     s.meta[k] = s.meta[k] || "";
   });
-  if (s.meta.mode !== "theme") s.meta.mode = "regular";
+  if (!GAME_MODES.includes(s.meta.mode)) s.meta.mode = "regular";
   // The same limits the inputs carry as maxlength, applied again to whatever comes IN. maxlength
   // only stops a person typing past it — it does nothing for a value arriving from a loaded .json
   // file, an older session saved before these limits existed, or a paste handled by script. The
@@ -179,6 +217,7 @@ function migrateState(s) {
   if (!s.halftime) s.halftime = {};
   if (!s.finalWager) s.finalWager = {};
   if (!s.wager1) s.wager1 = {};
+  if (!s.wager3) s.wager3 = {};
   if (s.gameStarted === undefined) s.gameStarted = false;
   if (s.craftPrizeWinner === undefined)
     s.craftPrizeWinner =
@@ -189,6 +228,9 @@ function migrateState(s) {
 }
 
 function checkGameStarted() {
+  // Once the flag is set the scan below can only ever return true (it falls through to this same
+  // flag when it finds nothing), so skip the O(16n) walk over every answer on every render.
+  if (gameState.gameStarted) return true;
   for (let ri = 0; ri < 4; ri++) {
     for (let qi = 0; qi < 4; qi++) {
       const q = gameState.rounds[ri].questions[qi];
@@ -209,22 +251,12 @@ function checkGameStarted() {
       }
     }
   }
-  for (const k in gameState.wager1) {
-    if (gameState.wager1[k]?.wager) {
-      gameState.gameStarted = true;
-      return true;
-    }
-  }
-  for (const k in gameState.halftime) {
-    if (gameState.halftime[k]?.wager) {
-      gameState.gameStarted = true;
-      return true;
-    }
-  }
-  for (const k in gameState.finalWager) {
-    if (gameState.finalWager[k]?.wager) {
-      gameState.gameStarted = true;
-      return true;
+  for (const store of [gameState.wager1, gameState.halftime, gameState.wager3, gameState.finalWager]) {
+    for (const k in store) {
+      if (store[k]?.wager) {
+        gameState.gameStarted = true;
+        return true;
+      }
     }
   }
   return gameState.gameStarted;
@@ -301,10 +333,27 @@ function fwPts(ti) {
   return f.correct ? +f.wager : -f.wager;
 }
 function w1Pts(ti) {
-  if (!isTheme()) return 0;
+  if (!hasQ5Wagers()) return 0;
   const w = gameState.wager1[ti];
   if (!w || w.wager == null || w.wager === "" || w.correct == null) return 0;
   return w.correct ? +w.wager : -w.wager;
+}
+// Name That Tune's Round 3 wager (its own store; Theme Night / Regular never write it).
+function w3Pts(ti) {
+  if (!isTune()) return 0;
+  const w = gameState.wager3[ti];
+  if (!w || w.wager == null || w.wager === "" || w.correct == null) return 0;
+  return w.correct ? +w.wager : -w.wager;
+}
+// Net points of whichever wager store `type` names, for one team.
+function wagerPts(type, ti) {
+  return type === "wager1"
+    ? w1Pts(ti)
+    : type === "wager3"
+      ? w3Pts(ti)
+      : type === "final"
+        ? fwPts(ti)
+        : htPts(ti);
 }
 function grandTotal(ti) {
   if (!scoreMemo) return grandTotalRaw(ti);
@@ -318,7 +367,7 @@ function grandTotal(ti) {
 function grandTotalRaw(ti) {
   let t = 0;
   for (let ri = 0; ri < 4; ri++) t += roundSub(ti, ri);
-  t += htPts(ti) + fwPts(ti) + w1Pts(ti);
+  t += htPts(ti) + fwPts(ti) + w1Pts(ti) + w3Pts(ti);
   if (gameState.teams[ti]?.bonusItem) t += 5;
   if (gameState.teams[ti]?.njcb) t += 3;
   t += gameState.teams[ti]?.adjustment || 0;
@@ -452,10 +501,16 @@ function usedW(ti, ri) {
   }
   return u;
 }
+// The team's score going INTO the wager `type`: every round before it (with the wagers that closed
+// them) plus the Q1-4 of the round the wager closes, then the Bonus Item / NJCB / adjustment.
 function preWagerTotal(ti, type) {
-  let t = roundSub(ti, 0);
-  if (type !== "wager1") t += w1Pts(ti) + roundSub(ti, 1);
-  if (type === "final") t += htPts(ti) + roundSub(ti, 2) + roundSub(ti, 3);
+  let t = 0;
+  for (let ri = 0; ri < 4; ri++) {
+    t += roundSub(ti, ri);
+    const wt = roundWagerType(ri);
+    if (wt === type) break;
+    if (wt) t += wagerPts(wt, ti);
+  }
   if (gameState.teams[ti]?.bonusItem) t += 5;
   if (gameState.teams[ti]?.njcb) t += 3;
   t += gameState.teams[ti]?.adjustment || 0;

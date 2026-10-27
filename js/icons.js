@@ -150,14 +150,18 @@ const ICON_SND_HORN_PICT =
 // four-column checker closed up into a blob.
 const ICON_FLAG_PICT =
   '<svg class="icon-ui icon-flag" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 2v20"/><path class="fl-edge" d="M4 3C6 3.2 8 4.2 10 4.4C12 4.6 14 2.2 16 2C18 1.8 20 3.4 22 3.6L22 15.6C20 15.4 18 13.8 16 14C14 14.2 12 16.6 10 16.4C8 16.2 6 15.2 4 15Z"/><path class="fl-sq" d="M4 3C6 3.2 8 4.2 10 4.4L10 10.4C8 10.2 6 9.2 4 9Z"/><path class="fl-sq" d="M16 2C18 1.8 20 3.4 22 3.6L22 9.6C20 9.4 18 7.8 16 8Z"/><path class="fl-sq" d="M10 10.4C12 10.6 14 8.2 16 8L16 14C14 14.2 12 16.6 10 16.4Z"/></svg>';
-// Settings > Game Mode: a target for Regular trivia, sparkles for Theme Night. Tinted via the
-// existing --tint-* tokens (see .icon-mode-* in styles.css); emoji twins 🎯 / 🎭.
+// Settings > Game Mode: a target for Regular trivia, sparkles for Theme Night, a musical note for
+// Name That Tune. Tinted via the existing --tint-* tokens (see .icon-mode-* in styles.css); emoji
+// twins 🎯 / 🎭 / 🎵.
 const ICON_MODE_REGULAR_PICT =
   '<svg class="icon-ui icon-tinted icon-mode-regular" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><circle class="ip-2" cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>';
 const ICON_MODE_THEME_PICT =
   '<svg class="icon-ui icon-tinted icon-mode-theme" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path class="ip-2" d="M20 3v4"/><path class="ip-2" d="M22 5h-4"/><path class="ip-2" d="M4 17v2"/><path class="ip-2" d="M5 18H3"/></svg>';
+const ICON_MODE_TUNE_PICT =
+  '<svg class="icon-ui icon-tinted icon-mode-tune" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18V5l12-2v13"/><circle class="ip-2" cx="6" cy="18" r="3"/><circle class="ip-2" cx="18" cy="16" r="3"/></svg>';
 const ICON_MODE_REGULAR_EMOJI = '<span class="icon-emoji">🎯</span>';
 const ICON_MODE_THEME_EMOJI = '<span class="icon-emoji">🎭</span>';
+const ICON_MODE_TUNE_EMOJI = '<span class="icon-emoji">🎵</span>';
 const ICON_PDF_PICT =
   '<svg class="icon-ui icon-tinted icon-pdf" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg>';
 const ICON_LINK_PICT =
@@ -317,6 +321,7 @@ let ICON_TROPHY = ICON_TROPHY_PICT;
 let ICON_FLAG = ICON_FLAG_PICT;
 let ICON_MODE_REGULAR = ICON_MODE_REGULAR_PICT;
 let ICON_MODE_THEME = ICON_MODE_THEME_PICT;
+let ICON_MODE_TUNE = ICON_MODE_TUNE_PICT;
 let ICON_PDF = ICON_PDF_PICT;
 let ICON_LINK = ICON_LINK_PICT;
 let ICON_FAWKES = ICON_FAWKES_PICT;
@@ -391,6 +396,7 @@ function applyIconStyle(style) {
   ICON_FLAG = emoji ? ICON_FLAG_EMOJI : ICON_FLAG_PICT;
   ICON_MODE_REGULAR = emoji ? ICON_MODE_REGULAR_EMOJI : ICON_MODE_REGULAR_PICT;
   ICON_MODE_THEME = emoji ? ICON_MODE_THEME_EMOJI : ICON_MODE_THEME_PICT;
+  ICON_MODE_TUNE = emoji ? ICON_MODE_TUNE_EMOJI : ICON_MODE_TUNE_PICT;
   ICON_PDF = emoji ? ICON_PDF_EMOJI : ICON_PDF_PICT;
   ICON_LINK = emoji ? ICON_LINK_EMOJI : ICON_LINK_PICT;
   ICON_FAWKES = emoji ? ICON_FAWKES_EMOJI : ICON_FAWKES_PICT;

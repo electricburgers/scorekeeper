@@ -488,6 +488,29 @@ async function exportPDF() {
       SPEC.find((c) => c.k === "htpts").l4 = "W 1-10";
       SPEC.find((c) => c.k === "r3bonus").l4 = "W 1-20";
     }
+    // Name That Tune keeps Regular's four rounds and point budgets, but every round ends in a Q5
+    // wager: Round 1 / Round 3's 4-part bonus slots (r1bonus, r3bonus) carry those wagers, the
+    // halftime / final slots carry Rounds 2 and 4, and Rounds 1 and 3 gain a Sub just before their
+    // wager like Round 2 and 4 already have. Bands are headed with what the round asks for.
+    if (isTune()) {
+      const subCol = (k) => ({ w: 28, k, df: "EFEFEF", dc: "8B0000", b: true, l4: "Sub", a: "C" });
+      SPEC.splice(SPEC.findIndex((c) => c.k === "r1bonus"), 0, subCol("tS1"));
+      SPEC.splice(SPEC.findIndex((c) => c.k === "r3bonus"), 0, subCol("tS3"));
+      const ix = (k) => SPEC.findIndex((c) => c.k === k);
+      GROUPS[0][0] = ix("r1q0");
+      GROUPS[0][1] = ix("tK");
+      GROUPS[1][0] = ix("r2q0");
+      GROUPS[1][1] = ix("tR");
+      GROUPS[2][0] = ix("r3q0");
+      GROUPS[2][1] = ix("tY");
+      GROUPS[3][0] = ix("r4q0");
+      GROUPS[3][1] = ix("tAF");
+      GROUPS.forEach((g, ri) => (g[2] = roundTitle(ri)));
+      SPEC.find((c) => c.k === "r1bonus").l4 = "W 1-5";
+      SPEC.find((c) => c.k === "htpts").l4 = "W 1-10";
+      SPEC.find((c) => c.k === "r3bonus").l4 = "W 1-15";
+      SPEC.find((c) => c.k === "fwpts").l4 = "W 1-20";
+    }
     const TRIV_WAGERS = isTheme()
       ? [...THEME_ROUND_WAGERS, []]
       : [
@@ -544,9 +567,10 @@ async function exportPDF() {
         r2 = qpts(1, t),
         r3 = qpts(2, t),
         r4 = qpts(3, t);
-      const theme = isTheme();
-      const r1b = theme ? w1Pts(t) : (gameState.rounds[0].bonus[t] || 0) * 5,
-        r3b = theme ? fwPts(t) : (gameState.rounds[2].bonus[t] || 0) * 5;
+      const theme = isTheme(),
+        q5 = hasQ5Wagers();
+      const r1b = q5 ? w1Pts(t) : (gameState.rounds[0].bonus[t] || 0) * 5,
+        r3b = theme ? fwPts(t) : isTune() ? w3Pts(t) : (gameState.rounds[2].bonus[t] || 0) * 5;
       const ht = htPts(t),
         fw = theme ? 0 : fwPts(t);
       const njcb3 = tm.njcb ? 3 : 0,
@@ -729,6 +753,7 @@ async function exportPDF() {
         ["HOST", meta.hostName || "—"],
       ];
       if (isTheme()) headerFields.push(["THEME", (meta.themeName || "").trim() || "—"]);
+      if (isTune()) headerFields.push(["GAME", "Name That Tune"]);
       // One row of four, as before. Craft Partner and Bonus Item are NOT here — they sit beside
       // the Standings table instead (see drawSideInfo), in the ~360pt of empty page that the
       // 432pt-wide table leaves to its right. A second header row cost 40pt of vertical space on
@@ -861,7 +886,7 @@ async function exportPDF() {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(11);
       setText("000000");
-      doc.text(isTheme() ? "STANDINGS - THEME NIGHT" : "STANDINGS - REGULAR TRIVIA", M, y);
+      doc.text("STANDINGS - " + gameModeName().toUpperCase(), M, y);
       y += 12;
       const sHeadY = y;
       SCOLS.forEach((c, ix) => {
@@ -1026,7 +1051,9 @@ var TRIVX_THEME_R2 = { 2: "L", 4: "M", 6: "N", 8: "O" },
 var TRIVX_WMAPS = [TRIVX_R1, TRIVX_R2, TRIVX_R3, TRIVX_R4],
   TRIVX_BONUS = { 0: "J", 2: "Y" },
   TRIVX_NET = { 1: "Q", 3: "AF" },
-  TRIVX_THEME_NET = { 0: "J", 1: "Q", 2: "Y" };
+  TRIVX_THEME_NET = { 0: "J", 1: "Q", 2: "Y" },
+  TRIVX_TUNE_NET = { 0: "J", 1: "Q", 2: "Y", 3: "AF" },
+  TRIVX_TUNE_BANDS = ["E", "L", "T", "AA"];
 function trivXFind(xml, ref) {
   let m = xml.match(new RegExp('<c r="' + ref + '"[^>]*?/>'));
   if (m) return { i: m.index, len: m[0].length, el: m[0] };
@@ -1203,6 +1230,16 @@ function trivInjectXlsx(templateBytes, gs, rk) {
   const patches = [];
   if (gs.meta.hostName) patches.push(["I1", "s", "HOST: " + gs.meta.hostName]);
   const theme = gs.meta.mode === "theme";
+  const tune = gs.meta.mode === "tune";
+  if (tune) {
+    // Name That Tune: Regular's four rounds and wager columns, with the Bonus / HT / Bonus / Final
+    // net-points columns (J, Q, Y, AF) carrying the Q5 wagers. Headers and the two cap cells
+    // (I, X, printed 20 in the template) are rewritten to 5 / 10 / 15 / 20 and each round band
+    // says what the round asks for.
+    patches.push(["R1", "s", "NAME THAT TUNE"]);
+    patches.push(["I4", "s", "Wager 1-5"], ["Q4", "s", "Wager 1-10"], ["X4", "s", "Wager 1-15"], ["AF4", "s", "Wager 1-20"]);
+    TRIVX_TUNE_BANDS.forEach((c, ri) => patches.push([c + "3", "s", roundTitle(ri)]));
+  }
   if (theme) {
     if ((gs.meta.themeName || "").trim())
       patches.push(["R1", "s", "THEME: " + gs.meta.themeName.trim()]);
@@ -1251,10 +1288,10 @@ function trivInjectXlsx(templateBytes, gs, rk) {
         if (a.correct === true) put(wcol, "n", a.wager);
         else if (a.correct === false) put(wcol, "n", 0);
       }
-      if (theme) {
-        const d = [gs.wager1, gs.halftime, gs.finalWager][ri][t];
+      if (theme || tune) {
+        const d = (tune ? [gs.wager1, gs.halftime, gs.wager3, gs.finalWager] : [gs.wager1, gs.halftime, gs.finalWager])[ri][t];
         if (d && d.wager != null && d.wager !== "" && d.correct != null)
-          put(TRIVX_THEME_NET[ri], "n", d.correct ? +d.wager : -d.wager);
+          put((tune ? TRIVX_TUNE_NET : TRIVX_THEME_NET)[ri], "n", d.correct ? +d.wager : -d.wager);
       } else if (ri === 0 || ri === 2) {
         const c = gs.rounds[ri].bonus[t];
         if (c != null) put(TRIVX_BONUS[ri], "n", c * 5);
@@ -1277,7 +1314,11 @@ function trivInjectXlsx(templateBytes, gs, rk) {
     patches.push(["P" + r, "cv", P]);
     patches.push(["R" + r, "cv", R]);
     patches.push(["Z" + r, "cv", Z]);
-    if (theme) {
+    if (tune) {
+      // The two bonus-cap cells the template prints as 20 become this mode's Round 1 / Round 3 caps.
+      patches.push(["I" + r, "n", 5], ["X" + r, "n", 15]);
+      patches.push(["AE" + r, "cv", AE], ["AG" + r, "cv", AG]);
+    } else if (theme) {
       // Final = Round 3's running total; AE (R4 Sub) and AF (R4 bonus) are blanked, I (the R1
       // bonus cap the template prints as 20) becomes this mode's Round 1 wager cap of 5.
       patches.push(["AE" + r, "blank"], ["AF" + r, "blank"]);

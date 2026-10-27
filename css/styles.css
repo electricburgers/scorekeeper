@@ -126,7 +126,7 @@
      beer/drum/trophy do, so hue was picked to stay visually distinct from every tint already in
      the palette rather than to match anything. Both clear 3:1 against every dark surface a
      settings row can sit on (--bg-card/-alt/-input/-hover): 5.3-6.6:1 and 8.3-10.4:1. */
-  --tint-flask:#b07cff;--tint-cap:#5ec8ff;
+  --tint-flask:#b07cff;--tint-cap:#5ec8ff;--tint-theme-2:#ffee00;
   /* Same swap as ICON_CLIPBOARD's own tint (app.js): a magenta distinct from the app's team-2
      accent, picked so a decorative "shuffle" pictograph beside a text label doesn't borrow the
      control-glyph's plain currentColor. Clears 6.6-8.2:1 on every dark surface. */
@@ -227,7 +227,7 @@
   --tint-pdf:#c0332b;
   /* Light counterparts — see the dark block's note. Darkened to clear 3:1 against a near-white
      card instead of near-black: 4.4-6.0:1 and 4.0-5.5:1. */
-  --tint-flask:#7a3fd6;--tint-cap:#0d6fa8;--tint-shuffle:#a3006b;
+  --tint-flask:#7a3fd6;--tint-cap:#0d6fa8;--tint-theme-2:#8a6100;--tint-shuffle:#a3006b;
   --txt-cyan:#006788;--txt-magenta:#bd0059;--txt-red:#9a0000;--txt-orange:#9b4800;--txt-purple:#6d28c9;
   --accent-cyan-solid:#007ea8;--danger-solid-bg:#eb0000;
   /* A true bright gold (like --accent-gold) only clears 3:1 non-text contrast against a
@@ -373,6 +373,8 @@ html{font-size:16px;max-width:100%;background:var(--bg-primary)}
 /* touch-action:manipulation app-wide: without it, two rapid taps on rapidly re-rendered
    controls (e.g. the standings Random button, which replaces its own DOM node on every tap)
    can be read by mobile browsers as a double-tap-to-zoom gesture instead of two clicks. */
+/* Placeholder text: the browser default (#757575) is 3.7:1 on the dark input fill, under AA. --text-muted clears 4.5:1 on every input surface in both themes. opacity:1 because Firefox dims placeholders on its own. */
+input::placeholder,textarea::placeholder{color:var(--text-muted);opacity:1}
 body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);min-height:100vh;-webkit-tap-highlight-color:transparent;overflow-x:hidden;max-width:100%;overflow-anchor:none;touch-action:manipulation}
 /* Belt-and-suspenders on top of body's own touch-action above: per the CSS Touch Action spec, a
    descendant with no touch-action of its own already computes to "manipulation" here (the UA
@@ -418,7 +420,7 @@ button,[role="button"]{touch-action:manipulation}
 .toolbar>button,.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:5px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .toolbar>button:hover,.btn:hover{background:var(--bg-hover);border-color:var(--border-light)}
 .btn-accent{background:var(--accent-cyan-solid)!important;color:var(--on-accent-cyan)!important;border-color:var(--accent-cyan-solid)!important;font-weight:700!important}
-.btn-accent:hover{opacity:.85}
+.btn-accent:hover{filter:brightness(.92)}
 .btn-danger{border-color:var(--accent-red)!important;color:var(--txt-red)!important}
 .btn-danger:hover{background:color-mix(in srgb,var(--accent-red) 13%,transparent)!important}
 
@@ -721,8 +723,9 @@ button,[role="button"]{touch-action:manipulation}
 /* The head/foot depth shadow used to need a theme-split override here (a black shadow is nearly
    invisible against Dark's #0d0d0d --bg-card). Both directions now use --edge-fade, which is
    already defined per theme — pale in Dark, darker in Light — so the per-theme override is gone. */
-.theme-select{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
+.theme-select{min-height:1.75rem;font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
 .theme-select:hover{background-color:var(--bg-hover)}
+.theme-select:focus-visible{outline:2px solid var(--accent-cyan-solid);outline-offset:2px}
 .theme-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 13%,transparent)}
 .theme-select option{background:var(--bg-card);color:var(--text-primary)}
 /* Custom color-vision dropdown — a native <select> can't wrap an option's text onto a
@@ -954,9 +957,16 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    hex values: this app already has an audited green (XLSX's own icon) and an audited silver
    (the mic), and neither needs its own one-off variant just for this icon to borrow it. */
 .icon-flask{--icon-tint:var(--tint-sheet);--icon-tint-2:var(--tint-mic)}
-/* Game Mode: Regular = trophy-gold target, Theme Night = flask-purple sparkles with gold glints. */
+/* Game Mode: Regular = trophy-gold target, Theme Night = flask-purple sparkles with gold glints
+   (--tint-theme-2, not --accent-gold: the light theme's #ffb300 is only 1.8:1 on white),
+   Name That Tune = cap-blue note. Every tint is checked against --bg-card in all six theme x color
+   vision combinations by tests/contrast-modes.test.js. */
 .icon-mode-regular{--icon-tint:var(--tint-trophy);--icon-tint-2:var(--tint-trophy-2)}
-.icon-mode-theme{--icon-tint:var(--tint-flask);--icon-tint-2:var(--accent-gold)}
+.icon-mode-theme{--icon-tint:var(--tint-flask);--icon-tint-2:var(--tint-theme-2)}
+.icon-mode-tune{--icon-tint:var(--tint-cap);--icon-tint-2:var(--tint-cap)}
+/* Game Mode row: the dropdown with its current mode's pictograph beside it. */
+.game-mode-picker{display:inline-flex;align-items:center;gap:8px}
+.game-mode-picker .icon-ui,.game-mode-picker .icon-emoji{flex-shrink:0;width:1.2rem;height:1.2rem;font-size:1.1rem;line-height:1}
 /* Take the Tour's own icon — a waving hand, since the ℹ️ it had before this read as an
    unlabeled dot at mobile sizes. --accent-gold rather than a bespoke tint: it's already
    contrast-audited for both themes and every color-vision mode (unlike a new one-off hex pair),
@@ -1633,12 +1643,13 @@ input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in sr
    enough; same ellipsis-on-overflow pattern .sr-name uses elsewhere in this file. */
 .date-native-wrap .date-display-text{position:absolute;left:10px;right:6px;top:0;bottom:0;display:flex;align-items:center;pointer-events:none;font-family:var(--font-body);font-size:.9rem;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .date-native-wrap .date-display-text.is-placeholder{color:var(--text-muted)}
-.date-native-wrap .date-native:disabled ~ .date-display-text{opacity:.5}
+.date-native-wrap .date-native:disabled ~ .date-display-text{opacity:.65}
 /* Same rem-not-px reasoning as .date-native-wrap above — a real <input> scrolls its own overflow
    internally rather than bleeding onto a neighbor, but a flat px cap still means this field
    doesn't visually grow alongside a Quiz ID label/value that is growing with it. */
 .quiz-id-input{width:auto;max-width:8.125rem}
-input:disabled{opacity:.5;cursor:not-allowed}
+/* .65, not .5: a locked Event Details field still holds a value the host has to read, and at .5 black on the light theme's input grey fell to 3.8:1 (AA wants 4.5:1). */
+input:disabled{opacity:.65;cursor:not-allowed}
 input[list]{padding-right:26px;background-image:linear-gradient(45deg,transparent 50%,var(--text-muted) 50%),linear-gradient(135deg,var(--text-muted) 50%,transparent 50%);background-position:calc(100% - 16px) 55%,calc(100% - 11px) 55%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
 input[list]::-webkit-calendar-picker-indicator{opacity:0}
 [role="button"]:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid var(--accent-cyan);outline-offset:2px}
@@ -1772,7 +1783,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .remove-team .pause-team{border-color:var(--border-control);color:var(--text-secondary)}
 .remove-team .pause-team.is-on{border-color:var(--accent-orange);color:var(--txt-orange);background:color-mix(in srgb,var(--accent-orange) 15%,transparent)}
 .remove-team .pause-team svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
-.team-entry.is-paused .team-name-cell>input[type="text"],.team-entry.is-paused .team-checks{opacity:.55}
+.team-entry.is-paused .team-name-cell>input[type="text"],.team-entry.is-paused .team-checks{opacity:.75}
 .remove-team button:hover{background:color-mix(in srgb,var(--accent-red) 15%,transparent)}
 /* X_ICON_SVG (app.js) replaces a ✕ Unicode glyph here — the button already centers its content
    with flex, but the glyph's own font metrics never quite landed it in the visual middle. An
@@ -1835,7 +1846,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    mobile. Every state below now only ever swaps the border-left COLOR, never its width. */
 .question-block{background:var(--bg-card-alt);border:1px solid var(--border-strong);border-left:6px solid transparent;border-radius:var(--radius);margin-bottom:8px;overflow:hidden;scroll-margin-top:calc(var(--header-h,80px) + var(--mini-progress-h,0px) + 12px)}
 .question-block.q-active{border-left-color:var(--accent-cyan)}
-.question-block.q-done{border-left-color:var(--accent-green);opacity:.82}
+/* No opacity dim on a finished question (it was .82): fading the whole card pulled the points, badges and Sort button inside it under AA 4.5:1 in the light theme. The green edge and the Done badge already say it's finished. */
+.question-block.q-done{border-left-color:var(--accent-green)}
 /* Beer Round wins over q-done green. Uses --beer-border on --beer-bg (not --accent-gold on the
    normal --bg-card-alt): the raw accent only clears 3:1 against a background this warm/dark —
    see the --beer-bg definitions above for why. */
@@ -1873,7 +1885,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .settings-toggle-btn.active,.settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 /* Sort buttons (unanswered-first and name): blank with a coloured outline + icon when off, solid
    fill with a contrasting icon when on. Name sort tells A-Z from Z-A by its arrow, not by fill. */
-.q-sort-btn,.q-alpha-btn{background:transparent;color:var(--accent-cyan-solid);border-color:var(--accent-cyan-solid)}
+.q-sort-btn,.q-alpha-btn{background:transparent;color:var(--txt-cyan);border-color:var(--accent-cyan-solid)}
 .q-sort-btn.active,.q-alpha-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan)}
 .q-sort-btn:hover,.q-alpha-btn:hover{filter:brightness(1.1)}
 .q-alpha-btn .icon-ui{width:1em;height:1em}
@@ -2127,7 +2139,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .q-stat-incorrect,.pts-neg,.pts-nil,.bonus-pts.pts-nil{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border)}
 /* No width here — same reasoning as the generic .pts-zero rule above: it comes from .bonus-pts
    alone so every state (including this one) resolves the container-query override identically. */
-.pts-zero,.bonus-pts.pts-zero{color:var(--text-muted);text-align:center;font-weight:700;opacity:.7}
+.pts-zero,.bonus-pts.pts-zero{color:var(--text-muted);text-align:center;font-weight:700}
 
 /* EXPORT */
 /* Centred to line up with the Clear Session button directly below it, which has been
@@ -2283,7 +2295,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .cp-field-label{font-size:.68rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;text-align:center}
 .cp-field .stepper input.sw-input{width:3.2rem}
 .cp-status{font-size:.72rem;color:var(--text-muted);margin-bottom:2px}
-.cp-note{font-size:.66rem;color:var(--text-muted);opacity:.75;margin-bottom:8px;font-style:italic}
+.cp-note{font-size:.66rem;color:var(--text-muted);margin-bottom:8px;font-style:italic}
 .cp-draw-btn{width:100%}
 .cp-draw-btn:disabled{opacity:.5;cursor:not-allowed}
 .cp-intro{font-size:.78rem;color:var(--text-secondary);margin-bottom:6px;font-style:italic}
@@ -2664,7 +2676,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    .ta-name-clickable), defined for every theme/color-vision combination, so this link is
    guaranteed AA in all of them without a color pick of its own. */
 .fr-note a{color:var(--txt-cyan);text-decoration:underline}
-.fr-note a:hover{opacity:.8}
+.fr-note a:hover{filter:brightness(.85)}
 /* Collapsed by default so the tie-break/Diff explanation doesn't eat vertical space every time
    Final Results is open — <details>/<summary> gets keyboard support and toggling for free. */
 .fr-details{margin-top:9px}
@@ -2813,3 +2825,9 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .settings-about{font-size:.66rem;color:var(--text-muted)}
 .settings-about summary{cursor:pointer;font-weight:600;letter-spacing:.5px}
 .settings-about ul{margin:2px 0 4px;padding-left:1.1rem}
+
+/* WCAG 2.2 target size (2.5.8): every interactive target is at least 24x24 CSS px. The name links
+   and collapse headers are text rows only ~16px tall; padding adds the missing height and the
+   matching negative margin keeps the layout exactly where it was. */
+.q-header-left,.standings-title-row,.cv-select-btn{min-height:24px}
+.ta-name-clickable,.sr-name-clickable{padding-block:5px;margin-block:-5px}

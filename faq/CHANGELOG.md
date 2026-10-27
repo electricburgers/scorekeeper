@@ -2,6 +2,16 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.45] - 27 Oct 2026
+
+### Added
+
+- **New "Name That Tune" section** (3 entries): switching to it, how it is scored (Regular's point choices, a Q5 wager closing each of four rounds, capped 5/10/15/20, perfect score 126, guesses 1-126, round headers naming the task), and how the PDF/XLSX exports, Try Example and Take the Tour handle it.
+
+### Changed
+
+- **Game Mode is now a dropdown** (Regular Trivia / Theme Night / Name That Tune), and the FAQ says that changing it wipes the board after a warning. Theme Night and Settings entries updated.
+
 ## [1.44] - 26 Oct 2026
 
 ### Changed

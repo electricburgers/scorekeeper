@@ -29,7 +29,7 @@ describe("Theme Night mode", () => {
     const d = window.document;
     assert.equal(d.querySelectorAll("[id^='sec-r']").length, 4);
     assert.ok(!d.querySelector("input[aria-label='Theme Name']"));
-    assert.match(d.getElementById("gameModeToggle").textContent, /Regular/);
+    assert.equal(d.getElementById("gameModeSelect").value, "regular");
     assert.ok(d.getElementById("bqblock-0"));
   });
 
@@ -38,7 +38,7 @@ describe("Theme Night mode", () => {
     const d = window.document;
     assert.equal(d.querySelectorAll("[id^='sec-r']").length, 3);
     assert.ok(d.querySelector("input[aria-label='Theme Name']"));
-    assert.match(d.getElementById("gameModeToggle").textContent, /Theme Night/);
+    assert.equal(d.getElementById("gameModeSelect").value, "theme");
     ["wager1", "halftime", "final"].forEach((t) => assert.ok(d.getElementById("swblock-" + t), t));
     assert.ok(!d.getElementById("bqblock-0"), "no 4-part bonus in Theme Night");
     assert.match(d.getElementById("swblock-wager1").textContent, /1-5/);
@@ -62,13 +62,14 @@ describe("Theme Night mode", () => {
     assert.ok(window.document.getElementById("standings-wager1"), "score block before the Round 1 wager");
   });
 
-  it("toggleGameMode flips the mode and keeps scores; new game keeps the mode", async () => {
+  it("setGameMode switches the mode (wiping the board); a new game keeps the mode", async () => {
+    window.appConfirm = async () => true;
     setup(false);
-    await evalIn(window, "toggleGameMode()");
+    await evalIn(window, 'setGameMode("theme")');
     assert.equal(evalIn(window, "gameState.meta.mode"), "theme");
     evalIn(window, "startNewGame()");
     assert.equal(evalIn(window, "gameState.meta.mode"), "theme");
-    await evalIn(window, "toggleGameMode()");
+    await evalIn(window, 'setGameMode("regular")');
     assert.equal(evalIn(window, "gameState.meta.mode"), "regular");
   });
 
@@ -116,15 +117,15 @@ describe("Theme Night: heading, icons, Try Example", () => {
     assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details");
   });
 
-  it("Game Mode button has a pictograph, and an emoji in Emoji icon style", () => {
+  it("Game Mode shows a pictograph, and an emoji in Emoji icon style", () => {
     const d = window.document;
-    assert.ok(d.querySelector("#gameModeToggle svg.icon-mode-regular"));
+    assert.ok(d.querySelector("#gameModeIcon svg.icon-mode-regular"));
     evalIn(window, 'setIconStyle("emoji")');
-    assert.match(d.getElementById("gameModeToggle").textContent, /🎯/);
+    assert.match(d.getElementById("gameModeIcon").textContent, /🎯/);
     evalIn(window, 'gameState.meta.mode = "theme"; renderAll();');
-    assert.match(d.getElementById("gameModeToggle").textContent, /🎭/);
+    assert.match(d.getElementById("gameModeIcon").textContent, /🎭/);
     evalIn(window, 'setIconStyle("pictograph")');
-    assert.ok(d.querySelector("#gameModeToggle svg.icon-mode-theme"));
+    assert.ok(d.querySelector("#gameModeIcon svg.icon-mode-theme"));
   });
 
   it("Try Example in Theme Night loads the same teams as a Simpsons theme night", async () => {

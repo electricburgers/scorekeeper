@@ -71,7 +71,7 @@ const Tutorial = (function () {
     const s = migrateState(freshState());
     // Tour the mode the host is actually in. Theme Name is left blank like Quiz ID and Host Name:
     // it gates scoring too, so the tour has the host type it in for real.
-    if (isTheme()) s.meta.mode = "theme";
+    s.meta.mode = gameMode();
     s.meta.date = new Date().toISOString().slice(0, 10);
     s.meta.location = "The Tutorial Tavern";
     s.meta.craftPartner = "Practice Run Brewing";
@@ -170,8 +170,12 @@ const Tutorial = (function () {
   }
   function autoFillSpecialWager(type, skipTi) {
     const max = wagerMax(type);
-    const wSet = type === "final" ? setFW : type === "wager1" ? setW1 : setHW;
-    const cSet = type === "final" ? setFC : type === "wager1" ? setC1 : setHC;
+    const [wSet, cSet] = {
+      wager1: [setW1, setC1],
+      halftime: [setHW, setHC],
+      wager3: [setW3, setC3],
+      final: [setFW, setFC],
+    }[type];
     const data = wagerStore(type);
     gameState.teams.forEach((_, ti) => {
       if (skipTi === ti) return; // already placed live
@@ -304,15 +308,72 @@ const Tutorial = (function () {
   //     to place it below, for steps where the host needs to watch content sitting just below
   //     the target itself (e.g. the Sort demo) that the callout would otherwise cover.
   function steps() {
-    return isTheme() ? themeSteps(regularSteps()) : regularSteps();
+    return isTheme()
+      ? themeSteps(regularSteps())
+      : isTune()
+        ? tuneSteps(regularSteps())
+        : regularSteps();
   }
-  // Theme Night's tour is the Regular tour with surgery, so every shared step (teams, sorting,
-  // Final Results, Team Report, Craft Prize, export...) stays a single source of truth. The
-  // differences: a required Theme Name step, a Q5 wager (with its "scores before" read-out) at
-  // the end of EACH of the three rounds in place of the multi-part bonus, new point budgets, a
-  // 1-95 guess range, and no Round 4.
-  function themeSteps(base) {
-    const wagerSteps = (type, n, cap, filler) => [
+  // Name That Tune's tour is the Regular tour with surgery too: Regular's four rounds and point
+  // budgets stay, but the multi-part bonus questions go and EVERY round ends in a Q5 wager
+  // (5 / 10 / 15 / 20), a 1-126 guess range, and each round says what the teams must name.
+  function tuneSteps(base) {
+    const out = [];
+    base.forEach((s) => {
+      const t = s.target;
+      if (t === '.team-entry:first-child input[type="number"]') {
+        out.push({ ...s, text: s.text.replace("1-146", "1-126") });
+      } else if (t === "#bqblock-0 .q-header") {
+        // Round 1's wager comes after the rest of Round 1 is filled in (next step), not here.
+      } else if (t === "#sec-r1") {
+        out.push({
+          ...s,
+          text: `Now I'll fill in the rest of Round 1 - ${TUNE_ROUND_TITLES[0]}. Take a look around before ${tappingWord()} Next.`,
+        });
+        q5WagerSteps("wager1", 1, 5).forEach((w, i) => {
+          if (i === 1) w.text = `Every round ends with a Q5 bonus wager. Round 1's is the first time teams put points on the line: win and the bet is added, lose and it's subtracted. Pick an amount from 1 to 5 for ${team0Name()}, mark it right or wrong, then ${tapWord()} Next.`;
+          out.push(w);
+        });
+      } else if (t === "#sec-r2" && /Scroll down to Round 2/.test(s.text)) {
+        out.push({
+          ...s,
+          text: `Scroll down to Round 2 - ${TUNE_ROUND_TITLES[1]}. The wager amounts change (1, 3, 5, 7). I'll fill in everyone's Q1.`,
+        });
+      } else if (t === "#sec-r2") {
+        out.push({
+          ...s,
+          text: "I'll fill the rest of Round 2. Next, we'll cover the scores before the Round 2 wager and the wager itself.",
+        });
+      } else if (t === "#standings-halftime") {
+        q5WagerSteps("halftime", 2, 10).forEach((w) => out.push(w));
+      } else if (t === "#swblock-halftime .sw-header" || t === "#swblock-halftime") {
+        // replaced by q5WagerSteps("halftime") above
+      } else if (t === "#sec-r3") {
+        out.push({
+          ...s,
+          text: `Scroll down to Round 3 - ${TUNE_ROUND_TITLES[2]}. The wagers are 2, 4, 6 and 8. I'll fill in Q1-4.`,
+        });
+        q5WagerSteps("wager3", 3, 15).forEach((w) => out.push(w));
+      } else if (t === "#sec-r4") {
+        out.push({
+          ...s,
+          text: `Scroll to Round 4 - ${TUNE_ROUND_TITLES[3]}. The wagers are 3, 6, 9 and 12 and the Q5 wager can go up to 20. I'll fill in Q1-4, then we'll do the last wager.`,
+          fill: (ready) => {
+            runBatched(() => autoFillRound(3));
+            ready();
+          },
+        });
+        q5WagerSteps("final", 4, 20, () => forceTieBreakDemo()).forEach((w) => out.push(w));
+      } else {
+        out.push(s);
+      }
+    });
+    return out;
+  }
+  // The Q5 wager trio shared by Theme Night and Name That Tune: the scores before the wager, the
+  // host placing the first wager live, then the rest filled in.
+  function q5WagerSteps(type, n, cap, filler) {
+    return [
       {
         target: "#standings-" + type,
         text: `Scroll down to the end of Round ${n} and you'll see the Scores before this round's wager. Read them out so teams know how many points to bet on Q5.`,
@@ -343,6 +404,14 @@ const Tutorial = (function () {
         },
       },
     ];
+  }
+  // Theme Night's tour is the Regular tour with surgery, so every shared step (teams, sorting,
+  // Final Results, Team Report, Craft Prize, export...) stays a single source of truth. The
+  // differences: a required Theme Name step, a Q5 wager (with its "scores before" read-out) at
+  // the end of EACH of the three rounds in place of the multi-part bonus, new point budgets, a
+  // 1-95 guess range, and no Round 4.
+  function themeSteps(base) {
+    const wagerSteps = q5WagerSteps;
     const out = [];
     base.forEach((s) => {
       const t = s.target;
@@ -991,7 +1060,7 @@ const Tutorial = (function () {
     if (
       gameState.teams.length &&
       !(await appConfirm(
-        "Starting the tutorial clears your current game in progress and starts a fresh " + (isTheme() ? "Theme Night" : "Regular Trivia") + " practice one. Skipping the tour brings your real game back, but finishing it normally keeps the practice game instead — export or save first if you need to keep this one. Continue?",
+        "Starting the tutorial clears your current game in progress and starts a fresh " + gameModeName() + " practice one. Skipping the tour brings your real game back, but finishing it normally keeps the practice game instead — export or save first if you need to keep this one. Continue?",
         { okLabel: "Start Tutorial" },
       ))
     )

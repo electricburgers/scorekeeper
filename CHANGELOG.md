@@ -14,6 +14,15 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.0 - 2026-10-27
+Name That Tune is a second new game mode, so it starts the v21 series (like Theme Night did for v20).
+- **Name That Tune mode.** Four rounds of five questions on Regular's point budgets (1-2-3-4, 1-3-5-7, 2-4-6-8, 3-6-9-12), every round closed by a Q5 bonus wager capped 5 / 10 / 15 / 20 (no four-part bonus). A perfect night is 126, so Final Score Guess accepts 1-126. Round headers say what the teams must name: Round 1 - Song Title, Round 2 - Artist, Round 3 - Song Title, Round 4 - Song Title & Artist (app, Team Report, PDF bands, XLSX bands).
+- **Game Mode is a dropdown** (Regular Trivia / Theme Night / Name That Tune) with its pictograph beside it: a target, sparkles, and a musical note (🎯 / 🎭 / 🎵 with Emoji icons). Text, pictographs, borders and focus ring are checked at WCAG AA in all six Theme x Color Vision combinations by a new test. Theme Night's gold glints are now a darker gold in Light theme (they were 1.8:1).
+- **Changing the mode always wipes the board** (scores, wagers, guesses, bonus checks, Craft Prize) so numbers never carry over into a mode where they mean something else; Event Details and team names stay. If anything has been entered the app warns first and Cancel changes nothing.
+- **Guess limits:** 1-146 Regular, 1-95 Theme Night, 1-126 Name That Tune; 0, negatives, decimals and too-high values are rejected.
+- **Name That Tune everywhere Theme Night is:** PDF (Standings - Name That Tune, Sub before every wager, W 1-5/10/15/20), XLSX (wagers in J/Q/Y/AF, caps and headers rewritten, round bands), Try Example (11 teams, guesses scaled to 126), Take the Tour (four rounds, four wagers), Team Report, and the mode-naming prompts (Try Example, Take the Tour, Clear Session, Resume banner).
+- FAQ v1.45: new Name That Tune section, dropdown and wipe behaviour documented.
+
 ## v20.11 - 2026-10-26
 - **PDF Standings:** the Adjustment column is now labelled "Adj".
 

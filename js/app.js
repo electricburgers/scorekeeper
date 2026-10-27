@@ -31,8 +31,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v20.11"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Oct 26, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v21.0"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Oct 27, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -351,9 +351,6 @@ function toggleAdvancedSettings() {
 }
 // Final-score guess entry. Anything outside 1..max (0, negatives, too high, decimals, junk) is
 // rejected: the box snaps back to the team's previous guess and the user is told the range.
-function guessLimit() {
-  return isTheme() ? 95 : 146;
-}
 function setGuess(i, input) {
   const t = gameState.teams[i];
   const raw = String(input.value).trim();
@@ -372,33 +369,68 @@ function setGuess(i, input) {
   renderLeft();
 }
 
-// Regular <-> Theme Night. Lives on the game (meta.mode) rather than in prefs so it travels with
-// a saved/exported game; a new game keeps whichever mode the host was last in.
-async function toggleGameMode() {
-  const toTheme = !isTheme();
+// True when switching modes would throw something away: any answer or wager scored, or a team
+// guess / extra / Craft Prize result entered. Team names and Event Details don't count - they
+// carry across a mode change.
+function hasBoardData() {
+  if (checkGameStarted()) return true;
+  if (gameState.craftPrizeWinner != null) return true;
+  return gameState.teams.some(
+    (t) =>
+      (t.scoreGuess !== "" && t.scoreGuess != null) ||
+      t.njcb ||
+      t.bonusItem ||
+      t.adjustment ||
+      t.craftPrize,
+  );
+}
+// Settings > Game Mode. The mode lives on the game (meta.mode) rather than in prefs so it travels
+// with a saved/exported game. Every mode has its own round layout, wager sets and guess range, so
+// switching WIPES the board (scores, wagers, guesses, extras, Craft Prize) instead of carrying
+// numbers across that mean something else in the new mode; Event Details and team names stay.
+// Asks first when there is anything to lose. Resolves true when the mode changed.
+async function setGameMode(mode) {
+  const from = gameMode();
+  if (!GAME_MODES.includes(mode) || mode === from) {
+    syncGameModeSelect();
+    return false;
+  }
   if (
-    gameState.gameStarted &&
+    hasBoardData() &&
     !(await appConfirm(
       "Switch from " +
-        (toTheme ? "Regular Trivia" : "Theme Night") +
+        gameModeName(from) +
         " to " +
-        (toTheme ? "Theme Night" : "Regular Trivia") +
-        "? Scores already entered are kept, but the round layout changes and some entries may be hidden.",
-      { okLabel: "Switch" },
+        gameModeName(mode) +
+        "? This erases every score, wager, guess and bonus entered so far - the rounds and point values are different in each mode. Event Details and team names are kept. This can't be undone.",
+      { okLabel: "Switch and erase", danger: true },
     ))
-  )
-    return;
-  gameState.meta.mode = toTheme ? "theme" : "regular";
+  ) {
+    syncGameModeSelect();
+    return false;
+  }
+  const next = freshState();
+  next.meta = { ...gameState.meta, mode, themeName: "" };
+  next.teams = gameState.teams.map((t) => {
+    const n = freshTeam(t.name);
+    n.paused = !!t.paused;
+    return n;
+  });
+  gameState = next;
+  resetBoardUi();
   autosave();
   renderAll();
+  return true;
 }
-function syncGameModeToggle() {
-  const b = document.getElementById("gameModeToggle");
-  if (!b) return;
-  b.classList.toggle("active", isTheme());
-  b.innerHTML = isTheme()
-    ? ICON_MODE_THEME + " Theme Night"
-    : ICON_MODE_REGULAR + " Regular";
+// Game Mode dropdown + its pictograph follow gameState.meta.mode (called from every render).
+function syncGameModeSelect() {
+  const sel = document.getElementById("gameModeSelect");
+  if (sel) sel.value = gameMode();
+  const icon = document.getElementById("gameModeIcon");
+  if (icon)
+    icon.innerHTML = { regular: ICON_MODE_REGULAR, theme: ICON_MODE_THEME, tune: ICON_MODE_TUNE }[
+      gameMode()
+    ];
 }
 function toggleUnlockEventDetails() {
   const p = loadPrefs();
@@ -801,21 +833,34 @@ document.addEventListener(
 // Track which (ri,qi) combos we've already toasted for Beer Round
 let beerRoundToasted = new Set();
 
+// " (Theme Night: Simpsons)" / " (Name That Tune)" / " (Regular Trivia)" for the saved-session banner
+// (innerHTML - every host-entered value goes through esc()).
+function resumeModeLabel(s) {
+  const mode = GAME_MODES.includes(s.meta?.mode) ? s.meta.mode : "regular";
+  return (
+    " (" +
+    gameModeName(mode) +
+    (mode === "theme" && s.meta.themeName ? ": " + esc(s.meta.themeName) : "") +
+    ")"
+  );
+}
+function resumeBannerText(s) {
+  return (
+    "Saved session from " +
+    esc(s.meta?.date ? isoToMDY(s.meta.date) : "?") +
+    " at " +
+    esc(s.meta?.location || "(no location)") +
+    resumeModeLabel(s) +
+    ". Resume or start fresh?"
+  );
+}
 (function () {
   const s = loadSaved();
   if (s) {
     // innerHTML, not textContent: the icon is markup, and a saved location is host-entered
     // free text, so it goes through esc() on the way in.
     document.getElementById("resumeText").innerHTML =
-      ICON_ALERT +
-      " Saved session from " +
-      esc(s.meta?.date ? isoToMDY(s.meta.date) : "?") +
-      " at " +
-      esc(s.meta?.location || "(no location)") +
-      (s.meta?.mode === "theme"
-        ? " (Theme Night" + (s.meta.themeName ? ": " + esc(s.meta.themeName) : "") + ")"
-        : " (Regular Trivia)") +
-      ". Resume or start fresh?";
+      ICON_ALERT + " " + resumeBannerText(s);
     document.getElementById("resumeBanner").classList.add("show");
   } else {
     gameState = freshState();
@@ -961,11 +1006,9 @@ function resumeSession() {
   document.getElementById("resumeBanner").classList.remove("show");
   renderAll();
 }
-function startNewGame() {
-  clearSaved();
-  const prevMode = gameState.meta.mode;
-  gameState = freshState();
-  gameState.meta.mode = prevMode === "theme" ? "theme" : "regular";
+// Resets every piece of on-screen board state (sorts, collapsed sections, banter/beer-round
+// memory, craft draw) - shared by a new game and by a game-mode change.
+function resetBoardUi() {
   scoreSortMode = "entry";
   randomOrder = null;
   standingsSortMode = { halftime: "entry", final: "entry" };
@@ -991,6 +1034,13 @@ function startNewGame() {
   stopAllDrumAudio();
   craftDrawState = null;
   craftFlowOpen = false;
+}
+function startNewGame() {
+  clearSaved();
+  const prevMode = gameMode();
+  gameState = freshState();
+  gameState.meta.mode = prevMode;
+  resetBoardUi();
   document.getElementById("resumeBanner").classList.remove("show");
   renderAll();
 }
@@ -1056,18 +1106,22 @@ function renderFinalResults() {
   return h;
 }
 
+// Which round's wager `type` closes in the current mode (-1 when the mode has no such wager).
+function roundWagerTypeIndex(type) {
+  for (let ri = 0; ri < 4; ri++) if (roundWagerType(ri) === type) return ri;
+  return -1;
+}
 function renderStandings(type) {
   if (!gameState.teams.length) return "";
+  // Regular keeps its "Halftime" / "Final" wording; the Q5-wager modes name the round instead.
   const label =
-    type === "wager1"
-      ? "Scores \u2014 Before Round 1 Wager"
+    "Scores \u2014 Before " +
+    (hasQ5Wagers()
+      ? "Round " + (roundWagerTypeIndex(type) + 1)
       : type === "halftime"
-      ? isTheme()
-        ? "Scores \u2014 Before Round 2 Wager"
-        : "Scores \u2014 Before Halftime Wager"
-      : isTheme()
-        ? "Scores \u2014 Before Round 3 Wager"
-        : "Scores \u2014 Before Final Wager";
+        ? "Halftime"
+        : "Final") +
+    " Wager";
   const mode = standingsSortMode[type] || "entry";
   const base = gameState.teams.map((t, ti) => ({
     ti,
@@ -1184,7 +1238,7 @@ function renderAll() {
     renderSB();
   });
   applyPrefs();
-  syncGameModeToggle();
+  syncGameModeSelect();
 }
 
 function renderLeft() {
@@ -1262,7 +1316,7 @@ function renderLeftBody() {
   // Once scoring starts, Event Details normally locks (so it can't drift mid-game) — but a
   // typo can still happen, so the "Edit Locked Fields" setting lets the host reopen just these.
   const metaLocked = gs && !loadPrefs().unlockEventDetails;
-  h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details${isTheme() ? " - Theme Night" : ""}</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
+  h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details${gameMode() === "regular" ? "" : " - " + gameModeName()}</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
     <div class="field"><label>Date</label><div class="date-native-wrap"><input type="date" class="date-native" aria-label="Date" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"><span class="date-display-text${gameState.meta.date ? "" : " is-placeholder"}">${esc(isoToPretty(gameState.meta.date) || "Select date")}</span></div></div>
     ${isTheme() ? `<div class="field full${themeInvalid ? " field-invalid" : ""}"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Music, Simpsons, Star Wars" onchange="gameState.meta.themeName=this.value;autosave();renderLeft();">${themeInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>` : ""}
     <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" maxlength="24" aria-label="Quiz ID" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
@@ -1332,11 +1386,11 @@ function renderLeftBody() {
           (rp.total - rp.done) +
           " left</span>";
     }
-    h += `<div class="section ${collapsedSections.has("sec-r" + rn) ? "collapsed" : ""} ${rComplete ? "round-complete" : ""}" id="sec-r${rn}"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-r${rn}')"><h2><span>Round ${rn}</span>${rpBadge}<span class="round-break"></span><span class="round-label ${ROUND_COLORS[ri]} round-wager-label">Wagers: ${roundWagers(ri).join(", ")}</span></h2><span class="chevron">▼</span></div><div class="section-body">`;
+    h += `<div class="section ${collapsedSections.has("sec-r" + rn) ? "collapsed" : ""} ${rComplete ? "round-complete" : ""}" id="sec-r${rn}"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-r${rn}')"><h2><span>${roundTitle(ri)}</span>${rpBadge}<span class="round-break"></span><span class="round-label ${ROUND_COLORS[ri]} round-wager-label">Wagers: ${roundWagers(ri).join(", ")}</span></h2><span class="chevron">▼</span></div><div class="section-body">`;
     for (let qi = 0; qi < 4; qi++) h += renderWQ(ri, qi);
     const wt = roundWagerType(ri);
-    if (wt === "wager1")
-      h += renderStandings("wager1") + renderSpecialWager("wager1");
+    if (wt === "wager1" || wt === "wager3")
+      h += renderStandings(wt) + renderSpecialWager(wt);
     else if (wt === "halftime")
       h += renderStandings("halftime") + renderHT() + renderStaffThanks();
     else if (wt === "final") h += renderStandings("final") + renderFW();
@@ -1866,8 +1920,13 @@ function renderSpecialWager(type) {
     ? "special-section final-wager"
     : "special-section";
   const titleSub = `BONUS WAGER (1-${max})`;
-  const wSet = isFinal ? "setFW" : type === "wager1" ? "setW1" : "setHW",
-    cSet = isFinal ? "setFC" : type === "wager1" ? "setC1" : "setHC";
+  const SETTERS = {
+    wager1: ["setW1", "setC1"],
+    halftime: ["setHW", "setHC"],
+    wager3: ["setW3", "setC3"],
+    final: ["setFW", "setFC"],
+  };
+  const [wSet, cSet] = SETTERS[type];
   const beer = isSpecialBeerRound(type);
   const swN = activeTeamCount();
   let swDone = 0;
@@ -2140,6 +2199,7 @@ async function removeTeam(ti) {
     );
   }
   gameState.wager1 = reindexAfterRemoval(gameState.wager1, ti);
+  gameState.wager3 = reindexAfterRemoval(gameState.wager3, ti);
   gameState.halftime = reindexAfterRemoval(gameState.halftime, ti);
   gameState.finalWager = reindexAfterRemoval(gameState.finalWager, ti);
   // Exclude Top can never cover the whole remaining roster (at least one team must stay
@@ -2363,6 +2423,29 @@ function setW1(ti, v) {
 function setC1(ti, v) {
   if (!canScore()) return;
   const d = gameState.wager1[ti];
+  if (!d || d.wager == null || d.wager === "") return;
+  if (d.correct === v) delete d.correct;
+  else d.correct = v;
+  gameState.gameStarted = true;
+  autosave();
+  renderAll();
+}
+// Name That Tune's Round 3 Q5 wager (cap 15) - same shape again, own store.
+function setW3(ti, v) {
+  if (!canScore()) return;
+  if (!gameState.wager3[ti]) gameState.wager3[ti] = {};
+  if (("" + v).trim() === "") {
+    delete gameState.wager3[ti].wager;
+  } else {
+    gameState.wager3[ti].wager = Math.max(1, Math.min(15, +v || 1));
+  }
+  gameState.gameStarted = true;
+  autosave();
+  renderAll();
+}
+function setC3(ti, v) {
+  if (!canScore()) return;
+  const d = gameState.wager3[ti];
   if (!d || d.wager == null || d.wager === "") return;
   if (d.correct === v) delete d.correct;
   else d.correct = v;

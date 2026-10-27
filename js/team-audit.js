@@ -68,7 +68,7 @@ function auditOverallStats(ti) {
       }
     }
   }
-  [gameState.wager1[ti], gameState.halftime[ti], gameState.finalWager[ti]].forEach(
+  [gameState.wager1[ti], gameState.halftime[ti], gameState.wager3[ti], gameState.finalWager[ti]].forEach(
     (w) => {
       if (w && w.wager != null && w.wager !== "" && w.correct != null) {
         if (w.correct) correct++;
@@ -219,7 +219,18 @@ function buildAudit(ti) {
   // Round 3 \u2014 Grand Total and everything after it (Guess/Diff, overall stats, note) stays
   // full-width below both columns rather than living inside either one.
   let col1, col2;
-  if (isTheme()) {
+  if (isTune()) {
+    // Name That Tune: four rounds, each headed with what it asks for and closed by its Q5 wager
+    // (Round 1 / 2 / 3 / 4 wagers cap at 5 / 10 / 15 / 20).
+    col1 = roundBlock(0, roundTitle(0), "rl-1");
+    col1 += wagerBlock(gameState.wager1[ti], "Round 1 Wager", "rl-1", "win or lose, 1\u20135");
+    col1 += roundBlock(1, roundTitle(1), "rl-2");
+    col1 += wagerBlock(gameState.halftime[ti], "Round 2 Wager", "rl-2", "win or lose, 1\u201310");
+    col2 = roundBlock(2, roundTitle(2), "rl-3");
+    col2 += wagerBlock(gameState.wager3[ti], "Round 3 Wager", "rl-3", "win or lose, 1\u201315");
+    col2 += roundBlock(3, roundTitle(3), "rl-4");
+    col2 += wagerBlock(gameState.finalWager[ti], "Round 4 Wager", "rl-4", "win or lose, 1\u201320", true);
+  } else if (isTheme()) {
     // Theme Night: three rounds, each closed by its Q5 wager (Round 1 / 2 / 3 wagers cap at 5 / 10 / 20).
     col1 = roundBlock(0, "Round 1", "rl-1");
     col1 += wagerBlock(gameState.wager1[ti], "Round 1 Wager", "rl-1", "win or lose, 1\u20135");

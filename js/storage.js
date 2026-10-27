@@ -223,19 +223,23 @@ function loadPrefsFromFile(e) {
 // Rounds 1-3, Simpsons as the theme. Round 1's Q5 wager is derived from that round's bonus score
 // (the sample has no Round 1 wager of its own); Round 2/3 reuse the halftime/final wagers, whose
 // sizes already fit the 10 / 20 caps. Round 4 and the 4-part bonuses don't exist in this mode.
+// Shrinks every sample guess proportionally so the highest equals `limit` (leaves them alone when
+// they already fit), keeping each team's spread instead of piling several onto the cap.
+function scaleSampleGuesses(s, limit) {
+  const topGuess = Math.max(...s.teams.map((t) => +t.scoreGuess || 0), 0);
+  if (topGuess <= limit) return;
+  s.teams.forEach((t) => {
+    if (t.scoreGuess !== "" && t.scoreGuess != null)
+      t.scoreGuess = Math.max(1, Math.round((+t.scoreGuess * limit) / topGuess));
+  });
+}
 function toThemeSample(s) {
   s.meta.mode = "theme";
   s.meta.themeName = "The Simpsons";
   s.wager1 = {};
   // The Regular example's guesses run higher than Theme Night's 95-point ceiling, so scale them
   // all down together (highest guess becomes 95) rather than piling several teams onto 95.
-  const guesses = s.teams.map((t) => +t.scoreGuess || 0);
-  const topGuess = Math.max(...guesses, 0);
-  if (topGuess > 95)
-    s.teams.forEach((t) => {
-      if (t.scoreGuess !== "" && t.scoreGuess != null)
-        t.scoreGuess = Math.max(1, Math.round((+t.scoreGuess * 95) / topGuess));
-    });
+  scaleSampleGuesses(s, 95);
   s.teams.forEach((_, ti) => {
     const b = s.rounds[0].bonus[ti] || 0;
     s.wager1[ti] = { wager: Math.min(5, b + 1), correct: b >= 2 };
@@ -256,15 +260,36 @@ function toThemeSample(s) {
   s.rounds[3] = { questions: [{}, {}, {}, {}], bonus: {} };
   return s;
 }
+// The same finished game as a Name That Tune night: identical teams, guesses (scaled to 126) and
+// Q1-4 results in all four rounds - Regular's point budgets are this mode's too. The halftime /
+// final wagers already fit the Round 2 / Round 4 caps (10 / 20); Round 1's Q5 wager comes from
+// that round's bonus score, and Round 3 (cap 15) gets a varied wager since the sample has none.
+// The 4-part bonuses don't exist in this mode.
+function toTuneSample(s) {
+  s.meta.mode = "tune";
+  s.meta.themeName = "";
+  scaleSampleGuesses(s, 126);
+  s.wager1 = {};
+  s.wager3 = {};
+  s.teams.forEach((_, ti) => {
+    const b = s.rounds[0].bonus[ti] || 0;
+    s.wager1[ti] = { wager: Math.min(5, b + 1), correct: b >= 2 };
+    s.wager3[ti] = { wager: 1 + ((ti * 7 + 4) % 15), correct: ti % 4 !== 1 };
+  });
+  s.rounds[0].bonus = {};
+  s.rounds[2].bonus = {};
+  return s;
+}
 async function loadSampleGame() {
-  const modeName = isTheme() ? "Theme Night" : "Regular Trivia";
+  const modeName = gameModeName();
   const msg = gameState.teams.length
     ? "Load the sample game for " + modeName + "? This wipes every team, score, and Event Details field currently entered \u2014 it can\u2019t be undone."
     : "Load the sample game for " + modeName + "? This replaces your current session.";
   if (!(await appConfirm(msg, { okLabel: "Load" }))) return;
-  const theme = isTheme();
+  const mode = gameMode();
   gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
-  if (theme) toThemeSample(gameState);
+  if (mode === "theme") toThemeSample(gameState);
+  else if (mode === "tune") toTuneSample(gameState);
   autosave();
   renderAll();
   document.getElementById("resumeBanner")?.classList.remove("show");

@@ -204,6 +204,7 @@
         <a href="#question-timer">Question Timer</a>
         <a href="#wagers">Halftime &amp; Final Wager</a>
         <a href="#theme-night">Theme Night</a>
+        <a href="#name-that-tune">Name That Tune</a>
         <a href="#standings">Scores &amp; Standings</a>
         <a href="#final-results">Final Results &amp; Ties</a>
         <a href="#team-report">Team Report</a>
@@ -454,7 +455,7 @@
               <li><strong>Date</strong> — the date of the event.</li>
               <li>
                 <strong>Theme Name</strong> — Theme Night only (Settings →
-                Game Mode). Printed on the PDF and XLSX exports.
+                Game Mode → Theme Night). Printed on the PDF and XLSX exports.
                 See <a href="#theme-night">Theme Night</a>.
               </li>
               <li>
@@ -886,13 +887,16 @@
           </summary>
           <div class="faq-a">
             <p>
-              Open <strong>Settings</strong> and tap <strong>Game Mode</strong>
-              to flip between <em>Regular</em> and <em>Theme Night</em>. The
-              choice is saved with the game (and in Save/Load files), and
-              <em>New Game</em> stays in whichever mode you were using. If
-              scoring has already started, the app asks you to confirm first;
-              nothing you entered is deleted, but some entries may be hidden
-              while you're in the other mode.
+              Open <strong>Settings</strong> and pick <em>Theme Night</em> from
+              the <strong>Game Mode</strong> dropdown (the other choices are
+              <em>Regular Trivia</em> and <a href="#name-that-tune">Name That Tune</a>).
+              The choice is saved with the game (and in Save/Load files), and
+              <em>New Game</em> stays in whichever mode you were using.
+              <strong>Changing the mode wipes the board</strong> &mdash; every
+              mode has its own rounds, point values and guess range, so scores
+              from one would mean something else in another. If anything has
+              been scored or guessed, the app warns you first and only erases
+              once you confirm; Event Details and team names are kept.
             </p>
           </div>
         </details>
@@ -968,6 +972,99 @@
               wager in the slot Regular uses for that round's bonus or
               halftime points.
             </p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ============================== NAME THAT TUNE ============================== -->
+      <section class="faq-section" id="name-that-tune">
+        <h2 class="faq-section-title">Name That Tune</h2>
+        <p class="faq-section-sub">
+          Four music rounds, each ending in a bonus wager.
+        </p>
+
+        <details class="faq-item" id="q-how-do-i-switch-to-name-that-tune">
+          <summary>
+            <span class="faq-q-text">How do I switch to Name That Tune?</span><span class="faq-q-arrow"
+              >▼</span
+            >
+          </summary>
+          <div class="faq-a">
+            <p>
+              Open <strong>Settings</strong> and pick <em>Name That Tune</em>
+              from the <strong>Game Mode</strong> dropdown (its pictograph is a
+              musical note, or &#127925; with Emoji icons). Switching modes
+              wipes the board, after a warning if anything has been entered;
+              Event Details and team names stay. The Event Details heading
+              then reads &ldquo;Event Details - Name That Tune&rdquo;.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item" id="q-how-is-name-that-tune-scored">
+          <summary>
+            <span class="faq-q-text">How is Name That Tune scored?</span><span class="faq-q-arrow"
+              >▼</span
+            >
+          </summary>
+          <div class="faq-a">
+            <ul>
+              <li>
+                <strong>Four rounds, five questions each.</strong> Q1–Q4 use
+                the same point choices as Regular trivia (1-2-3-4, 1-3-5-7,
+                2-4-6-8 and 3-6-9-12), each usable once per round.
+              </li>
+              <li>
+                <strong>Every round ends with a Q5 bonus wager</strong>: at
+                least 1, up to 5 in Round 1, 10 in Round 2, 15 in Round 3 and
+                20 in Round 4. Correct adds the bet, incorrect subtracts it.
+                A &ldquo;Scores &mdash; Before Round N Wager&rdquo; block
+                appears ahead of each one. There is no four-part bonus
+                question.
+              </li>
+              <li>
+                <strong>A perfect night is 126 points</strong> (76 from Q1–Q4
+                plus 5 + 10 + 15 + 20 in wagers), not counting the CB and Bonus
+                extras. The Final Score Guess therefore only accepts whole
+                numbers from 1 to 126.
+              </li>
+              <li>
+                <strong>Each round says what to name:</strong> Round 1 &ndash;
+                Song Title, Round 2 &ndash; Artist, Round 3 &ndash; Song Title,
+                Round 4 &ndash; Song Title &amp; Artist. That wording appears
+                next to the round in the app, on the Team Report, and in the PDF
+                and XLSX round headers.
+              </li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="faq-item" id="q-name-that-tune-exports-and-tour">
+          <summary>
+            <span class="faq-q-text">Do the exports, Try Example and Take the Tour work in Name That Tune?</span><span class="faq-q-arrow"
+              >▼</span
+            >
+          </summary>
+          <div class="faq-a">
+            <ul>
+              <li>
+                <strong>PDF:</strong> the Standings heading reads &ldquo;Standings
+                - Name That Tune&rdquo;, every round has a Sub column before its
+                wager, and the wagers show as W 1-5, W 1-10, W 1-15 and W 1-20.
+              </li>
+              <li>
+                <strong>XLSX:</strong> the four Q5 wagers land in each round's
+                bonus / halftime / final net-points column, whose headers now read Wager 1-5 / 1-10 / 1-15 / 1-20.
+              </li>
+              <li>
+                <strong>Try Example</strong> loads the same eleven teams with
+                their guesses scaled so the highest is 126.
+              </li>
+              <li>
+                <strong>Take the Tour</strong> walks the four rounds and all
+                four wagers, with the 1&ndash;126 guess range.
+              </li>
+            </ul>
           </div>
         </details>
       </section>
@@ -1836,9 +1933,12 @@
                 icons throughout this FAQ swap right along with it.
               </li>
               <li>
-                <strong>Game Mode</strong> — Regular (four rounds) or Theme
-                Night (three rounds, each ending in a bonus wager). See
-                <a href="#theme-night">Theme Night</a>.
+                <strong>Game Mode</strong> — a dropdown: Regular Trivia (four
+                rounds), Theme Night (three rounds, each ending in a bonus
+                wager) or Name That Tune (four rounds, each ending in a bonus
+                wager). Changing it wipes the board after a warning. See
+                <a href="#theme-night">Theme Night</a> and
+                <a href="#name-that-tune">Name That Tune</a>.
               </li>
               <li>
                 <strong>Question Timer</strong> — the default countdown length
