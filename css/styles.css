@@ -2856,3 +2856,30 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    matching negative margin keeps the layout exactly where it was. */
 .q-header-left,.standings-title-row,.cv-select-btn{min-height:24px}
 .ta-name-clickable,.sr-name-clickable{padding-block:5px;margin-block:-5px}
+
+/* TOUCH TARGETS (tablet + phone): on touch-first devices every control gets at least a 44x44 CSS px
+   hit area (Apple HIG / WCAG 2.5.5 AAA; the 24px floor above still covers mouse layouts). The
+   dropdowns, Settings buttons and text/number fields were 26-33px tall. Tiny glyph buttons that
+   can't grow without breaking the dense score rows (.pause-team) keep their drawn size and extend
+   the tappable area with an invisible ::after instead. */
+@media (pointer:coarse),(max-width:1024px){
+  .toolbar>button,button.qtimer-btn,.check-label,.fr-details summary,.fr-note a,
+  .theme-select,.cv-select-btn,.settings-btn,.settings-advanced-toggle,.settings-x-btn,
+  .settings-toggle-btn,.sort-btn,.btn,.qtimer-btn,.quiz-id-input,.date-native,.sw-select,
+  input[type="text"],input[type="number"],input[type="date"],textarea{min-height:44px}
+  .toolbar>button,.settings-btn,.settings-x-btn,.settings-toggle-btn,.sort-btn,button.qtimer-btn,.cv-select-btn,.fr-details summary{min-width:44px}
+  .fr-details summary,.fr-note a{display:inline-flex;align-items:center}
+  .check-label{box-sizing:border-box}
+  .qtimer-btn.qtimer-toggle,.qtimer-btn.qtimer-reset,.qtimer-mobile .qtimer-btn.qtimer-toggle,
+  .qtimer-mobile .qtimer-btn.qtimer-reset,.qtimer-mobile .qtimer-btn.qtimer-step{width:44px;height:44px;min-height:44px}
+  .qtimer-btn.qtimer-step{min-height:44px;min-width:44px}
+  .settings-toggle-btn{min-height:44px;min-width:44px}
+  .theme-select{font-size:.85rem;padding-right:28px}
+  .cv-select-btn{font-size:.85rem}
+  .cv-select-menu li{min-height:44px;align-items:flex-start;justify-content:center}
+  .mobile-scores-peek,.mini-progress,.settings-about summary,.sidebar-header,.section-header,.q-header{min-height:44px}
+  .settings-about summary,.settings-footer a,a.footer-link{display:inline-flex;align-items:center;min-height:44px}
+  .ta-name-clickable,.sr-name-clickable{padding-block:14px;margin-block:-14px}
+  .pause-team,.remove-team button{position:relative}
+  .pause-team::after,.remove-team button::after{content:"";position:absolute;inset:-12px}
+}

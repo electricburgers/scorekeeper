@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.5 - 2026-10-28
+- **Bigger touch targets on tablet and phone:** on touch devices and screens up to 1024px wide every control is now at least 44x44 px - the dropdowns (Game Mode, Question Timer, Color Vision and its menu rows), Settings buttons, toolbar Save/Load, timer buttons, sort buttons, text/number/date fields, checkboxes, collapse headers, team-name links and the footer links. The small pause / remove team buttons keep their look but get an invisible 44px tap area. Dropdown text is slightly larger.
+
 ## v21.4 - 2026-10-27
 - **Theme Night PDF:** the theme is appended to the mode ("Theme Night - Simpsons") in the header's GAME field and the Standings title, instead of a separate THEME field.
 
