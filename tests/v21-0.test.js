@@ -172,9 +172,9 @@ describe("Game Mode dropdown", () => {
     const sel = d.getElementById("gameModeSelect");
     assert.equal(sel.tagName, "SELECT");
     assert.deepEqual([...sel.options].map((o) => [o.value, o.textContent]), [
-      ["regular", "Regular Trivia"],
-      ["theme", "Theme Night"],
-      ["tune", "Name That Tune"],
+      ["regular", "🎯 Regular Trivia"],
+      ["theme", "🎭 Theme Night"],
+      ["tune", "🎵 Name That Tune"],
     ]);
     assert.ok(sel.getAttribute("aria-label") || d.querySelector("label[for='gameModeSelect']"));
     assert.ok(!d.getElementById("gameModeToggle"));
