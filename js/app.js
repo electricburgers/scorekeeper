@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.8"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.9"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 29, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -65,6 +65,9 @@ let questionSortOrder = {};
 // Per-question name sort ("az" | "za"), independent of questionSortOrder so both can be on at once;
 // questionSortPending remembers which teams were unanswered when the unanswered-first sort ran.
 let questionAlphaSort = {};
+// Teams section A-Z / Z-A view ("az" | "za" | undefined). View only: gameState.teams keeps its entry
+// order, every row keeps its "Team N" entry number and data-ti, so nothing downstream shifts.
+let teamAlphaSort;
 let questionSortPending = {};
 
 // loadPrefs() is called constantly — several times from inside a single renderLeft() alone,
@@ -1065,6 +1068,7 @@ function resetBoardUi() {
   collapsedSpecialWagers = new Set();
   questionSortOrder = {};
   questionAlphaSort = {};
+  teamAlphaSort = undefined;
   questionSortPending = {};
   beerRoundToasted = new Set();
   adjOpenTeams = new Set();
@@ -1373,10 +1377,13 @@ function renderLeftBody() {
     (t) => !t.paused && (t.scoreGuess === "" || t.scoreGuess == null),
   ).length;
   h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2><span class="chevron">▼</span></div><div class="section-body">`;
+  if (gameState.teams.length > 1)
+    h += `<div class="team-sort-row"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept." aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${teamAlphaSort === "az" ? ICON_ARROW_DOWN : teamAlphaSort === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${teamAlphaSort === "za" ? "Z-A" : "A-Z"}</span></button></div>`;
   const showAdj = !!loadPrefs().showAdjustments;
   // 146 = a perfect Regular night; the Theme Night script calls 95 a perfect score.
   const guessMax = guessLimit();
-  gameState.teams.forEach((t, i) => {
+  teamEntryOrder().forEach((i) => {
+    const t = gameState.teams[i];
     const adj = t.adjustment || 0,
       adjOpen = adjOpenTeams.has(i);
     h += `<div class="team-entry${showAdj ? " has-adj" : ""}${t.paused ? " is-paused" : ""}" data-ti="${i}">
@@ -2184,6 +2191,31 @@ function buildScores() {
   return h + "</div>";
 }
 
+// Indices into gameState.teams in the order the Teams section shows them: entry order, or by name
+// (blank names last) when the A-Z / Z-A view is on. Nothing is reordered in the data.
+function teamEntryOrder() {
+  const idx = gameState.teams.map((_, i) => i);
+  if (!teamAlphaSort) return idx;
+  const dir = teamAlphaSort === "za" ? -1 : 1;
+  const nm = (i) => (gameState.teams[i].name || "").trim();
+  return idx.sort((a, b) => {
+    const x = nm(a),
+      y = nm(b);
+    if (!x !== !y) return x ? -1 : 1;
+    return dir * x.localeCompare(y, undefined, { sensitivity: "base", numeric: true }) || a - b;
+  });
+}
+function cycleTeamAlphaSort() {
+  teamAlphaSort = { undefined: "az", az: "za", za: undefined }[teamAlphaSort];
+  renderAll();
+}
+// Team Report's name field: same edit as the Teams section, then refresh the rest of the app.
+function setAuditTeamName(ti, v) {
+  if (!gameState.teams[ti]) return;
+  gameState.teams[ti].name = v.slice(0, FIELD_MAX.teamName);
+  autosave();
+  renderAll();
+}
 function addTeam() {
   if (gameState.teams.length >= MAX_TEAMS) return;
   gameState.teams.push(freshTeam(""));

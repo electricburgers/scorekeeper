@@ -2443,6 +2443,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 [data-theme="dark"] .audit-head{box-shadow:0 6px 12px -4px rgba(255,255,255,.18)}
 [data-theme="light"] .audit-head{box-shadow:0 6px 12px -4px rgba(0,0,0,.30)}
 .audit-head h2{font-family:var(--font-display);font-size:1.05rem;color:var(--txt-cyan);text-transform:uppercase;letter-spacing:1px;line-height:1.2;word-break:break-word}
+.audit-head h2{min-width:0;flex:1}
+.aud-name-input{width:100%;font:inherit;color:inherit;text-transform:inherit;letter-spacing:inherit;background:transparent;border:1px solid transparent;border-bottom-color:var(--border-light);border-radius:4px;padding:2px 4px;margin-left:-4px}
+.aud-name-input:hover,.aud-name-input:focus{border-color:var(--accent-cyan-solid)}
+.team-sort-row{display:flex;justify-content:flex-end;margin-bottom:8px}
 .audit-head .aud-sub{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:3px}
 /* Icon-only now (see buildAudit in app.js) — used to read "✕ Close", but the X alone next to a
    modal titled "Team Report" already reads as close without needing the word spelled out too.

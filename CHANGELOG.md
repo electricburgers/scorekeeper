@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.9 - 2026-10-29
+- **A-Z view for team name entry:** a button at the top of the Teams section cycles A-Z, Z-A, then back to entry order. It only changes how the list is shown - teams keep their entry order, each row keeps its "Team N" entry number, and nothing else (scoring rows, exports) is reordered. Blank names sort last.
+- **Rename a team from its Team Report:** the team name at the top of the Team Report is now an editable field; changes save and update the whole app.
+
 ## v21.8 - 2026-10-29
 - **Game Mode dropdown follows Icon Style:** in Pictograph mode the drawn pictograph for the current mode sits beside the dropdown and the options are plain text; in Emoji mode each option carries its emoji (🎯 / 🎭 / 🎵).
 
