@@ -23,8 +23,8 @@ describe("import from saved game", () => {
     for (const l of ["Brewery location", "Host name", "Restaurant staff", "Team names"]) assert.ok(js.includes(l), l);
   });
   it("version is bumped everywhere", () => {
-    assert.match(read("js/app.js"), /APP_VERSION = "v21\.7"/);
-    assert.equal(JSON.parse(read("version.json")).version, "v21.7");
+    const v = read("js/app.js").match(/APP_VERSION = "(v[\d.]+)"/)[1];
+    assert.equal(JSON.parse(read("version.json")).version, v);
   });
 });
 

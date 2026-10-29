@@ -991,9 +991,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-mode-tune{--icon-tint:var(--tint-cap);--icon-tint-2:var(--tint-cap)}
 /* Game Mode row: the dropdown with its current mode's pictograph beside it. */
 .game-mode-picker{display:inline-flex;align-items:center;gap:8px}
-/* The symbol now lives inside each <option> (native lists can only hold text), so the selected one
-   already shows it in the closed select; the separate icon beside it would be a duplicate. */
-#gameModeIcon{display:none}
+/* Pictograph mode: the drawn icon sits beside the select (an <option> can only hold text). Emoji
+   mode leaves the span empty and puts the emoji in the option text instead. */
+#gameModeIcon:empty{display:none}
 .game-mode-picker .icon-ui,.game-mode-picker .icon-emoji{flex-shrink:0;width:1.2rem;height:1.2rem;font-size:1.1rem;line-height:1}
 /* Take the Tour's own icon — a waving hand, since the ℹ️ it had before this read as an
    unlabeled dot at mobile sizes. --accent-gold rather than a bespoke tint: it's already

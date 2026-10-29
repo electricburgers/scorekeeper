@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.7"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.8"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 29, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -431,6 +431,7 @@ const MODE_BLURBS = {
 // Everything that tells the host which mode they are in, refreshed on every render: the dropdown
 // and its pictograph, the accent colour (data-mode on <html>), the tab title, the Scores heading
 // and the Settings tooltips.
+const MODE_EMOJI = { regular: "🎯", theme: "🎭", tune: "🎵" };
 function syncGameModeSelect() {
   const mode = gameMode(),
     name = gameModeName();
@@ -451,13 +452,23 @@ function syncGameModeSelect() {
     "takeTourBtn",
     "A guided practice run through a full " + name + " game with 5 fake teams \u2014 nothing here touches your real session",
   );
+  // A native <select> can only hold text in its options, so the two icon styles are done two ways:
+  // Emoji mode puts the platform emoji in each option's text; Pictograph mode keeps the options
+  // plain and shows the drawn pictograph in the span beside the select.
+  const emoji = loadPrefs().iconStyle === "emoji";
   const sel = document.getElementById("gameModeSelect");
-  if (sel) sel.value = mode;
+  if (sel) {
+    [...sel.options].forEach((o) => {
+      const t = (emoji ? MODE_EMOJI[o.value] + " " : "") + gameModeName(o.value);
+      if (o.textContent !== t) o.textContent = t;
+    });
+    sel.value = mode;
+  }
   const icon = document.getElementById("gameModeIcon");
   if (icon)
-    icon.innerHTML = { regular: ICON_MODE_REGULAR, theme: ICON_MODE_THEME, tune: ICON_MODE_TUNE }[
-      gameMode()
-    ];
+    icon.innerHTML = emoji
+      ? ""
+      : { regular: ICON_MODE_REGULAR_PICT, theme: ICON_MODE_THEME_PICT, tune: ICON_MODE_TUNE_PICT }[mode];
 }
 function toggleUnlockEventDetails() {
   const p = loadPrefs();

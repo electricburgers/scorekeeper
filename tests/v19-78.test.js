@@ -121,9 +121,11 @@ describe("Theme Night: heading, icons, Try Example", () => {
     const d = window.document;
     assert.ok(d.querySelector("#gameModeIcon svg.icon-mode-regular"));
     evalIn(window, 'setIconStyle("emoji")');
-    assert.match(d.getElementById("gameModeIcon").textContent, /🎯/);
+    const opt = (v) => d.querySelector('#gameModeSelect option[value="' + v + '"]').textContent;
+    assert.match(opt("regular"), /🎯/);
+    assert.equal(d.getElementById("gameModeIcon").textContent, "");
     evalIn(window, 'gameState.meta.mode = "theme"; renderAll();');
-    assert.match(d.getElementById("gameModeIcon").textContent, /🎭/);
+    assert.match(opt("theme"), /🎭/);
     evalIn(window, 'setIconStyle("pictograph")');
     assert.ok(d.querySelector("#gameModeIcon svg.icon-mode-theme"));
   });

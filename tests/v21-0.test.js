@@ -172,9 +172,9 @@ describe("Game Mode dropdown", () => {
     const sel = d.getElementById("gameModeSelect");
     assert.equal(sel.tagName, "SELECT");
     assert.deepEqual([...sel.options].map((o) => [o.value, o.textContent]), [
-      ["regular", "🎯 Regular Trivia"],
-      ["theme", "🎭 Theme Night"],
-      ["tune", "🎵 Name That Tune"],
+      ["regular", "Regular Trivia"],
+      ["theme", "Theme Night"],
+      ["tune", "Name That Tune"],
     ]);
     assert.ok(sel.getAttribute("aria-label") || d.querySelector("label[for='gameModeSelect']"));
     assert.ok(!d.getElementById("gameModeToggle"));
@@ -194,11 +194,14 @@ describe("Game Mode dropdown", () => {
     assert.ok(icon().querySelector("svg.icon-mode-tune"));
     assert.equal(icon().getAttribute("aria-hidden"), "true");
     evalIn(window, 'setIconStyle("emoji")');
-    assert.match(icon().textContent, /🎵/);
+    const opt = (v) => d.querySelector('#gameModeSelect option[value="' + v + '"]').textContent;
+    assert.match(opt("tune"), /🎵/);
+    assert.match(opt("regular"), /🎯/);
+    assert.equal(icon().textContent, "");
     evalIn(window, 'gameState.meta.mode = "theme"; renderAll();');
-    assert.match(icon().textContent, /🎭/);
+    assert.match(opt("theme"), /🎭/);
     evalIn(window, 'gameState.meta.mode = "regular"; renderAll();');
-    assert.match(icon().textContent, /🎯/);
+    assert.equal(icon().textContent, "");
     evalIn(window, 'setIconStyle("pictograph")');
   });
 

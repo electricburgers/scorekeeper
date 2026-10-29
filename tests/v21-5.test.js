@@ -33,10 +33,10 @@ describe("touch target sizing", () => {
 });
 
 describe("Game Mode dropdown symbols", () => {
-  it("each option carries its mode symbol", () => {
+  it("options are plain text in the markup; the symbol is added per Icon Style (see v21-8)", () => {
     const html = fs.readFileSync(path.join(__dirname, "..", "index.html"), "utf8");
-    assert.match(html, /<option value="regular">🎯 Regular Trivia<\/option>/);
-    assert.match(html, /<option value="theme">🎭 Theme Night<\/option>/);
-    assert.match(html, /<option value="tune">🎵 Name That Tune<\/option>/);
+    assert.match(html, /<option value="regular">Regular Trivia<\/option>/);
+    assert.match(html, /<option value="theme">Theme Night<\/option>/);
+    assert.match(html, /<option value="tune">Name That Tune<\/option>/);
   });
 });
