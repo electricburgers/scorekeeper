@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.46] - 29 Oct 2026
+
+### Added
+
+- **Importing from a saved game** (2 entries in Manual Save & Load): Settings > Import > From Saved Game, the checklist (brewery location, host name, restaurant staff, team names, Select all / Select none), and what it does and doesn't touch.
+
 ## [1.45] - 27 Oct 2026
 
 ### Added

@@ -27,3 +27,12 @@ describe("import from saved game", () => {
     assert.equal(JSON.parse(read("version.json")).version, "v21.7");
   });
 });
+
+describe("hidden file inputs", () => {
+  it("every <input type=file> in index.html is hidden by the stylesheet", () => {
+    const html = read("index.html");
+    const css = read("css/styles.css");
+    for (const m of html.matchAll(/<input type="file" id="(\w+)"/g))
+      assert.ok(new RegExp("#" + m[1] + "[,{]").test(css), m[1] + " is not display:none");
+  });
+});
