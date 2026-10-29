@@ -2410,6 +2410,18 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .confirm-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:22rem;box-shadow:var(--shadow);padding:20px;animation:auditPop .18s ease-out}
 .confirm-message{font-family:var(--font-body);font-size:.9rem;line-height:1.5;color:var(--text-primary);white-space:pre-line;margin:0 0 16px}
 .confirm-actions{display:flex;justify-content:flex-end;gap:8px}
+.import-modal{max-width:26rem;max-height:90vh;overflow:auto}
+.import-title{font-weight:700;margin-bottom:10px}
+.import-bulk{display:flex;gap:8px;margin-bottom:10px}
+.import-list{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
+.import-row{display:flex;align-items:flex-start;gap:10px}
+.import-text{display:flex;flex-direction:column;min-width:0}
+.import-name{font-weight:600}
+.import-val{font-size:.8rem;color:var(--text-secondary);overflow-wrap:anywhere}
+.import-row input:disabled+.import-text{opacity:1}
+.import-row input:disabled+.import-text .import-val{font-style:italic}
+.import-warn{font-size:.8rem;line-height:1.4;color:var(--text-primary);margin:0 0 14px}
+#importOkBtn:disabled{opacity:.5;cursor:not-allowed}
 /* alert() has nothing to cancel — appAlert hides Cancel outright rather than leaving a button
    that would just do the same thing OK does. */
 .confirm-modal.confirm-alert #confirmCancelBtn{display:none}

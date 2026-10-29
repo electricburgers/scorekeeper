@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.7 - 2026-10-29
+- **Import is now a guided overlay, under Color Vision in Settings:** Import > From Saved Game opens a file picker, then a centered checklist of what to bring in - brewery location, host name, restaurant staff and team names - with Select all / Select none. Items missing from the file are greyed out. Scores, wagers and guesses are never imported. Only team names touch the board (they replace the roster); a warning shows when that would erase scores already entered. Replaces the v21.6 Team Names > Import button.
+
 ## v21.6 - 2026-10-29
 - **Import team names:** Settings > Team Names > Import reads a saved game file and brings in just its team names (no scores, wagers or guesses), for venues where the same teams play every week. Event Details and the game mode are kept; it asks first if the current board has data, since the current teams are replaced.
 

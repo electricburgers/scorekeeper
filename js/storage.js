@@ -164,18 +164,30 @@ function loadFromFile(e) {
   r.readAsText(f);
   e.target.value = "";
 }
-// Settings > Team Names > Import: reads a saved game (.json from Save) and keeps ONLY its team
-// names - for a venue where the same teams show up every week. Scores, wagers and guesses are not
-// imported, Event Details and the game mode stay as they are, and the current roster is replaced.
-async function triggerImportTeamNames() {
-  const msg = hasBoardData()
-    ? "Replace the current teams with the names from a saved game? This erases every score, wager, guess and bonus entered so far - it can\u2019t be undone."
-    : "Replace the current teams with the names from a saved game?";
-  if (!gameState.teams.length || (await appConfirm(msg, { okLabel: "Import", danger: hasBoardData() })))
-    document.getElementById("teamNamesLoadInput").click();
+// Settings > Import: pick a saved game (.json from Save), then an overlay lists what can come
+// across - brewery location, host name, restaurant staff, team names - as a checklist. Scores,
+// wagers and guesses are never imported. Fields the file doesn't have are shown but disabled.
+// Only team names touch the board: they replace the roster, which erases any scores entered.
+const IMPORT_FIELDS = [
+  { key: "location", label: "Brewery location", get: (d) => d.meta && d.meta.location },
+  { key: "hostName", label: "Host name", get: (d) => d.meta && d.meta.hostName },
+  { key: "staffNames", label: "Restaurant staff", get: (d) => d.meta && d.meta.staffNames },
+  { key: "teams", label: "Team names", get: (d) => importTeamNames(d).join(", ") },
+];
+let importData = null;
+function importTeamNames(d) {
+  const seen = new Set();
+  return (Array.isArray(d && d.teams) ? d.teams : [])
+    .map((t) => String((t && t.name) || "").trim().slice(0, FIELD_MAX.teamName))
+    .filter((n) => n && !seen.has(n.toLowerCase()) && seen.add(n.toLowerCase()))
+    .slice(0, MAX_TEAMS);
 }
-function importTeamNamesFromFile(e) {
+function pickImportFile() {
+  document.getElementById("importLoadInput").click();
+}
+function openImportDialog(e) {
   const f = e.target.files[0];
+  e.target.value = "";
   if (!f) return;
   const r = new FileReader();
   r.onload = function (ev) {
@@ -186,28 +198,62 @@ function importTeamNamesFromFile(e) {
       appAlert("Bad JSON \u2014 this file isn\u2019t a valid save: " + err.message);
       return;
     }
-    const seen = new Set();
-    const names = (Array.isArray(data && data.teams) ? data.teams : [])
-      .map((t) => String((t && t.name) || "").trim())
-      .filter((n) => n && !seen.has(n.toLowerCase()) && seen.add(n.toLowerCase()))
-      .slice(0, MAX_TEAMS);
-    if (!names.length) {
-      appAlert("No team names found in this file.");
+    if (!data || typeof data !== "object") {
+      appAlert("This file isn\u2019t a valid save.");
       return;
     }
-    const next = freshState();
-    next.meta = { ...gameState.meta };
-    next.teams = names.map((n) => freshTeam(n));
-    gameState = next;
-    resetBoardUi();
-    autosave();
-    renderAll();
-    closeSettingsPanel();
-    announce(names.length + " team names imported");
+    importData = data;
+    const list = document.getElementById("importList");
+    list.innerHTML = IMPORT_FIELDS.map((fd) => {
+      const v = String(fd.get(data) || "").trim();
+      return `<label class="check-label import-row"><input type="checkbox" data-key="${fd.key}" ${v ? "checked" : "disabled"} onchange="updateImportDialog()"><span class="import-text"><span class="import-name">${fd.label}</span><span class="import-val">${v ? esc(v) : "Not in this file"}</span></span></label>`;
+    }).join("");
+    document.getElementById("importOverlay").classList.add("show");
+    updateImportDialog();
+    document.querySelector("#importList input:not(:disabled)")?.focus();
   };
   r.readAsText(f);
-  e.target.value = "";
 }
+function importChecked() {
+  return [...document.querySelectorAll("#importList input:checked")].map((c) => c.dataset.key);
+}
+function setImportChecks(on) {
+  document.querySelectorAll("#importList input:not(:disabled)").forEach((c) => (c.checked = on));
+  updateImportDialog();
+}
+function updateImportDialog() {
+  const keys = importChecked();
+  document.getElementById("importOkBtn").disabled = !keys.length;
+  document.getElementById("importWarn").hidden = !(keys.includes("teams") && hasBoardData());
+}
+function closeImportDialog() {
+  document.getElementById("importOverlay").classList.remove("show");
+  importData = null;
+}
+function applyImport() {
+  const keys = importChecked();
+  if (!importData || !keys.length) return;
+  const d = importData;
+  const meta = { ...gameState.meta };
+  ["location", "hostName", "staffNames"].forEach((k) => {
+    if (keys.includes(k)) meta[k] = String(d.meta[k] || "").trim().slice(0, FIELD_MAX[k]);
+  });
+  if (keys.includes("teams")) {
+    const next = freshState();
+    next.teams = importTeamNames(d).map((n) => freshTeam(n));
+    gameState = next;
+    resetBoardUi();
+  }
+  gameState.meta = meta;
+  closeImportDialog();
+  autosave();
+  renderAll();
+  closeSettingsPanel();
+  announce("Imported " + keys.length + " item" + (keys.length > 1 ? "s" : ""));
+}
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape" && importData) closeImportDialog();
+});
 // App Preferences save/load — a separate file format from the Session Data save/load above:
 // this one carries only the Settings-panel prefs blob (theme, size, timer duration, etc.), not
 // team/score data, so a host can carry their preferred setup between events without dragging an
