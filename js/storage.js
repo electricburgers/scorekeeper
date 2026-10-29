@@ -164,6 +164,50 @@ function loadFromFile(e) {
   r.readAsText(f);
   e.target.value = "";
 }
+// Settings > Team Names > Import: reads a saved game (.json from Save) and keeps ONLY its team
+// names - for a venue where the same teams show up every week. Scores, wagers and guesses are not
+// imported, Event Details and the game mode stay as they are, and the current roster is replaced.
+async function triggerImportTeamNames() {
+  const msg = hasBoardData()
+    ? "Replace the current teams with the names from a saved game? This erases every score, wager, guess and bonus entered so far - it can\u2019t be undone."
+    : "Replace the current teams with the names from a saved game?";
+  if (!gameState.teams.length || (await appConfirm(msg, { okLabel: "Import", danger: hasBoardData() })))
+    document.getElementById("teamNamesLoadInput").click();
+}
+function importTeamNamesFromFile(e) {
+  const f = e.target.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = function (ev) {
+    let data;
+    try {
+      data = JSON.parse(ev.target.result);
+    } catch (err) {
+      appAlert("Bad JSON \u2014 this file isn\u2019t a valid save: " + err.message);
+      return;
+    }
+    const seen = new Set();
+    const names = (Array.isArray(data && data.teams) ? data.teams : [])
+      .map((t) => String((t && t.name) || "").trim())
+      .filter((n) => n && !seen.has(n.toLowerCase()) && seen.add(n.toLowerCase()))
+      .slice(0, MAX_TEAMS);
+    if (!names.length) {
+      appAlert("No team names found in this file.");
+      return;
+    }
+    const next = freshState();
+    next.meta = { ...gameState.meta };
+    next.teams = names.map((n) => freshTeam(n));
+    gameState = next;
+    resetBoardUi();
+    autosave();
+    renderAll();
+    closeSettingsPanel();
+    announce(names.length + " team names imported");
+  };
+  r.readAsText(f);
+  e.target.value = "";
+}
 // App Preferences save/load — a separate file format from the Session Data save/load above:
 // this one carries only the Settings-panel prefs blob (theme, size, timer duration, etc.), not
 // team/score data, so a host can carry their preferred setup between events without dragging an

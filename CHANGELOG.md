@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.6 - 2026-10-29
+- **Import team names:** Settings > Team Names > Import reads a saved game file and brings in just its team names (no scores, wagers or guesses), for venues where the same teams play every week. Event Details and the game mode are kept; it asks first if the current board has data, since the current teams are replaced.
+
 ## v21.5 - 2026-10-28
 - **Bigger touch targets on tablet and phone:** on touch devices and screens up to 1024px wide every control is now at least 44x44 px - the dropdowns (Game Mode, Question Timer, Color Vision and its menu rows), Settings buttons, toolbar Save/Load, timer buttons, sort buttons, text/number/date fields, checkboxes, collapse headers, team-name links and the footer links. The small pause / remove team buttons keep their look but get an invisible 44px tap area. Dropdown text is slightly larger, the settings gear icon is enlarged to fill its button, and the Game Mode dropdown lists each mode with its symbol (🎯 Regular Trivia, 🎭 Theme Night, 🎵 Name That Tune).
 
