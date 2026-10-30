@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.49] - 30 Oct 2026
+
+### Changed
+
+- **Sort button entry:** the pinned question header keeps A-Z / Sort / Reset on one row as icon buttons.
+
 ## [1.48] - 30 Oct 2026
 
 ### Changed

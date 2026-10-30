@@ -1916,7 +1916,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .q-sort-btn,.q-alpha-btn{background:transparent;color:var(--txt-cyan);border-color:var(--accent-cyan-solid)}
 .q-sort-btn.active,.q-alpha-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan)}
 .q-sort-btn:hover,.q-alpha-btn:hover{filter:brightness(1.1)}
-.q-alpha-btn .icon-ui{width:1em;height:1em}
+.q-alpha-btn .icon-ui{width:1.15em;height:1.15em}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
 .q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
 .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.15)}
@@ -2618,8 +2618,12 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
      below the badge's own size — one shared .8rem (not three separate step-downs) keeps the
      badge and the Sort/Reset buttons reading as one control cluster at every FONT_SIZES step,
      down to the 12px floor. */
-  .q-header,.sw-header{flex-wrap:wrap}
-  .q-header-right{flex-basis:100%;flex-wrap:wrap;row-gap:4px;column-gap:10px;justify-content:flex-end;margin-left:0;margin-top:2px}
+  /* One row: label + badge on the left, the icon-only A-Z / Sort / Reset buttons on the right (the
+     header pins while scrolling, so it has to stay short). The label shrinks before the buttons do. */
+  .q-header,.sw-header{flex-wrap:nowrap}
+  .q-header-right{flex-basis:auto;flex-wrap:nowrap;column-gap:4px;justify-content:flex-end;margin-left:auto}
+  .q-header-left,.sw-header-left{min-width:0}
+  .q-alpha-btn .icon-ui{width:1.7em;height:1.7em}
   .q-badge,.round-badge{font-size:.8rem}
   /* Sort/Reset drop their text label and shrink to icon-only squares here so the correct/
      incorrect stat pills (which carry the count+% the host actually needs) always have room

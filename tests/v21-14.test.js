@@ -32,3 +32,11 @@ describe("phone Scores sheet", () => {
     assert.match(css, /@media\(max-width:768px\)\{\s*\.sort-btn\{font-size:1\.02rem/);
   });
 });
+
+describe("one-row question header", () => {
+  it("A-Z is an icon button (pictograph) and the phone header does not wrap", () => {
+    const icons = fs.readFileSync(path.join(__dirname, "..", "js/icons.js"), "utf8");
+    assert.match(icons, /ICON_AZ_DOWN_PICT/);
+    assert.match(css, /\.q-header,\.sw-header\{flex-wrap:nowrap\}/);
+  });
+});

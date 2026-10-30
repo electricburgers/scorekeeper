@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.16 - 2026-10-30
+- **One-row question header:** the pinned header was too tall on phones, so the A-Z / Sort / Reset buttons now sit on the same row as the question name and badge (icon-only squares; the label and badge shrink first). A-Z is now a drawn A-Z-with-arrow pictograph (arrow flips for Z-A); Emoji mode keeps the arrow emoji with the text. Applies to Q1-Q5 and the halftime / final wager cards.
+
 ## v21.15 - 2026-10-30
 - **Paused teams in the score tables:** the Before Halftime Wager, Before Final Wager and Final Results tables now show a paused team with dimmed text and a "Paused" pill (pause pictograph, or ⏸️ in Emoji mode) beside its name. This is the chosen one of the three trial looks; the Paused Look setting is removed.
 
