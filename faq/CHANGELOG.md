@@ -6,6 +6,7 @@ All notable changes to the Scorekeeper FAQ site are documented here.
 
 ### Changed
 
+- **New "Game Progress Bar" entry** (Advanced Settings, hidden by default). The Team Report rename now goes through a pencil button.
 - **Sort button entry** now explains the pinned sort row (A-Z / Sort / Reset stay at the top of each question, including the Halftime and Final wager cards, beside the question name, the "N left" count and the bonus description, while you scroll a long team list). Crowd-Wisdom Percentage entry no longer says the counts sit next to the buttons. The Sort/Reset close-up screenshot still shows the old header placement.
 
 ## [1.46] - 29 Oct 2026

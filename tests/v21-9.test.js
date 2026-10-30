@@ -16,8 +16,10 @@ describe("team name A-Z view", () => {
   });
 });
 describe("Team Report rename", () => {
-  it("name is an input wired to setAuditTeamName", () => {
-    assert.match(read("js/team-audit.js"), /class="aud-name-input"[^>]*onchange="setAuditTeamName\(\$\{ti\},this\.value\)"/);
+  it("name is plain text with a pencil that opens an edit field wired to setAuditTeamName", () => {
+    const ta = read("js/team-audit.js");
+    assert.match(ta, /class="aud-edit-btn" onclick="editAuditName\(\$\{ti\}\)"/);
+    assert.match(ta, /setAuditTeamName\(ti, inp\.value\)/);
     assert.match(read("js/app.js"), /function setAuditTeamName/);
   });
 });
@@ -36,9 +38,17 @@ describe("behaviour", () => {
     evalIn(w, "cycleTeamAlphaSort()");
     assert.equal(rows()[0], "Team 1:Zed");
     assert.equal(rows()[1], "Team 2:");
-    evalIn(w, `openAudit(3); setAuditTeamName(3, "Middle")`);
+    evalIn(w, `openAudit(3)`);
+    assert.ok(!d.querySelector(".aud-name-input"), "not editable until the pencil is used");
+    assert.equal(d.querySelector("#audName").textContent, "Mid");
+    d.querySelector(".aud-edit-btn").click();
+    const inp = d.querySelector(".aud-name-input");
+    assert.equal(inp.value, "Mid");
+    inp.value = "Middle";
+    inp.dispatchEvent(new w.KeyboardEvent("keydown", { key: "Enter" }));
     assert.equal(evalIn(w, "gameState.teams[3].name"), "Middle");
-    assert.equal(d.querySelector(".aud-name-input").value, "Mid");
+    assert.equal(d.querySelector("#audName").textContent, "Middle");
+    assert.ok(!d.querySelector(".aud-name-input"));
     w.close();
   });
 });

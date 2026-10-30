@@ -2446,6 +2446,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .audit-head h2{min-width:0;flex:1}
 .aud-name-input{width:100%;font:inherit;color:inherit;text-transform:inherit;letter-spacing:inherit;background:transparent;border:1px solid transparent;border-bottom-color:var(--border-light);border-radius:4px;padding:2px 4px;margin-left:-4px}
 .aud-name-input:hover,.aud-name-input:focus{border-color:var(--accent-cyan-solid)}
+.aud-name-row{display:flex;align-items:center;gap:8px;min-width:0}
+.aud-name{min-width:0;word-break:break-word}
+.aud-edit-btn{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;padding:0;background:transparent;border:1px solid var(--border-strong);border-radius:6px;color:var(--txt-cyan);cursor:pointer}
+.aud-edit-btn:hover{border-color:var(--accent-cyan-solid)}
+.aud-edit-btn .icon-ui{width:1rem;height:1rem}
 .team-sort-row{display:flex;justify-content:flex-end;margin-bottom:8px}
 .audit-head .aud-sub{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:3px}
 /* Icon-only now (see buildAudit in app.js) — used to read "✕ Close", but the X alone next to a
@@ -2915,6 +2920,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 @media(max-width:768px){:root{--qbar-top:calc(var(--header-h,64px) + var(--mini-progress-h,0px))}}
 .q-sortbar{position:sticky;top:var(--qbar-top);z-index:50;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;background:var(--bg-input);border-bottom:1px solid var(--border-strong)}
 /* Left: which question this is, its "N left" badge and (bonus cards) the description. Right: buttons. */
+.q-body>.q-sortbar{margin:0 -10px}
+.sw-body>.q-sortbar{margin:0 -12px;padding-left:12px;padding-right:12px}
 .qsb-label{min-width:0;display:flex;flex-direction:column;gap:1px}
 .qsb-title{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-family:var(--font-display);font-size:.82rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px}
 .qsb-sub{font-family:var(--font-display);font-size:.62rem;font-weight:600;letter-spacing:.5px;color:var(--text-muted);text-transform:uppercase}

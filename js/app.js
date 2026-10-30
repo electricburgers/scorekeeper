@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.12"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.13"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 30, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -154,6 +154,7 @@ function loadPrefs() {
     craftFadeSec: CRAFT_FADE_DEFAULT,
     craftSoundTest: false,
     qResultToggle: false,
+    showProgressBar: false,
   };
   return { ...prefsCache };
 }
@@ -230,6 +231,11 @@ function applyPrefs() {
   else document.documentElement.setAttribute("data-stripe", String(sl));
   const slt = document.getElementById("stripeToggle");
   if (slt) slt.textContent = STRIPE_LABELS[sl] || "Subtle";
+  const pbt = document.getElementById("progressBarToggle");
+  if (pbt) {
+    pbt.classList.toggle("active", !!p.showProgressBar);
+    pbt.textContent = p.showProgressBar ? "Shown" : "Hidden";
+  }
   const adt = document.getElementById("adjToggle");
   if (adt) {
     adt.classList.toggle("active", !!p.showAdjustments);
@@ -340,6 +346,13 @@ function setTheme(t) {
 function toggleTheme() {
   const p = loadPrefs();
   setTheme(p.theme === "dark" ? "light" : "dark");
+}
+function toggleProgressBar() {
+  const p = loadPrefs();
+  p.showProgressBar = !p.showProgressBar;
+  savePrefs(p);
+  applyPrefs();
+  renderLeft();
 }
 function toggleAdjSetting() {
   const p = loadPrefs();
@@ -1626,6 +1639,9 @@ function jumpToFirstUnanswered() {
 // renderLeft() for why. visibility:hidden also drops it out of tab order/the accessibility tree
 // on its own, so no extra aria-hidden/tabindex handling is needed for the pending state.
 function renderMiniProgress(visible) {
+  // Off by default (Settings > Advanced > Game Progress Bar). Rendering nothing also zeroes
+  // --mini-progress-h, so the pinned sort rows slide up to sit right under the page header.
+  if (!loadPrefs().showProgressBar) return "";
   const s = currentProgressSummary();
   if (!s) return "";
   const pendingCls = visible ? "" : " mp-pending";

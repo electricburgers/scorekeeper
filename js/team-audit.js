@@ -8,6 +8,33 @@ function openAudit(ti) {
   el.innerHTML = buildAudit(ti);
   document.getElementById("auditOverlay").classList.add("show");
 }
+// Pencil next to the name in the Team Report: swaps the name for a text field (Enter / blur saves,
+// Esc cancels), then back to plain text.
+function editAuditName(ti) {
+  const row = document.querySelector("#auditModal .aud-name-row");
+  const t = gameState.teams[ti];
+  if (!row || !t || row.querySelector("input")) return;
+  row.innerHTML = `<input type="text" class="aud-name-input" maxlength="${FIELD_MAX.teamName}" value="${esc(t.name)}" placeholder="Team ${ti + 1}" aria-label="Team name">`;
+  const inp = row.querySelector("input");
+  let done = false;
+  const finish = (save) => {
+    if (done) return;
+    done = true;
+    if (save) setAuditTeamName(ti, inp.value);
+    const label = document.querySelector("#auditModal .audit-head");
+    if (label) openAudit(ti);
+  };
+  inp.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") finish(true);
+    else if (e.key === "Escape") {
+      e.stopPropagation();
+      finish(false);
+    }
+  });
+  inp.addEventListener("blur", () => finish(true));
+  inp.focus();
+  inp.select();
+}
 function closeAudit() {
   document.getElementById("auditOverlay").classList.remove("show");
 }
@@ -122,7 +149,7 @@ function buildAudit(ti) {
   const name = esc(t.name || "Team " + (ti + 1));
   const rm = rankMap();
   const rank = rm[ti];
-  let h = `<div class="audit-head"><h2><input type="text" class="aud-name-input" maxlength="40" value="${esc(t.name)}" placeholder="Team ${ti + 1}" aria-label="Team name (edit)" title="Tap to rename this team" onchange="setAuditTeamName(${ti},this.value)"><span class="aud-sub">Team Report \u2014 ${gameModeName()} \u00B7 rank #${rank} of ${gameState.teams.length} \u00B7 ${esc(gameState.meta.location || "")}${gameState.meta.quizId ? " \u00B7 Quiz " + esc(gameState.meta.quizId) : ""}</span></h2><button class="audit-close" onclick="closeAudit()" aria-label="Close" title="Close">${X_ICON_SVG}</button></div>`;
+  let h = `<div class="audit-head"><h2><span class="aud-name-row"><span class="aud-name" id="audName">${name}</span><button type="button" class="aud-edit-btn" onclick="editAuditName(${ti})" title="Rename this team" aria-label="Rename this team">${ICON_PENCIL}</button></span><span class="aud-sub">Team Report \u2014 ${gameModeName()} \u00B7 rank #${rank} of ${gameState.teams.length} \u00B7 ${esc(gameState.meta.location || "")}${gameState.meta.quizId ? " \u00B7 Quiz " + esc(gameState.meta.quizId) : ""}</span></h2><button class="audit-close" onclick="closeAudit()" aria-label="Close" title="Close">${X_ICON_SVG}</button></div>`;
   h += `<div class="audit-body">`;
 
   let run = 0;

@@ -162,6 +162,9 @@ const ICON_MODE_TUNE_PICT =
 const ICON_MODE_REGULAR_EMOJI = '<span class="icon-emoji">🎯</span>';
 const ICON_MODE_THEME_EMOJI = '<span class="icon-emoji">🎭</span>';
 const ICON_MODE_TUNE_EMOJI = '<span class="icon-emoji">🎵</span>';
+const ICON_PENCIL_PICT =
+  '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>';
+const ICON_PENCIL_EMOJI = '<span class="icon-emoji">✏️</span>';
 const ICON_PDF_PICT =
   '<svg class="icon-ui icon-tinted icon-pdf" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 12v6"/><path d="m9 15 3 3 3-3"/></svg>';
 const ICON_LINK_PICT =
@@ -309,6 +312,7 @@ let ICON_SORT = ICON_SORT_PICT;
 let ICON_ARROW_UP = ICON_ARROW_UP_PICT;
 let ICON_ARROW_DOWN = ICON_ARROW_DOWN_PICT;
 let ICON_RESET = ICON_RESET_PICT;
+let ICON_PENCIL = ICON_PENCIL_PICT;
 let ICON_REFRESH = ICON_REFRESH_PICT;
 let ICON_SHUFFLE = ICON_SHUFFLE_PICT;
 let ICON_SHUFFLE_TINTED = ICON_SHUFFLE_TINTED_PICT;
@@ -384,6 +388,7 @@ function applyIconStyle(style) {
   ICON_ARROW_UP = emoji ? ICON_ARROW_UP_EMOJI : ICON_ARROW_UP_PICT;
   ICON_ARROW_DOWN = emoji ? ICON_ARROW_DOWN_EMOJI : ICON_ARROW_DOWN_PICT;
   ICON_RESET = emoji ? ICON_RESET_EMOJI : ICON_RESET_PICT;
+  ICON_PENCIL = emoji ? ICON_PENCIL_EMOJI : ICON_PENCIL_PICT;
   ICON_REFRESH = emoji ? ICON_REFRESH_EMOJI : ICON_REFRESH_PICT;
   ICON_SHUFFLE = emoji ? ICON_SHUFFLE_EMOJI : ICON_SHUFFLE_PICT;
   ICON_SHUFFLE_TINTED = emoji ? ICON_SHUFFLE_TINTED_EMOJI : ICON_SHUFFLE_TINTED_PICT;

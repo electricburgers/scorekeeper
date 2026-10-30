@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.13 - 2026-10-30
+- **Team Report rename needs the pencil:** the team name is plain text again, with a pictograph pencil (emoji ✏️ in Emoji mode) beside it. Tap it to turn the name into a field; Enter or tapping away saves, Esc cancels.
+- **The pinned sort row is as wide as the team answer rows** (edge to edge of the question card, including the halftime and final wager cards).
+- **Game Progress Bar is hidden by default:** a new Advanced Settings toggle shows or hides the sticky "Round N - x/y scored" bar. With it hidden, the pinned sort rows sit right under the page header.
+
 ## v21.12 - 2026-10-30
 - **Sticky sort row on the halftime and final wager cards:** their A-Z / Sort / Reset buttons now live in the same pinned row at the top of the card, like Q1-Q5.
 - **The pinned row names its question:** the left side of the row shows the question (Q1-Q5), its "N left" badge and, on the bonus and wager cards, the description (BONUS (0-4 x 5) / BONUS WAGER (1-N)), so you always know which question the buttons belong to and how many answers are still missing. The tutorial's Sort step and the FAQ (v1.47) mention the pinned row.
