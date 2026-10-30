@@ -2904,3 +2904,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .pause-team,.remove-team button{position:relative}
   .pause-team::after,.remove-team button::after{content:"";position:absolute;inset:-12px}
 }
+
+/* QUESTION SORT ROW: A-Z / Sort / Reset pin under .mini-progress while a question's team list
+   scrolls. position:sticky needs every ancestor up to the scroll pane to be free of
+   overflow:hidden, so .section/.question-block use overflow:clip (same rounded-corner clipping,
+   no scroll container). --qbar-top: just under .mini-progress inside .col-left's own scroll pane
+   on desktop; under the page .header as well on phones. */
+:root{--qbar-top:var(--mini-progress-h,0px)}
+.section,.question-block{overflow:clip}
+@media(max-width:768px){:root{--qbar-top:calc(var(--header-h,64px) + var(--mini-progress-h,0px))}}
+.q-sortbar{position:sticky;top:var(--qbar-top);z-index:50;display:flex;justify-content:flex-end;gap:8px;padding:6px 10px;background:var(--bg-input);border-bottom:1px solid var(--border-strong)}
