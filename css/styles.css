@@ -2913,4 +2913,9 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 :root{--qbar-top:var(--mini-progress-h,0px)}
 .section,.question-block{overflow:clip}
 @media(max-width:768px){:root{--qbar-top:calc(var(--header-h,64px) + var(--mini-progress-h,0px))}}
-.q-sortbar{position:sticky;top:var(--qbar-top);z-index:50;display:flex;justify-content:flex-end;gap:8px;padding:6px 10px;background:var(--bg-input);border-bottom:1px solid var(--border-strong)}
+.q-sortbar{position:sticky;top:var(--qbar-top);z-index:50;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;background:var(--bg-input);border-bottom:1px solid var(--border-strong)}
+/* Left: which question this is, its "N left" badge and (bonus cards) the description. Right: buttons. */
+.qsb-label{min-width:0;display:flex;flex-direction:column;gap:1px}
+.qsb-title{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-family:var(--font-display);font-size:.82rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px}
+.qsb-sub{font-family:var(--font-display);font-size:.62rem;font-weight:600;letter-spacing:.5px;color:var(--text-muted);text-transform:uppercase}
+.qsb-btns{display:flex;align-items:center;gap:4px;flex-shrink:0}

@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.12 - 2026-10-30
+- **Sticky sort row on the halftime and final wager cards:** their A-Z / Sort / Reset buttons now live in the same pinned row at the top of the card, like Q1-Q5.
+- **The pinned row names its question:** the left side of the row shows the question (Q1-Q5), its "N left" badge and, on the bonus and wager cards, the description (BONUS (0-4 x 5) / BONUS WAGER (1-N)), so you always know which question the buttons belong to and how many answers are still missing. The tutorial's Sort step and the FAQ (v1.47) mention the pinned row.
+
 ## v21.11 - 2026-10-30
 - **Sticky sort row on every question:** the A-Z / Sort / Reset buttons moved out of the question header into a full-width row at the top of the question that pins under the progress bar (and under the header on phones) while its team list scrolls, so a long team list never needs a scroll back to the top to re-sort. Applies to Q1-Q4 and the Q5 bonus. The round sections and question blocks now clip with overflow:clip instead of overflow:hidden so sticky works inside them.
 
