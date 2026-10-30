@@ -2,6 +2,13 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.48] - 30 Oct 2026
+
+### Changed
+
+- **Sort button entry** describes the pinned question header (name, N left, bonus description and the A-Z / Sort / Reset buttons all pin together) instead of a separate row.
+- **Scores & Standings intro** notes that the phone's slide-up Scores panel reaches near the top and has larger sort buttons.
+
 ## [1.47] - 30 Oct 2026
 
 ### Changed

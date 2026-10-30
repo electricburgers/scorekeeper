@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.13"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.14"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 30, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -155,6 +155,7 @@ function loadPrefs() {
     craftSoundTest: false,
     qResultToggle: false,
     showProgressBar: false,
+    pausedLook: "1",
   };
   return { ...prefsCache };
 }
@@ -231,6 +232,9 @@ function applyPrefs() {
   else document.documentElement.setAttribute("data-stripe", String(sl));
   const slt = document.getElementById("stripeToggle");
   if (slt) slt.textContent = STRIPE_LABELS[sl] || "Subtle";
+  document.documentElement.setAttribute("data-paused", pausedStyle());
+  const pls = document.getElementById("pausedLookSelect");
+  if (pls) pls.value = pausedStyle();
   const pbt = document.getElementById("progressBarToggle");
   if (pbt) {
     pbt.classList.toggle("active", !!p.showProgressBar);
@@ -1150,9 +1154,9 @@ function renderFinalResults() {
     const diffSigned =
       r.diffSign > 0 ? "+" + r.diff : r.diffSign < 0 ? "-" + r.diff : r.diff;
     h +=
-      `<tr class="${r.tie ? "fr-tie" : ""}${medal}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to view team report" onclick="openAudit(${r.index})">` +
+      `<tr class="${r.tie ? "fr-tie" : ""}${medal}${pausedRowCls(r.index)}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to view team report" onclick="openAudit(${r.index})">` +
       `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>` +
-      `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${r.tie ? ` <span class="fr-tiebadge${r.tieWinner ? " fr-win" : ""}">${r.tieWinner ? CHECK_ICON_SVG + " closer" : "tie"}</span>` : ""}</td>` +
+      `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${pausedMark(r.index)}${r.tie ? ` <span class="fr-tiebadge${r.tieWinner ? " fr-win" : ""}">${r.tieWinner ? CHECK_ICON_SVG + " closer" : "tie"}</span>` : ""}</td>` +
       `<td class="fr-score" data-label="Score">${r.score}</td>` +
       `<td class="fr-guess" data-label="Guess">${r.guess == null ? "\u2014" : r.guess}</td>` +
       `<td class="fr-diff${r.tieWinner ? " fr-diff-win" : ""}" data-label="Diff *">${r.guess == null ? "\u2014" : diffSigned}</td>` +
@@ -1171,6 +1175,33 @@ function renderFinalResults() {
 function roundWagerTypeIndex(type) {
   for (let ri = 0; ri < 4; ri++) if (roundWagerType(ri) === type) return ri;
   return -1;
+}
+// Paused teams on the score tables (before halftime / before final wager / Final Results). Three
+// looks, picked in Settings > Paused Look: "1" dimmed text, "2" dimmed + a Paused pill, "3" hatched
+// row + italic "(paused)". Dimming is a colour change (--text-muted, AA-checked), never opacity.
+function pausedStyle() {
+  const v = loadPrefs().pausedLook;
+  return v === "2" || v === "3" ? v : "1";
+}
+function pausedRowCls(ti) {
+  return isPaused(ti) ? " row-paused" : "";
+}
+function pausedMark(ti) {
+  if (!isPaused(ti)) return "";
+  const v = pausedStyle();
+  if (v === "2") {
+    const ic = loadPrefs().iconStyle === "emoji" ? '<span class="icon-emoji">\u23F8\uFE0F</span>' : PAUSE_ICON_SVG;
+    return ` <span class="paused-pill">${ic} Paused</span>`;
+  }
+  if (v === "3") return ' <span class="paused-note">(paused)</span>';
+  return "";
+}
+function setPausedLook(v) {
+  const p = loadPrefs();
+  p.pausedLook = v === "2" || v === "3" ? v : "1";
+  savePrefs(p);
+  applyPrefs();
+  renderAll();
 }
 function renderStandings(type) {
   if (!gameState.teams.length) return "";
@@ -1212,7 +1243,7 @@ function renderStandings(type) {
     `<div class="standings-sort-btns" id="standings-sortbtns-${type}">${btns}</div>` +
     `<table class="standings-table"><thead><tr><th>Team</th><th>Score</th></tr></thead><tbody>`;
   list.forEach((t) => {
-    h += `<tr class="standings-row" role="button" tabindex="0" title="${esc(t.name)} — tap to view team report" onclick="openAudit(${t.ti})"><td class="standings-name ta-name-clickable">${esc(t.name)}</td><td class="standings-pts">${t.pts}</td></tr>`;
+    h += `<tr class="standings-row${pausedRowCls(t.ti)}" role="button" tabindex="0" title="${esc(t.name)}${isPaused(t.ti) ? " (paused)" : ""} — tap to view team report" onclick="openAudit(${t.ti})"><td class="standings-name ta-name-clickable">${esc(t.name)}${pausedMark(t.ti)}</td><td class="standings-pts">${t.pts}</td></tr>`;
   });
   return h + "</tbody></table></div></div>";
 }
@@ -1660,11 +1691,6 @@ function renderMiniProgress(visible) {
 }
 // Per-question sort buttons (A-Z / Sort / Reset) sit in a sticky row at the top of the question
 // body, so they stay reachable while scrolling a long team list.
-// The row also carries the question's label, "left" badge and (bonus cards) description, so the
-// host always sees which question the pinned buttons belong to and how many answers are left.
-function qSortBar(btns, labelHtml, subHtml) {
-  return `<div class="q-sortbar"><div class="qsb-label"><div class="qsb-title">${labelHtml}</div>${subHtml ? `<div class="qsb-sub">${subHtml}</div>` : ""}</div><div class="qsb-btns">${btns}</div></div>`;
-}
 function renderQStatsRow(s) {
   if (!s.done) return "";
   return `<span class="q-stats-row">
@@ -1717,11 +1743,12 @@ function renderWQ(ri, qi) {
     </div>
     <div class="q-header-right">
       ${qResultToggle ? renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length)) : ""}
+      ${sortBtns}
     </div>
   </div>`;
 
   // Body (collapsible)
-  h += `<div class="q-body">` + qSortBar(sortBtns, `<span class="qsb-q">Q${qi + 1}</span>${qs.total ? `<span class="${badgeCls}">${badgeText}</span>` : ""}`);
+  h += `<div class="q-body">`;
   const entryOrder = gameState.teams.map((_, i) => i);
   let teamOrder = questionSortOrder[qKey]
     ? questionSortOrder[qKey].filter((ti) => ti < gameState.teams.length)
@@ -1926,7 +1953,7 @@ function renderBQ(ri) {
   const bqStyle = BONUS_Q_STYLE[ri] || { cls: "" };
   const bqKey = "b" + ri;
   const sortBtns = `<button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${qAlpha(bqKey) === "az" ? ICON_ARROW_DOWN : qAlpha(bqKey) === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${qAlpha(bqKey) === "za" ? "Z-A" : "A-Z"}</span></button><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
-  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"></div></div><div class="q-body">${qSortBar(sortBtns, `<span class="${bqStyle.cls}">Q5</span>${badge}`, "BONUS (0-4 \u00D7 5)")}`;
+  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right">${sortBtns}</div></div><div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
     ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
@@ -2023,12 +2050,12 @@ function renderSpecialWager(type) {
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
   const sortBtns = `<button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${qAlpha(swKey) === "az" ? ICON_ARROW_DOWN : qAlpha(swKey) === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${qAlpha(swKey) === "za" ? "Z-A" : "A-Z"}</span></button><button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}</div></div>`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}${sortBtns}</div></div>`;
   // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
   // badge is two inches away and says the same thing, and the whole block is already washed gold
   // with a gold border — three statements of one fact. Same call, same reasoning, as removing the
   // bonus questions' version of this line in v18.57.
-  h += `<div class="sw-body">` + qSortBar(sortBtns, `<span class="qsb-q">Q5</span>${swBadge}`, titleSub);
+  h += `<div class="sw-body">`;
   const swEntryOrder = gameState.teams.map((_, i) => i);
   let swTeamOrder = questionSortOrder[swKey]
     ? questionSortOrder[swKey].filter((ti) => ti < gameState.teams.length)

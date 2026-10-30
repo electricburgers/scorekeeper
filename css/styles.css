@@ -1388,7 +1388,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      visibly overlapping itself while collapsing. pointer-events:none once closed so this
      now-invisible box (still sitting exactly over the dock) doesn't swallow taps meant for the
      peek strip/timer underneath it. */
-  .col-right{position:fixed;left:8px;right:8px;bottom:0;top:auto;width:auto!important;min-width:0;max-width:none;height:75vh;max-height:75vh;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(calc(100% - var(--mobile-dock-h,97px)));opacity:0;pointer-events:none;transition:transform .28s ease,opacity .12s ease .16s;padding-bottom:env(safe-area-inset-bottom)}
+  .col-right{position:fixed;left:8px;right:8px;bottom:0;top:auto;width:auto!important;min-width:0;max-width:none;height:calc(100vh - var(--header-h,67px) - 8px);height:calc(100dvh - var(--header-h,67px) - 8px);max-height:none;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(calc(100% - var(--mobile-dock-h,97px)));opacity:0;pointer-events:none;transition:transform .28s ease,opacity .12s ease .16s;padding-bottom:env(safe-area-inset-bottom)}
   .col-right.open{transform:translateY(0);opacity:1;pointer-events:auto;transition:transform .28s ease,opacity .16s ease}
   /* .qtimer-desktop stays visible here (no display:none override) — expanding the scores
      sheet on mobile should still show the timer, not hide it; it's the same #sidebar element
@@ -2918,11 +2918,30 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 :root{--qbar-top:var(--mini-progress-h,0px)}
 .section,.question-block{overflow:clip}
 @media(max-width:768px){:root{--qbar-top:calc(var(--header-h,64px) + var(--mini-progress-h,0px))}}
-.q-sortbar{position:sticky;top:var(--qbar-top);z-index:50;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 10px;background:var(--bg-input);border-bottom:1px solid var(--border-strong)}
-/* Left: which question this is, its "N left" badge and (bonus cards) the description. Right: buttons. */
-.q-body>.q-sortbar{margin:0 -10px}
-.sw-body>.q-sortbar{margin:0 -12px;padding-left:12px;padding-right:12px}
-.qsb-label{min-width:0;display:flex;flex-direction:column;gap:1px}
-.qsb-title{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-family:var(--font-display);font-size:.82rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px}
-.qsb-sub{font-family:var(--font-display);font-size:.62rem;font-weight:600;letter-spacing:.5px;color:var(--text-muted);text-transform:uppercase}
-.qsb-btns{display:flex;align-items:center;gap:4px;flex-shrink:0}
+/* The question header itself pins (title, "N left" badge, bonus description and the A-Z / Sort /
+   Reset buttons), so it scrolls up into the sticky spot rather than being duplicated. It already
+   spans the card edge to edge, as wide as the team answer rows. */
+.q-header{position:sticky;top:var(--qbar-top);z-index:50;border-bottom:1px solid var(--border-strong)}
+/* Special wager cards pad 12px, so their header band reaches back out to the card's inner edge. */
+.special-section .sw-header{position:sticky;top:var(--qbar-top);z-index:50;background:var(--bg-input);margin:-12px -12px 0;padding:8px 12px;border-radius:10px 10px 0 0;border-bottom:1px solid var(--border-strong)}
+.special-section.sw-collapsed .sw-header{margin-bottom:-12px;border-radius:10px;border-bottom:0}
+
+/* PAUSED TEAMS in the score tables (Settings > Paused Look, <html data-paused="1|2|3">).
+   Dimming is --text-muted (AA-audited), not opacity. */
+.standings-table tr.row-paused td,.final-table tbody tr.row-paused td,.row-paused td .ta-name-clickable{color:var(--text-muted)}
+.row-paused .fr-score,.row-paused .standings-pts{font-weight:600}
+.paused-pill{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:1px 7px;border:1px solid var(--border-strong);border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary);background:var(--bg-input);vertical-align:middle;white-space:nowrap}
+.paused-pill .icon-ui{width:.8rem;height:.8rem}
+html[data-paused="1"] .paused-pill,html[data-paused="3"] .paused-pill{display:none}
+.paused-note{font-style:italic;font-weight:400;color:var(--text-muted);margin-left:4px}
+html[data-paused="3"] .standings-table tr.row-paused,html[data-paused="3"] .final-table tbody tr.row-paused{background:repeating-linear-gradient(135deg,transparent 0 7px,var(--border) 7px 8px)}
+html[data-paused="3"] .row-paused td:first-child,html[data-paused="3"] .row-paused .ta-name-clickable{font-style:italic}
+
+/* PHONE SCORES SHEET: the slide-up ranking reaches up to just under the page header (was 75% of the
+   screen) to show more rows, and its sort buttons fill their 44px+ height with bigger text/icons. */
+@media(max-width:768px){
+  .sort-btn{font-size:1.02rem;padding:12px 4px;min-height:48px}
+  .sort-btn .icon-ui{width:1.5em;height:1.5em}
+  .sort-btn .icon-emoji{transform:scale(1.5)}
+  .qtimer-btn .icon-ui{width:1.5em;height:1.5em}
+}

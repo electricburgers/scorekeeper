@@ -714,7 +714,7 @@ const Tutorial = (function () {
         target: "#qblock-1-1 .q-sort-btn",
         targetEnd: "#qblock-1-1 .q-reset-btn",
         calloutPosition: "above",
-        text: `${tapWordCap()} Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or Reset to go back to entry order. This row (with the question name, the number left and A-Z too) stays pinned at the top as you scroll a long team list, on every question and wager card, so you never have to scroll back up to re-sort. ${tapWordCap()} Next when you're ready to move on.`,
+        text: `${tapWordCap()} Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or Reset to go back to entry order. This header (question name, number left and A-Z too) pins to the top as you scroll a long team list, on every question and wager card, so you never have to scroll back up to re-sort. ${tapWordCap()} Next when you're ready to move on.`,
         // 'confirm' rather than 'on-click' here on purpose — the host might want to tap Sort a
         // few times (and try Reset) to get a feel for it, not get whisked away the instant it
         // sorts once.
