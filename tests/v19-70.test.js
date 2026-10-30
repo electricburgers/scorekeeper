@@ -1,4 +1,4 @@
-// v19.70 — per-question A-Z / Z-A name sort (cycles off -> A-Z -> Z-A -> off), combinable with
+// v19.70 — per-question A-Z / Z-A name sort (starts A-Z; cycles A-Z -> Z-A -> off -> A-Z since v21.10), combinable with
 // the existing "unanswered first" sort.
 "use strict";
 const { describe, it, before, after } = require("node:test");
@@ -32,27 +32,24 @@ describe("Per-question A-Z sort", () => {
     assert.deepEqual(JSON.parse(evalIn(window, "JSON.stringify(applyAlphaSort([0,1,2],undefined))")), [0, 1, 2]);
   });
 
-  it("tapping cycles A-Z, Z-A, off with distinct visual states", () => {
+  it("starts A-Z; tapping cycles Z-A, off (entry order), A-Z with distinct visual states", () => {
     setup();
-    const b0 = btn(window);
-    assert.ok(b0, "button exists");
-    assert.equal(b0.getAttribute("data-state"), "off");
-    assert.deepEqual(rowNames(window), ["Charlie", "alpha", "Bravo"]);
-
-    window.toggleAlphaSort(0, 0);
+    assert.ok(btn(window), "button exists");
     assert.equal(btn(window).getAttribute("data-state"), "az");
     assert.ok(btn(window).classList.contains("active"));
     assert.deepEqual(rowNames(window), ["alpha", "Bravo", "Charlie"]);
 
     window.toggleAlphaSort(0, 0);
     assert.equal(btn(window).getAttribute("data-state"), "za");
-    assert.ok(btn(window).classList.contains("active"));
     assert.deepEqual(rowNames(window), ["Charlie", "Bravo", "alpha"]);
 
     window.toggleAlphaSort(0, 0);
     assert.equal(btn(window).getAttribute("data-state"), "off");
     assert.ok(!btn(window).classList.contains("active"));
     assert.deepEqual(rowNames(window), ["Charlie", "alpha", "Bravo"]);
+
+    window.toggleAlphaSort(0, 0);
+    assert.equal(btn(window).getAttribute("data-state"), "az");
   });
 
   it("works together with the unanswered-first sort (both on at once)", () => {
@@ -61,9 +58,7 @@ describe("Per-question A-Z sort", () => {
     evalIn(window, "gameState.rounds[0].questions[0][0] = {wager:1, correct:true};");
     window.sortQuestion(0, 0);
     assert.ok(window.document.querySelector("#qblock-0-0 .q-sort-btn").classList.contains("active"));
-    window.toggleAlphaSort(0, 0); // A-Z
-    assert.ok(window.document.querySelector("#qblock-0-0 .q-sort-btn").classList.contains("active"));
-    assert.ok(btn(window).classList.contains("active"));
+    assert.ok(btn(window).classList.contains("active")); // A-Z by default
     // unanswered first (alpha, Bravo A-Z), answered Charlie last
     assert.deepEqual(rowNames(window), ["alpha", "Bravo", "Charlie"]);
     window.toggleAlphaSort(0, 0); // Z-A
@@ -76,8 +71,9 @@ describe("Per-question A-Z sort", () => {
   it("is per question and Reset clears it", () => {
     setup();
     window.toggleAlphaSort(0, 0);
-    assert.equal(btn(window, "#qblock-0-1").getAttribute("data-state"), "off");
-    window.resetQuestionSort(0, 0);
+    assert.equal(btn(window).getAttribute("data-state"), "za");
+    assert.equal(btn(window, "#qblock-0-1").getAttribute("data-state"), "az");
+    window.resetQuestionSort(0, 0); // Reset restores entry order
     assert.equal(btn(window).getAttribute("data-state"), "off");
   });
 });
@@ -109,8 +105,6 @@ describe("A-Z sort on bonus questions", () => {
        renderAll();`,
     );
     assert.ok(abtn(), "button exists");
-    assert.equal(abtn().getAttribute("data-state"), "off");
-    window.toggleBonusAlphaSort(0);
     assert.equal(abtn().getAttribute("data-state"), "az");
     assert.deepEqual(names(), ["alpha", "Bravo", "Charlie"]);
     window.toggleBonusAlphaSort(0);
@@ -150,8 +144,7 @@ describe("A-Z sort on Round 2 and 4 bonus (special wager) cards", () => {
          renderAll();`,
       );
       assert.ok(abtn(type), "button exists");
-      assert.equal(abtn(type).getAttribute("data-state"), "off");
-      window.toggleSpecialWagerAlphaSort(type);
+      assert.equal(abtn(type).getAttribute("data-state"), "az");
       assert.deepEqual(names(type), ["alpha", "Bravo", "Charlie"]);
       window.toggleSpecialWagerAlphaSort(type);
       assert.deepEqual(names(type), ["Charlie", "Bravo", "alpha"]);

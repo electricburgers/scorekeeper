@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.9"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.10"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 29, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -65,6 +65,12 @@ let questionSortOrder = {};
 // Per-question name sort ("az" | "za"), independent of questionSortOrder so both can be on at once;
 // questionSortPending remembers which teams were unanswered when the unanswered-first sort ran.
 let questionAlphaSort = {};
+// Each question's team list starts sorted A-Z; a key holds "az" | "za" | "off" (entry order) once
+// the host has changed it. Reset sets "off", i.e. restores entry order.
+function qAlpha(key) {
+  const v = questionAlphaSort[key];
+  return v === "off" ? undefined : v || "az";
+}
 // Teams section A-Z / Z-A view ("az" | "za" | undefined). View only: gameState.teams keeps its entry
 // order, every row keeps its "Team N" entry number and data-ti, so nothing downstream shifts.
 let teamAlphaSort;
@@ -1687,7 +1693,7 @@ function renderWQ(ri, qi) {
     </div>
     <div class="q-header-right">
       ${qResultToggle ? renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length)) : ""}
-      <button class="q-alpha-btn${questionAlphaSort[qKey] ? " active" : ""}" data-state="${questionAlphaSort[qKey] || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${questionAlphaSort[qKey] === "az" ? "A to Z" : questionAlphaSort[qKey] === "za" ? "Z to A" : "off"}">${questionAlphaSort[qKey] === "az" ? ICON_ARROW_DOWN : questionAlphaSort[qKey] === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${questionAlphaSort[qKey] === "za" ? "Z-A" : "A-Z"}</span></button>
+      <button class="q-alpha-btn${qAlpha(qKey) ? " active" : ""}" data-state="${qAlpha(qKey) || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(qKey) === "az" ? "A to Z" : qAlpha(qKey) === "za" ? "Z to A" : "off"}">${qAlpha(qKey) === "az" ? ICON_ARROW_DOWN : qAlpha(qKey) === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${qAlpha(qKey) === "za" ? "Z-A" : "A-Z"}</span></button>
       <button class="q-sort-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button>
       <button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>
     </div>
@@ -1708,7 +1714,7 @@ function renderWQ(ri, qi) {
   }
   teamOrder = applyAlphaSort(
     teamOrder,
-    questionAlphaSort[qKey],
+    qAlpha(qKey),
     questionSortOrder[qKey] ? questionSortPending[qKey] : null,
   );
   teamOrder.forEach((ti) => {
@@ -1804,15 +1810,13 @@ function toggleBonusAlphaSort(ri) {
   cycleAlphaSort("b" + ri);
 }
 function cycleAlphaSort(key) {
-  const next = { undefined: "az", az: "za", za: undefined }[questionAlphaSort[key]];
-  if (next) questionAlphaSort[key] = next;
-  else delete questionAlphaSort[key];
+  questionAlphaSort[key] = { az: "za", za: "off", undefined: "az" }[qAlpha(key)];
   renderAll();
 }
 function resetQuestionSort(ri, qi) {
   delete questionSortOrder[ri + "-" + qi];
   delete questionSortPending[ri + "-" + qi];
-  delete questionAlphaSort[ri + "-" + qi];
+  questionAlphaSort[ri + "-" + qi] = "off";
   renderAll();
 }
 function sortBonusQuestion(ri) {
@@ -1833,7 +1837,7 @@ function sortBonusQuestion(ri) {
 function resetBonusQuestionSort(ri) {
   delete questionSortOrder["b" + ri];
   delete questionSortPending["b" + ri];
-  delete questionAlphaSort["b" + ri];
+  questionAlphaSort["b" + ri] = "off";
   renderAll();
 }
 function sortSpecialWager(type) {
@@ -1858,7 +1862,7 @@ function sortSpecialWager(type) {
 function resetSpecialWagerSort(type) {
   delete questionSortOrder["sw-" + type];
   delete questionSortPending["sw-" + type];
-  delete questionAlphaSort["sw-" + type];
+  questionAlphaSort["sw-" + type] = "off";
   renderAll();
 }
 function toggleSpecialWagerAlphaSort(type) {
@@ -1900,7 +1904,7 @@ function renderBQ(ri) {
   if (isCollapsedBQ) blockCls += " bq-collapsed";
   const bqStyle = BONUS_Q_STYLE[ri] || { cls: "" };
   const bqKey = "b" + ri;
-  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-alpha-btn${questionAlphaSort[bqKey] ? " active" : ""}" data-state="${questionAlphaSort[bqKey] || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${questionAlphaSort[bqKey] === "az" ? "A to Z" : questionAlphaSort[bqKey] === "za" ? "Z to A" : "off"}">${questionAlphaSort[bqKey] === "az" ? ICON_ARROW_DOWN : questionAlphaSort[bqKey] === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${questionAlphaSort[bqKey] === "za" ? "Z-A" : "A-Z"}</span></button><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div><div class="q-body">`;
+  let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right"><button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${qAlpha(bqKey) === "az" ? ICON_ARROW_DOWN : qAlpha(bqKey) === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${qAlpha(bqKey) === "za" ? "Z-A" : "A-Z"}</span></button><button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div><div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
     ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
@@ -1913,7 +1917,7 @@ function renderBQ(ri) {
   }
   bqTeamOrder = applyAlphaSort(
     bqTeamOrder,
-    questionAlphaSort[bqKey],
+    qAlpha(bqKey),
     questionSortOrder[bqKey] ? questionSortPending[bqKey] : null,
   );
   bqTeamOrder.forEach((ti) => {
@@ -1996,7 +2000,7 @@ function renderSpecialWager(type) {
   // ignoring the toggle entirely, so turning the setting Off didn't hide it here like it does
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-alpha-btn${questionAlphaSort[swKey] ? " active" : ""}" data-state="${questionAlphaSort[swKey] || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${questionAlphaSort[swKey] === "az" ? "A to Z" : questionAlphaSort[swKey] === "za" ? "Z to A" : "off"}">${questionAlphaSort[swKey] === "az" ? ICON_ARROW_DOWN : questionAlphaSort[swKey] === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${questionAlphaSort[swKey] === "za" ? "Z-A" : "A-Z"}</span></button><button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}<button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${qAlpha(swKey) === "az" ? ICON_ARROW_DOWN : qAlpha(swKey) === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${qAlpha(swKey) === "za" ? "Z-A" : "A-Z"}</span></button><button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button></div></div>`;
   // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
   // badge is two inches away and says the same thing, and the whole block is already washed gold
   // with a gold border — three statements of one fact. Same call, same reasoning, as removing the
@@ -2014,7 +2018,7 @@ function renderSpecialWager(type) {
   }
   swTeamOrder = applyAlphaSort(
     swTeamOrder,
-    questionAlphaSort[swKey],
+    qAlpha(swKey),
     questionSortOrder[swKey] ? questionSortPending[swKey] : null,
   );
   swTeamOrder.forEach((ti) => {
