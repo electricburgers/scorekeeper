@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.14"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.15"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Oct 30, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -155,7 +155,6 @@ function loadPrefs() {
     craftSoundTest: false,
     qResultToggle: false,
     showProgressBar: false,
-    pausedLook: "1",
   };
   return { ...prefsCache };
 }
@@ -232,9 +231,6 @@ function applyPrefs() {
   else document.documentElement.setAttribute("data-stripe", String(sl));
   const slt = document.getElementById("stripeToggle");
   if (slt) slt.textContent = STRIPE_LABELS[sl] || "Subtle";
-  document.documentElement.setAttribute("data-paused", pausedStyle());
-  const pls = document.getElementById("pausedLookSelect");
-  if (pls) pls.value = pausedStyle();
   const pbt = document.getElementById("progressBarToggle");
   if (pbt) {
     pbt.classList.toggle("active", !!p.showProgressBar);
@@ -1176,32 +1172,15 @@ function roundWagerTypeIndex(type) {
   for (let ri = 0; ri < 4; ri++) if (roundWagerType(ri) === type) return ri;
   return -1;
 }
-// Paused teams on the score tables (before halftime / before final wager / Final Results). Three
-// looks, picked in Settings > Paused Look: "1" dimmed text, "2" dimmed + a Paused pill, "3" hatched
-// row + italic "(paused)". Dimming is a colour change (--text-muted, AA-checked), never opacity.
-function pausedStyle() {
-  const v = loadPrefs().pausedLook;
-  return v === "2" || v === "3" ? v : "1";
-}
+// Paused teams on the score tables (before halftime / before final wager / Final Results): dimmed
+// text (--text-muted, AA-checked, never opacity) plus a "Paused" pill beside the name.
 function pausedRowCls(ti) {
   return isPaused(ti) ? " row-paused" : "";
 }
 function pausedMark(ti) {
   if (!isPaused(ti)) return "";
-  const v = pausedStyle();
-  if (v === "2") {
-    const ic = loadPrefs().iconStyle === "emoji" ? '<span class="icon-emoji">\u23F8\uFE0F</span>' : PAUSE_ICON_SVG;
-    return ` <span class="paused-pill">${ic} Paused</span>`;
-  }
-  if (v === "3") return ' <span class="paused-note">(paused)</span>';
-  return "";
-}
-function setPausedLook(v) {
-  const p = loadPrefs();
-  p.pausedLook = v === "2" || v === "3" ? v : "1";
-  savePrefs(p);
-  applyPrefs();
-  renderAll();
+  const ic = loadPrefs().iconStyle === "emoji" ? '<span class="icon-emoji">\u23F8\uFE0F</span>' : PAUSE_ICON_SVG;
+  return ` <span class="paused-pill">${ic} Paused</span>`;
 }
 function renderStandings(type) {
   if (!gameState.teams.length) return "";

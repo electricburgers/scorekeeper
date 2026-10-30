@@ -15,18 +15,12 @@ describe("paused teams in score tables", () => {
   });
   after(() => w.close());
   const rows = (sel) => [...w.document.querySelectorAll(sel + " .row-paused")].map((r) => r.textContent);
-  it("marks the paused team in standings and final results, for every look", () => {
-    for (const v of ["1", "2", "3"]) {
-      evalIn(w, `setPausedLook("${v}")`);
-      assert.equal(w.document.documentElement.getAttribute("data-paused"), v);
-      assert.equal(rows("#standings-halftime").length, 1, "halftime " + v);
-      assert.equal(rows("#standings-final").length, 1, "final wager " + v);
-      assert.equal(rows(".final-table").length, 1, "final results " + v);
-    }
-    evalIn(w, 'setPausedLook("2")');
+  it("marks the paused team (dimmed + Paused pill) in standings and final results", () => {
+    assert.equal(rows("#standings-halftime").length, 1);
+    assert.equal(rows("#standings-final").length, 1);
+    assert.equal(rows(".final-table").length, 1);
     assert.match(rows(".final-table")[0], /Paused/);
-    evalIn(w, 'setPausedLook("3")');
-    assert.match(rows(".final-table")[0], /\(paused\)/);
+    assert.ok(w.document.querySelector(".final-table tr:not(.row-paused) .paused-pill") === null);
   });
   it("dims with colour, not opacity", () => {
     assert.doesNotMatch(css.match(/\.row-paused td,[^{]*\{[^}]*\}/)?.[0] || css.match(/tr\.row-paused td[^{]*\{[^}]*\}/)[0], /opacity/);

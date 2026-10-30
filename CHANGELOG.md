@@ -14,10 +14,13 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.15 - 2026-10-30
+- **Paused teams in the score tables:** the Before Halftime Wager, Before Final Wager and Final Results tables now show a paused team with dimmed text and a "Paused" pill (pause pictograph, or ⏸️ in Emoji mode) beside its name. This is the chosen one of the three trial looks; the Paused Look setting is removed.
+
 ## v21.14 - 2026-10-30
 - **The question header pins as one piece:** the separate sticky sort row (v21.11-v21.13) is gone, because it duplicated the Q label and badge. Instead the real header (Q1-Q5 name, "N left" / Done badge, bonus description, and A-Z / Sort / Reset) scrolls up into the sticky spot and stays there, edge to edge like the answer rows. Same on the halftime and final wager cards.
 - **Phone Scores sheet:** the slide-up ranking now reaches up to just under the page header (was 75% of the screen), so more team rows are visible; its Entry / Shuffle / Asc / Desc buttons have larger text and icons and fill more of the button, and the timer buttons' icons are bigger.
-- **Paused teams in the score tables (trial):** Settings > Paused Look offers three ways to mark a paused team in the Before Halftime Wager, Before Final Wager and Final Results tables - 1 dimmed text, 2 dimmed + a Paused pill, 3 hatched row with italic "(paused)". Dimming is a text-colour change, never opacity. Pick one and the other two will be removed.
+- **Paused teams in the score tables (trial):** Settings > Paused Look offers three ways to mark a paused team in the Before Halftime Wager, Before Final Wager and Final Results tables - 1 dimmed text, 2 dimmed + a Paused pill, 3 hatched row with italic "(paused)". Dimming is a text-colour change, never opacity. The trial ended in v21.15 (look 2 kept).
 
 ## v21.13 - 2026-10-30
 - **Team Report rename needs the pencil:** the team name is plain text again, with a pictograph pencil (emoji ✏️ in Emoji mode) beside it. Tap it to turn the name into a field; Enter or tapping away saves, Esc cancels.

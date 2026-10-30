@@ -2926,16 +2926,12 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .special-section .sw-header{position:sticky;top:var(--qbar-top);z-index:50;background:var(--bg-input);margin:-12px -12px 0;padding:8px 12px;border-radius:10px 10px 0 0;border-bottom:1px solid var(--border-strong)}
 .special-section.sw-collapsed .sw-header{margin-bottom:-12px;border-radius:10px;border-bottom:0}
 
-/* PAUSED TEAMS in the score tables (Settings > Paused Look, <html data-paused="1|2|3">).
+/* PAUSED TEAMS in the score tables.
    Dimming is --text-muted (AA-audited), not opacity. */
 .standings-table tr.row-paused td,.final-table tbody tr.row-paused td,.row-paused td .ta-name-clickable{color:var(--text-muted)}
 .row-paused .fr-score,.row-paused .standings-pts{font-weight:600}
 .paused-pill{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:1px 7px;border:1px solid var(--border-strong);border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary);background:var(--bg-input);vertical-align:middle;white-space:nowrap}
 .paused-pill .icon-ui{width:.8rem;height:.8rem}
-html[data-paused="1"] .paused-pill,html[data-paused="3"] .paused-pill{display:none}
-.paused-note{font-style:italic;font-weight:400;color:var(--text-muted);margin-left:4px}
-html[data-paused="3"] .standings-table tr.row-paused,html[data-paused="3"] .final-table tbody tr.row-paused{background:repeating-linear-gradient(135deg,transparent 0 7px,var(--border) 7px 8px)}
-html[data-paused="3"] .row-paused td:first-child,html[data-paused="3"] .row-paused .ta-name-clickable{font-style:italic}
 
 /* PHONE SCORES SHEET: the slide-up ranking reaches up to just under the page header (was 75% of the
    screen) to show more rows, and its sort buttons fill their 44px+ height with bigger text/icons. */
