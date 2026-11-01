@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.17 - 2026-11-01
+- **Shorter sort buttons on the phone Scores sheet:** the sort row is 32px tall (was 48px) with tighter padding, so more teams are readable without scrolling.
+- **Phone timer:** the play/pause and reset icons are larger inside their buttons, and the digits are bigger (2.1rem, was 1.85rem) with the timer box kept at the same height.
+- **Team Report header:** reorganised as a "Team Report" label, then the team name (rename pencil and a Paused pill when the team is paused), then a rank line ("Rank #19 of 22") followed by mode, venue and quiz ID.
+- **Scroll bug fixed:** sometimes the score list wouldn't move and the page behind it scrolled instead. The list had no scroll containment, so a swipe at its top/bottom edge (or one starting on the sheet's header, sort row or backdrop) chained to the page. The list and sheet now contain their scrolling, and the page is locked while the sheet is open.
+
 ## v21.16 - 2026-10-30
 - **One-row question header:** the pinned header was too tall on phones, so the A-Z / Sort / Reset buttons now sit on the same row as the question name and badge (icon-only squares; the label and badge shrink first). A-Z is now a drawn A-Z-with-arrow pictograph (arrow flips for Z-A); Emoji mode keeps the arrow emoji with the text. Applies to Q1-Q5 and the halftime / final wager cards.
 

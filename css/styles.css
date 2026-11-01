@@ -1487,7 +1487,12 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      an initial 2.1rem pass that read a little large — 1.85rem plus .qtimer-display's own trimmed
      3px+3px padding plus the 4px+4px border every state (qt-warn/crit) already reserves stays
      comfortably under the frozen 54.5px row-height ceiling. */
-  .qtimer-mobile .qtimer-display{font-size:1.85rem;padding:3px 10px}
+  /* v21.17: digits 1.85 -> 2.1rem; vertical padding 3 -> 1px so the box (line-height 1) keeps its height. */
+  .qtimer-mobile .qtimer-display{font-size:2.1rem;padding:1px 10px}
+  /* Play/pause and reset glyphs fill more of their buttons (were ~1em / 1.1em, which floated small). */
+  .qtimer-mobile .qtimer-btn.qtimer-toggle svg{width:1.45em;height:1.45em;min-width:1.45em;flex-shrink:0}
+  .qtimer-mobile .qtimer-btn.qtimer-reset .icon-ui{width:1.45em;height:1.45em}
+  .qtimer-mobile .qtimer-btn.qtimer-toggle .icon-emoji,.qtimer-mobile .qtimer-btn.qtimer-reset .icon-emoji{transform:scale(1.35)}
   /* Flat rem values here, not max(...,44px) — the usual touch-target floor elsewhere in the app
      (.standings-sort-btn) would push these past the frozen row height this whole rule exists to
      respect. 2.4rem (36px at this app's 15px root) — pulled back from an initial 2.75rem pass
@@ -1537,7 +1542,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 @media(min-width:769px){
   .sidebar-toggle{display:none}
 }
-.sidebar-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;overflow-anchor:none}
+.sidebar-body{flex:1;min-height:0;overscroll-behavior:contain;overflow-y:auto;display:flex;flex-direction:column;overflow-anchor:none}
 
 .sort-controls{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
 .sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.3em;flex:1;min-width:0;font-family:var(--font-display);font-size:.86rem;font-weight:700;padding:8px 4px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;touch-action:manipulation}
@@ -1561,7 +1566,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    with no way to scroll it into view, since .scores-list (not .sidebar-body) is the element
    that actually scrolls. --qtimer-h is kept in sync with the timer's real rendered height by a
    ResizeObserver in app.js. */
-.scores-list{padding:8px 12px;flex:1;overflow-y:auto;padding-bottom:calc(8px + var(--qtimer-h,4.6rem))}
+.scores-list{padding:8px 12px;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:calc(8px + var(--qtimer-h,4.6rem))}
 .score-row{display:flex;align-items:center;padding:var(--row-pad) 12px;border-bottom:1px solid var(--border);margin-left:-12px;margin-right:-12px}
 .score-row:last-child{border-bottom:none}
 .score-row:nth-child(even){background:var(--row-stripe)}
@@ -2452,7 +2457,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .aud-edit-btn:hover{border-color:var(--accent-cyan-solid)}
 .aud-edit-btn .icon-ui{width:1rem;height:1rem}
 .team-sort-row{display:flex;justify-content:flex-end;margin-bottom:8px}
-.audit-head .aud-sub{display:block;font-family:var(--font-body);font-size:.7rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:3px}
+.audit-head .aud-eyebrow{display:block;font-family:var(--font-body);font-size:.66rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600;margin-bottom:2px}
+.aud-name-row{flex-wrap:wrap}
+.aud-name-row .paused-pill{margin-left:0}
+.audit-head .aud-sub{display:flex;flex-wrap:wrap;align-items:center;gap:2px 0;font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:5px}
+.aud-rank{color:var(--txt-cyan);font-weight:700;margin-right:8px}
+.aud-rank-of{color:var(--text-muted);font-weight:400}
+.aud-meta+.aud-meta::before,.aud-rank+.aud-meta::before{content:"\00B7";margin:0 6px}
 /* Icon-only now (see buildAudit in app.js) — used to read "✕ Close", but the X alone next to a
    modal titled "Team Report" already reads as close without needing the word spelled out too.
    A circle, not the rounded square it was: with the word gone this is a lone mark, and a round
@@ -2940,8 +2951,17 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* PHONE SCORES SHEET: the slide-up ranking reaches up to just under the page header (was 75% of the
    screen) to show more rows, and its sort buttons fill their 44px+ height with bigger text/icons. */
 @media(max-width:768px){
-  .sort-btn{font-size:1.02rem;padding:12px 4px;min-height:48px}
-  .sort-btn .icon-ui{width:1.5em;height:1.5em}
-  .sort-btn .icon-emoji{transform:scale(1.5)}
+  /* Short sort buttons (32px, was 48px) so more team rows fit in the sheet without scrolling. */
+  .sort-controls{padding:4px 10px}
+  .sort-btn{font-size:.9rem;padding:4px 4px;min-height:32px}
+  @media (pointer:coarse),(max-width:1024px){.sort-btn{min-height:32px}}
+  .sort-btn .icon-ui{width:1.2em;height:1.2em}
+  .sort-btn .icon-emoji{transform:scale(1.2)}
+  /* Scroll containment: the sheet's own scroller keeps the gesture (no chaining to the page), and
+     while the sheet is open the page behind it is locked, so touches that start on the sheet's
+     non-scrolling parts (grab handle, sort row, header, backdrop) can't scroll the page either. */
+  .col-right{overscroll-behavior:contain}
+  html.sheet-open,html.sheet-open body{overflow:hidden;overscroll-behavior:none}
+  .sidebar-backdrop,.sort-controls,.sort-mode-label{touch-action:none}
   .qtimer-btn .icon-ui{width:1.5em;height:1.5em}
 }

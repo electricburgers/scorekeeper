@@ -31,7 +31,7 @@ describe("mode is named in the chrome", () => {
       assert.match(d.getElementById("gameModeSelect").title, new RegExp(name));
       assert.match(d.getElementById("tryExampleBtn").title, new RegExp(name));
       assert.match(d.getElementById("takeTourBtn").title, new RegExp(name));
-      assert.match(evalIn(window, "buildAudit(0)"), new RegExp("Team Report \\u2014 " + name));
+      assert.match(evalIn(window, "buildAudit(0)"), new RegExp('aud-meta">' + name));
     });
   });
 

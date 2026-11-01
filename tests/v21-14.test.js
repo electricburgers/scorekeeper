@@ -27,9 +27,9 @@ describe("paused teams in score tables", () => {
   });
 });
 describe("phone Scores sheet", () => {
-  it("opens to just under the header and has bigger sort buttons", () => {
+  it("opens to just under the header; its sort buttons are compact (32px)", () => {
     assert.match(css, /height:calc\(100dvh - var\(--header-h,67px\) - 8px\)/);
-    assert.match(css, /@media\(max-width:768px\)\{\s*\.sort-btn\{font-size:1\.02rem/);
+    assert.match(css, /\.sort-btn\{font-size:\.9rem;padding:4px 4px;min-height:32px\}/);
   });
 });
 

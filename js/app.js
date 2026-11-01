@@ -31,8 +31,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.16"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Oct 30, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v21.17"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 1, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -2113,6 +2113,9 @@ function toggleSidebar() {
   const sb = document.getElementById("sidebar");
   const open = sb.classList.toggle("open");
   document.getElementById("sidebarBackdrop")?.classList.toggle("show", open);
+  // Lock the page behind the open sheet (see html.sheet-open in styles.css) so a swipe never
+  // scrolls the background while the scores sit still.
+  document.documentElement.classList.toggle("sheet-open", open);
   const peek = document.getElementById("mobileScoresPeek");
   if (peek) {
     peek.setAttribute("aria-expanded", String(open));

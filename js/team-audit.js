@@ -149,7 +149,11 @@ function buildAudit(ti) {
   const name = esc(t.name || "Team " + (ti + 1));
   const rm = rankMap();
   const rank = rm[ti];
-  let h = `<div class="audit-head"><h2><span class="aud-name-row"><span class="aud-name" id="audName">${name}</span><button type="button" class="aud-edit-btn" onclick="editAuditName(${ti})" title="Rename this team" aria-label="Rename this team">${ICON_PENCIL}</button></span><span class="aud-sub">Team Report \u2014 ${gameModeName()} \u00B7 rank #${rank} of ${gameState.teams.length} \u00B7 ${esc(gameState.meta.location || "")}${gameState.meta.quizId ? " \u00B7 Quiz " + esc(gameState.meta.quizId) : ""}</span></h2><button class="audit-close" onclick="closeAudit()" aria-label="Close" title="Close">${X_ICON_SVG}</button></div>`;
+  // Header order: what this is (eyebrow) -> who (name, rename, Paused pill) -> where they stand (rank)
+  // -> the game it belongs to (mode / venue / quiz). Used to be one run-on "Team Report - mode - rank -
+  // venue - quiz" line under the name, which buried the rank among the context.
+  const metaBits = [gameModeName(), esc(gameState.meta.location || ""), gameState.meta.quizId ? "Quiz " + esc(gameState.meta.quizId) : ""].filter(Boolean);
+  let h = `<div class="audit-head"><h2><span class="aud-eyebrow">Team Report</span><span class="aud-name-row"><span class="aud-name" id="audName">${name}</span><button type="button" class="aud-edit-btn" onclick="editAuditName(${ti})" title="Rename this team" aria-label="Rename this team">${ICON_PENCIL}</button>${pausedMark(ti)}</span><span class="aud-sub"><span class="aud-rank">Rank #${rank} <span class="aud-rank-of">of ${gameState.teams.length}</span></span>${metaBits.map((m) => `<span class="aud-meta">${m}</span>`).join("")}</span></h2><button class="audit-close" onclick="closeAudit()" aria-label="Close" title="Close">${X_ICON_SVG}</button></div>`;
   h += `<div class="audit-body">`;
 
   let run = 0;
