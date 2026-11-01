@@ -1333,9 +1333,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      shrink:0 because the play/pause <svg> (unlike the reset icon, which carries .icon-ui) is a
      bare flex child with no shrink guard of its own and was collapsing to a sliver. */
   .qtimer-desktop .qtimer-btn.qtimer-toggle svg{width:1.5em;height:1.5em;min-width:1.5em;flex-shrink:0}
-  .qtimer-desktop .qtimer-btn.qtimer-reset .icon-ui{width:1.5em;height:1.5em}
+  .qtimer-desktop .qtimer-btn.qtimer-reset .icon-ui{width:1.15em;height:1.15em}
   .qtimer-desktop .qtimer-btn.qtimer-toggle .icon-emoji,
-  .qtimer-desktop .qtimer-btn.qtimer-reset .icon-emoji{transform:scale(1.35)}
+  .qtimer-desktop .qtimer-btn.qtimer-reset .icon-emoji{transform:scale(1.1)}
   .qtimer-desktop .qtimer-btn.qtimer-step{padding:6px 12px;font-size:.85rem}
 }
 
@@ -2964,3 +2964,9 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .sidebar-backdrop,.sort-controls,.sort-mode-label{touch-action:none}
   .qtimer-btn .icon-ui{width:1.5em;height:1.5em}
 }
+
+/* v21.17: play/pause and reset are always the same rectangle (3rem x 2.5rem), docked or deployed, at every
+   width and pointer type. Comes last so it beats the 44px square touch-target rules above. */
+.qtimer-btn.qtimer-toggle,.qtimer-btn.qtimer-reset,
+.qtimer-desktop .qtimer-btn.qtimer-toggle,.qtimer-desktop .qtimer-btn.qtimer-reset,
+.qtimer-mobile .qtimer-btn.qtimer-toggle,.qtimer-mobile .qtimer-btn.qtimer-reset{width:3rem;min-width:3rem;height:2.5rem;min-height:2.5rem}

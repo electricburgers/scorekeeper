@@ -20,6 +20,7 @@ v19.79 through v19.84; git history isn't rewritten).
 - **Team Report header:** reorganised as a "Team Report" label, then the team name (rename pencil and a Paused pill when the team is paused), then a rank line ("Rank #19 of 22") followed by mode, venue and quiz ID.
 - **Timer when the phone Scores sheet is open:** the timer's digits and play/reset buttons use the same larger sizes as the docked timer.
 - **Team Report header:** the "Team Report" label is plain body text (not the team name's font and colour), and the rank / mode / venue / quiz items are separated by dots.
+- **Timer buttons:** play/pause and reset are the same 3rem x 2.5rem rectangle docked or deployed (docked used to be square), and the reset icon in the deployed timer is smaller.
 - **Scroll bug fixed:** sometimes the score list wouldn't move and the page behind it scrolled instead. The list had no scroll containment, so a swipe at its top/bottom edge (or one starting on the sheet's header, sort row or backdrop) chained to the page. The list and sheet now contain their scrolling, and the page is locked while the sheet is open.
 
 ## v21.16 - 2026-10-30

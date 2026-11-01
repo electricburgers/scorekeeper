@@ -7,6 +7,7 @@ All notable changes to the Scorekeeper FAQ site are documented here.
 ### Changed
 
 - **Screenshots regenerated:** Team Report (new header: label, name, rank, mode / venue / quiz), Question Timer, Sort buttons (now with the A-Z button) and the mobile bottom dock, in dark and light.
+- Also regenerated: Scores sidebar, Question Timer, Timer Stepper Buttons, Halftime Wager, Crowd-Wisdom, Round Scoring, Beer Round, Before-Wager Scores and Final Results (all with the A-Z button, rectangular timer buttons and smaller reset icon), dark and light.
 - Question Timer intro notes the larger icons and digits apply docked or open; sort-button entry notes the icon-only header on a phone.
 
 ## [1.50] - 1 Nov 2026
