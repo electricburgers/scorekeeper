@@ -2,6 +2,17 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.50] - 1 Nov 2026
+
+### Added
+
+- **New "What's at the top of the Team Report?" entry:** the heading order (label, name, rank, mode / venue / quiz) and the Paused badge.
+
+### Changed
+
+- **Scores & Standings intro:** the phone Scores panel has slim sort buttons, and its list scrolls on its own with the page behind it locked.
+- **Question Timer intro:** the phone timer's play / pause and reset icons and digits are larger.
+
 ## [1.49] - 30 Oct 2026
 
 ### Changed

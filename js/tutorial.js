@@ -810,7 +810,7 @@ const Tutorial = (function () {
         // regardless of where that team lands in the ranking, so this is stable no matter the
         // final order.
         target: '#sec-final tr[onclick="openAudit(0)"] .ta-name-clickable',
-        text: `${tapWordCap()} ${team0Name()}'s name in Final Results (or anywhere during a real game) to open a Team Report detailing every point. Useful in case a team asks you about a specific question.`,
+        text: `${tapWordCap()} ${team0Name()}'s name in Final Results (or anywhere during a real game) to open a Team Report detailing every point, with the team's rank at the top (and a Paused badge if they're paused). Useful in case a team asks you about a specific question.`,
         advance: "on-click",
         fill: () => {
           auditOpened = false;
