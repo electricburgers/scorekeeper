@@ -1320,10 +1320,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Tablet and up: the shared .qtimer look is sized for the cramped mobile peek-strip, which left
    the countdown — and especially the play/reset glyphs — noticeably small everywhere .qtimer-
    desktop actually renders at size: the desktop sidebar AND the tablet expanded scores sheet,
-   both of which have plenty of room. Scoped to min-width:601px (not 769px) so it also covers the
-   tablet sheet; only the ≤600 phone sheet, where vertical room is tighter and the dock is the
-   primary control anyway, keeps the base sizing. */
-@media(min-width:601px){
+   both of which have plenty of room. v21.17: now at every width, so the timer inside the deployed
+   phone sheet matches the big timer in the docked strip (.qtimer-mobile) instead of staying small. */
+@media(min-width:0){
   .qtimer-desktop .qtimer-display{font-size:2.15rem;padding:6px 14px}
   .qtimer-desktop .qtimer-btn{min-height:2.5rem;padding:7px 14px;font-size:.95rem}
   .qtimer-desktop .qtimer-btn.qtimer-toggle,
@@ -2457,13 +2456,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .aud-edit-btn:hover{border-color:var(--accent-cyan-solid)}
 .aud-edit-btn .icon-ui{width:1rem;height:1rem}
 .team-sort-row{display:flex;justify-content:flex-end;margin-bottom:8px}
-.audit-head .aud-eyebrow{display:block;font-family:var(--font-body);font-size:.66rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px;font-weight:600;margin-bottom:2px}
+.audit-head .aud-eyebrow{display:block;font-family:var(--font-body);font-size:.74rem;color:var(--text-secondary);text-transform:none;letter-spacing:0;font-weight:500;margin-bottom:3px}
 .aud-name-row{flex-wrap:wrap}
 .aud-name-row .paused-pill{margin-left:0}
 .audit-head .aud-sub{display:flex;flex-wrap:wrap;align-items:center;gap:2px 0;font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:5px}
-.aud-rank{color:var(--txt-cyan);font-weight:700;margin-right:8px}
+.aud-rank{color:var(--txt-cyan);font-weight:700}
 .aud-rank-of{color:var(--text-muted);font-weight:400}
-.aud-meta+.aud-meta::before,.aud-rank+.aud-meta::before{content:"\00B7";margin:0 6px}
+.aud-dot{margin:0 .6em;font-weight:700}
 /* Icon-only now (see buildAudit in app.js) — used to read "✕ Close", but the X alone next to a
    modal titled "Team Report" already reads as close without needing the word spelled out too.
    A circle, not the rounded square it was: with the word gone this is a lone mark, and a round
