@@ -34,7 +34,7 @@ comparison it exists to make.
 | File | What to capture | Used in |
 |---|---|---|
 | `event-details.webp` | The Event Details section, expanded, fully filled in (Date, Quiz ID, Host Name, Location, Craft Partner, Partner Town, Bonus Item, Restaurant Staff). | Event Details |
-| `teams-list.webp` | A few rows of the Teams section — name field, the +5 Bonus / +3 NJCB checkboxes, the Score Guess field, and the ✕ remove button. | Teams |
+| `teams-list.webp` | A few rows of the Teams section — name field, the +3 CB / +5 Bonus checkboxes, the Score Guess field, and the rounded-rectangle pause button next to the ✕ remove button. | Teams |
 | `round-scoring.webp` | One round expanded, with a mix of green (correct), red (incorrect), and idle wager buttons across a few teams/questions. | Scoring Rounds |
 | `beer-round.webp` | A bonus (Q5) question where every team is marked correct, showing the gold wash and the 🍺 Beer Round! badge. The standalone "Everyone got it right!" banner was removed in app v18.57 — the badge and the gold block are the whole treatment now. Round 3's Q5 in the sample game is one; otherwise mark a question correct for every team by hand. | Scoring Rounds |
 | `sort-buttons.webp` | Close-up of a single question's header showing the A-Z, Sort and Reset buttons on one row (the header pins as one piece). | Tips & Tricks |

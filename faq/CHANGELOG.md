@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.52] - 2 Nov 2026
+
+### Changed
+
+- **Teams screenshot regenerated:** now shows the rounded-rectangle pause button next to the remove button and the current +3 CB / +5 Bonus labels, in dark and light.
+
 ## [1.51] - 1 Nov 2026
 
 ### Changed
