@@ -1812,7 +1812,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .adj-val.neg{color:var(--txt-red)}
 .remove-team button{width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--accent-red);background:none;color:var(--txt-red);font-size:1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .remove-team{display:flex;gap:6px}
-.remove-team .pause-team{border-color:var(--border-control);color:var(--text-secondary)}
+.remove-team .pause-team{width:2.1rem;border-radius:6px;border-color:var(--border-control);color:var(--text-secondary)}
 .remove-team .pause-team.is-on{border-color:var(--accent-orange);color:var(--txt-orange);background:color-mix(in srgb,var(--accent-orange) 15%,transparent)}
 .remove-team .pause-team svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
 .team-entry.is-paused .team-name-cell>input[type="text"],.team-entry.is-paused .team-checks{opacity:.75}
@@ -2631,7 +2631,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   /* One row: label + badge on the left, the icon-only A-Z / Sort / Reset buttons on the right (the
      header pins while scrolling, so it has to stay short). The label shrinks before the buttons do. */
   .q-header,.sw-header{flex-wrap:nowrap}
-  .q-header-right{flex-basis:auto;flex-wrap:nowrap;column-gap:4px;justify-content:flex-end;margin-left:auto}
+  .q-header-right{flex-basis:auto;flex-wrap:nowrap;column-gap:10px;justify-content:flex-end;margin-left:auto}
   .q-header-left,.sw-header-left{min-width:0}
   .q-alpha-btn .icon-ui{width:1.7em;height:1.7em}
   .q-badge,.round-badge{font-size:.8rem}
@@ -2643,12 +2643,12 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   /* Icon is the button's whole visible content now that its label is hidden, so it gets its
      own larger font-size (not the .78rem sized for the old icon+text pairing) to actually
      read at a glance instead of looking lost in the middle of a same-sized tap target. */
-  .q-alpha-btn{width:auto;min-width:clamp(1.9rem,7.5cqw,2.3rem);height:clamp(1.9rem,7.5cqw,2.3rem);padding:0 6px;font-size:.7rem}
-  .q-sort-btn,.q-reset-btn{font-size:1.1rem;line-height:1;padding:0;width:clamp(1.9rem,7.5cqw,2.3rem);height:clamp(1.9rem,7.5cqw,2.3rem);display:inline-flex;align-items:center;justify-content:center}
+  .q-alpha-btn{width:auto;min-width:clamp(2.3rem,9.5cqw,2.7rem);height:clamp(2.3rem,9.5cqw,2.7rem);padding:0 6px;font-size:.7rem}
+  .q-sort-btn,.q-reset-btn{font-size:1.1rem;line-height:1;padding:0;width:clamp(2.3rem,9.5cqw,2.7rem);height:clamp(2.3rem,9.5cqw,2.7rem);display:inline-flex;align-items:center;justify-content:center}
   /* height matches .q-sort-btn/.q-reset-btn's own (now smaller) clamp exactly, same reasoning
      as the desktop rule above — width isn't matched (unlike the buttons) since the pill's text
      content needs to stay readable rather than being squeezed into a square. */
-  .q-stat{font-size:.7rem;height:clamp(1.9rem,7.5cqw,2.3rem);padding:0 6px}
+  .q-stat{font-size:.7rem;height:clamp(2.3rem,9.5cqw,2.7rem);padding:0 6px}
 }
 
 @media(max-width:480px){

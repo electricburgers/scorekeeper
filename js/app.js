@@ -31,8 +31,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.18"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 1, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v21.19"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 2, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1407,7 +1407,7 @@ function renderLeftBody() {
   ).length;
   h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2><span class="chevron">▼</span></div><div class="section-body">`;
   if (gameState.teams.length > 1)
-    h += `<div class="team-sort-row"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept." aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${teamAlphaSort === "az" ? ICON_ARROW_DOWN : teamAlphaSort === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${teamAlphaSort === "za" ? "Z-A" : "A-Z"}</span></button></div>`;
+    h += `<div class="team-sort-row"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept." aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}</button></div>`;
   const showAdj = !!loadPrefs().showAdjustments;
   // 146 = a perfect Regular night; the Theme Night script calls 95 a perfect score.
   const guessMax = guessLimit();

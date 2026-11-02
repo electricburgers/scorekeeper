@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.19 - 2026-11-02
+- **Team pause button:** now a rounded rectangle instead of a circle.
+- **Bigger, roomier phone buttons:** A-Z, Sort and Reset are larger on phones, with more space between them to prevent accidental taps.
+- **A-Z button:** the Teams section's A-Z button now uses the same drawn A-Z pictograph as the question headers.
+
 ## v21.18 - 2026-11-01
 - **Timer when the phone Scores sheet is open:** the timer's digits and play/reset buttons use the same larger sizes as the docked timer.
 - **Team Report header:** the "Team Report" label is plain body text (not the team name's font and colour), and the rank / mode / venue / quiz items are separated by dots.
