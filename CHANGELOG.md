@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.29 - 2026-11-03
+- **Team pause button:** a paused team's button is now filled yellow (was an orange tint).
+
 ## v21.28 - 2026-11-03
 - **Team pause button:** now has a yellow outline in the team entry (still orange while the team is paused).
 
