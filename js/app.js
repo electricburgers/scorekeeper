@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.22"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.23"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 3, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -2783,9 +2783,15 @@ document.addEventListener("visibilitychange", () => {
 // had been dragged to. The values were saved correctly the whole time; only the panel was stale.
 // The IIFE near the top of this file handles the root-element attributes early to avoid a flash;
 // this handles the panel's own widgets, which need the DOM to exist.
+// The Game Mode picker's pictograph (syncGameModeSelect) used to be filled only by renderAll(), so on
+// a fresh load it stayed blank for Regular trivia until the mode was switched.
+const initialSettingsSync = () => {
+  applyPrefs();
+  syncGameModeSelect();
+};
 if (document.readyState === "loading")
-  window.addEventListener("DOMContentLoaded", () => applyPrefs());
-else applyPrefs();
+  window.addEventListener("DOMContentLoaded", initialSettingsSync);
+else initialSettingsSync();
 
 // Mark this page's audio as mixable before anything can play. Deliberately at load and not inside
 // the drumroll tap: it has to be in force ahead of the first play to have any effect, and unlike

@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.23 - 2026-11-03
+- **Game Mode icon on first load:** Settings now shows the Regular trivia pictograph right away instead of only after switching modes.
+- **Settings:** the "Import" row is now labelled "Import from old games".
+
 ## v21.22 - 2026-11-03
 - **Update notice:** when a new version is available, Settings still links to how to update the installed app and now also says "On a regular web browser? Reload to load the new version."
 
