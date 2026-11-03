@@ -1503,6 +1503,17 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
     width:2.4rem;height:2.4rem;min-height:2.4rem;font-size:1.15rem;
   }
   .qtimer-mobile .qtimer-btn.qtimer-step{font-size:.82rem;padding:5px 8px;min-height:2.4rem}
+  /* v21.20: the deployed sheet's timer (.qtimer-desktop) uses the exact same row metrics as the docked
+     one above, so the digits and buttons stay put when the dock deploys instead of shifting a few px.
+     Side padding is 11px (not 10) because the dock has a 1px side border the sheet doesn't. */
+  .qtimer-desktop{padding:4px 11px calc(10px + env(safe-area-inset-bottom))}
+  .qtimer-desktop .qtimer-display{font-size:2.1rem;padding:1px 10px}
+  .qtimer-desktop .qtimer-btn.qtimer-toggle svg{width:1.45em;height:1.45em;min-width:1.45em}
+  .qtimer-desktop .qtimer-btn.qtimer-reset .icon-ui{width:1.45em;height:1.45em}
+  .qtimer-desktop .qtimer-btn.qtimer-toggle .icon-emoji,.qtimer-desktop .qtimer-btn.qtimer-reset .icon-emoji{transform:scale(1.35)}
+  .qtimer-desktop .qtimer-btn.qtimer-toggle,
+  .qtimer-desktop .qtimer-btn.qtimer-reset{font-size:1.15rem}
+  .qtimer-desktop .qtimer-btn.qtimer-step{font-size:.82rem;padding:5px 8px;min-height:2.4rem;width:44px;height:44px}
   /* Column 1 is left empty on purpose — an unfilled 1fr grid track still reserves the same
      width as column 3's chevron, which is what keeps column 2 centered against the full strip
      rather than just the leftover space; it doesn't need visible content of its own to do that. */

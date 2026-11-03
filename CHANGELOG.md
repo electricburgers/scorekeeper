@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.20 - 2026-11-03
+- **Phone timer no longer shifts when the dock deploys:** the deployed Scores sheet's timer now uses the same padding, digit size and button sizes as the docked timer, so the numbers and buttons stay in the same place.
+
 ## v21.19 - 2026-11-02
 - **Team pause button:** now a rounded rectangle instead of a circle.
 - **Bigger, roomier phone buttons:** A-Z, Sort and Reset are larger on phones, with more space between them to prevent accidental taps.
