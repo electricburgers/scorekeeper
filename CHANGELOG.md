@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.25 - 2026-11-03
+- **Craft Prize steppers:** the Drumroll (sec) and Exclude Top +/- buttons (and their number boxes) are bigger and taller, so they are easier to tap.
+
 ## v21.24 - 2026-11-03
 - **Question Timer setting:** the timer duration dropdown moved from the main Settings list into Advanced Settings, next to the other timer options.
 
