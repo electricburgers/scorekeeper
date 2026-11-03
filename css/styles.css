@@ -1828,7 +1828,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .adj-val.neg{color:var(--txt-red)}
 .remove-team button{width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--accent-red);background:none;color:var(--txt-red);font-size:1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .remove-team{display:flex;gap:6px}
-.remove-team .pause-team{width:2.1rem;border-radius:6px;border-color:var(--border-control);color:var(--text-secondary)}
+.remove-team .pause-team{width:2.1rem;border-radius:6px;border-color:var(--accent-gold);color:var(--text-secondary)}
 .remove-team .pause-team.is-on{border-color:var(--accent-orange);color:var(--txt-orange);background:color-mix(in srgb,var(--accent-orange) 15%,transparent)}
 .remove-team .pause-team svg line{stroke:currentColor;stroke-width:3;stroke-linecap:round}
 .team-entry.is-paused .team-name-cell>input[type="text"],.team-entry.is-paused .team-checks{opacity:.75}
