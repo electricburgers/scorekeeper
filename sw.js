@@ -56,7 +56,9 @@
 // v20: static assets that never change in place (fonts, vendored libs, audio, icons, FAQ
 // screenshots) are now served cache-first with a background refresh instead of racing the network
 // — no 1.5s wait on a bad connection and no wasted request before painting.
-const CACHE_NAME='trivia-scorekeeper-shell-v20';
+// v21: site moved to https://scorekeeper.triviarevolution.com/ (domain root) — head-tag URLs and
+// the FAQ's hosted-app link changed; bump so any installed client refetches the shell.
+const CACHE_NAME='trivia-scorekeeper-shell-v21';
 const STATIC_RE=/\.(?:woff2|wav|png|webp|ico)$|\/js\/vendor\/|\/js\/data\//;
 const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png','./icons/icon-512.png',
   './css/styles.css','./css/tutorial.css','./js/shared-ui.js',

@@ -2,8 +2,8 @@
 
 A live scoring tool for trivia nights — a static, no-build-step web app built with plain HTML, CSS, and JavaScript. Scorekeeper runs in any modern browser and works on both desktop and mobile devices.
 
-**Live app:** [electricburgers.github.io/scorekeeper](https://electricburgers.github.io/scorekeeper/)  
-**FAQ & Tips:** [electricburgers.github.io/scorekeeper/faq](https://electricburgers.github.io/scorekeeper/faq/)  
+**Live app:** [scorekeeper.triviarevolution.com](https://scorekeeper.triviarevolution.com/)  
+**FAQ & Tips:** [scorekeeper.triviarevolution.com/faq](https://scorekeeper.triviarevolution.com/faq/)  
 **Current version:** v19.49 (as of 2026-08-24) — see [CHANGELOG.md](CHANGELOG.md)
 
 ## What it does
