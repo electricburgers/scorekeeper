@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.26 - 2026-11-03
+- **Reload link:** in the new-version notice, "Reload" is now a button that clears the cached copy of the app and reloads it fresh (your game is saved first), instead of plain text.
+- **Craft Prize steppers:** the Drumroll / Exclude Top number box is now exactly as tall as the +/- buttons.
+
 ## v21.25 - 2026-11-03
 - **Craft Prize steppers:** the Drumroll (sec) and Exclude Top +/- buttons (and their number boxes) are bigger and taller, so they are easier to tap.
 

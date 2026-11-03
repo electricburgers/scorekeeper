@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.25"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.26"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 3, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -323,11 +323,26 @@ function applyPrefs() {
     // at the FAQ's own real instructions instead: remove the installed app and add it again.
     if (latestVersion)
       html +=
-        ` <a class="update-available-btn" href="faq/index.html#q-how-do-i-update-the-installed-app" target="_blank" rel="noopener">${esc(latestVersion)} available — see how to update</a> <span class="update-reload-hint">On a regular web browser? Reload to load the new version.</span>`;
+        ` <a class="update-available-btn" href="faq/index.html#q-how-do-i-update-the-installed-app" target="_blank" rel="noopener">${esc(latestVersion)} available — see how to update</a> <span class="update-reload-hint">On a regular web browser? <button type="button" class="update-available-btn" onclick="forceReloadApp()">Reload</button> to load the new version.</span>`;
     vl.innerHTML = html;
   }
   const qts = document.getElementById("qtDurationSelect");
   if (qts && document.activeElement !== qts) qts.value = p.qtDurationSec;
+}
+// Forces a genuinely fresh load: a plain reload can still be answered from sw.js's cache. The game
+// is autosaved on every change, so nothing is lost; the worker re-registers on the next load.
+async function forceReloadApp() {
+  try {
+    autosave();
+  } catch (e) {}
+  try {
+    if ("caches" in window) await Promise.all((await caches.keys()).map((k) => caches.delete(k)));
+    if ("serviceWorker" in navigator)
+      await Promise.all((await navigator.serviceWorker.getRegistrations()).map((r) => r.unregister()));
+  } catch (e) {}
+  const u = new URL(location.href);
+  u.searchParams.set("reload", Date.now());
+  location.replace(u.toString());
 }
 function setTheme(t) {
   if (!["dark", "light"].includes(t)) t = "dark";

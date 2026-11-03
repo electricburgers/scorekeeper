@@ -2340,7 +2340,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .cp-field .stepper input.sw-input{width:3.2rem}
 /* v21.25: the Craft Prize Drumroll (sec) / Exclude Top +/- buttons were small and short; now roomier tap targets. */
 .cp-field .stepper button{width:2.6rem;height:2.6rem;font-size:1.3rem}
-.cp-field .stepper input.sw-input{height:2.6rem}
+.cp-field .stepper input.sw-input{height:2.6rem;min-height:0;box-sizing:border-box;padding-top:0;padding-bottom:0}
+.cp-field .stepper button{min-height:0;box-sizing:border-box}
 .cp-status{font-size:.72rem;color:var(--text-muted);margin-bottom:2px}
 .cp-note{font-size:.66rem;color:var(--text-muted);margin-bottom:8px;font-style:italic}
 .cp-draw-btn{width:100%}
