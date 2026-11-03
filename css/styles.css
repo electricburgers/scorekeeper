@@ -447,6 +447,7 @@ button,[role="button"]{touch-action:manipulation}
    real link (js/app.js), not a button — it navigates to the FAQ's own instructions for actually
    updating an installed app, which a reload can't reliably do itself (see js/app.js). */
 .update-available-btn{font-family:var(--font-display);font-size:.66rem;font-weight:700;color:var(--txt-cyan);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.update-reload-hint{font-size:.66rem;color:var(--text-muted)}
 .update-available-btn:hover{color:var(--accent-cyan)}
 
 /* Overlay, not in-flow: .header is position:sticky (a valid containing block for an

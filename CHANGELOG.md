@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.22 - 2026-11-03
+- **Update notice:** when a new version is available, Settings still links to how to update the installed app and now also says "On a regular web browser? Reload to load the new version."
+
 ## v21.21 - 2026-11-03
 - **Settings close button:** the circle with the X is back to its normal size on phones, so the Settings header is no longer too tall. It still has a full-size tap area.
 
