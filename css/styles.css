@@ -1723,6 +1723,9 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    inventing a one-off color for this one divider. */
 .team-entry{display:grid;grid-template-columns:1fr 5.4rem auto;gap:8px;align-items:start;padding:10px 8px;border-bottom:1px solid var(--border-control)}
 .team-entry.has-adj{grid-template-columns:1fr 5.4rem auto auto}
+.team-entry{position:relative}
+/* v21.27: the delete-team circle sits in the row's top-right corner; the pause button keeps its own column. */
+.team-entry .remove-team-corner{position:absolute;top:6px;right:8px;align-self:auto}
 .team-entry:last-of-type{border-bottom:none}
 /* Zebra stripe on the even team rows, same --row-stripe (Row Zebra Stripes setting) the score
    rows / round answers / standings already use, so the Teams list scans the same way. */
@@ -1797,7 +1800,8 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .team-guess-cell input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 .team-guess-cell input[type="number"]::-webkit-outer-spin-button,
 .team-guess-cell input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.team-guess-cell>label{font-size:.66rem;margin-bottom:7px}
+.team-guess-cell>label{font-size:.66rem;margin-bottom:7px;display:block;text-align:center}
+.team-guess-cell input[type="number"]{text-align:center}
 .team-guess-cell.guess-missing>label{color:var(--txt-orange)}
 .team-guess-cell.guess-missing input{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
 /* "Limit reached" cue for maxlength fields (see the delegated listener in app.js). Same

@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.26"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.27"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 3, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1452,7 +1452,8 @@ function renderLeftBody() {
       </div>`
           : ""
       }
-      <div class="remove-team"><button class="pause-team${t.paused ? " is-on" : ""}" aria-pressed="${t.paused ? "true" : "false"}" onclick="togglePause(${i})" title="${t.paused ? "Resume team" : "Pause team (keeps them in the report)"}" aria-label="${t.paused ? "Resume" : "Pause"} team ${i + 1}">${PAUSE_ICON_SVG}</button><button onclick="removeTeam(${i})" title="Remove team" aria-label="Remove team ${i + 1}">${X_ICON_SVG}</button></div>
+      <div class="remove-team"><button class="pause-team${t.paused ? " is-on" : ""}" aria-pressed="${t.paused ? "true" : "false"}" onclick="togglePause(${i})" title="${t.paused ? "Resume team" : "Pause team (keeps them in the report)"}" aria-label="${t.paused ? "Resume" : "Pause"} team ${i + 1}">${PAUSE_ICON_SVG}</button></div>
+      <div class="remove-team remove-team-corner"><button onclick="removeTeam(${i})" title="Remove team" aria-label="Remove team ${i + 1}">${X_ICON_SVG}</button></div>
     </div>`;
   });
   if (gameState.teams.length < MAX_TEAMS)
