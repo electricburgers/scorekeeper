@@ -1,0 +1,41 @@
+appId: com.triviarevolution.scorekeeper
+productName: Trivia Scorekeeper
+copyright: Trivia Revolution
+directories:
+  output: release
+  buildResources: resources
+files:
+  - main.js
+  - preload.js
+  - store.js
+  - offline.html
+  - package.json
+# Auto-update feed: GitHub Releases. The repo must be PUBLIC (or you must ship a read token in the
+# client, which you don't want). Change owner/repo if releases live somewhere else.
+publish:
+  provider: github
+  owner: electricburgers
+  repo: scorekeeper
+mac:
+  category: public.app-category.entertainment
+  icon: resources/icon.png
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  entitlements: resources/entitlements.mac.plist
+  entitlementsInherit: resources/entitlements.mac.plist
+  # arm64 + x64 as separate builds; the .zip is what electron-updater uses on macOS.
+  target:
+    - { target: dmg, arch: [arm64, x64] }
+    - { target: zip, arch: [arm64, x64] }
+  # Notarization runs automatically when APPLE_ID, APPLE_APP_SPECIFIC_PASSWORD and APPLE_TEAM_ID
+  # are set in the environment (see desktop/README.md).
+  notarize: true
+win:
+  icon: resources/icon.png
+  target:
+    - { target: nsis, arch: [x64] }
+  # Unsigned for now: installs fine but SmartScreen warns on first run. See README for signing.
+nsis:
+  oneClick: true
+  perMachine: false
+  deleteAppDataOnUninstall: false

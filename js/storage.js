@@ -12,24 +12,47 @@ const STORAGE_KEY = "trivRev6_session",
 const TRStore = (function () {
   let backing = null,
     persistent = false;
-  try {
-    const k = "__trs_probe__";
-    window.localStorage.setItem(k, "1");
-    window.localStorage.removeItem(k);
-    backing = window.localStorage;
-    persistent = true;
-  } catch (e) {
-    const mem = Object.create(null);
+  /* Desktop app bridge. The Electron shell (desktop/preload.js) exposes window.TRDesktopStore =
+     { snapshot, set(k,v), remove(k) }, backed by one JSON file in the app's user-data folder.
+     Using it instead of localStorage makes saved data independent of which origin the shell
+     happens to be showing (hosted site today, a bundled offline copy later), so the two can
+     never disagree. Reads come from the in-memory snapshot (the API here is synchronous);
+     writes update the snapshot and are forwarded to the shell. Inert in a normal browser. */
+  const bridge = typeof window !== "undefined" ? window.TRDesktopStore : null;
+  if (bridge && bridge.snapshot && typeof bridge.snapshot === "object") {
+    const mem = Object.assign(Object.create(null), bridge.snapshot);
     backing = {
       getItem: (k) => (k in mem ? mem[k] : null),
       setItem: (k, v) => {
         mem[k] = String(v);
+        bridge.set(k, mem[k]);
       },
       removeItem: (k) => {
         delete mem[k];
+        bridge.remove(k);
       },
     };
-    persistent = false;
+    persistent = true;
+  } else {
+    try {
+      const k = "__trs_probe__";
+      window.localStorage.setItem(k, "1");
+      window.localStorage.removeItem(k);
+      backing = window.localStorage;
+      persistent = true;
+    } catch (e) {
+      const mem = Object.create(null);
+      backing = {
+        getItem: (k) => (k in mem ? mem[k] : null),
+        setItem: (k, v) => {
+          mem[k] = String(v);
+        },
+        removeItem: (k) => {
+          delete mem[k];
+        },
+      };
+      persistent = false;
+    }
   }
   return {
     get persistent() {

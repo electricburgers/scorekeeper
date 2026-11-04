@@ -176,20 +176,25 @@ function whenLoaded(window) {
   });
 }
 
-function open(htmlPath, url) {
+function open(htmlPath, url, extraBeforeParse) {
   const dom = new JSDOM(fs.readFileSync(htmlPath, "utf8"), {
     url,
     runScripts: "dangerously",
     resources: new LocalFileResourceLoader(),
     pretendToBeVisual: true,
     virtualConsole: new VirtualConsole().on("jsdomError", () => {}), // CSS-parse noise only
-    beforeParse,
+    beforeParse(window) {
+      beforeParse(window);
+      if (extraBeforeParse) extraBeforeParse(window);
+    },
   });
   return whenLoaded(dom.window);
 }
 
-function loadAppWindow() {
-  return open(path.join(ROOT, "index.html"), ORIGIN + "/index.html");
+// extraBeforeParse(window) runs before any page script, e.g. to inject window.TRDesktopStore the
+// way desktop/preload.js does.
+function loadAppWindow(extraBeforeParse) {
+  return open(path.join(ROOT, "index.html"), ORIGIN + "/index.html", extraBeforeParse);
 }
 // urlSuffix lets a test load the FAQ with a real query string/hash already on the URL (e.g.
 // "?q=wager" or "#q-some-id") — needed to exercise faqApplyQueryParam()/faqOpenLinkedItem()'s

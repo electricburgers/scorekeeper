@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.31 - 2026-11-04
+- **Desktop app groundwork:** new `desktop/` Electron shell (macOS + Windows installers, auto-update via GitHub Releases, keep-screen-awake, offline retry page) that wraps the hosted site. `TRStore` now uses `window.TRDesktopStore` when the shell provides it, so saved data lives in a file instead of per-origin `localStorage`; no change in a normal browser. Added `.github/workflows/desktop.yml`, tests, and lint config for `desktop/`.
+
 ## v21.30 - 2026-11-03
 - **New home:** the site moved from electricburgers.github.io/scorekeeper to https://scorekeeper.triviarevolution.com/ (domain root). Added `CNAME` and a `404.html`; canonical, `og:url` and absolute `og:image`/`twitter:image` tags on the app and FAQ; README and FAQ links updated; service-worker cache bumped to `shell-v21`.
 - **Heads-up:** saved games and settings are stored per web address, so anything saved on the old github.io address does not appear on the new one, and an installed PWA must be reinstalled from the new address.

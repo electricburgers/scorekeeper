@@ -61,7 +61,8 @@ module.exports = [
       "drumroll-pwa/**",
       "js/vendor/**",
       "js/data/xlsx-templates.js",
-      "node_modules/**",
+      "**/node_modules/**",
+      "desktop/release/**",
       "faq/screenshots/**",
       "coverage/**",
     ],
@@ -114,6 +115,28 @@ module.exports = [
     languageOptions: {
       sourceType: "commonjs",
       globals: { require: "readonly", module: "writable" },
+    },
+  },
+  {
+    // Electron shell (desktop/) - Node/CommonJS, not browser code.
+    files: ["desktop/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: "commonjs",
+      globals: {
+        require: "readonly",
+        module: "writable",
+        __dirname: "readonly",
+        process: "readonly",
+        Buffer: "readonly",
+        console: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        URL: "readonly",
+        AbortSignal: "readonly",
+      },
     },
   },
   {

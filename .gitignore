@@ -30,3 +30,5 @@ venv/
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+# Electron build output
+desktop/release/
