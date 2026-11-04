@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.34 - 2026-11-04
+- **Backups start later:** automatic backups now begin only once more than one team has been scored (a roster, or a single team's first tap, no longer uses up one of the 10 slots). Applies to both the after-each-question and the 3-minute snapshots.
+- **Partner Town:** added Neshanic Station to the suggestions list.
+
 ## v21.33 - 2026-11-04
 - **Automatic backups:** the last 10 snapshots of the game are kept in their own storage key, saved after every question that every active team has finished scoring and every 3 minutes while a game is running (skipped when identical to the newest, and never for a roster that hasn't started scoring). Settings > Backups > Restore lists them with time, trigger and questions scored; restoring replaces the game on screen after a confirm and backs the current game up first. Backups survive Clear Session. The timer reads the saved copy, so the guided tour's practice game is never backed up; a full or failing storage drops the oldest snapshot instead of the newest.
 - **Chart button moved:** the score progression chart now opens from Settings > Score progression (or press G) instead of the Export & Data bar.

@@ -75,3 +75,19 @@ describe("rolling backups", () => {
     assert.equal(o.querySelectorAll(".ht-backups li").length, evalIn(window, "loadBackups().length"));
   });
 });
+
+describe("backups start once more than one team has been scored", () => {
+  it("one scored team: no backup; two: backup", async () => {
+    const window = await loadAppWindow();
+    evalIn(window, `TRStore.removeItem(BACKUP_KEY); gameState = freshState(); gameState.teams=[freshTeam("A"),freshTeam("B"),freshTeam("C")]; gameState.teams.forEach(t=>t.scoreGuess=50); gameState.meta.location="Pub"; gameState.meta.hostName="Host"; gameState.meta.quizId="AB-123"; renderAll(); autosave();`);
+    evalIn(window, `cycleW(0,0,0,1);`);
+    assert.equal(evalIn(window, "scoredTeamCount(gameState)"), 1);
+    evalIn(window, `addBackup("timer", TRStore.getItem(STORAGE_KEY));`);
+    assert.equal(evalIn(window, "loadBackups().length"), 0);
+    evalIn(window, `cycleW(0,0,1,2);`);
+    assert.equal(evalIn(window, "scoredTeamCount(gameState)"), 2);
+    evalIn(window, `addBackup("timer", TRStore.getItem(STORAGE_KEY));`);
+    assert.equal(evalIn(window, "loadBackups().length"), 1);
+    window.close();
+  });
+});

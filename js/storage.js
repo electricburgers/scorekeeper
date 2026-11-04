@@ -120,6 +120,23 @@ function completedQuestions(st) {
   }
   return done;
 }
+// Teams with at least one scored answer (a wager or a result) in any Q1-4 of any round.
+function scoredTeamCount(st) {
+  if (!st || !st.teams || !st.rounds) return 0;
+  let n = 0;
+  for (let ti = 0; ti < st.teams.length; ti++) {
+    let any = false;
+    for (let ri = 0; ri < st.rounds.length && !any; ri++) {
+      const qs = (st.rounds[ri] && st.rounds[ri].questions) || [];
+      for (let qi = 0; qi < qs.length && !any; qi++) {
+        const a = qs[qi] && qs[qi][ti];
+        if (a && (a.wager !== undefined || a.correct !== undefined)) any = true;
+      }
+    }
+    if (any) n++;
+  }
+  return n;
+}
 function loadBackups() {
   try {
     const a = JSON.parse(TRStore.getItem(BACKUP_KEY) || "[]");
@@ -137,9 +154,9 @@ function addBackup(why, json) {
   } catch (e) {
     return false;
   }
-  // Only games that have actually started scoring — a roster alone isn't worth one of the 10
-  // slots, and would push real backups out.
-  if (!st || !st.gameStarted || !st.teams || !st.teams.length) return false;
+  // Backups begin once MORE THAN ONE team has been scored — a roster, or a single team's first
+  // tap, isn't worth one of the 10 slots and would push real backups out.
+  if (!st || scoredTeamCount(st) < 2) return false;
   const list = loadBackups();
   if (list[0] && list[0].state === json) return false;
   list.unshift({
