@@ -65,7 +65,7 @@ function toggleShortcutsHelp(force) {
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
-    ["shortcutsOverlay", "chartOverlay"].forEach((id) =>
+    ["shortcutsOverlay", "chartOverlay", "backupsOverlay"].forEach((id) =>
       document.getElementById(id)?.classList.remove("show"),
     );
     return;
@@ -421,4 +421,74 @@ async function shareChartImage() {
   } catch (e) {
     /* share sheet dismissed */
   }
+}
+
+// ---------------------------------------------------------------------------------------------
+// Backups (Settings > Backups): restore one of the rolling snapshots from js/storage.js
+// ---------------------------------------------------------------------------------------------
+const BACKUP_WHY = {
+  question: "After a question",
+  timer: "Every 3 minutes",
+  restore: "Before a restore",
+};
+function backupWhen(ts) {
+  return new Date(ts).toLocaleString([], {
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+function openBackups() {
+  const o = ensureOverlay("backupsOverlay");
+  const list = loadBackups();
+  o.innerHTML =
+    `<div class="audit-modal ht-modal" role="dialog" aria-modal="true" aria-label="Backups">` +
+    `<div class="ht-head"><h2>Backups</h2><button type="button" class="btn" onclick="closeBackups()">Close</button></div>` +
+    `<p class="fr-note">The last ${BACKUP_MAX} snapshots, saved after each finished question and every 3 minutes while a game is running. Restoring replaces the current game (it is backed up first).</p>` +
+    (list.length
+      ? `<ul class="ht-backups">` +
+        list
+          .map(
+            (b, i) =>
+              `<li><div class="ht-b-info"><b>${esc(backupWhen(b.ts))}</b><span>${esc(BACKUP_WHY[b.why] || b.why)} · ${b.q} question${b.q === 1 ? "" : "s"} scored · ${b.teams} team${b.teams === 1 ? "" : "s"}</span></div>` +
+              `<button type="button" class="btn" onclick="restoreBackup(${i})">Restore</button></li>`,
+          )
+          .join("") +
+        `</ul>`
+      : `<p class="fr-note">No backups yet — the first one is saved when a question is fully scored.</p>`) +
+    `</div>`;
+  o.classList.add("show");
+}
+function closeBackups() {
+  document.getElementById("backupsOverlay")?.classList.remove("show");
+}
+async function restoreBackup(i) {
+  const entry = loadBackups()[i];
+  if (!entry) return;
+  const ok = await appConfirm(
+    "Restore the backup from " +
+      backupWhen(entry.ts) +
+      "? This replaces the game on screen with that snapshot (" +
+      entry.q +
+      " question" +
+      (entry.q === 1 ? "" : "s") +
+      " scored). The current game is backed up first.",
+    { okLabel: "Restore" },
+  );
+  if (!ok) return;
+  let restored;
+  try {
+    restored = migrateState(JSON.parse(entry.state));
+  } catch (e) {
+    return appAlert("That backup could not be read.");
+  }
+  addBackup("restore", TRStore.getItem(STORAGE_KEY));
+  gameState = restored;
+  resetBoardUi();
+  autosave();
+  renderAll();
+  closeBackups();
+  closeSettingsPanel();
+  announce("Backup restored");
 }

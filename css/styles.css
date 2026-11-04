@@ -3013,3 +3013,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .ht-dot{width:10px;height:10px;border-radius:50%;flex:none}
 .ht-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .ht-actions [hidden]{display:none}
+.ht-backups{list-style:none;margin:8px 0 0;padding:0}
+.ht-backups li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-light)}
+.ht-b-info{display:flex;flex-direction:column;gap:2px;font-size:.82rem}
+.ht-b-info span{color:var(--text-secondary);font-size:.75rem}

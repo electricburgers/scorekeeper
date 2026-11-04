@@ -86,8 +86,99 @@ const TRStore = (function () {
 // only way to know whether anything changed.
 function persistGameStateNow() {
   const json = JSON.stringify(gameState);
-  if (TRStore.getItem(STORAGE_KEY) === json) return;
-  TRStore.setItem(STORAGE_KEY, json);
+  if (TRStore.getItem(STORAGE_KEY) !== json) TRStore.setItem(STORAGE_KEY, json);
+  return json;
+}
+
+// ===== ROLLING BACKUPS =====
+// The last BACKUP_MAX snapshots of the game, kept in their own storage key so Clear Session / a
+// bad import / a mis-tap can be undone from Settings > Backups. A snapshot is taken (a) when a
+// question becomes fully scored for every active team and (b) every BACKUP_INTERVAL_MS while a
+// game is running. Both copy the string autosave already built, off the tap path (setTimeout 0),
+// and skip it when it's identical to the newest backup. Newest first.
+const BACKUP_KEY = "trivRev6_backups",
+  BACKUP_MAX = 10,
+  BACKUP_INTERVAL_MS = 3 * 60 * 1000;
+// Questions (Q1-4 of every round) that every non-paused team has a wager AND a result for.
+// Pure on a state object so it works on a stored snapshot as well as the live gameState.
+function completedQuestions(st) {
+  if (!st || !st.teams || !st.rounds) return 0;
+  const active = st.teams.reduce((n, t) => n + (t && t.paused ? 0 : 1), 0);
+  if (!active) return 0;
+  let done = 0;
+  for (let ri = 0; ri < st.rounds.length; ri++) {
+    const qs = (st.rounds[ri] && st.rounds[ri].questions) || [];
+    for (let qi = 0; qi < qs.length; qi++) {
+      let n = 0;
+      for (let ti = 0; ti < st.teams.length; ti++) {
+        if (st.teams[ti] && st.teams[ti].paused) continue;
+        const a = qs[qi] && qs[qi][ti];
+        if (a && a.wager !== undefined && a.correct !== undefined) n++;
+      }
+      if (n >= active) done++;
+    }
+  }
+  return done;
+}
+function loadBackups() {
+  try {
+    const a = JSON.parse(TRStore.getItem(BACKUP_KEY) || "[]");
+    return Array.isArray(a) ? a : [];
+  } catch (e) {
+    return [];
+  }
+}
+// why: "question" | "timer" | "restore". Returns true when a new backup was written.
+function addBackup(why, json) {
+  if (!json) return false;
+  let st;
+  try {
+    st = JSON.parse(json);
+  } catch (e) {
+    return false;
+  }
+  // Only games that have actually started scoring — a roster alone isn't worth one of the 10
+  // slots, and would push real backups out.
+  if (!st || !st.gameStarted || !st.teams || !st.teams.length) return false;
+  const list = loadBackups();
+  if (list[0] && list[0].state === json) return false;
+  list.unshift({
+    ts: Date.now(),
+    why,
+    q: completedQuestions(st),
+    teams: st.teams.length,
+    state: json,
+  });
+  list.length = Math.min(list.length, BACKUP_MAX);
+  // Storage can be full (TRStore swallows the error): read it back and, if it didn't stick, drop
+  // the oldest snapshot and try again rather than losing the newest one.
+  while (list.length) {
+    const out = JSON.stringify(list);
+    TRStore.setItem(BACKUP_KEY, out);
+    if (TRStore.getItem(BACKUP_KEY) === out) return true;
+    if (list.length === 1) break;
+    list.pop();
+  }
+  return false;
+}
+function scheduleBackup(why, json) {
+  setTimeout(() => addBackup(why, json), 0);
+}
+let lastCompletedQ = null;
+// Called by autosave() right after a write: a backup whenever the completed-question count goes up.
+function noteQuestionProgress(json, before) {
+  const n = completedQuestions(gameState);
+  const prev = lastCompletedQ === null ? completedQuestions(before) : lastCompletedQ;
+  lastCompletedQ = n;
+  if (n > prev) scheduleBackup("question", json);
+}
+if (typeof window !== "undefined") {
+  // Reads the SAVED copy, not the live gameState — during the guided tour autosave is suspended
+  // and gameState is a practice game that must never be backed up.
+  setInterval(
+    () => addBackup("timer", TRStore.getItem(STORAGE_KEY)),
+    BACKUP_INTERVAL_MS,
+  );
 }
 // autosave() itself stays synchronous — nearly every caller is an onchange/onclick handler
 // (one discrete user action = one commit), and callers throughout the app (loadFromFile,
@@ -102,7 +193,10 @@ function autosave() {
     clearTimeout(autosaveDebounceTimer);
     autosaveDebounceTimer = null;
   }
-  persistGameStateNow();
+  // The previous saved copy is only needed once, to seed the question counter on the first save.
+  const before = lastCompletedQ === null ? loadSaved() : null;
+  const json = persistGameStateNow();
+  noteQuestionProgress(json, before);
 }
 // The one real exception is Staff Names (js/content.js setStaffNames), wired to oninput rather
 // than onchange so both copies of the field stay in sync as the host types — that means one

@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.33 - 2026-11-04
+- **Automatic backups:** the last 10 snapshots of the game are kept in their own storage key, saved after every question that every active team has finished scoring and every 3 minutes while a game is running (skipped when identical to the newest, and never for a roster that hasn't started scoring). Settings > Backups > Restore lists them with time, trigger and questions scored; restoring replaces the game on screen after a confirm and backs the current game up first. Backups survive Clear Session. The timer reads the saved copy, so the guided tour's practice game is never backed up; a full or failing storage drops the oldest snapshot instead of the newest.
+- **Chart button moved:** the score progression chart now opens from Settings > Score progression (or press G) instead of the Export & Data bar.
+
 ## v21.32 - 2026-11-04
 - **Score progression chart:** new Chart button in Export & Data (or press G) opens a running-total line chart by round. Pick any teams (Top 3 / Top 5 / All / None, or tick individually); Download, Copy or Share (where the browser supports it) a 1200x675 PNG with the event name, date, final scores and a ranked legend. Always drawn on a dark card so it looks the same on any theme. New `js/host-tools.js`.
 - **Keyboard shortcuts:** N next unscored question, 1-4 jump to a round, F Final Results, E/R/A/D scoreboard order (entry / shuffle / ascending / descending), G chart, ? list (also Settings > Keyboard shortcuts), Esc closes. Paused while typing in a field, with Ctrl/Cmd/Alt held, or while a dialog or the tour is open.
