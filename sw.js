@@ -68,7 +68,7 @@ const SHELL_FILES=['./','./index.html','./manifest.json','./icons/icon-192.png',
   './js/storage.js','./js/icons.js','./js/content.js','./js/scoring.js','./js/dom-utils.js',
   './js/confirm-dialog.js','./js/team-audit.js','./js/question-timer.js','./js/craft-prize.js',
   './js/export.js',
-  './js/app.js','./js/tutorial-firstrun.js',
+  './js/app.js','./js/host-tools.js','./js/tutorial-firstrun.js',
   // v19.54 lazy-loads this on first Take the Tour click (loadTutorialLib(), js/app.js) rather
   // than a blocking <script> tag — kept here anyway, same as the export libs already were as of
   // v19.51, so a host that has taken the tour once is still covered offline after that.

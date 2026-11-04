@@ -30,7 +30,8 @@ describe("autosave(): stays synchronous, autosaveDebounced() coalesces bursts", 
        TRStore.setItem = (...a) => { window.__writes++; return __orig(...a); };
        gameState = freshState(); addTeam();`, // addTeam() itself autosaves once — not what's under test
     );
-    evalIn(window, "window.__writes = 0; autosave();"); // reset the counter, THEN measure just this call
+    // reset the counter, change something (an identical save is skipped — see the test below), THEN measure just this call
+    evalIn(window, "window.__writes = 0; gameState.meta.hostName = 'Host'; autosave();");
     assert.equal(evalIn(window, "window.__writes"), 1);
     // Already landed — loadSaved() reflects it with no setTimeout/tick needed.
     assert.equal(evalJSON(window, "loadSaved()").teams.length, 1);
@@ -60,10 +61,10 @@ describe("autosave(): stays synchronous, autosaveDebounced() coalesces bursts", 
   it("repeated autosaveDebounced() calls (simulating a typing burst) collapse into a single deferred write reflecting the LAST value, not one write per call", () => {
     evalIn(window, "window.__writes = 0;");
     evalIn(window, `
-      gameState.meta.staffNames = "A";  autosaveDebounced();
-      gameState.meta.staffNames = "Al"; autosaveDebounced();
-      gameState.meta.staffNames = "Ale"; autosaveDebounced();
-      gameState.meta.staffNames = "Alex"; autosaveDebounced();
+      gameState.meta.staffNames = "B";  autosaveDebounced();
+      gameState.meta.staffNames = "Bo"; autosaveDebounced();
+      gameState.meta.staffNames = "Bob"; autosaveDebounced();
+      gameState.meta.staffNames = "Bobby"; autosaveDebounced();
     `);
     assert.equal(evalIn(window, "window.__writes"), 0);
     evalIn(window, "flushAutosave();");
@@ -72,7 +73,12 @@ describe("autosave(): stays synchronous, autosaveDebounced() coalesces bursts", 
       1,
       "four rapid calls must collapse into exactly one persisted write",
     );
-    assert.equal(evalJSON(window, "loadSaved()").meta.staffNames, "Alex");
+    assert.equal(evalJSON(window, "loadSaved()").meta.staffNames, "Bobby");
+  });
+
+  it("an autosave() of state identical to what is already stored skips the storage write", () => {
+    evalIn(window, "autosave(); window.__writes = 0; autosave(); autosave();");
+    assert.equal(evalIn(window, "window.__writes"), 0);
   });
 
   it("a synchronous autosave() call cancels a pending debounced write instead of it firing again later with stale intent", () => {

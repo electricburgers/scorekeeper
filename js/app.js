@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.31"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.32"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 4, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -861,7 +861,40 @@ let lastSBClickAnchorSel = null;
 // way a function declaration is — a render triggered during initial page load would otherwise
 // hit this before its own declaration ran.
 let lastRenderedLeftHTML = null,
+  lastRenderedLeftParts = null,
   lastRenderedSBHTML = null;
+// Swaps only the top-level sections of #mainContent whose markup changed, instead of re-parsing
+// and re-laying-out the whole column on every tap. One score tap changes the question block, its
+// round's badge and the Final Results table — but not Event Details, the Teams list, the other
+// three rounds, the Craft Prize block or Export — so those keep their live DOM (and any
+// uncommitted text typed into one of their fields, which a full innerHTML used to wipe). Falls
+// back to the full innerHTML whenever the section list can't be matched 1:1 to the DOM's
+// children (first render, a section appearing/disappearing, anything else appended to the pane,
+// or a part that isn't exactly one element).
+function patchPaneSections(m, parts, prevParts, full) {
+  if (
+    !prevParts ||
+    prevParts.length !== parts.length ||
+    m.children.length !== parts.length
+  ) {
+    m.innerHTML = full;
+    return;
+  }
+  const swaps = [];
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i] === prevParts[i]) continue;
+    // A plain <div> in THIS document, not a <template>: template contents live in an inert
+    // document, and inline onclick="" handlers on nodes parsed there don't survive the move.
+    const box = document.createElement("div");
+    box.innerHTML = parts[i];
+    if (box.childElementCount !== 1) {
+      m.innerHTML = full;
+      return;
+    }
+    swaps.push([i, box.firstElementChild]);
+  }
+  swaps.forEach(([i, el]) => m.children[i].replaceWith(el));
+}
 // renderLeft() and renderSB() each need one requestAnimationFrame-deferred pass after their own
 // render to re-assert the scroll anchor once layout has fully settled (fonts/container-queries
 // — see either function's own pinAnchor comment). renderAll() calls both back to back, and
@@ -1269,23 +1302,17 @@ function setSortMode(mode) {
   scoreSortMode = mode;
   renderSB();
 }
-// rm: an already-computed rankMap() result, when the caller has one handy (buildScores() below
-// always does) — skips a second full rankMap()/ranked() pass (each team's grandTotal(), each of
-// which itself sums 4 roundSub() calls) over every team purely to re-derive a value the caller
-// already had. Falls back to computing it fresh so any other/future caller without one still
-// works unchanged.
-function getDisplayOrder(rm) {
+// asc/desc read their order straight off ranked() — already sorted by (total, guess-closeness,
+// index), the same key rankMap()'s places are dense on — so this is O(n) instead of a fresh
+// O(n log n) sort over the places. Ties on both keys share a place and fall back to index in
+// both, so the order is identical to sorting by (place, index). Ascending is its reverse, so
+// the "dramatic reveal" still ends on the actual winner.
+function getDisplayOrder() {
   const n = gameState.teams.length;
   if (scoreSortMode === "random" && randomOrder && randomOrder.length === n)
     return randomOrder.slice();
   if (scoreSortMode === "asc" || scoreSortMode === "desc") {
-    // Sorts by rankMap()'s own place number (already tie-broken by score then guess-closeness)
-    // rather than grandTotal alone — otherwise a tied pair could land in an order that
-    // contradicts their #1/#2 rank badges, and Ascending's "dramatic reveal" could end on the
-    // 2nd-place team instead of the actual winner.
-    rm = rm || rankMap();
-    const order = gameState.teams.map((_, i) => i);
-    order.sort((a, b) => rm[a] - rm[b] || a - b);
+    const order = ranked().map((r) => r.index);
     if (scoreSortMode === "asc") order.reverse();
     return order;
   }
@@ -1377,6 +1404,14 @@ function renderLeftBody() {
     : undefined;
   const gs = checkGameStarted();
   let h = "";
+  // h is cut into one string per top-level child of #mainContent (see the patch step at the end
+  // of this function): each cut() closes a section. Only the sections whose markup actually
+  // changed get re-parsed and swapped into the DOM.
+  const parts = [];
+  const cut = () => {
+    if (h) parts.push(h);
+    h = "";
+  };
 
   // Only VISIBLE once scoring has actually begun — before that there's no "current round" to
   // report, and showing it during team setup would just be clutter above Event Details. Still
@@ -1386,6 +1421,7 @@ function renderLeftBody() {
   // real markup — not a guessed placeholder height — the whole time guarantees the space it
   // claims once visible is exactly the space already held for it.
   h += renderMiniProgress(gs);
+  cut();
 
   // Quiz ID's format is free-entry — it never blocks scoring, just hinted: a soft warning
   // when it doesn't match the usual pattern, a green confirmation once it does. Being EMPTY
@@ -1413,6 +1449,7 @@ function renderLeftBody() {
     <div class="field full"><label>Bonus Item (+5)</label><input type="text" maxlength="60" aria-label="Bonus Item description" value="${esc(gameState.meta.bonusItem)}" placeholder="e.g., something red, deck of cards" onchange="gameState.meta.bonusItem=this.value;autosave();"></div>
     <div class="field full"><label>Restaurant Staff</label><textarea class="meta-textarea staff-names-input" maxlength="200" aria-label="Restaurant staff names" rows="2" placeholder="Server / bartender names to shout out" oninput="setStaffNames(this.value)">${esc(gameState.meta.staffNames || "")}</textarea></div>
   </div><p class="fr-note${metaLocked ? "" : " fr-note-pending"}"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Locked once scoring starts, so it can't drift mid-game. Typo? <a href="#" onclick="event.preventDefault();toggleUnlockEventDetails();">Unlock to fix it</a>.</p></div></div>`;
+  cut();
 
   // Flagged the whole game, not just before scoring starts — a guess left blank stops blocking
   // anything once scoring begins, but it still silently shows as "—" in Final Results, which
@@ -1461,6 +1498,7 @@ function renderLeftBody() {
   else
     h += `<p class="fr-note">${MAX_TEAMS}-team max reached — remove a team to add another.</p>`;
   h += `</div></div>`;
+  cut();
 
   for (let ri = 0; ri < roundCount(); ri++) {
     const rn = ri + 1,
@@ -1487,17 +1525,22 @@ function renderLeftBody() {
     if (hasBonusQ(ri)) h += renderBQ(ri);
     if (ri < roundCount() - 1) h += renderBanter("round", "rbot-" + ri, {}); // outro after every round except the last
     h += `</div></div>`;
+    cut();
   }
 
   h += `<div class="section ${collapsedSections.has("sec-final") ? "collapsed" : ""}" id="sec-final"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-final')"><h2>${ICON_FLAG} Final Results</h2><span class="chevron">▼</span></div><div class="section-body">${renderFinalResults()}</div></div>`;
+  cut();
 
   h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><h2>${ICON_BEER} Craft Prize Drawing</h2><span class="chevron">\u25BC</span></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
+  cut();
 
   h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><h2>Export &amp; Data</h2><span class="chevron">▼</span></div><div class="section-body">
-    <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button><a class="btn export-sq jd-upload-btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer">${ICON_FAWKES}<span class="export-sq-label">JD Upload<br>Form</span></a></div>
+    <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button><button class="btn export-sq" onclick="openProgressChart()" title="Score progression chart and shareable image" aria-label="Score progression chart"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="m7 15 4-5 3 3 5-7"/></svg><span class="export-sq-label">Chart</span></button><a class="btn export-sq jd-upload-btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer">${ICON_FAWKES}<span class="export-sq-label">JD Upload<br>Form</span></a></div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="startNewGame();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>
   </div></div>`;
+  cut();
+  h = parts.join("");
 
   // Skipping the write when nothing actually changed avoids a full reparse+repaint of the
   // entire left column on a render that turns out to be a no-op (e.g. two renderAll() calls
@@ -1512,8 +1555,9 @@ function renderLeftBody() {
   // means the anchor's rect can't have moved, so pinAnchor() below measures a delta of ~0 and
   // writes nothing.
   if (h !== lastRenderedLeftHTML) {
-    m.innerHTML = h;
+    patchPaneSections(m, parts, lastRenderedLeftParts, h);
     lastRenderedLeftHTML = h;
+    lastRenderedLeftParts = parts;
   }
   // Keeps --mini-progress-h in sync with .mini-progress's real rendered height, the same way
   // --header-h/--mobile-dock-h already are elsewhere — used by .section/.question-block/
@@ -2209,7 +2253,7 @@ function buildScores() {
   if (!gameState.teams.length)
     return '<div class="scores-list" style="color:var(--text-muted);padding:12px;">Add teams to begin.</div>';
   const rm = rankMap();
-  const order = getDisplayOrder(rm);
+  const order = getDisplayOrder();
   let h = '<div class="scores-list">';
   order.forEach((ti) => {
     const t = gameState.teams[ti],

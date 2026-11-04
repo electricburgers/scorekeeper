@@ -288,7 +288,7 @@ function checkBeerRound(ri, qi) {
 let scoreMemo = null;
 function withScoreMemo(fn) {
   if (scoreMemo) return fn();
-  scoreMemo = { rs: new Map(), gt: new Map(), rk: null };
+  scoreMemo = { rs: new Map(), gt: new Map(), rk: null, rows: null };
   try {
     return fn();
   } finally {
@@ -384,22 +384,38 @@ function ranked() {
   if (scoreMemo) scoreMemo.rk = out;
   return out;
 }
+// One row per team with everything both rankings need: total, bonuses, parsed guess and its
+// distance from the bonus-stripped score (Infinity when there's no guess). ranked() and
+// finalResultsRows() used to each rebuild this and run their own identical sort; now the rows
+// are built once per render pass (memoized like the totals) and finalResultsRows() reuses
+// ranked()'s order instead of sorting a second time.
+function teamScoreRows() {
+  if (scoreMemo && scoreMemo.rows) return scoreMemo.rows;
+  const rows = gameState.teams.map((t, i) => {
+    const total = grandTotal(i);
+    const bonuses = (t.bonusItem ? 5 : 0) + (t.njcb ? 3 : 0);
+    const hasGuess = !(t.scoreGuess === "" || t.scoreGuess == null);
+    const guess = hasGuess ? parseInt(t.scoreGuess, 10) : null;
+    return {
+      index: i,
+      name: t.name || "Team " + (i + 1),
+      total,
+      bonuses,
+      guess,
+      guessDiff: hasGuess ? Math.abs(total - bonuses - guess) : Infinity,
+    };
+  });
+  if (scoreMemo) scoreMemo.rows = rows;
+  return rows;
+}
 function rankedRaw() {
-  return gameState.teams
-    .map((t, i) => {
-      const total = grandTotal(i);
-      const bonuses = (t.bonusItem ? 5 : 0) + (t.njcb ? 3 : 0);
-      const hasGuess = !(t.scoreGuess === "" || t.scoreGuess == null);
-      const guessDiff = hasGuess
-        ? Math.abs(total - bonuses - parseInt(t.scoreGuess, 10))
-        : Infinity;
-      return {
-        index: i,
-        name: t.name || "Team " + (i + 1),
-        total,
-        guessDiff,
-      };
-    })
+  return teamScoreRows()
+    .map((r) => ({
+      index: r.index,
+      name: r.name,
+      total: r.total,
+      guessDiff: r.guessDiff,
+    }))
     .sort(
       (a, b) =>
         b.total - a.total || a.guessDiff - b.guessDiff || a.index - b.index,
@@ -433,27 +449,23 @@ function ordinal(n) {
 }
 function finalResultsRows() {
   const dv = (r) => (r.diff == null ? Infinity : r.diff);
-  const rows = gameState.teams.map((t, i) => {
-    const score = grandTotal(i);
-    const bonuses = (t.bonusItem ? 5 : 0) + (t.njcb ? 3 : 0);
-    const hasG = !(t.scoreGuess === "" || t.scoreGuess == null);
-    const guess = hasG ? parseInt(t.scoreGuess, 10) : null;
-    const diff = hasG ? Math.abs(score - bonuses - guess) : null;
-    // >0 = guess came in over the actual score, <0 = under, 0 = exact — display-only, the
-    // tie-break sort above always uses the unsigned diff.
-    const diffSign = hasG ? Math.sign(guess - (score - bonuses)) : 0;
+  const rows = teamScoreRows().map((r) => {
+    const hasG = r.guess !== null;
+    const score = r.total;
     return {
-      index: i,
-      name: t.name || "Team " + (i + 1),
+      index: r.index,
+      name: r.name,
       score,
-      guess,
-      diff,
-      diffSign,
+      guess: r.guess,
+      diff: hasG ? r.guessDiff : null,
+      // >0 = guess came in over the actual score, <0 = under, 0 = exact — display-only, the
+      // tie-break sort always uses the unsigned diff.
+      diffSign: hasG ? Math.sign(r.guess - (score - r.bonuses)) : 0,
     };
   });
-  const byPlace = rows
-    .slice()
-    .sort((a, b) => b.score - a.score || dv(a) - dv(b) || a.index - b.index);
+  // ranked() is already sorted by (total desc, guess-closeness asc, index) — the exact key this
+  // table sorts on — so the order is read off it in O(n) instead of sorting the rows again.
+  const byPlace = ranked().map((r) => rows[r.index]);
   // Place NUMBER is dense on the (score, diff) compound key — same rule as the sidebar's
   // rankMap(): a closer guess resolves a tied score into its own next place instead of sharing
   // one, so no more than one team can hold 1st/2nd/etc. unless their guesses were ALSO tied.

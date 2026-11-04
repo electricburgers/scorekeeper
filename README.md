@@ -4,7 +4,7 @@ A live scoring tool for trivia nights — a static, no-build-step web app built 
 
 **Live app:** [scorekeeper.triviarevolution.com](https://scorekeeper.triviarevolution.com/)  
 **FAQ & Tips:** [scorekeeper.triviarevolution.com/faq](https://scorekeeper.triviarevolution.com/faq/)  
-**Current version:** v19.49 (as of 2026-08-24) — see [CHANGELOG.md](CHANGELOG.md)
+**Current version:** v21.32 (as of 2026-11-04) — see [CHANGELOG.md](CHANGELOG.md)
 
 ## What it does
 

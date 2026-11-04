@@ -78,8 +78,16 @@ const TRStore = (function () {
   };
 })();
 
+// Skips the write when the stored copy is already byte-identical — a repeat autosave() from the
+// same action (or an edit that didn't change the state, e.g. re-selecting the same value) used
+// to cost a full storage write (a blocking disk flush) for nothing. Comparing against the stored
+// string itself, not a cached copy, means a cleared/removed key or another tab's write can never
+// leave a stale "already saved" flag behind. The stringify stays: state is a few KB, and it's the
+// only way to know whether anything changed.
 function persistGameStateNow() {
-  TRStore.setItem(STORAGE_KEY, JSON.stringify(gameState));
+  const json = JSON.stringify(gameState);
+  if (TRStore.getItem(STORAGE_KEY) === json) return;
+  TRStore.setItem(STORAGE_KEY, json);
 }
 // autosave() itself stays synchronous — nearly every caller is an onchange/onclick handler
 // (one discrete user action = one commit), and callers throughout the app (loadFromFile,

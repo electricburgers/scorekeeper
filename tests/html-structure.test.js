@@ -408,6 +408,7 @@ test("index.html: every onclick=\"fnName(...)\" call references a function defin
     "js/craft-prize.js",
     "js/export.js",
     "js/app.js",
+    "js/host-tools.js",
     "js/tutorial.js",
   );
   const missing = [];

@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.32 - 2026-11-04
+- **Score progression chart:** new Chart button in Export & Data (or press G) opens a running-total line chart by round. Pick any teams (Top 3 / Top 5 / All / None, or tick individually); Download, Copy or Share (where the browser supports it) a 1200x675 PNG with the event name, date, final scores and a ranked legend. Always drawn on a dark card so it looks the same on any theme. New `js/host-tools.js`.
+- **Keyboard shortcuts:** N next unscored question, 1-4 jump to a round, F Final Results, E/R/A/D scoreboard order (entry / shuffle / ascending / descending), G chart, ? list (also Settings > Keyboard shortcuts), Esc closes. Paused while typing in a field, with Ctrl/Cmd/Alt held, or while a dialog or the tour is open.
+- **Performance:** each tap now re-parses only the left-pane sections whose markup changed instead of the whole column (untouched sections keep their DOM and any half-typed text); the scoreboard's ascending/descending order and Final Results read their order off the single memoized ranking instead of sorting again; autosave skips the storage write when the saved copy is already identical.
+
 ## v21.31 - 2026-11-04
 - **Desktop app groundwork:** new `desktop/` Electron shell (macOS + Windows installers, auto-update via GitHub Releases, keep-screen-awake, offline retry page) that wraps the hosted site. `TRStore` now uses `window.TRDesktopStore` when the shell provides it, so saved data lives in a file instead of per-origin `localStorage`; no change in a normal browser. Added `.github/workflows/desktop.yml`, tests, and lint config for `desktop/`.
 
