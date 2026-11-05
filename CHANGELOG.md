@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.45 - 2026-11-05
+- **Theme Night PDF Standings title keeps the theme:** it reads "STANDINGS - THEME NIGHT - SIMPSONS" again (v21.44 had dropped the theme from it). The header GAME box still shows just the theme.
+
 ## v21.44 - 2026-11-05
 - **Theme Night PDF:** the GAME box in the header shows just the theme (e.g. "Simpsons") instead of "Theme Night - Simpsons" (it falls back to "Theme Night" if no theme is named). The Standings title keeps the mode name: "STANDINGS - THEME NIGHT".
 

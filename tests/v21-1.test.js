@@ -54,12 +54,13 @@ describe("exports name the mode in every mode", () => {
       evalIn(window, setup(mode));
       await evalIn(window, "exportPDF()");
       const pdf = evalIn(window, `(function(){const b=[...window.__mockBlobUrls.values()].filter(b=>b.type.includes("pdf")).pop(); return new TextDecoder("latin1").decode(b.parts[0]);})()`);
-      // v21.44: Theme Night's GAME field is just the theme; Standings keeps the mode name.
+      // v21.44/45: Theme Night's GAME field is just the theme; Standings keeps mode + theme.
       const label = mode === "theme" ? "Simpsons" : name;
+      const standings = mode === "theme" ? name + " - Simpsons" : name;
       assert.ok(pdf.includes("(" + label + ")"), "GAME value");
       assert.ok(pdf.includes("(GAME)"));
       assert.ok(!pdf.includes("(THEME)"), "no separate THEME field");
-      assert.ok(pdf.includes("(STANDINGS - " + name.toUpperCase() + ")"));
+      assert.ok(pdf.includes("(STANDINGS - " + standings.toUpperCase() + ")"));
     });
   });
   it("Regular XLSX carries REGULAR TRIVIA in the title cell", async () => {

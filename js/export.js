@@ -529,7 +529,10 @@ async function exportPDF() {
     }
 
     // Theme Night: the header GAME field shows just the theme ("Simpsons"; falls back to "Theme
-    // Night" if no theme is named) while the Standings title keeps the mode label ("Theme Night").
+    // Night" if no theme is named) while the Standings title keeps mode + theme
+    // ("Theme Night - Simpsons").
+    const pdfModeLabel = () =>
+      gameModeName() + (isTheme() && (gameState.meta.themeName || "").trim() ? " - " + gameState.meta.themeName.trim() : "");
     const pdfGameLabel = () =>
       (isTheme() && (gameState.meta.themeName || "").trim()) || gameModeName();
     const doc = new jsPDF({
@@ -889,7 +892,7 @@ async function exportPDF() {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(11);
       setText("000000");
-      doc.text("STANDINGS - " + gameModeName().toUpperCase(), M, y);
+      doc.text("STANDINGS - " + pdfModeLabel().toUpperCase(), M, y);
       y += 12;
       const sHeadY = y;
       SCOLS.forEach((c, ix) => {
