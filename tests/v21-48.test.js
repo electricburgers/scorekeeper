@@ -26,4 +26,14 @@ describe("Game Mode pictograph is visible", () => {
   it("the Game Mode select is trimmed shorter than the 44px touch default", () => {
     assert.match(css, /#gameModeSelect\.theme-select\{[^}]*min-height:2\.25rem/);
   });
+  it("every Game Mode pictograph tint is defined in both the dark (default) and light themes", () => {
+    const lightAt = css.indexOf('[data-theme="light"]{');
+    assert.ok(lightAt > 0);
+    const dark = css.slice(0, lightAt);
+    const light = css.slice(lightAt, lightAt + 6000);
+    for (const v of ["--tint-trophy", "--tint-trophy-2", "--tint-flask", "--tint-theme-2", "--tint-cap"]) {
+      assert.ok(dark.includes(v + ":"), v + " missing in dark");
+      assert.ok(light.includes(v + ":"), v + " missing in light");
+    }
+  });
 });
