@@ -991,15 +991,16 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-mode-theme{--icon-tint:var(--tint-flask);--icon-tint-2:var(--tint-theme-2)}
 .icon-mode-tune{--icon-tint:var(--tint-cap);--icon-tint-2:var(--tint-cap)}
 /* Game Mode row: the dropdown with its current mode's pictograph beside it. */
-.game-mode-picker{display:inline-grid;grid-auto-flow:column;align-items:stretch;gap:8px}
+.game-mode-picker{display:inline-flex;align-items:center;gap:8px}
 /* Pictograph mode: the drawn icon sits beside the select (an <option> can only hold text). Emoji
    mode leaves the span empty and puts the emoji in the option text instead. */
 #gameModeIcon:empty{display:none}
-/* The pictograph is as tall as the select (the row's tallest item) without making the row taller. The
-   picker is a grid so the svg's height:100% resolves against the select's row; aspect-ratio then gives
-   the svg its own width. (v21.47's stretched span + aspect-ratio + absolute child collapsed to 0 width.) */
-#gameModeIcon{display:flex}
-#gameModeIcon .icon-ui,#gameModeIcon .icon-emoji{height:100%;width:auto;aspect-ratio:1}
+/* Fixed-size pictograph (v21.47's stretch/aspect-ratio sizing collapsed to 0 width, and v21.48's grid
+   version overlapped the select on iOS Safari). An explicit square can't depend on browser layout quirks;
+   the select is trimmed on touch screens (16px font, min-height 44px) so the pair stays compact. */
+#gameModeIcon{display:flex;flex-shrink:0}
+#gameModeIcon .icon-ui,#gameModeIcon .icon-emoji{width:2rem;height:2rem;flex-shrink:0}
+#gameModeSelect.theme-select{min-height:2.25rem;padding-top:2px;padding-bottom:2px}
 /* Take the Tour's own icon — a waving hand, since the ℹ️ it had before this read as an
    unlabeled dot at mobile sizes. --accent-gold rather than a bespoke tint: it's already
    contrast-audited for both themes and every color-vision mode (unlike a new one-off hex pair),

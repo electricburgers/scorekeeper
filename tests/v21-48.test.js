@@ -16,11 +16,14 @@ describe("Game Mode pictograph is visible", () => {
   it("the icon span does not rely on aspect-ratio from a stretched height (that resolves to 0 width)", () => {
     assert.doesNotMatch(rule("#gameModeIcon"), /aspect-ratio/);
   });
-  it("the icon is in-flow (an absolutely positioned child gives its span no intrinsic width)", () => {
-    assert.doesNotMatch(css, /#gameModeIcon \.icon-ui[^{]*\{[^}]*position:absolute/);
+  it("the icon has an explicit fixed size (no layout-dependent sizing that overlapped the select on iOS)", () => {
+    assert.match(css, /#gameModeIcon \.icon-ui[^{]*\{[^}]*width:2rem;height:2rem/);
+    assert.doesNotMatch(css, /#gameModeIcon \.icon-ui[^{]*\{[^}]*(position:absolute|aspect-ratio)/);
   });
-  it("the picker is a grid so the svg takes the select's row height and sizes its own width", () => {
-    assert.match(rule(".game-mode-picker"), /display:inline-grid/);
-    assert.match(css, /#gameModeIcon \.icon-ui[^{]*\{[^}]*height:100%[^}]*aspect-ratio:1/);
+  it("the picker is a plain centered flex row", () => {
+    assert.match(rule(".game-mode-picker"), /display:inline-flex;align-items:center/);
+  });
+  it("the Game Mode select is trimmed shorter than the 44px touch default", () => {
+    assert.match(css, /#gameModeSelect\.theme-select\{[^}]*min-height:2\.25rem/);
   });
 });

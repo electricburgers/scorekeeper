@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.49 - 2026-11-05
+- **Game Mode picture no longer overlaps the dropdown (iPhone):** the icon and dropdown in Settings are now a fixed, smaller pair - a 2rem icon beside a shorter dropdown - instead of an icon sized from the dropdown's height.
+
 ## v21.48 - 2026-11-05
 - **Game Mode pictograph is back:** the v21.47 sizing change collapsed the icon beside the Game Mode dropdown to zero width, so it disappeared. It is visible again and still as tall as the dropdown without making the row taller.
 
