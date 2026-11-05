@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.42"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.43"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 5, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1906,13 +1906,13 @@ function sortMoveCount(key, answered) {
   return cur.reduce((c, ti, i) => c + (ti !== fresh[i] ? 1 : 0), 0);
 }
 // The "Sort" button. Grey outline when nothing would move; solid fill + a count badge of how many
-// teams would move when a re-sort would change the order (v21.42).
+// a notification dot when a re-sort would change the order (v21.42, dot-only from v21.43).
 function sortBtnHtml(key, answered, onclick) {
   const moves = sortMoveCount(key, answered);
   const title = moves
     ? `Re-sort: ${moves} team${moves === 1 ? "" : "s"} would move (unanswered teams go to the top)`
     : "Move currently unanswered teams to the top (nothing to re-sort right now)";
-  return `<button class="q-sort-btn${questionSortOrder[key] ? " active" : ""}${moves ? " can-resort" : ""}" onclick="${onclick}" title="${title}" aria-label="Sort by answer${moves ? `, ${moves} team${moves === 1 ? "" : "s"} would move` : ""}">${ICON_SORT}<span class="btn-label">Sort</span>${moves ? `<span class="resort-count" aria-hidden="true">${moves}</span>` : ""}</button>`;
+  return `<button class="q-sort-btn${questionSortOrder[key] ? " active" : ""}${moves ? " can-resort" : ""}" onclick="${onclick}" title="${title}" aria-label="Sort by answer${moves ? `, ${moves} team${moves === 1 ? "" : "s"} would move` : ""}">${ICON_SORT}<span class="btn-label">Sort</span>${moves ? `<span class="resort-dot" aria-hidden="true"></span>` : ""}</button>`;
 }
 function sortQuestion(ri, qi) {
   const key = ri + "-" + qi;

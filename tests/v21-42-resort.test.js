@@ -1,4 +1,4 @@
-// v21.42: the Sort button shows a count badge + solid fill only when a re-sort would move teams.
+// v21.42: the Sort button shows a notification dot + solid fill only when a re-sort would move teams.
 "use strict";
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
@@ -10,13 +10,15 @@ describe("v21.42 Sort button can-re-sort hint", () => {
   after(() => window.close());
   const btn = () => window.document.querySelector("#qblock-0-0 .q-sort-btn");
 
-  it("lights up with a count when answered teams sit above unanswered ones, and quiets after Sort", () => {
+  it("lights up with a dot when answered teams sit above unanswered ones, and quiets after Sort", () => {
     evalIn(window, `gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); gameState.rounds[0].questions[0] = {}; renderAll();`);
     assert.ok(!btn().classList.contains("can-resort"), "nothing answered: nothing to move");
     evalIn(window, `gameState.rounds[0].questions[0][0] = {wager: 1, correct: true}; renderAll();`);
     assert.ok(btn().classList.contains("can-resort"));
-    const n = Number(btn().querySelector(".resort-count").textContent);
-    assert.ok(n >= 2);
+    const dot = btn().querySelector(".resort-dot");
+    assert.ok(dot, "notification dot present");
+    assert.equal(dot.textContent, "", "dot carries no number");
+    assert.ok(!btn().querySelector(".resort-count"));
     evalIn(window, `sortQuestion(0, 0);`);
     assert.ok(!btn().classList.contains("can-resort"), "just sorted: nothing to move");
     assert.ok(btn().classList.contains("active"));
