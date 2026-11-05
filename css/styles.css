@@ -2634,7 +2634,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .sw-select{width:clamp(3.4rem,15cqw,4.4rem);min-width:0;font-size:clamp(.82rem,3.6cqw,1rem)}
 
   /* team-setup grid */
-  .meta-grid{grid-template-columns:1fr}
+  /* v21.35: Date + Quiz ID share one row (both are short fields); everything else stays full width. */
+  .meta-grid{grid-template-columns:max-content minmax(0,1fr)}
+  .meta-grid>.field{grid-column:1/-1}
+  .meta-grid>.field:has(>.date-native-wrap),.meta-grid>.field:has(>.quiz-id-input){grid-column:auto}
+  .meta-grid .quiz-id-input{max-width:100%}
   .team-entry{grid-template-columns:1fr 4.3rem auto;gap:5px}
   .team-entry.has-adj{grid-template-columns:1fr 4.3rem auto auto}
   .check-label{font-size:.72rem;padding:5px 8px;gap:5px}
@@ -3017,3 +3021,23 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .ht-backups li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-light)}
 .ht-b-info{display:flex;flex-direction:column;gap:2px;font-size:.82rem}
 .ht-b-info span{color:var(--text-secondary);font-size:.75rem}
+
+/* v21.35: iOS Safari auto-zooms the page when a focused field's font-size is under 16px (inputs were
+   13.5-14.4px on phones/tablets), leaving the layout shifted and zoomed after typing. Keep the look
+   the same everywhere except touch devices, where fields use 16px. */
+@media (pointer:coarse),(max-width:1024px){
+  input[type="text"],input[type="number"],input[type="date"],input[type="search"],input:not([type]),
+  textarea,select,.date-native,.quiz-id-input,.meta-textarea{font-size:max(16px,1em)}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  /* The mobile .theme-select rule (.85rem) is a class selector and out-ranks the element selectors above. */
+  .theme-select{font-size:16px}
+  /* Text floor: labels, table headers and footer notes were 9-10.8px; nothing readable drops under 11.5px. */
+  label,.team-number,thead th,.team-guess-cell>label,.round-label,.cp-field-label,.cp-script-label,
+  .export-sq-label,.fr-guess-h,.fr-diff-h,.lbl-short,summary,.size-label,.settings-version,
+  .settings-about .about-ver,.aud-rank-of,.aud-meta,.aud-wager,.aud-stat-pct,.fr-note{font-size:max(11.5px,.72rem)}
+  .check-label,.standings-table thead th,.final-table thead th,.settings-about,.settings-about summary,
+  .fr-details summary,.cv-select-arrow,.aud-dot,.aud-eyebrow,.aud-res,.fr-tiebadge,.aud-stat-pct,.aud-dot+*{font-size:max(11.5px,.72rem)}
+  /* Team report close/edit buttons keep their drawn size; an invisible ::after extends the tap area to 44px. */
+  .audit-close,.aud-edit-btn{position:relative}
+  .audit-close::after,.aud-edit-btn::after{content:"";position:absolute;inset:-7px}
+}

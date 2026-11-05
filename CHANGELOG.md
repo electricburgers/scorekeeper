@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.35 - 2026-11-05
+- **Phone/tablet polish:** text fields and dropdowns (including the Theme dropdown) are 16px on touch screens so iOS no longer zooms the page when you tap one; Date and Quiz ID share a row on phones; small labels, table headers and footer notes have an 11.5px minimum; the Team Report close and edit buttons have a full 44px tap area.
+
 ## v21.34 - 2026-11-04
 - **Backups start later:** automatic backups now begin only once more than one team has been scored (a roster, or a single team's first tap, no longer uses up one of the 10 slots). Applies to both the after-each-question and the 3-minute snapshots.
 - **Partner Town:** added Neshanic Station to the suggestions list.
