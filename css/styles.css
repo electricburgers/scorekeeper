@@ -3046,3 +3046,15 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .audit-close,.aud-edit-btn{position:relative}
   .audit-close::after,.aud-edit-btn::after{content:"";position:absolute;inset:-7px}
 }
+
+/* v21.40: A-Z sort button is orange (was cyan like Sort), so Sort / A-Z / Reset read as three different things.
+   Per Color Vision mode: Red-Green turns "red" (Reset) into orange, so A-Z goes yellow there; Blue-Yellow keeps a
+   red-leaning orange (tritans still separate it from the green-for-cyan Sort button). */
+:root{--az-txt:var(--txt-orange);--az-solid:var(--accent-orange);--az-on:var(--on-accent-cyan)}
+[data-theme="light"]{--az-solid:#a84f00}
+[data-theme="dark"][data-cb="1"]{--az-txt:#f0e442;--az-solid:#f0e442;--az-on:#000000}
+[data-theme="light"][data-cb="1"]{--az-txt:#6e5f00;--az-solid:#857200;--az-on:#ffffff}
+[data-theme="dark"][data-cb="2"]{--az-txt:#ff8a5c;--az-solid:#ff8a5c;--az-on:#000000}
+[data-theme="light"][data-cb="2"]{--az-txt:#a94400;--az-solid:#c4510a;--az-on:#ffffff}
+.q-alpha-btn{color:var(--az-txt);border-color:var(--az-solid)}
+.q-alpha-btn.active{background:var(--az-solid);color:var(--az-on)}
