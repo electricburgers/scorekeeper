@@ -1946,6 +1946,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .q-sort-btn:not(.can-resort){background:transparent;color:var(--text-secondary);border-color:var(--border-control)}
 .q-sort-btn.can-resort{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .resort-dot{position:absolute;top:-5px;right:-5px;width:11px;height:11px;box-sizing:border-box;border-radius:50%;background:var(--badge-gold-fg);border:2px solid var(--bg-card);pointer-events:none}
+/* Light themes: --badge-gold-fg is a dull brown/maroon there (it's a text-contrast token), so the dot
+   gets its own brighter pick: orange (3.1-3.6:1 on every light surface; stays distinct from the blue
+   fill in Red-Green mode too) and a vivid magenta in Blue-Yellow mode (3.9-4.5:1). The ring still separates it from the fill. */
+[data-theme="light"] .resort-dot{background:#ea580c}
+[data-theme="light"][data-cb="2"] .resort-dot{background:#e5008a}
 .q-alpha-btn .icon-ui{width:1.15em;height:1.15em}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
 .q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}

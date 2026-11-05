@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.46 - 2026-11-05
+- **Brighter Sort dot in light themes:** the "can re-sort" dot was a dull brown/maroon in light mode; it is now a vivid orange (3.1-3.6:1 on every light surface, still distinct from the blue button in Red-Green mode) and a vivid magenta in Blue-Yellow mode (3.9-4.5:1). Dark themes are unchanged.
+
 ## v21.45 - 2026-11-05
 - **Theme Night PDF Standings title keeps the theme:** it reads "STANDINGS - THEME NIGHT - SIMPSONS" again (v21.44 had dropped the theme from it). The header GAME box still shows just the theme.
 
