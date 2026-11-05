@@ -11,7 +11,7 @@ const css = fs.readFileSync(path.join(__dirname, "..", "css/styles.css"), "utf8"
 describe("Theme row pictograph", () => {
   let window;
   before(async () => { window = await loadAppWindow(); });
-  after(() => { try { window.close(); } catch (e) { /* ignore */ } });
+  after(() => { try { window.close(); } catch { /* ignore */ } });
 
   it("pictograph style: icon beside the button, button holds text only", () => {
     const d = window.document;
