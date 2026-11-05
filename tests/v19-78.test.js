@@ -111,8 +111,9 @@ describe("Theme Night: heading, icons, Try Example", () => {
     const d = window.document;
     assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details - Theme Night");
     const labels = [...d.querySelectorAll("#sec-meta .meta-grid .field label")].map((l) => l.textContent);
-    assert.ok(labels.indexOf("Theme Name") < labels.indexOf("Quiz ID"));
-    assert.ok(labels.indexOf("Theme Name") > labels.indexOf("Date"));
+    // v21.42: Quiz ID sits right after Date (so they share a row); Theme Name follows.
+    assert.ok(labels.indexOf("Theme Name") > labels.indexOf("Quiz ID"));
+    assert.ok(labels.indexOf("Quiz ID") > labels.indexOf("Date"));
     evalIn(window, 'gameState.meta.mode = "regular"; renderAll();');
     assert.equal(d.querySelector("#sec-meta h2").textContent, "Event Details - Regular Trivia");
   });

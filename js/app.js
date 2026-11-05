@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.41"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.42"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 5, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1440,8 +1440,8 @@ function renderLeftBody() {
   const metaLocked = gs && !loadPrefs().unlockEventDetails;
   h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details - ${gameModeName()}</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
     <div class="field"><label>Date</label><div class="date-native-wrap"><input type="date" class="date-native" aria-label="Date" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"><span class="date-display-text${gameState.meta.date ? "" : " is-placeholder"}">${esc(isoToPretty(gameState.meta.date) || "Select date")}</span></div></div>
-    ${isTheme() ? `<div class="field full${themeInvalid ? " field-invalid" : ""}"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Music, Simpsons, Star Wars" onchange="gameState.meta.themeName=this.value;autosave();renderLeft();">${themeInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>` : ""}
     <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" maxlength="24" aria-label="Quiz ID" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
+    ${isTheme() ? `<div class="field full${themeInvalid ? " field-invalid" : ""}"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Music, Simpsons, Star Wars" onchange="gameState.meta.themeName=this.value;autosave();renderLeft();">${themeInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>` : ""}
     <div class="field${hostInvalid ? " field-invalid" : ""}"><label>Host Name</label><input type="text" maxlength="40" aria-label="Host Name" value="${esc(gameState.meta.hostName || "")}" placeholder="Who's hosting" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.hostName=this.value;autosave();renderLeft();">${hostInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
     <div class="field full${locInvalid ? " field-invalid" : ""}"><label>Location</label><input type="text" maxlength="60" aria-label="Location" list="locationList" autocomplete="off" value="${esc(gameState.meta.location)}" placeholder="Bar name — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.location=this.value;autosave();renderLeft();">${locInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>
     <div class="field"><label>Craft Partner</label><input type="text" maxlength="50" aria-label="Craft Partner" list="craftPartnerList" autocomplete="off" value="${esc(gameState.meta.craftPartner)}" placeholder="Brewery — search or type your own" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.craftPartner=this.value;autosave();"></div>
@@ -1775,7 +1775,7 @@ function renderWQ(ri, qi) {
           ? `${ICON_DONE} Done`
           : qs.total - qs.done + " left";
 
-  const sortBtns = `<button class="q-sort-btn${questionSortOrder[qKey] ? " active" : ""}" onclick="sortQuestion(${ri},${qi})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-alpha-btn${qAlpha(qKey) ? " active" : ""}" data-state="${qAlpha(qKey) || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(qKey) === "az" ? "A to Z" : qAlpha(qKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(qKey))}</button><button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
+  const sortBtns = `${sortBtnHtml(qKey, (ti) => qAnswered(ri, qi, ti), `sortQuestion(${ri},${qi})`)}<button class="q-alpha-btn${qAlpha(qKey) ? " active" : ""}" data-state="${qAlpha(qKey) || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(qKey) === "az" ? "A to Z" : qAlpha(qKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(qKey))}</button><button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
   let h = `<div class="${blockCls}" id="qblock-${ri}-${qi}">`;
 
   // Collapsible header
@@ -1879,12 +1879,44 @@ function toggleQuestion(ri, qi) {
     if (el) el.classList.toggle("q-collapsed");
   });
 }
+// "Answered" per sort kind, shared by the sort actions and the Sort button's can-re-sort hint.
+function qAnswered(ri, qi, ti) {
+  const a = gameState.rounds[ri].questions[qi][ti];
+  return !!(a && a.wager !== undefined && a.correct !== undefined);
+}
+function bonusAnswered(ri, ti) {
+  return gameState.rounds[ri].bonus[ti] != null;
+}
+function swAnswered(type, ti) {
+  const d = wagerStore(type)[ti];
+  return !!(d && d.wager != null && d.wager !== "" && d.correct != null);
+}
+// How many (non-paused) teams would change position if Sort ran right now: current order (the
+// last Sort's, else entry order, plus any late-added teams) vs. unanswered-first. 0 = nothing to re-sort.
+function sortMoveCount(key, answered) {
+  const n = gameState.teams.length;
+  const active = (ti) => !gameState.teams[ti].paused;
+  const entry = gameState.teams.map((_, ti) => ti);
+  const saved = (questionSortOrder[key] || []).filter((ti) => ti < n);
+  const have = new Set(saved);
+  const cur = saved.concat(entry.filter((ti) => !have.has(ti))).filter(active);
+  const fresh = entry
+    .filter(active)
+    .sort((a, b) => (answered(a) ? 1 : 0) - (answered(b) ? 1 : 0) || a - b);
+  return cur.reduce((c, ti, i) => c + (ti !== fresh[i] ? 1 : 0), 0);
+}
+// The "Sort" button. Grey outline when nothing would move; solid fill + a count badge of how many
+// teams would move when a re-sort would change the order (v21.42).
+function sortBtnHtml(key, answered, onclick) {
+  const moves = sortMoveCount(key, answered);
+  const title = moves
+    ? `Re-sort: ${moves} team${moves === 1 ? "" : "s"} would move (unanswered teams go to the top)`
+    : "Move currently unanswered teams to the top (nothing to re-sort right now)";
+  return `<button class="q-sort-btn${questionSortOrder[key] ? " active" : ""}${moves ? " can-resort" : ""}" onclick="${onclick}" title="${title}" aria-label="Sort by answer${moves ? `, ${moves} team${moves === 1 ? "" : "s"} would move` : ""}">${ICON_SORT}<span class="btn-label">Sort</span>${moves ? `<span class="resort-count" aria-hidden="true">${moves}</span>` : ""}</button>`;
+}
 function sortQuestion(ri, qi) {
   const key = ri + "-" + qi;
-  const answered = (ti) => {
-    const a = gameState.rounds[ri].questions[qi][ti];
-    return !!(a && a.wager !== undefined && a.correct !== undefined);
-  };
+  const answered = (ti) => qAnswered(ri, qi, ti);
   questionSortOrder[key] = gameState.teams
     .map((_, ti) => ti)
     .sort((a, b) => {
@@ -1915,7 +1947,7 @@ function resetQuestionSort(ri, qi) {
 }
 function sortBonusQuestion(ri) {
   const key = "b" + ri;
-  const answered = (ti) => gameState.rounds[ri].bonus[ti] != null;
+  const answered = (ti) => bonusAnswered(ri, ti);
   questionSortOrder[key] = gameState.teams
     .map((_, ti) => ti)
     .sort((a, b) => {
@@ -1936,11 +1968,7 @@ function resetBonusQuestionSort(ri) {
 }
 function sortSpecialWager(type) {
   const key = "sw-" + type;
-  const data = wagerStore(type);
-  const answered = (ti) => {
-    const d = data[ti];
-    return !!(d && d.wager != null && d.wager !== "" && d.correct != null);
-  };
+  const answered = (ti) => swAnswered(type, ti);
   questionSortOrder[key] = gameState.teams
     .map((_, ti) => ti)
     .sort((a, b) => {
@@ -1998,7 +2026,7 @@ function renderBQ(ri) {
   if (isCollapsedBQ) blockCls += " bq-collapsed";
   const bqStyle = BONUS_Q_STYLE[ri] || { cls: "" };
   const bqKey = "b" + ri;
-  const sortBtns = `<button class="q-sort-btn${questionSortOrder[bqKey] ? " active" : ""}" onclick="sortBonusQuestion(${ri})" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(bqKey))}</button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
+  const sortBtns = `${sortBtnHtml(bqKey, (ti) => bonusAnswered(ri, ti), `sortBonusQuestion(${ri})`)}<button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(bqKey))}</button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
   let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right">${sortBtns}</div></div><div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
@@ -2095,7 +2123,7 @@ function renderSpecialWager(type) {
   // ignoring the toggle entirely, so turning the setting Off didn't hide it here like it does
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
-  const sortBtns = `<button class="q-sort-btn${questionSortOrder[swKey] ? " active" : ""}" onclick="sortSpecialWager('${type}')" title="Move currently unanswered teams to the top (one-time, click again to re-sort)" aria-label="Sort by answer">${ICON_SORT}<span class="btn-label">Sort</span></button><button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(swKey))}</button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
+  const sortBtns = `${sortBtnHtml(swKey, (ti) => swAnswered(type, ti), `sortSpecialWager('${type}')`)}<button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(swKey))}</button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
   let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}${sortBtns}</div></div>`;
   // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
   // badge is two inches away and says the same thing, and the whole block is already washed gold

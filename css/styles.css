@@ -1936,6 +1936,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .q-sort-btn,.q-alpha-btn{background:transparent;color:var(--txt-cyan);border-color:var(--accent-cyan-solid)}
 .q-sort-btn.active,.q-alpha-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan)}
 .q-sort-btn:hover,.q-alpha-btn:hover{filter:brightness(1.1)}
+/* v21.42: Sort tells you when a re-sort would change the order. Nothing to move = quiet grey
+   outline (even right after a sort); something would move = solid fill plus a count badge of how
+   many teams. The badge is a shape + number, so it reads in every Color Vision mode. */
+.q-sort-btn{position:relative}
+.q-sort-btn:not(.can-resort){background:transparent;color:var(--text-secondary);border-color:var(--border-control)}
+.q-sort-btn.can-resort{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
+.resort-count{position:absolute;top:-7px;right:-7px;min-width:15px;height:15px;padding:0 3px;box-sizing:border-box;border-radius:8px;background:var(--badge-gold-fg);color:var(--on-badge);border:1.5px solid var(--bg-card);font-size:.6rem;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .q-alpha-btn .icon-ui{width:1.15em;height:1.15em}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
 .q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
@@ -3046,3 +3053,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .audit-close,.aud-edit-btn{position:relative}
   .audit-close::after,.aud-edit-btn::after{content:"";position:absolute;inset:-7px}
 }
+
+/* v21.42: group headings inside Advanced Settings. */
+.settings-group-label{margin:14px 0 2px;padding-top:12px;border-top:1px solid var(--border-light);font-family:var(--font-display);font-size:max(11.5px,.7rem);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.settings-group-label:first-child{margin-top:4px;padding-top:0;border-top:0}

@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.42 - 2026-11-05
+- **Sort button shows when it can re-sort:** on every question, the bonus row and the wagers, Sort fills in solid with a small count badge (how many teams would move) when running it again would change the order, and is a quiet grey outline when there is nothing to re-sort. The badge is a number, so it works in every theme and Color Vision mode.
+- **Advanced Settings grouped:** headings for Display (Icon Style moved here), Scoring, Timer, Craft Prize and Tools (Score progression and Keyboard shortcuts moved here).
+- **Theme Night Event Details:** Quiz ID now sits right after Date (so they share a row) and Theme Name follows; the Team Report header also shows the theme name.
+
 ## v21.41 - 2026-11-05
 - **A-Z button back to blue:** reverted v21.40's orange A-Z button (and its Color Vision palettes); it is cyan/blue again like Sort. The Sort / A-Z / Reset order from v21.39 stays.
 
