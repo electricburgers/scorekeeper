@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.38 - 2026-11-05
+- **Bigger A-Z buttons:** the A-Z / Z-A sort icon is larger (2.7em, was 1.7em) on every A-Z button on phones — Teams, each question, bonus and wagers.
+
 ## v21.37 - 2026-11-05
 - **Date box still overlapped Quiz ID on iPhone (real fix):** iOS Safari's date input ignores normal width rules, so on phones it is now filled into a wrapper that the grid column sizes (the input's own width can no longer push into Quiz ID), with Safari's native sizing turned off. Covered by new tests.
 

@@ -2661,7 +2661,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .q-header,.sw-header{flex-wrap:nowrap}
   .q-header-right{flex-basis:auto;flex-wrap:nowrap;column-gap:10px;justify-content:flex-end;margin-left:auto}
   .q-header-left,.sw-header-left{min-width:0}
-  .q-alpha-btn .icon-ui{width:1.7em;height:1.7em}
+  /* v21.38: A-Z/Z-A pictograph 2.7em (was 1.7em) so it reads clearly in the ~41px button. */
+  .q-alpha-btn .icon-ui{width:2.7em;height:2.7em}
   .q-badge,.round-badge{font-size:.8rem}
   /* Sort/Reset drop their text label and shrink to icon-only squares here so the correct/
      incorrect stat pills (which carry the count+% the host actually needs) always have room
