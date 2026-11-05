@@ -31,7 +31,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.49"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.50"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 5, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -196,11 +196,15 @@ function applyPrefs() {
   if (dn === "normal") document.documentElement.removeAttribute("data-density");
   else document.documentElement.setAttribute("data-density", dn);
   const tb = document.getElementById("themeToggle");
-  if (tb)
-    tb.innerHTML =
-      p.theme === "light"
-        ? THEME_ICON_SUN + " Light"
-        : THEME_ICON_MOON + " Dark";
+  if (tb) {
+    // Pictograph style: the sun/moon sits beside the button (Game Mode row's layout); Emoji style keeps
+    // the emoji inside the button, since an emoji that size would look out of place.
+    const emoji = p.iconStyle === "emoji";
+    const ti = document.getElementById("themeIcon");
+    const themeIcon = p.theme === "light" ? THEME_ICON_SUN : THEME_ICON_MOON;
+    if (ti) ti.innerHTML = emoji ? "" : themeIcon;
+    tb.innerHTML = (emoji || !ti ? themeIcon + " " : "") + (p.theme === "light" ? "Light" : "Dark");
+  }
   const cbm = p.cbMode || 0;
   if (cbm) document.documentElement.setAttribute("data-cb", String(cbm));
   else document.documentElement.removeAttribute("data-cb");

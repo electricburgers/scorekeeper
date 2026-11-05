@@ -609,6 +609,15 @@ button,[role="button"]{touch-action:manipulation}
 #themeToggle .icon-sun,#faqThemeToggle .icon-sun{color:var(--sun-ray)}
 #themeToggle .icon-sun circle,#faqThemeToggle .icon-sun circle{fill:var(--sun-disc);stroke:var(--sun-ray);stroke-width:2}
 #themeToggle .icon-moon,#faqThemeToggle .icon-moon{color:var(--txt-cyan)}
+/* Settings > Theme: the sun/moon beside the button, the same 2rem square as the Game Mode pictograph. */
+#themeIcon{display:flex;flex-shrink:0;margin-right:4px}
+#themeIcon:empty{display:none}
+#themeIcon .icon-sun,#themeIcon .icon-moon{width:2rem;height:2rem;flex-shrink:0}
+#themeIcon .icon-sun{color:var(--sun-ray)}
+#themeIcon svg path{fill:currentColor}
+#themeIcon svg line{stroke:currentColor}
+#themeIcon .icon-sun circle{fill:var(--sun-disc);stroke:var(--sun-ray);stroke-width:2}
+#themeIcon .icon-moon{color:var(--txt-cyan)}
 /* Hidden by default (desktop's multi-column grid rarely needs to scroll, so a heading here would
    just be dead weight) — shown only in the mobile single-column layout below, where Advanced
    Settings expanding can push the panel well past the viewport height and the "Theme" row
