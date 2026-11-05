@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.41 - 2026-11-05
+- **A-Z button back to blue:** reverted v21.40's orange A-Z button (and its Color Vision palettes); it is cyan/blue again like Sort. The Sort / A-Z / Reset order from v21.39 stays.
+
 ## v21.40 - 2026-11-05
 - **Orange A-Z button:** the A-Z / Z-A sort button is now orange (was cyan like Sort) so Sort, A-Z and Reset each look different. Color Vision modes get their own picks: Red-Green uses yellow (Reset turns orange there), Blue-Yellow uses a red-leaning orange; contrast is checked in every theme and mode.
 
