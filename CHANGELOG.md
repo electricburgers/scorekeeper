@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.44 - 2026-11-05
+- **Theme Night PDF:** the GAME box in the header shows just the theme (e.g. "Simpsons") instead of "Theme Night - Simpsons" (it falls back to "Theme Night" if no theme is named). The Standings title keeps the mode name: "STANDINGS - THEME NIGHT".
+
 ## v21.43 - 2026-11-05
 - **Sort "can re-sort" hint is a plain dot:** the count badge from v21.42 is now a small notification dot with no number, on the corner of the filled-in Sort button. Its color (yellow in dark, deep amber in light, pink/magenta in Blue-Yellow mode) is at least 5.1:1 against every card and page surface in all six theme x Color Vision modes, and a 2px card-colored ring keeps it distinct from the button fill.
 
