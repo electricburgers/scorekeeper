@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.39 - 2026-11-05
+- **Sort button moved left:** on every question, the bonus row and the wagers, "move unanswered teams to the top" now sits first (left of A-Z), so Reset is no longer next to it and is harder to hit by accident.
+
 ## v21.38 - 2026-11-05
 - **Bigger A-Z buttons:** the A-Z / Z-A sort icon is larger (2.7em, was 1.7em) on every A-Z button on phones — Teams, each question, bonus and wagers.
 
