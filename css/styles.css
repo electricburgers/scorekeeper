@@ -2635,10 +2635,12 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 
   /* team-setup grid */
   /* v21.35: Date + Quiz ID share one row (both are short fields); everything else stays full width. */
-  .meta-grid{grid-template-columns:max-content minmax(0,1fr)}
-  .meta-grid>.field{grid-column:1/-1}
+  /* Equal, shrinkable columns: iOS date inputs report a wide intrinsic min-width, which with a max-content column made the Date box spill over Quiz ID on a real iPhone. */
+  .meta-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .meta-grid>.field{grid-column:1/-1;min-width:0}
   .meta-grid>.field:has(>.date-native-wrap),.meta-grid>.field:has(>.quiz-id-input){grid-column:auto}
-  .meta-grid .quiz-id-input{max-width:100%}
+  .meta-grid .quiz-id-input,.meta-grid .date-native-wrap,.meta-grid .date-native{width:100%;max-width:100%;min-width:0;box-sizing:border-box}
+  .meta-grid .date-native-wrap{display:block}
   .team-entry{grid-template-columns:1fr 4.3rem auto;gap:5px}
   .team-entry.has-adj{grid-template-columns:1fr 4.3rem auto auto}
   .check-label{font-size:.72rem;padding:5px 8px;gap:5px}
