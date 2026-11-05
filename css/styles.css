@@ -991,11 +991,15 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-mode-theme{--icon-tint:var(--tint-flask);--icon-tint-2:var(--tint-theme-2)}
 .icon-mode-tune{--icon-tint:var(--tint-cap);--icon-tint-2:var(--tint-cap)}
 /* Game Mode row: the dropdown with its current mode's pictograph beside it. */
-.game-mode-picker{display:inline-flex;align-items:center;gap:8px}
+.game-mode-picker{display:inline-flex;align-items:stretch;gap:8px}
 /* Pictograph mode: the drawn icon sits beside the select (an <option> can only hold text). Emoji
    mode leaves the span empty and puts the emoji in the option text instead. */
 #gameModeIcon:empty{display:none}
-.game-mode-picker .icon-ui,.game-mode-picker .icon-emoji{flex-shrink:0;width:1.2rem;height:1.2rem;font-size:1.1rem;line-height:1}
+/* The pictograph is as tall as the select (the row's tallest item) without ever making the row taller:
+   the span stretches to the select's height, aspect-ratio makes it square, and the icon is absolutely
+   positioned inside so it adds nothing to the row's own height. */
+#gameModeIcon{position:relative;flex-shrink:0;align-self:stretch;aspect-ratio:1}
+#gameModeIcon .icon-ui,#gameModeIcon .icon-emoji{position:absolute;inset:0;width:100%;height:100%;font-size:1.3rem;line-height:1;display:flex;align-items:center;justify-content:center}
 /* Take the Tour's own icon — a waving hand, since the ℹ️ it had before this read as an
    unlabeled dot at mobile sizes. --accent-gold rather than a bespoke tint: it's already
    contrast-audited for both themes and every color-vision mode (unlike a new one-off hex pair),
