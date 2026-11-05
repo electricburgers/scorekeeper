@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.37 - 2026-11-05
+- **Date box still overlapped Quiz ID on iPhone (real fix):** iOS Safari's date input ignores normal width rules, so on phones it is now filled into a wrapper that the grid column sizes (the input's own width can no longer push into Quiz ID), with Safari's native sizing turned off. Covered by new tests.
+
 ## v21.36 - 2026-11-05
 - **Date/Quiz ID overlap fixed:** on a real iPhone the Date box spilled over the Quiz ID box when they shared a row; they now sit in two equal columns that shrink to fit.
 
