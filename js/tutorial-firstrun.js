@@ -1,3 +1,11 @@
+/* ==========================================================================
+   js/tutorial-firstrun.js — offers the tour to first-time visitors  (READ ME FIRST)
+
+   On every page load it checks a localStorage flag (TUTORIAL_SEEN_KEY) and whether a saved game
+   exists; for a genuine first-time visitor it shows a small 'New here? Take the tour.' card.
+   dismissTutorialFirstRun() records that it was seen. Split out of tutorial.js so the big tour
+   file can stay lazy-loaded.
+   ========================================================================== */
 "use strict";
 /* Tiny, deliberately-EAGER companion to js/tutorial.js (the ~1400-line guided-tour engine,
    which is now lazy-loaded on first actual use — see loadTutorialLib()/startTutorial() in

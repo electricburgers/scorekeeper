@@ -1,3 +1,11 @@
+/* ==========================================================================
+   js/question-timer.js — the countdown TIMER widget  (READ ME FIRST)
+
+   A 1–15 minute countdown (duration chosen in Settings). toggleQTimer / resetQTimer / bumpQTimer
+   are the buttons; tickQTimer() runs every 200ms (setInterval at the bottom of app.js) and
+   updates the display, colour and optional pulse as time runs low. It compares against a saved
+   end timestamp rather than counting ticks, so it stays accurate if the tab is throttled.
+   ========================================================================== */
 "use strict";
 
 

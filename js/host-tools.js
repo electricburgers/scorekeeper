@@ -1,3 +1,13 @@
+/* ==========================================================================
+   js/host-tools.js — HOST EXTRAS: keyboard shortcuts, progress chart, backups dialog  (READ ME FIRST)
+
+   Loaded after app.js because it only uses things app.js defines.
+     - SHORTCUT_LIST + the '?' help overlay; shortcutsBlocked() stops letter shortcuts while typing.
+     - Score progression chart: progressionData() computes each team's running score by round,
+       drawChartCanvas() paints it on a <canvas> (no chart library), and the download/copy/share
+       functions turn it into an image.
+     - Backups dialog: openBackups()/restoreBackup() list and restore the snapshots made by storage.js.
+   ========================================================================== */
 "use strict";
 
 // ===== HOST TOOLS: keyboard shortcuts + score progression chart / shareable image =====

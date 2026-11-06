@@ -1,3 +1,14 @@
+/* ==========================================================================
+   js/craft-prize.js — CRAFT PRIZE DRAWING and the drumroll sound engine  (READ ME FIRST)
+
+   Two jobs in one file:
+     1. AUDIO (top half): Web Audio API code that loads the .wav files from assets/audio/ and plays
+        drumroll start -> loop -> end/finale -> horn, with fades. Web Audio is used instead of
+        <audio> tags because it starts instantly with no lag.
+     2. THE DRAWING (bottom half): picks a random winner from craftEligiblePool() (teams not in the
+        top places), runs the countdown, and renderCraftPrizeBlock() builds that section's HTML.
+   Also: copy/export the eligible team list for use in other apps.
+   ========================================================================== */
 "use strict";
 
 // Craft prize randomizer (transient — not persisted across reload)

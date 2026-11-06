@@ -1,3 +1,11 @@
+/* ==========================================================================
+   js/icons.js — ICONS: every SVG picture used in the app, plus an emoji twin of each  (READ ME FIRST)
+
+   Settings > Icon Style lets the host swap drawn SVG 'pictographs' for plain emoji. So each icon
+   exists twice: ICON_X_PICT (SVG string) and ICON_X_EMOJI (a <span> with an emoji). The
+   un-suffixed name (e.g. ICON_X) is a `let` that points at whichever style is active, and gets
+   reassigned when the style toggles. Other files drop these strings into their HTML templates.
+   ========================================================================== */
 "use strict";
 
 // Inline SVG (rect+path, colored via .wager-badge.bg-correct svg in styles.css) rather than the

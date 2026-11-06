@@ -1,3 +1,16 @@
+/* ==========================================================================
+   js/storage.js — SAVING: localStorage, autosave, backups, save/load files, import  (READ ME FIRST)
+
+     - TRStore: a safe wrapper around localStorage. If the browser blocks it (e.g. opening the
+       file straight from disk), it falls back to memory so the app still runs. The Electron
+       desktop app plugs in its own file-based storage here too.
+     - autosave()/autosaveDebounced(): write gameState to storage after every change.
+     - addBackup()/loadBackups(): keeps the last 10 automatic snapshots (Settings > Backups).
+     - saveToFile()/loadFromFile(): download/upload the game as a .json file.
+     - importTeamNames()/applyImport(): bring team names (never scores) over from an old game file.
+     - loadSampleGame(): the 'Try Example' button; loads a fake finished game.
+   Storage keys are named 'trivRev6_*' (STORAGE_KEY, PREFS_KEY, BACKUP_KEY).
+   ========================================================================== */
 "use strict";
 const STORAGE_KEY = "trivRev6_session",
   PREFS_KEY = "trivRev6_prefs",

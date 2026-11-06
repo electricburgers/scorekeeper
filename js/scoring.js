@@ -1,3 +1,20 @@
+/* ==========================================================================
+   js/scoring.js — THE RULES: point values, game modes, and every score calculation  (READ ME FIRST)
+
+   Mostly 'pure' functions: give them gameState, get numbers back. They do not touch the page.
+
+     - ROUND_WAGERS etc.: the point values a team may wager on each question (e.g. round 1 uses 1,2,3,4).
+     - gameMode()/isTheme()/isTune(): Regular Trivia vs Theme Night vs Name That Tune change the
+       number of rounds and which special wagers exist.
+     - freshState()/freshTeam(): the SHAPE of a new game. Read freshState() to learn what
+       gameState contains: meta (date, location...), teams[], rounds[], wagers, etc.
+     - migrateState(): upgrades/cleans a saved game from an older version so old files still load.
+     - roundSub(ti, ri), htPts, fwPts, grandTotal(ti): points for one team in one round / overall.
+       'ti' = team index, 'ri' = round index, 'qi' = question index (used everywhere in the app).
+     - ranked()/rankMap(): sort teams into places (1st, 2nd...), handling ties.
+     - withScoreMemo(): caches totals during ONE render so they aren't recomputed per team per pane.
+     - roundProgress/qScored: how much of a round has been scored (drives the 'N left' badges).
+   ========================================================================== */
 "use strict";
 
 const ROUND_WAGERS = [

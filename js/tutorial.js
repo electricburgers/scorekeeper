@@ -1,3 +1,13 @@
+/* ==========================================================================
+   js/tutorial.js — the guided TOUR ('Take the Tour' button)  (READ ME FIRST)
+
+   Lazy-loaded by startTutorial() in app.js the first time it's needed. It swaps in a throwaway
+   practice game with 5 fake teams (by reassigning the global `gameState`), wraps a few app.js
+   functions like renderAll so it can watch what the host does, and spotlights each step with
+   overlays and tooltips (styles in css/tutorial.css). It works because every file shares one
+   global scope. Everything lives inside one `Tutorial` object built by an IIFE (a function that
+   runs immediately), which keeps its variables private.
+   ========================================================================== */
 /* TUTORIAL MODE
    Spotlight walkthrough that runs a throwaway 5-team practice game start to finish, automating
    the tedious parts so the tour takes minutes instead of the length of a real match.

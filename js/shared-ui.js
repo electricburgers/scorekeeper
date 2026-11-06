@@ -1,3 +1,10 @@
+/* ==========================================================================
+   js/shared-ui.js — code SHARED by the app and the FAQ site  (READ ME FIRST)
+
+   Both index.html and faq/index.html load this first. It holds the font-size list and the
+   Color Vision dropdown logic so the two pages can't drift apart. Each page wraps these in its
+   own tiny functions (toggleCvMenu in app.js, faqToggleCvMenu in faq.js).
+   ========================================================================== */
 /* SHARED UI — logic identical between the main app (js/app.js, index.html) and the FAQ
    (faq/js/faq.js, faq/index.html), loaded as a plain <script> by both pages before their own.
 

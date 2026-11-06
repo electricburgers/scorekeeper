@@ -1,3 +1,36 @@
+/* ==========================================================================
+   js/app.js — THE MAIN FILE: game state, rendering, click handlers, startup  (READ ME FIRST)
+
+   What this app is: a scoreboard for a live trivia night. There is NO framework and NO build step.
+   index.html holds a mostly-empty page; this file fills it in by building HTML strings and
+   assigning them to element.innerHTML.
+
+   The core loop (everything else is a variation on it):
+     1. A button in the HTML has onclick="cycleW(...)" (a function in this file).
+     2. That function changes the data in the global object `gameState`.
+     3. It calls autosave() (saves gameState to localStorage) and renderAll()/renderLeft().
+     4. render* functions read gameState and rebuild the HTML for the page. Nothing is
+        'remembered' in the DOM; the DOM is always re-drawn from gameState.
+
+   Why no import/export? The files in index.html are classic <script> tags, so every top-level
+   function/const in every file is a global shared by all the others. That is why this file can
+   call roundSub() (scoring.js) or autosave() (storage.js) without importing anything.
+
+   Rough order of this file, top to bottom:
+     - Constants + saved PREFERENCES (theme, text size, toggles)  -> loadPrefs/savePrefs/applyPrefs
+     - Game-mode switching (Regular / Theme Night / Name That Tune)
+     - The global `gameState` and UI-only state (which sections are collapsed, sort order)
+     - Resume banner, new game, tutorial launch
+     - STANDINGS + FINAL RESULTS rendering
+     - renderAll() / renderLeft(): builds the big left-hand column (event details, teams,
+       4 rounds of questions, bonus, halftime, final, craft prize, export)
+     - Per-question / bonus / special-wager renderers (renderWQ, renderBQ, renderSpecialWager)
+     - The sidebar scoreboard (renderSB, buildScores)
+     - Team management + the score-changing actions (cycleW, markAll, setB, setHW...)
+     - Event listeners (drag-to-resize, keyboard) and STARTUP code at the very bottom
+
+   Tip for reading: search for 'function renderLeftBody' first; it is the heart of the page.
+   ========================================================================== */
 
 
 // Round 1 and Round 3's bonus question keep the colour each round is already tagged with
@@ -91,6 +124,11 @@ let questionSortPending = {};
 // independent copy" contract this had before.
 let prefsCache = null,
   prefsCacheRaw;
+
+// ============================================================================
+// SECTION: PREFERENCES: theme, text size and toggles saved separately from the game
+// loadPrefs() reads them from storage, savePrefs() writes them, applyPrefs() pushes them onto the page (CSS attributes + button labels).
+// ============================================================================
 function loadPrefs() {
   const raw = TRStore.getItem(PREFS_KEY);
   if (prefsCache && raw === prefsCacheRaw) return { ...prefsCache };
@@ -348,6 +386,11 @@ async function forceReloadApp() {
   u.searchParams.set("reload", Date.now());
   location.replace(u.toString());
 }
+
+// ============================================================================
+// SECTION: SETTINGS-PANEL ACTIONS: each toggle*/set* below flips one preference, saves it and refreshes the page
+// They all follow the same recipe: change the pref -> savePrefs -> applyPrefs/renderAll.
+// ============================================================================
 function setTheme(t) {
   if (!["dark", "light"].includes(t)) t = "dark";
   const p = loadPrefs();
@@ -425,6 +468,11 @@ function hasBoardData() {
       t.craftPrize,
   );
 }
+
+// ============================================================================
+// SECTION: GAME MODE: Regular Trivia / Theme Night / Name That Tune
+// Switching modes resets scores (after a confirm), because each mode has different rounds and wagers.
+// ============================================================================
 // Settings > Game Mode. The mode lives on the game (meta.mode) rather than in prefs so it travels
 // with a saved/exported game. Every mode has its own round layout, wager sets and guess range, so
 // switching WIPES the board (scores, wagers, guesses, extras, Craft Prize) instead of carrying
@@ -695,6 +743,11 @@ function closeSettingsPanel() {
     ] + "px";
 })();
 
+
+// ============================================================================
+// SECTION: GLOBAL STATE: gameState is THE data model for the whole app
+// Everything shown on screen is derived from it. The other variables here are UI-only (what's collapsed, sort order) and aren't part of a saved game.
+// ============================================================================
 let gameState = freshState(),
   scoreSortMode = "entry",
   randomOrder = null;
@@ -779,6 +832,11 @@ document.addEventListener("keydown", (e) => {
 // Re-announcing an identical string is a no-op in most readers, so a trailing space is toggled to
 // force each one through even when the same message repeats (e.g. two teams both scoring "+4").
 let __srToggle = false;
+
+// ============================================================================
+// SECTION: ACCESSIBILITY + SCROLL HANDLING: screen-reader announcements and keeping the view steady across re-renders
+// Re-drawing the page with innerHTML can make it jump; the code in this area tries to restore the host's place.
+// ============================================================================
 function announce(msg) {
   const el = document.getElementById("srAnnouncer");
   if (!el || !msg) return;
@@ -945,6 +1003,11 @@ document.addEventListener(
 // Track which (ri,qi) combos we've already toasted for Beer Round
 let beerRoundToasted = new Set();
 
+
+// ============================================================================
+// SECTION: RESUME BANNER / NEW GAME / TOUR LAUNCH
+// On load, if a saved game exists the host is offered Resume or Start New.
+// ============================================================================
 // " (Theme Night: Simpsons)" / " (Name That Tune)" / " (Regular Trivia)" for the saved-session banner
 // (innerHTML - every host-entered value goes through esc()).
 function resumeModeLabel(s) {
@@ -1184,6 +1247,11 @@ async function startTutorial() {
     );
   }
 }
+
+// ============================================================================
+// SECTION: STANDINGS + FINAL RESULTS: the halftime/final tables and the end-of-night summary
+// Sort modes (entry order, shuffled, ascending, descending) exist so the host can reveal winners dramatically.
+// ============================================================================
 function renderFinalResults() {
   if (!gameState.teams.length)
     return '<p class="fr-note">Add teams and score the game to see final results.</p>';
@@ -1348,6 +1416,11 @@ function setStandingsSort(type, mode) {
   renderLeft();
 }
 
+
+// ============================================================================
+// SECTION: THE RENDER PIPELINE: renderAll -> renderLeft (main column) + renderSB (sidebar)
+// renderLeftBody() is one huge template that builds Event Details, Teams, Rounds 1-4, bonus, halftime, final, craft prize and export sections.
+// ============================================================================
 function renderAll() {
   // One memo scope across both panes, so the sidebar and the left column share each total.
   withScoreMemo(() => {
@@ -1614,6 +1687,11 @@ function renderLeftBody() {
     }
   });
 }
+
+// ============================================================================
+// SECTION: NAVIGATION HELPERS: jump to a section or the first unanswered question, mini progress bar
+// These power the keyboard shortcuts (N, 1-4, F) and the sticky progress bar.
+// ============================================================================
 // Which round the host is presumably actively working on: the first one that isn't fully
 // scored yet. Based on scoring state, not scroll position — so it reads the same regardless
 // of where in the page the host has scrolled to (e.g. up to check Teams, or ahead to Final
@@ -1748,6 +1826,11 @@ function renderQStatsRow(s) {
     <span class="q-stat q-stat-incorrect">${ICON_INCORRECT} ${s.incorrect}/${s.done} (${s.incorrectPct}%)</span>
   </span>`;
 }
+
+// ============================================================================
+// SECTION: QUESTION RENDERERS: one regular question, the bonus question (Q5), and the special wagers
+// Each draws a list of team rows with correct/incorrect and wager buttons, plus sort controls.
+// ============================================================================
 function renderWQ(ri, qi) {
   const wagers = roundWagers(ri);
   const qs = qScored(ri, qi);
@@ -2004,6 +2087,11 @@ function toggleBonusQ(ri) {
   });
 }
 
+
+// ============================================================================
+// SECTION: BONUS QUESTION (Q5) renderer
+// Rounds 1 and 3 end with a bonus question where each team picks how many bonus points to claim.
+// ============================================================================
 function renderBQ(ri) {
   const n = activeTeamCount();
   let subDone = 0;
@@ -2087,6 +2175,11 @@ function renderBQ(ri) {
   return h + `</div></div>`;
 }
 
+
+// ============================================================================
+// SECTION: SPECIAL WAGERS: halftime and final wagers (and Q5 wagers in other modes)
+// A team stakes up to a maximum number of points on one question.
+// ============================================================================
 // Halftime and final wagers are identical except for range, labels and setters.
 function renderSpecialWager(type) {
   const isFinal = type === "final";
@@ -2194,6 +2287,11 @@ function renderFW() {
   return renderSpecialWager("final");
 }
 
+
+// ============================================================================
+// SECTION: SIDEBAR SCOREBOARD: the live standings column (a swipe-up sheet on phones)
+// renderSB() -> renderSBBody() -> buildScores() builds the ranked list with medals and tooltips.
+// ============================================================================
 function toggleSidebar() {
   // A just-finished swipe on the peek strip or the sheet's grab handle (see the drag IIFE near
   // the bottom of this file) fires a click on release — swallow that one so the drag doesn't
@@ -2326,6 +2424,11 @@ function buildScores() {
   return h + "</div>";
 }
 
+
+// ============================================================================
+// SECTION: TEAM MANAGEMENT: add, remove, pause, rename and re-sort teams
+// Removing a team has to shift every index stored in gameState, which is what reindexAfterRemoval() does.
+// ============================================================================
 // Indices into gameState.teams in the order the Teams section shows them: entry order, or by name
 // (blank names last) when the A-Z / Z-A view is on. Nothing is reordered in the data.
 function teamEntryOrder() {
@@ -2427,6 +2530,11 @@ function adjPts(ti, d) {
   autosave();
   renderAll();
 }
+
+// ============================================================================
+// SECTION: SCORE-CHANGING ACTIONS: the functions your clicks end up in
+// cycleW cycles a team's wager button (unscored -> correct -> incorrect -> cleared); markAll does the whole table at once; adjPts is a manual +/- fix.
+// ============================================================================
 function cycleW(ri, qi, ti, w) {
   if (!canScore()) return;
   const q = gameState.rounds[ri].questions[qi];
@@ -2481,6 +2589,11 @@ function markAll(ri, qi, correct) {
   renderAll();
   if (correct && !wasBeer) checkBeerRound(ri, qi);
 }
+
+// ============================================================================
+// SECTION: VALIDATION + canScore(): scoring stays locked until Event Details are filled in properly
+// isQuizIdValid / isLocationValid / isHostNameValid feed the red 'required' labels.
+// ============================================================================
 // Accepts 1-5 letters, optional dash, 1-4 digits (e.g. "AB-123", "ABCDE1234").
 function isQuizIdValid(v) {
   const s = (v || "").trim();
@@ -2568,6 +2681,11 @@ function canScore() {
   }
   return false;
 }
+
+// ============================================================================
+// SECTION: BONUS / WAGER SETTERS: record a team's bonus pick, wager amount and whether it was correct
+// setHW/setHC = halftime wager/correct, setW1/setC1 and setW3/setC3 = Q5 wagers, setFW/setFC = final wager/correct.
+// ============================================================================
 function setB(ri, ti, v) {
   if (!canScore()) return;
   const cur = gameState.rounds[ri].bonus[ti];
@@ -2688,6 +2806,11 @@ document.addEventListener("keydown", (e) => {
   )
     confirmDialogRespond(false);
 });
+
+// ============================================================================
+// SECTION: EVENT LISTENERS + STARTUP: everything from here down wires the page together once it loads
+// Drag-to-resize sidebar, keyboard handlers, the question-timer interval, service-worker registration and the update check.
+// ============================================================================
 // Native <input type="date"> always hands back either a valid ISO date or '' (never a
 // half-typed/invalid string), so there's no parsing or validation left to do here — the
 // browser's own calendar UI and keyboard navigation replace the old hand-rolled text parser.

@@ -1,3 +1,11 @@
+/* ==========================================================================
+   js/content.js — TEXT CONTENT: host banter lines and 'thank your staff' lines  (READ ME FIRST)
+
+   BANTER holds arrays of jokes the host can read between questions/rounds. banterLine() picks
+   the next one in a cycle and cycleBanter() is wired to a 'new line' button. STAFF_THANKS does
+   the same for the closing thank-you, using the staff names typed into Event Details.
+   Edit the arrays freely to change what the app says; no other code needs to change.
+   ========================================================================== */
 "use strict";
 
 /* ── HOST BANTER LINES ──────────────────────────────────────────────

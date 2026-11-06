@@ -1,3 +1,11 @@
+/* ==========================================================================
+   js/confirm-dialog.js — themed replacements for confirm() and alert()  (READ ME FIRST)
+
+   appConfirm('Really?') returns a Promise<boolean>; appAlert('Done') shows an OK-only box.
+   Callers use `await appConfirm(...)`. They are styled to match the dark/light themes, which
+   the browser's native popups can't. The modal's HTML lives in index.html (#confirmOverlay).
+   confirmClearSession() is the shared 'erase everything?' prompt.
+   ========================================================================== */
 "use strict";
 
 

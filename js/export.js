@@ -1,3 +1,14 @@
+/* ==========================================================================
+   js/export.js — EXPORT: the PDF scoresheet and the Excel (.xlsx) backup  (READ ME FIRST)
+
+   Both libraries are big, so they load lazily: loadExportLibs() fetches jsPDF + fflate only the
+   first time someone clicks an export button.
+     - buildRows()/expCols(): flatten gameState into table rows/columns.
+     - exportPDF(): draws the whole scoresheet with jsPDF (very long; mostly layout coordinates).
+     - trivInjectXlsx() and the trivX* helpers: an .xlsx file is a zip of XML. We open a template
+       workbook (js/data/xlsx-templates.js), patch cell values into its XML, and re-zip it.
+     - exportXLSXBackup(): the button handler tying that together.
+   ========================================================================== */
 "use strict";
 
 // Export libraries — fflate, jsPDF, and the embedded XLSX backup template — are ~500KB combined

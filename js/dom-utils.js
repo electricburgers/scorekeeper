@@ -1,3 +1,12 @@
+/* ==========================================================================
+   js/dom-utils.js — SMALL DOM HELPERS used all over the app  (READ ME FIRST)
+
+     - esc(s): escapes text for safe insertion into HTML strings. Anything a user typed (team
+       names!) must go through esc() before it is placed in innerHTML, or it could inject HTML.
+     - dl(blob, name): triggers a file download (handles the iOS quirks).
+     - toggleSection(id): collapse/expand a section while keeping the scroll position steady.
+     - bindSheetDrag(): the swipe-up/swipe-down gesture for the mobile scores sheet.
+   ========================================================================== */
 "use strict";
 
 // Collapse/expand toggles below only flip a CSS class (no re-render), so the browser reflows

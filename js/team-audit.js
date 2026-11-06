@@ -1,3 +1,11 @@
+/* ==========================================================================
+   js/team-audit.js — TEAM REPORT: the per-team breakdown popup (formerly called Score Audit)  (READ ME FIRST)
+
+   openAudit(ti) shows a modal listing every question a team answered, how many points each was
+   worth, and a check of the team's guess against the computed score. buildAudit() assembles the
+   HTML; auditQLine / auditOverallStats / auditGuessDiff are its building blocks. Read-only
+   except for editAuditName(), which renames the team.
+   ========================================================================== */
 "use strict";
 
 
