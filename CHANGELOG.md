@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.51 - 2026-11-05
+- **A-Z sort ignores "The", "An" and "A":** sorting teams by name (Teams section and question cards) skips a leading article, so "The Quizzards" files under Q.
+
 ## v21.50 - 2026-11-05
 - **Theme pictograph beside the button:** in Settings, the sun/moon now sits beside the Light/Dark button at the same size as the Game Mode picture (Emoji icon style still keeps the emoji inside the button).
 

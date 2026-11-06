@@ -142,13 +142,20 @@ const ALPHA_COLLATOR = new Intl.Collator(undefined, {
   sensitivity: "base",
   numeric: true,
 });
+// A-Z key for a team name: a leading "The" / "An" / "A" is ignored ("The Quizzards" files under Q).
+// A name that is only an article keeps it, so it never becomes an empty key.
+function alphaSortKey(name) {
+  const s = String(name || "").trim();
+  const stripped = s.replace(/^(?:the|an|a)\s+/i, "");
+  return stripped || s;
+}
 function applyAlphaSort(order, dir, pending) {
   if (!dir) return order;
   const sign = dir === "za" ? -1 : 1;
   // Labels built once per sort (O(n)) instead of re-derived inside every comparison
   // (O(n log n) lookups), and one shared Collator instead of a fresh locale resolution per
   // localeCompare call — same ordering as localeCompare(…, {sensitivity:"base", numeric:true}).
-  const labels = new Map(order.map((ti) => [ti, teamLabel(ti)]));
+  const labels = new Map(order.map((ti) => [ti, alphaSortKey(teamLabel(ti))]));
   return order.slice().sort((a, b) => {
     const g = pending ? (pending.has(a) ? 0 : 1) - (pending.has(b) ? 0 : 1) : 0;
     if (g) return g;
