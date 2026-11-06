@@ -1659,8 +1659,8 @@ describe("Update check (checkForUpdate)", () => {
 // ---- Static TDZ sweep — generalizes the exact bug hit twice now (BONUS_Q_STYLE, then
 // latestVersion, both js/app.js — see their own top-of-file comments) into a real test instead
 // of needing a third live crash to catch the next one. applyPrefs() runs synchronously at
-// script-parse time (the `else applyPrefs();` at the very end of js/app.js — see its own
-// comment), so any top-level `const`/`let` in js/app.js that a function reachable from
+// script-parse time (via `else initialSettingsSync();` near the end of js/app.js, which calls
+// applyPrefs() and syncGameModeSelect() — see its own comment), so any top-level `const`/`let` in js/app.js that a function reachable from
 // applyPrefs() reads has to be declared BEFORE that line, or it's still in its temporal dead
 // zone the first time the page ever loads. Reachability is a static call-graph BFS over
 // js/app.js's own top-level `function` declarations (the ones a load-time call chain can
@@ -1713,9 +1713,9 @@ describe("Static TDZ sweep: applyPrefs()'s load-time call chain (js/app.js)", ()
 
   const funcs = extractTopLevelFunctions(src);
   const decls = topLevelDecls(src);
-  const entryMatch = [...src.matchAll(/^else applyPrefs\(\);/gm)].pop();
-  it("finds applyPrefs()'s synchronous load-time entry point (`else applyPrefs();` at end of file)", () => {
-    assert.ok(entryMatch, "expected `else applyPrefs();` at the end of js/app.js");
+  const entryMatch = [...src.matchAll(/^else initialSettingsSync\(\);/gm)].pop();
+  it("finds the synchronous load-time entry point (`else initialSettingsSync();` near end of file)", () => {
+    assert.ok(entryMatch, "expected `else initialSettingsSync();` near the end of js/app.js");
   });
   it("finds applyPrefs and a substantial top-level function set to search", () => {
     assert.ok(funcs.has("applyPrefs"), "applyPrefs() itself not found");
@@ -1726,7 +1726,7 @@ describe("Static TDZ sweep: applyPrefs()'s load-time call chain (js/app.js)", ()
   // BFS over the call graph starting at applyPrefs, following any identifier-followed-by-"("
   // that names another top-level function in this same file.
   const reachable = new Set();
-  const queue = ["applyPrefs"];
+  const queue = ["applyPrefs", "syncGameModeSelect"]; // both called by initialSettingsSync()
   while (queue.length) {
     const name = queue.pop();
     if (reachable.has(name)) continue;
