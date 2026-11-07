@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.61 - 2026-11-07
+- **Slightly smaller XLSX and PDF icons:** the spreadsheet and PDF pictographs are scaled back a bit from v21.60; the JD Form mask stays the same size.
+
 ## v21.60 - 2026-11-07
 - **Bigger XLSX and PDF icons:** the spreadsheet and PDF pictographs on the export buttons are now the same size as the JD Form mask.
 
