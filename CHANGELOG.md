@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.55 - 2026-11-06
+- **Collapse arrow on the left everywhere:** the Rounds, Final Results, Craft Prize Drawing and Export & Data section headers now put the arrow to the left of the title, matching Teams and Event Details.
+
 ## v21.54 - 2026-11-06
 - **Team sort buttons in the Teams header:** A-Z and No guess now sit on the right of the Teams title row, with the collapse arrow moved to the left of "Teams" (Event Details gets the same left-hand arrow), and the row stays pinned while you scroll the team list.
 

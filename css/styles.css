@@ -1662,7 +1662,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    not the 3px it used to be, growing to 6px only once complete. That width JUMP shifted this
    header's own content by the same 3px the moment a round finished scoring; keeping the width
    constant and only ever swapping the COLOR means completing a round never moves anything. */
-.section-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;transition:var(--transition);border-left:6px solid var(--mode-accent,transparent);background:var(--bg-card-alt)}
+.section-header{display:flex;align-items:center;justify-content:flex-start;gap:8px;padding:12px 14px;cursor:pointer;user-select:none;transition:var(--transition);border-left:6px solid var(--mode-accent,transparent);background:var(--bg-card-alt)}
 .section-header:hover{background:var(--bg-hover)}
 .section-header h2{font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
 .section-header .chevron{transition:transform .3s;color:var(--text-muted);font-size:1.1rem;flex-shrink:0}
@@ -2505,8 +2505,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .aud-edit-btn:hover{border-color:var(--accent-cyan-solid)}
 .aud-edit-btn .icon-ui{width:1rem;height:1rem}
 .team-sort-row{display:inline-flex;gap:6px;margin:0 0 0 auto;flex-shrink:0;cursor:default}
-#sec-meta>.section-header{justify-content:flex-start;gap:8px}
-#sec-teams>.section-header{justify-content:flex-start;gap:8px;position:sticky;top:var(--qbar-top);z-index:50;border-bottom:1px solid var(--border-strong);padding-block:8px}
+#sec-teams>.section-header{position:sticky;top:var(--qbar-top);z-index:50;border-bottom:1px solid var(--border-strong);padding-block:8px}
 .audit-head .aud-eyebrow{display:block;font-family:var(--font-body);font-size:.74rem;color:var(--text-secondary);text-transform:none;letter-spacing:0;font-weight:500;margin-bottom:3px}
 .aud-name-row{flex-wrap:wrap}
 .aud-name-row .paused-pill{margin-left:0}
