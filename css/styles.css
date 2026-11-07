@@ -1966,6 +1966,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 [data-theme="light"] .resort-dot{background:#ea580c}
 [data-theme="light"][data-cb="2"] .resort-dot{background:#e5008a}
 .q-alpha-btn .icon-ui{width:1.15em;height:1.15em}
+.team-guess-btn{width:1.5rem;padding:0;border-radius:7px}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
 .q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
 .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.15)}

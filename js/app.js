@@ -64,7 +64,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.55"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.56"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 6, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -107,7 +107,7 @@ function qAlpha(key) {
 // Teams section A-Z / Z-A view ("az" | "za" | undefined). View only: gameState.teams keeps its entry
 // order, every row keeps its "Team N" entry number and data-ti, so nothing downstream shifts.
 let teamAlphaSort;
-let teamGuessSort = false; // Teams section: teams still missing a final score guess float to the top (combines with A-Z)
+let teamGuessSort = false; // Teams section: false (off) | "first" (teams missing a final score guess on top) | "last"; combines with A-Z
 let teamSortSnapshot; // frozen display order while A-Z/Z-A is on; only re-computed when the sort button is tapped
 let questionSortPending = {};
 
@@ -1544,7 +1544,7 @@ function renderLeftBody() {
     : "";
   const teamSortBtns =
     gameState.teams.length > 1
-      ? `<span class="team-sort-row" onclick="event.stopPropagation()"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept.${teamResort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}${teamAlphaSort ? resortDot : ""}</button><button class="q-alpha-btn${teamGuessSort ? " active" : ""}" onclick="toggleTeamGuessSort()" title="Put teams that still have no final score guess at the top. Works with A-Z." aria-pressed="${teamGuessSort}" aria-label="Show teams without a score guess first, currently ${teamGuessSort ? "on" : "off"}"><span class="qa-text">No guess</span>${!teamAlphaSort && teamGuessSort ? resortDot : ""}</button></span>`
+      ? `<span class="team-sort-row" onclick="event.stopPropagation()"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept.${teamResort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}${teamAlphaSort ? resortDot : ""}</button><button class="q-alpha-btn team-guess-btn${teamGuessSort ? " active" : ""}" onclick="toggleTeamGuessSort()" title="Teams with no final score guess: first, then last, then back to entry order. Works with A-Z.${teamResort && !teamAlphaSort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Teams without a score guess, currently ${teamGuessSort === "first" ? "shown first" : teamGuessSort === "last" ? "shown last" : "off"}">${noGuessBtnInner(teamGuessSort)}${!teamAlphaSort && teamGuessSort ? resortDot : ""}</button></span>`
       : "";
   h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><span class="chevron">▼</span><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2>${teamSortBtns}</div><div class="section-body">`;
   const showAdj = !!loadPrefs().showAdjustments;
@@ -1824,6 +1824,18 @@ function renderMiniProgress(visible) {
 // body, so they stay reachable while scrolling a long team list.
 // Inside the A-Z button: the drawn A-Z-with-arrow pictograph (arrow flips for Z-A), or in Emoji mode
 // the arrow emoji plus the text, since there is no A-Z emoji. The aria-label names the state.
+// No-guess sort button face: arrow on the left (down = teams missing a guess first, up = last), then a "?".
+function noGuessBtnInner(state) {
+  if (loadPrefs().iconStyle === "emoji")
+    return `${state === "first" ? ICON_ARROW_DOWN : state === "last" ? ICON_ARROW_UP : ""}<span class="qa-text">?</span>`;
+  const arrow =
+    state === "first"
+      ? '<path d="M5 5v13"/><path d="m2 15 3 3 3-3"/>'
+      : state === "last"
+        ? '<path d="M5 18V5"/><path d="m2 8 3-3 3 3"/>'
+        : "";
+  return `<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${arrow}<path d="M12 9a3.5 3.5 0 1 1 5.3 3c-.8.5-1.3 1-1.3 2"/><path d="M16 18h.01"/></svg>`;
+}
 function alphaBtnInner(state) {
   if (loadPrefs().iconStyle === "emoji")
     return `${state === "az" ? ICON_ARROW_DOWN : state === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${state === "za" ? "Z-A" : "A-Z"}</span>`;
@@ -2458,7 +2470,7 @@ function computeTeamSort() {
     return g === "" || g == null;
   };
   return idx.sort((a, b) => {
-    if (teamGuessSort && noGuess(a) !== noGuess(b)) return noGuess(a) ? -1 : 1;
+    if (teamGuessSort && noGuess(a) !== noGuess(b)) return noGuess(a) === (teamGuessSort === "first") ? -1 : 1;
     if (!teamAlphaSort) return a - b;
     const x = alphaSortKey(nm(a)),
       y = alphaSortKey(nm(b));
@@ -2479,7 +2491,7 @@ function toggleTeamGuessSort() {
     renderAll();
     return;
   }
-  teamGuessSort = !teamGuessSort;
+  teamGuessSort = { false: "first", first: "last", last: false }[teamGuessSort];
   teamSortSnapshot = undefined;
   renderAll();
 }
