@@ -64,7 +64,7 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.52"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v21.54"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 6, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -107,6 +107,7 @@ function qAlpha(key) {
 // Teams section A-Z / Z-A view ("az" | "za" | undefined). View only: gameState.teams keeps its entry
 // order, every row keeps its "Team N" entry number and data-ti, so nothing downstream shifts.
 let teamAlphaSort;
+let teamGuessSort = false; // Teams section: teams still missing a final score guess float to the top (combines with A-Z)
 let teamSortSnapshot; // frozen display order while A-Z/Z-A is on; only re-computed when the sort button is tapped
 let questionSortPending = {};
 
@@ -1205,6 +1206,7 @@ function resetBoardUi() {
   questionAlphaSort = {};
   teamAlphaSort = undefined;
   teamSortSnapshot = undefined;
+  teamGuessSort = false;
   questionSortPending = {};
   beerRoundToasted = new Set();
   adjOpenTeams = new Set();
@@ -1517,7 +1519,7 @@ function renderLeftBody() {
   // Once scoring starts, Event Details normally locks (so it can't drift mid-game) — but a
   // typo can still happen, so the "Edit Locked Fields" setting lets the host reopen just these.
   const metaLocked = gs && !loadPrefs().unlockEventDetails;
-  h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><h2>Event Details - ${gameModeName()}</h2><span class="chevron">▼</span></div><div class="section-body"><div class="meta-grid">
+  h += `<div class="section ${collapsedSections.has("sec-meta") ? "collapsed" : ""}" id="sec-meta"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-meta')"><span class="chevron">▼</span><h2>Event Details - ${gameModeName()}</h2></div><div class="section-body"><div class="meta-grid">
     <div class="field"><label>Date</label><div class="date-native-wrap"><input type="date" class="date-native" aria-label="Date" value="${esc(gameState.meta.date || "")}" ${metaLocked ? "disabled" : ""} onchange="setGameDateISO(this.value)"><span class="date-display-text${gameState.meta.date ? "" : " is-placeholder"}">${esc(isoToPretty(gameState.meta.date) || "Select date")}</span></div></div>
     <div class="field${quizIdInvalid ? " field-invalid" : quizIdWarn ? " field-warn" : quizIdGood ? " field-good" : ""}"><label>Quiz ID</label><input type="text" class="quiz-id-input" maxlength="24" aria-label="Quiz ID" value="${esc(gameState.meta.quizId)}" placeholder="AB-123" ${metaLocked ? "disabled" : ""} onchange="gameState.meta.quizId=this.value;autosave();renderLeft();">${quizIdInvalid ? '<span class="guess-warn">&#9888; required</span>' : quizIdWarn ? '<span class="guess-warn">&#9888; unusual format — typically 1-5 letters + 1-4 numbers, e.g. AB-123</span>' : quizIdGood ? `<span class="guess-good">${CHECK_ICON_SVG} looks good</span>` : ""}</div>
     ${isTheme() ? `<div class="field full${themeInvalid ? " field-invalid" : ""}"><label>Theme Name</label><input type="text" maxlength="${FIELD_MAX.themeName}" aria-label="Theme Name" value="${esc(gameState.meta.themeName || "")}" placeholder="e.g., 80s Music, Simpsons, Star Wars" onchange="gameState.meta.themeName=this.value;autosave();renderLeft();">${themeInvalid ? '<span class="guess-warn">&#9888; required</span>' : ""}</div>` : ""}
@@ -1536,9 +1538,15 @@ function renderLeftBody() {
   const missingGuessCount = gameState.teams.filter(
     (t) => !t.paused && (t.scoreGuess === "" || t.scoreGuess == null),
   ).length;
-  h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2><span class="chevron">▼</span></div><div class="section-body">`;
-  if (gameState.teams.length > 1)
-    h += `<div class="team-sort-row"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept." aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}</button></div>`;
+  const teamResort = teamResortPending();
+  const resortDot = teamResort
+    ? `<span class="resort-dot" aria-hidden="true"></span>`
+    : "";
+  const teamSortBtns =
+    gameState.teams.length > 1
+      ? `<span class="team-sort-row" onclick="event.stopPropagation()"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept.${teamResort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}${teamAlphaSort ? resortDot : ""}</button><button class="q-alpha-btn${teamGuessSort ? " active" : ""}" onclick="toggleTeamGuessSort()" title="Put teams that still have no final score guess at the top. Works with A-Z." aria-pressed="${teamGuessSort}" aria-label="Show teams without a score guess first, currently ${teamGuessSort ? "on" : "off"}"><span class="qa-text">No guess</span>${!teamAlphaSort && teamGuessSort ? resortDot : ""}</button></span>`
+      : "";
+  h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><span class="chevron">▼</span><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2>${teamSortBtns}</div><div class="section-body">`;
   const showAdj = !!loadPrefs().showAdjustments;
   // 146 = a perfect Regular night; the Theme Night script calls 95 a perfect score.
   const guessMax = guessLimit();
@@ -2435,7 +2443,7 @@ function buildScores() {
 // (blank names last) when the A-Z / Z-A view is on. Nothing is reordered in the data.
 function teamEntryOrder() {
   const idx = gameState.teams.map((_, i) => i);
-  if (!teamAlphaSort) return idx;
+  if (!teamAlphaSort && !teamGuessSort) return idx;
   if (!teamSortSnapshot) teamSortSnapshot = computeTeamSort();
   // Teams added (or renamed) since the last tap stay put: new ones land at the end until A-Z is tapped again.
   const seen = new Set(teamSortSnapshot);
@@ -2445,14 +2453,42 @@ function computeTeamSort() {
   const idx = gameState.teams.map((_, i) => i);
   const dir = teamAlphaSort === "za" ? -1 : 1;
   const nm = (i) => (gameState.teams[i].name || "").trim();
+  const noGuess = (i) => {
+    const g = gameState.teams[i].scoreGuess;
+    return g === "" || g == null;
+  };
   return idx.sort((a, b) => {
+    if (teamGuessSort && noGuess(a) !== noGuess(b)) return noGuess(a) ? -1 : 1;
+    if (!teamAlphaSort) return a - b;
     const x = alphaSortKey(nm(a)),
       y = alphaSortKey(nm(b));
     if (!x !== !y) return x ? -1 : 1;
     return dir * x.localeCompare(y, undefined, { sensitivity: "base", numeric: true }) || a - b;
   });
 }
+// True when the frozen team order has drifted from what a fresh sort would give (teams added or renamed).
+function teamResortPending() {
+  return (
+    !!(teamAlphaSort || teamGuessSort) &&
+    computeTeamSort().join() !== teamEntryOrder().join()
+  );
+}
+function toggleTeamGuessSort() {
+  if (!teamAlphaSort && teamResortPending()) {
+    teamSortSnapshot = undefined; // dot showing: re-sort in place instead of turning the sort off
+    renderAll();
+    return;
+  }
+  teamGuessSort = !teamGuessSort;
+  teamSortSnapshot = undefined;
+  renderAll();
+}
 function cycleTeamAlphaSort() {
+  if (teamResortPending()) {
+    teamSortSnapshot = undefined; // dot showing: re-sort in place instead of advancing A-Z to Z-A
+    renderAll();
+    return;
+  }
   teamAlphaSort = { undefined: "az", az: "za", za: undefined }[teamAlphaSort];
   teamSortSnapshot = undefined;
   renderAll();

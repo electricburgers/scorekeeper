@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.54 - 2026-11-06
+- **Team sort buttons in the Teams header:** A-Z and No guess now sit on the right of the Teams title row, with the collapse arrow moved to the left of "Teams" (Event Details gets the same left-hand arrow), and the row stays pinned while you scroll the team list.
+
+## v21.53 - 2026-11-06
+- **Sort teams by missing guess:** a new "No guess" button in the Teams section floats teams without a final score guess to the top. It combines with A-Z / Z-A (each group stays alphabetical) and, like A-Z, only re-sorts when tapped. The same orange dot as on question cards shows when added or renamed teams are out of place; tapping then re-sorts in place.
+
 ## v21.52 - 2026-11-06
 - **Team list holds still while you add teams:** with A-Z or Z-A on, a newly entered team name no longer jumps into place; new teams stay at the end until you tap A-Z again. The A-Z row also pins to the top while you scroll the Teams list.
 

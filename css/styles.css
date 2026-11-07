@@ -1956,7 +1956,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    pink/magenta in Blue-Yellow mode) which is >=5.1:1 on every card/page surface in all six
    theme x Color Vision modes; its 2px --bg-card ring separates it from the button fill, which is
    a similar hue in some modes. A shape in a fixed corner, so it doesn't rely on color alone. */
-.q-sort-btn{position:relative}
+.q-sort-btn,.team-sort-row .q-alpha-btn{position:relative}
 .q-sort-btn:not(.can-resort){background:transparent;color:var(--text-secondary);border-color:var(--border-control)}
 .q-sort-btn.can-resort{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .resort-dot{position:absolute;top:-5px;right:-5px;width:11px;height:11px;box-sizing:border-box;border-radius:50%;background:var(--badge-gold-fg);border:2px solid var(--bg-card);pointer-events:none}
@@ -2504,7 +2504,9 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .aud-edit-btn{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;padding:0;background:transparent;border:1px solid var(--border-strong);border-radius:6px;color:var(--txt-cyan);cursor:pointer}
 .aud-edit-btn:hover{border-color:var(--accent-cyan-solid)}
 .aud-edit-btn .icon-ui{width:1rem;height:1rem}
-.team-sort-row{display:flex;justify-content:flex-end;margin:0 -14px 8px;padding:6px 14px;position:sticky;top:var(--qbar-top);z-index:50;background:var(--bg-card);border-bottom:1px solid var(--border-strong)}
+.team-sort-row{display:inline-flex;gap:6px;margin:0 0 0 auto;flex-shrink:0;cursor:default}
+#sec-meta>.section-header{justify-content:flex-start;gap:8px}
+#sec-teams>.section-header{justify-content:flex-start;gap:8px;position:sticky;top:var(--qbar-top);z-index:50;border-bottom:1px solid var(--border-strong);padding-block:8px}
 .audit-head .aud-eyebrow{display:block;font-family:var(--font-body);font-size:.74rem;color:var(--text-secondary);text-transform:none;letter-spacing:0;font-weight:500;margin-bottom:3px}
 .aud-name-row{flex-wrap:wrap}
 .aud-name-row .paused-pill{margin-left:0}
