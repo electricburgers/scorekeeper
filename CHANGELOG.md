@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.57 - 2026-11-06
+- **No guess button greys out when it has nothing to do:** once every team has a score guess the button is disabled, and any no-guess sort is turned off.
+
 ## v21.56 - 2026-11-06
 - **No guess button is now a square "?" with an arrow:** the arrow sits on the left and works like A-Z / Z-A. Tap once for teams missing a score guess first (arrow down), again for last (arrow up), again for off.
 
