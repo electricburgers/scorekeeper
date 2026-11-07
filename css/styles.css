@@ -2504,7 +2504,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .aud-edit-btn{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;width:1.9rem;height:1.9rem;padding:0;background:transparent;border:1px solid var(--border-strong);border-radius:6px;color:var(--txt-cyan);cursor:pointer}
 .aud-edit-btn:hover{border-color:var(--accent-cyan-solid)}
 .aud-edit-btn .icon-ui{width:1rem;height:1rem}
-.team-sort-row{display:flex;justify-content:flex-end;margin-bottom:8px}
+.team-sort-row{display:flex;justify-content:flex-end;margin:0 -14px 8px;padding:6px 14px;position:sticky;top:var(--qbar-top);z-index:50;background:var(--bg-card);border-bottom:1px solid var(--border-strong)}
 .audit-head .aud-eyebrow{display:block;font-family:var(--font-body);font-size:.74rem;color:var(--text-secondary);text-transform:none;letter-spacing:0;font-weight:500;margin-bottom:3px}
 .aud-name-row{flex-wrap:wrap}
 .aud-name-row .paused-pill{margin-left:0}

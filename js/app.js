@@ -64,8 +64,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.51"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 5, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v21.52"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 6, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -107,6 +107,7 @@ function qAlpha(key) {
 // Teams section A-Z / Z-A view ("az" | "za" | undefined). View only: gameState.teams keeps its entry
 // order, every row keeps its "Team N" entry number and data-ti, so nothing downstream shifts.
 let teamAlphaSort;
+let teamSortSnapshot; // frozen display order while A-Z/Z-A is on; only re-computed when the sort button is tapped
 let questionSortPending = {};
 
 // loadPrefs() is called constantly — several times from inside a single renderLeft() alone,
@@ -1203,6 +1204,7 @@ function resetBoardUi() {
   questionSortOrder = {};
   questionAlphaSort = {};
   teamAlphaSort = undefined;
+  teamSortSnapshot = undefined;
   questionSortPending = {};
   beerRoundToasted = new Set();
   adjOpenTeams = new Set();
@@ -2434,6 +2436,13 @@ function buildScores() {
 function teamEntryOrder() {
   const idx = gameState.teams.map((_, i) => i);
   if (!teamAlphaSort) return idx;
+  if (!teamSortSnapshot) teamSortSnapshot = computeTeamSort();
+  // Teams added (or renamed) since the last tap stay put: new ones land at the end until A-Z is tapped again.
+  const seen = new Set(teamSortSnapshot);
+  return teamSortSnapshot.concat(idx.filter((i) => !seen.has(i)));
+}
+function computeTeamSort() {
+  const idx = gameState.teams.map((_, i) => i);
   const dir = teamAlphaSort === "za" ? -1 : 1;
   const nm = (i) => (gameState.teams[i].name || "").trim();
   return idx.sort((a, b) => {
@@ -2445,6 +2454,7 @@ function teamEntryOrder() {
 }
 function cycleTeamAlphaSort() {
   teamAlphaSort = { undefined: "az", az: "za", za: undefined }[teamAlphaSort];
+  teamSortSnapshot = undefined;
   renderAll();
 }
 // Team Report's name field: same edit as the Teams section, then refresh the rest of the app.
@@ -2489,6 +2499,7 @@ async function removeTeam(ti) {
     : 'Remove "' + name + '"?';
   if (!(await appConfirm(msg, { danger: true, okLabel: "Remove" }))) return;
   gameState.teams.splice(ti, 1);
+  if (teamSortSnapshot) teamSortSnapshot = teamSortSnapshot.filter((i) => i !== ti).map((i) => (i > ti ? i - 1 : i));
   const newAdj = new Set();
   adjOpenTeams.forEach((i) => {
     if (i < ti) newAdj.add(i);
