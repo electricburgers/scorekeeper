@@ -51,10 +51,10 @@ comparison it exists to make.
 | `craft-prize.webp` | The Craft Prize Drawing section open pre-draw, showing the Exclude Top / Drumroll-seconds steppers and the square **Start Drumroll** button (v19.60). | Craft Prize Drawing |
 | `craft-prize-drumroll.webp` | The Craft Prize drumroll actively playing, right after clicking Start Drumroll — the spinning name and countdown bar. | Craft Prize Drawing |
 | `craft-prize-winner.webp` | The finished draw — winning team announced, with the **Clear** button next to the result and the Winner Announcement Script below. | Craft Prize Drawing |
-| `export-bar.webp` | The Export & Data section — the square 📄 XLSX / 📕 PDF buttons and the 🎭 JD Upload Form link. | Exporting |
+| `export-bar.webp` | The Export & Data section — the square 📄 XLSX / 📕 PDF buttons and the 🎭 JD Form link. | Exporting |
 | `xlsx-export.webp` | The downloaded XLSX scoresheet, opened in a spreadsheet app — header (Location/Date/Quiz #/Host), a few zebra-striped team rows, and only as many team rows as the game has. | Exporting |
 | `pdf-export.webp` | The downloaded PDF scoresheet — same header plus full standings. | Exporting |
-| `jd-upload-form.webp` | The JD Upload Form page, opened in its own browser tab. | Exporting |
+| `jd-upload-form.webp` | The JD Form page, opened in its own browser tab. | Exporting |
 | `sound-test-buttons.webp` | The Craft Prize Drawing's Test Sounds bar — the square Roll / Fade out / Crash / Horn buttons (Advanced Settings → Manual Drumroll Control **and** Sound Test Buttons both on). | Tips & Tricks |
 | `settings-panel.webp` | The main Settings panel open (⚙️ gear icon) — Theme, Size, Icon Style, Question Timer, Sample Data (🧪 Try Example and ℹ️ Take the Tour), Help, App Preferences, and the collapsed Advanced Settings toggle. | Getting Started |
 | `tutorial-spotlight.webp` | Mid-tour: the dimmed spotlight overlay around a highlighted control, with the callout box (step text, "Step X of Y", Back/Next, Skip Tutorial) visible. | Interactive Tutorial |

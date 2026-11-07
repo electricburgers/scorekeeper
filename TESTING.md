@@ -107,7 +107,7 @@ Legend: **Platform** = Desktop / Mobile / Both.
 34. **(Both)** Export PDF — the scoresheet PDF downloads, and the printed "** DIFF is minus
     Bonuses" note is visible near the DIFF column header.
 35. **(Both)** Export XLSX (backup format) — file downloads without throwing a console error.
-36. **(Both)** Click "🔗 JD Upload Form" — it opens `form.jotform.com/261746701455055` in a
+36. **(Both)** Click "🔗 JD Form" — it opens `form.jotform.com/261746701455055` in a
     new tab; the Scorekeeper app tab remains open and unaffected.
 37. **(Both)** After any export, confirm the "Export complete. Clear session?" prompt appears
     and both "Yes" and "No" behave correctly.

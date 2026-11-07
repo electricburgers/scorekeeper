@@ -68,7 +68,7 @@ const Tutorial = (function () {
   let auditOpened = false; // real click on a team name to open the Team Report modal
   let batching = false; // see runBatched() below
   let pendingRenderKind = null; // "all"|"left"|"sb" — the broadest render still owed once batching ends
-  // Note for the PDF export / JD Upload Form steps further down: neither tracks a
+  // Note for the PDF export / JD Form steps further down: neither tracks a
   // clicked/not-clicked flag the way every other on-click step does. PDF export and the JD
   // link (opens in a new tab) both leave no in-page state change to poll for, so those two
   // steps lean on fallbackNext (see the STEP TABLE note on it) instead — an always-available
@@ -914,7 +914,7 @@ const Tutorial = (function () {
       },
       {
         target: 'a[href="https://app.jotform.com/261954293403156"]',
-        text: `JD Upload Form sends you to where you submit your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
+        text: `JD Form sends you to where you submit your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
       },
       {

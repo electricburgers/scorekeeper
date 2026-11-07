@@ -1,7 +1,7 @@
 // v19.59 — 10 more tests for this batch: the XLSX export now trims to the game's real team
 // count and carries a zebra stripe, Row Zebra Stripes defaults to Medium, the Example Game has
 // a 3rd-place tie broken by score guess, Color Vision is gone from both pages, "Take the Tour"'s
-// hand icon is tilted, and the JD Upload Form button carries the new Guy Fawkes pictograph.
+// hand icon is tilted, and the JD Form button carries the new Guy Fawkes pictograph.
 "use strict";
 const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
@@ -202,7 +202,7 @@ describe("v19.59 — icons", () => {
     assert.match(m[1], /transform:\s*rotate\(-15deg\)/);
   });
 
-  it("the JD Upload Form button carries the Guy Fawkes pictograph and a two-line label", async () => {
+  it("the JD Form button carries the Guy Fawkes pictograph and a one-line label", async () => {
     const window = await loadAppWindow();
     try {
       evalIn(
@@ -210,12 +210,11 @@ describe("v19.59 — icons", () => {
         "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();",
       );
       const a = window.document.querySelector("a.jd-upload-btn");
-      assert.ok(a, "JD Upload Form button missing");
+      assert.ok(a, "JD Form button missing");
       assert.ok(a.classList.contains("export-sq"), "should be a square icon-forward button like XLSX/PDF");
       assert.ok(a.querySelector("svg.icon-fawkes"), "Guy Fawkes icon missing");
       const label = a.querySelector(".export-sq-label").innerHTML;
-      assert.match(label, /Upload/);
-      assert.match(label, /<br\s*\/?>\s*Form/, "'Form' should sit on its own line, below the icon");
+      assert.equal(label, "JD Form");
       assert.match(evalIn(window, "ICON_FAWKES"), /icon-fawkes|🎭/);
     } finally {
       window.close();

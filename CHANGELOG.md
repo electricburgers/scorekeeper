@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v21.59 - 2026-11-06
+- **JD Upload Form is now JD Form:** the button is renamed to a one-line "JD Form" label, and its Guy Fawkes mask icon is much bigger while staying inside the button (same square size as XLSX and PDF).
+
 ## v21.58 - 2026-11-06
 - **Bigger flag and beer icons:** the icons beside Final Results and Craft Prize Drawing are larger (drawn and emoji styles) and stay inside the header row without touching the title.
 

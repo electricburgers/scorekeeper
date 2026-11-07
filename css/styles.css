@@ -1020,7 +1020,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* transform: tilted ~15° to match the lean the 👋 platform emoji it stands in for is drawn with
    (Settings > Take the Tour) — an upright hand read as a "stop" gesture rather than a wave. */
 .icon-hand{--icon-tint:var(--accent-gold);transform:rotate(-15deg)}
-/* JD Upload Form's Guy Fawkes mask — purple plate (--tint-flask, freed when the flask icon
+/* JD Form's Guy Fawkes mask — purple plate (--tint-flask, freed when the flask icon
    moved to green) with a thin 1.4 outline, and the mustache/goatee as SOLID fills with no
    stroke: at .icon-ui's 2.25 stroke the two features merged into one blob at button size. */
 .icon-fawkes{--icon-tint:var(--tint-flask);stroke-width:1.4}
@@ -2235,10 +2235,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .export-sq{flex-direction:column;gap:3px;width:4.6rem;height:4.6rem;padding:6px 4px;font-size:1.9rem;line-height:1}
 .export-sq .export-sq-label{font-family:var(--font-body);font-size:.62rem;font-weight:700;letter-spacing:.5px}
 .export-sq .icon-emoji{line-height:1}
-/* JD Upload Form is a square icon-forward button like XLSX/PDF now — the big Guy Fawkes mask
+/* JD Form is a square icon-forward button like XLSX/PDF now — the big Guy Fawkes mask
    stacked over a "JD Upload / Form" label. Wider than the 4.6rem XLSX/PDF squares because its
    label is longer, and its label line-height opens up for the wrap. */
-.export-sq.jd-upload-btn{width:auto;min-width:5.2rem;padding-left:12px;padding-right:12px;text-align:center;line-height:1.15}
+.export-sq.jd-upload-btn{font-size:3.2rem;gap:0;padding:2px 4px 3px;line-height:1}
 .export-sq.jd-upload-btn .export-sq-label{letter-spacing:.3px}
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
 .export-prompt.show{display:block}
