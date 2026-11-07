@@ -2238,7 +2238,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* JD Form is a square icon-forward button like XLSX/PDF now — the big Guy Fawkes mask
    stacked over a "JD Upload / Form" label. Wider than the 4.6rem XLSX/PDF squares because its
    label is longer, and its label line-height opens up for the wrap. */
-.export-sq.jd-upload-btn{font-size:3.2rem;gap:0;padding:2px 4px 3px;line-height:1}
+.export-bar .export-sq{font-size:3.2rem;gap:0;padding:2px 4px 3px;line-height:1;width:auto;height:auto;min-width:4.6rem}
 .export-sq.jd-upload-btn .export-sq-label{letter-spacing:.3px}
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
 .export-prompt.show{display:block}
