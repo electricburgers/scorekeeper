@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.12 - 2026-11-13
+- **Rivals:** removed the redundant "Places: 10 / 7 / 4 / 0" label from each round header.
+
 ## v22.11 - 2026-11-13
 - **Final Results flag:** the checkered flag now has a solid white cloth (no longer see-through), tilted 10°, with a white outline in dark mode.
 
