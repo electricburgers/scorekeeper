@@ -2064,7 +2064,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* WAGER BUTTONS */
 .ta-wagers{display:flex;gap:.2rem;flex-shrink:0;margin-left:auto}
 .wager-btn{min-width:var(--wager-size);min-height:var(--wager-size);width:var(--wager-size);height:var(--wager-size);border:1px solid var(--border-control);border-radius:6px;background:var(--btn-idle-bg);color:var(--text-primary);font-family:var(--font-display);font-size:1.1rem;font-weight:700;cursor:pointer;transition:var(--transition);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;touch-action:manipulation}
-.wager-btn:hover:not(.used):not(.correct):not(.incorrect){background:var(--bg-hover);border-color:var(--accent-cyan)}
+.wager-btn:hover:not(.used):not(.correct):not(.incorrect):not(.selected){background:var(--bg-hover);border-color:var(--accent-cyan)}
 .wager-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
 .wager-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red)}
 /* Revolution Rivals place picker: same audited .wager-btn colours; each button is wider so it can hold "#1" plus its points. */
