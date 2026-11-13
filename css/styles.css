@@ -2060,14 +2060,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .wager-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
 .wager-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red)}
 /* Revolution Rivals place picker: same audited .wager-btn colours; each button is wider so it can hold "#1" plus its points. */
-.place-btn{width:auto;min-width:calc(var(--wager-size) * 1.8);height:calc(var(--wager-size) * .92);min-height:0;padding:0 .35rem 0 .6rem;flex-direction:row;gap:.4rem;line-height:1.05;font-size:.95rem;border-radius:8px}
-.place-btn .place-pts{font-size:.7rem;font-weight:700;opacity:1;background:rgba(128,128,128,.25);border-radius:5px;padding:2px 5px}
-.place-btn.place-other{min-width:0}
+.place-btn{width:3.6rem;min-width:0;height:calc(var(--wager-size) * 1.1);min-height:0;padding:0;flex-direction:column;gap:1px;line-height:1.1;font-size:.95rem;border-radius:8px}
+.place-btn .place-pts{font-size:.7rem;font-weight:700;opacity:.85;background:none;padding:0}
 /* Selected: the Rivals mode accent, with ink picked per theme so the label keeps its contrast. */
 .place-btn.selected{background:var(--mode-accent);border:1px solid var(--mode-accent);color:#000}
 [data-theme="light"] .place-btn.selected{color:#fff}
-.place-btn.selected .place-pts{background:rgba(0,0,0,.2)}
-[data-theme="light"] .place-btn.selected .place-pts{background:rgba(255,255,255,.25)}
 .wager-btn.used{background:var(--btn-used-bg);opacity:.22;cursor:not-allowed;text-decoration:line-through}
 
 .wager-badge{position:absolute;top:-8px;right:-5px;width:1.3rem;height:1.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:900;line-height:1;padding-bottom:1px;pointer-events:none}
@@ -2678,6 +2675,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   /* Re-tuned for this rule's own 1rem, not inherited from the -.24em above — checked separately
      at this narrower size (screenshot, not box math; see that rule's own comment) rather than
      assumed to scale evenly from the wide-desktop value, since it doesn't. */
+  /* Rivals place tiles keep their own size (the clamp above would squash them to a 2rem square). */
+  .place-btn{width:clamp(3rem,15cqw,3.6rem);min-width:0;height:calc(var(--wager-size) * 1.1);min-height:0;font-size:.95rem}
   .result-btn>.icon-emoji{margin-top:-.13em}
   .bonus-choice-btn{width:clamp(1.7rem,7.5cqw,2.2rem);height:clamp(1.7rem,7.5cqw,2.2rem);font-size:.92rem}
 
