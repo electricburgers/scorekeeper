@@ -2054,7 +2054,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .wager-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
 .wager-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red)}
 /* Revolution Rivals place picker: same audited .wager-btn colours; each button is wider so it can hold "#1" plus its points. */
-.place-btn{width:auto;min-width:calc(var(--wager-size) * 1.45);padding:0 .45rem;flex-direction:column;gap:0;line-height:1.05;font-size:.95rem}
+.place-btn{width:auto;min-width:calc(var(--wager-size) * 1.8);padding:0 .5rem;flex-direction:column;gap:0;line-height:1.05;font-size:.95rem}
 .place-btn .place-pts{font-size:.7rem;font-weight:600;opacity:.85}
 .place-btn.selected{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
 .place-btn.selected.place-other{background:var(--btn-incorrect-bg);border-color:var(--accent-red)}

@@ -64,8 +64,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v22.1"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 13, 2026 11:34 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.2"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 13, 2026 4:50 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -529,13 +529,7 @@ function syncGameModeSelect() {
     name = gameModeName();
   document.documentElement.setAttribute("data-mode", mode);
   document.title = mode === "rivals" ? name : "Scorekeeper - " + name;
-  // Revolution Rivals brands the header too; the installed app name and manifest stay "Scorekeeper".
-  const logo = document.getElementById("appLogo");
-  if (logo) {
-    const want = mode === "rivals" ? "Revolution Rivals" : "Score Keeper";
-    if (logo.textContent !== want)
-      logo.innerHTML = mode === "rivals" ? "Revolution <span>Rivals</span>" : "Score <span>Keeper</span>";
-  }
+  // Revolution Rivals changes the window title only; the header logo stays "Score Keeper".
   const setText = (id, t) => {
     const el = document.getElementById(id);
     if (el && el.textContent !== t) el.textContent = t;

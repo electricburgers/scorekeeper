@@ -170,7 +170,7 @@ const ICON_MODE_TUNE_PICT =
 const ICON_MODE_REGULAR_EMOJI = '<span class="icon-emoji">🎯</span>';
 const ICON_MODE_THEME_EMOJI = '<span class="icon-emoji">🎭</span>';
 const ICON_MODE_RIVALS_PICT =
-  '<svg class="icon-ui icon-tinted icon-mode-rivals" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path class="ip-2" d="M13 19l6-6M16 16l4 4M19 21l2-2"/><path d="M9.5 6.5 21 18v3h-3L6.5 9.5"/><path class="ip-2" d="M5 14l4 4M7 17l-3 3M3 19l2 2"/></svg>';
+  '<svg class="icon-ui icon-tinted icon-mode-rivals" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path class="ip-2" d="M13 19l6-6M16 16l4 4M19 21l2-2"/><path d="M14.5 6.5 18 3h3v3l-3.5 3.5"/><path class="ip-2" d="M5 14l4 4M7 17l-3 3M3 19l2 2"/></svg>';
 const ICON_MODE_RIVALS_EMOJI = '<span class="icon-emoji">⚔️</span>';
 const ICON_MODE_TUNE_EMOJI = '<span class="icon-emoji">🎵</span>';
 const ICON_PENCIL_PICT =
