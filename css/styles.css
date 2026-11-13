@@ -942,7 +942,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    a solid green bar. Landscape, because a spreadsheet is wider than it is tall and the portrait
    document this replaced was indistinguishable from the PDF button beside it. */
 .icon-sheet .sh-head{fill:currentColor;fill-opacity:.34;stroke:none}
-.icon-flag .fl-sq{fill:currentColor;stroke:none}
+.icon-flag .fl-cloth{fill:#fff;stroke:none}
+.icon-flag .fl-sq{fill:#14161c;stroke:none}
 .icon-flag .fl-edge{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}
 /* Each pictograph carries .icon-tinted plus its own class; the class only sets --icon-tint, so
    the two rules below can both read it without repeating a colour.

@@ -146,7 +146,8 @@ const ICON_SND_CRASH_PICT =
   '<svg class="icon-ui icon-tinted icon-snd-crash" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-burst" d="M12.41 3.87 14.11 6.42 18.51 5.24 17.56 9.22 20.62 10.92 16.4 12.97 21.98 17.51 14.7 15.61 16.37 22.11 12.01 18.1 8.58 20.62 7.75 17.23 2.71 17.38 7.92 12.91 1.57 10.05 7.09 8.7 6.7 5.29 10.18 7.47Z"/><path class="snd-mid" d="M12.25 7.12 13.27 8.65 15.91 7.94 15.34 10.33 17.17 11.35 14.64 12.58 17.99 15.31 13.62 14.17 14.62 18.07 12.01 15.66 9.95 17.17 9.45 15.14 6.43 15.23 9.55 12.55 5.74 10.83 9.05 10.02 8.82 7.97 10.91 9.28Z"/><path class="ip-2" d="M12 8.4 12.57 10.61 14.55 9.45 13.39 11.43 15.6 12 13.39 12.57 14.55 14.55 12.57 13.39 12 15.6 11.43 13.39 9.45 14.55 10.61 12.57 8.4 12 10.61 11.43 9.45 9.45 11.43 10.61Z"/></svg>';
 const ICON_SND_HORN_PICT =
   '<svg class="icon-ui icon-tinted icon-snd-horn" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path class="snd-body" d="M2 10h2v4H2z"/><path class="snd-body" d="M4 8 15 3.6v16.8L4 16z"/><path class="ip-2" d="M17.7 8.4a4.6 4.6 0 0 1 0 7.2"/><path class="ip-2" d="M20.2 6.2a8.4 8.4 0 0 1 0 11.6" opacity=".5"/></svg>';
-// Final Results' checkered flag. Deliberately NOT one of the tinted pictographs: a racing flag
+// v22.11: the cloth is now solid white (not see-through), tilted 10°, with a currentColor outline —
+// white in dark mode, dark in light. Original note: Final Results' checkered flag. Deliberately NOT one of the tinted pictographs: a racing flag
 // has no colour of its own, and the two things it IS made of are "ink" and "not ink". The filled
 // squares take currentColor and the alternating ones are left empty, so the empty half is
 // whatever surface the header sits on — which makes the checker read correctly as white-on-dark
@@ -157,7 +158,7 @@ const ICON_SND_HORN_PICT =
 // sitting flat on it. Three checks across rather than four: at the 16px this header renders, a
 // four-column checker closed up into a blob.
 const ICON_FLAG_PICT =
-  '<svg class="icon-ui icon-flag" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 2v20"/><path class="fl-edge" d="M4 3C6 3.2 8 4.2 10 4.4C12 4.6 14 2.2 16 2C18 1.8 20 3.4 22 3.6L22 15.6C20 15.4 18 13.8 16 14C14 14.2 12 16.6 10 16.4C8 16.2 6 15.2 4 15Z"/><path class="fl-sq" d="M4 3C6 3.2 8 4.2 10 4.4L10 10.4C8 10.2 6 9.2 4 9Z"/><path class="fl-sq" d="M16 2C18 1.8 20 3.4 22 3.6L22 9.6C20 9.4 18 7.8 16 8Z"/><path class="fl-sq" d="M10 10.4C12 10.6 14 8.2 16 8L16 14C14 14.2 12 16.6 10 16.4Z"/></svg>';
+  '<svg class="icon-ui icon-flag" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g transform="rotate(-10 12 12)"><path d="M4 2v20"/><path class="fl-cloth" d="M4 3C6 3.2 8 4.2 10 4.4C12 4.6 14 2.2 16 2C18 1.8 20 3.4 22 3.6L22 15.6C20 15.4 18 13.8 16 14C14 14.2 12 16.6 10 16.4C8 16.2 6 15.2 4 15Z"/><path class="fl-sq" d="M4 3C6 3.2 8 4.2 10 4.4L10 10.4C8 10.2 6 9.2 4 9Z"/><path class="fl-sq" d="M16 2C18 1.8 20 3.4 22 3.6L22 9.6C20 9.4 18 7.8 16 8Z"/><path class="fl-sq" d="M10 10.4C12 10.6 14 8.2 16 8L16 14C14 14.2 12 16.6 10 16.4Z"/><path class="fl-edge" d="M4 3C6 3.2 8 4.2 10 4.4C12 4.6 14 2.2 16 2C18 1.8 20 3.4 22 3.6L22 15.6C20 15.4 18 13.8 16 14C14 14.2 12 16.6 10 16.4C8 16.2 6 15.2 4 15Z"/></g></svg>';
 // Settings > Game Mode: a target for Regular trivia, sparkles for Theme Night, a musical note for
 // Name That Tune. Tinted via the existing --tint-* tokens (see .icon-mode-* in styles.css); emoji
 // twins 🎯 / 🎭 / 🎵.
