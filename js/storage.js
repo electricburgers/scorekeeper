@@ -126,7 +126,7 @@ function completedQuestions(st) {
       for (let ti = 0; ti < st.teams.length; ti++) {
         if (st.teams[ti] && st.teams[ti].paused) continue;
         const a = qs[qi] && qs[qi][ti];
-        if (a && a.wager !== undefined && a.correct !== undefined) n++;
+        if (isAnswered(a)) n++;
       }
       if (n >= active) done++;
     }
@@ -143,7 +143,7 @@ function scoredTeamCount(st) {
       const qs = (st.rounds[ri] && st.rounds[ri].questions) || [];
       for (let qi = 0; qi < qs.length && !any; qi++) {
         const a = qs[qi] && qs[qi][ti];
-        if (a && (a.wager !== undefined || a.correct !== undefined)) any = true;
+        if (a && (a.wager !== undefined || a.correct !== undefined || a.place !== undefined)) any = true;
       }
     }
     if (any) n++;
@@ -525,6 +525,23 @@ function toTuneSample(s) {
   s.rounds[2].bonus = {};
   return s;
 }
+// The same finished game as a Revolution Rivals night: the Name That Tune layout (Q5 wagers in all
+// four rounds), with each Q1-4 result turned into a survey place - a correct answer lands #1, #2
+// or #3 (varied), an incorrect one lands outside the top 3 - and guesses scaled to 210.
+function toRivalsSample(s) {
+  toTuneSample(s);
+  s.meta.mode = "rivals";
+  scaleSampleGuesses(s, 210);
+  s.rounds.forEach((r, ri) =>
+    r.questions.forEach((q, qi) =>
+      Object.keys(q).forEach((ti) => {
+        const a = q[ti];
+        q[ti] = { place: a && a.correct ? ((+ti + qi + ri) % 3) + 1 : 0 };
+      }),
+    ),
+  );
+  return s;
+}
 async function loadSampleGame() {
   const modeName = gameModeName();
   const msg = gameState.teams.length
@@ -535,6 +552,7 @@ async function loadSampleGame() {
   gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON));
   if (mode === "theme") toThemeSample(gameState);
   else if (mode === "tune") toTuneSample(gameState);
+  else if (mode === "rivals") toRivalsSample(gameState);
   autosave();
   renderAll();
   document.getElementById("resumeBanner")?.classList.remove("show");

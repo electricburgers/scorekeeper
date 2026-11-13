@@ -124,7 +124,9 @@ Roughly 10-15 hours of focused work, with most of the uncertainty in export and 
 ## Still open (small)
 
 1. **Ties in place.** Assumed two teams can both land on #1 for the same question, since each is scored independently.
-2. **Script date.** The script is dated 10-26-2023. Confirm 10/7/4 and the 5/10/15/20 caps are still current.
+2. ~~Script date.~~ **Confirmed:** 10/7/4 and the 5/10/15/20 caps are current.
+
+(Ties in place: still unconfirmed; the app allows several teams on the same place.)
 
 ## Git procedure
 

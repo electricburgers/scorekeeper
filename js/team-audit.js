@@ -90,7 +90,11 @@ function auditOverallStats(ti) {
   for (let ri = 0; ri < 4; ri++) {
     for (let qi = 0; qi < 4; qi++) {
       const a = gameState.rounds[ri].questions[qi][ti];
-      if (a && a.wager != null && a.wager !== "" && a.correct != null) {
+      if (a && a.place !== undefined) {
+        // Revolution Rivals: any top-3 place counts as "correct".
+        if (a.place > 0) correct++;
+        else incorrect++;
+      } else if (a && a.wager != null && a.wager !== "" && a.correct != null) {
         if (a.correct) correct++;
         else incorrect++;
       }
@@ -124,6 +128,15 @@ function auditOverallStats(ti) {
 }
 function auditQLine(ri, qi, ti) {
   const a = gameState.rounds[ri].questions[qi][ti] || {};
+  if (a.place !== undefined) {
+    // Revolution Rivals: a survey place, not a wager.
+    const label = a.place ? "#" + a.place : "Other";
+    const p = answerPoints(a);
+    const res = p
+      ? `<span class="aud-res aud-correct">${CHECK_ICON_SVG} top 3</span>`
+      : `<span class="aud-res aud-wrong">${ICON_AUDIT_WRONG} not in top 3</span>`;
+    return `<div class="aud-line"><span class="aud-q">Q${qi + 1}</span><span class="aud-wager">${label}</span>${res}<span class="aud-p ${p ? "pos" : "zero"}">${p ? "+" + p : "0"}</span></div>`;
+  }
   const hasW = a.wager !== undefined,
     hasR = a.correct !== undefined;
   let res, pts, pcls;
@@ -258,8 +271,8 @@ function buildAudit(ti) {
   // Round 3 \u2014 Grand Total and everything after it (Guess/Diff, overall stats, note) stays
   // full-width below both columns rather than living inside either one.
   let col1, col2;
-  if (isTune()) {
-    // Name That Tune: four rounds, each headed with what it asks for and closed by its Q5 wager
+  if (isTune() || isRivals()) {
+    // Name That Tune (and Revolution Rivals, whose Q5 is a wager on the #1 answer): four rounds, each headed with what it asks for and closed by its Q5 wager
     // (Round 1 / 2 / 3 / 4 wagers cap at 5 / 10 / 15 / 20).
     col1 = roundBlock(0, roundTitle(0), "rl-1");
     col1 += wagerBlock(gameState.wager1[ti], "Round 1 Wager", "rl-1", "win or lose, 1\u20135");

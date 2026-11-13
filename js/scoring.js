@@ -47,11 +47,22 @@ const THEME_WAGER_MAX = { wager1: 5, halftime: 10, final: 20 };
 const TUNE_WAGER_MAX = { wager1: 5, halftime: 10, wager3: 15, final: 20 };
 // What a team has to name in each Name That Tune round (shown next to "Round N").
 const TUNE_ROUND_TITLES = ["Song Title", "Artist", "Song Title", "Song Title & Artist"];
-const GAME_MODES = ["regular", "theme", "tune"];
-const MODE_NAMES = { regular: "Regular Trivia", theme: "Theme Night", tune: "Name That Tune" };
+// Revolution Rivals: 4 rounds like Name That Tune, same Q5 wager caps (5 / 10 / 15 / 20), but Q1-4 are
+// scored by survey PLACE instead of a picked wager: the team's answer lands #1 / #2 / #3 / elsewhere
+// for 10 / 7 / 4 / 0. Q5 is a wager on the #1 answer only. Perfect night = 16 x 10 + 50 = 210.
+// A Q1-4 answer is stored as { place } (1, 2, 3 or 0 for "other"); see isAnswered().
+const RIVALS_WAGER_MAX = TUNE_WAGER_MAX;
+const RIVALS_PLACE_POINTS = { 1: 10, 2: 7, 3: 4, 0: 0 };
+const GAME_MODES = ["regular", "theme", "tune", "rivals"];
+const MODE_NAMES = {
+  regular: "Regular Trivia",
+  theme: "Theme Night",
+  tune: "Name That Tune",
+  rivals: "Revolution Rivals",
+};
 // Highest score guess a team may enter: a perfect night in that mode (Regular's 146 also covers
 // its 4-part bonuses).
-const GUESS_LIMITS = { regular: 146, theme: 95, tune: 126 };
+const GUESS_LIMITS = { regular: 146, theme: 95, tune: 126, rivals: 210 };
 function gameMode() {
   const m = gameState.meta.mode;
   return GAME_MODES.includes(m) ? m : "regular";
@@ -68,9 +79,23 @@ function isTheme() {
 function isTune() {
   return gameState.meta.mode === "tune";
 }
-// Theme Night and Name That Tune both close every round with a Q5 wager (no 4-part bonus).
+function isRivals() {
+  return gameState.meta.mode === "rivals";
+}
+// Theme Night, Name That Tune and Revolution Rivals all close every round with a Q5 wager (no
+// 4-part bonus).
 function hasQ5Wagers() {
-  return isTheme() || isTune();
+  return isTheme() || isTune() || isRivals();
+}
+// A Q1-4 answer is "scored" once it carries a Rivals place, or a Regular-style wager AND a verdict.
+function isAnswered(a) {
+  return !!a && (a.place !== undefined || (a.wager !== undefined && a.correct !== undefined));
+}
+// Points one Q1-4 answer is worth (0 for an unanswered one).
+function answerPoints(a) {
+  if (!a) return 0;
+  if (a.place !== undefined) return RIVALS_PLACE_POINTS[a.place] || 0;
+  return a.wager !== undefined && a.correct ? a.wager : 0;
 }
 function roundWagers(ri) {
   return isTheme() ? THEME_ROUND_WAGERS[ri] || [] : ROUND_WAGERS[ri];
@@ -88,7 +113,8 @@ function roundTitle(ri) {
 // Which special-wager block (if any) closes round ri in the current mode.
 function roundWagerType(ri) {
   if (isTheme()) return ["wager1", "halftime", "final"][ri] || null;
-  if (isTune()) return ["wager1", "halftime", "wager3", "final"][ri] || null;
+  if (isTune() || isRivals())
+    return ["wager1", "halftime", "wager3", "final"][ri] || null;
   return ri === 1 ? "halftime" : ri === 3 ? "final" : null;
 }
 function wagerStore(type) {
@@ -101,7 +127,7 @@ function wagerStore(type) {
         : gameState.halftime;
 }
 function wagerMax(type) {
-  if (isTune()) return TUNE_WAGER_MAX[type];
+  if (isTune() || isRivals()) return TUNE_WAGER_MAX[type];
   return isTheme() ? THEME_WAGER_MAX[type] : type === "final" ? 20 : 10;
 }
 
@@ -259,7 +285,10 @@ function checkGameStarted() {
     for (let qi = 0; qi < 4; qi++) {
       const q = gameState.rounds[ri].questions[qi];
       for (const k in q) {
-        if (q[k] && (q[k].wager !== undefined || q[k].correct !== undefined)) {
+        if (
+          q[k] &&
+          (q[k].wager !== undefined || q[k].correct !== undefined || q[k].place !== undefined)
+        ) {
           gameState.gameStarted = true;
           return true;
         }
@@ -297,6 +326,7 @@ function isBeerRound(ri, qi) {
   }
   return true;
 }
+// (isBeerRound is false in Rivals: place answers carry no wager, so the test above never passes.)
 
 function checkBeerRound(ri, qi) {
   const key = ri + "-" + qi;
@@ -335,8 +365,7 @@ function roundSubRaw(ti, ri) {
   let t = 0;
   for (let qi = 0; qi < 4; qi++) {
     const a = rd.questions[qi][ti];
-    if (a && a.wager !== undefined && a.correct !== undefined)
-      t += a.correct ? a.wager : 0;
+    t += answerPoints(a);
   }
   if (hasBonusQ(ri)) {
     const bc = rd.bonus[ti];
@@ -364,7 +393,7 @@ function w1Pts(ti) {
 }
 // Name That Tune's Round 3 wager (its own store; Theme Night / Regular never write it).
 function w3Pts(ti) {
-  if (!isTune()) return 0;
+  if (!isTune() && !isRivals()) return 0;
   const w = gameState.wager3[ti];
   if (!w || w.wager == null || w.wager === "" || w.correct == null) return 0;
   return w.correct ? +w.wager : -w.wager;
@@ -580,7 +609,7 @@ function qScored(ri, qi) {
   for (let ti = 0; ti < n; ti++) {
     if (isPaused(ti)) continue;
     const a = gameState.rounds[ri].questions[qi][ti];
-    if (a && a.wager !== undefined && a.correct !== undefined) done++;
+    if (isAnswered(a)) done++;
   }
   return { done, total: activeTeamCount() };
 }
@@ -594,7 +623,7 @@ function roundProgress(ri) {
     for (let ti = 0; ti < len; ti++) {
       if (isPaused(ti)) continue;
       const a = gameState.rounds[ri].questions[qi][ti];
-      if (a && a.wager !== undefined && a.correct !== undefined) done++;
+      if (isAnswered(a)) done++;
     }
   if (hasBonusQ(ri)) {
     total += n;
@@ -616,6 +645,23 @@ function roundProgress(ri) {
 
 function qVerdict(ri, qi) {
   if (isBeerRound(ri, qi)) return "beer";
+  // Rivals: "everyone wrong" means nobody landed in the top 3.
+  if (isRivals()) {
+    let ans = 0,
+      miss = 0;
+    for (let ti = 0; ti < gameState.teams.length; ti++) {
+      if (isPaused(ti)) continue;
+      const a = gameState.rounds[ri].questions[qi][ti];
+      if (a && a.place !== undefined) {
+        ans++;
+        if (a.place === 0) miss++;
+      }
+    }
+    if (ans === 0) return "next";
+    if (miss === ans) return "everyonewrong";
+    if (miss >= Math.ceil(ans / 2)) return "manywrong";
+    return "next";
+  }
   const n = gameState.teams.length;
   let ans = 0,
     wrong = 0;

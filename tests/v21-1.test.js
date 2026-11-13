@@ -72,7 +72,7 @@ describe("exports name the mode in every mode", () => {
 });
 
 describe("per-mode accent colour", () => {
-  const MODES = ["regular", "theme", "tune"];
+  const MODES = ["regular", "theme", "tune", "rivals"];
   const accent = (theme, cb, mode) => {
     const t = tokensFor(theme, cb, mode);
     return { t, col: resolve(t, t["--mode-accent"]) };
@@ -92,8 +92,8 @@ describe("per-mode accent colour", () => {
         }
       }
     });
-    it(`the three accents are three different colours (${name})`, () => {
-      assert.equal(new Set(MODES.map((m) => accent(theme, cb, m).col)).size, 3);
+    it(`every mode has its own accent colour (${name})`, () => {
+      assert.equal(new Set(MODES.map((m) => accent(theme, cb, m).col)).size, MODES.length);
     });
     if (cb) {
       it(`Color Vision ${cb} swaps every accent for its own palette (${theme})`, () => {

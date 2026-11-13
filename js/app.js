@@ -64,8 +64,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.62"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 12, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.1"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 13, 2026 11:34 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -518,16 +518,24 @@ const MODE_BLURBS = {
   regular: "4 rounds, a multi-part bonus in Rounds 1 and 3, halftime and final wagers",
   theme: "3 rounds, each ending in a bonus wager, with a Theme Name",
   tune: "4 rounds of music questions, each ending in a bonus wager (perfect score 126)",
+  rivals: "4 rounds scored by survey place (#1 = 10, #2 = 7, #3 = 4), each ending in a wager on the #1 answer (perfect score 210)",
 };
 // Everything that tells the host which mode they are in, refreshed on every render: the dropdown
 // and its pictograph, the accent colour (data-mode on <html>), the tab title, the Scores heading
 // and the Settings tooltips.
-const MODE_EMOJI = { regular: "🎯", theme: "🎭", tune: "🎵" };
+const MODE_EMOJI = { regular: "🎯", theme: "🎭", tune: "🎵", rivals: "⚔️" };
 function syncGameModeSelect() {
   const mode = gameMode(),
     name = gameModeName();
   document.documentElement.setAttribute("data-mode", mode);
-  document.title = "Scorekeeper - " + name;
+  document.title = mode === "rivals" ? name : "Scorekeeper - " + name;
+  // Revolution Rivals brands the header too; the installed app name and manifest stay "Scorekeeper".
+  const logo = document.getElementById("appLogo");
+  if (logo) {
+    const want = mode === "rivals" ? "Revolution Rivals" : "Score Keeper";
+    if (logo.textContent !== want)
+      logo.innerHTML = mode === "rivals" ? "Revolution <span>Rivals</span>" : "Score <span>Keeper</span>";
+  }
   const setText = (id, t) => {
     const el = document.getElementById(id);
     if (el && el.textContent !== t) el.textContent = t;
@@ -559,7 +567,7 @@ function syncGameModeSelect() {
   if (icon)
     icon.innerHTML = emoji
       ? ""
-      : { regular: ICON_MODE_REGULAR_PICT, theme: ICON_MODE_THEME_PICT, tune: ICON_MODE_TUNE_PICT }[mode];
+      : { regular: ICON_MODE_REGULAR_PICT, theme: ICON_MODE_THEME_PICT, tune: ICON_MODE_TUNE_PICT, rivals: ICON_MODE_RIVALS_PICT }[mode];
 }
 function toggleUnlockEventDetails() {
   const p = loadPrefs();
@@ -1241,6 +1249,14 @@ function loadTutorialLib() {
   return tutorialLibPromise;
 }
 async function startTutorial() {
+  // Revolution Rivals has no guided tour yet (Regular's would teach wagers on Q1-4, which Rivals
+  // doesn't have), so say so instead of walking a host through the wrong game.
+  if (isRivals()) {
+    appAlert(
+      "The guided tour isn't available for Revolution Rivals yet. Try Example loads a finished sample game, and the FAQ explains the place buttons.",
+    );
+    return;
+  }
   try {
     await loadTutorialLib();
     return await Tutorial.start();
@@ -1607,7 +1623,7 @@ function renderLeftBody() {
           (rp.total - rp.done) +
           " left</span>";
     }
-    h += `<div class="section ${collapsedSections.has("sec-r" + rn) ? "collapsed" : ""} ${rComplete ? "round-complete" : ""}" id="sec-r${rn}"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-r${rn}')"><span class="chevron">▼</span><h2><span>${roundTitle(ri)}</span>${rpBadge}<span class="round-break"></span><span class="round-label ${ROUND_COLORS[ri]} round-wager-label">Wagers: ${roundWagers(ri).join(", ")}</span></h2></div><div class="section-body">`;
+    h += `<div class="section ${collapsedSections.has("sec-r" + rn) ? "collapsed" : ""} ${rComplete ? "round-complete" : ""}" id="sec-r${rn}"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-r${rn}')"><span class="chevron">▼</span><h2><span>${roundTitle(ri)}</span>${rpBadge}<span class="round-break"></span><span class="round-label ${ROUND_COLORS[ri]} round-wager-label">${isRivals() ? "Places: 10 / 7 / 4 / 0" : "Wagers: " + roundWagers(ri).join(", ")}</span></h2></div><div class="section-body">`;
     for (let qi = 0; qi < 4; qi++) h += renderWQ(ri, qi);
     const wt = roundWagerType(ri);
     if (wt === "wager1" || wt === "wager3")
@@ -1764,7 +1780,7 @@ function jumpToFirstUnanswered() {
     for (let ti = 0; ti < gameState.teams.length; ti++) {
       if (isPaused(ti)) continue;
       const a = gameState.rounds[ri].questions[qi][ti];
-      if (a && a.wager !== undefined && a.correct !== undefined) done++;
+      if (isAnswered(a)) done++;
     }
     if (done < n) {
       targetSel = "#qblock-" + ri + "-" + qi;
@@ -1859,8 +1875,16 @@ function renderQStatsRow(s) {
 // SECTION: QUESTION RENDERERS: one regular question, the bonus question (Q5), and the special wagers
 // Each draws a list of team rows with correct/incorrect and wager buttons, plus sort controls.
 // ============================================================================
+// Revolution Rivals' Q1-4 row buttons: which survey place the team's answer landed on.
+const RIVALS_PLACES = [
+  { place: 1, label: "#1", name: "number 1" },
+  { place: 2, label: "#2", name: "number 2" },
+  { place: 3, label: "#3", name: "number 3" },
+  { place: 0, label: "Other", name: "not in the top 3" },
+];
 function renderWQ(ri, qi) {
-  const wagers = roundWagers(ri);
+  const rivals = isRivals();
+  const wagers = rivals ? [] : roundWagers(ri);
   const qs = qScored(ri, qi);
   const beer = isBeerRound(ri, qi);
   const qKey = ri + "-" + qi;
@@ -1903,7 +1927,7 @@ function renderWQ(ri, qi) {
       </div>
     </div>
     <div class="q-header-right">
-      ${qResultToggle ? renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length)) : ""}
+      ${qResultToggle && !rivals ? renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length)) : ""}
       ${sortBtns}
     </div>
   </div>`;
@@ -1932,8 +1956,8 @@ function renderWQ(ri, qi) {
     const ans = gameState.rounds[ri].questions[qi][ti] || {};
     const uw = usedW(ti, ri);
     const sel = ans.wager;
-    const hasW = sel !== undefined,
-      hasR = ans.correct !== undefined;
+    const hasW = rivals ? ans.place !== undefined : sel !== undefined,
+      hasR = rivals ? hasW : ans.correct !== undefined;
     const isFlash =
       lastAction &&
       lastAction.ri === ri &&
@@ -1947,7 +1971,7 @@ function renderWQ(ri, qi) {
       !isFlash;
     let ptsHtml;
     if (hasW && hasR) {
-      const p = ans.correct ? ans.wager : 0;
+      const p = answerPoints(ans);
       ptsHtml =
         p > 0
           ? `<span class="ta-pts pts-pos">+${p}</span>`
@@ -1959,6 +1983,11 @@ function renderWQ(ri, qi) {
     else if (isFlash) rowCls += " flash";
 
     h += `<div class="${rowCls}" data-ta="${ri}-${qi}-${ti}"><span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} — tap to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span><div class="ta-wagers">`;
+    if (rivals)
+      RIVALS_PLACES.forEach((pl) => {
+        const on = ans.place === pl.place;
+        h += `<button class="wager-btn place-btn${on ? " selected" : ""}${pl.place === 0 ? " place-other" : ""}" aria-pressed="${on}" aria-label="${pl.name}, ${RIVALS_PLACE_POINTS[pl.place]} points" onclick="setPlace(${ri},${qi},${ti},${pl.place})">${pl.label}<span class="place-pts">${RIVALS_PLACE_POINTS[pl.place]}</span></button>`;
+      });
     wagers.forEach((w) => {
       const isSel = sel === w,
         isUsed = !isSel && uw.some((u) => u.wager === w && u.qi !== qi);
@@ -1997,7 +2026,7 @@ function toggleQuestion(ri, qi) {
 // "Answered" per sort kind, shared by the sort actions and the Sort button's can-re-sort hint.
 function qAnswered(ri, qi, ti) {
   const a = gameState.rounds[ri].questions[qi][ti];
-  return !!(a && a.wager !== undefined && a.correct !== undefined);
+  return isAnswered(a);
 }
 function bonusAnswered(ri, ti) {
   return gameState.rounds[ri].bonus[ti] != null;
@@ -2216,7 +2245,9 @@ function renderSpecialWager(type) {
   const sectionCls = isFinal
     ? "special-section final-wager"
     : "special-section";
-  const titleSub = `BONUS WAGER (1-${max})`;
+  const titleSub = isRivals()
+    ? `WAGER ON THE #1 ANSWER (1-${max})`
+    : `BONUS WAGER (1-${max})`;
   const SETTERS = {
     wager1: ["setW1", "setC1"],
     halftime: ["setHW", "setHC"],
@@ -2224,7 +2255,7 @@ function renderSpecialWager(type) {
     final: ["setFW", "setFC"],
   };
   const [wSet, cSet] = SETTERS[type];
-  const beer = isSpecialBeerRound(type);
+  const beer = !isRivals() && isSpecialBeerRound(type); // Rivals has no Beer Round
   const swN = activeTeamCount();
   let swDone = 0;
   for (let ti = 0; ti < gameState.teams.length; ti++) {
@@ -2661,6 +2692,27 @@ function cycleW(ri, qi, ti, w) {
   }
   renderAll();
   checkBeerRound(ri, qi);
+  setTimeout(() => {
+    lastAction = null;
+  }, 900);
+}
+// Rivals Q1-4: set the survey place a team's answer landed on. Tapping the selected place again
+// clears it (a place is a single choice, so there is no correct -> incorrect -> clear cycle).
+function setPlace(ri, qi, ti, place) {
+  if (!canScore()) return;
+  const q = gameState.rounds[ri].questions[qi];
+  if (q[ti] && q[ti].place === place) delete q[ti];
+  else q[ti] = { place };
+  const now = q[ti];
+  announce(
+    !now
+      ? `${teamLabel(ti)}, round ${ri + 1} question ${qi + 1} cleared`
+      : `${teamLabel(ti)}, round ${ri + 1} question ${qi + 1}, ${now.place ? "number " + now.place + ", plus " + RIVALS_PLACE_POINTS[now.place] : "not in the top 3, 0"} points. Total ${grandTotal(ti)}`,
+  );
+  lastAction = { ri, qi, ti };
+  gameState.gameStarted = true;
+  autosave();
+  renderAll();
   setTimeout(() => {
     lastAction = null;
   }, 900);
