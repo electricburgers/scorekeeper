@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.14 - 2026-11-13
+- **Rivals Q5 wager:** header now reads "Wager #1 (1-N)" instead of "Wager on the #1 answer".
+
 ## v22.13 - 2026-11-13
 - **Rivals place buttons:** the selected button is now amber (dark) / burnt orange (light) in normal vision, since red read as "incorrect". Color vision modes keep their own accents.
 
