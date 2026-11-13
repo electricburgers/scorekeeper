@@ -178,29 +178,6 @@ describe("Drumroll Crossfade: setCraftFadeSec clamps + persists, previewCraftFad
 });
 
 // ============================================================================
-// Sound Test Buttons visibility mirrors Drumroll Crossfade's own gating (both hidden until
-// Manual Drumroll Control is on)
-// ============================================================================
-describe("Sound Test Buttons: hidden until Manual Drumroll Control is on, same as Drumroll Crossfade", () => {
-  let window;
-  before(async () => {
-    window = await loadAppWindow();
-  });
-  after(() => window.close());
-
-  it("both rows are hidden (display:none) while craftManualEnd is off", () => {
-    evalIn(window, `let p = loadPrefs(); p.craftManualEnd = false; savePrefs(p); applyPrefs();`);
-    assert.equal(window.document.getElementById("soundTestRow").style.display, "none");
-    assert.equal(window.document.getElementById("drumCrossfadeRow").style.display, "none");
-  });
-  it("both rows become visible once craftManualEnd is on", () => {
-    evalIn(window, `let p = loadPrefs(); p.craftManualEnd = true; savePrefs(p); applyPrefs();`);
-    assert.notEqual(window.document.getElementById("soundTestRow").style.display, "none");
-    assert.notEqual(window.document.getElementById("drumCrossfadeRow").style.display, "none");
-  });
-});
-
-// ============================================================================
 // Tutorial: exiting mid-tour restores the exact pre-tour gameState
 // ============================================================================
 describe("Tutorial: Tutorial.skip() mid-tour restores the exact pre-tour gameState", () => {

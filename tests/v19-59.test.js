@@ -7,7 +7,7 @@ const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("fs");
 const path = require("path");
-const { loadAppWindow, loadFaqWindow, evalIn } = require("./helpers/load-app");
+const { loadAppWindow, evalIn } = require("./helpers/load-app");
 
 const ROOT = path.join(__dirname, "..");
 const read = (p) => fs.readFileSync(path.join(ROOT, p), "utf8");
@@ -179,17 +179,6 @@ describe("v19.59 — Example Game 3rd-place tie", () => {
       assert.ok(pk.tieWinner && !ma.tieWinner, "Powder Keg is the closer guess");
     } finally {
       window.close();
-    }
-  });
-});
-
-describe("v19.59 — Color Vision removed from the FAQ (restored to the app in v19.63)", () => {
-  it("the FAQ ships no cv-select widget", async () => {
-    const faq = await loadFaqWindow();
-    try {
-      assert.equal(faq.document.querySelector(".cv-select"), null);
-    } finally {
-      faq.close();
     }
   });
 });

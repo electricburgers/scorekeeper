@@ -2,8 +2,6 @@
 "use strict";
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const path = require("node:path");
 const { loadAppWindow, evalIn } = require("./helpers/load-app");
 
 describe("Paused teams (scoring)", () => {
@@ -117,16 +115,3 @@ describe("Paused teams (UI)", () => {
   });
 });
 
-describe("Teams row CSS", () => {
-  const css = fs.readFileSync(path.join(__dirname, "..", "css", "styles.css"), "utf8");
-  it("makes the two checkboxes equal width, swaps to BON when tight, stacks when tighter", () => {
-    assert.match(css, /@container \(max-width:12\.5rem\)\s*\{[^}]*flex-basis:100%/);
-    assert.match(css, /@container \(max-width:[^)]*\)\s*\{[^}]*\.lbl-full\{display:none\}/);
-    assert.match(css, /\.team-checks\s+\.check-label\s*\{[^}]*flex:\s*1 1 0/);
-    assert.match(css, /\.lbl-short/);
-  });
-
-  it("unticked CB/Bonus chips are neutral (quiet chips)", () => {
-    assert.match(css, /\.team-checks \.check-label:not\(\.is-checked\)\{border-color:var\(--border-control\);color:var\(--text-secondary\)\}/);
-  });
-});

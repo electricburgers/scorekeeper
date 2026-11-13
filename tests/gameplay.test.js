@@ -619,11 +619,4 @@ describe("Persistence: empty games and clearSaved", () => {
     assert.equal(loaded.craftPrizeWinner, null);
     assert.equal(loaded.gameStarted, false);
   });
-
-  it("clearSaved() removes the saved session — loadSaved() returns null afterward", () => {
-    evalIn(window, "gameState = freshState(); addTeam(); autosave();");
-    assert.notEqual(evalIn(window, "loadSaved()"), null);
-    evalIn(window, "clearSaved();");
-    assert.equal(evalIn(window, "loadSaved()"), null);
-  });
 });

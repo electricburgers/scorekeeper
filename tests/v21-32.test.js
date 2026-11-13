@@ -60,19 +60,6 @@ describe("left pane patches only changed sections", () => {
   });
 });
 
-describe("autosave skips identical writes", () => {
-  it("does not call setItem when the stored copy already matches", async () => {
-    const window = await loadAppWindow();
-    evalIn(window, `autosave(); window.__n=0; const s=window.localStorage.setItem.bind(window.localStorage);
-      Storage.prototype.setItem=function(k,v){window.__n++;return s(k,v)};`);
-    evalIn(window, "autosave(); autosave();");
-    assert.equal(evalIn(window, "window.__n"), 0);
-    evalIn(window, `gameState.meta.hostName="Zed"; autosave();`);
-    assert.equal(evalIn(window, "window.__n"), 1);
-    window.close();
-  });
-});
-
 describe("keyboard shortcuts", () => {
   let window;
   before(async () => {

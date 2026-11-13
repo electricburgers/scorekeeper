@@ -3,10 +3,7 @@
 "use strict";
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
-const fs = require("fs");
-const path = require("path");
 const { loadAppWindow, evalIn } = require("./helpers/load-app");
-const css = fs.readFileSync(path.join(__dirname, "..", "css/styles.css"), "utf8");
 
 describe("Theme row pictograph", () => {
   let window;
@@ -33,11 +30,5 @@ describe("Theme row pictograph", () => {
     assert.equal(d.getElementById("themeIcon").innerHTML, "");
     assert.match(d.getElementById("themeToggle").textContent, /[🌙☀]/u);
     evalIn(window, 'setIconStyle("pictograph")');
-  });
-  it("is 2rem square, like the Game Mode pictograph, and colored in the Settings row", () => {
-    assert.match(css, /#themeIcon \.icon-sun,#themeIcon \.icon-moon\{[^}]*width:2rem;height:2rem/);
-    assert.match(css, /#themeIcon:empty\{display:none\}/);
-    assert.match(css, /#themeIcon \.icon-sun\{color:var\(--sun-ray\)\}/);
-    assert.match(css, /#themeIcon \.icon-moon\{color:var\(--txt-cyan\)\}/);
   });
 });

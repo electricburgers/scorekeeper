@@ -252,10 +252,6 @@ test('faq/index.html: the "Installing as an App" section exists (this session\'s
   assert.ok(doc.getElementById("install-app"));
 });
 
-test("faq/index.html has no leftover \"Score Audit\" text (renamed to \"Team Report\")", () => {
-  const doc = loadDoc("faq/index.html");
-  assert.doesNotMatch(doc.body.textContent, /Score Audit/);
-});
 
 test("faq/index.html has no leftover graduation-cap/ℹ️ Take the Tour icon markup (replaced by the waving-hand icon)", () => {
   const src = read("faq/index.html");

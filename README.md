@@ -4,17 +4,21 @@ A live scoring tool for trivia nights — a static, no-build-step web app built 
 
 **Live app:** [scorekeeper.triviarevolution.com](https://scorekeeper.triviarevolution.com/)  
 **FAQ & Tips:** [scorekeeper.triviarevolution.com/faq](https://scorekeeper.triviarevolution.com/faq/)  
-**Current version:** v21.34 (as of 2026-11-04) — see [CHANGELOG.md](CHANGELOG.md)
+**Current version:** v22.21 (as of 2026-11-13) — see [CHANGELOG.md](CHANGELOG.md)
 
 ## What it does
 
 Scorekeeper is designed for a trivia host managing a game with multiple teams:
 
 - **Real-time score tracking** — enter team names, track scores, and watch standings update live across all devices.
+- **Four game modes** — pick from the Game Mode dropdown: **Regular Trivia** (4 rounds, 4-part bonuses, halftime/final wagers), **Theme Night** (3 rounds, each closed by a Q5 wager), **Name That Tune** (4 rounds, each closed by a Q5 wager) and **Revolution Rivals** (survey-style: Q1–4 score by the answer's place — #1/#2/#3/Other = 10/7/4/0 — with a Q5 wager on the #1 answer; perfect night 210). Each mode has its own accent colour, score-guess limit, exports and tutorial, and switching modes with scores on the board asks first.
 - **Question flow** — mark questions correct/incorrect, adjust scores per team, and navigate through halftime and final standings.
 - **Drumroll & prize drawing** — built-in drumroll animation with Web Audio playback (no HTML5 `<audio>` lag) for announcing prize winners.
 - **Mobile & desktop UI** — responsive design adapts from a phone-sized sidebars-and-scoreboard layout on mobile to a full side-by-side view on tablet/desktop.
 - **Dark & light themes** — built-in theme switcher, plus color-vision accessibility modes (red-green and blue-yellow) for inclusive reading on any display.
+- **Teams tools** — pause a team that sits out, sort the roster A–Z (ignoring a leading The/An/A) or by missing guess, track Bonus Item/CB, and open a per-team Team Report with a rename pencil.
+- **Safety nets** — rolling auto-backups (last 10, restorable from Settings), import team names/host/location from a saved game, and save/load the whole session as a file.
+- **Insights & exports** — score-progression chart (shareable image), keyboard shortcuts (`?` lists them), and XLSX / PDF / JD Form exports named after the mode.
 - **Customizable settings** — adjust text size, sound levels, timer widgets, and manual drumroll controls in Advanced Settings, all persisted to browser storage.
 - **No backend required** — all game state lives in the browser; no login, no account, no server sync needed.
 
@@ -36,9 +40,15 @@ Or use any other HTTP server you prefer (`npx http-server`, Node.js, Ruby, PHP, 
 |---|---|
 | `index.html` | The main app — markup only. |
 | `css/styles.css` | Shared design system (colors, fonts, buttons, settings panel). |
-| `js/scorekeeper.js` | Core game state, rendering, and event handling. |
-| `js/data/` | Bundled audio clips and clips metadata for drumroll playback. |
-| `audio/` | Source audio files (drumroll start/loop/end, horn, sound-test clips). |
+| `js/app.js` | Main app: rendering, settings, event handling and the score-changing actions. |
+| `js/scoring.js` | Pure scoring, ranking and game-mode rules. |
+| `js/storage.js` | Autosave, rolling backups, save/load, import and sample games. |
+| `js/export.js`, `js/craft-prize.js`, `js/team-audit.js`, `js/question-timer.js`, `js/tutorial*.js`, … | Exports (XLSX/PDF), Craft Prize drawing, Team Report, timer and guided tour. See [ARCHITECTURE.md](ARCHITECTURE.md). |
+| `js/data/` | Bundled XLSX templates for export. |
+| `assets/audio/` | Drumroll start/loop/end and horn clips. |
+| `desktop/` | Electron wrapper for the desktop app (see `desktop/README.md`). |
+| `tests/` | Node test suite (jsdom exercises of the real app). |
+| `sw.js` | Service worker for offline use. |
 | `icons/` | App icon in multiple sizes (`icon-192.png`, `icon-512.png`, `apple-touch-icon.png`). |
 | `fonts/` | Self-hosted variable fonts (`inter-var.woff2`, `space-grotesk-var.woff2`) — no Google Fonts request at runtime. |
 | `assets/` | Static assets (social sharing images, etc.). |
@@ -51,7 +61,8 @@ Or use any other HTTP server you prefer (`npx http-server`, Node.js, Ruby, PHP, 
 ### Core Scoring
 - Add teams and track scores in real time.
 - Entry by entry: log who answered, mark correct/incorrect, adjust score per team.
-- Shuffle teams, sort by score (ascending/descending), or restore original order.
+- Sort teams and standings by score (ascending/descending) or restore entry order.
+- Mode-specific scoring: wagers per question (Regular/Theme/Tune) or survey places (Rivals).
 
 ### Question Answering Flow
 - **Before the question:** Set up the points and confirm the team.
@@ -104,11 +115,11 @@ npm test
 - **ESLint** for JavaScript code style.
 - **Stylelint** for CSS consistency.
 - **html-validate** for HTML structure and accessibility.
-- **Node.js test runner** for unit tests (e.g., drumroll audio, scroll anchoring).
+- **Node.js test runner + jsdom** — `npm test` loads the real page and covers scoring/ranking unit tests (`tests/unit-scoring.test.js`), end-to-end flows (`tests/integration-flows.test.js`), exports, PWA/service-worker integrity, accessibility contrast and HTML/CSS structure. `TESTING.md` holds the manual QA checklist.
 
 ### No build step required
 All HTML, CSS, and JS are served as-is. The only pre-processing is:
-- Audio clips are encoded to base64 and bundled in `js/data/drum-clips.js` (generated once, checked in).
+- Audio clips are plain WAV files under `assets/audio/`, precached by the service worker.
 - Icons are pre-generated at standard sizes (`icon-192.png` from `icons/icon-source.svg`).
 
 ## Browser support

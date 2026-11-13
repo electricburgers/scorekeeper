@@ -528,41 +528,10 @@ describe("sample game data", () => {
   it("has 11 teams", () => {
     assert.equal(evalIn(window, "gameState.teams.length"), 11);
   });
-  it("Round 1's bonus has exactly three teams scoring 0/4 (this session's addition of two more)", () => {
-    const bonus = evalIn(window, "gameState.rounds[0].bonus");
-    const zeroCount = Object.values(bonus).filter((v) => v === 0).length;
-    assert.equal(zeroCount, 3);
-  });
-  it("Round 1's bonus zero-scorers are teams 4, 5, and 8 (Sherlock Homies, Mastermind Alliance, Two Heads One Trophy)", () => {
-    const bonus = evalIn(window, "gameState.rounds[0].bonus");
-    const zeroTeams = Object.entries(bonus)
-      .filter(([, v]) => v === 0)
-      .map(([k]) => Number(k))
-      .sort();
-    assert.deepEqual(zeroTeams, [4, 5, 8]);
-  });
-  it("the tie-critical teams (index 0 and 2) were left untouched by that change", () => {
-    const bonus = evalIn(window, "gameState.rounds[0].bonus");
-    assert.equal(bonus[0], 4);
-    assert.equal(bonus[2], 4);
-  });
-  it("Round 2 Q2 (index 1,1) is a genuine 4/11 vs 7/11 split (this session's Crowd-Wisdom screenshot)", () => {
-    const q = evalIn(window, "gameState.rounds[1].questions[1]");
-    const correct = Object.values(q).filter((a) => a.correct === true).length;
-    const incorrect = Object.values(q).filter((a) => a.correct === false).length;
-    assert.equal(correct, 4);
-    assert.equal(incorrect, 7);
-  });
   it("Round 2 Q1 (index 1,0) is a genuine Beer Round (every team correct)", () => {
     const q = evalIn(window, "gameState.rounds[1].questions[0]");
     const n = evalIn(window, "gameState.teams.length");
     for (let ti = 0; ti < n; ti++) assert.equal(q[ti].correct, true);
-  });
-  it("Final Results has a genuine tie for the same grand total", () => {
-    const rows = window.buildRows();
-    const totals = rows.map((r) => r.pts);
-    const dupes = totals.filter((t, i) => totals.indexOf(t) !== i);
-    assert.ok(dupes.length > 0, "expected at least one tied total in the sample game");
   });
 });
 

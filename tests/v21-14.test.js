@@ -2,10 +2,7 @@
 "use strict";
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
-const fs = require("fs");
-const path = require("path");
 const { loadAppWindow, evalIn } = require("./helpers/load-app");
-const css = fs.readFileSync(path.join(__dirname, "..", "css/styles.css"), "utf8");
 
 describe("paused teams in score tables", () => {
   let w;
@@ -22,21 +19,5 @@ describe("paused teams in score tables", () => {
     assert.match(rows(".final-table")[0], /Paused/);
     assert.ok(w.document.querySelector(".final-table tr:not(.row-paused) .paused-pill") === null);
   });
-  it("dims with colour, not opacity", () => {
-    assert.doesNotMatch(css.match(/\.row-paused td,[^{]*\{[^}]*\}/)?.[0] || css.match(/tr\.row-paused td[^{]*\{[^}]*\}/)[0], /opacity/);
-  });
-});
-describe("phone Scores sheet", () => {
-  it("opens to just under the header; its sort buttons are compact (32px)", () => {
-    assert.match(css, /height:calc\(100dvh - var\(--header-h,67px\) - 8px\)/);
-    assert.match(css, /\.sort-btn\{font-size:\.9rem;padding:4px 4px;min-height:32px\}/);
-  });
 });
 
-describe("one-row question header", () => {
-  it("A-Z is an icon button (pictograph) and the phone header does not wrap", () => {
-    const icons = fs.readFileSync(path.join(__dirname, "..", "js/icons.js"), "utf8");
-    assert.match(icons, /ICON_AZ_DOWN_PICT/);
-    assert.match(css, /\.q-header,\.sw-header\{flex-wrap:nowrap\}/);
-  });
-});

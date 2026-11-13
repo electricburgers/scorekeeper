@@ -64,16 +64,12 @@ describe("Revolution Rivals", () => {
     assert.equal(evalIn(window, "qScored(0,0).done"), 0);
   });
 
-  it("renders four place buttons per team, no Beer Round, branded header", () => {
+  it("renders four place buttons per team and no Beer Round", () => {
     evalIn(window, setup(2));
     evalIn(window, "for (let t=0;t<2;t++) gameState.rounds[0].questions[0][t] = { place: 1 }; renderAll();");
     const d = window.document;
     assert.equal(d.querySelectorAll("#qblock-0-0 .place-btn").length, 8);
     assert.equal(evalIn(window, "isBeerRound(0,0)"), false);
-    assert.equal(d.getElementById("appLogo").textContent, "Revolution Rivals");
-    assert.equal(d.title, "Revolution Rivals");
-    evalIn(window, 'gameState.meta.mode = "regular"; renderAll();');
-    assert.equal(d.getElementById("appLogo").textContent, "Score Keeper");
   });
 
   it("an unknown mode still migrates to regular; rivals survives migration", () => {

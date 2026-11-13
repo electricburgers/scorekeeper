@@ -3,8 +3,6 @@
 "use strict";
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
-const fs = require("fs");
-const path = require("path");
 const { loadAppWindow, evalIn } = require("./helpers/load-app");
 
 describe("sticky question header", () => {
@@ -21,11 +19,5 @@ describe("sticky question header", () => {
     assert.ok(d().querySelector("#bqblock-0 .q-header .q-alpha-btn"));
     ["halftime", "final"].forEach((t) => assert.ok(d().querySelector("#swblock-" + t + " .sw-header .q-alpha-btn"), t));
     assert.ok(!d().querySelector(".q-sortbar"));
-  });
-  it("headers are sticky and containers use overflow:clip", () => {
-    const css = fs.readFileSync(path.join(__dirname, "..", "css/styles.css"), "utf8");
-    assert.match(css, /\.q-header\{position:sticky;top:var\(--qbar-top\)/);
-    assert.match(css, /\.special-section \.sw-header\{position:sticky;top:var\(--qbar-top\)/);
-    assert.match(css, /\.section,\.question-block\{overflow:clip\}/);
   });
 });
