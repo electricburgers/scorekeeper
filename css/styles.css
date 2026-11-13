@@ -2979,6 +2979,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .settings-about summary{cursor:pointer;font-weight:600;letter-spacing:.5px}
 .settings-about .about-older{margin-top:2px}
 .settings-about .about-older summary{font-weight:500;letter-spacing:0}
+.settings-about summary{list-style:none;gap:5px}
+.settings-about summary::-webkit-details-marker{display:none}
+.settings-about summary::before{content:"\25B8";font-size:1.1em;line-height:1;display:inline-block;transition:transform .2s}
+.settings-about details[open]>summary::before,.settings-about[open]>summary::before{transform:rotate(90deg)}
 .settings-about ul{margin:2px 0 4px;padding-left:1.1rem}
 
 /* WCAG 2.2 target size (2.5.8): every interactive target is at least 24x24 CSS px. The name links

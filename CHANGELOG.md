@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.10 - 2026-11-13
+- **Settings What's new:** "What's new" and "Earlier versions" now show a solid triangle twisty that rotates when opened (it was missing on mobile).
+
 ## v22.9 - 2026-11-13
 - **Rivals place buttons:** now four stacked tiles (place over points) that fit narrow phone widths; the narrow-column button clamp no longer squashes them.
 
