@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.5 - 2026-11-13
+- **What's new twisty:** in Settings > About, the latest version stays visible and older versions collapse under an "Earlier versions" twisty.
+
 ## v22.4 - 2026-11-13
 - **JD Form mask, Light theme:** the plate is now solid purple in Light theme only, so the white mustache and goatee stand out. Dark theme is unchanged.
 
