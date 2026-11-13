@@ -64,8 +64,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v22.19"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 13, 2026 5:56 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.20"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 13, 2026 6:02 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1980,7 +1980,7 @@ function renderWQ(ri, qi) {
     if (rivals)
       RIVALS_PLACES.forEach((pl) => {
         const on = ans.place === pl.place;
-        h += `<button class="wager-btn place-btn${on ? " selected" : ""}${pl.place === 0 ? " place-other" : ""}" aria-pressed="${on}" aria-label="${pl.name}, ${RIVALS_PLACE_POINTS[pl.place]} points" onclick="setPlace(${ri},${qi},${ti},${pl.place})">${pl.label}<span class="place-pts">${RIVALS_PLACE_POINTS[pl.place]}</span></button>`;
+        h += `<button class="wager-btn place-btn${on ? " selected" : ""}${pl.place === 0 ? " place-other" : ""}" aria-pressed="${on}" aria-label="${pl.name}, ${RIVALS_PLACE_POINTS[pl.place]} points" onclick="setPlace(${ri},${qi},${ti},${pl.place})">${pl.label}<span class="place-pts">${RIVALS_PLACE_POINTS[pl.place]}</span>${on ? (pl.place === 0 ? `<span class="wager-badge bg-incorrect">${ICON_INCORRECT}</span>` : `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>`) : ""}</button>`;
       });
     wagers.forEach((w) => {
       const isSel = sel === w,

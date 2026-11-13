@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.20 - 2026-11-13
+- **Rivals:** the selected place button now carries the checkmark badge for #1, #2 and #3, and the X badge for Other.
+
 ## v22.19 - 2026-11-13
 - **Rivals:** a selected place button (#1/#2/#3/Other) now stays solid on/off instead of picking up the hover look, so it no longer reads as a third state.
 
