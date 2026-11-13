@@ -64,8 +64,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v21.61"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 7, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v21.62"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 12, 2026"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -2552,6 +2552,12 @@ async function removeTeam(ti) {
       '"? This also deletes every round, bonus, and wager score already entered for them — it can’t be undone.'
     : 'Remove "' + name + '"?';
   if (!(await appConfirm(msg, { danger: true, okLabel: "Remove" }))) return;
+  removeTeamAt(ti);
+  autosave();
+  renderAll();
+}
+// Deletes team ti and reindexes everything that points at teams. No confirm, save, or render — callers do those.
+function removeTeamAt(ti) {
   gameState.teams.splice(ti, 1);
   if (teamSortSnapshot) teamSortSnapshot = teamSortSnapshot.filter((i) => i !== ti).map((i) => (i > ti ? i - 1 : i));
   const newAdj = new Set();
@@ -2581,6 +2587,27 @@ async function removeTeam(ti) {
   const maxExcludeN = Math.max(1, gameState.teams.length - 1);
   if ((gameState.meta.excludeTopN || 2) > maxExcludeN)
     gameState.meta.excludeTopN = maxExcludeN;
+}
+// Advanced Settings: delete every team that has no Final score guess (never leaves the roster empty).
+async function removeTeamsWithoutGuess() {
+  const missing = [];
+  gameState.teams.forEach((t, i) => {
+    if (t.scoreGuess === "" || t.scoreGuess == null) missing.push(i);
+  });
+  if (!missing.length) {
+    await appConfirm("Every team already has a score guess — nothing to delete.", { okLabel: "OK" });
+    return;
+  }
+  if (missing.length === gameState.teams.length) {
+    await appConfirm("No team has a score guess, so deleting them all would empty the roster. Nothing was deleted.", { okLabel: "OK" });
+    return;
+  }
+  const names = missing.map((i) => gameState.teams[i].name || "Team " + (i + 1)).join(", ");
+  const extra = checkGameStarted() ? " This also deletes every score already entered for them." : "";
+  const msg = `Delete ${missing.length} team${missing.length === 1 ? "" : "s"} with no score guess (${names})?${extra} It can’t be undone.`;
+  if (!(await appConfirm(msg, { danger: true, okLabel: "Delete" }))) return;
+  for (let k = missing.length - 1; k >= 0; k--) removeTeamAt(missing[k]);
+  announce(`Deleted ${missing.length} team${missing.length === 1 ? "" : "s"} with no score guess`);
   autosave();
   renderAll();
 }
