@@ -974,24 +974,30 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 [data-mode="regular"]{--mode-accent:var(--tint-trophy)}
 [data-mode="theme"]{--mode-accent:var(--tint-flask)}
 [data-mode="tune"]{--mode-accent:var(--tint-cap)}
+[data-mode="rivals"]{--mode-accent:var(--tint-heart)}
 /* Light theme: vivid accents. They are borders/bars, not text, so they only need 3:1 (checked in tests/v21-1.test.js), which leaves far more saturation than the text-safe tints above. Color Vision modes get their own palettes: red-green = orange / blue / rose, blue-yellow = magenta / vermilion / green (Okabe-Ito based, each set kept apart for that deficiency). */
 [data-theme="light"][data-mode="regular"]{--mode-accent:#b57d00}
 [data-theme="light"][data-mode="theme"]{--mode-accent:#8a3ffc}
 [data-theme="light"][data-mode="tune"]{--mode-accent:#0a84cc}
+[data-theme="light"][data-mode="rivals"]{--mode-accent:#c62741}
 /* Light theme section headers pick up a faint wash of the mode accent instead of flat grey (9% keeps every header text pair above AA; audited in the browser). */
 [data-theme="light"] .section-header{background:color-mix(in srgb,var(--mode-accent) 9%,var(--bg-card-alt))}
 [data-theme="light"][data-cb="1"][data-mode="regular"]{--mode-accent:#c76b00}
 [data-theme="light"][data-cb="1"][data-mode="theme"]{--mode-accent:#0a6fe0}
 [data-theme="light"][data-cb="1"][data-mode="tune"]{--mode-accent:#c4177f}
+[data-theme="light"][data-cb="1"][data-mode="rivals"]{--mode-accent:#00806a}
 [data-theme="light"][data-cb="2"][data-mode="regular"]{--mode-accent:#d6007f}
 [data-theme="light"][data-cb="2"][data-mode="theme"]{--mode-accent:#c4510a}
 [data-theme="light"][data-cb="2"][data-mode="tune"]{--mode-accent:#00946a}
+[data-theme="light"][data-cb="2"][data-mode="rivals"]{--mode-accent:#5a3fd0}
 [data-theme="dark"][data-cb="1"][data-mode="regular"]{--mode-accent:#e69f00}
 [data-theme="dark"][data-cb="1"][data-mode="theme"]{--mode-accent:#56b4e9}
 [data-theme="dark"][data-cb="1"][data-mode="tune"]{--mode-accent:#cc79a7}
+[data-theme="dark"][data-cb="1"][data-mode="rivals"]{--mode-accent:#f0e442}
 [data-theme="dark"][data-cb="2"][data-mode="regular"]{--mode-accent:#ff66cc}
 [data-theme="dark"][data-cb="2"][data-mode="theme"]{--mode-accent:#ff8a5c}
 [data-theme="dark"][data-cb="2"][data-mode="tune"]{--mode-accent:#00cc88}
+[data-theme="dark"][data-cb="2"][data-mode="rivals"]{--mode-accent:#ffd84d}
 /* Game Mode: Regular = trophy-gold target, Theme Night = flask-purple sparkles with gold glints
    (--tint-theme-2, not --accent-gold: the light theme's #ffb300 is only 1.8:1 on white),
    Name That Tune = cap-blue note. Every tint is checked against --bg-card in all six theme x color
@@ -999,6 +1005,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-mode-regular{--icon-tint:var(--tint-trophy);--icon-tint-2:var(--tint-trophy-2)}
 .icon-mode-theme{--icon-tint:var(--tint-flask);--icon-tint-2:var(--tint-theme-2)}
 .icon-mode-tune{--icon-tint:var(--tint-cap);--icon-tint-2:var(--tint-cap)}
+.icon-mode-rivals{--icon-tint:var(--tint-heart);--icon-tint-2:var(--tint-heart)}
 /* Game Mode row: the dropdown with its current mode's pictograph beside it. */
 .game-mode-picker{display:inline-flex;align-items:center;gap:8px}
 /* Pictograph mode: the drawn icon sits beside the select (an <option> can only hold text). Emoji
@@ -2046,6 +2053,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .wager-btn:hover:not(.used):not(.correct):not(.incorrect){background:var(--bg-hover);border-color:var(--accent-cyan)}
 .wager-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
 .wager-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red)}
+/* Revolution Rivals place picker: same audited .wager-btn colours; each button is wider so it can hold "#1" plus its points. */
+.place-btn{width:auto;min-width:calc(var(--wager-size) * 1.45);padding:0 .45rem;flex-direction:column;gap:0;line-height:1.05;font-size:.95rem}
+.place-btn .place-pts{font-size:.7rem;font-weight:600;opacity:.85}
+.place-btn.selected{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
+.place-btn.selected.place-other{background:var(--btn-incorrect-bg);border-color:var(--accent-red)}
 .wager-btn.used{background:var(--btn-used-bg);opacity:.22;cursor:not-allowed;text-decoration:line-through}
 
 .wager-badge{position:absolute;top:-8px;right:-5px;width:1.3rem;height:1.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:900;line-height:1;padding-bottom:1px;pointer-events:none}
@@ -2641,7 +2653,12 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 @container scorecol (max-width:600px){
   /* team name on its own line, controls right-aligned on the line below */
   .team-answer,.bonus-row,.special-wager-row{flex-wrap:wrap;row-gap:.35rem;min-height:0}
-  .ta-name{flex:0 0 100%;width:100%;min-width:0;overflow-wrap:break-word;font-size:.82rem;padding-left:2px;padding-right:0;line-height:1.3}
+  /* The name is only as wide as its text (it used to span the whole row, so the empty space above
+     the right-aligned wager buttons opened the Team Report too). A zero-height 100%-wide spacer item
+     forces the controls onto the next line exactly as before; its negative top margin cancels the extra row-gap. */
+  .ta-name{flex:0 1 auto;width:auto;max-width:100%;order:1;min-width:0;overflow-wrap:break-word;font-size:.82rem;padding-left:2px;padding-right:0;line-height:1.3}
+  .team-answer::before,.bonus-row::before,.special-wager-row::before{content:"";flex:0 0 100%;height:0;margin-top:-.35rem;order:2}
+  .team-answer>:not(.ta-name),.bonus-row>:not(.ta-name),.special-wager-row>:not(.ta-name){order:3}
   .ta-name-clickable::after{display:none}
   /* push the control cluster to the right edge of its own line */
   .team-answer>.ta-wagers,.bonus-row>.bonus-right,.special-wager-row>.sw-select{margin-left:auto}
@@ -2987,6 +3004,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .mobile-scores-peek,.mini-progress,.settings-about summary,.sidebar-header,.section-header,.q-header{min-height:44px}
   .settings-about summary,.settings-footer a,a.footer-link{display:inline-flex;align-items:center;min-height:44px}
   .ta-name-clickable,.sr-name-clickable{padding-block:14px;margin-block:-14px}
+  /* The scoring-row name sits right above (or beside) the wager buttons, so its invisible tap padding
+     must not reach into them: a tap that lands a little high on a wager button was opening the Team
+     Report. Rows keep the 24px WCAG 2.5.8 floor from the base rule; only the name-only lists keep 44px. */
+  .ta-name.ta-name-clickable{padding-block:5px;margin-block:-5px}
   .pause-team,.remove-team button{position:relative}
   .pause-team::after,.remove-team button::after{content:"";position:absolute;inset:-12px}
 }

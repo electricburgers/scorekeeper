@@ -14,6 +14,13 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.1 - 2026-11-13
+- **Fix: tapping just above a wager opened the Team Report (iPad):** on scoring rows the team name's tap area no longer extends over the wager buttons. Its invisible padding is back to 24px, and in the narrow layout the name is only as wide as its text instead of the whole row.
+- **Rivals plan:** the wager caps (5 / 10 / 15 / 20) and the 10 / 7 / 4 scoring are confirmed current.
+
+## v22.0 - 2026-11-13
+- **Revolution Rivals mode:** a fourth Game Mode. Four rounds; Q1-4 are scored by survey place with #1 / #2 / #3 / Other buttons (10 / 7 / 4 / 0), and each round ends in a Q5 wager on the #1 answer (caps 5 / 10 / 15 / 20). Perfect night 210, guess range 1-210, no Beer Round, no Theme Name. Header logo, tab title, PDF and XLSX read Revolution Rivals; crossed-swords pictograph and a red accent; Team Report, JSON / CSV (Place columns), PDF, XLSX and Try Example all understand places. Take the Tour is not available in this mode yet.
+
 ## v21.62 - 2026-11-12
 - **Delete teams with no guess:** new "Teams Without a Guess" button under Advanced Settings > Scoring removes every team lacking a Final score guess, after a confirmation listing them. It never empties the roster.
 

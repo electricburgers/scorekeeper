@@ -61,6 +61,7 @@ function buildRows() {
     for (let qi = 0; qi < 4; qi++) {
       const a = gameState.rounds[0].questions[qi][ti] || {};
       r["R1Q" + (qi + 1) + "Wager"] = a.wager != null ? a.wager : "";
+      if (isRivals()) r["R1Q" + (qi + 1) + "Place"] = a.place != null ? a.place : "";
       r["R1Q" + (qi + 1) + "Correct"] =
         a.correct != null ? (a.correct ? 1 : 0) : "";
     }
@@ -75,6 +76,7 @@ function buildRows() {
     for (let qi = 0; qi < 4; qi++) {
       const a = gameState.rounds[1].questions[qi][ti] || {};
       r["R2Q" + (qi + 1) + "Wager"] = a.wager != null ? a.wager : "";
+      if (isRivals()) r["R2Q" + (qi + 1) + "Place"] = a.place != null ? a.place : "";
       r["R2Q" + (qi + 1) + "Correct"] =
         a.correct != null ? (a.correct ? 1 : 0) : "";
     }
@@ -82,6 +84,7 @@ function buildRows() {
     for (let qi = 0; qi < 4; qi++) {
       const a = gameState.rounds[2].questions[qi][ti] || {};
       r["R3Q" + (qi + 1) + "Wager"] = a.wager != null ? a.wager : "";
+      if (isRivals()) r["R3Q" + (qi + 1) + "Place"] = a.place != null ? a.place : "";
       r["R3Q" + (qi + 1) + "Correct"] =
         a.correct != null ? (a.correct ? 1 : 0) : "";
     }
@@ -96,6 +99,7 @@ function buildRows() {
     for (let qi = 0; qi < 4; qi++) {
       const a = gameState.rounds[3].questions[qi][ti] || {};
       r["R4Q" + (qi + 1) + "Wager"] = a.wager != null ? a.wager : "";
+      if (isRivals()) r["R4Q" + (qi + 1) + "Place"] = a.place != null ? a.place : "";
       r["R4Q" + (qi + 1) + "Correct"] =
         a.correct != null ? (a.correct ? 1 : 0) : "";
     }
@@ -107,7 +111,7 @@ function buildRows() {
   });
 }
 function expCols() {
-  return [
+  const cols = [
     "Date",
     "Location",
     "QuizID",
@@ -166,6 +170,8 @@ function expCols() {
     "GrandTotal",
     "Rank",
   ];
+  // Revolution Rivals: each Q1-4 also exports the survey place (1 / 2 / 3 / 0 = other).
+  return isRivals() ? cols.flatMap((c) => (/^R\dQ\dCorrect$/.test(c) ? [c, c.replace("Correct", "Place")] : [c])) : cols;
 }
 
 async function exportPDF() {
@@ -503,7 +509,7 @@ async function exportPDF() {
     // wager: Round 1 / Round 3's 4-part bonus slots (r1bonus, r3bonus) carry those wagers, the
     // halftime / final slots carry Rounds 2 and 4, and Rounds 1 and 3 gain a Sub just before their
     // wager like Round 2 and 4 already have. Bands are headed with what the round asks for.
-    if (isTune()) {
+    if (isTune() || isRivals()) {
       const subCol = (k) => ({ w: 28, k, df: "EFEFEF", dc: "8B0000", b: true, l4: "Sub", a: "C" });
       SPEC.splice(SPEC.findIndex((c) => c.k === "r1bonus"), 0, subCol("tS1"));
       SPEC.splice(SPEC.findIndex((c) => c.k === "r3bonus"), 0, subCol("tS3"));
@@ -517,6 +523,11 @@ async function exportPDF() {
       GROUPS[3][0] = ix("r4q0");
       GROUPS[3][1] = ix("tAF");
       GROUPS.forEach((g, ri) => (g[2] = roundTitle(ri)));
+      // Revolution Rivals: the Q1-4 columns hold place points, so head them Q1-Q4 (the cells
+      // below show 10 / 7 / 4 / 0), not wager values.
+      if (isRivals())
+        for (let ri = 0; ri < 4; ri++)
+          for (let k = 0; k < 4; k++) SPEC.find((c) => c.k === "r" + (ri + 1) + "q" + k).l4 = "Q" + (k + 1);
       SPEC.find((c) => c.k === "r1bonus").l4 = "W 1-5";
       SPEC.find((c) => c.k === "htpts").l4 = "W 1-10";
       SPEC.find((c) => c.k === "r3bonus").l4 = "W 1-15";
@@ -567,6 +578,10 @@ async function exportPDF() {
         const W = ws[k];
         let p = 0;
         const qq = gameState.rounds[ri].questions;
+        if (isRivals()) {
+          out.push(answerPoints(qq[k][t]));
+          continue;
+        }
         for (let qi = 0; qi < 4; qi++) {
           const a = qq[qi][t];
           if (a && a.wager === W) {
@@ -588,7 +603,7 @@ async function exportPDF() {
       const theme = isTheme(),
         q5 = hasQ5Wagers();
       const r1b = q5 ? w1Pts(t) : (gameState.rounds[0].bonus[t] || 0) * 5,
-        r3b = theme ? fwPts(t) : isTune() ? w3Pts(t) : (gameState.rounds[2].bonus[t] || 0) * 5;
+        r3b = theme ? fwPts(t) : isTune() || isRivals() ? w3Pts(t) : (gameState.rounds[2].bonus[t] || 0) * 5;
       const ht = htPts(t),
         fw = theme ? 0 : fwPts(t);
       const njcb3 = tm.njcb ? 3 : 0,
@@ -1248,14 +1263,15 @@ function trivInjectXlsx(templateBytes, gs, rk) {
   const patches = [];
   if (gs.meta.hostName) patches.push(["I1", "s", "HOST: " + gs.meta.hostName]);
   const theme = gs.meta.mode === "theme";
-  const tune = gs.meta.mode === "tune";
+  const rivals = gs.meta.mode === "rivals";
+  const tune = gs.meta.mode === "tune" || rivals;
   if (!theme && !tune) patches.push(["R1", "s", "REGULAR TRIVIA"]);
   if (tune) {
     // Name That Tune: Regular's four rounds and wager columns, with the Bonus / HT / Bonus / Final
     // net-points columns (J, Q, Y, AF) carrying the Q5 wagers. Headers and the two cap cells
     // (I, X, printed 20 in the template) are rewritten to 5 / 10 / 15 / 20 and each round band
     // says what the round asks for.
-    patches.push(["R1", "s", "NAME THAT TUNE"]);
+    patches.push(["R1", "s", rivals ? "REVOLUTION RIVALS" : "NAME THAT TUNE"]);
     patches.push(["I4", "s", "Wager 1-5"], ["Q4", "s", "Wager 1-10"], ["X4", "s", "Wager 1-15"], ["AF4", "s", "Wager 1-20"]);
     TRIVX_TUNE_BANDS.forEach((c, ri) => patches.push([c + "3", "s", roundTitle(ri)]));
   }
@@ -1301,6 +1317,15 @@ function trivInjectXlsx(templateBytes, gs, rk) {
         qs = gs.rounds[ri].questions;
       for (let qi = 0; qi < 4; qi++) {
         const a = qs[qi][t];
+        if (rivals) {
+          // Place points land in the round's Q1-Q4 columns in order (the template's wager columns
+          // 1-4, 1-7, 2-8, 3-12 are only positions here).
+          if (a && a.place !== undefined) {
+            const cols = Object.keys(wm).map(Number).sort((x, y) => x - y).map((k) => wm[k]);
+            if (cols[qi]) put(cols[qi], "n", answerPoints(a));
+          }
+          continue;
+        }
         if (!a || a.wager === undefined) continue;
         const wcol = wm[a.wager];
         if (!wcol) continue;

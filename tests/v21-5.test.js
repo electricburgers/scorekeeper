@@ -38,5 +38,6 @@ describe("Game Mode dropdown symbols", () => {
     assert.match(html, /<option value="regular">Regular Trivia<\/option>/);
     assert.match(html, /<option value="theme">Theme Night<\/option>/);
     assert.match(html, /<option value="tune">Name That Tune<\/option>/);
+    assert.match(html, /<option value="rivals">Revolution Rivals<\/option>/);
   });
 });

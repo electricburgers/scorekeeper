@@ -63,7 +63,7 @@ describe("v21.42 Theme Night report + Advanced settings", () => {
     }
     assert.deepEqual(groups, [
       ["Display", ["Icon Style", "Row Density", "Row Zebra Stripes", "Game Progress Bar"]],
-      ["Scoring", ["Point Adjustments", "Crowd-Wisdom Percentage", "Edit Locked Fields"]],
+      ["Scoring", ["Point Adjustments", "Crowd-Wisdom Percentage", "Edit Locked Fields", "Teams Without a Guess"]],
       ["Timer", ["Question Timer", "Timer Widget", "Timer Stepper Buttons", "Timer Pulse"]],
       ["Craft Prize", ["Craft Prize Eligible List", "Manual Drumroll Control", "Drumroll Crossfade", "Sound Test Buttons"]],
       ["Tools", ["Score progression", "Keyboard shortcuts"]],

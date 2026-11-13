@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.53] - 13 Nov 2026
+
+### Added
+- **New "Revolution Rivals" section:** how to switch, place scoring (#1 / #2 / #3 / Other = 10 / 7 / 4 / 0), the Q5 wager on the #1 answer, the 210 perfect score and 1-210 guess range, and how exports, Try Example and the (unavailable) tour behave. No screenshots yet.
+
 ## [1.52] - 2 Nov 2026
 
 ### Changed

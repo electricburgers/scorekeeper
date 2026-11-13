@@ -169,6 +169,9 @@ const ICON_MODE_TUNE_PICT =
   '<svg class="icon-ui icon-tinted icon-mode-tune" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18V5l12-2v13"/><circle class="ip-2" cx="6" cy="18" r="3"/><circle class="ip-2" cx="18" cy="16" r="3"/></svg>';
 const ICON_MODE_REGULAR_EMOJI = '<span class="icon-emoji">🎯</span>';
 const ICON_MODE_THEME_EMOJI = '<span class="icon-emoji">🎭</span>';
+const ICON_MODE_RIVALS_PICT =
+  '<svg class="icon-ui icon-tinted icon-mode-rivals" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 17.5 3 6V3h3l11.5 11.5"/><path class="ip-2" d="M13 19l6-6M16 16l4 4M19 21l2-2"/><path d="M9.5 6.5 21 18v3h-3L6.5 9.5"/><path class="ip-2" d="M5 14l4 4M7 17l-3 3M3 19l2 2"/></svg>';
+const ICON_MODE_RIVALS_EMOJI = '<span class="icon-emoji">⚔️</span>';
 const ICON_MODE_TUNE_EMOJI = '<span class="icon-emoji">🎵</span>';
 const ICON_PENCIL_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>';
@@ -338,6 +341,7 @@ let ICON_FLAG = ICON_FLAG_PICT;
 let ICON_MODE_REGULAR = ICON_MODE_REGULAR_PICT;
 let ICON_MODE_THEME = ICON_MODE_THEME_PICT;
 let ICON_MODE_TUNE = ICON_MODE_TUNE_PICT;
+let ICON_MODE_RIVALS = ICON_MODE_RIVALS_PICT;
 let ICON_PDF = ICON_PDF_PICT;
 let ICON_LINK = ICON_LINK_PICT;
 let ICON_FAWKES = ICON_FAWKES_PICT;
@@ -414,6 +418,7 @@ function applyIconStyle(style) {
   ICON_MODE_REGULAR = emoji ? ICON_MODE_REGULAR_EMOJI : ICON_MODE_REGULAR_PICT;
   ICON_MODE_THEME = emoji ? ICON_MODE_THEME_EMOJI : ICON_MODE_THEME_PICT;
   ICON_MODE_TUNE = emoji ? ICON_MODE_TUNE_EMOJI : ICON_MODE_TUNE_PICT;
+  ICON_MODE_RIVALS = emoji ? ICON_MODE_RIVALS_EMOJI : ICON_MODE_RIVALS_PICT;
   ICON_PDF = emoji ? ICON_PDF_EMOJI : ICON_PDF_PICT;
   ICON_LINK = emoji ? ICON_LINK_EMOJI : ICON_LINK_PICT;
   ICON_FAWKES = emoji ? ICON_FAWKES_EMOJI : ICON_FAWKES_PICT;

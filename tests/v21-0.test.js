@@ -175,6 +175,7 @@ describe("Game Mode dropdown", () => {
       ["regular", "Regular Trivia"],
       ["theme", "Theme Night"],
       ["tune", "Name That Tune"],
+      ["rivals", "Revolution Rivals"],
     ]);
     assert.ok(sel.getAttribute("aria-label") || d.querySelector("label[for='gameModeSelect']"));
     assert.ok(!d.getElementById("gameModeToggle"));

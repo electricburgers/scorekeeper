@@ -7,7 +7,7 @@ const { CSS, tokensFor, resolve, contrast, COMBOS } = require("./helpers/css-tok
 
 const tok = (t, name) => resolve(t, t["--" + name.replace(/^--/, "")]);
 // Icon tints exactly as .icon-mode-* declares them in the stylesheet.
-const MODE_ICON_RULES = { regular: ".icon-mode-regular", theme: ".icon-mode-theme", tune: ".icon-mode-tune" };
+const MODE_ICON_RULES = { regular: ".icon-mode-regular", theme: ".icon-mode-theme", tune: ".icon-mode-tune", rivals: ".icon-mode-rivals" };
 function iconTints(t, rule) {
   const m = CSS.match(new RegExp(rule.replace(".", "\\.") + "\\{([^}]*)\\}"));
   assert.ok(m, rule + " is declared");
