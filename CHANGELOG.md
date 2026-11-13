@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.18 - 2026-11-13
+- **Rivals:** the Q5 wager header now reads "Wager on #1".
+
 ## v22.17 - 2026-11-13
 - **Question headers:** collapsing a question, bonus or special wager now keeps the header at its taller height instead of shrinking when the sort buttons hide.
 
