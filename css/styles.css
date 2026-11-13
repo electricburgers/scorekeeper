@@ -2064,7 +2064,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .place-btn{width:3.6rem;min-width:0;height:calc(var(--wager-size) * 1.1);min-height:0;padding:0;flex-direction:column;gap:1px;line-height:1.1;font-size:.95rem;border-radius:8px}
 .place-btn .place-pts{font-size:.7rem;font-weight:700;opacity:.85;background:none;padding:0}
 /* Selected: the Rivals mode accent, with ink picked per theme so the label keeps its contrast. */
-.place-btn.selected{background:var(--mode-accent);border:1px solid var(--mode-accent);color:#000}
+.place-btn.selected{background:var(--place-sel,var(--mode-accent));border:1px solid var(--place-sel,var(--mode-accent));color:#000}
+/* Normal vision uses amber (red read as "incorrect"); the colour-vision modes keep their own audited Rivals accents. */
+:root:not([data-cb]){--place-sel:#ffb020}
+[data-theme="light"]:not([data-cb]){--place-sel:#b45309}
 [data-theme="light"] .place-btn.selected{color:#fff}
 .wager-btn.used{background:var(--btn-used-bg);opacity:.22;cursor:not-allowed;text-decoration:line-through}
 
