@@ -1032,6 +1032,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    stroke: at .icon-ui's 2.25 stroke the two features merged into one blob at button size. */
 .icon-fawkes{--icon-tint:var(--tint-flask);stroke-width:1.4}
 .icon-fawkes .ip-2,.icon-tinted.icon-fawkes .ip-2{fill:#fff;stroke:none}
+/* Light theme only: a solid plate so the white mustache and goatee stand out. */
+[data-theme="light"] .icon-tinted.icon-fawkes{fill:var(--icon-tint)}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
 /* Test Sounds bar: Crash echoes 💥 — a jagged red-orange outer burst (--tint-drum, the identifying
    outline held to WCAG AA), an orange mid layer (--vivid-drum) and a small bright-yellow core star
