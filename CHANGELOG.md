@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.6 - 2026-11-13
+- **JD Form mask, Light theme:** pale purple plate with deep purple mustache and goatee.
+- **Rivals place buttons:** shorter one-line chips with the points in a small badge; the selected place uses the Rivals accent color.
+
 ## v22.5 - 2026-11-13
 - **What's new twisty:** in Settings > About, the latest version stays visible and older versions collapse under an "Earlier versions" twisty.
 

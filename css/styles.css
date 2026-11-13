@@ -1032,8 +1032,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    stroke: at .icon-ui's 2.25 stroke the two features merged into one blob at button size. */
 .icon-fawkes{--icon-tint:var(--tint-flask);stroke-width:1.4}
 .icon-fawkes .ip-2,.icon-tinted.icon-fawkes .ip-2{fill:#fff;stroke:none}
-/* Light theme only: a solid plate so the white mustache and goatee stand out. */
-[data-theme="light"] .icon-tinted.icon-fawkes{fill:var(--icon-tint)}
+/* Light theme only: a pale purple wash plate with deep purple mustache and goatee. */
+[data-theme="light"] .icon-tinted.icon-fawkes{fill:color-mix(in srgb,var(--icon-tint) 22%,transparent)}
+[data-theme="light"] .icon-fawkes .ip-2,[data-theme="light"] .icon-tinted.icon-fawkes .ip-2{fill:#3a1676}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
 /* Test Sounds bar: Crash echoes 💥 — a jagged red-orange outer burst (--tint-drum, the identifying
    outline held to WCAG AA), an orange mid layer (--vivid-drum) and a small bright-yellow core star
@@ -2056,10 +2057,14 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .wager-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
 .wager-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red)}
 /* Revolution Rivals place picker: same audited .wager-btn colours; each button is wider so it can hold "#1" plus its points. */
-.place-btn{width:auto;min-width:calc(var(--wager-size) * 1.8);padding:0 .5rem;flex-direction:column;gap:0;line-height:1.05;font-size:.95rem}
-.place-btn .place-pts{font-size:.7rem;font-weight:600;opacity:.85}
-.place-btn.selected{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
-.place-btn.selected.place-other{background:var(--btn-incorrect-bg);border-color:var(--accent-red)}
+.place-btn{width:auto;min-width:calc(var(--wager-size) * 1.8);height:calc(var(--wager-size) * .92);min-height:0;padding:0 .35rem 0 .6rem;flex-direction:row;gap:.4rem;line-height:1.05;font-size:.95rem;border-radius:8px}
+.place-btn .place-pts{font-size:.7rem;font-weight:700;opacity:1;background:rgba(128,128,128,.25);border-radius:5px;padding:2px 5px}
+.place-btn.place-other{min-width:0}
+/* Selected: the Rivals mode accent, with ink picked per theme so the label keeps its contrast. */
+.place-btn.selected{background:var(--mode-accent);border:1px solid var(--mode-accent);color:#000}
+[data-theme="light"] .place-btn.selected{color:#fff}
+.place-btn.selected .place-pts{background:rgba(0,0,0,.2)}
+[data-theme="light"] .place-btn.selected .place-pts{background:rgba(255,255,255,.25)}
 .wager-btn.used{background:var(--btn-used-bg);opacity:.22;cursor:not-allowed;text-decoration:line-through}
 
 .wager-badge{position:absolute;top:-8px;right:-5px;width:1.3rem;height:1.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:900;line-height:1;padding-bottom:1px;pointer-events:none}
