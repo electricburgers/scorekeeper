@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.3 - 2026-11-13
+- **JD Form mask:** the mustache and goatee are now solid white (the plate keeps its purple outline and wash).
+
 ## v22.2 - 2026-11-13
 - **Rivals header and window title:** the top-left logo stays "Score Keeper" in Revolution Rivals mode; only the window / tab title reads Revolution Rivals.
 - **Wider place buttons:** the #1 / #2 / #3 / Other buttons are wider so "Other" fits.

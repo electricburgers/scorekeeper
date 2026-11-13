@@ -1031,7 +1031,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    moved to green) with a thin 1.4 outline, and the mustache/goatee as SOLID fills with no
    stroke: at .icon-ui's 2.25 stroke the two features merged into one blob at button size. */
 .icon-fawkes{--icon-tint:var(--tint-flask);stroke-width:1.4}
-.icon-fawkes .ip-2{fill:currentColor;stroke:none}
+.icon-fawkes .ip-2,.icon-tinted.icon-fawkes .ip-2{fill:#fff;stroke:none}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
 /* Test Sounds bar: Crash echoes 💥 — a jagged red-orange outer burst (--tint-drum, the identifying
    outline held to WCAG AA), an orange mid layer (--vivid-drum) and a small bright-yellow core star
