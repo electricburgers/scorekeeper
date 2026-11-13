@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.8 - 2026-11-13
+- **JD Form mask:** a slightly thicker mustache (same shape, heavier outline) in both themes.
+
+## v22.7 - 2026-11-13
+- **Light theme icons:** Pause is a deep-amber outline, the idle Reset button no longer fades to 40% (slate chip instead), and close (X) buttons are a 2px red ring on white with a heavier X.
+
 ## v22.6 - 2026-11-13
 - **JD Form mask, Light theme:** pale purple plate with deep purple mustache and goatee.
 - **Rivals place buttons:** shorter one-line chips with the points in a small badge; the selected place uses the Rivals accent color.

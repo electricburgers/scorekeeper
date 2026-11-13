@@ -1035,6 +1035,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Light theme only: a pale purple wash plate with deep purple mustache and goatee. */
 [data-theme="light"] .icon-tinted.icon-fawkes{fill:color-mix(in srgb,var(--icon-tint) 22%,transparent)}
 [data-theme="light"] .icon-fawkes .ip-2,[data-theme="light"] .icon-tinted.icon-fawkes .ip-2{fill:#3a1676}
+/* Thicker mustache: the first .ip-2 path gets a same-colour stroke (goatee stays a plain fill). */
+.icon-fawkes path.ip-2:nth-of-type(2){stroke:#fff;stroke-width:.7;stroke-linejoin:round}
+[data-theme="light"] .icon-fawkes path.ip-2:nth-of-type(2){stroke:#3a1676}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
 /* Test Sounds bar: Crash echoes 💥 — a jagged red-orange outer burst (--tint-drum, the identifying
    outline held to WCAG AA), an orange mid layer (--vivid-drum) and a small bright-yellow core star
@@ -3115,3 +3118,17 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* v21.42: group headings inside Advanced Settings. */
 .settings-group-label{margin:14px 0 2px;padding-top:12px;border-top:1px solid var(--border-light);font-family:var(--font-display);font-size:max(11.5px,.7rem);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
 .settings-group-label:first-child{margin-top:4px;padding-top:0;border-top:0}
+
+/* Light theme icon legibility (v22.7). Pause, Reset and the close X were all drawn as thin or faded
+   outlines that washed out on the pale-blue/white surfaces. Pause: deep-amber 2px outline instead
+   of the 1.8:1 gold hairline. Reset: the idle (disabled) button no longer drops to 40% opacity;
+   it is a solid slate-on-pale chip instead. Close X: 2px red ring on white with a heavier X. */
+[data-theme="light"] .settings-x-btn,[data-theme="light"] .resume-banner-close,[data-theme="light"] .audit-close,[data-theme="light"] .remove-team button{border-width:2px;background:#fff;color:#8a0000}
+[data-theme="light"] .settings-x-btn:hover,[data-theme="light"] .resume-banner-close:hover,[data-theme="light"] .audit-close:hover,[data-theme="light"] .remove-team button:hover{background:#ffd9d9}
+[data-theme="light"] .settings-x-btn svg line,[data-theme="light"] .resume-banner-close svg line,[data-theme="light"] .audit-close svg line,[data-theme="light"] .remove-team button svg line{stroke-width:3.8}
+[data-theme="light"] .remove-team .pause-team{border-color:#9a6200;color:#7a4b00;background:#fff}
+[data-theme="light"] .remove-team .pause-team:hover{background:#fff3d6}
+[data-theme="light"] .remove-team .pause-team.is-on,[data-theme="light"] .remove-team .pause-team.is-on:hover{border-color:#7a4b00;background:var(--accent-gold);color:#000}
+[data-theme="light"] .remove-team .pause-team svg line{stroke-width:3.4}
+[data-theme="light"] .qtimer-btn.qtimer-reset:disabled{opacity:1;background:#eef2f9;border:2px solid #7d90ad;color:#5d6f8b}
+[data-theme="light"] .qtimer-btn.qtimer-reset .icon-ui-reset{stroke-width:3.2}
