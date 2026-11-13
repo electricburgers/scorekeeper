@@ -64,8 +64,8 @@ const FIELD_MAX = {
   teamName: 40,
   craftScript: 600,
 };
-const APP_VERSION = "v22.14"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 13, 2026 5:22 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.17"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 13, 2026 5:41 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1908,7 +1908,7 @@ function renderWQ(ri, qi) {
           ? `${ICON_DONE} Done`
           : qs.total - qs.done + " left";
 
-  const sortBtns = `${sortBtnHtml(qKey, (ti) => qAnswered(ri, qi, ti), `sortQuestion(${ri},${qi})`)}<button class="q-alpha-btn${qAlpha(qKey) ? " active" : ""}" data-state="${qAlpha(qKey) || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(qKey) === "az" ? "A to Z" : qAlpha(qKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(qKey))}</button><button class="q-reset-btn" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
+  const sortBtns = `${sortBtnHtml(qKey, (ti) => qAnswered(ri, qi, ti), `sortQuestion(${ri},${qi})`)}<button class="q-alpha-btn${qAlpha(qKey) ? " active" : ""}" data-state="${qAlpha(qKey) || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(qKey) === "az" ? "A to Z" : qAlpha(qKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(qKey))}</button><button class="q-reset-btn${resetIdleCls(qKey)}" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
   let h = `<div class="${blockCls}" id="qblock-${ri}-${qi}">`;
 
   // Collapsible header
@@ -2045,6 +2045,10 @@ function sortMoveCount(key, answered) {
 }
 // The "Sort" button. Grey outline when nothing would move; solid fill + a count badge of how many
 // a notification dot when a re-sort would change the order (v21.42, dot-only from v21.43).
+// Reset does nothing when no answer sort is saved and name sort is off: show it quiet (v22.16).
+function resetIdleCls(key) {
+  return !questionSortOrder[key] && !qAlpha(key) ? " is-idle" : "";
+}
 function sortBtnHtml(key, answered, onclick) {
   const moves = sortMoveCount(key, answered);
   const title = moves
@@ -2169,7 +2173,7 @@ function renderBQ(ri) {
   if (isCollapsedBQ) blockCls += " bq-collapsed";
   const bqStyle = BONUS_Q_STYLE[ri] || { cls: "" };
   const bqKey = "b" + ri;
-  const sortBtns = `${sortBtnHtml(bqKey, (ti) => bonusAnswered(ri, ti), `sortBonusQuestion(${ri})`)}<button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(bqKey))}</button><button class="q-reset-btn" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
+  const sortBtns = `${sortBtnHtml(bqKey, (ti) => bonusAnswered(ri, ti), `sortBonusQuestion(${ri})`)}<button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(bqKey))}</button><button class="q-reset-btn${resetIdleCls(bqKey)}" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
   let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right">${sortBtns}</div></div><div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
@@ -2273,7 +2277,7 @@ function renderSpecialWager(type) {
   // ignoring the toggle entirely, so turning the setting Off didn't hide it here like it does
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
-  const sortBtns = `${sortBtnHtml(swKey, (ti) => swAnswered(type, ti), `sortSpecialWager('${type}')`)}<button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(swKey))}</button><button class="q-reset-btn" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
+  const sortBtns = `${sortBtnHtml(swKey, (ti) => swAnswered(type, ti), `sortSpecialWager('${type}')`)}<button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(swKey))}</button><button class="q-reset-btn${resetIdleCls(swKey)}" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
   let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}${sortBtns}</div></div>`;
   // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
   // badge is two inches away and says the same thing, and the whole block is already washed gold

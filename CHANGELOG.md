@@ -14,6 +14,15 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.17 - 2026-11-13
+- **Question headers:** collapsing a question, bonus or special wager now keeps the header at its taller height instead of shrinking when the sort buttons hide.
+
+## v22.16 - 2026-11-13
+- **Question Reset:** when tapping Reset would change nothing (no answer sort saved, name sort off), it shows as a red outline with red text instead of solid red.
+
+## v22.15 - 2026-11-13
+- **Teams:** the zebra striping on team rows now extends the full width of the Teams box instead of stopping short of both edges.
+
 ## v22.14 - 2026-11-13
 - **Rivals Q5 wager:** header now reads "Wager #1 (1-N)" instead of "Wager on the #1 answer".
 
