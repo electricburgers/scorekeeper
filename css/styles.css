@@ -3129,6 +3129,16 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .audit-close::after,.aud-edit-btn::after{content:"";position:absolute;inset:-7px}
 }
 
+/* v22.22: iPad landscape (touch, wider than the phone layout) kept the compact 1.5rem desktop per-question
+   buttons, which were too short and small to tap. Give them the same tap-sized height and larger icon as phones. */
+@media (pointer:coarse) and (min-width:769px){
+  .q-sort-btn,.q-reset-btn,.q-alpha-btn,.q-stat{height:2.5rem;font-size:.9rem}
+  .q-sort-btn,.q-reset-btn{min-width:2.5rem;padding:0 12px}
+  .q-alpha-btn{min-width:2.5rem;padding:0 10px}
+  .q-sort-btn .icon-ui,.q-reset-btn .icon-ui,.q-alpha-btn .icon-ui{width:1.4em;height:1.4em}
+  .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.4)}
+}
+
 /* v21.42: group headings inside Advanced Settings. */
 .settings-group-label{margin:14px 0 2px;padding-top:12px;border-top:1px solid var(--border-light);font-family:var(--font-display);font-size:max(11.5px,.7rem);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
 .settings-group-label:first-child{margin-top:4px;padding-top:0;border-top:0}

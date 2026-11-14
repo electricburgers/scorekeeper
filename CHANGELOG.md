@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.22 - 2026-11-14
+- **Questions:** on iPad landscape the per-question sort, reset and name-sort buttons (and the correct/incorrect pills) are now taller and larger with bigger icons, so they are easier to tap.
+
 ## v22.21 - 2026-11-13
 - **Tests & docs:** consolidated the test suite (merged per-version test files, added unit-scoring and integration-flow tests) and refreshed the README feature list and file map.
 
