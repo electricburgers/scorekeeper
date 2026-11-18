@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.30 - 2026-11-18
+- **Export:** on phones the icons scale with the button (2.6rem-3rem) and the labels grow to .9rem; button size is unchanged.
+
 ## v22.29 - 2026-11-18
 - **Export:** on phones the square XLSX / PDF / Photos / JD Form buttons shrink to at most 6rem (down to 5.5rem on narrow screens), with smaller 2.2rem icons and bigger, bolder .8rem labels so the labels get more room.
 
