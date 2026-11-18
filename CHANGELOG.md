@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.33 - 2026-11-18
+- **Export:** the Photos button is now "Winner Photos" (label, tooltip, FAQ text); on phones the label wraps to two lines. Removed the negative margin on the JD Form mask so it no longer touches its label. Regenerated the Export FAQ screenshots.
+
 ## v22.32 - 2026-11-18
 - **Export:** the bigger JD Form mask icon now applies on phones only (on desktop it overlapped the label); regenerated the Export FAQ screenshots.
 
