@@ -766,8 +766,8 @@ function renderCraftPrizeBlock() {
         pct: 0,
       };
       h += `<div class="cp-countdown">
-      <div class="cp-countdown-track"><div class="cp-countdown-fill" id="cpCountdownBar" style="transform:scaleX(${st.pct / 100})"></div></div>
       <div class="cp-countdown-num" id="cpCountdownNum">${Math.ceil(st.remaining / 1000)}s</div>
+      <div class="cp-countdown-track"><div class="cp-countdown-fill" id="cpCountdownBar" style="transform:scaleX(${st.pct / 100})"></div></div>
     </div>`;
       if (prefs.craftManualEnd) {
         h += `<div class="cp-btn-row"><button class="btn btn-danger export-sq cp-sq-btn cp-manual-end-btn" onclick="stopDrumrollOnly()" title="Stop just the drumroll sound, e.g. once a staff member reveals a paper from the stack — then play the horn whenever you're ready">${ICON_STOP}<span class="export-sq-label">Stop<br>Drumroll</span></button></div>`;
