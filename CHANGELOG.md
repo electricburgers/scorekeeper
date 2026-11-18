@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.27 - 2026-11-18
+- **Export:** on phones the buttons are now a 2x2 grid with a divider: XLSX and PDF on top, Photos and JD Form below.
+- **Craft Prize:** the Exclude Top and Drumroll (sec) digits are bigger again (2.4rem) within the same boxes.
+
 ## v22.26 - 2026-11-18
 - **Craft Prize:** the Exclude Top and Drumroll (sec) number boxes now show much bigger digits, with slightly larger +/- buttons.
 - **FAQ (v1.55):** regenerated the Export bar, Settings panel and Craft Prize screenshots (dark and light) to match.
