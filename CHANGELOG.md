@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.40 - 2026-11-18
+- **Craft Prize:** Choose Craft Prize Winner and Start Drumroll buttons are smaller on phones and iPad (same shapes, about 25% smaller).
+
 ## v22.39 - 2026-11-18
 - **Export:** on iPad portrait the XLSX, PDF, Winner Photos and JD Form buttons sit in the same 2x2 grid as phones.
 
