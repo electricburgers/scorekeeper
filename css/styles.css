@@ -2460,6 +2460,12 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    (it isn't touched here). */
 .cp-btn-row{display:flex;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:10px}
 .export-sq.cp-sq-btn{width:auto;min-width:var(--cp-sq-size);height:auto;min-height:var(--cp-sq-size);font-size:1.9rem;line-height:1.1;padding:8px 10px;margin-top:0;flex:0 0 auto}
+/* Choose Craft Prize Winner: a full-width horizontal bar with a big mug on the left and a
+   two-line label, instead of the square icon-over-label tile the other drumroll buttons use. */
+.cp-btn-row .cp-wide-btn{width:100%;display:flex;flex-direction:row;align-items:center;justify-content:center;gap:12px;min-height:4.6rem;padding:8px 16px;margin-top:0}
+.cp-wide-btn .icon-ui{width:4.4rem;height:4.4rem}
+.cp-wide-btn .icon-emoji{font-size:3.6rem;line-height:1}
+.cp-wide-label{font-family:var(--font-body);font-size:1.15rem;font-weight:800;line-height:1.1;letter-spacing:.3px;text-align:left}
 .cp-preview-btn{opacity:.35;cursor:not-allowed}
 /* Trophy+name+"won!" are one flowing text span (not separate flex items) so a long team name
    wraps onto a second line on its own, with "won!" following right after it — the Clear
