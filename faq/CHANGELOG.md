@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.56] - 18 Nov 2026
+
+### Changed
+- **Screenshots regenerated (dark + light):** Export bar (new XLSX, PDF, Photos, JD Form order) and Craft Prize Drawing (bigger digits in the Exclude Top / Drumroll boxes).
+
 ## [1.55] - 18 Nov 2026
 
 ### Changed
