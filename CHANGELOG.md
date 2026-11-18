@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.35 - 2026-11-18
+- **Craft Prize:** the Start Drumroll button is now the same full-width horizontal bar as Choose Craft Prize Winner, with a much bigger drum icon (4.4rem) and a two-line label.
+
 ## v22.34 - 2026-11-18
 - **Craft Prize:** the Choose Craft Prize Winner button is now a full-width horizontal bar with a much bigger beer mug icon (4.4rem) and a two-line label.
 

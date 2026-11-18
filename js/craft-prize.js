@@ -778,7 +778,7 @@ function renderCraftPrizeBlock() {
     // Square, icon-forward buttons (.export-sq) — a big drum/stop/horn glyph over a two-line
     // label is a far easier phone tap than a full-width text bar, and matches the export and
     // sound-test buttons elsewhere.
-    h += `<div class="cp-btn-row"><button class="btn btn-accent export-sq cp-sq-btn cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>${ICON_DRUM}<span class="export-sq-label">Start<br>Drumroll</span></button>`;
+    h += `<div class="cp-btn-row"><button class="btn btn-accent cp-wide-btn cp-draw-btn" onclick="startCraftPrizeDraw()" ${winner || poolLeft <= 0 ? "disabled" : ""}>${ICON_DRUM}<span class="cp-wide-label">Start<br>Drumroll</span></button>`;
     if (prefs.craftManualEnd && !winner) {
       // Previewed here, faded and disabled, so the host knows these controls exist before the
       // drumroll is even running — rather than only discovering them once a draw is underway.
