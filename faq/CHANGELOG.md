@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.55] - 18 Nov 2026
+
+### Changed
+- **Screenshots regenerated (dark + light):** Export bar (new Photos button), Settings panel ("Font size"), and Craft Prize Drawing (bigger Exclude Top / Drumroll digits and the excluded-teams list).
+
 ## [1.54] - 18 Nov 2026
 
 ### Added
