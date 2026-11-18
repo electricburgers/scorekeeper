@@ -448,6 +448,7 @@ button,[role="button"]{touch-action:manipulation}
    updating an installed app, which a reload can't reliably do itself (see js/app.js). */
 .update-available-btn{font-family:var(--font-display);font-size:.66rem;font-weight:700;color:var(--txt-cyan);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
 .update-reload-hint{font-size:.66rem;color:var(--text-muted)}
+.update-reload-hint .update-available-btn{font-size:.85rem;padding:8px 14px;margin:2px 4px;min-height:40px;border:1px solid var(--txt-cyan);border-radius:8px;text-decoration:none}
 .update-available-btn:hover{color:var(--accent-cyan)}
 
 /* Overlay, not in-flow: .header is position:sticky (a valid containing block for an
@@ -2257,7 +2258,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    text-align:center all along — left-aligned, the section read as two rows that had
    nothing to do with each other. Applies at every width: the same reasoning holds once
    the three wrap onto separate lines on a phone. */
-.export-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px 0}
+.export-bar{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;padding:10px 0}
 /* XLSX / PDF export as square, icon-forward buttons — a big glyph stacked over a small label is
    a far bigger tap target on a phone (and click target on desktop) than a .78rem icon beside a
    short word. Reused verbatim by the Craft Prize sound-test bar (.cp-test-bar). font-size here
@@ -2404,13 +2405,19 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    takes for the same job one section down. */
 #sec-craftprize .section-body>:first-child{margin-top:10px}
 .cp-field{display:flex;flex-direction:column;align-items:center;gap:5px}
-.cp-field-label{font-size:.68rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;text-align:center}
-.cp-field .stepper input.sw-input{width:3.2rem}
+.cp-field-label{font-size:.8rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;text-align:center}
+.cp-field .stepper input.sw-input{width:3.2rem;font-size:1.1rem}
 /* v21.25: the Craft Prize Drumroll (sec) / Exclude Top +/- buttons were small and short; now roomier tap targets. */
 .cp-field .stepper button{width:2.6rem;height:2.6rem;font-size:1.3rem}
 .cp-field .stepper input.sw-input{height:2.6rem;min-height:0;box-sizing:border-box;padding-top:0;padding-bottom:0}
 .cp-field .stepper button{min-height:0;box-sizing:border-box}
 .cp-status{font-size:.72rem;color:var(--text-muted);margin-bottom:2px}
+.cp-excluded{margin:8px 0;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input)}
+.cp-excluded-title{font-size:.8rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px}
+.cp-excluded-list{list-style:none;margin:0;padding:0}
+.cp-excluded-list li{display:flex;align-items:baseline;gap:8px;padding:3px 0;font-size:1rem;color:var(--text-primary,inherit)}
+.cp-excluded-rank{font-family:var(--font-display);font-weight:800;min-width:2.2rem;color:var(--accent-gold)}
+.cp-excluded-name{font-weight:600;word-break:break-word}
 .cp-note{font-size:.66rem;color:var(--text-muted);margin-bottom:8px;font-style:italic}
 .cp-draw-btn{width:100%}
 .cp-draw-btn:disabled{opacity:.5;cursor:not-allowed}

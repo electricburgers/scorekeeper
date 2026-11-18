@@ -622,6 +622,7 @@ async function exportPDF() {
       rec.push({
         num: t + 1,
         name: tm.name || "Team " + (t + 1),
+        craft: !!tm.craftPrize,
         njcb3,
         item5,
         r1,
@@ -889,8 +890,13 @@ async function exportPDF() {
     // fixed 220, so short names don't leave a wide gap before the Guess column.
     doc.setFont("helvetica", "normal");
     doc.setFontSize(fsData);
+    const CRAFT_TAG = "  - CRAFT PRIZE WINNER";
     const longestName = standings.reduce(
-      (m, s) => Math.max(m, doc.getTextWidth(s.name)),
+      (m, s) =>
+        Math.max(
+          m,
+          doc.getTextWidth(s.craft ? s.name + CRAFT_TAG : s.name),
+        ),
       doc.getTextWidth("Team Name"),
     );
     const nameW = Math.min(220, Math.max(90, Math.ceil(longestName) + 24));
@@ -980,7 +986,7 @@ async function exportPDF() {
       const rowVals = {
         place: String(i + 1),
         score: String(s.tAF),
-        name: s.name,
+        name: s.craft ? s.name + CRAFT_TAG : s.name,
         guess: String(s.guess),
         diff: String(s.tAH),
         adj: s.njcb3 + s.item5 ? "-" + (s.njcb3 + s.item5) : "0",
@@ -988,7 +994,7 @@ async function exportPDF() {
       const sStripe = i % 2 === 1;
       SCOLS.forEach((c, ix) => {
         const base = c.k === "place" ? "DCE6F2" : "FFFFFF";
-        setFill(sStripe ? darken(base) : base);
+        setFill(s.craft && c.k === "name" ? "FFD966" : sStripe ? darken(base) : base);
         doc.rect(scx[ix], y, c.w, rowH, "F");
         doc.setFont(
           "helvetica",

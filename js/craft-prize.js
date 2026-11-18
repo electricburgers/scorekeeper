@@ -751,12 +751,10 @@ function renderCraftPrizeBlock() {
     </div>`
         : ""
     }
-    <div class="cp-note">Top ${excludeN} place${excludeN > 1 ? "s" : ""} ${excludeN > 1 ? "are" : "is"} excluded: ${esc(
-      ranked()
-        .slice(0, excludeN)
-        .map((r) => r.name)
-        .join(", "),
-    )}</div>
+    <div class="cp-excluded"><div class="cp-excluded-title">Excluded from the draw (top ${excludeN})</div><ol class="cp-excluded-list">${ranked()
+      .slice(0, excludeN)
+      .map((r, i) => `<li><span class="cp-excluded-rank">#${i + 1}</span><span class="cp-excluded-name">${esc(r.name || "Team " + (r.index + 1))}</span></li>`)
+      .join("")}</ol></div>
     <p class="fr-note">Note: Not hearing sound? Make sure your device isn't on Silent Mode.</p>`;
   if (drawing) {
     h += `<div class="cp-intro">${ICON_MIC} Now choosing our Craft Beer Prize winner…</div><div class="cp-flash" id="cpFlashName">${esc(craftDrawState.displayName || "")}</div>`;

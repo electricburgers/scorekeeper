@@ -14,6 +14,15 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.24 - 2026-11-18
+- **PDF export:** the craft prize winner is highlighted in gold and labelled "CRAFT PRIZE WINNER" in the Standings.
+- **Export buttons:** more spacing between the XLSX, PDF and JD Form buttons.
+
+## v22.23 - 2026-11-18
+- **Craft Prize:** the Exclude Top and Drumroll (sec) labels and number boxes use bigger text.
+- **Craft Prize:** the excluded teams are now a clear list with their rank (#1, #2, ...) so you can verify them.
+- **Reload:** the hard-reload button in Settings is now a larger, outlined tap target.
+
 ## v22.22 - 2026-11-14
 - **Questions:** on iPad landscape the per-question sort, reset and name-sort buttons (and the correct/incorrect pills) are now taller and larger with bigger icons, so they are easier to tap.
 
