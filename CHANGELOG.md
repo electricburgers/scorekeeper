@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.45 - 2026-11-18
+- **Save file:** every game now carries extra, optional fields so the same `.json` can move between the web app and future native apps. New at the top level: `schemaVersion`, `savedBy` (e.g. "web v22.45"), `gameId` (one per game night, kept when you switch Game Mode), `createdAt`, `updatedAt` (only moves on a real change) and `ext` (room for per-platform extras). New in `meta`: `startedAt` (first score entered), `endedAt` (reserved), `timezone`, `locale`. New on each team: a stable `id` and a `notes` field (no screen for notes yet). The craft prize winner (and the old draws list) also store `teamId` next to the team number. Older files load fine and get the fields filled in; older builds ignore them.
+- **Craft Prize:** removing a team no longer leaves the winner pointing at the wrong team. The winner follows the team, and is cleared if that team is the one removed.
+
 ## v22.43 - 2026-11-18
 - **Craft Prize:** the drumroll countdown bar now starts full and shrinks to the left toward the seconds (it no longer grows).
 

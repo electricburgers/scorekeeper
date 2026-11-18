@@ -480,7 +480,9 @@ describe("migrateState: field clamping and backfilling old saves", () => {
         craftPrizeDraws: [{ ti: 0 }, { ti: 1 }],
       })`,
     );
-    assert.deepEqual(result.craftPrizeWinner, { ti: 1 });
+    // v22.45: the winner also carries teamId (the id of team index 1) next to the index.
+    assert.equal(result.craftPrizeWinner.ti, 1);
+    assert.equal(result.craftPrizeWinner.teamId, result.teams[1].id);
   });
 });
 

@@ -98,9 +98,31 @@ const TRStore = (function () {
 // leave a stale "already saved" flag behind. The stringify stays: state is a few KB, and it's the
 // only way to know whether anything changed.
 function persistGameStateNow() {
-  const json = JSON.stringify(gameState);
-  if (TRStore.getItem(STORAGE_KEY) !== json) TRStore.setItem(STORAGE_KEY, json);
+  let json = JSON.stringify(gameState);
+  if (TRStore.getItem(STORAGE_KEY) !== json) {
+    // Only a real change gets here, so updatedAt/savedBy move only when something was edited —
+    // a no-op autosave still skips the write and the stamp.
+    stampSave();
+    json = JSON.stringify(gameState);
+    TRStore.setItem(STORAGE_KEY, json);
+  }
   return json;
+}
+// Save-file bookkeeping that every real save refreshes (v22.45): who wrote it, when, and — the
+// first time any score is entered — when the game started and where (time zone, language).
+function stampSave() {
+  const now = new Date().toISOString();
+  gameState.updatedAt = now;
+  gameState.savedBy = "web " + (typeof APP_VERSION !== "undefined" ? APP_VERSION : "");
+  if (!Number.isInteger(gameState.schemaVersion)) gameState.schemaVersion = SCHEMA_VERSION;
+  const m = gameState.meta;
+  if (m && gameState.gameStarted && !m.startedAt) {
+    m.startedAt = now;
+    try {
+      m.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch (e) {}
+    m.locale = (typeof navigator !== "undefined" && navigator.language) || "";
+  }
 }
 
 // ===== ROLLING BACKUPS =====

@@ -27,7 +27,7 @@ function toggleCraftPrize(ti) {
   });
   gameState.teams[ti].craftPrize = !was;
   gameState.craftPrizeWinner = gameState.teams[ti].craftPrize
-    ? { ti, script: craftPrizeScript(ti) }
+    ? { ti, teamId: gameState.teams[ti].id, script: craftPrizeScript(ti) }
     : null;
   autosave();
   renderAll();
@@ -646,6 +646,7 @@ function finalizeCraftPrizeWinner(pool) {
   gameState.teams[winnerTi].craftPrize = true;
   gameState.craftPrizeWinner = {
     ti: winnerTi,
+    teamId: gameState.teams[winnerTi].id,
     script: craftPrizeScript(winnerTi),
   };
   craftDrawState = null;

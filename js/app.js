@@ -63,9 +63,14 @@ const FIELD_MAX = {
   themeName: 40,
   teamName: 40,
   craftScript: 600,
+  teamNotes: 500,
+  startedAt: 40,
+  endedAt: 40,
+  timezone: 64,
+  locale: 35,
 };
-const APP_VERSION = "v22.43"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 18, 2026 5:27 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.45"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 18, 2026 6:24 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -501,9 +506,17 @@ async function setGameMode(mode) {
     return false;
   }
   const next = freshState();
-  next.meta = { ...gameState.meta, mode, themeName: "" };
+  // Same game night, new board: keep the game's identity and each team's id/notes so a file saved
+  // before the switch and one saved after are recognisably the same game. The clock restarts with
+  // the wiped scores.
+  next.meta = { ...gameState.meta, mode, themeName: "", startedAt: "", endedAt: "" };
+  next.gameId = gameState.gameId;
+  next.createdAt = gameState.createdAt;
+  next.ext = gameState.ext;
   next.teams = gameState.teams.map((t) => {
     const n = freshTeam(t.name);
+    n.id = t.id;
+    n.notes = t.notes;
     n.paused = !!t.paused;
     return n;
   });
@@ -2588,6 +2601,14 @@ async function removeTeam(ti) {
 // Deletes team ti and reindexes everything that points at teams. No confirm, save, or render — callers do those.
 function removeTeamAt(ti) {
   gameState.teams.splice(ti, 1);
+  // The craft prize winner stores a team INDEX; follow the team by its id, and drop the winner if
+  // that team is the one removed (otherwise the index would now name the next team along).
+  const cw = gameState.craftPrizeWinner;
+  if (cw && cw.teamId) {
+    const at = gameState.teams.findIndex((t) => t.id === cw.teamId);
+    if (at < 0) gameState.craftPrizeWinner = null;
+    else cw.ti = at;
+  }
   if (teamSortSnapshot) teamSortSnapshot = teamSortSnapshot.filter((i) => i !== ti).map((i) => (i > ti ? i - 1 : i));
   const newAdj = new Set();
   adjOpenTeams.forEach((i) => {

@@ -1824,7 +1824,17 @@ describe("Save/Load round-trip", () => {
       window.loadFromFile({ target: { files: [file], value: "" } });
       await new Promise((r) => setTimeout(r, 50));
       const restored = evalIn(window, "JSON.stringify(gameState)");
-      assert.equal(restored, original);
+      // Loading autosaves, and a real save refreshes the bookkeeping fields (v22.45: who saved it,
+      // when, and when the game started). Everything else — including gameId, createdAt and every
+      // team id — must come back exactly.
+      const strip = (json) => {
+        const o = JSON.parse(json);
+        delete o.savedBy;
+        delete o.updatedAt;
+        for (const k of ["startedAt", "timezone", "locale"]) delete o.meta[k];
+        return JSON.stringify(o);
+      };
+      assert.equal(strip(restored), strip(original));
     } finally {
       window.close();
     }

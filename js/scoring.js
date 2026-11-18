@@ -131,8 +131,32 @@ function wagerMax(type) {
   return isTheme() ? THEME_WAGER_MAX[type] : type === "final" ? 20 : 10;
 }
 
+// Save-file schema number. Bump ONLY when an older reader would misread a file (a renamed or
+// repurposed key) — never for a new optional field. migrateState() leaves a higher number alone, so
+// a file written by a newer app stays marked as newer.
+const SCHEMA_VERSION = 1;
+// A random UUID for game and team ids. crypto.randomUUID needs a secure context, so plain-http
+// localhost or an old WebView falls back to a Math.random v4 UUID — ids only have to be unique
+// within one person's files, not unguessable.
+function newId() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    return (c === "x" ? r : (r & 3) | 8).toString(16);
+  });
+}
+
 function freshState() {
+  const now = new Date().toISOString();
   return {
+    // Forward-compat fields (v22.45). Every one is optional for readers: older builds just carry
+    // them along, newer ones can rely on them. See native-ios-plan.md > "Fields to add to the JSON now".
+    schemaVersion: SCHEMA_VERSION,
+    savedBy: "", // "web v22.45" / "ios 1.0" — stamped on every real save
+    gameId: newId(), // one game night; survives mode switches, new for a fresh board
+    createdAt: now,
+    updatedAt: now,
+    ext: {}, // per-platform extras ({ios:{}, android:{}, web:{}}) every app must round-trip untouched
     meta: {
       date: new Date().toISOString().slice(0, 10),
       location: "",
@@ -145,6 +169,10 @@ function freshState() {
       excludeTopN: 2,
       mode: "regular",
       themeName: "",
+      startedAt: "", // ISO time of the first score entered (stamped by persistGameStateNow)
+      endedAt: "", // reserved: nothing sets it yet
+      timezone: "", // IANA zone of the device when the game started, e.g. "America/New_York"
+      locale: "", // navigator.language when the game started
     },
     teams: [],
     rounds: [0, 1, 2, 3].map(() => ({
@@ -161,7 +189,9 @@ function freshState() {
 }
 function freshTeam(n) {
   return {
+    id: newId(), // stable identity: the index keys everywhere else shift when a team is removed
     name: n || "",
+    notes: "", // host's private note about the team (no UI yet)
     scoreGuess: "",
     bonusItem: false,
     njcb: false,
@@ -229,8 +259,12 @@ function migrateState(s) {
     "bonusItem",
     "staffNames",
     "themeName",
+    "startedAt",
+    "endedAt",
+    "timezone",
+    "locale",
   ].forEach((k) => {
-    s.meta[k] = s.meta[k] || "";
+    s.meta[k] = typeof s.meta[k] === "string" ? s.meta[k] : "";
   });
   if (!GAME_MODES.includes(s.meta.mode)) s.meta.mode = "regular";
   // The same limits the inputs carry as maxlength, applied again to whatever comes IN. maxlength
@@ -274,6 +308,32 @@ function migrateState(s) {
       s.craftPrizeDraws && s.craftPrizeDraws.length
         ? s.craftPrizeDraws[s.craftPrizeDraws.length - 1]
         : null;
+  // ---- forward-compat fields (v22.45) — every one optional in a file, defaulted here ----
+  if (!Number.isInteger(s.schemaVersion) || s.schemaVersion < 1) s.schemaVersion = SCHEMA_VERSION;
+  if (typeof s.savedBy !== "string") s.savedBy = "";
+  if (typeof s.gameId !== "string" || !s.gameId) s.gameId = newId();
+  // A file from before these fields has no real creation time; "first opened by a build that
+  // tracks it" is the honest value, and it is only ever filled in once.
+  const nowIso = new Date().toISOString();
+  if (typeof s.createdAt !== "string" || !s.createdAt) s.createdAt = nowIso;
+  if (typeof s.updatedAt !== "string" || !s.updatedAt) s.updatedAt = s.createdAt;
+  if (!s.ext || typeof s.ext !== "object" || Array.isArray(s.ext)) s.ext = {};
+  const seenIds = new Set();
+  s.teams.forEach((t) => {
+    if (typeof t.id !== "string" || !t.id || seenIds.has(t.id)) t.id = newId();
+    seenIds.add(t.id);
+    if (typeof t.notes !== "string") t.notes = "";
+    if (t.notes.length > FIELD_MAX.teamNotes) t.notes = t.notes.slice(0, FIELD_MAX.teamNotes);
+  });
+  // teamId rides next to every stored team INDEX (ti) in the craft prize records, so a removed or
+  // re-sorted roster can't leave them pointing at the wrong team. craftPrizeDraws is a legacy list
+  // (nothing writes it any more) but old files still carry it.
+  const stampTeamId = (rec) => {
+    if (rec && typeof rec === "object" && typeof rec.teamId !== "string" && s.teams[rec.ti])
+      rec.teamId = s.teams[rec.ti].id;
+  };
+  stampTeamId(s.craftPrizeWinner);
+  if (Array.isArray(s.craftPrizeDraws)) s.craftPrizeDraws.forEach(stampTeamId);
   return s;
 }
 
