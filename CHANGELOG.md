@@ -14,6 +14,9 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.29 - 2026-11-18
+- **Export:** on phones the square XLSX / PDF / Photos / JD Form buttons shrink to at most 6rem (down to 5.5rem on narrow screens), with smaller 2.2rem icons and bigger, bolder .8rem labels so the labels get more room.
+
 ## v22.28 - 2026-11-18
 - **Craft Prize:** Exclude Top and Drumroll (sec) boxes and +/- buttons go back to their pre-v22.26 size (2.6rem tall); digits are now 1.95rem in a 3.6rem-wide box.
 - **Export:** on phones the XLSX / PDF / Photos / JD Form buttons stay square in the 2x2 grid.
