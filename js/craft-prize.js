@@ -614,7 +614,7 @@ function startCraftPrizeDraw() {
     // transform:scaleX(), not width — see .cp-countdown-fill's own comment (css/styles.css) for
     // why: this fires every 100ms for the whole drumroll, and scaleX runs on the compositor
     // instead of triggering a layout pass on every single tick.
-    if (barEl) barEl.style.transform = "scaleX(" + st.pct / 100 + ")";
+    if (barEl) barEl.style.transform = "scaleX(" + (1 - st.pct / 100) + ")";
   }, 100);
   // The finale and the winner selection share one timer so the reveal and the sound land together.
   // Audio first, and the winner deferred by a task rather than run inline: finalizeCraftPrizeWinner
@@ -767,7 +767,7 @@ function renderCraftPrizeBlock() {
       };
       h += `<div class="cp-countdown">
       <div class="cp-countdown-num" id="cpCountdownNum">${Math.ceil(st.remaining / 1000)}s</div>
-      <div class="cp-countdown-track"><div class="cp-countdown-fill" id="cpCountdownBar" style="transform:scaleX(${st.pct / 100})"></div></div>
+      <div class="cp-countdown-track"><div class="cp-countdown-fill" id="cpCountdownBar" style="transform:scaleX(${1 - st.pct / 100})"></div></div>
     </div>`;
       if (prefs.craftManualEnd) {
         h += `<div class="cp-btn-row"><button class="btn btn-danger export-sq cp-sq-btn cp-manual-end-btn" onclick="stopDrumrollOnly()" title="Stop just the drumroll sound, e.g. once a staff member reveals a paper from the stack — then play the horn whenever you're ready">${ICON_STOP}<span class="export-sq-label">Stop<br>Drumroll</span></button></div>`;

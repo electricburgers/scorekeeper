@@ -2445,11 +2445,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    (js/craft-prize.js's countdownTimer), and a width transition triggers layout on every single
    tick; scaleX runs on the compositor thread instead, which matters most exactly here, the one
    moment jank is most visible to a room full of people watching the bar fill. transform-origin
-   pins the scale to the right edge so it GROWS right-to-left toward the seconds readout on the left (the default center
+   pins the scale to the left edge so the bar SHRINKS leftward toward the seconds readout on the left (the default center
    origin would grow from the middle both ways instead) — same look as the old width-based bar,
    cheaper to animate. width:100% is the unscaled full-track size scaleX() then shrinks down
    from, taking over the role the JS-set inline width used to play. */
-.cp-countdown-fill{height:100%;width:100%;transform-origin:right;background:var(--accent-cyan-solid);transition:transform .1s linear}
+.cp-countdown-fill{height:100%;width:100%;transform-origin:left;background:var(--accent-cyan-solid);transition:transform .1s linear}
 .cp-countdown-num{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--txt-cyan);min-width:2.8rem;text-align:left;font-variant-numeric:tabular-nums}
 .cp-manual-end-btn{width:100%;margin-top:8px}
 /* Start Drumroll / Stop Drumroll / Play Horn as square, icon-forward buttons (the same
