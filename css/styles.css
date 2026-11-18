@@ -1083,6 +1083,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    only one of the five candidates that survived the 13px this button actually renders at, and it
    is what keeps it distinct from the spreadsheet sitting immediately beside it. */
 .icon-pdf{--icon-tint:var(--tint-pdf)}
+.icon-camera{--icon-tint:var(--tint-cap)}
 /* Second and third colours, for the icons whose emoji had more than one: the cream head of the
    drum against its red shell and its wooden sticks, the foam on the beer, the trophy's darker
    plinth, the mic's darker yoke, the pale clip on the clipboard. Each part needs fill and stroke
@@ -2274,6 +2275,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .export-sq.jd-upload-btn .export-sq-label{letter-spacing:.3px}
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
 .export-prompt.show{display:block}
+.export-photo-hint{font-size:.78rem;margin:0 0 8px}
+.export-photo-hint a{color:var(--accent-gold);text-decoration:underline}
 .export-prompt p{margin-bottom:6px;color:var(--badge-gold-fg);font-weight:600;font-size:.85rem}
 #fileLoadInput,#prefsLoadInput,#importLoadInput{display:none}
 

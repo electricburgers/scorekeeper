@@ -195,6 +195,11 @@ const ICON_LINK_PICT =
 // at button/mobile size. The plate keeps a thin (1.4) outline. 🎭 as the Emoji-mode glyph.
 const ICON_FAWKES_PICT =
   '<svg class="icon-ui icon-tinted icon-fawkes" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 4.2H16C19.2 4.2 20 8.2 20 11.4 20 16.6 15.6 21.8 12 21.8 8.4 21.8 4 16.6 4 11.4 4 8.2 4.8 4.2 8 4.2Z"/><path class="ip-2" d="M12 13.1c-.5-.9-1.6-1.3-2.6-.9-1.6.6-2.2 2.3-3.6 2.6-1 .2-1.9-.3-2.3-1.1-.3.9.1 2 1.1 2.5 1.7.8 3.5-.2 4.6-1.4.5-.6 1.1-1.1 1.8-1.4v-.3Zm0 0c.5-.9 1.6-1.3 2.6-.9 1.6.6 2.2 2.3 3.6 2.6 1 .2 1.9-.3 2.3-1.1.3.9-.1 2-1.1 2.5-1.7.8-3.5-.2-4.6-1.4-.5-.6-1.1-1.1-1.8-1.4v-.3Z"/><path class="ip-2" d="M10.1 16.6c.4 2.5 1 4.6 1.9 6.1.9-1.5 1.5-3.6 1.9-6.1-.8.4-1.3.8-1.9 1.7-.6-.9-1.1-1.3-1.9-1.7Z"/></svg>';
+// Photo Upload's camera: a body with a raised viewfinder bump on top and a lens ring in the middle.
+// Tinted --tint-cap (the audited sky blue) so it sits apart from the green XLSX, red PDF and
+// purple JD Form beside it. The lens is the only inner stroke, so it survives the 38% fill wash.
+const ICON_CAMERA_PICT =
+  '<svg class="icon-ui icon-tinted icon-camera" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 4h-5L7.8 6.5H4a2 2 0 0 0-2 2V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8.5a2 2 0 0 0-2-2h-3.8Z"/><circle cx="12" cy="13" r="3.6"/></svg>';
 const ICON_TRASH_PICT =
   '<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
 // Play Horn's icon: a plain play triangle. No frame around it — the button already has a border
@@ -303,6 +308,7 @@ const ICON_TROPHY_EMOJI = '<span class="icon-emoji">🏆</span>';
 const ICON_FLAG_EMOJI = '<span class="icon-emoji">🏁</span>';
 const ICON_PDF_EMOJI = '<span class="icon-emoji">📕</span>';
 const ICON_LINK_EMOJI = '<span class="icon-emoji">🔗</span>';
+const ICON_CAMERA_EMOJI = '<span class="icon-emoji">📷</span>';
 const ICON_FAWKES_EMOJI = '<span class="icon-emoji">🎭</span>';
 const ICON_SND_CRASH_EMOJI = '<span class="icon-emoji">💥</span>';
 const ICON_SND_HORN_EMOJI = '<span class="icon-emoji">📢</span>';
@@ -345,6 +351,7 @@ let ICON_MODE_TUNE = ICON_MODE_TUNE_PICT;
 let ICON_MODE_RIVALS = ICON_MODE_RIVALS_PICT;
 let ICON_PDF = ICON_PDF_PICT;
 let ICON_LINK = ICON_LINK_PICT;
+let ICON_CAMERA = ICON_CAMERA_PICT;
 let ICON_FAWKES = ICON_FAWKES_PICT;
 let ICON_SND_CRASH = ICON_SND_CRASH_PICT;
 let ICON_SND_HORN = ICON_SND_HORN_PICT;
@@ -422,6 +429,7 @@ function applyIconStyle(style) {
   ICON_MODE_RIVALS = emoji ? ICON_MODE_RIVALS_EMOJI : ICON_MODE_RIVALS_PICT;
   ICON_PDF = emoji ? ICON_PDF_EMOJI : ICON_PDF_PICT;
   ICON_LINK = emoji ? ICON_LINK_EMOJI : ICON_LINK_PICT;
+  ICON_CAMERA = emoji ? ICON_CAMERA_EMOJI : ICON_CAMERA_PICT;
   ICON_FAWKES = emoji ? ICON_FAWKES_EMOJI : ICON_FAWKES_PICT;
   ICON_SND_CRASH = emoji ? ICON_SND_CRASH_EMOJI : ICON_SND_CRASH_PICT;
   ICON_SND_HORN = emoji ? ICON_SND_HORN_EMOJI : ICON_SND_HORN_PICT;

@@ -913,6 +913,11 @@ const Tutorial = (function () {
         // way; the real tap still advances on its own the instant it's detected.
       },
       {
+        target: "a.photo-upload-btn",
+        text: `Photos sends you to the photo upload form. Use it to send in pictures from the night. ${tapWordCap()} Next when you're ready.`,
+        advance: "manual",
+      },
+      {
         target: 'a[href="https://app.jotform.com/261954293403156"]',
         text: `JD Form sends you to where you submit your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",

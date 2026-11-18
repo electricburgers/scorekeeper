@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.54] - 18 Nov 2026
+
+### Added
+- **Photos button:** documented the new camera button (photo upload form) in the export button list and a new "What is the Photos button?" entry. Renamed "Size" to "Font size" in the Settings list.
+
 ## [1.53] - 13 Nov 2026
 
 ### Added

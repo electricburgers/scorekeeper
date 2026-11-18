@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.25 - 2026-11-18
+- **Photos:** new camera button to the left of XLSX in Export & Data opens the photo upload form; the "Export complete" prompt links to it too, and the tutorial has a step for it.
+- **Partner Town:** added Belford to the list.
+- **Settings:** the "Size" label is now "Font size".
+- **FAQ (v1.54):** documented the Photos button.
+
 ## v22.24 - 2026-11-18
 - **PDF export:** the craft prize winner is highlighted in gold and labelled "CRAFT PRIZE WINNER" in the Standings.
 - **Export buttons:** more spacing between the XLSX, PDF and JD Form buttons.
