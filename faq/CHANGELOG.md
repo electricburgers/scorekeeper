@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.62] - 21 Nov 2026
+
+### Changed
+- **Plain-language pass over the whole FAQ.** Answers are shorter and written for hosts rather than developers: removed technical detail (character limits per field, file formats, timer color steps, row-by-row layout notes), out-of-date wording (the old "Upload photos from tonight" link) and repeated explanations.
+
 ## [1.61] - 21 Nov 2026
 
 ### Changed
