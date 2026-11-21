@@ -5,6 +5,8 @@ const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
 const { loadAppWindow, evalIn } = require("./helpers/load-app");
 
+// Q5 wagers are locked until the round's Q4 has a response (v22.50); seed a stray Q4 entry.
+const SEED = '[0,1,2,3].forEach(ri => { gameState.rounds[ri].questions[3][99] = { wager: 1 }; }); ';
 describe("Theme Night mode", () => {
   let window;
   before(async () => {
@@ -50,7 +52,7 @@ describe("Theme Night mode", () => {
     setup(true);
     evalIn(
       window,
-      `setW1(0, 9); setC1(0, true);   // capped to 5, +5
+      `${SEED}setW1(0, 9); setC1(0, true);   // capped to 5, +5
        setHW(0, 99); setHC(0, false); // capped to 10, -10
        setFW(0, 7); setFC(0, true);   // +7`,
     );
@@ -82,7 +84,7 @@ describe("Theme Night mode", () => {
 
   it("XLSX carries the theme name and the Q5 wagers; PDF builds", async () => {
     setup(true);
-    evalIn(window, "setW1(0, 3); setC1(0, true); setHW(0, 4); setHC(0, false); setFW(0, 6); setFC(0, true);");
+    evalIn(window, SEED + "setW1(0, 3); setC1(0, true); setHW(0, 4); setHC(0, false); setFW(0, 6); setFC(0, true);");
     await evalIn(window, "exportXLSXBackup()");
     const sheet = evalIn(
       window,

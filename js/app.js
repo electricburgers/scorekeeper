@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.49"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 21, 2026 9:30 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.50"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 21, 2026 9:39 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -2377,8 +2377,12 @@ function renderSpecialWager(type) {
     const d = data[ti];
     if (d && d.wager != null && d.wager !== "" && d.correct != null) swDone++;
   }
+  const swRi = roundWagerTypeIndex(type);
+  const swLocked = swRi >= 0 && bonusLocked(swRi, type);
   let swBadge = "";
-  if (swN) {
+  if (swLocked)
+    swBadge = `<span class="q-badge q-locked-badge" title="${esc(bonusLockedMessage(swRi))}">Score Q4 first</span>`;
+  else if (swN) {
     if (beer)
       swBadge = `<span class="q-badge q-beer">${ICON_BEER} Beer Round!</span>`;
     else if (swDone === swN)
@@ -2394,7 +2398,7 @@ function renderSpecialWager(type) {
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
   const sortBtns = `${sortBtnHtml(swKey, (ti) => swAnswered(type, ti), `sortSpecialWager('${type}')`)}<button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(swKey))}</button><button class="q-reset-btn${resetIdleCls(swKey)}" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}${sortBtns}</div></div>`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swLocked ? " q-locked" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}${sortBtns}</div></div>`;
   // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
   // badge is two inches away and says the same thing, and the whole block is already washed gold
   // with a gold border — three statements of one fact. Same call, same reasoning, as removing the
@@ -2977,8 +2981,13 @@ function clearB(ri, ti) {
   autosave();
   renderAll();
 }
+function specialLocked(type) {
+  const ri = roundWagerTypeIndex(type);
+  return ri >= 0 && bonusLocked(ri, type);
+}
 function setHW(ti, v) {
   if (!canScore()) return;
+  if (specialLocked("halftime")) return showToast(bonusLockedMessage(roundWagerTypeIndex("halftime")));
   if (!gameState.halftime[ti]) gameState.halftime[ti] = {};
   if (("" + v).trim() === "") {
     delete gameState.halftime[ti].wager;
@@ -2991,6 +3000,7 @@ function setHW(ti, v) {
 }
 function setHC(ti, v) {
   if (!canScore()) return;
+  if (specialLocked("halftime")) return showToast(bonusLockedMessage(roundWagerTypeIndex("halftime")));
   const d = gameState.halftime[ti];
   if (!d || d.wager == null || d.wager === "") return;
   /* need a wager first */ const c = d.correct;
@@ -3003,6 +3013,7 @@ function setHC(ti, v) {
 // Theme Night's Round 1 Q5 wager (cap 5) — same shape as setHW/setHC, own store.
 function setW1(ti, v) {
   if (!canScore()) return;
+  if (specialLocked("wager1")) return showToast(bonusLockedMessage(roundWagerTypeIndex("wager1")));
   if (!gameState.wager1[ti]) gameState.wager1[ti] = {};
   if (("" + v).trim() === "") {
     delete gameState.wager1[ti].wager;
@@ -3015,6 +3026,7 @@ function setW1(ti, v) {
 }
 function setC1(ti, v) {
   if (!canScore()) return;
+  if (specialLocked("wager1")) return showToast(bonusLockedMessage(roundWagerTypeIndex("wager1")));
   const d = gameState.wager1[ti];
   if (!d || d.wager == null || d.wager === "") return;
   if (d.correct === v) delete d.correct;
@@ -3026,6 +3038,7 @@ function setC1(ti, v) {
 // Name That Tune's Round 3 Q5 wager (cap 15) - same shape again, own store.
 function setW3(ti, v) {
   if (!canScore()) return;
+  if (specialLocked("wager3")) return showToast(bonusLockedMessage(roundWagerTypeIndex("wager3")));
   if (!gameState.wager3[ti]) gameState.wager3[ti] = {};
   if (("" + v).trim() === "") {
     delete gameState.wager3[ti].wager;
@@ -3038,6 +3051,7 @@ function setW3(ti, v) {
 }
 function setC3(ti, v) {
   if (!canScore()) return;
+  if (specialLocked("wager3")) return showToast(bonusLockedMessage(roundWagerTypeIndex("wager3")));
   const d = gameState.wager3[ti];
   if (!d || d.wager == null || d.wager === "") return;
   if (d.correct === v) delete d.correct;
@@ -3048,6 +3062,7 @@ function setC3(ti, v) {
 }
 function setFW(ti, v) {
   if (!canScore()) return;
+  if (specialLocked("final")) return showToast(bonusLockedMessage(roundWagerTypeIndex("final")));
   if (!gameState.finalWager[ti]) gameState.finalWager[ti] = {};
   if (("" + v).trim() === "") {
     delete gameState.finalWager[ti].wager;
@@ -3060,6 +3075,7 @@ function setFW(ti, v) {
 }
 function setFC(ti, v) {
   if (!canScore()) return;
+  if (specialLocked("final")) return showToast(bonusLockedMessage(roundWagerTypeIndex("final")));
   const d = gameState.finalWager[ti];
   if (!d || d.wager == null || d.wager === "") return;
   /* need a wager first */ const c = d.correct;

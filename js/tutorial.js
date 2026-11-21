@@ -151,7 +151,7 @@ const Tutorial = (function () {
   // skipCell: a single {ti, qi} slot to leave alone — used only for Round 1, where the host
   // hand-scores Q1 for their own team (through the full correct/incorrect/clear cycle) and this
   // only has to fill in that one skipped slot's teammates, the same team's other 3 questions.
-  function autoFillRound(ri, skipCell) {
+  function autoFillRound(ri, skipCell, skipBonus) {
     const wagers = roundWagers(ri).slice();
     gameState.teams.forEach((_, ti) => {
       const order = wagers.slice().sort(() => Math.random() - 0.5);
@@ -170,7 +170,7 @@ const Tutorial = (function () {
         if (!plausibleCorrect()) cycleW(ri, qi, ti, w); // 2nd tap on same wager: flip to incorrect
       }
     });
-    if (hasBonusQ(ri)) autoFillBonus(ri);
+    if (!skipBonus && hasBonusQ(ri)) autoFillBonus(ri);
   }
   function autoFillBonus(ri) {
     gameState.teams.forEach((_, ti) => {
@@ -396,6 +396,9 @@ const Tutorial = (function () {
         advance: "confirm",
         doneLabel: "Next →",
         waitHint: "Pick a wager and a result to continue",
+        // The Q5 is locked until the round's Q4 has a response (v22.50), so quietly fill the
+        // round's Q1-4 first; the "fill the rest" step later skips cells that are already scored.
+        fill: () => runBatched(() => autoFillRound(roundWagerTypeIndex(type), null, true)),
         done: () => {
           const d = wagerStore(type)[0];
           return !!(d && d.wager != null && d.correct != null);
@@ -678,6 +681,8 @@ const Tutorial = (function () {
         advance: "confirm",
         waitHint: `${tapWordCap()} a number to continue`,
         doneLabel: "Next →",
+        // Q5 is locked until Q4 has a response (v22.49), so quietly fill Round 1's Q1-4 first.
+        fill: () => runBatched(() => autoFillRound(0, null, true)),
         done: () => gameState.rounds[0].bonus[0] != null,
       },
       {

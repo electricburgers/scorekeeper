@@ -14,6 +14,14 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.50 - 2026-11-21
+
+- **Bonus lock now covers every round:** the Round 2 and Round 4 Q5 bonus wagers (halftime and final; also the Theme/Tune/Rivals wager rounds) are locked until that round's Q4 has a response, with the "Score Q4 first" badge, dimmed rows and blocked-tap toast. A wager that already has data is never locked.
+- **Greyed titles:** a locked Q5 bonus's title labels (Round 1-4) turn grey like the non-bonus questions.
+- **Shorter toasts:** removed "(at least one team)" from the blocked-scoring toasts.
+- **Tutorial:** the live Q5 step now quietly fills that round's Q1-4 first, so the new lock can't block the walkthrough (the Regular tour's Round 1 bonus step had the same problem since v22.49).
+- **Tests:** new `tests/v22-50.test.js`; older wager tests seed a Q4 response.
+
 ## v22.49 - 2026-11-21
 
 - **Bonus Question order guard:** a round's Q5 Bonus Question can't be scored until that round's Q4 has at least one response, same as the Q1-4 guard. It is dimmed with a "Score Q4 first" badge and a blocked tap shows the toast; a bonus that already has scores is never locked.

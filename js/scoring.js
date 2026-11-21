@@ -396,18 +396,20 @@ function questionLocked(ri, qi) {
 }
 // The round's Q5 Bonus Question follows the same rule: locked until that round's Q4 has a response
 // (and, like the questions, never locked once it already holds a score).
-function bonusLocked(ri) {
-  const b = gameState.rounds[ri] && gameState.rounds[ri].bonus;
-  return !questionHasResponse(ri, 3) && !(b && Object.keys(b).length);
+// Rounds 2 and 4 (and Theme/Tune/Rivals wager rounds) have a wager Q5 instead (`type`), held in wagerStore().
+function bonusLocked(ri, type) {
+  if (questionHasResponse(ri, 3)) return false;
+  const b = type ? wagerStore(type) : gameState.rounds[ri] && gameState.rounds[ri].bonus;
+  return !(b && Object.keys(b).length);
 }
 function bonusLockedMessage(ri) {
-  return "Round " + (ri + 1) + " Q4 has no responses yet. Score it first (at least one team) before the Bonus Question.";
+  return "Round " + (ri + 1) + " Q4 has no responses yet. Score it first before the Bonus Question.";
 }
 function questionLockedMessage(ri, qi) {
   const prev = previousQuestion(ri, qi);
   if (!prev) return "";
   const name = prev.ri === ri ? "Q" + (prev.qi + 1) : "Round " + (prev.ri + 1) + " Q" + (prev.qi + 1);
-  return name + " has no responses yet. Score it first (at least one team) so you stay on the right question.";
+  return name + " has no responses yet. Score it first so you stay on the right question.";
 }
 
 // BEER ROUND: question is a beer round if every team has been marked AND all are correct

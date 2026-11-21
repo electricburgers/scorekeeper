@@ -11,6 +11,8 @@ const EVENT = `gameState.meta.location = "Test Tap"; gameState.meta.quizId = "AB
 const tune = `gameState = freshState(); gameState.meta.mode = "tune"; ${EVENT} ${TEAMS} renderAll();`;
 const j = (w, code) => JSON.parse(evalIn(w, `JSON.stringify(${code})`));
 
+// Q5 wagers are locked until the round's Q4 has a response (v22.50); seed a stray Q4 entry.
+const SEED = '[0,1,2,3].forEach(ri => { gameState.rounds[ri].questions[3][99] = { wager: 1 }; }); ';
 describe("Name That Tune: scoring model", () => {
   let window;
   before(async () => {
@@ -63,7 +65,7 @@ describe("Name That Tune: scoring model", () => {
 
   it("wagers win/lose, clamp to 5/10/15/20, and each round's progress counts its wager", () => {
     evalIn(window, tune);
-    evalIn(window, "setW1(0, 9); setC1(0, false); setHW(0, 99); setHC(0, true); setW3(0, 99); setC3(0, false); setFW(0, 99); setFC(0, true);");
+    evalIn(window, SEED + "setW1(0, 9); setC1(0, false); setHW(0, 99); setHC(0, true); setW3(0, 99); setC3(0, false); setFW(0, 99); setFC(0, true);");
     assert.equal(evalIn(window, "gameState.wager1[0].wager"), 5);
     assert.equal(evalIn(window, "gameState.wager3[0].wager"), 15);
     assert.equal(evalIn(window, "grandTotal(0)"), -5 + 10 - 15 + 20);
@@ -83,7 +85,7 @@ describe("Name That Tune: scoring model", () => {
        gameState.rounds[1].questions[0][0] = { wager: 7, correct: true };
        gameState.rounds[2].questions[0][0] = { wager: 8, correct: true };
        gameState.rounds[3].questions[0][0] = { wager: 12, correct: true };
-       setW1(0, 5); setC1(0, true); setHW(0, 10); setHC(0, false); setW3(0, 15); setC3(0, true);`,
+       ${SEED}setW1(0, 5); setC1(0, true); setHW(0, 10); setHC(0, false); setW3(0, 15); setC3(0, true);`,
     );
     assert.deepEqual(j(window, "['wager1','halftime','wager3','final'].map(t => preWagerTotal(0, t))"), [4, 4 + 5 + 7, 4 + 5 + 7 - 10 + 8, 4 + 5 + 7 - 10 + 8 + 15 + 12]);
   });
@@ -134,7 +136,7 @@ describe("Name That Tune: rendering", () => {
 
   it("Q5 wager rows score through the setters for all four rounds", () => {
     const d = window.document;
-    evalIn(window, "setW3(1, 6); setC3(1, true)");
+    evalIn(window, SEED + "setW3(1, 6); setC3(1, true)");
     assert.equal(evalIn(window, "grandTotal(1)"), 6);
     assert.ok(d.querySelector("#swblock-wager3 .pts-pos"));
   });
