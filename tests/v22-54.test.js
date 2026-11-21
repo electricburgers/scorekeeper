@@ -13,7 +13,8 @@ describe("v22.54 Game Submission section", () => {
 
   it("titles the section Game Submission", () => {
     const h = window.document.querySelector("#sec-export .section-header h2");
-    assert.equal(h.textContent, "Game Submission");
+    assert.equal(h.textContent.trim(), "Game Submission");
+    assert.ok(h.querySelector("svg.icon-ui"), "clipboard pictograph missing");
   });
 
   it("groups XLSX/PDF under Download Scoresheet and the forms under Submit Results", () => {

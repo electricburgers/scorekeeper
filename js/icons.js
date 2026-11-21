@@ -116,6 +116,10 @@ const ICON_SHUFFLE_TINTED_PICT =
 // and baseline are the font's business rather than the layout's. Lucide geometry throughout.
 const ICON_CLIPBOARD_PICT =
   '<svg class="icon-ui icon-tinted icon-clipboard" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect class="ip-2" width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>';
+// Game Submission's header: the same clipboard as above (reuses .icon-clipboard's tints) with a
+// check mark in the body, a finished, signed-off scoresheet.
+const ICON_CLIPCHECK_PICT =
+  '<svg class="icon-ui icon-tinted icon-clipboard" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect class="ip-2" width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4.5"/></svg>';
 const ICON_MIC_PICT =
   '<svg class="icon-ui icon-tinted icon-mic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path class="ip-2" d="M19 10v2a7 7 0 0 1-14 0v-2"/><line class="ip-2" x1="12" x2="12" y1="19" y2="22"/></svg>';
 const ICON_HEART_PICT =
@@ -308,6 +312,7 @@ const ICON_TROPHY_EMOJI = '<span class="icon-emoji">🏆</span>';
 const ICON_FLAG_EMOJI = '<span class="icon-emoji">🏁</span>';
 const ICON_PDF_EMOJI = '<span class="icon-emoji">📕</span>';
 const ICON_LINK_EMOJI = '<span class="icon-emoji">🔗</span>';
+const ICON_CLIPCHECK_EMOJI = '<span class="icon-emoji">📋</span>';
 const ICON_CAMERA_EMOJI = '<span class="icon-emoji">📷</span>';
 const ICON_FAWKES_EMOJI = '<span class="icon-emoji">🎭</span>';
 const ICON_SND_CRASH_EMOJI = '<span class="icon-emoji">💥</span>';
@@ -352,6 +357,7 @@ let ICON_MODE_RIVALS = ICON_MODE_RIVALS_PICT;
 let ICON_PDF = ICON_PDF_PICT;
 let ICON_LINK = ICON_LINK_PICT;
 let ICON_CAMERA = ICON_CAMERA_PICT;
+let ICON_CLIPCHECK = ICON_CLIPCHECK_PICT;
 let ICON_FAWKES = ICON_FAWKES_PICT;
 let ICON_SND_CRASH = ICON_SND_CRASH_PICT;
 let ICON_SND_HORN = ICON_SND_HORN_PICT;
@@ -430,6 +436,7 @@ function applyIconStyle(style) {
   ICON_PDF = emoji ? ICON_PDF_EMOJI : ICON_PDF_PICT;
   ICON_LINK = emoji ? ICON_LINK_EMOJI : ICON_LINK_PICT;
   ICON_CAMERA = emoji ? ICON_CAMERA_EMOJI : ICON_CAMERA_PICT;
+  ICON_CLIPCHECK = emoji ? ICON_CLIPCHECK_EMOJI : ICON_CLIPCHECK_PICT;
   ICON_FAWKES = emoji ? ICON_FAWKES_EMOJI : ICON_FAWKES_PICT;
   ICON_SND_CRASH = emoji ? ICON_SND_CRASH_EMOJI : ICON_SND_CRASH_PICT;
   ICON_SND_HORN = emoji ? ICON_SND_HORN_EMOJI : ICON_SND_HORN_PICT;

@@ -1107,10 +1107,10 @@ let beerRoundToasted = new Set();
 // first renderAll() runs before the rest of this file has been evaluated.
 let finishDone = new Set();
 const FINISH_STEPS = [
+  { k: "backup", label: "Save a backup file (Recommended)", hint: "A .json file, so you can reopen the game later", btn: true },
   { k: "pdf", label: "Save the PDF scoresheet", hint: "Tap PDF above" },
   { k: "photos", label: "Winner Photos", hint: "Submit the winning teams' names and photos" },
   { k: "confirm", label: "Game Confirmation", hint: "Submit the PDF you saved" },
-  { k: "backup", label: "Save a backup file (.json)", hint: "", btn: true },
 ];
 
 
@@ -1746,7 +1746,7 @@ function renderLeftBody() {
   h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><span class="chevron">\u25BC</span><h2>${ICON_BEER} Craft Prize Drawing</h2></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
   cut();
 
-  h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>Game Submission</h2></div><div class="section-body">
+  h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>${ICON_CLIPCHECK} Game Submission</h2></div><div class="section-body">
     <h3 class="export-group-title">Download Scoresheet</h3>
     <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button></div>
     <h3 class="export-group-title">Submit Results</h3>
@@ -2784,8 +2784,8 @@ function adjPts(ti, d) {
 }
 
 // ---- FINISH GAME CHECKLIST (Game Submission) -----------------------------------------------
-// The end-of-night chores, ticked as the host does them: save the PDF, Winner Photos (names and
-// photos of the winning teams), Game Confirmation (submit the saved PDF), and a backup .json.
+// The end-of-night chores, ticked as the host does them: a backup .json (recommended, listed first), the PDF, Winner Photos (names and
+// photos of the winning teams) and Game Confirmation (submit the saved PDF).
 // In memory only; reset by resetBoardUi() for a new game. The guided tour never ticks it.
 function finishChecklistHtml() {
   const n = FINISH_STEPS.filter((x) => finishDone.has(x.k)).length;

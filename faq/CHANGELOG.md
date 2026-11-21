@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.61] - 21 Nov 2026
+
+### Changed
+- **Game Submission screenshot** (`export-bar`, dark and light) regenerated to show the Download Scoresheet and Submit Results groups and the Finish game checklist.
+
 ## [1.60] - 21 Nov 2026
 
 ### Changed

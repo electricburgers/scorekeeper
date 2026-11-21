@@ -18,7 +18,9 @@ v19.79 through v19.84; git history isn't rewritten).
 
 - **Game Submission:** the Export & Data section is renamed Game Submission (section header, tutorial, FAQ, README, TESTING, code comments).
 - **Grouped buttons:** XLSX and PDF sit under a new **Download Scoresheet** heading; Winner Photos and Game Confirmation sit under a new **Submit Results** heading. Each group is its own row of two buttons on every screen size, replacing the phone 2x2 grid and its hairline divider. XLSX stays.
-- **Tutorial and FAQ:** the wrap-up steps name the new headings. FAQ v1.60.
+- **Header icon:** Game Submission gets a clipboard-with-check-mark pictograph (`ICON_CLIPCHECK`, 📋 in Emoji mode).
+- **Finish game checklist:** "Save a backup file (Recommended)" is now the first step, with a hint that it lets you reopen the game later.
+- **Tutorial and FAQ:** the wrap-up steps name the new headings; the FAQ screenshot (dark and light) is regenerated. FAQ v1.61.
 - **What's new:** lists v22.54, v22.53 and v22.51.
 - **Tests:** new `tests/v22-54.test.js`.
 
