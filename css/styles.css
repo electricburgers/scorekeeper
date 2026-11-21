@@ -3248,3 +3248,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .app-toast{border-color:CanvasText}
   :focus-visible{outline:3px solid Highlight;outline-offset:2px}
 }
+/* Developer Tools (hidden Advanced Settings group): one wrapped row of fixture buttons per game mode */
+.dev-fixture-mode{padding:6px 0}
+.dev-fixture-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+#devToolsGroup[hidden]{display:none}

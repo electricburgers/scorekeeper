@@ -101,6 +101,11 @@
       <h3 class="settings-group-label">Tools</h3>
     <div class="settings-row"><span class="size-label">Score progression</span><div class="settings-controls"><button class="settings-btn" onclick="openProgressChart()" title="Line chart of each team's running score by round, with a shareable image (or press G)"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="m7 15 4-5 3 3 5-7"/></svg> Chart</button></div></div>
     <div class="settings-row"><span class="size-label">Keyboard shortcuts</span><div class="settings-controls"><button class="settings-btn" onclick="toggleShortcutsHelp(true)" title="List the keyboard shortcuts (or press ?)">Show list</button></div></div>
+    <div id="devToolsGroup" hidden>
+      <h3 class="settings-group-label">Developer Tools</h3>
+      <p class="fr-note">Test games in states a finished game can't show. Each button replaces the current game.</p>
+      <div id="devFixtureList"></div>
+    </div>
     </div>
     </div>
     <div class="settings-panel-foot">

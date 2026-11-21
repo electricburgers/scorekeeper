@@ -502,3 +502,185 @@ async function restoreBackup(i) {
   closeSettingsPanel();
   announce("Backup restored");
 }
+
+// ---------------------------------------------------------------------------------------------
+// Developer Tools (hidden): partially-played test games
+// ---------------------------------------------------------------------------------------------
+// Settings > Advanced Settings > Developer Tools appears after tapping the version label 7 times
+// (tap 7 more to hide it again). Every button loads one ready-made game in one mode, in a state a
+// finished game can't show: locked Q5 bonuses, halftime/final wagers waiting, ties, paused teams...
+// Fixtures are generated (not stored) and deterministic, so the same button always gives the same
+// board. They are ordinary saves: migrateState() -> autosave() -> renderAll(), like loadSampleGame().
+const DEV_TOOLS_KEY = "tr-dev-tools";
+const DEV_TAP_COUNT = 7;
+const DEV_MODES = ["regular", "theme", "tune", "rivals"];
+// progress = how many of Q1-4 are scored in each round; q5 = which rounds' Q5 (bonus / wager) is entered.
+const DEV_FIXTURES = [
+  { key: "pregame", label: "Pre-game", n: 6, desc: "Teams and guesses entered, nothing scored" },
+  { key: "r1-mid", label: "R1 mid-round", n: 6, desc: "R1 Q1-3 scored, Q4 empty: R1 Q5 locked" },
+  { key: "lock-r2", label: "R2 wager locked", n: 6, desc: "R1 done, R2 Q1-3 scored: halftime wager locked" },
+  { key: "lock-final", label: "Last-round wager locked", n: 6, desc: "Last round Q1-3 scored: final wager locked" },
+  { key: "halftime-pending", label: "Halftime pending", n: 8, desc: "R2 Q1-4 scored, halftime wagers not entered" },
+  { key: "before-final", label: "Before Final wager", n: 8, desc: "Everything scored except the Final wager" },
+  { key: "craft-ready", label: "Craft Prize ready", n: 10, desc: "Finished game, no Craft Prize winner drawn yet" },
+  { key: "edge-ties", label: "Tied scores", n: 8, desc: "Finished game, teams paired up with identical results" },
+  { key: "edge-paused", label: "Paused teams", n: 8, desc: "Mid-game with two paused teams" },
+  { key: "edge-noguess", label: "No-guess teams", n: 8, desc: "Finished game, two teams without a score guess" },
+  { key: "edge-maxteams", label: "MAX_TEAMS", n: 0, desc: "A full roster (MAX_TEAMS) in the middle of Round 2" },
+];
+const DEV_TEAM_NAMES = [
+  "Quizzy McQuizface", "Trivia Newton John", "The Fifth of November", "Sherlock Homies",
+  "Mastermind Alliance", "Two Heads, One Trophy", "Lanterns & Lore", "Remember Remember",
+  "Powder Keg of Knowledge", "The Usual Suspecters", "Parliamentary Procedure", "Bar Mitzvah Brain Trust",
+];
+// Q5 store per round, per mode (null = the 4-part bonus, which lives in rounds[ri].bonus).
+const DEV_Q5_TYPES = {
+  regular: [null, "halftime", null, "final"],
+  theme: ["wager1", "halftime", "final"],
+  tune: ["wager1", "halftime", "wager3", "final"],
+  rivals: ["wager1", "halftime", "wager3", "final"],
+};
+const DEV_Q5_CAPS = {
+  regular: { halftime: 10, final: 20 },
+  theme: { wager1: 5, halftime: 10, final: 20 },
+  tune: { wager1: 5, halftime: 10, wager3: 15, final: 20 },
+  rivals: { wager1: 5, halftime: 10, wager3: 15, final: 20 },
+};
+// Per fixture: [Q1-4 scored count per round] and the rounds whose Q5 is entered, for a mode with
+// `rc` rounds. "Full" = every round complete with every Q5.
+function devFixturePlan(key, rc) {
+  const all = (v) => Array.from({ length: rc }, () => v);
+  const upTo = (full, partial) => Array.from({ length: rc }, (_, i) => (i < full ? 4 : i === full ? partial : 0));
+  const q5 = (n) => Array.from({ length: rc }, (_, i) => i < n);
+  switch (key) {
+    case "pregame": return { prog: all(0), q5: q5(0) };
+    case "r1-mid": return { prog: upTo(0, 3), q5: q5(0) };
+    case "lock-r2": return { prog: upTo(1, 3), q5: q5(1) };
+    case "lock-final": return { prog: upTo(rc - 1, 3), q5: q5(rc - 1) };
+    case "halftime-pending": return { prog: upTo(2, 0), q5: q5(1) };
+    case "before-final": return { prog: all(4), q5: q5(rc - 1) };
+    case "edge-paused": return { prog: upTo(1, 2), q5: q5(1) };
+    case "edge-maxteams": return { prog: upTo(1, 2), q5: q5(1) };
+    default: return { prog: all(4), q5: q5(rc) }; // craft-ready, edge-ties, edge-noguess
+  }
+}
+function devBuildFixture(mode, key) {
+  const fx = DEV_FIXTURES.find((f) => f.key === key);
+  const rc = mode === "theme" ? 3 : 4;
+  const n = fx.n || MAX_TEAMS;
+  const plan = devFixturePlan(key, rc);
+  const tied = key === "edge-ties";
+  const paused = key === "edge-paused" ? [1, 4] : [];
+  const noGuess = key === "edge-noguess" ? [2, 5] : [];
+  const limit = GUESS_LIMITS[mode];
+  const wagerSets = mode === "theme" ? THEME_ROUND_WAGERS : ROUND_WAGERS;
+  const s = freshState();
+  s.meta = {
+    ...s.meta,
+    location: "Dev Fixture Tavern",
+    quizId: "DEV-" + mode.toUpperCase().slice(0, 3) + "-" + key,
+    hostName: "Dev Host",
+    craftPartner: "Dev Brewing Co",
+    craftPartnerTown: "Testville",
+    bonusItem: "Test Mug",
+    staffNames: "Alex, Sam",
+    mode,
+    themeName: mode === "theme" ? "Dev Theme Night" : "",
+    excludeTopN: 2,
+  };
+  s.gameStarted = key !== "pregame";
+  // tied pairs (0&1, 2&3, ...) share every result; seed is what results are derived from.
+  const seedOf = (ti) => (tied ? ti >> 1 : ti);
+  for (let ti = 0; ti < n; ti++) {
+    const t = freshTeam(ti < DEV_TEAM_NAMES.length ? DEV_TEAM_NAMES[ti] : "Team " + (ti + 1));
+    const g = Math.round(limit * (0.45 + (0.5 * ((ti * 37) % 11)) / 11));
+    t.scoreGuess = noGuess.includes(ti) ? "" : tied && ti < 2 ? Math.round(limit * 0.6) : g;
+    t.bonusItem = seedOf(ti) % 3 === 0;
+    t.njcb = seedOf(ti) % 4 === 1;
+    t.paused = paused.includes(ti);
+    s.teams.push(t);
+  }
+  const storeKey = { wager1: "wager1", halftime: "halftime", wager3: "wager3", final: "finalWager" };
+  for (let ri = 0; ri < rc; ri++) {
+    for (let qi = 0; qi < plan.prog[ri]; qi++) {
+      for (let ti = 0; ti < n; ti++) {
+        if (s.teams[ti].paused) continue;
+        const sd = seedOf(ti);
+        const ok = (sd * 3 + qi * 5 + ri * 7) % 4 !== 0;
+        s.rounds[ri].questions[qi][ti] =
+          mode === "rivals"
+            ? { place: ok ? 1 + ((sd + qi + ri) % 3) : 0 }
+            : { wager: wagerSets[ri][(qi + sd) % 4], correct: ok };
+      }
+    }
+    if (!plan.q5[ri]) continue;
+    const type = DEV_Q5_TYPES[mode][ri];
+    for (let ti = 0; ti < n; ti++) {
+      if (s.teams[ti].paused) continue;
+      const sd = seedOf(ti);
+      if (type) {
+        const cap = DEV_Q5_CAPS[mode][type];
+        s[storeKey[type]][ti] = { wager: 1 + ((sd * 3 + ri) % cap), correct: (sd + ri) % 3 !== 0 };
+      } else {
+        s.rounds[ri].bonus[ti] = (sd + ri) % 5;
+      }
+    }
+  }
+  return migrateState(s);
+}
+async function loadDevFixture(mode, key) {
+  const fx = DEV_FIXTURES.find((f) => f.key === key);
+  const msg = (gameState.teams.length ? "Replace the current game with " : "Load ") +
+    "the developer test game “" + fx.label + "” (" + gameModeName(mode) + ")?" +
+    (gameState.teams.length ? " This wipes every team, score, and Event Details field currently entered — it can’t be undone." : "");
+  if (!(await appConfirm(msg, { okLabel: "Load" }))) return;
+  gameState = devBuildFixture(mode, key);
+  resetBoardUi();
+  autosave();
+  renderAll();
+  document.getElementById("resumeBanner")?.classList.remove("show");
+  closeSettingsPanel();
+}
+function devToolsEnabled() {
+  return TRStore.getItem(DEV_TOOLS_KEY) === "1";
+}
+function renderDevTools() {
+  const group = document.getElementById("devToolsGroup");
+  if (!group) return;
+  const on = devToolsEnabled();
+  group.hidden = !on;
+  const list = document.getElementById("devFixtureList");
+  if (!on || !list || list.childElementCount) return;
+  list.innerHTML = DEV_MODES.map(
+    (m) =>
+      `<div class="dev-fixture-mode"><span class="size-label">${esc(gameModeName(m))}</span><div class="dev-fixture-btns">` +
+      DEV_FIXTURES.map(
+        (f) =>
+          `<button class="settings-btn" type="button" title="${esc(f.desc)}" onclick="loadDevFixture('${m}','${f.key}')">${esc(f.label)}</button>`,
+      ).join("") +
+      "</div></div>",
+  ).join("");
+}
+// 7 quick taps on the version label toggle Developer Tools (a tap on the update link / Reload
+// button inside the label doesn't count).
+(function initDevToolsTap() {
+  let taps = 0;
+  let last = 0;
+  window.addEventListener("DOMContentLoaded", () => {
+    renderDevTools();
+    const vl = document.getElementById("versionLabel");
+    if (!vl) return;
+    vl.addEventListener("click", (e) => {
+      if (e.target.closest("a, button")) return;
+      const now = Date.now();
+      taps = now - last > 1500 ? 1 : taps + 1;
+      last = now;
+      if (taps < DEV_TAP_COUNT) return;
+      taps = 0;
+      const on = !devToolsEnabled();
+      TRStore.setItem(DEV_TOOLS_KEY, on ? "1" : "0");
+      renderDevTools();
+      showToast(on ? "Developer Tools unlocked (Advanced Settings)" : "Developer Tools hidden");
+    });
+  });
+})();

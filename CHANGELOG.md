@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.52 - 2026-11-21
+
+- **Developer Tools (hidden):** tap the version label in Settings 7 times to reveal a Developer Tools group under Advanced Settings (7 more taps hides it). It has 44 buttons, 11 partial-game test states for each of the four game modes: pre-game, R1 mid-round (Q5 locked), R2 and last-round wagers locked, halftime pending, before the Final wager, Craft Prize ready, tied scores, paused teams, teams with no guess, and a full MAX_TEAMS roster. Fixtures are generated in `js/host-tools.js`, so there are no JSON files to maintain.
+- **Not in What's new:** dev-only, so What's new is unchanged; it still lists v22.51, v22.50 and v22.49 (all user-facing).
+- **Tests:** new `tests/dev-fixtures.test.js`; `tests/v22-47.test.js` now only requires What's new's newest entry to be no newer than `APP_VERSION`.
+
 ## v22.51 - 2026-11-21
 
 - **Blocked-scoring toasts name the round and question:** now read like "R1-Q2 has no responses yet. Score it first so you stay on the right question." (R1-R4, R#-Q#) instead of "Round 1 Q2".

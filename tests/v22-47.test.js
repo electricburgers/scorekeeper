@@ -15,8 +15,10 @@ describe("v22.47 What's new", () => {
     try {
       const vers = [...window.document.querySelectorAll(".settings-about .about-ver b")].map((b) => b.textContent);
       assert.equal(vers.length, 3);
-      assert.equal(vers[0], evalIn(window, "APP_VERSION"));
       const n = (v) => v.slice(1).split(".").map(Number);
+      // Dev-only releases (e.g. v22.52 Developer Tools) bump APP_VERSION without a What's new entry.
+      const [cur, top] = [n(evalIn(window, "APP_VERSION")), n(vers[0])];
+      assert.ok(top[0] < cur[0] || (top[0] === cur[0] && top[1] <= cur[1]), `${vers[0]} is newer than APP_VERSION`);
       for (let i = 1; i < 3; i++) {
         const [a, b] = [n(vers[i - 1]), n(vers[i])];
         assert.ok(a[0] > b[0] || (a[0] === b[0] && a[1] > b[1]), `${vers[i - 1]} should be newer than ${vers[i]}`);
