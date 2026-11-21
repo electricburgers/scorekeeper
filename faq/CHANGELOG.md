@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.63] - 21 Nov 2026
+
+### Changed
+- **Field character limits** are listed again in "Is there a limit on how much I can type into a field?", as a short list with no extra explanation.
+
 ## [1.62] - 21 Nov 2026
 
 ### Changed
