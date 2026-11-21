@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.48"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 21, 2026 8:41 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.49"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 21, 2026 9:30 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -2267,8 +2267,11 @@ function renderBQ(ri) {
     if (gameState.rounds[ri].bonus[ti] != null) subDone++;
   }
   const beer = isBonusBeerRound(ri);
+  const bqLocked = bonusLocked(ri);
   let badge = "";
-  if (n) {
+  if (bqLocked)
+    badge = `<span class="q-badge q-badge-lg q-locked-badge" title="${esc(bonusLockedMessage(ri))}">Score Q4 first</span>`;
+  else if (n) {
     if (beer)
       badge =
         `<span class="q-badge q-badge-lg q-beer">${ICON_BEER} Beer Round!</span>`;
@@ -2283,6 +2286,7 @@ function renderBQ(ri) {
   else if (n > 0 && subDone === n) blockCls += " q-done";
   else if (subDone > 0) blockCls += " q-active";
   if (isCollapsedBQ) blockCls += " bq-collapsed";
+  if (bqLocked) blockCls += " q-locked";
   const bqStyle = BONUS_Q_STYLE[ri] || { cls: "" };
   const bqKey = "b" + ri;
   const sortBtns = `${sortBtnHtml(bqKey, (ti) => bonusAnswered(ri, ti), `sortBonusQuestion(${ri})`)}<button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(bqKey))}</button><button class="q-reset-btn${resetIdleCls(bqKey)}" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
@@ -2953,6 +2957,7 @@ function canScore() {
 // ============================================================================
 function setB(ri, ti, v) {
   if (!canScore()) return;
+  if (bonusLocked(ri)) return showToast(bonusLockedMessage(ri));
   const cur = gameState.rounds[ri].bonus[ti];
   if (cur === v) {
     delete gameState.rounds[ri].bonus[ti];

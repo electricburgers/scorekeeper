@@ -394,6 +394,15 @@ function questionLocked(ri, qi) {
   const prev = previousQuestion(ri, qi);
   return !!prev && !questionHasResponse(prev.ri, prev.qi) && !questionHasResponse(ri, qi);
 }
+// The round's Q5 Bonus Question follows the same rule: locked until that round's Q4 has a response
+// (and, like the questions, never locked once it already holds a score).
+function bonusLocked(ri) {
+  const b = gameState.rounds[ri] && gameState.rounds[ri].bonus;
+  return !questionHasResponse(ri, 3) && !(b && Object.keys(b).length);
+}
+function bonusLockedMessage(ri) {
+  return "Round " + (ri + 1) + " Q4 has no responses yet. Score it first (at least one team) before the Bonus Question.";
+}
 function questionLockedMessage(ri, qi) {
   const prev = previousQuestion(ri, qi);
   if (!prev) return "";

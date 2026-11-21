@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.49 - 2026-11-21
+
+- **Bonus Question order guard:** a round's Q5 Bonus Question can't be scored until that round's Q4 has at least one response, same as the Q1-4 guard. It is dimmed with a "Score Q4 first" badge and a blocked tap shows the toast; a bonus that already has scores is never locked.
+- **Tests:** new `tests/v22-49.test.js`.
+
 ## v22.48 - 2026-11-21
 - **Scoring order guard:** a Q1-4 question can't be scored until the question before it (Q4 of the previous round, for Q1) has at least one response. Locked questions are dimmed with a "Score Qn first" badge; a question that already has a response is never locked, so scores stay editable. Added after a host lost their place and scored a question ahead.
 - **Blocked-scoring toast:** blocked taps (the order guard, and missing Quiz ID, Theme Name, Host Name, Location or team guesses) now show a non-blocking toast with a shrinking timer bar that says why, instead of a modal alert.

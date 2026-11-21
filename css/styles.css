@@ -3202,7 +3202,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* ---- v22.48 additions ---------------------------------------------------------------- */
 /* Scoring-order guard: a question whose predecessor has no response yet is dimmed (the buttons
    stay tappable so a tap can explain itself with a toast; see questionLocked() in scoring.js). */
-.question-block.q-locked .team-answer{opacity:.5}
+.question-block.q-locked .team-answer,.question-block.q-locked .bonus-choice{opacity:.5}
 .q-badge.q-locked-badge{background:transparent;color:var(--text-muted)}
 .app-toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(12px);width:max-content;max-width:min(92vw,28rem);padding:10px 16px 14px;border-radius:var(--radius);background:var(--bg-card-alt);color:var(--text-primary);border:2px solid var(--accent-gold);box-shadow:var(--shadow-lg);font-size:.9rem;font-weight:600;text-align:center;white-space:pre-line;overflow:hidden;opacity:0;pointer-events:none;z-index:900;transition:opacity .2s,transform .2s}
 .app-toast-bar{position:absolute;left:0;bottom:0;height:5px;width:100%;background:var(--accent-gold);transform-origin:left center;transform:scaleX(0)}
@@ -3234,7 +3234,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   :root{--border-control:currentcolor}
   .wager-btn,.btn,.settings-btn,.finish-box,.q-badge{border-width:2px;border-style:solid}
   .finish-hint,.finish-count,.q-badge.q-locked-badge{color:var(--text-primary)}
-  .question-block.q-locked .team-answer{opacity:.75}
+  .question-block.q-locked .team-answer,.question-block.q-locked .bonus-choice{opacity:.75}
 }
 
 /* Windows High Contrast / forced colors: let the system palette win, but keep states that rely
