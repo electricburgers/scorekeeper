@@ -2,6 +2,20 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.59] - 21 Nov 2026
+
+### Added
+- **"Why can't I score a question?"** explains the scoring-order guard and the blocked-scoring toast.
+- The wrap-up answer now mentions the Finish game checklist and the backup file reminder.
+
+## [1.58] - 21 Nov 2026
+
+### Added
+- **"How do I wrap up after a finished game?"** walks through PDF, Winner Photos, then Game Confirmation.
+
+### Changed
+- Winner Photos and Game Confirmation answers now say where hosts submit winning teams' names and photos, and where the saved PDF goes.
+
 ## [1.57] - 20 Nov 2026
 
 ### Changed

@@ -14,6 +14,22 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.48 - 2026-11-21
+- **Scoring order guard:** a Q1-4 question can't be scored until the question before it (Q4 of the previous round, for Q1) has at least one response. Locked questions are dimmed with a "Score Qn first" badge; a question that already has a response is never locked, so scores stay editable. Added after a host lost their place and scored a question ahead.
+- **Blocked-scoring toast:** blocked taps (the order guard, and missing Quiz ID, Theme Name, Host Name, Location or team guesses) now show a non-blocking toast with a shrinking timer bar that says why, instead of a modal alert.
+- **Keep screen awake:** new Settings toggle (on by default) uses the Screen Wake Lock API while a game has teams; it is re-requested when the page returns to the foreground.
+- **Haptics:** the device buzzes when the Craft Prize drumroll finishes, where the browser supports vibration (not iOS Safari).
+- **Reduced motion, contrast, forced colors:** `prefers-reduced-motion` stops all animation and smooth scrolling (the toast timer bar keeps running); `prefers-contrast: more` firms up borders and text; `forced-colors` keeps selected, done and focus states visible.
+- **CSS:** `color-scheme` follows the app Theme; the Settings panel and mini progress shadows use `light-dark()` (with a fallback); the phone score sheet sizes with `100svh`.
+- **Finish game checklist (Export & Data):** PDF, Winner Photos, Game Confirmation and a backup file, ticked as you do them. The post-export prompt no longer carries the photos link.
+- **Save file safety:** Clear Session (and the post-export Yes) warns when no backup `.json` was saved this game.
+- **Tests:** new `tests/v22-48.test.js`; the `!important` and JS-set custom property guards in `css-integrity` know the new rules.
+
+## v22.47 - 2026-11-21
+- **Tutorial:** the closing Export steps now walk through saving the PDF of the finished game, then Winner Photos (where hosts submit the winning teams' names and photos), then Game Confirmation (where the saved PDF is submitted).
+- **FAQ v1.58:** new "How do I wrap up after a finished game?" answer; Winner Photos and Game Confirmation answers updated to match.
+- **Settings:** What's new now shows only the last three versions (the "Earlier versions" twisty is gone).
+
 ## v22.46 - 2026-11-20
 - **Export:** the JD Form button is now called Game Confirmation (button label, tutorial step, FAQ, README and TESTING). On phones the longer label wraps to two lines inside the square button. FAQ is v1.57 with regenerated Export bar screenshots.
 

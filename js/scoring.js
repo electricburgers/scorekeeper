@@ -375,6 +375,32 @@ function checkGameStarted() {
   return gameState.gameStarted;
 }
 
+// SCORING ORDER GUARD (v22.48): a host once scored a question ahead of where the game really was
+// and lost their place. Q1-4 must be scored in order: a question is locked until the question
+// right before it (Q4 of the previous round, for Q1) has at least one response. A question that
+// already has a response is never locked, so existing scores stay editable.
+function questionHasResponse(ri, qi) {
+  const q = gameState.rounds[ri] && gameState.rounds[ri].questions[qi];
+  if (!q) return false;
+  for (const k in q) if (q[k]) return true;
+  return false;
+}
+function previousQuestion(ri, qi) {
+  if (qi > 0) return { ri, qi: qi - 1 };
+  if (ri > 0) return { ri: ri - 1, qi: 3 };
+  return null;
+}
+function questionLocked(ri, qi) {
+  const prev = previousQuestion(ri, qi);
+  return !!prev && !questionHasResponse(prev.ri, prev.qi) && !questionHasResponse(ri, qi);
+}
+function questionLockedMessage(ri, qi) {
+  const prev = previousQuestion(ri, qi);
+  if (!prev) return "";
+  const name = prev.ri === ri ? "Q" + (prev.qi + 1) : "Round " + (prev.ri + 1) + " Q" + (prev.qi + 1);
+  return name + " has no responses yet. Score it first (at least one team) so you stay on the right question.";
+}
+
 // BEER ROUND: question is a beer round if every team has been marked AND all are correct
 function isBeerRound(ri, qi) {
   const n = gameState.teams.length;

@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.46"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 20, 2026 6:59 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.48"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 21, 2026 8:41 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -176,6 +176,7 @@ function loadPrefs() {
       if (p.craftFadeSec == null) p.craftFadeSec = CRAFT_FADE_DEFAULT;
       if (p.craftSoundTest == null) p.craftSoundTest = false;
       if (p.qResultToggle == null) p.qResultToggle = false;
+      if (p.keepAwake == null) p.keepAwake = true;
       prefsCache = p;
       return { ...p };
     }
@@ -199,6 +200,7 @@ function loadPrefs() {
     craftFadeSec: CRAFT_FADE_DEFAULT,
     craftSoundTest: false,
     qResultToggle: false,
+    keepAwake: true,
     showProgressBar: false,
   };
   return { ...prefsCache };
@@ -337,6 +339,11 @@ function applyPrefs() {
   if (fadeRange) {
     fadeRange.value = String(craftFadeSec());
     previewCraftFadeSec(fadeRange.value);
+  }
+  const keepAwakeBtn = document.getElementById("keepAwakeBtn");
+  if (keepAwakeBtn) {
+    keepAwakeBtn.classList.toggle("active", !!p.keepAwake);
+    keepAwakeBtn.textContent = p.keepAwake ? "On" : "Off";
   }
   const qResultToggle = document.getElementById("qResultToggleBtn");
   if (qResultToggle) {
@@ -603,6 +610,13 @@ function toggleTimerPulse() {
   savePrefs(p);
   applyPrefs();
 }
+function toggleKeepAwake() {
+  const p = loadPrefs();
+  p.keepAwake = !p.keepAwake;
+  savePrefs(p);
+  applyPrefs();
+  syncWakeLock();
+}
 function toggleQResultButtons() {
   const p = loadPrefs();
   p.qResultToggle = !p.qResultToggle;
@@ -861,6 +875,76 @@ function announce(msg) {
   el.textContent = msg + (__srToggle ? " " : "");
 }
 
+// A small non-blocking message at the bottom of the screen (the scoring-order guard uses it, so
+// a blocked tap explains itself without a modal in the middle of a game). Also read aloud.
+let toastTimer = null;
+function showToast(msg, ms) {
+  ms = ms || 5000;
+  announce(msg);
+  let el = document.getElementById("appToast");
+  if (!el) {
+    el = document.createElement("div");
+    el.id = "appToast";
+    el.className = "app-toast";
+    el.setAttribute("aria-hidden", "true"); // announce() already spoke it
+    el.innerHTML = '<div class="app-toast-msg"></div><div class="app-toast-bar"></div>';
+    document.body.appendChild(el);
+  }
+  el.querySelector(".app-toast-msg").textContent = msg;
+  // Restart the shrinking bar: drop the class, force a reflow, add it back with this duration.
+  const bar = el.querySelector(".app-toast-bar");
+  bar.classList.remove("run");
+  bar.style.setProperty("--toast-ms", ms + "ms");
+  void bar.offsetWidth;
+  bar.classList.add("run");
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove("show"), ms);
+}
+
+// ---- MOTION, HAPTICS AND SCREEN WAKE LOCK ------------------------------------------------
+// prefersReducedMotion(): the OS "reduce motion" setting. CSS animations are switched off in
+// styles.css; this is the same check for motion driven from JS (smooth scrolling).
+function prefersReducedMotion() {
+  return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+}
+function smoothBehavior() {
+  return prefersReducedMotion() ? "auto" : "smooth";
+}
+// A short buzz where the browser supports it (Android Chrome and friends; iOS Safari has no
+// Vibration API, so this quietly does nothing there). Never throws.
+function hapticPulse(pattern) {
+  try {
+    if (navigator.vibrate) navigator.vibrate(pattern);
+  } catch (e) {}
+}
+// Screen Wake Lock: keep the phone/iPad awake while a game is in progress (Settings > Keep
+// screen awake). The browser drops the lock whenever the page is hidden, so it is re-requested
+// when the page becomes visible again. No-op where navigator.wakeLock doesn't exist.
+let wakeLockSentinel = null;
+async function syncWakeLock() {
+  if (!("wakeLock" in navigator)) return;
+  const want =
+    !!loadPrefs().keepAwake &&
+    document.visibilityState === "visible" &&
+    gameState.teams.length > 0;
+  try {
+    if (want && !wakeLockSentinel) {
+      const s = await navigator.wakeLock.request("screen");
+      wakeLockSentinel = s;
+      s.addEventListener("release", () => {
+        if (wakeLockSentinel === s) wakeLockSentinel = null;
+      });
+    } else if (!want && wakeLockSentinel) {
+      const s = wakeLockSentinel;
+      wakeLockSentinel = null;
+      await s.release();
+    }
+  } catch (e) {
+    wakeLockSentinel = null; // denied (low battery, etc.): fine, try again on the next render
+  }
+}
+
 // ---- CHARACTER-LIMIT FEEDBACK ------------------------------------------------------------
 // Every host-typed field carries a maxlength (Team name 40, Location 60, Quiz ID 24, the
 // announcement script 600, and so on). The browser enforces those silently: at the limit the
@@ -1019,6 +1103,15 @@ document.addEventListener(
 );
 // Track which (ri,qi) combos we've already toasted for Beer Round
 let beerRoundToasted = new Set();
+// Finish game checklist state (see finishChecklistHtml below); declared this early because the
+// first renderAll() runs before the rest of this file has been evaluated.
+let finishDone = new Set();
+const FINISH_STEPS = [
+  { k: "pdf", label: "Save the PDF scoresheet", hint: "Tap PDF above" },
+  { k: "photos", label: "Winner Photos", hint: "Submit the winning teams' names and photos" },
+  { k: "confirm", label: "Game Confirmation", hint: "Submit the PDF you saved" },
+  { k: "backup", label: "Save a backup file (.json)", hint: "", btn: true },
+];
 
 
 // ============================================================================
@@ -1201,6 +1294,7 @@ function resumeSession() {
 // Resets every piece of on-screen board state (sorts, collapsed sections, banter/beer-round
 // memory, craft draw) - shared by a new game and by a game-mode change.
 function resetBoardUi() {
+  finishDone = new Set();
   scoreSortMode = "entry";
   randomOrder = null;
   standingsSortMode = { halftime: "entry", final: "entry" };
@@ -1238,6 +1332,7 @@ function startNewGame() {
   resetBoardUi();
   document.getElementById("resumeBanner").classList.remove("show");
   renderAll();
+  refreshFinishChecklist();
 }
 // js/tutorial.js (the ~1400-line guided-tour engine) is lazy-loaded on first actual use rather
 // than a blocking <script> tag — see its own top comment. loadScriptOnce (js/export.js) is the
@@ -1456,6 +1551,7 @@ function renderAll() {
   });
   applyPrefs();
   syncGameModeSelect();
+  syncWakeLock();
 }
 
 function renderLeft() {
@@ -1651,8 +1747,9 @@ function renderLeftBody() {
   cut();
 
   h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>Export &amp; Data</h2></div><div class="section-body">
-    <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button><a class="btn export-sq photo-upload-btn" href="https://form.jotform.com/263015326852050" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos">${ICON_CAMERA}<span class="export-sq-label">Winner Photos</span></a><a class="btn export-sq jd-upload-btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer">${ICON_FAWKES}<span class="export-sq-label">Game Confirmation</span></a></div>
-    <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><p class="export-photo-hint"><a href="https://form.jotform.com/263015326852050" target="_blank" rel="noopener noreferrer">Upload photos from tonight first</a></p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="startNewGame();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
+    <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button><a class="btn export-sq photo-upload-btn" href="https://form.jotform.com/263015326852050" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${ICON_CAMERA}<span class="export-sq-label">Winner Photos</span></a><a class="btn export-sq jd-upload-btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer" onclick="markFinish('confirm')">${ICON_FAWKES}<span class="export-sq-label">Game Confirmation</span></a></div>
+    <div class="finish-card" id="finishChecklist">${finishChecklistHtml()}</div>
+    <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="clearAfterExport();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>
   </div></div>`;
   cut();
@@ -1759,7 +1856,7 @@ function scrollToJumpTarget(selector) {
   requestAnimationFrame(() => {
     const el = document.querySelector(selector);
     if (!el) return;
-    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    el.scrollIntoView({ behavior: smoothBehavior(), block: "start" });
   });
 }
 function jumpToSection(id) {
@@ -1906,6 +2003,8 @@ function renderWQ(ri, qi) {
   else if (qs.total > 0 && qs.done === qs.total) blockCls += " q-done";
   else if (qs.done > 0) blockCls += " q-active";
   if (isCollapsed) blockCls += " q-collapsed";
+  const locked = questionLocked(ri, qi);
+  if (locked) blockCls += " q-locked";
 
   const badgeCls = beer
     ? "q-badge q-beer"
@@ -1930,7 +2029,7 @@ function renderWQ(ri, qi) {
       <span class="q-chevron">▼</span>
       <div class="question-title">
         <span>Q${qi + 1}</span>
-        ${qs.total ? `<span class="${badgeCls}">${badgeText}</span>` : ""}
+        ${locked ? `<span class="q-badge q-locked-badge" title="${esc(questionLockedMessage(ri, qi))}">Score Q${previousQuestion(ri, qi).qi + 1} first</span>` : qs.total ? `<span class="${badgeCls}">${badgeText}</span>` : ""}
       </div>
     </div>
     <div class="q-header-right">
@@ -1993,7 +2092,7 @@ function renderWQ(ri, qi) {
     if (rivals)
       RIVALS_PLACES.forEach((pl) => {
         const on = ans.place === pl.place;
-        h += `<button class="wager-btn place-btn${on ? " selected" : ""}${pl.place === 0 ? " place-other" : ""}" aria-pressed="${on}" aria-label="${pl.name}, ${RIVALS_PLACE_POINTS[pl.place]} points" onclick="setPlace(${ri},${qi},${ti},${pl.place})">${pl.label}<span class="place-pts">${RIVALS_PLACE_POINTS[pl.place]}</span>${on ? (pl.place === 0 ? `<span class="wager-badge bg-incorrect">${ICON_INCORRECT}</span>` : `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>`) : ""}</button>`;
+        h += `<button class="wager-btn place-btn${on ? " selected" : ""}${pl.place === 0 ? " place-other" : ""}" aria-pressed="${on}" aria-label="${pl.name}, ${RIVALS_PLACE_POINTS[pl.place]} points" onclick="setPlace(${ri},${qi},${ti},${pl.place})"${locked ? ' aria-disabled="true"' : ""}>${pl.label}<span class="place-pts">${RIVALS_PLACE_POINTS[pl.place]}</span>${on ? (pl.place === 0 ? `<span class="wager-badge bg-incorrect">${ICON_INCORRECT}</span>` : `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>`) : ""}</button>`;
       });
     wagers.forEach((w) => {
       const isSel = sel === w,
@@ -2007,7 +2106,7 @@ function renderWQ(ri, qi) {
         cls += " incorrect";
         badge = `<span class="wager-badge bg-incorrect">${ICON_INCORRECT}</span>`;
       } else if (isUsed) cls += " used";
-      h += `<button class="${cls}" onclick="cycleW(${ri},${qi},${ti},${w})" ${isUsed ? "disabled" : ""}>${w}${badge}</button>`;
+      h += `<button class="${cls}" onclick="cycleW(${ri},${qi},${ti},${w})" ${isUsed ? "disabled" : locked ? 'aria-disabled="true"' : ""}>${w}${badge}</button>`;
     });
     h += `</div>${ptsHtml}</div>`;
   });
@@ -2673,12 +2772,44 @@ function adjPts(ti, d) {
   renderAll();
 }
 
+// ---- FINISH GAME CHECKLIST (Export & Data) -----------------------------------------------
+// The end-of-night chores, ticked as the host does them: save the PDF, Winner Photos (names and
+// photos of the winning teams), Game Confirmation (submit the saved PDF), and a backup .json.
+// In memory only; reset by resetBoardUi() for a new game. The guided tour never ticks it.
+function finishChecklistHtml() {
+  const n = FINISH_STEPS.filter((x) => finishDone.has(x.k)).length;
+  let h = `<div class="finish-head"><b>Finish game</b><span class="finish-count">${n} of ${FINISH_STEPS.length}</span></div><ol class="finish-list">`;
+  FINISH_STEPS.forEach((x) => {
+    const done = finishDone.has(x.k);
+    h += `<li class="finish-item${done ? " done" : ""}"><span class="finish-box" aria-hidden="true">${done ? "\u2713" : ""}</span><span class="finish-text">${x.label}${done ? '<span class="sr-only"> (done)</span>' : ""}${x.hint ? `<span class="finish-hint">${x.hint}</span>` : ""}</span>${x.btn ? '<button class="btn finish-btn" onclick="saveToFile()">Save</button>' : ""}</li>`;
+  });
+  return h + "</ol>";
+}
+function markFinish(key) {
+  if (typeof Tutorial !== "undefined" && Tutorial.isActive && Tutorial.isActive()) return;
+  finishDone.add(key);
+  refreshFinishChecklist();
+}
+// Repaints just the checklist card in place (no full re-render, so the host's scroll position
+// stays put). renderLeft() skips a repaint when its HTML matches the last one it drew, and this
+// writes to the DOM behind its back, so anything that resets finishDone must call this too.
+function refreshFinishChecklist() {
+  const el = document.getElementById("finishChecklist");
+  if (el) el.innerHTML = finishChecklistHtml();
+}
+// "Yes" on the post-export prompt: same safety net as Clear Session when no backup was saved.
+function clearAfterExport() {
+  if (gameState.teams.length && !finishDone.has("backup")) confirmClearSession();
+  else startNewGame();
+}
+
 // ============================================================================
 // SECTION: SCORE-CHANGING ACTIONS: the functions your clicks end up in
 // cycleW cycles a team's wager button (unscored -> correct -> incorrect -> cleared); markAll does the whole table at once; adjPts is a manual +/- fix.
 // ============================================================================
 function cycleW(ri, qi, ti, w) {
   if (!canScore()) return;
+  if (questionLocked(ri, qi)) return showToast(questionLockedMessage(ri, qi));
   const q = gameState.rounds[ri].questions[qi];
   const a = q[ti] || {};
   if (a.wager === w) {
@@ -2719,6 +2850,7 @@ function cycleW(ri, qi, ti, w) {
 // clears it (a place is a single choice, so there is no correct -> incorrect -> clear cycle).
 function setPlace(ri, qi, ti, place) {
   if (!canScore()) return;
+  if (questionLocked(ri, qi)) return showToast(questionLockedMessage(ri, qi));
   const q = gameState.rounds[ri].questions[qi];
   if (q[ti] && q[ti].place === place) delete q[ti];
   else q[ti] = { place };
@@ -2780,69 +2912,39 @@ function isHostNameValid(v) {
 // this check is bypassed.
 function canScore() {
   if (gameState.gameStarted) return true;
+  // Each blocked case says why in a toast with a shrinking timer bar (not a modal), opens the
+  // section where the host can fix it, and scrolls there.
+  const block = (msg, secId, rerender) => {
+    showToast(msg, 7000);
+    const sec = document.getElementById(secId);
+    if (sec) {
+      if (sec.classList.contains("collapsed")) sec.classList.remove("collapsed");
+      sec.scrollIntoView({ behavior: smoothBehavior(), block: "start" });
+    }
+    if (rerender) renderLeft();
+    return false;
+  };
   // Required means entered, not "matches the pattern" — Quiz ID's format hint stays purely
   // advisory (v16.41), so a value that just doesn't look typical still satisfies this gate.
-  if (!isQuizIdEntered(gameState.meta.quizId)) {
-    appAlert("Please enter a Quiz ID in Event Details before scoring begins.");
-    const sec = document.getElementById("sec-meta");
-    if (sec) {
-      if (sec.classList.contains("collapsed"))
-        sec.classList.remove("collapsed");
-      sec.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    renderLeft();
-    return false;
-  }
-  if (isTheme() && !(gameState.meta.themeName || "").trim()) {
-    appAlert("Please enter a Theme Name in Event Details before scoring begins.");
-    const sec = document.getElementById("sec-meta");
-    if (sec) {
-      if (sec.classList.contains("collapsed"))
-        sec.classList.remove("collapsed");
-      sec.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    renderLeft();
-    return false;
-  }
-  if (!isHostNameValid(gameState.meta.hostName)) {
-    appAlert("Please enter a Host Name in Event Details before scoring begins.");
-    const sec = document.getElementById("sec-meta");
-    if (sec) {
-      if (sec.classList.contains("collapsed"))
-        sec.classList.remove("collapsed");
-      sec.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    renderLeft();
-    return false;
-  }
-  if (!isLocationValid(gameState.meta.location)) {
-    appAlert("Please enter a Location in Event Details before scoring begins.");
-    const sec = document.getElementById("sec-meta");
-    if (sec) {
-      if (sec.classList.contains("collapsed"))
-        sec.classList.remove("collapsed");
-      sec.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-    renderLeft();
-    return false;
-  }
+  if (!isQuizIdEntered(gameState.meta.quizId))
+    return block("Scoring is locked: enter a Quiz ID in Event Details first.", "sec-meta", true);
+  if (isTheme() && !(gameState.meta.themeName || "").trim())
+    return block("Scoring is locked: enter a Theme Name in Event Details first.", "sec-meta", true);
+  if (!isHostNameValid(gameState.meta.hostName))
+    return block("Scoring is locked: enter a Host Name in Event Details first.", "sec-meta", true);
+  if (!isLocationValid(gameState.meta.location))
+    return block("Scoring is locked: enter a Location in Event Details first.", "sec-meta", true);
   const missing = gameState.teams.reduce((acc, t, i) => {
     if (!t.paused && (t.scoreGuess === "" || t.scoreGuess == null))
       acc.push(t.name || "Team " + (i + 1));
     return acc;
   }, []);
   if (missing.length === 0) return true;
-  appAlert(
-    "Please enter a score guess for all teams before scoring begins.\n\nMissing guess:\u00a0" +
-      missing.join(", "),
+  return block(
+    "Scoring is locked until every team has a score guess.\nMissing guess:\u00a0" + missing.join(", "),
+    "sec-teams",
+    false,
   );
-  // Scroll the Teams section into view so the user can fix it
-  const sec = document.getElementById("sec-teams");
-  if (sec) {
-    if (sec.classList.contains("collapsed")) sec.classList.remove("collapsed");
-    sec.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-  return false;
 }
 
 // ============================================================================
@@ -3152,6 +3254,7 @@ checkForUpdate();
 // that shipped after it opened, since nothing else re-runs this.
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") checkForUpdate();
+  syncWakeLock();
 });
 
 // Sync the Settings controls to the saved prefs once on load. applyPrefs had only ever been

@@ -903,7 +903,7 @@ const Tutorial = (function () {
       },
       {
         target: 'button[onclick="exportPDF()"]',
-        text: `Scroll down to Export & Data at the bottom. PDF downloads a scoresheet that's ready to send to JD. ${tapWordCap()} Next when you're ready.`,
+        text: `The game is finished, so it's time to save your scoresheet. Scroll down to Export & Data at the bottom. ${tapWordCap()} PDF to save a copy of the finished game to your device, then ${tapWord()} Next. You'll attach it on the Game Confirmation page in a moment.`,
         advance: "manual",
         // fallbackNext: this listener is the only thing that notices the tap (exporting doesn't
         // touch gameState or call any hooked render function, unlike almost every other step),
@@ -914,12 +914,12 @@ const Tutorial = (function () {
       },
       {
         target: "a.photo-upload-btn",
-        text: `Photos sends you to the photo upload form. Use it to send in pictures from the night. ${tapWordCap()} Next when you're ready.`,
+        text: `Winner Photos is the link to use at the end of the game. It's where hosts submit the winning teams' names and photos. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
       },
       {
         target: 'a[href="https://app.jotform.com/261954293403156"]',
-        text: `Game Confirmation sends you to where you submit your scoresheet. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
+        text: `Last stop: ${tapWord()} Game Confirmation. It opens the form in a new tab, where you submit the PDF you just saved. Take a look, then come back here to finish up. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
       },
       {
@@ -1585,5 +1585,6 @@ const Tutorial = (function () {
     skip,
     next,
     back,
+    isActive: () => active,
   };
 })();

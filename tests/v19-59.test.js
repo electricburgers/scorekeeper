@@ -191,16 +191,18 @@ describe("v19.59 — icons", () => {
     assert.match(m[1], /transform:\s*rotate\(-15deg\)/);
   });
 
-  it("the Photos button sits left of XLSX with a camera pictograph and the photo form link", async () => {
+  it("the Winner Photos button sits after XLSX and PDF with a camera pictograph and the photo form link", async () => {
     const window = await loadAppWindow();
     try {
       evalIn(window, "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();");
       const a = window.document.querySelector("a.photo-upload-btn");
-      assert.ok(a, "Photos button missing");
+      assert.ok(a, "Winner Photos button missing");
       assert.equal(a.getAttribute("href"), "https://form.jotform.com/263015326852050");
       assert.ok(a.querySelector("svg.icon-camera"), "camera icon missing");
       assert.equal(a.querySelector(".export-sq-label").innerHTML, "Winner Photos");
-      assert.equal(a.nextElementSibling.getAttribute("onclick"), "exportXLSXBackup()");
+      // Export bar order is XLSX, PDF, Winner Photos, Game Confirmation.
+      assert.equal(a.previousElementSibling.getAttribute("onclick"), "exportPDF()");
+      assert.equal(a.nextElementSibling, a.parentNode.querySelector("a.jd-upload-btn"));
       assert.match(evalIn(window, "ICON_CAMERA"), /icon-camera|📷/);
     } finally {
       window.close();

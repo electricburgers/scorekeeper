@@ -6,6 +6,10 @@ const { describe, it, before, after, beforeEach } = require("node:test");
 const assert = require("node:assert/strict");
 const { loadAppWindow, evalIn } = require("./helpers/load-app");
 
+// v22.48: Q1-4 must be scored in order, and most of these tests score Round 2 Q1 directly.
+// Seeding one (zero-point) response on Round 1 Q4 puts the game "at" Round 2 Q1, so those tests
+// still exercise scoring itself rather than the order guard (which has its own tests in v22-48).
+const SEED = "gameState.rounds[0].questions[3][0] = { wager: 1, correct: false };";
 describe("integration: scoring flows", () => {
   let w;
   const E = (expr) => evalIn(w, expr);
@@ -16,6 +20,7 @@ describe("integration: scoring flows", () => {
     E(`gameState = freshState(); gameState.meta.mode = "${mode}"; gameState.meta.location = "Test Pub";
        gameState.gameStarted = true;
        gameState.teams = [${Array.from({ length: n }, (_, i) => `freshTeam("Team ${String.fromCharCode(65 + i)}")`).join(",")}];
+       ${SEED}
        renderAll();`);
   };
   const scoreOf = (name) => {
@@ -171,7 +176,9 @@ describe("integration: persistence, modes, files and exports", () => {
   beforeEach(() => {
     E(`gameState = freshState(); gameState.meta.location = "Test Pub"; gameState.meta.quizId = "AB-123";
        gameState.meta.hostName = "Host"; gameState.gameStarted = true;
-       gameState.teams = [freshTeam("Alpha"), freshTeam("Beta")]; renderAll();`);
+       gameState.teams = [freshTeam("Alpha"), freshTeam("Beta")];
+       ${SEED}
+       renderAll();`);
   });
 
   it("autosave writes to storage under the app key, and loadSaved returns an equal state", () => {

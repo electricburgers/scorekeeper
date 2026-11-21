@@ -124,6 +124,7 @@ function collectUsedCustomProps(file) {
     "--mobile-dock-h",
     "--qtimer-h",
     "--mini-progress-h",
+    "--toast-ms", // showToast() sets the shrinking-bar duration per toast
   ]);
   test("every var(--x) in css/styles.css resolves to a --x defined in that same file (or is one of the small set app.js computes and sets directly)", () => {
     const used = collectUsedCustomProps("css/styles.css");
@@ -444,6 +445,12 @@ test("css/styles.css uses !important only in the known, already-reviewed set of 
     ".question-block.beer-round { border-color }",
     ".fr-diff-win { color }",
     ".fr-diff-win { font-weight }",
+    // v22.48 prefers-reduced-motion: must beat every per-component animation/transition rule.
+    "*,*::before,*::after { animation-duration }",
+    "*,*::before,*::after { animation-iteration-count }",
+    "*,*::before,*::after { transition-duration }",
+    "*,*::before,*::after { scroll-behavior }",
+    ".app-toast-bar.run { animation-duration }",
   ];
   assert.deepEqual([...found].sort(), [...expected].sort());
 });

@@ -76,7 +76,14 @@ function appAlert(message) {
 // pulled out to a named function since an inline onclick="" attribute can't await a Promise.
 async function confirmClearSession() {
   if (
-    await appConfirm("Clear all data? The next game stays in " + gameModeName() + ".", {
+    await appConfirm(
+      "Clear all data? The next game stays in " +
+        gameModeName() +
+        "." +
+        (gameState.teams.length && !finishDone.has("backup")
+          ? " You haven't saved a backup file (.json) yet. Cancel and tap Save in the toolbar if you might need this game again."
+          : ""),
+      {
       danger: true,
       okLabel: "Clear Session",
     })

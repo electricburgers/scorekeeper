@@ -300,6 +300,7 @@ function saveToFile() {
   );
   a.download = exportFn("json").replace(".json", "-save.json");
   a.click();
+  markFinish("backup");
 }
 async function triggerLoadFile() {
   const msg = gameState.teams.length

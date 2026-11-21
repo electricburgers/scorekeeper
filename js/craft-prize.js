@@ -639,6 +639,7 @@ function startCraftPrizeDraw() {
 // (startCraftPrizeDraw's setTimeout) and the manual "End Drumroll Now" control.
 function finalizeCraftPrizeWinner(pool) {
   clearCraftDrawTimers();
+  hapticPulse([80, 50, 80, 50, 240]); // the drumroll just ended: buzz where the browser allows it
   const winnerTi = pool[Math.floor(Math.random() * pool.length)];
   gameState.teams.forEach((t) => {
     t.craftPrize = false;

@@ -1029,6 +1029,7 @@ async function exportPDF() {
     );
 
     dl(doc.output("blob"), exportFn("pdf"));
+    markFinish("pdf");
     document.getElementById("exportPrompt").classList.add("show");
   } catch (e) {
     appAlert("PDF export failed: " + (e && e.message ? e.message : e));

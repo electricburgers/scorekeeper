@@ -499,8 +499,9 @@ button,[role="button"]{touch-action:manipulation}
    (blur-only) so the halo spreads evenly on all four sides instead of pooling underneath.
    Opacity/blur bumped up from the first pass (was .16/.10 and .32/.24) — still theme-aware,
    just a clearly more visible halo in both themes. */
-[data-theme="dark"] .settings-panel{box-shadow:0 0 52px rgba(255,255,255,.30),0 0 16px rgba(255,255,255,.20)}
-[data-theme="light"] .settings-panel{box-shadow:0 0 52px rgba(0,0,0,.46),0 0 16px rgba(0,0,0,.34)}
+/* light-dark() (v22.48): one rule instead of a dark/light pair. The first box-shadow is the
+   fallback a browser without light-dark() keeps (it drops the second declaration). */
+.settings-panel{box-shadow:0 0 52px rgba(255,255,255,.30),0 0 16px rgba(255,255,255,.20);box-shadow:0 0 52px light-dark(rgba(0,0,0,.46),rgba(255,255,255,.30)),0 0 16px light-dark(rgba(0,0,0,.34),rgba(255,255,255,.20))}
 /* Text-selection highlight (click-drag over labels/inputs on desktop) defaults to the browser's
    own gray/blue, which reads as a flat light-gray smear against this panel's own dark surface.
    --bg-hover is already "a lighter version of the button background" everywhere else in the
@@ -867,8 +868,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    .settings-panel/.col-right.open: dark mode needs a pale glow to read as "floating above" its
    own near-black background, light mode gets a plain shadow instead. Scaled down from those
    bigger panels since this is a slim bar, not a full overlay. */
-[data-theme="dark"] .mini-progress{box-shadow:0 5px 22px rgba(255,255,255,.24),0 0 8px rgba(255,255,255,.16)}
-[data-theme="light"] .mini-progress{box-shadow:0 5px 22px rgba(0,0,0,.38),0 0 8px rgba(0,0,0,.26)}
+.mini-progress{box-shadow:0 5px 22px rgba(255,255,255,.24),0 0 8px rgba(255,255,255,.16);box-shadow:0 5px 22px light-dark(rgba(0,0,0,.38),rgba(255,255,255,.24)),0 0 8px light-dark(rgba(0,0,0,.26),rgba(255,255,255,.16))}
 .mini-progress:hover{background:var(--bg-hover)}
 .mp-round{font-family:var(--font-display);font-weight:700;font-size:.95rem;flex-shrink:0}
 .mp-count{font-family:var(--font-body);font-size:.8rem;font-weight:600;color:var(--text-secondary);white-space:nowrap}
@@ -1418,7 +1418,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
      visibly overlapping itself while collapsing. pointer-events:none once closed so this
      now-invisible box (still sitting exactly over the dock) doesn't swallow taps meant for the
      peek strip/timer underneath it. */
-  .col-right{position:fixed;left:8px;right:8px;bottom:0;top:auto;width:auto!important;min-width:0;max-width:none;height:calc(100vh - var(--header-h,67px) - 8px);height:calc(100dvh - var(--header-h,67px) - 8px);max-height:none;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(calc(100% - var(--mobile-dock-h,97px)));opacity:0;pointer-events:none;transition:transform .28s ease,opacity .12s ease .16s;padding-bottom:env(safe-area-inset-bottom)}
+  .col-right{position:fixed;left:8px;right:8px;bottom:0;top:auto;width:auto!important;min-width:0;max-width:none;height:calc(100vh - var(--header-h,67px) - 8px);height:calc(100svh - var(--header-h,67px) - 8px);max-height:none;border-left:none;border-top:1px solid var(--border-strong);border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:250;transform:translateY(calc(100% - var(--mobile-dock-h,97px)));opacity:0;pointer-events:none;transition:transform .28s ease,opacity .12s ease .16s;padding-bottom:env(safe-area-inset-bottom)}
   .col-right.open{transform:translateY(0);opacity:1;pointer-events:auto;transition:transform .28s ease,opacity .16s ease}
   /* .qtimer-desktop stays visible here (no display:none override) — expanding the scores
      sheet on mobile should still show the timer, not hide it; it's the same #sidebar element
@@ -1695,6 +1695,10 @@ input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in sr
    dark theme's input background) — this is the standards-based fix, not a filter/invert hack. */
 [data-theme="dark"] input[type="date"]{color-scheme:dark}
 [data-theme="light"] input[type="date"]{color-scheme:light}
+/* color-scheme on the root too (v22.48): native scrollbars, form controls and the light-dark()
+   colors below follow the app's own Theme setting, not just the OS preference. */
+:root,[data-theme="dark"]{color-scheme:dark}
+[data-theme="light"]{color-scheme:light}
 /* max-width is rem, not a flat px cap, on both this and .date-native-wrap below — same reasoning
    as the mobile bugs fixed elsewhere in this file: .date-display-text's font-size is also rem
    (below), driven by root font-size (Settings > Size, 12-30px), so at the larger end of that
@@ -3194,3 +3198,51 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 [data-theme="light"] .remove-team .pause-team svg line{stroke-width:3.4}
 [data-theme="light"] .qtimer-btn.qtimer-reset:disabled{opacity:1;background:#eef2f9;border:2px solid #7d90ad;color:#5d6f8b}
 [data-theme="light"] .qtimer-btn.qtimer-reset .icon-ui-reset{stroke-width:3.2}
+
+/* ---- v22.48 additions ---------------------------------------------------------------- */
+/* Scoring-order guard: a question whose predecessor has no response yet is dimmed (the buttons
+   stay tappable so a tap can explain itself with a toast; see questionLocked() in scoring.js). */
+.question-block.q-locked .team-answer{opacity:.5}
+.q-badge.q-locked-badge{background:transparent;color:var(--text-muted)}
+.app-toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(12px);width:max-content;max-width:min(92vw,28rem);padding:10px 16px 14px;border-radius:var(--radius);background:var(--bg-card-alt);color:var(--text-primary);border:2px solid var(--accent-gold);box-shadow:var(--shadow-lg);font-size:.9rem;font-weight:600;text-align:center;white-space:pre-line;overflow:hidden;opacity:0;pointer-events:none;z-index:900;transition:opacity .2s,transform .2s}
+.app-toast-bar{position:absolute;left:0;bottom:0;height:5px;width:100%;background:var(--accent-gold);transform-origin:left center;transform:scaleX(0)}
+.app-toast-bar.run{animation:toastShrink var(--toast-ms,5000ms) linear forwards}
+@keyframes toastShrink{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.app-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Finish game checklist (Export & Data) */
+.finish-card{margin-top:10px;padding:10px 12px;background:var(--bg-card-alt);border:1px solid var(--border-strong);border-radius:var(--radius)}
+.finish-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:.9rem}
+.finish-count{color:var(--text-muted);font-size:.8rem}
+.finish-list{list-style:none;margin:0;padding:0}
+.finish-item{display:flex;align-items:center;gap:10px;padding:5px 0}
+.finish-box{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.4rem;height:1.4rem;border:2px solid var(--border-control);border-radius:5px;font-weight:700;line-height:1}
+.finish-item.done .finish-box{background:var(--accent-green);border-color:var(--accent-green);color:#000}
+.finish-text{flex:1;min-width:0;font-size:.9rem;font-weight:600}
+.finish-hint{display:block;font-size:.75rem;font-weight:400;color:var(--text-muted)}
+.finish-btn{flex:none;min-height:44px;padding:4px 14px}
+
+/* Reduced motion: honor the OS setting for every animation and transition. Short and simple
+   beats surgical here; essential state changes still happen, they just don't move. */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  .app-toast-bar.run{animation-duration:var(--toast-ms,5000ms)!important}
+}
+
+/* More contrast (OS setting): firmer borders, full-strength secondary text. */
+@media(prefers-contrast:more){
+  :root{--border-control:currentcolor}
+  .wager-btn,.btn,.settings-btn,.finish-box,.q-badge{border-width:2px;border-style:solid}
+  .finish-hint,.finish-count,.q-badge.q-locked-badge{color:var(--text-primary)}
+  .question-block.q-locked .team-answer{opacity:.75}
+}
+
+/* Windows High Contrast / forced colors: let the system palette win, but keep states that rely
+   on a fill (selected wager, done tick, focus) visible through borders and system colors. */
+@media(forced-colors:active){
+  .wager-btn,.btn,.settings-btn,.q-badge,.finish-box,.export-sq{border:2px solid ButtonText}
+  .wager-btn.correct,.wager-btn.selected,.finish-item.done .finish-box{border-color:Highlight;background:Highlight;color:HighlightText;forced-color-adjust:none}
+  .wager-btn.incorrect{border-style:dashed}
+  .app-toast{border-color:CanvasText}
+  :focus-visible{outline:3px solid Highlight;outline-offset:2px}
+}
