@@ -11,7 +11,7 @@ const assert = require("node:assert/strict");
 const vm = require("vm");
 const fs = require("fs");
 const path = require("path");
-const { loadAppWindow, loadFaqWindow, evalIn } = require("./helpers/load-app");
+const { createFakeClock, loadAppWindow, loadFaqWindow, evalIn } = require("./helpers/load-app");
 
 function evalJSON(window, expr) {
   return JSON.parse(evalIn(window, `JSON.stringify(${expr})`));
@@ -35,7 +35,7 @@ class MockRequest {
 function mockResponse(ok, tag) {
   return { ok, tag, clone() { return this; } };
 }
-function loadSW(fetchImpl) {
+function loadSW(fetchImpl, extraGlobals) {
   const cachesStore = new Map();
   function resolveKey(input) {
     const raw = typeof input === "string" ? input : input.url;
@@ -60,7 +60,7 @@ function loadSW(fetchImpl) {
     skipWaiting() {},
     clients: { claim() {} },
   };
-  const sandbox = { self: selfObj, caches, fetch: fetchImpl, Request: MockRequest, URL, Promise, setTimeout, console };
+  const sandbox = { self: selfObj, caches, fetch: fetchImpl, Request: MockRequest, URL, Promise, setTimeout, console, ...extraGlobals };
   vm.createContext(sandbox);
   vm.runInContext(SW_SRC, sandbox, { filename: "sw.js" });
   return { listeners, cachesStore, self: selfObj, resolveKey };
@@ -75,10 +75,16 @@ const CACHE_NAME = SW_SRC.match(/const CACHE_NAME='([^']+)'/)[1];
 describe("Service worker fetch: a 'cache wins' decision expires after DECISION_TTL_MS and re-races", () => {
   it("a request issued ~5.1s after the decision was recorded races the network again instead of honoring the stale decision", async () => {
     let calls = 0;
-    const sw = loadSW(async () => {
-      calls++;
-      return mockResponse(true, "fresh-" + calls);
-    });
+    // sw.js reads time only via Date.now(), so a controllable Date in its vm sandbox lets the
+    // test jump past DECISION_TTL_MS instead of sleeping through it.
+    let fakeNow = Date.now();
+    const sw = loadSW(
+      async () => {
+        calls++;
+        return mockResponse(true, "fresh-" + calls);
+      },
+      { Date: { now: () => fakeNow } },
+    );
     const req = { method: "GET", url: WORKER_ORIGIN + "/index.html" };
     const cache = new Map();
     cache.set(sw.resolveKey(req), mockResponse(true, "stale"));
@@ -89,7 +95,7 @@ describe("Service worker fetch: a 'cache wins' decision expires after DECISION_T
     assert.equal(first.response.tag, "fresh-1");
 
     // Wait past DECISION_TTL_MS (5000ms).
-    await new Promise((r) => setTimeout(r, 5150));
+    fakeNow += 5150;
 
     const second = await fireFetch(sw, req);
     // currentDecision() must have expired -> this goes through the real race again, and the
@@ -397,7 +403,8 @@ describe("FAQ: faqShotFallback() replaces a broken screenshot with its text fall
 // ============================================================================
 describe("Craft Prize: winner assignment is atomic, never partially visible mid-roll", () => {
   it("craftPrizeWinner stays null while craftDrawState.active is true, and is set exactly once when the timed finish fires", async () => {
-    const window = await loadAppWindow();
+    const clock = createFakeClock();
+    const window = await loadAppWindow((w) => clock.install(w));
     try {
       evalIn(
         window,
@@ -408,7 +415,7 @@ describe("Craft Prize: winner assignment is atomic, never partially visible mid-
          renderAll();`,
       );
       evalIn(window, "startCraftPrizeDraw();");
-      await new Promise((r) => setTimeout(r, 100));
+      await clock.advance(100);
       assert.equal(evalIn(window, "craftDrawState.active"), true);
       assert.equal(
         evalIn(window, "gameState.craftPrizeWinner"),
@@ -417,7 +424,7 @@ describe("Craft Prize: winner assignment is atomic, never partially visible mid-
       );
       // Let the timed finish (finalizeCraftPrizeWinner) run — totalMs is 3000 (the clamped
       // minimum above), plus room for the finale audio scheduling ahead of the callback.
-      await new Promise((r) => setTimeout(r, 3700));
+      await clock.advance(3700);
       assert.equal(evalIn(window, "craftDrawState"), null);
       const winner = evalJSON(window, "gameState.craftPrizeWinner");
       assert.ok(winner && typeof winner.ti === "number");

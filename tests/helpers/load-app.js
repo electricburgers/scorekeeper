@@ -180,6 +180,49 @@ function whenLoaded(window) {
   });
 }
 
+/** Manual clock for tests that would otherwise sleep in real time. Replaces the window's own
+ * setTimeout/setInterval/clear*, performance.now and Date.now; time only moves when the test
+ * calls clock.advance(ms), which fires due timers in order (awaiting a microtask turn between
+ * them so promise continuations run). Install it with loadAppWindow(fakeClockInstaller(clock)). */
+function createFakeClock() {
+  let now = 0;
+  let seq = 1;
+  const timers = new Map();
+  const clock = {
+    now: () => now,
+    install(window) {
+      const add = (fn, ms, repeat) => {
+        const id = seq++;
+        timers.set(id, { fn, at: now + Math.max(0, ms || 0), ms: Math.max(1, ms || 0), repeat });
+        return id;
+      };
+      window.setTimeout = (fn, ms) => add(fn, ms, false);
+      window.setInterval = (fn, ms) => add(fn, ms, true);
+      window.clearTimeout = window.clearInterval = (id) => timers.delete(id);
+      const realDate = window.Date;
+      window.performance.now = () => now;
+      window.Date.now = () => realDate.UTC(2026, 0, 1) + now;
+    },
+    async advance(ms) {
+      const end = now + ms;
+      for (;;) {
+        let nextId = null;
+        for (const [id, t] of timers) if (t.at <= end && (nextId === null || t.at < timers.get(nextId).at)) nextId = id;
+        if (nextId === null) break;
+        const t = timers.get(nextId);
+        now = Math.max(now, t.at);
+        if (t.repeat) t.at += t.ms;
+        else timers.delete(nextId);
+        t.fn();
+        await Promise.resolve();
+        await new Promise((r) => require("timers").setImmediate(r));
+      }
+      now = end;
+    },
+  };
+  return clock;
+}
+
 function open(htmlPath, url, extraBeforeParse) {
   const dom = new JSDOM(fs.readFileSync(htmlPath, "utf8"), {
     url,
@@ -222,4 +265,4 @@ function evalIn(window, expr) {
   return window.eval(expr);
 }
 
-module.exports = { loadAppWindow, loadFaqWindow, evalIn, ROOT };
+module.exports = { createFakeClock, loadAppWindow, loadFaqWindow, evalIn, ROOT };

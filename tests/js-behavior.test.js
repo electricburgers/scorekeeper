@@ -8,7 +8,7 @@ const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("fs");
 const path = require("path");
-const { loadAppWindow, loadFaqWindow, evalIn, ROOT } = require("./helpers/load-app");
+const { createFakeClock, loadAppWindow, loadFaqWindow, evalIn, ROOT } = require("./helpers/load-app");
 
 // ============================================================================
 // Shared UI (js/shared-ui.js) — the module this session's refactor extracted specifically
@@ -452,6 +452,10 @@ describe("Drumroll audio pipeline", () => {
   // reproduce the invalidation — asserting the fix (a fresh context + a try/catch that can't
   // strand the reveal) recovers both.
   it("a drumroll survives its AudioContext being invalidated mid-roll: crash cue still fires and the winner still gets revealed", async () => {
+    // Manual clock instead of real sleeps (the roll is a 3s minimum). Installed here, after
+    // load, so only this test — the last one in the block — runs on fake time.
+    const clock = createFakeClock();
+    clock.install(window);
     evalIn(
       window,
       `
@@ -491,7 +495,7 @@ describe("Drumroll audio pipeline", () => {
       `,
     );
     evalIn(window, "startCraftPrizeDraw();");
-    await new Promise((r) => setTimeout(r, 300));
+    await clock.advance(300);
     assert.equal(
       evalIn(window, "!!activeWebAudio.loopSource"),
       true,
@@ -499,7 +503,7 @@ describe("Drumroll audio pipeline", () => {
     );
     // The OS pulls the audio session out from under the page mid-roll.
     evalIn(window, "webAudioCtx.state = 'closed';");
-    await new Promise((r) => setTimeout(r, 3000));
+    await clock.advance(3000);
     assert.equal(evalIn(window, "craftDrawState"), null, "draw got stuck instead of finishing");
     const winner = evalIn(window, "gameState.craftPrizeWinner");
     assert.ok(winner && typeof winner.ti === "number", "no winner was picked");
@@ -799,6 +803,7 @@ describe("Tutorial step table", () => {
 // ============================================================================
 describe("Tutorial full walkthrough", () => {
   let window;
+  let clock;
   let renderCounts;
   let stoppedNaturally;
   let jsErrors;
@@ -806,6 +811,8 @@ describe("Tutorial full walkthrough", () => {
 
   before(async () => {
     window = await loadAppWindow();
+    clock = createFakeClock();
+    clock.install(window); // walkthrough pacing runs on fake time, not 250ms real sleeps
     jsErrors = [];
     window.addEventListener("error", (e) =>
       jsErrors.push((e.error && e.error.message) || e.message || String(e)),
@@ -877,7 +884,7 @@ describe("Tutorial full walkthrough", () => {
         }
       }
       evalIn(window, "Tutorial.next()");
-      await new Promise((r) => setTimeout(r, 250));
+      await clock.advance(250);
     }
     stoppedNaturally = i < 50; // false would mean the safety cap fired, not a real Finish
     renderCounts = evalIn(window, "window.__rc");

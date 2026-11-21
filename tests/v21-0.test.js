@@ -4,7 +4,7 @@
 "use strict";
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
-const { loadAppWindow, evalIn } = require("./helpers/load-app");
+const { createFakeClock, loadAppWindow, evalIn } = require("./helpers/load-app");
 
 const TEAMS = `gameState.teams = ["Alpha", "Bravo"].map(freshTeam); gameState.teams.forEach(t => t.scoreGuess = 50);`;
 const EVENT = `gameState.meta.location = "Test Tap"; gameState.meta.quizId = "AB-123"; gameState.meta.hostName = "Host";`;
@@ -381,11 +381,14 @@ describe("Name That Tune: prompts name the mode", () => {
 
 describe("Name That Tune tutorial walkthrough", () => {
   let window;
+  let clock;
   let jsErrors;
   let seen;
   let stoppedNaturally;
   before(async () => {
     window = await loadAppWindow();
+    clock = createFakeClock();
+    clock.install(window); // walkthrough pacing runs on fake time, not 250ms real sleeps
     jsErrors = [];
     window.addEventListener("error", (e) => jsErrors.push((e.error && e.error.message) || e.message));
     evalIn(window, 'gameState = freshState(); gameState.meta.mode = "tune"; renderAll();');
@@ -399,7 +402,7 @@ describe("Name That Tune tutorial walkthrough", () => {
       seen.push(callout.textContent);
       evalIn(window, 'gameState.meta.quizId = "TEST-001"; gameState.meta.hostName = "Test Host";');
       evalIn(window, "Tutorial.next()");
-      await new Promise((r) => setTimeout(r, 250));
+      await clock.advance(250);
     }
     stoppedNaturally = i < 80;
   });
