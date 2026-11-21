@@ -14,6 +14,13 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.53 - 2026-11-21
+
+- **Timer progress bar:** a thin bar under the countdown (desktop and mobile widgets) shrinks to the left as time runs out. It's full at start, holds its place while paused, and is empty at 0:00 and through overtime. If +30s lifts the remaining time past the starting total, the bar stays full and uses the new total.
+- **Color-vision safe, no motion:** the fill is one high-contrast neutral color (never gold/red), and two fixed notches mark the 1:00 and 0:30 thresholds so urgency is read by position instead of color. It never flashes or pulses; it just updates on the existing 200ms tick.
+- **What's new:** lists v22.53, v22.51 and v22.50.
+- **Tests:** new `tests/v22-53.test.js`.
+
 ## v22.52 - 2026-11-21
 
 - **Developer Tools (hidden):** tap the version label in Settings 7 times to reveal a Developer Tools group under Advanced Settings (7 more taps hides it). It has 44 buttons, 11 partial-game test states for each of the four game modes: pre-game, R1 mid-round (Q5 locked), R2 and last-round wagers locked, halftime pending, before the Final wager, Craft Prize ready, tied scores, paused teams, teams with no guess, and a full MAX_TEAMS roster. Fixtures are generated in `js/host-tools.js`, so there are no JSON files to maintain.

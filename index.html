@@ -109,7 +109,7 @@
     </div>
     </div>
     <div class="settings-panel-foot">
-    <div class="settings-meta"><span class="settings-version" id="versionLabel"></span><details class="settings-about"><summary>What's new</summary><div class="about-ver"><b>v22.51</b><ul><li>Blocked-scoring toasts now name the round and question, like R1-Q2.</li></ul></div><div class="about-ver"><b>v22.50</b><ul><li>The Round 2 and Round 4 bonus wagers are now locked until that round's Q4 has a response, and every locked bonus title is greyed out.</li><li>Shorter blocked-scoring toasts.</li></ul></div><div class="about-ver"><b>v22.49</b><ul><li>A round's Bonus Question can't be scored until that round's Q4 has at least one response.</li></ul></div></details><span class="settings-disclaimer"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></div>
+    <div class="settings-meta"><span class="settings-version" id="versionLabel"></span><details class="settings-about"><summary>What's new</summary><div class="about-ver"><b>v22.53</b><ul><li>The timer now has a bar under it that shrinks to the left as time runs out, with small notches at the 1:00 and 0:30 marks. It never flashes or pulses.</li></ul></div><div class="about-ver"><b>v22.51</b><ul><li>Blocked-scoring toasts now name the round and question, like R1-Q2.</li></ul></div><div class="about-ver"><b>v22.50</b><ul><li>The Round 2 and Round 4 bonus wagers are now locked until that round's Q4 has a response, and every locked bonus title is greyed out.</li><li>Shorter blocked-scoring toasts.</li></ul></div></details><span class="settings-disclaimer"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></div>
     </div>
   </div>
 </div>
@@ -559,6 +559,7 @@
         <button type="button" class="qtimer-btn qtimer-toggle" onclick="toggleQTimer()" aria-label="Start timer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg></button>
         <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled aria-label="Reset timer"><svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg></button>
       </div>
+      <div class="qtimer-bar" aria-hidden="true"><i class="qtimer-bar-fill"></i></div>
     </div>
   </div>
   <div class="col-right" id="sidebar">
@@ -576,6 +577,7 @@
         <button type="button" class="qtimer-btn qtimer-toggle" onclick="toggleQTimer()" aria-label="Start timer"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z"/></svg></button>
         <button type="button" class="qtimer-btn qtimer-reset" onclick="resetQTimer()" disabled aria-label="Reset timer"><svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg></button>
       </div>
+      <div class="qtimer-bar" aria-hidden="true"><i class="qtimer-bar-fill"></i></div>
     </div>
   </div>
 </div>

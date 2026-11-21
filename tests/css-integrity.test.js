@@ -125,6 +125,8 @@ function collectUsedCustomProps(file) {
     "--qtimer-h",
     "--mini-progress-h",
     "--toast-ms", // showToast() sets the shrinking-bar duration per toast
+    "--qt-n1", // qtSetBar() sets the timer progress bar notch positions
+    "--qt-n2",
   ]);
   test("every var(--x) in css/styles.css resolves to a --x defined in that same file (or is one of the small set app.js computes and sets directly)", () => {
     const used = collectUsedCustomProps("css/styles.css");

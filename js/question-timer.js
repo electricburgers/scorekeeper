@@ -23,6 +23,7 @@ const QT_MIN_SEC = 60,
 let qtDurationSec = QT_DEFAULT_SEC,
   qtEndEpoch = 0,
   qtRemainMs = 0,
+  qtTotalMs = QT_DEFAULT_SEC * 1000, // denominator for the progress bar; grows if +30s pushes remaining past it
   qtState = "idle"; // idle | running | paused
 
 // The two .qtimer-display/.qtimer-toggle/.qtimer-reset pairs (desktop + mobile — see the file
@@ -120,6 +121,30 @@ function qtSetDisplayClass(cls) {
     }
   });
 }
+// Progress bar under the countdown (see .qtimer-bar in styles.css): full at idle/start, scaled to
+// remaining/total from the left, empty at 0:00 and through overtime. Total only ever grows (a +30s
+// mid-countdown that lifts remaining past the starting total becomes the new total, so the bar
+// stays full rather than overflowing). Notches mark the 60s/30s thresholds; a threshold at or
+// beyond the total has no notch. Writes are skipped when nothing changed.
+let qtBarEls = null,
+  qtLastBarKey = "";
+function qtSetBar(remainMs) {
+  if (remainMs > qtTotalMs) qtTotalMs = remainMs;
+  const frac = Math.max(0, Math.min(1, remainMs / qtTotalMs));
+  const n1 = 60000 / qtTotalMs,
+    n2 = 30000 / qtTotalMs;
+  const key = frac.toFixed(4) + "|" + n1.toFixed(4);
+  if (key === qtLastBarKey) return;
+  qtLastBarKey = key;
+  if (!qtBarEls) qtBarEls = document.querySelectorAll(".qtimer-bar");
+  qtBarEls.forEach((b) => {
+    b.firstElementChild.style.transform = "scaleX(" + frac.toFixed(4) + ")";
+    b.toggleAttribute("data-n1", n1 < 1);
+    b.toggleAttribute("data-n2", n2 < 1);
+    b.style.setProperty("--qt-n1", (n1 * 100).toFixed(3) + "%");
+    b.style.setProperty("--qt-n2", (n2 * 100).toFixed(3) + "%");
+  });
+}
 // Inline SVG (fill:currentColor, see .qtimer-btn.qtimer-toggle svg in styles.css) rather than
 // the ▶/⏸ Unicode glyphs these replaced — those default to a fixed-color platform emoji font on
 // iOS/Android, ignoring this button's own already theme/color-vision-audited text color entirely.
@@ -177,6 +202,7 @@ function toggleQTimer() {
     qtState = "running";
   } else {
     qtEndEpoch = Date.now() + qtDurationSec * 1000;
+    qtTotalMs = qtDurationSec * 1000;
     qtState = "running";
   }
   renderQtControls();
@@ -186,8 +212,10 @@ function resetQTimer() {
   qtState = "idle";
   qtEndEpoch = 0;
   qtRemainMs = 0;
+  qtTotalMs = qtDurationSec * 1000;
   qtSetDisplayText(fmtQt(qtDurationSec));
   qtSetDisplayClass(null);
+  qtSetBar(qtTotalMs);
   renderQtControls();
 }
 // Optional +/-30s stepper buttons (Advanced Settings > Timer Stepper Buttons, hidden by
@@ -207,8 +235,10 @@ function bumpQTimer(deltaSec) {
       QT_MIN_SEC,
       Math.min(QT_MAX_SEC, qtDurationSec + deltaSec),
     );
+    qtTotalMs = qtDurationSec * 1000;
     qtSetDisplayText(fmtQt(qtDurationSec));
     qtSetDisplayClass(null);
+    qtSetBar(qtTotalMs);
     return;
   }
   tickQTimer();
@@ -229,13 +259,18 @@ function setQtDurationSec(sec) {
   savePrefs(p);
   const sel = document.getElementById("qtDurationSelect");
   if (sel && document.activeElement !== sel) sel.value = n;
-  if (qtState === "idle") qtSetDisplayText(fmtQt(qtDurationSec));
+  if (qtState === "idle") {
+    qtTotalMs = qtDurationSec * 1000;
+    qtSetDisplayText(fmtQt(qtDurationSec));
+    qtSetBar(qtTotalMs);
+  }
 }
 function tickQTimer() {
   if (qtState !== "running" && qtState !== "paused") return;
   const remainSec =
     (qtState === "running" ? qtEndEpoch - Date.now() : qtRemainMs) / 1000;
   qtSetDisplayText(fmtQt(remainSec));
+  qtSetBar(remainSec * 1000);
   qtSetDisplayClass(
     remainSec < 0
       ? "qt-over"

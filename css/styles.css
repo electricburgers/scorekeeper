@@ -1208,6 +1208,19 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qt-sign{opacity:0}
 .qtimer-display.qt-neg .qt-sign{opacity:1}
 .qtimer-btns{display:flex;gap:6px;flex-shrink:0}
+/* Progress bar under the countdown (v22.53). Shrinks toward the LEFT as time runs out: the fill is
+   a full-width element scaled on X from its left edge (transform, no layout, no animation — the
+   200ms tick just sets the scale). Deliberately ONE neutral high-contrast colour the whole way
+   down, never gold/red: gold-vs-red is the pair colour-vision users confuse, so urgency is carried
+   by POSITION instead — two fixed notches (--qt-n1 / --qt-n2, set from JS) mark where the 1:00 and
+   0:30 warn/crit thresholds fall, and the fill visibly passes them. The notches are cut in
+   --bg-primary so they show against both the fill and the track in either theme. flex-basis:100%
+   puts the bar on its own line under the display/buttons in both widget copies. No flashing. */
+.qtimer-bar{position:relative;flex:0 0 100%;height:4px;margin-top:2px;border-radius:2px;background:var(--border-strong);overflow:hidden}
+.qtimer-bar-fill{position:absolute;inset:0;background:var(--text-primary);transform-origin:left center;transform:scaleX(1)}
+.qtimer-bar::before,.qtimer-bar::after{content:"";position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--bg-primary);z-index:1;display:none}
+.qtimer-bar[data-n1]::before{display:block;left:var(--qt-n1)}
+.qtimer-bar[data-n2]::after{display:block;left:var(--qt-n2)}
 .qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-control);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
 .qtimer-btn:hover{background:var(--bg-hover)}
 .qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
