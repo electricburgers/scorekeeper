@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.51 - 2026-11-21
+
+- **Blocked-scoring toasts name the round and question:** now read like "R1-Q2 has no responses yet. Score it first so you stay on the right question." (R1-R4, R#-Q#) instead of "Round 1 Q2".
+
 ## v22.50 - 2026-11-21
 
 - **Bonus lock now covers every round:** the Round 2 and Round 4 Q5 bonus wagers (halftime and final; also the Theme/Tune/Rivals wager rounds) are locked until that round's Q4 has a response, with the "Score Q4 first" badge, dimmed rows and blocked-tap toast. A wager that already has data is never locked.

@@ -403,12 +403,12 @@ function bonusLocked(ri, type) {
   return !(b && Object.keys(b).length);
 }
 function bonusLockedMessage(ri) {
-  return "Round " + (ri + 1) + " Q4 has no responses yet. Score it first before the Bonus Question.";
+  return "R" + (ri + 1) + "-Q4 has no responses yet. Score it first before the Bonus Question.";
 }
 function questionLockedMessage(ri, qi) {
   const prev = previousQuestion(ri, qi);
   if (!prev) return "";
-  const name = prev.ri === ri ? "Q" + (prev.qi + 1) : "Round " + (prev.ri + 1) + " Q" + (prev.qi + 1);
+  const name = "R" + (prev.ri + 1) + "-Q" + (prev.qi + 1);
   return name + " has no responses yet. Score it first so you stay on the right question.";
 }
 
