@@ -1,7 +1,7 @@
 // v19.59 — 10 more tests for this batch: the XLSX export now trims to the game's real team
 // count and carries a zebra stripe, Row Zebra Stripes defaults to Medium, the Example Game has
 // a 3rd-place tie broken by score guess, Color Vision is gone from both pages, "Take the Tour"'s
-// hand icon is tilted, and the JD Form button carries the new Guy Fawkes pictograph.
+// hand icon is tilted, and the Game Confirmation button carries the new Guy Fawkes pictograph.
 "use strict";
 const { describe, it } = require("node:test");
 const assert = require("node:assert/strict");
@@ -199,7 +199,7 @@ describe("v19.59 — icons", () => {
       assert.ok(a, "Photos button missing");
       assert.equal(a.getAttribute("href"), "https://form.jotform.com/263015326852050");
       assert.ok(a.querySelector("svg.icon-camera"), "camera icon missing");
-      assert.equal(a.querySelector(".export-sq-label").innerHTML, "Photos");
+      assert.equal(a.querySelector(".export-sq-label").innerHTML, "Winner Photos");
       assert.equal(a.nextElementSibling.getAttribute("onclick"), "exportXLSXBackup()");
       assert.match(evalIn(window, "ICON_CAMERA"), /icon-camera|📷/);
     } finally {
@@ -207,7 +207,7 @@ describe("v19.59 — icons", () => {
     }
   });
 
-  it("the JD Form button carries the Guy Fawkes pictograph and a one-line label", async () => {
+  it("the Game Confirmation button carries the Guy Fawkes pictograph and a one-line label", async () => {
     const window = await loadAppWindow();
     try {
       evalIn(
@@ -215,11 +215,11 @@ describe("v19.59 — icons", () => {
         "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();",
       );
       const a = window.document.querySelector("a.jd-upload-btn");
-      assert.ok(a, "JD Form button missing");
+      assert.ok(a, "Game Confirmation button missing");
       assert.ok(a.classList.contains("export-sq"), "should be a square icon-forward button like XLSX/PDF");
       assert.ok(a.querySelector("svg.icon-fawkes"), "Guy Fawkes icon missing");
       const label = a.querySelector(".export-sq-label").innerHTML;
-      assert.equal(label, "JD Form");
+      assert.equal(label, "Game Confirmation");
       assert.match(evalIn(window, "ICON_FAWKES"), /icon-fawkes|🎭/);
     } finally {
       window.close();

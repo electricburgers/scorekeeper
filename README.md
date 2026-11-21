@@ -16,7 +16,7 @@ Scorekeeper is designed for a trivia host managing a game with multiple teams:
 - **Dark & light themes** — built-in theme switcher, plus color-vision accessibility modes (red-green and blue-yellow) for inclusive reading on any display.
 - **Teams tools** — pause a team that sits out, sort the roster A–Z (ignoring a leading The/An/A) or by missing guess, track Bonus Item/CB, and open a per-team Team Report with a rename pencil.
 - **Safety nets** — rolling auto-backups (last 10, restorable from Settings), import team names/host/location from a saved game, and save/load the whole session as a file.
-- **Insights & exports** — score-progression chart (shareable image), keyboard shortcuts (`?` lists them), and Photos / XLSX / PDF / JD Form exports named after the mode.
+- **Insights & exports** — score-progression chart (shareable image), keyboard shortcuts (`?` lists them), and Photos / XLSX / PDF / Game Confirmation exports named after the mode.
 - **Customizable settings** — adjust text size, sound levels, timer widgets, and manual drumroll controls in Advanced Settings, all persisted to browser storage.
 - **No backend required** — all game state lives in the browser; no login, no account, no server sync needed.
 

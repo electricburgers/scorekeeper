@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.57] - 20 Nov 2026
+
+### Changed
+- **JD Form is now Game Confirmation:** renamed in the Export answers, the "What is the Game Confirmation link?" question and image alt text; Export bar screenshots regenerated (dark + light).
+
 ## [1.56] - 18 Nov 2026
 
 ### Changed

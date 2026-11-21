@@ -2280,7 +2280,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .export-bar .export-sq:not(.jd-upload-btn){font-size:clamp(2.6rem,11vw,3rem)}
 .export-bar .export-sq .export-sq-label{font-size:.9rem;font-weight:800}
 .export-bar .jd-upload-btn .icon-fawkes{width:1.2em;height:1.2em}
-.export-bar .photo-upload-btn .export-sq-label{white-space:normal;text-align:center;line-height:1.05}
+.export-bar .photo-upload-btn .export-sq-label,.export-bar .jd-upload-btn .export-sq-label{white-space:normal;text-align:center;line-height:1.05}
+.export-bar .jd-upload-btn .export-sq-label{font-size:.78rem;letter-spacing:0;margin-top:-.1rem}
 .export-bar::after{content:"";grid-row:2;grid-column:1/-1;height:1px;background:var(--border)}
 }
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
