@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.53"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 21, 2026 10:47 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.54"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 21, 2026 6:31 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -806,7 +806,7 @@ let adjOpenTeams = new Set(),
 //
 // `.section` is the catch-all at the end of that selector list, and it covers every re-rendering
 // control that isn't a scoring row at all: Craft Prize Drawing's buttons and steppers, Event
-// Details' fields, Export & Data's. Without it those matched nothing, so renderLeft() ran with
+// Details' fields, Game Submission's. Without it those matched nothing, so renderLeft() ran with
 // no anchor and fell back to the raw sy/wy restore — i.e. exactly the pre-v18.41 behaviour this
 // anchor exists to replace: right for as long as nothing above them changed height, and a jump
 // to somewhere unrelated the moment something did. closest() returns the NEAREST match, so a
@@ -1746,8 +1746,11 @@ function renderLeftBody() {
   h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><span class="chevron">\u25BC</span><h2>${ICON_BEER} Craft Prize Drawing</h2></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
   cut();
 
-  h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>Export &amp; Data</h2></div><div class="section-body">
-    <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button><a class="btn export-sq photo-upload-btn" href="https://form.jotform.com/263015326852050" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${ICON_CAMERA}<span class="export-sq-label">Winner Photos</span></a><a class="btn export-sq jd-upload-btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer" onclick="markFinish('confirm')">${ICON_FAWKES}<span class="export-sq-label">Game Confirmation</span></a></div>
+  h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>Game Submission</h2></div><div class="section-body">
+    <h3 class="export-group-title">Download Scoresheet</h3>
+    <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button></div>
+    <h3 class="export-group-title">Submit Results</h3>
+    <div class="export-bar"><a class="btn export-sq photo-upload-btn" href="https://form.jotform.com/263015326852050" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${ICON_CAMERA}<span class="export-sq-label">Winner Photos</span></a><a class="btn export-sq jd-upload-btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer" onclick="markFinish('confirm')">${ICON_FAWKES}<span class="export-sq-label">Game Confirmation</span></a></div>
     <div class="finish-card" id="finishChecklist">${finishChecklistHtml()}</div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="clearAfterExport();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>
@@ -2780,7 +2783,7 @@ function adjPts(ti, d) {
   renderAll();
 }
 
-// ---- FINISH GAME CHECKLIST (Export & Data) -----------------------------------------------
+// ---- FINISH GAME CHECKLIST (Game Submission) -----------------------------------------------
 // The end-of-night chores, ticked as the host does them: save the PDF, Winner Photos (names and
 // photos of the winning teams), Game Confirmation (submit the saved PDF), and a backup .json.
 // In memory only; reset by resetBoardUi() for a new game. The guided tour never ticks it.

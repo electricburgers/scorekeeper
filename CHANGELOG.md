@@ -14,6 +14,14 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.54 - 2026-11-21
+
+- **Game Submission:** the Export & Data section is renamed Game Submission (section header, tutorial, FAQ, README, TESTING, code comments).
+- **Grouped buttons:** XLSX and PDF sit under a new **Download Scoresheet** heading; Winner Photos and Game Confirmation sit under a new **Submit Results** heading. Each group is its own row of two buttons on every screen size, replacing the phone 2x2 grid and its hairline divider. XLSX stays.
+- **Tutorial and FAQ:** the wrap-up steps name the new headings. FAQ v1.60.
+- **What's new:** lists v22.54, v22.53 and v22.51.
+- **Tests:** new `tests/v22-54.test.js`.
+
 ## v22.53 - 2026-11-21
 
 - **Timer progress bar:** a thin bar under the countdown (desktop and mobile widgets) shrinks to the left as time runs out. It's full at start, holds its place while paused, and is empty at 0:00 and through overtime. If +30s lifts the remaining time past the starting total, the bar stays full and uses the new total.

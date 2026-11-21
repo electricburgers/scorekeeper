@@ -25,7 +25,7 @@ Legend: **Platform** = Desktop / Mobile / Both.
 4. **(Both)** Type a venue not on the list (e.g. "My Backyard BBQ") and tab out — the value
    is accepted, no validation error appears, and it persists after a page reload.
 5. **(Both)** Confirm the value typed/selected in Location is what appears in the exported
-   CSV/PDF/XLSX `Location` field (Export & Data section).
+   CSV/PDF/XLSX `Location` field (Game Submission section).
 6. **(Both)** Clear the Location field entirely and tab out — field stays empty, no console
    errors.
 7. **(Both)** Switch through every theme (Dark, Light — via Settings → Theme; "High-Contrast
@@ -102,7 +102,7 @@ Legend: **Platform** = Desktop / Mobile / Both.
 33. **(Both)** Change "Exclude Top" to exclude more teams than exist — the draw button
     disables with no eligible pool instead of crashing.
 
-## Export & Data
+## Game Submission (Download Scoresheet / Submit Results)
 
 34. **(Both)** Export PDF — the scoresheet PDF downloads, and the printed "** DIFF is minus
     Bonuses" note is visible near the DIFF column header.

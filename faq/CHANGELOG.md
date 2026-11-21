@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.60] - 21 Nov 2026
+
+### Changed
+- **Export & Data is now Game Submission** everywhere in the FAQ, with the buttons grouped under **Download Scoresheet** (XLSX, PDF) and **Submit Results** (Winner Photos, Game Confirmation).
+
 ## [1.59] - 21 Nov 2026
 
 ### Added

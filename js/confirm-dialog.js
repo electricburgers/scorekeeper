@@ -72,7 +72,7 @@ function appConfirm(message, opts) {
 function appAlert(message) {
   return showConfirmDialog(message, { alert: true });
 }
-// Export & Data's own "Clear Session" button (below the already-custom Yes/No export prompt) —
+// Game Submission's own "Clear Session" button (below the already-custom Yes/No export prompt) —
 // pulled out to a named function since an inline onclick="" attribute can't await a Promise.
 async function confirmClearSession() {
   if (

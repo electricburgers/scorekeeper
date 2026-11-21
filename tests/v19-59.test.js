@@ -200,8 +200,9 @@ describe("v19.59 — icons", () => {
       assert.equal(a.getAttribute("href"), "https://form.jotform.com/263015326852050");
       assert.ok(a.querySelector("svg.icon-camera"), "camera icon missing");
       assert.equal(a.querySelector(".export-sq-label").innerHTML, "Winner Photos");
-      // Export bar order is XLSX, PDF, Winner Photos, Game Confirmation.
-      assert.equal(a.previousElementSibling.getAttribute("onclick"), "exportPDF()");
+      // v22.54: Winner Photos leads the Submit Results group; XLSX and PDF are in Download Scoresheet.
+      assert.equal(a.previousElementSibling, null);
+      assert.equal(a.parentNode.previousElementSibling.textContent, "Submit Results");
       assert.equal(a.nextElementSibling, a.parentNode.querySelector("a.jd-upload-btn"));
       assert.match(evalIn(window, "ICON_CAMERA"), /icon-camera|📷/);
     } finally {
