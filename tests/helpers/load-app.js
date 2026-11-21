@@ -147,9 +147,11 @@ function beforeParse(window) {
 function whenLoaded(window) {
   return new Promise((resolve, reject) => {
     let settled = false;
+    let timer = null;
     window.addEventListener("error", (e) => {
       if (settled) return;
       settled = true;
+      clearTimeout(timer);
       reject(e.error || new Error(String(e.message || e)));
     });
     if (window.document.readyState === "complete") {
@@ -159,6 +161,7 @@ function whenLoaded(window) {
     window.addEventListener("load", () => {
       if (settled) return;
       settled = true;
+      clearTimeout(timer);
       resolve(window);
     });
     // 20s, not 5s: when the full test suite runs multiple files in parallel (node --test's
@@ -168,7 +171,8 @@ function whenLoaded(window) {
     // window then fails with confusing "APP_VERSION is undefined"-style errors instead of a
     // clear timeout. If this genuinely fires, resolving with the still-loading window (rather
     // than rejecting) keeps a truly-hung page's failure readable in the assertion that follows.
-    setTimeout(() => {
+    // Cleared on settle: left pending, it kept every test process alive an extra ~20s.
+    timer = setTimeout(() => {
       if (settled) return;
       settled = true;
       resolve(window); // safety net — not expected to fire on a healthy page

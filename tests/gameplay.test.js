@@ -44,7 +44,11 @@ describe("Team management: addTeam / removeTeam", () => {
   it("addTeam() never grows the roster past MAX_TEAMS", () => {
     evalIn(
       window,
-      "gameState = freshState(); for (let i = 0; i < MAX_TEAMS + 5; i++) addTeam();",
+      `gameState = freshState();
+      // Fill to one below the cap directly: addTeam() re-renders the whole roster each call,
+      // so looping it MAX_TEAMS times is quadratic in jsdom (~40s). Only the last calls matter.
+      while (gameState.teams.length < MAX_TEAMS - 1) gameState.teams.push(freshTeam(""));
+      for (let i = 0; i < 6; i++) addTeam();`,
     );
     assert.equal(evalIn(window, "gameState.teams.length"), evalIn(window, "MAX_TEAMS"));
   });
