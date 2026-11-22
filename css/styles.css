@@ -1228,8 +1228,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Light theme: the "time left" fill is black, so the "time elapsed" track is a pale blue-grey instead of the mid-blue --border-control, which sat too close to it. */
 [data-theme="light"] .qtimer-bar{background:#c3d0e6}
 .qtimer-bar-fill{position:absolute;inset:0;background:var(--text-primary);transform-origin:left center;transform:scaleX(1)}
-/* Reset from overflow jumps the fill empty -> full the instant the bar starts fading out, which flashed it bright. While not live, hold the old fill for the length of the fade before moving it. */
-.qtimer-bar:not(.qt-live) .qtimer-bar-fill{transition:transform 0s linear .4s}
+/* On reset the fill used to snap to full, which read as a blink (and, from overtime, a bright flash). While not live, refill it with a quick ease-out sweep instead, running alongside the fade-out. */
+.qtimer-bar:not(.qt-live) .qtimer-bar-fill{transition:transform .3s ease-out}
 @media (prefers-reduced-motion:reduce){.qtimer-bar:not(.qt-live) .qtimer-bar-fill{transition:none}}
 .qtimer-bar::before,.qtimer-bar::after{content:"";position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--bg-primary);z-index:1;display:none}
 .qtimer-bar[data-n1]::before{display:block;left:var(--qt-n1)}
