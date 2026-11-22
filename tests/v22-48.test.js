@@ -134,13 +134,13 @@ describe("v22.48 Finish game checklist", () => {
 
   const done = () => window.document.querySelectorAll("#finishChecklist .finish-item.done").length;
 
-  it("starts with four unticked steps in backup, PDF, Winner Photos, Game Confirmation order", () => {
+  it("starts with four unticked steps in backup, Winner Photos, PDF, Game Confirmation order", () => {
     const items = [...window.document.querySelectorAll("#finishChecklist .finish-item")].map((e) => e.textContent);
     assert.equal(items.length, 4);
     assert.match(items[0], /backup/i);
     assert.match(items[0], /\(Recommended\)/);
-    assert.match(items[1], /PDF/);
-    assert.match(items[2], /Winner Photos/);
+    assert.match(items[1], /Winner Photos/);
+    assert.match(items[2], /PDF/);
     assert.match(items[3], /Game Confirmation/);
     assert.equal(done(), 0);
   });

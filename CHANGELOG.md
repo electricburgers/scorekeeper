@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.58 - 2026-11-21
+
+- **Finish game checklist order:** Winner Photos now comes before Save the PDF scoresheet in Game Submission's checklist.
+
 ## v22.57 - 2026-11-21
 
 - **Copy team names for Winner Photos:** under the Winner Photos / Game Confirmation buttons in Game Submission, one full-width button per excluded top team (#1, #2, … up to the Exclude Top setting) and one for the Craft Prize winner once drawn. Each shows the team name; one tap copies it (flashes "Copied"), so the host doesn't re-type names into the form. Names are read at tap time.

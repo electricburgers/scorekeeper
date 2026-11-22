@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.57"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 21, 2026 7:41 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.58"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 21, 2026 7:59 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1108,8 +1108,8 @@ let beerRoundToasted = new Set();
 let finishDone = new Set();
 const FINISH_STEPS = [
   { k: "backup", label: "Save a backup file (Recommended)", hint: "A .json file, so you can reopen the game later", btn: true },
-  { k: "pdf", label: "Save the PDF scoresheet", hint: "Tap PDF above" },
   { k: "photos", label: "Winner Photos", hint: "Submit the winning teams' names and photos" },
+  { k: "pdf", label: "Save the PDF scoresheet", hint: "Tap PDF above" },
   { k: "confirm", label: "Game Confirmation", hint: "Submit the PDF you saved" },
 ];
 
