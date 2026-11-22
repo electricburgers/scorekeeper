@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.85 - 2026-11-22
+
+- **Light mode contrast.** The Game Confirmation mask icon's mustache and goatee are now near-black on a paler plate so they stand out from the outline, and the question timer bar's elapsed track is a lighter blue-grey so it is easy to tell from the black time-left fill.
+
 ## v22.84 - 2026-11-22
 
 - **Timer bar reset flash.** Tapping reset while the timer was in overtime no longer flashes the bar bright before it fades out; the empty fill now holds until the fade finishes. Also updated the Advanced Settings grouping test for the Prize Winners for Photos row.

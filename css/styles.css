@@ -1039,11 +1039,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .icon-fawkes{--icon-tint:var(--tint-flask);stroke-width:1.4}
 .icon-fawkes .ip-2,.icon-tinted.icon-fawkes .ip-2{fill:#fff;stroke:none}
 /* Light theme only: a pale purple wash plate with deep purple mustache and goatee. */
-[data-theme="light"] .icon-tinted.icon-fawkes{fill:color-mix(in srgb,var(--icon-tint) 22%,transparent)}
-[data-theme="light"] .icon-fawkes .ip-2,[data-theme="light"] .icon-tinted.icon-fawkes .ip-2{fill:#3a1676}
+[data-theme="light"] .icon-tinted.icon-fawkes{fill:color-mix(in srgb,var(--icon-tint) 12%,#fff)}
+[data-theme="light"] .icon-fawkes .ip-2,[data-theme="light"] .icon-tinted.icon-fawkes .ip-2{fill:#12041f}
 /* Thicker mustache: the first .ip-2 path gets a same-colour stroke (goatee stays a plain fill). */
 .icon-fawkes path.ip-2:nth-of-type(2){stroke:#fff;stroke-width:.7;stroke-linejoin:round}
-[data-theme="light"] .icon-fawkes path.ip-2:nth-of-type(2){stroke:#3a1676}
+[data-theme="light"] .icon-fawkes path.ip-2:nth-of-type(2){stroke:#12041f}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
 /* Test Sounds bar: Crash echoes 💥 — a jagged red-orange outer burst (--tint-drum, the identifying
    outline held to WCAG AA), an orange mid layer (--vivid-drum) and a small bright-yellow core star
@@ -1225,6 +1225,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-bar{opacity:.3;transition:opacity .4s ease;position:relative;flex:0 0 100%;height:4px;margin-top:2px;border-radius:2px;background:var(--border-control);overflow:hidden}
 .qtimer-bar.qt-live{opacity:1}
 @media (prefers-reduced-motion:reduce){.qtimer-bar{transition:none}}
+/* Light theme: the "time left" fill is black, so the "time elapsed" track is a pale blue-grey instead of the mid-blue --border-control, which sat too close to it. */
+[data-theme="light"] .qtimer-bar{background:#c3d0e6}
 .qtimer-bar-fill{position:absolute;inset:0;background:var(--text-primary);transform-origin:left center;transform:scaleX(1)}
 /* Reset from overflow jumps the fill empty -> full the instant the bar starts fading out, which flashed it bright. While not live, hold the old fill for the length of the fade before moving it. */
 .qtimer-bar:not(.qt-live) .qtimer-bar-fill{transition:transform 0s linear .4s}
