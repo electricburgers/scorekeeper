@@ -1746,7 +1746,7 @@ function renderLeftBody() {
   h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><span class="chevron">\u25BC</span><h2>${ICON_BEER} Craft Prize Drawing</h2></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
   cut();
 
-  h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>${ICON_CLIPCHECK} Game Submission</h2></div><div class="section-body">
+  h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>${ICON_PLANE} Game Submission</h2></div><div class="section-body">
     <h3 class="export-group-title">Download Scoresheet</h3>
     <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button></div>
     <h3 class="export-group-title">Submit Results</h3>

@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.64] - 21 Nov 2026
+
+### Changed
+- **Game Submission screenshot** (`export-bar`, dark and light) regenerated with the new paper plane icon in the section header.
+
 ## [1.63] - 21 Nov 2026
 
 ### Changed
