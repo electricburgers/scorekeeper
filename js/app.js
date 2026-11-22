@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.78"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 22, 2026 5:41 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.79"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 22, 2026 7:02 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1297,6 +1297,7 @@ function resumeSession() {
 // memory, craft draw) - shared by a new game and by a game-mode change.
 function resetBoardUi() {
   finishDone = new Set();
+  document.getElementById("exportPrompt")?.classList.remove("show");
   scoreSortMode = "entry";
   randomOrder = null;
   standingsSortMode = { halftime: "entry", final: "entry" };
@@ -1750,7 +1751,7 @@ function renderLeftBody() {
 
   h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>${ICON_PLANE} Game Confirmation</h2></div><div class="section-body">
     <div class="finish-card" id="finishChecklist">${finishChecklistHtml()}</div>
-    <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="clearAfterExport();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
+    <div class="export-prompt" id="exportPrompt"><p>Game submitted! Clear this Scoresheet?</p><div class="export-prompt-btns"><button class="btn btn-accent" onclick="clearAfterExport();">Yes</button><button class="btn export-prompt-no" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>
   </div></div>`;
   cut();
@@ -2812,6 +2813,8 @@ function markFinish(key) {
   if (typeof Tutorial !== "undefined" && Tutorial.isActive && Tutorial.isActive()) return;
   finishDone.add(key);
   refreshFinishChecklist();
+  // The clear-this-scoresheet prompt only appears once the host taps step 4 (Game Confirmation).
+  if (key === "confirm") document.getElementById("exportPrompt")?.classList.add("show");
 }
 // Repaints just the checklist card in place (no full re-render, so the host's scroll position
 // stays put). renderLeft() skips a repaint when its HTML matches the last one it drew, and this

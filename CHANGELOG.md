@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.79 - 2026-11-22
+
+- **Clear prompt waits for step 4.** The Game Confirmation clear prompt no longer pops up after saving the PDF or backup; it appears only after you tap the step 4 Game Confirmation button. It now reads "Game submitted! Clear this Scoresheet?" with larger, well-separated Yes (filled) and No (red outline) buttons.
+
 ## v22.78 - 2026-11-22
 
 - **The Copy chip fades back out after "Copied".** On the Game Confirmation winner buttons, "✓ Copied" now crossfades back to "Copy" (and the green fades away) instead of snapping.

@@ -234,12 +234,14 @@ describe("integration: persistence, modes, files and exports", () => {
     assert.match($("#auditOverlay").textContent, /7/);
     E("closeAudit()");
   });
-  it("XLSX backup export builds a non-empty blob and shows the export-complete prompt", async () => {
+  it("XLSX backup export builds a non-empty blob; clear prompt waits for step 4", async () => {
     E("cycleW(1,0,0,5)");
     E("window.__mockBlobUrls.clear()");
     await E("exportXLSXBackup()");
     const sizes = JSON.parse(E("JSON.stringify([...window.__mockBlobUrls.values()].map(b => b.parts ? b.parts.length : 0))"));
     assert.ok(sizes.some((n) => n > 0), "an xlsx blob was produced");
+    assert.ok(!$("#exportPrompt").classList.contains("show"));
+    E("markFinish('confirm')");
     assert.ok($("#exportPrompt").classList.contains("show"));
   });
 });

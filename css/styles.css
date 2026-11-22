@@ -2323,6 +2323,9 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 }
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
 .export-prompt.show{display:block}
+.export-prompt-btns{display:flex;gap:16px;margin-top:10px}
+.export-prompt-btns .btn{flex:1;min-height:44px;font-size:1rem}
+.export-prompt-btns .btn.export-prompt-no{background:transparent;border:2px solid var(--accent-red);color:var(--txt-red);font-weight:700}
 .export-photo-hint{font-size:.78rem;margin:0 0 8px}
 .export-photo-hint a{color:var(--accent-gold);text-decoration:underline}
 .export-prompt p{margin-bottom:6px;color:var(--badge-gold-fg);font-weight:600;font-size:.85rem}

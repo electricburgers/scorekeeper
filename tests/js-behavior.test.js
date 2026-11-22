@@ -1215,9 +1215,9 @@ describe("Export smoke test", () => {
     assert.ok(result.hasSheet);
   });
 
-  it("exportXLSXBackup() shows the export-complete prompt", () => {
+  it("exportXLSXBackup() does not show the clear prompt (only step 4 does)", () => {
     assert.ok(
-      window.document.getElementById("exportPrompt").classList.contains("show"),
+      !window.document.getElementById("exportPrompt").classList.contains("show"),
     );
   });
 
