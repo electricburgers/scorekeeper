@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.74 - 2026-11-22
+
+- **Step 1 renamed "Save a Scoresheet backup (Optional)"** and its button is now "Save backup".
+- FAQ v1.75: step name updated, regenerated `export-bar` screenshots.
+
 ## v22.73 - 2026-11-22
 
 - **Step 3 button renamed "Download PDF"** (one line).

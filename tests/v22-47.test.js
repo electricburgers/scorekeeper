@@ -46,7 +46,7 @@ describe("v22.47 closing tutorial steps and FAQ", () => {
       const item = window.document.getElementById("q-how-do-i-wrap-up-a-finished-game");
       assert.ok(item, "wrap-up FAQ item missing");
       const steps = [...item.querySelectorAll("ol > li > strong:first-child")].map((s) => s.textContent);
-      const pos = ["Save a backup file", "Submit the winners", "Save the Scoresheet", "Submit your Game Confirmation"].map((t) => steps.findIndex((x) => x.startsWith(t)));
+      const pos = ["Save a Scoresheet backup", "Submit the winners", "Save the Scoresheet", "Submit your Game Confirmation"].map((t) => steps.findIndex((x) => x.startsWith(t)));
       assert.deepEqual(pos, [0, 1, 2, 3], "steps missing or out of order: " + steps);
       assert.match(item.textContent, /Optional/);
       assert.match(item.textContent, /winners. names and photos/);

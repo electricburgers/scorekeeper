@@ -24,6 +24,6 @@ describe("v22.54 Game Submission section", () => {
     const steps = [...body.querySelectorAll("ol.finish-list > li")];
     assert.equal(steps.length, 4);
     const act = (li) => li.querySelector(".finish-rect").textContent.trim();
-    assert.deepEqual(steps.map(act), ["Save a Scoresheet backup file", "Open the Winner Photos Form", "Download PDF", "Open the Game Confirmation Form"]);
+    assert.deepEqual(steps.map(act), ["Save backup", "Open the Winner Photos Form", "Download PDF", "Open the Game Confirmation Form"]);
   });
 });

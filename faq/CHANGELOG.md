@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.75] - 22 Nov 2026
+
+### Changed
+
+- **Game Confirmation:** step 1 is "Save a Scoresheet backup (Optional)" in the wrap-up steps and alt text, and the `export-bar` screenshots (dark + light) are regenerated for app v22.74.
+
 ## [1.74] - 22 Nov 2026
 
 ### Changed
