@@ -1230,8 +1230,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-bar-fill{position:absolute;inset:0;background:var(--text-primary);transform-origin:left center;transform:scaleX(1)}
 /* On reset the fill used to snap to full, which read as a blink (and, from overtime, a bright flash). While not live, refill it with a quick ease-out sweep instead, running alongside the fade-out. */
 .qtimer-bar:not(.qt-live) .qtimer-bar-fill{transition:transform .3s ease-out}
-/* Reset from overtime: the bar is empty and fully bright, so refill it first and only then fade it out. */
-.qtimer-bar.qt-refill{transition:opacity .4s ease .3s}
+/* Reset from overtime: drop straight to the dim idle opacity (no fade) so the refilling fill is never shown bright. */
+.qtimer-bar.qt-refill{transition:none}
 @media (prefers-reduced-motion:reduce){.qtimer-bar:not(.qt-live) .qtimer-bar-fill,.qtimer-bar.qt-refill{transition:none}}
 .qtimer-bar::before,.qtimer-bar::after{content:"";position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--bg-primary);z-index:1;display:none}
 .qtimer-bar[data-n1]::before{display:block;left:var(--qt-n1)}
@@ -1321,7 +1321,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    on its own, and flashing two different states at two different speeds (2s vs 1.5s previously)
    read as more agitated than the countdown actually warrants. qt-crit's own cycle is slowed to
    2.9s (from 1.5s) for the same reason, with the .75 floor left untouched. */
-.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);border-color:var(--bg-primary)}
+.qtimer-display.qt-warn{background:var(--accent-gold);color:var(--on-accent-gold);border-color:var(--bg-primary);transition-duration:1s}
+@media (prefers-reduced-motion:reduce){.qtimer-display.qt-warn{transition-duration:.2s}}
 .qtimer-display.qt-crit{background:var(--danger-solid-bg);color:#fff;border-color:var(--bg-primary);animation:qtFlash 2.9s ease-in-out infinite}
 .qtimer-display.qt-over{background:var(--danger-solid-bg);color:#fff;border-color:var(--bg-primary)}
 /* An animated filter — brightness(), as this used to be — forces the element onto its own

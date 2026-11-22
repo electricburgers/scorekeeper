@@ -211,14 +211,14 @@ function toggleQTimer() {
 }
 let qtRefillTimer = 0;
 function resetQTimer() {
-  // From overtime the bar is already empty, so let it refill at full brightness first and fade
-  // afterwards (.qt-refill delays the fade, see styles.css) rather than fading while it refills.
+  // From overtime the bar is empty and fully lit; .qt-refill (see styles.css) snaps it to the dim idle
+  // opacity so the refilling fill is never shown bright.
   const wasOver = (qtState === "running" ? qtEndEpoch - Date.now() : qtRemainMs) <= 0 && qtState !== "idle";
   if (wasOver) {
     const bars = document.querySelectorAll(".qtimer-bar");
     bars.forEach((b) => b.classList.add("qt-refill"));
     clearTimeout(qtRefillTimer);
-    qtRefillTimer = setTimeout(() => bars.forEach((b) => b.classList.remove("qt-refill")), 800);
+    qtRefillTimer = setTimeout(() => bars.forEach((b) => b.classList.remove("qt-refill")), 500);
   }
   qtState = "idle";
   qtEndEpoch = 0;
