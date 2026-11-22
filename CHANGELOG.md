@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.60 - 2026-11-21
+
+- **Game Submission buttons back to squares:** Winner Photos, PDF and Game Confirmation use the square `.export-sq` buttons again (inside their numbered steps). The team-name copy rows under Winner Photos now wrap long names instead of cutting them off.
+
 ## v22.59 - 2026-11-21
 
 - **Game Submission is a single list of steps:** replaces the Download Scoresheet / Submit Results button groups and the separate checklist. In order: 1) Save a backup file (Optional), 2) Winner Photos, with one-tap copy buttons for the excluded top teams and the Craft Prize winner directly under the link, 3) Download PDF, 4) Game Confirmation. Each step has its own button and ticks when done; nothing is forced or skipped for you.

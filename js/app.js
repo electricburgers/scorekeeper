@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.59"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 21, 2026 8:16 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.60"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 21, 2026 8:28 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -2788,13 +2788,13 @@ function adjPts(ti, d) {
 // can be skipped. In memory only; reset by resetBoardUi() for a new game. The guided tour never ticks it.
 function finishActionHtml(k) {
   if (k === "backup") return `<button class="btn finish-act" onclick="saveToFile()">Save backup file</button>`;
-  if (k === "pdf") return `<button class="btn finish-act" onclick="exportPDF()">${ICON_PDF}<span>Download PDF</span></button>`;
+  if (k === "pdf") return `<div class="export-bar finish-sq"><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button></div>`;
   if (k === "confirm")
-    return `<a class="btn finish-act jd-upload-btn" href="${FINISH_CONFIRM_URL}" target="_blank" rel="noopener noreferrer" onclick="markFinish('confirm')">${ICON_FAWKES}<span>Game Confirmation</span></a>`;
+    return `<div class="export-bar finish-sq"><a class="btn export-sq jd-upload-btn" href="${FINISH_CONFIRM_URL}" target="_blank" rel="noopener noreferrer" title="Game Confirmation" aria-label="Game Confirmation" onclick="markFinish('confirm')">${ICON_FAWKES}<span class="export-sq-label">Game Confirmation</span></a></div>`;
   if (k === "photos") {
     const w = gameState.craftPrizeWinner;
     const note = w && gameState.teams[w.ti] ? "" : `<p class="finish-warn">No Craft Prize winner drawn yet. Skip that name if this game has none.</p>`;
-    return `<a class="btn finish-act photo-upload-btn" href="${FINISH_PHOTOS_URL}" target="_blank" rel="noopener noreferrer" onclick="markFinish('photos')">${ICON_CAMERA}<span>Winner Photos</span></a>${winnerCopyButtonsHtml()}${note}`;
+    return `<div class="export-bar finish-sq"><a class="btn export-sq photo-upload-btn" href="${FINISH_PHOTOS_URL}" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${ICON_CAMERA}<span class="export-sq-label">Winner Photos</span></a></div>${winnerCopyButtonsHtml()}${note}`;
   }
   return "";
 }

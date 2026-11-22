@@ -19,11 +19,11 @@ describe("v22.54 Game Submission section", () => {
 
   it("is one ordered list of steps with no XLSX button: backup, Winner Photos, PDF, Game Confirmation", () => {
     const body = window.document.querySelector("#sec-export .section-body");
-    assert.equal(body.querySelectorAll(".export-group-title, .export-bar").length, 0);
+    assert.equal(body.querySelectorAll(".export-group-title").length, 0);
     assert.ok(!body.querySelector('[onclick*="exportXLSXBackup"]'), "XLSX button should be gone");
     const steps = [...body.querySelectorAll("ol.finish-list > li")];
     assert.equal(steps.length, 4);
-    const act = (li) => li.querySelector(".finish-act").textContent.trim();
-    assert.deepEqual(steps.map(act), ["Save backup file", "Winner Photos", "Download PDF", "Game Confirmation"]);
+    const act = (li) => li.querySelector(".finish-act, .export-sq").textContent.trim();
+    assert.deepEqual(steps.map(act), ["Save backup file", "Winner Photos", "PDF", "Game Confirmation"]);
   });
 });
