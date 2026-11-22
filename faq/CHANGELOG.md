@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.72] - 22 Nov 2026
+
+### Changed
+
+- **Game Confirmation screenshot** (`export-bar`, dark + light) regenerated for app v22.71: the step subtitles are gone.
+
 ## [1.71] - 22 Nov 2026
 
 ### Changed

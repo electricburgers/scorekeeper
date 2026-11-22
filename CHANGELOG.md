@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.71 - 2026-11-22
+
+- **Game Confirmation steps lose their subtitles** (the hint line under each step title) so the list is shorter and less wordy.
+- FAQ v1.72: regenerated `export-bar` screenshots without the subtitles.
+
 ## v22.70 - 2026-11-22
 
 - **Step 4 subtitle** says "Attach the PDF you just saved" again.
