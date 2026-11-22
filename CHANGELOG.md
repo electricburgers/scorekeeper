@@ -14,6 +14,15 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.66 - 2026-11-22
+
+- **Timer progress line stays visible while paused** (hidden only when idle).
+- **Backup floppy** is purple with silver accents.
+- **#1/#2/#3 and Craft Prize labels** in the copy-name buttons are larger.
+- **PDF step** is "Save Scoresheet PDF", its button "Download / Scoresheet PDF" with Download on its own line.
+- **Step 4** is "Attach the PDF you saved" and its Guy Fawkes picto is larger.
+- Step 2 hint drops "winning" ("copy the teams' names into it").
+
 ## v22.65 - 2026-11-22
 
 - **Game Submission is now "Game Confirmation"** (section title and tour text).
