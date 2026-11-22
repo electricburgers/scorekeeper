@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.56 - 2026-11-21
+
+- **Paper plane colors:** the Game Submission plane is now sky blue (outline `#4db8ff` dark / `#1b6fb8` light) with a pale keel fold and lighter wind lines, via a new `.icon-plane` class and `--tint-plane` tokens, instead of borrowing the clipboard's tan.
+- **What's new:** lists v22.56, v22.55 and v22.54.
+
 ## v22.55 - 2026-11-21
 
 - **Header icon:** Game Submission swaps the clipboard-with-check-mark for a climbing paper plane with three wind lines trailing behind it (`ICON_PLANE`, ✈️ in Emoji mode). The keel fold is tinted like the other two-tone icons, and the trail is rotated with the plane so it follows the flight path.
