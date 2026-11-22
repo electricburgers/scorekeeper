@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.87 - 2026-11-22
+
+- **Timer bar reset from overtime.** Resetting from overtime now just refills the empty bar at full brightness and fades it out afterwards, instead of fading and refilling at the same time.
+
 ## v22.86 - 2026-11-22
 
 - **Timer bar reset refill.** Resetting the question timer now refills the bar with a quick sweep to full while it fades out, instead of snapping to a full faded bar.
