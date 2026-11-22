@@ -574,7 +574,7 @@ function winnerCopyButtonsHtml() {
 // Copy confirmation for the winner buttons: only the small Copy chip changes, in place. Both
 // labels ("Copy" and "✓ Copied") are always in the chip, stacked in one grid cell, so the chip is
 // permanently as wide as the wider one and toggling a class can't reflow the team name beside it.
-// No text swap, no fade, no measured widths — nothing to flicker or wrap.
+// The swap is a CSS opacity/colour crossfade, so "Copied" fades back out to "Copy" when it expires.
 function flashChip(chip) {
   clearTimeout(+chip.dataset.flashTimer || 0);
   chip.classList.add("wc-copied");

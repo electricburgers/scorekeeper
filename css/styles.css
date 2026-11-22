@@ -2292,8 +2292,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .wc-copy{flex:none;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.3px;padding:2px 10px;border:1px solid var(--border);border-radius:var(--radius)}
 .wc-copy{display:inline-grid;text-align:center;white-space:nowrap}
 .wc-copy>span{grid-area:1/1}
-.wc-copy-done,.wc-copied .wc-copy-idle{visibility:hidden}
-.wc-copied .wc-copy-done{visibility:visible}
+.wc-copy{transition:background-color .35s ease,color .35s ease,border-color .35s ease}
+.wc-copy>span{transition:opacity .35s ease}
+.wc-copy-done,.wc-copied .wc-copy-idle{opacity:0}
+.wc-copied .wc-copy-done{opacity:1}
 .wc-copy.wc-copied{background:var(--correct-badge-bg);color:var(--correct-badge-fg);border-color:var(--correct-badge-bg)}
 .export-bar{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;padding:10px 0}
 /* XLSX / PDF export as square, icon-forward buttons — a big glyph stacked over a small label is

@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.78 - 2026-11-22
+
+- **The Copy chip fades back out after "Copied".** On the Game Confirmation winner buttons, "✓ Copied" now crossfades back to "Copy" (and the green fades away) instead of snapping.
+
 ## v22.77 - 2026-11-22
 
 - **Copy on a winner button no longer wraps long team names.** The Copy chip now holds both "Copy" and "✓ Copied" stacked in one spot, so it is always as wide as the wider label and tapping it changes only the colour and which label shows. Previously the longer "Copied" widened the chip and pushed the name onto a second line.
