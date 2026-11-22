@@ -581,7 +581,7 @@ function flashBtn(btn, label, ms) {
     btn.dataset.flashRestore = btn.innerHTML;
   clearTimeout(+btn.dataset.flashTimer || 0);
   clearTimeout(+btn.dataset.flashOutTimer || 0);
-  btn.classList.remove("flash-out");
+  btn.classList.remove("flash-out", "flash-in");
   btn.innerHTML = label;
   // Colored "Copied" state: re-adding the class after a reflow replays the tap pop on a re-tap.
   btn.classList.remove("flash-copied");
@@ -591,11 +591,15 @@ function flashBtn(btn, label, ms) {
     // Auto-dismiss: play the fade-out, then restore the original label.
     btn.classList.add("flash-out");
     btn.dataset.flashOutTimer = setTimeout(() => {
+      // Faded to nothing by now: swap the label back and fade the original in, instead of
+      // snapping from invisible to fully visible (that was the odd flash at the end).
       btn.innerHTML = btn.dataset.flashRestore;
       btn.classList.remove("flash-copied", "flash-out");
+      btn.classList.add("flash-in");
       delete btn.dataset.flashRestore;
       delete btn.dataset.flashTimer;
       delete btn.dataset.flashOutTimer;
+      setTimeout(() => btn.classList.remove("flash-in"), 240);
     }, 260);
   }, ms || 1500);
 }

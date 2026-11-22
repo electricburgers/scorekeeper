@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.69"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 22, 2026 4:24 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.70"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 22, 2026 4:31 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1112,7 +1112,7 @@ const FINISH_STEPS = [
   { k: "backup", label: "Save a backup file (Optional)", hint: "So you can reopen the game later (just in case)" },
   { k: "photos", label: "Submit the winners' names and photos", hint: "Open the form, then copy the teams' names into it" },
   { k: "pdf", label: "Save the Scoresheet", hint: "Download a copy to attach to the confirmation page" },
-  { k: "confirm", label: "Submit your Game Confirmation", hint: "Submit the PDF you just saved" },
+  { k: "confirm", label: "Submit your Game Confirmation", hint: "Attach the PDF you just saved" },
 ];
 
 

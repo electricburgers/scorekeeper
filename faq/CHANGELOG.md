@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.71] - 22 Nov 2026
+
+### Changed
+
+- **Game Confirmation screenshot** (`export-bar`, dark + light) regenerated for app v22.70: step 4's subtitle is "Attach the PDF you just saved".
+
 ## [1.70] - 22 Nov 2026
 
 ### Changed
