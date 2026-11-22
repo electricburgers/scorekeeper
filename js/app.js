@@ -1751,7 +1751,7 @@ function renderLeftBody() {
 
   h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>${ICON_PLANE} Game Confirmation</h2></div><div class="section-body">
     <div class="finish-card" id="finishChecklist">${finishChecklistHtml()}</div>
-    <div class="export-prompt" id="exportPrompt"><p>Game submitted! Clear this Scoresheet?</p><div class="export-prompt-btns"><button class="btn btn-accent" onclick="clearAfterExport();">Yes</button><button class="btn export-prompt-no" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
+    <div class="export-prompt" id="exportPrompt"><p>Clear this Scoresheet?</p><div class="export-prompt-btns"><button class="btn btn-accent" onclick="clearAfterExport();">Yes</button><button class="btn export-prompt-no" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>
   </div></div>`;
   cut();

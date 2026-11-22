@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.77] - 22 Nov 2026
+
+### Changed
+
+- **Wrapping up:** new `clear-scoresheet-prompt` screenshots (dark + light) for the "Clear this Scoresheet?" prompt, which now appears only after step 4. The wrap-up and "Clear this Scoresheet?" answers are updated to match.
+
 ## [1.76] - 22 Nov 2026
 
 ### Changed

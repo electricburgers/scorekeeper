@@ -16,7 +16,7 @@ v19.79 through v19.84; git history isn't rewritten).
 
 ## v22.79 - 2026-11-22
 
-- **Clear prompt waits for step 4.** The Game Confirmation clear prompt no longer pops up after saving the PDF or backup; it appears only after you tap the step 4 Game Confirmation button. It now reads "Game submitted! Clear this Scoresheet?" with larger, well-separated Yes (filled) and No (red outline) buttons.
+- **Clear prompt waits for step 4.** The Game Confirmation clear prompt no longer pops up after saving the PDF or backup; it appears only after you tap the step 4 Game Confirmation button. It now reads "Clear this Scoresheet?" with larger, well-separated Yes (filled) and No (red outline) buttons.
 
 ## v22.78 - 2026-11-22
 
