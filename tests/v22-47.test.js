@@ -37,7 +37,7 @@ describe("v22.47 closing tutorial steps and FAQ", () => {
     const iPhotos = src.indexOf("Winner Photos is the link to use at the end of the game");
     const iConfirm = src.indexOf("Game Confirmation. It opens the form in a new tab");
     assert.ok(iPdf > 0 && iPhotos > iPdf && iConfirm > iPhotos, "steps missing or out of order");
-    assert.match(src, /winning teams' names and photos/);
+    assert.match(src, /winners. names and photos/);
   });
 
   it("FAQ has the wrap-up walkthrough in backup, Winner Photos, PDF, Game Confirmation order", async () => {
@@ -46,10 +46,10 @@ describe("v22.47 closing tutorial steps and FAQ", () => {
       const item = window.document.getElementById("q-how-do-i-wrap-up-a-finished-game");
       assert.ok(item, "wrap-up FAQ item missing");
       const steps = [...item.querySelectorAll("ol > li > strong:first-child")].map((s) => s.textContent);
-      const pos = ["Save a backup file", "Winner Photos", "Download PDF", "Game Confirmation"].map((t) => steps.findIndex((x) => x.startsWith(t)));
+      const pos = ["Save a backup file", "Submit the winners", "Save the Scoresheet", "Attach the PDF"].map((t) => steps.findIndex((x) => x.startsWith(t)));
       assert.deepEqual(pos, [0, 1, 2, 3], "steps missing or out of order: " + steps);
       assert.match(item.textContent, /Optional/);
-      assert.match(item.textContent, /winning teams' names and photos/);
+      assert.match(item.textContent, /winners. names and photos/);
     } finally {
       window.close();
     }
