@@ -17,14 +17,13 @@ describe("v22.54 Game Submission section", () => {
     assert.ok(h.querySelector("svg.icon-ui"), "clipboard pictograph missing");
   });
 
-  it("groups XLSX/PDF under Download Scoresheet and the forms under Submit Results", () => {
+  it("is one ordered list of steps with no XLSX button: backup, Winner Photos, PDF, Game Confirmation", () => {
     const body = window.document.querySelector("#sec-export .section-body");
-    const titles = [...body.querySelectorAll(".export-group-title")];
-    assert.deepEqual(titles.map((t) => t.textContent), ["Download Scoresheet", "Submit Results"]);
-    const labels = (t) =>
-      [...t.nextElementSibling.querySelectorAll(".export-sq-label")].map((l) => l.textContent);
-    assert.ok(titles[0].nextElementSibling.classList.contains("export-bar"));
-    assert.deepEqual(labels(titles[0]), ["XLSX", "PDF"]);
-    assert.deepEqual(labels(titles[1]), ["Winner Photos", "Game Confirmation"]);
+    assert.equal(body.querySelectorAll(".export-group-title, .export-bar").length, 0);
+    assert.ok(!body.querySelector('[onclick*="exportXLSXBackup"]'), "XLSX button should be gone");
+    const steps = [...body.querySelectorAll("ol.finish-list > li")];
+    assert.equal(steps.length, 4);
+    const act = (li) => li.querySelector(".finish-act").textContent.trim();
+    assert.deepEqual(steps.map(act), ["Save backup file", "Winner Photos", "Download PDF", "Game Confirmation"]);
   });
 });

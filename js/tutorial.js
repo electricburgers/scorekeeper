@@ -908,7 +908,7 @@ const Tutorial = (function () {
       },
       {
         target: 'button[onclick="exportPDF()"]',
-        text: `The game is finished, so it's time to save your scoresheet. Scroll down to Game Submission at the bottom. Under Download Scoresheet, ${tapWord()} PDF to save a copy of the finished game to your device, then ${tapWord()} Next. You'll attach it on the Game Confirmation page in a moment.`,
+        text: `The game is finished, so it's time to save your scoresheet. Scroll down to Game Submission at the bottom. In the Game Submission steps, ${tapWord()} Download PDF to save a copy of the finished game to your device, then ${tapWord()} Next. You'll attach it on the Game Confirmation page in a moment.`,
         advance: "manual",
         // fallbackNext: this listener is the only thing that notices the tap (exporting doesn't
         // touch gameState or call any hooked render function, unlike almost every other step),
@@ -919,7 +919,7 @@ const Tutorial = (function () {
       },
       {
         target: "a.photo-upload-btn",
-        text: `Under Submit Results, Winner Photos is the link to use at the end of the game. It's where hosts submit the winning teams' names and photos. ${tapWordCap()} Next when you're ready.`,
+        text: `In Game Submission, Winner Photos is the link to use at the end of the game. It's where hosts submit the winning teams' names and photos. ${tapWordCap()} Next when you're ready.`,
         advance: "manual",
       },
       {

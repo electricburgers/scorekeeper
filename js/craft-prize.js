@@ -588,6 +588,21 @@ function flashBtn(btn, label, ms) {
   }, ms || 1500);
 }
 
+// Uniform random index in [0, n) from crypto.getRandomValues, with rejection sampling so no
+// index is favoured (a plain `% n` on a 32-bit value is slightly biased unless n divides 2^32).
+// Falls back to Math.random only where Web Crypto is missing (very old WebViews).
+function secureRandomIndex(n) {
+  if (!(n > 1)) return 0;
+  const c = typeof crypto !== "undefined" ? crypto : null;
+  if (!c || typeof c.getRandomValues !== "function") return Math.floor(Math.random() * n);
+  const buf = new Uint32Array(1);
+  const limit = 0x100000000 - (0x100000000 % n);
+  do {
+    c.getRandomValues(buf);
+  } while (buf[0] >= limit);
+  return buf[0] % n;
+}
+
 function startCraftPrizeDraw() {
   if (craftDrawState && craftDrawState.active) return;
   if (gameState.craftPrizeWinner) {
@@ -618,7 +633,7 @@ function startCraftPrizeDraw() {
   // finale/fade swaps that follow. Do not put anything asynchronous in front of it.
   startDrumrollAudio();
   craftDrawState.flashTimer = setInterval(() => {
-    const ti = pool[Math.floor(Math.random() * pool.length)];
+    const ti = pool[secureRandomIndex(pool.length)];
     const name = gameState.teams[ti]?.name || "Team " + (ti + 1);
     if (craftDrawState) craftDrawState.displayName = name;
     // Update the flash text node directly — a full renderLeft() 9x/sec would rebuild the
@@ -664,7 +679,7 @@ function startCraftPrizeDraw() {
 function finalizeCraftPrizeWinner(pool) {
   clearCraftDrawTimers();
   hapticPulse([80, 50, 80, 50, 240]); // the drumroll just ended: buzz where the browser allows it
-  const winnerTi = pool[Math.floor(Math.random() * pool.length)];
+  const winnerTi = pool[secureRandomIndex(pool.length)];
   gameState.teams.forEach((t) => {
     t.craftPrize = false;
   });

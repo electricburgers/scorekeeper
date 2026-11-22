@@ -14,6 +14,13 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.59 - 2026-11-21
+
+- **Game Submission is a single list of steps:** replaces the Download Scoresheet / Submit Results button groups and the separate checklist. In order: 1) Save a backup file (Optional), 2) Winner Photos, with one-tap copy buttons for the excluded top teams and the Craft Prize winner directly under the link, 3) Download PDF, 4) Game Confirmation. Each step has its own button and ticks when done; nothing is forced or skipped for you.
+- **XLSX export button removed** from Game Submission (`exportXLSXBackup()` itself is untouched).
+- **No-winner warning:** if no Craft Prize winner is drawn yet, step 2 shows a note ("Skip that name if this game has none") instead of blocking anything.
+- **Craft Prize drawing uses `crypto.getRandomValues`:** new `secureRandomIndex()` (rejection sampling, uniform) picks the winner and drives the name flash; `Math.random` remains only as a fallback where Web Crypto is missing.
+
 ## v22.58 - 2026-11-21
 
 - **Finish game checklist order:** Winner Photos now comes before Save the PDF scoresheet in Game Submission's checklist.

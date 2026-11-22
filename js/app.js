@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.58"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 21, 2026 7:59 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.59"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 21, 2026 8:16 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1106,11 +1106,13 @@ let beerRoundToasted = new Set();
 // Finish game checklist state (see finishChecklistHtml below); declared this early because the
 // first renderAll() runs before the rest of this file has been evaluated.
 let finishDone = new Set();
+const FINISH_PHOTOS_URL = "https://form.jotform.com/263015326852050";
+const FINISH_CONFIRM_URL = "https://app.jotform.com/261954293403156";
 const FINISH_STEPS = [
-  { k: "backup", label: "Save a backup file (Recommended)", hint: "A .json file, so you can reopen the game later", btn: true },
-  { k: "photos", label: "Winner Photos", hint: "Submit the winning teams' names and photos" },
-  { k: "pdf", label: "Save the PDF scoresheet", hint: "Tap PDF above" },
-  { k: "confirm", label: "Game Confirmation", hint: "Submit the PDF you saved" },
+  { k: "backup", label: "Save a backup file (Optional)", hint: "A .json file, so you can reopen the game later" },
+  { k: "photos", label: "Winner Photos", hint: "Open the form, then copy the winning teams' names into it" },
+  { k: "pdf", label: "Save the PDF scoresheet", hint: "Download a copy to attach to the confirmation" },
+  { k: "confirm", label: "Game Confirmation", hint: "Submit the PDF you just saved" },
 ];
 
 
@@ -1747,10 +1749,6 @@ function renderLeftBody() {
   cut();
 
   h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>${ICON_PLANE} Game Submission</h2></div><div class="section-body">
-    <h3 class="export-group-title">Download Scoresheet</h3>
-    <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button></div>
-    <h3 class="export-group-title">Submit Results</h3>
-    <div class="export-bar"><a class="btn export-sq photo-upload-btn" href="https://form.jotform.com/263015326852050" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${ICON_CAMERA}<span class="export-sq-label">Winner Photos</span></a><a class="btn export-sq jd-upload-btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer" onclick="markFinish('confirm')">${ICON_FAWKES}<span class="export-sq-label">Game Confirmation</span></a></div>${winnerCopyButtonsHtml()}
     <div class="finish-card" id="finishChecklist">${finishChecklistHtml()}</div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="clearAfterExport();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>
@@ -2783,16 +2781,28 @@ function adjPts(ti, d) {
   renderAll();
 }
 
-// ---- FINISH GAME CHECKLIST (Game Submission) -----------------------------------------------
-// The end-of-night chores, ticked as the host does them: a backup .json (recommended, listed first), the PDF, Winner Photos (names and
-// photos of the winning teams) and Game Confirmation (submit the saved PDF).
-// In memory only; reset by resetBoardUi() for a new game. The guided tour never ticks it.
+// ---- GAME SUBMISSION STEPS (Game Submission) ----------------------------------------------
+// One numbered list, top to bottom, each step carrying its own button: a backup .json (Optional),
+// Winner Photos (with the team names to paste under its link), the PDF, then Game Confirmation
+// (submit the saved PDF). Steps tick as the host does them but nothing is gated or forced, so any
+// can be skipped. In memory only; reset by resetBoardUi() for a new game. The guided tour never ticks it.
+function finishActionHtml(k) {
+  if (k === "backup") return `<button class="btn finish-act" onclick="saveToFile()">Save backup file</button>`;
+  if (k === "pdf") return `<button class="btn finish-act" onclick="exportPDF()">${ICON_PDF}<span>Download PDF</span></button>`;
+  if (k === "confirm")
+    return `<a class="btn finish-act jd-upload-btn" href="${FINISH_CONFIRM_URL}" target="_blank" rel="noopener noreferrer" onclick="markFinish('confirm')">${ICON_FAWKES}<span>Game Confirmation</span></a>`;
+  if (k === "photos") {
+    const w = gameState.craftPrizeWinner;
+    const note = w && gameState.teams[w.ti] ? "" : `<p class="finish-warn">No Craft Prize winner drawn yet. Skip that name if this game has none.</p>`;
+    return `<a class="btn finish-act photo-upload-btn" href="${FINISH_PHOTOS_URL}" target="_blank" rel="noopener noreferrer" onclick="markFinish('photos')">${ICON_CAMERA}<span>Winner Photos</span></a>${winnerCopyButtonsHtml()}${note}`;
+  }
+  return "";
+}
 function finishChecklistHtml() {
-  const n = FINISH_STEPS.filter((x) => finishDone.has(x.k)).length;
-  let h = `<div class="finish-head"><b>Finish game</b><span class="finish-count">${n} of ${FINISH_STEPS.length}</span></div><ol class="finish-list">`;
-  FINISH_STEPS.forEach((x) => {
+  let h = `<div class="finish-head"><b>Finish game</b></div><ol class="finish-list">`;
+  FINISH_STEPS.forEach((x, i) => {
     const done = finishDone.has(x.k);
-    h += `<li class="finish-item${done ? " done" : ""}"><span class="finish-box" aria-hidden="true">${done ? "\u2713" : ""}</span><span class="finish-text">${x.label}${done ? '<span class="sr-only"> (done)</span>' : ""}${x.hint ? `<span class="finish-hint">${x.hint}</span>` : ""}</span>${x.btn ? '<button class="btn finish-btn" onclick="saveToFile()">Save</button>' : ""}</li>`;
+    h += `<li class="finish-item${done ? " done" : ""}"><span class="finish-box" aria-hidden="true">${done ? "\u2713" : i + 1}</span><div class="finish-body"><span class="finish-text">${x.label}${done ? '<span class="sr-only"> (done)</span>' : ""}${x.hint ? `<span class="finish-hint">${x.hint}</span>` : ""}</span>${finishActionHtml(x.k)}</div></li>`;
   });
   return h + "</ol>";
 }

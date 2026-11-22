@@ -138,7 +138,7 @@ describe("v22.48 Finish game checklist", () => {
     const items = [...window.document.querySelectorAll("#finishChecklist .finish-item")].map((e) => e.textContent);
     assert.equal(items.length, 4);
     assert.match(items[0], /backup/i);
-    assert.match(items[0], /\(Recommended\)/);
+    assert.match(items[0], /\(Optional\)/);
     assert.match(items[1], /Winner Photos/);
     assert.match(items[2], /PDF/);
     assert.match(items[3], /Game Confirmation/);

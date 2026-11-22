@@ -191,7 +191,7 @@ describe("v19.59 — icons", () => {
     assert.match(m[1], /transform:\s*rotate\(-15deg\)/);
   });
 
-  it("the Winner Photos button sits after XLSX and PDF with a camera pictograph and the photo form link", async () => {
+  it("the Winner Photos button has a camera pictograph and the photo form link", async () => {
     const window = await loadAppWindow();
     try {
       evalIn(window, "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();");
@@ -199,11 +199,10 @@ describe("v19.59 — icons", () => {
       assert.ok(a, "Winner Photos button missing");
       assert.equal(a.getAttribute("href"), "https://form.jotform.com/263015326852050");
       assert.ok(a.querySelector("svg.icon-camera"), "camera icon missing");
-      assert.equal(a.querySelector(".export-sq-label").innerHTML, "Winner Photos");
-      // v22.54: Winner Photos leads the Submit Results group; XLSX and PDF are in Download Scoresheet.
-      assert.equal(a.previousElementSibling, null);
-      assert.equal(a.parentNode.previousElementSibling.textContent, "Submit Results");
-      assert.equal(a.nextElementSibling, a.parentNode.querySelector("a.jd-upload-btn"));
+      assert.equal(a.querySelector("span").textContent, "Winner Photos");
+      // Step 2 of the Game Submission list; the copy buttons for the team names sit right under it.
+      assert.equal(a.closest("li").querySelector(".finish-act"), a);
+      assert.ok(a.parentNode.querySelector(".winner-copy"), "team name copy buttons missing under the link");
       assert.match(evalIn(window, "ICON_CAMERA"), /icon-camera|📷/);
     } finally {
       window.close();
@@ -219,9 +218,9 @@ describe("v19.59 — icons", () => {
       );
       const a = window.document.querySelector("a.jd-upload-btn");
       assert.ok(a, "Game Confirmation button missing");
-      assert.ok(a.classList.contains("export-sq"), "should be a square icon-forward button like XLSX/PDF");
+      assert.ok(a.classList.contains("finish-act"));
       assert.ok(a.querySelector("svg.icon-fawkes"), "Guy Fawkes icon missing");
-      const label = a.querySelector(".export-sq-label").innerHTML;
+      const label = a.querySelector("span").textContent;
       assert.equal(label, "Game Confirmation");
       assert.match(evalIn(window, "ICON_FAWKES"), /icon-fawkes|🎭/);
     } finally {

@@ -3242,12 +3242,17 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .finish-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:.9rem}
 .finish-count{color:var(--text-muted);font-size:.8rem}
 .finish-list{list-style:none;margin:0;padding:0}
-.finish-item{display:flex;align-items:center;gap:10px;padding:5px 0}
+.finish-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0}
+.finish-item+.finish-item{border-top:1px solid var(--border)}
+.finish-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
+.finish-act{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:22rem;min-height:44px;font-weight:700;text-decoration:none}
+.finish-act .icon-ui,.finish-act .icon-emoji{font-size:1.4rem}
+.finish-warn{margin:0;font-size:.78rem;color:var(--accent-gold)}
 .finish-box{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.4rem;height:1.4rem;border:2px solid var(--border-control);border-radius:5px;font-weight:700;line-height:1}
 .finish-item.done .finish-box{background:var(--accent-green);border-color:var(--accent-green);color:#000}
 .finish-text{flex:1;min-width:0;font-size:.9rem;font-weight:600}
 .finish-hint{display:block;font-size:.75rem;font-weight:400;color:var(--text-muted)}
-.finish-btn{flex:none;min-height:44px;padding:4px 14px}
+.finish-body .winner-copy{margin:0;max-width:22rem}
 
 /* Reduced motion: honor the OS setting for every animation and transition. Short and simple
    beats surgical here; essential state changes still happen, they just don't move. */
