@@ -51,7 +51,7 @@ comparison it exists to make.
 | `craft-prize.webp` | The Craft Prize Drawing section open pre-draw, showing the Exclude Top / Drumroll-seconds steppers and the square **Start Drumroll** button (v19.60). | Craft Prize Drawing |
 | `craft-prize-drumroll.webp` | The Craft Prize drumroll actively playing, right after clicking Start Drumroll — the spinning name and countdown bar. | Craft Prize Drawing |
 | `craft-prize-winner.webp` | The finished draw — winning team announced, with the **Clear** button next to the result and the Winner Announcement Script below. | Craft Prize Drawing |
-| `export-bar.webp` | The Game Submission section as one numbered list — Save a backup file (Optional), Winner Photos (📷 link with the Copy buttons for the top teams and craft prize winner under it), Download PDF, Game Confirmation (🎭), then Clear Session. Dark + light. | Exporting |
+| `export-bar.webp` | The Game Submission section as one numbered list — Save a backup file (Optional), Winner Photos (📷 link with the Copy buttons for the top teams and craft prize winner under it), square PDF button, square Game Confirmation (🎭) button, then Clear Session. Winner Photos, PDF and Game Confirmation are square buttons; long team names wrap (v22.60). Dark + light. | Exporting |
 | `pdf-export.webp` | The downloaded PDF scoresheet — same header plus full standings. | Exporting |
 | `jd-upload-form.webp` | The Game Confirmation page, opened in its own browser tab. | Exporting |
 | `sound-test-buttons.webp` | The Craft Prize Drawing's Test Sounds bar — the square Roll / Fade out / Crash / Horn buttons (Advanced Settings → Manual Drumroll Control **and** Sound Test Buttons both on). | Tips & Tricks |

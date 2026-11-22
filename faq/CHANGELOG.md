@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.67] - 21 Nov 2026
+
+### Changed
+- **Game Submission screenshot** (`export-bar`, dark + light) regenerated for app v22.60: Winner Photos, PDF and Game Confirmation are square buttons again, and long team names wrap in the copy rows.
+
 ## [1.66] - 21 Nov 2026
 
 ### Changed
