@@ -186,6 +186,7 @@ function renderQtControls() {
     b.classList.toggle("qtimer-pause", qtState === "running");
     b.classList.toggle("qtimer-resume", qtState === "paused");
   });
+  document.querySelectorAll(".qtimer-bar").forEach((b) => b.classList.toggle("qt-live", qtState === "running"));
   document.querySelectorAll(".qtimer-reset").forEach((b) => {
     const active = qtState !== "idle";
     b.disabled = !active;

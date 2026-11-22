@@ -221,7 +221,7 @@ describe("v19.59 — icons", () => {
       assert.ok(a.classList.contains("finish-rect"));
       assert.ok(a.querySelector("svg.icon-fawkes"), "Guy Fawkes icon missing");
       const label = a.querySelector(".finish-rect-label").textContent;
-      assert.equal(label, "Open Game Confirmation Form");
+      assert.equal(label, "Open the Game Confirmation Form");
       assert.match(evalIn(window, "ICON_FAWKES"), /icon-fawkes|🎭/);
     } finally {
       window.close();

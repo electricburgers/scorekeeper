@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.64"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 22, 2026 3:50 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.65"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 22, 2026 3:58 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1109,7 +1109,7 @@ let finishDone = new Set();
 const FINISH_PHOTOS_URL = "https://form.jotform.com/263015326852050";
 const FINISH_CONFIRM_URL = "https://app.jotform.com/261954293403156";
 const FINISH_STEPS = [
-  { k: "backup", label: "Save a backup file (Optional, just in case)", hint: "So you can reopen the game later" },
+  { k: "backup", label: "Save a backup file (Optional)", hint: "So you can reopen the game later (just in case)" },
   { k: "photos", label: "Submit the winners' names and photos", hint: "Open the form, then copy the winning teams' names into it" },
   { k: "pdf", label: "Save the PDF scoresheet", hint: "Download a copy to attach to the confirmation page" },
   { k: "confirm", label: "Submit your Game Confirmation", hint: "Submit the PDF you just saved" },
@@ -1748,7 +1748,7 @@ function renderLeftBody() {
   h += `<div class="section ${collapsedSections.has("sec-craftprize") ? "collapsed" : ""}" id="sec-craftprize"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-craftprize')"><span class="chevron">\u25BC</span><h2>${ICON_BEER} Craft Prize Drawing</h2></div><div class="section-body">${renderCraftPrizeBlock()}</div></div>`;
   cut();
 
-  h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>${ICON_PLANE} Game Submission</h2></div><div class="section-body">
+  h += `<div class="section ${collapsedSections.has("sec-export") ? "collapsed" : ""}" id="sec-export"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-export')"><span class="chevron">▼</span><h2>${ICON_PLANE} Game Confirmation</h2></div><div class="section-body">
     <div class="finish-card" id="finishChecklist">${finishChecklistHtml()}</div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="clearAfterExport();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>
@@ -2790,9 +2790,9 @@ function finishActionHtml(k) {
   const rect = (icon, label, sub) =>
     `${icon}<span class="finish-rect-text"><span class="finish-rect-label">${label}</span>${sub ? `<span class="finish-rect-sub">${sub}</span>` : ""}</span>`;
   if (k === "backup") return `<button class="btn finish-rect" onclick="saveToFile()" title="Save a Scoresheet backup file" aria-label="Save a Scoresheet backup file">${rect(ICON_SAVE, "Save a Scoresheet backup file")}</button>`;
-  if (k === "pdf") return `<button class="btn finish-rect" onclick="exportPDF()" title="Save PDF Scoresheet" aria-label="Save PDF Scoresheet">${rect(ICON_PDF, "Save PDF Scoresheet")}</button>`;
+  if (k === "pdf") return `<button class="btn finish-rect" onclick="exportPDF()" title="Save Scoresheet PDF" aria-label="Save Scoresheet PDF">${rect(ICON_PDF, "Save Scoresheet PDF")}</button>`;
   if (k === "confirm")
-    return `<a class="btn finish-rect jd-upload-btn" href="${FINISH_CONFIRM_URL}" target="_blank" rel="noopener noreferrer" title="Game Confirmation" aria-label="Game Confirmation" onclick="markFinish('confirm')">${rect(ICON_FAWKES, "Open Game Confirmation Form")}</a>`;
+    return `<a class="btn finish-rect jd-upload-btn" href="${FINISH_CONFIRM_URL}" target="_blank" rel="noopener noreferrer" title="Game Confirmation" aria-label="Game Confirmation" onclick="markFinish('confirm')">${rect(ICON_FAWKES, "Open the Game Confirmation Form")}</a>`;
   if (k === "photos") {
     const w = gameState.craftPrizeWinner;
     const note = w && gameState.teams[w.ti] ? "" : `<p class="finish-warn">No Craft Prize winner drawn yet. Skip that name if this game has none.</p>`;

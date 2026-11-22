@@ -13,7 +13,7 @@ describe("v22.54 Game Submission section", () => {
 
   it("titles the section Game Submission", () => {
     const h = window.document.querySelector("#sec-export .section-header h2");
-    assert.equal(h.textContent.trim(), "Game Submission");
+    assert.equal(h.textContent.trim(), "Game Confirmation");
     assert.ok(h.querySelector("svg.icon-ui"), "clipboard pictograph missing");
   });
 
@@ -24,6 +24,6 @@ describe("v22.54 Game Submission section", () => {
     const steps = [...body.querySelectorAll("ol.finish-list > li")];
     assert.equal(steps.length, 4);
     const act = (li) => li.querySelector(".finish-rect").textContent.trim();
-    assert.deepEqual(steps.map(act), ["Save a Scoresheet backup file", "Open the Winner Photos Form", "Save PDF Scoresheet", "Open Game Confirmation Form"]);
+    assert.deepEqual(steps.map(act), ["Save a Scoresheet backup file", "Open the Winner Photos Form", "Save Scoresheet PDF", "Open the Game Confirmation Form"]);
   });
 });
