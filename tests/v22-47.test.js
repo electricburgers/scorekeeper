@@ -37,7 +37,7 @@ describe("v22.47 closing tutorial steps and FAQ", () => {
     const iPhotos = src.indexOf("Winner Photos is the link to use at the end of the game");
     const iConfirm = src.indexOf("Game Confirmation. It opens the form in a new tab");
     assert.ok(iPdf > 0 && iPhotos > iPdf && iConfirm > iPhotos, "steps missing or out of order");
-    assert.match(src, /winners. names and photos/);
+    assert.match(src, /winning teams. names and photos/);
   });
 
   it("FAQ has the wrap-up walkthrough in backup, Winner Photos, PDF, Game Confirmation order", async () => {
