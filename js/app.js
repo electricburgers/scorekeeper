@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.56"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 21, 2026 7:28 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.57"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 21, 2026 7:41 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1750,7 +1750,7 @@ function renderLeftBody() {
     <h3 class="export-group-title">Download Scoresheet</h3>
     <div class="export-bar"><button class="btn export-sq" onclick="exportXLSXBackup()" title="Export XLSX backup" aria-label="Export XLSX backup">${ICON_SHEET}<span class="export-sq-label">XLSX</span></button><button class="btn export-sq" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${ICON_PDF}<span class="export-sq-label">PDF</span></button></div>
     <h3 class="export-group-title">Submit Results</h3>
-    <div class="export-bar"><a class="btn export-sq photo-upload-btn" href="https://form.jotform.com/263015326852050" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${ICON_CAMERA}<span class="export-sq-label">Winner Photos</span></a><a class="btn export-sq jd-upload-btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer" onclick="markFinish('confirm')">${ICON_FAWKES}<span class="export-sq-label">Game Confirmation</span></a></div>
+    <div class="export-bar"><a class="btn export-sq photo-upload-btn" href="https://form.jotform.com/263015326852050" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${ICON_CAMERA}<span class="export-sq-label">Winner Photos</span></a><a class="btn export-sq jd-upload-btn" href="https://app.jotform.com/261954293403156" target="_blank" rel="noopener noreferrer" onclick="markFinish('confirm')">${ICON_FAWKES}<span class="export-sq-label">Game Confirmation</span></a></div>${winnerCopyButtonsHtml()}
     <div class="finish-card" id="finishChecklist">${finishChecklistHtml()}</div>
     <div class="export-prompt" id="exportPrompt"><p>Export complete. Clear session?</p><div style="display:flex;gap:8px;"><button class="btn btn-accent" onclick="clearAfterExport();">Yes</button><button class="btn" onclick="document.getElementById('exportPrompt').classList.remove('show');">No</button></div></div>
     <div style="margin-top:14px;text-align:center;"><button class="btn btn-danger" onclick="confirmClearSession()">${ICON_TRASH} Clear Session</button></div>

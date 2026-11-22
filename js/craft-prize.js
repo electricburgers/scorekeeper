@@ -523,7 +523,11 @@ function exportCraftEligible() {
 function copyCraftEligible(btn) {
   const blocked = craftEligibleBlocker();
   if (blocked) return appAlert(blocked);
-  const text = craftEligibleNames().join("\n");
+  copyTextToClipboard(craftEligibleNames().join("\n"), btn, "Couldn't copy — use the TXT button instead.");
+}
+// Shared one-tap copy: flashes "Copied" on the pressed button. Uses navigator.clipboard when it
+// exists, else the execCommand fallback.
+function copyTextToClipboard(text, btn, failMsg) {
   const ok = () => flashBtn(btn, CHECK_ICON_SVG + " Copied");
   const fail = () => {
     // execCommand is deprecated, but navigator.clipboard is undefined on a plain-http origin —
@@ -536,14 +540,34 @@ function copyCraftEligible(btn) {
       ta.select();
       const copied = document.execCommand("copy");
       ta.remove();
-      copied ? ok() : appAlert("Couldn't copy — use the TXT button instead.");
+      copied ? ok() : appAlert(failMsg || "Couldn't copy.");
     } catch (e) {
-      appAlert("Couldn't copy — use the TXT button instead.");
+      appAlert(failMsg || "Couldn't copy.");
     }
   };
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(ok, fail);
   } else fail();
+}
+// Winner Photos form asks the host to type team names: one tap copies each excluded (top N)
+// team's name, and the craft prize winner's, so nothing gets re-typed. Names are looked up at
+// tap time (by team index) so a rename after render can't copy a stale string.
+function copyTeamName(btn, ti) {
+  const t = gameState.teams[ti];
+  if (!t) return;
+  copyTextToClipboard(t.name || "Team " + (ti + 1), btn);
+}
+function winnerCopyButtonsHtml() {
+  if (!gameState.teams.length) return "";
+  const nm = (ti) => esc(gameState.teams[ti].name || "Team " + (ti + 1));
+  const btn = (ti, label) =>
+    `<button class="btn wc-btn" onclick="copyTeamName(this,${ti})" title="Copy team name" aria-label="Copy ${label}: ${nm(ti)}"><span class="wc-label">${label}</span><span class="wc-name">${nm(ti)}</span><span class="wc-icon">${ICON_CLIPBOARD}</span></button>`;
+  const rows = ranked()
+    .slice(0, gameState.meta.excludeTopN || 2)
+    .map((r, i) => btn(r.index, "#" + (i + 1)));
+  const w = gameState.craftPrizeWinner;
+  if (w && gameState.teams[w.ti]) rows.push(btn(w.ti, "Craft Prize"));
+  return `<div class="winner-copy">${rows.join("")}</div>`;
 }
 // Momentary label swap for confirmation — the app has no toast, and the button is already
 // under the pointer that pressed it. Restores from the original label, so a double-tap mid-

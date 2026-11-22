@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.57 - 2026-11-21
+
+- **Copy team names for Winner Photos:** under the Winner Photos / Game Confirmation buttons in Game Submission, one full-width button per excluded top team (#1, #2, … up to the Exclude Top setting) and one for the Craft Prize winner once drawn. Each shows the team name; one tap copies it (flashes "Copied"), so the host doesn't re-type names into the form. Names are read at tap time.
+- **Shared copy helper:** `copyTextToClipboard()` (clipboard API with the execCommand fallback) now backs both these buttons and the Craft Prize Eligible List copy.
+- **What's new:** lists v22.57, v22.56 and v22.55.
+
 ## v22.56 - 2026-11-21
 
 - **Paper plane colors:** the Game Submission plane is now sky blue (outline `#4db8ff` dark / `#1b6fb8` light) with a pale keel fold and lighter wind lines, via a new `.icon-plane` class and `--tint-plane` tokens, instead of borrowing the clipboard's tan.
