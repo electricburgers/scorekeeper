@@ -23,7 +23,7 @@ describe("v22.59 Game Submission steps", () => {
     try {
       evalIn(window, "gameState = migrateState(JSON.parse(SAMPLE_GAME_JSON)); renderAll();");
       assert.equal(window.document.querySelectorAll("#finishChecklist [disabled], #finishChecklist [aria-disabled]").length, 0);
-      assert.match(window.document.querySelector("#finishChecklist li").textContent, /\(Optional\)/);
+      assert.match(window.document.querySelector("#finishChecklist li").textContent, /\(Optional, just in case\)/);
     } finally {
       window.close();
     }

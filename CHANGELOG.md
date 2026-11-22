@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.64 - 2026-11-22
+
+- **Game Submission wording:** backup button "Save a Scoresheet backup file" (step text now "Save a backup file (Optional, just in case)"), photos button "Open the Winner Photos Form", step 2 "Submit the winners' names and photos", step 4 "Submit your Game Confirmation".
+- Button text wraps inside the rectangle instead of overflowing.
+- Removed the "Finish game" heading above the list.
+
 ## v22.63 - 2026-11-22
 
 - **Game Submission button labels:** "Save PDF Scoresheet" (subtitle removed), "Submit Winners' Photos", "Open Game Confirmation Form". The PDF step's hint now ends "...confirmation page".

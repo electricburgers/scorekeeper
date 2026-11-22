@@ -3252,11 +3252,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .finish-text{flex:1;min-width:0;font-size:.9rem;font-weight:600}
 .finish-hint{display:block;font-size:.75rem;font-weight:400;color:var(--text-muted)}
 .finish-body .winner-copy{margin:0;max-width:22rem;width:100%}
-.finish-rect{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;width:100%;max-width:22rem;min-height:4.6rem;padding:8px 16px;text-align:left;text-decoration:none;font-size:3.4rem;line-height:1}
+.finish-rect{box-sizing:border-box;overflow:hidden;height:auto;white-space:normal;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;width:100%;max-width:22rem;min-height:4.6rem;padding:8px 16px;text-align:left;text-decoration:none;font-size:3.4rem;line-height:1}
 .finish-rect .icon-ui,.finish-rect .icon-emoji{flex:none;font-size:3.4rem;width:1em;height:1em;line-height:1}
 .finish-rect .icon-fawkes{width:1.15em;height:1.15em}
-.finish-rect-text{display:flex;flex-direction:column;gap:2px;min-width:0;font-family:var(--font-body)}
-.finish-rect-label{font-size:1rem;font-weight:800;line-height:1.15}
+.finish-rect-text{flex:1 1 0;display:flex;flex-direction:column;gap:2px;min-width:0;font-family:var(--font-body)}
+.finish-rect-label{font-size:1rem;font-weight:800;line-height:1.15;white-space:normal;overflow-wrap:anywhere}
 .finish-rect-sub{font-size:.78rem;font-weight:600;line-height:1.2;white-space:normal}
 .finish-body .wc-btn{height:auto;min-height:44px;white-space:normal;overflow:visible;flex-wrap:wrap;min-width:0}
 .finish-body .wc-label{min-width:4.2rem;line-height:1.1}

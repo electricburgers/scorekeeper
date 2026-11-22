@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.63"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 22, 2026 3:42 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.64"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 22, 2026 3:50 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1109,10 +1109,10 @@ let finishDone = new Set();
 const FINISH_PHOTOS_URL = "https://form.jotform.com/263015326852050";
 const FINISH_CONFIRM_URL = "https://app.jotform.com/261954293403156";
 const FINISH_STEPS = [
-  { k: "backup", label: "Save a backup file (Optional)", hint: "So you can reopen the game later" },
-  { k: "photos", label: "Winner Photos", hint: "Open the form, then copy the winning teams' names into it" },
+  { k: "backup", label: "Save a backup file (Optional, just in case)", hint: "So you can reopen the game later" },
+  { k: "photos", label: "Submit the winners' names and photos", hint: "Open the form, then copy the winning teams' names into it" },
   { k: "pdf", label: "Save the PDF scoresheet", hint: "Download a copy to attach to the confirmation page" },
-  { k: "confirm", label: "Game Confirmation", hint: "Submit the PDF you just saved" },
+  { k: "confirm", label: "Submit your Game Confirmation", hint: "Submit the PDF you just saved" },
 ];
 
 
@@ -2789,19 +2789,19 @@ function adjPts(ti, d) {
 function finishActionHtml(k) {
   const rect = (icon, label, sub) =>
     `${icon}<span class="finish-rect-text"><span class="finish-rect-label">${label}</span>${sub ? `<span class="finish-rect-sub">${sub}</span>` : ""}</span>`;
-  if (k === "backup") return `<button class="btn finish-rect" onclick="saveToFile()" title="Save backup file" aria-label="Save backup file">${rect(ICON_SAVE, "Save backup file")}</button>`;
+  if (k === "backup") return `<button class="btn finish-rect" onclick="saveToFile()" title="Save a Scoresheet backup file" aria-label="Save a Scoresheet backup file">${rect(ICON_SAVE, "Save a Scoresheet backup file")}</button>`;
   if (k === "pdf") return `<button class="btn finish-rect" onclick="exportPDF()" title="Save PDF Scoresheet" aria-label="Save PDF Scoresheet">${rect(ICON_PDF, "Save PDF Scoresheet")}</button>`;
   if (k === "confirm")
     return `<a class="btn finish-rect jd-upload-btn" href="${FINISH_CONFIRM_URL}" target="_blank" rel="noopener noreferrer" title="Game Confirmation" aria-label="Game Confirmation" onclick="markFinish('confirm')">${rect(ICON_FAWKES, "Open Game Confirmation Form")}</a>`;
   if (k === "photos") {
     const w = gameState.craftPrizeWinner;
     const note = w && gameState.teams[w.ti] ? "" : `<p class="finish-warn">No Craft Prize winner drawn yet. Skip that name if this game has none.</p>`;
-    return `<a class="btn finish-rect photo-upload-btn" href="${FINISH_PHOTOS_URL}" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${rect(ICON_CAMERA, "Submit Winners' Photos")}</a>${winnerCopyButtonsHtml()}${note}`;
+    return `<a class="btn finish-rect photo-upload-btn" href="${FINISH_PHOTOS_URL}" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${rect(ICON_CAMERA, "Open the Winner Photos Form")}</a>${winnerCopyButtonsHtml()}${note}`;
   }
   return "";
 }
 function finishChecklistHtml() {
-  let h = `<div class="finish-head"><b>Finish game</b></div><ol class="finish-list">`;
+  let h = `<ol class="finish-list">`;
   FINISH_STEPS.forEach((x, i) => {
     const done = finishDone.has(x.k);
     h += `<li class="finish-item${done ? " done" : ""}"><span class="finish-box" aria-hidden="true">${done ? "\u2713" : i + 1}</span><div class="finish-body"><span class="finish-text">${x.label}${done ? '<span class="sr-only"> (done)</span>' : ""}${x.hint ? `<span class="finish-hint">${x.hint}</span>` : ""}</span>${finishActionHtml(x.k)}</div></li>`;
