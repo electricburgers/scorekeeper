@@ -2,6 +2,16 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.66] - 21 Nov 2026
+
+### Changed
+- **Game Submission screenshot** (`export-bar`, dark and light) regenerated for the new numbered-step layout (backup Optional, Winner Photos with team-name Copy buttons, Download PDF, Game Confirmation).
+- **"How do I wrap up after a finished game?"** rewritten around the four numbered steps.
+- **"What's the difference between…"** now covers the PDF, Winner Photos and Game Confirmation only; XLSX mentions removed throughout (the XLSX button is gone from the app).
+
+### Removed
+- **"What does the XLSX export look like?"** and its `xlsx-export.webp` screenshot.
+
 ## [1.65] - 21 Nov 2026
 
 ### Changed

@@ -40,14 +40,15 @@ describe("v22.47 closing tutorial steps and FAQ", () => {
     assert.match(src, /winning teams' names and photos/);
   });
 
-  it("FAQ has the wrap-up walkthrough in PDF, Winner Photos, Game Confirmation order", async () => {
+  it("FAQ has the wrap-up walkthrough in backup, Winner Photos, PDF, Game Confirmation order", async () => {
     const window = await loadFaqWindow();
     try {
       const item = window.document.getElementById("q-how-do-i-wrap-up-a-finished-game");
       assert.ok(item, "wrap-up FAQ item missing");
-      const steps = [...item.querySelectorAll("ol li strong")].map((s) => s.textContent);
-      const pos = ["PDF", "Winner Photos", "Game Confirmation"].map((t) => steps.indexOf(t));
-      assert.ok(pos[0] >= 0 && pos[1] > pos[0] && pos[2] > pos[1], "buttons missing or out of order: " + steps);
+      const steps = [...item.querySelectorAll("ol > li > strong:first-child")].map((s) => s.textContent);
+      const pos = ["Save a backup file", "Winner Photos", "Download PDF", "Game Confirmation"].map((t) => steps.findIndex((x) => x.startsWith(t)));
+      assert.deepEqual(pos, [0, 1, 2, 3], "steps missing or out of order: " + steps);
+      assert.match(item.textContent, /Optional/);
       assert.match(item.textContent, /winning teams' names and photos/);
     } finally {
       window.close();
