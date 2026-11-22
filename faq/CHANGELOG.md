@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.74] - 22 Nov 2026
+
+### Changed
+
+- **Game Confirmation:** step 3's button is called "Download PDF" in the wrap-up steps and the PDF/photos/confirmation comparison, and the `export-bar` screenshots (dark + light) are regenerated for app v22.73.
+
 ## [1.73] - 22 Nov 2026
 
 ### Changed

@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.72"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 22, 2026 4:43 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.73"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 22, 2026 4:48 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -2790,7 +2790,7 @@ function finishActionHtml(k) {
   const rect = (icon, label, sub) =>
     `${icon}<span class="finish-rect-text"><span class="finish-rect-label">${label}</span>${sub ? `<span class="finish-rect-sub">${sub}</span>` : ""}</span>`;
   if (k === "backup") return `<button class="btn finish-rect" onclick="saveToFile()" title="Save a Scoresheet backup file" aria-label="Save a Scoresheet backup file">${rect(ICON_SAVE, "Save a Scoresheet backup file")}</button>`;
-  if (k === "pdf") return `<button class="btn finish-rect" onclick="exportPDF()" title="Download Scoresheet PDF" aria-label="Download Scoresheet PDF">${rect(ICON_PDF, '<span class="lb-line">Download</span> <span class="lb-line">Scoresheet PDF</span>')}</button>`;
+  if (k === "pdf") return `<button class="btn finish-rect" onclick="exportPDF()" title="Download PDF" aria-label="Download PDF">${rect(ICON_PDF, "Download PDF")}</button>`;
   if (k === "confirm")
     return `<a class="btn finish-rect jd-upload-btn" href="${FINISH_CONFIRM_URL}" target="_blank" rel="noopener noreferrer" title="Game Confirmation" aria-label="Game Confirmation" onclick="markFinish('confirm')">${rect(ICON_FAWKES, "Open the Game Confirmation Form")}</a>`;
   if (k === "photos") {

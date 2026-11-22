@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.73 - 2026-11-22
+
+- **Step 3 button renamed "Download PDF"** (one line).
+- FAQ v1.74: button name updated in the wrap-up steps, regenerated `export-bar` screenshots.
+
 ## v22.72 - 2026-11-22
 
 - **Copy-name labels** (#1/#2/Craft Prize) in step 2 moved a bit to the left (narrower label column, so team names also fit on one line more often).
