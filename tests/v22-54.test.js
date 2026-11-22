@@ -23,7 +23,7 @@ describe("v22.54 Game Submission section", () => {
     assert.ok(!body.querySelector('[onclick*="exportXLSXBackup"]'), "XLSX button should be gone");
     const steps = [...body.querySelectorAll("ol.finish-list > li")];
     assert.equal(steps.length, 4);
-    const act = (li) => li.querySelector(".finish-act, .export-sq").textContent.trim();
-    assert.deepEqual(steps.map(act), ["Save backup file", "Winner Photos", "PDF", "Game Confirmation"]);
+    const act = (li) => li.querySelector(".finish-rect").textContent.trim();
+    assert.deepEqual(steps.map(act), ["Save backup file", "Winner Photos", "PDFTo attach to the confirmation page", "Game Confirmation"]);
   });
 });

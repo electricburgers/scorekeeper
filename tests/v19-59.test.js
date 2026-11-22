@@ -201,7 +201,7 @@ describe("v19.59 — icons", () => {
       assert.ok(a.querySelector("svg.icon-camera"), "camera icon missing");
       assert.equal(a.querySelector("span").textContent, "Winner Photos");
       // Step 2 of the Game Submission list; the copy buttons for the team names sit right under it.
-      assert.equal(a.closest("li").querySelector("a.export-sq"), a);
+      assert.equal(a.closest("li").querySelector("a.finish-rect"), a);
       assert.ok(a.closest(".finish-body").querySelector(".winner-copy"), "team name copy buttons missing under the link");
       assert.match(evalIn(window, "ICON_CAMERA"), /icon-camera|📷/);
     } finally {
@@ -218,7 +218,7 @@ describe("v19.59 — icons", () => {
       );
       const a = window.document.querySelector("a.jd-upload-btn");
       assert.ok(a, "Game Confirmation button missing");
-      assert.ok(a.classList.contains("export-sq"));
+      assert.ok(a.classList.contains("finish-rect"));
       assert.ok(a.querySelector("svg.icon-fawkes"), "Guy Fawkes icon missing");
       const label = a.querySelector("span").textContent;
       assert.equal(label, "Game Confirmation");
