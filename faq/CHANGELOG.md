@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.69] - 22 Nov 2026
+
+### Changed
+
+- **Game Confirmation section** (formerly Game Submission): wrap-up steps, alt text and button names rewritten for app v22.68, and the `export-bar` screenshots (dark + light) regenerated with the outlined rectangle buttons.
+
 ## [1.68] - 21 Nov 2026
 
 ### Changed

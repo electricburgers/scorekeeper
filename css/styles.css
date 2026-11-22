@@ -3252,16 +3252,17 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .finish-text{flex:1;min-width:0;font-size:.9rem;font-weight:600}
 .finish-hint{display:block;font-size:.75rem;font-weight:400;color:var(--text-muted)}
 .finish-body .winner-copy{margin:0;max-width:22rem;width:100%}
-.finish-rect{box-sizing:border-box;overflow:hidden;height:auto;white-space:normal;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;width:100%;max-width:22rem;min-height:4.6rem;padding:8px 16px;text-align:left;text-decoration:none;font-size:3.4rem;line-height:1}
+.finish-rect{border:2px solid var(--accent-gold);box-sizing:border-box;overflow:hidden;height:auto;white-space:normal;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;width:100%;max-width:22rem;min-height:4.6rem;padding:8px 16px;text-align:left;text-decoration:none;font-size:3.4rem;line-height:1}
 .finish-rect .icon-ui,.finish-rect .icon-emoji{flex:none;font-size:3.4rem;width:1em;height:1em;line-height:1}
 .finish-rect .icon-fawkes{width:1.35em;height:1.35em}
 .finish-rect .icon-save{--icon-tint:var(--tint-flask)}
 .finish-rect-label .lb-line{display:block}
+.finish-body .wc-label.wc-num{font-size:.95rem}
 .finish-rect-text{flex:1 1 0;display:flex;flex-direction:column;gap:2px;min-width:0;font-family:var(--font-body)}
 .finish-rect-label{font-size:1rem;font-weight:800;line-height:1.15;white-space:normal;overflow-wrap:anywhere}
 .finish-rect-sub{font-size:.78rem;font-weight:600;line-height:1.2;white-space:normal}
 .finish-body .wc-btn{height:auto;min-height:44px;white-space:normal;overflow:visible;flex-wrap:wrap;min-width:0}
-.finish-body .wc-label{font-size:.95rem;flex:none;width:4.6rem;min-width:0;text-align:center;line-height:1.1}
+.finish-body .wc-label{flex:none;width:4.6rem;min-width:0;text-align:center;line-height:1.1}
 .finish-body .wc-name{min-width:0;overflow-wrap:anywhere;word-break:normal;text-align:left}
 
 .btn.flash-copied,.btn.flash-copied:hover{background:var(--correct-badge-bg);color:var(--correct-badge-fg);border-color:var(--correct-badge-bg);animation:flashPop .32s ease-out}

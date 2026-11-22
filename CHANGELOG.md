@@ -14,6 +14,13 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.68 - 2026-11-22
+
+- **Game Confirmation step buttons have a gold outline** to draw the eye.
+- **Copy-name labels:** only the #1/#2/#3 numbers stay bigger; "Craft Prize" is back to its original size (`.wc-num`).
+- Winner Photos and Game Confirmation form links already open in a new tab (`target="_blank"`); the PDF button still downloads in place (opening it in a tab would trigger Chrome's PDF viewer instead of saving; iOS already opens it in a new tab).
+- FAQ v1.69: Game Confirmation steps text and regenerated `export-bar` screenshots.
+
 ## v22.67 - 2026-11-22
 
 - **Step 3 renamed "Save the Scoresheet"** (its button is still "Download Scoresheet PDF").
