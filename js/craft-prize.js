@@ -528,7 +528,7 @@ function copyCraftEligible(btn) {
 // Shared one-tap copy: flashes "Copied" on the pressed button. Uses navigator.clipboard when it
 // exists, else the execCommand fallback.
 function copyTextToClipboard(text, btn, failMsg) {
-  const ok = () => flashBtn(btn, CHECK_ICON_SVG + " Copied");
+  const ok = () => flashBtn(btn, ICON_DONE + " Copied");
   const fail = () => {
     // execCommand is deprecated, but navigator.clipboard is undefined on a plain-http origin —
     // which is exactly what a laptop serving this over venue wifi looks like. Keep the fallback.
@@ -580,11 +580,23 @@ function flashBtn(btn, label, ms) {
   if (btn.dataset.flashRestore == null)
     btn.dataset.flashRestore = btn.innerHTML;
   clearTimeout(+btn.dataset.flashTimer || 0);
+  clearTimeout(+btn.dataset.flashOutTimer || 0);
+  btn.classList.remove("flash-out");
   btn.innerHTML = label;
+  // Colored "Copied" state: re-adding the class after a reflow replays the tap pop on a re-tap.
+  btn.classList.remove("flash-copied");
+  void btn.offsetWidth;
+  btn.classList.add("flash-copied");
   btn.dataset.flashTimer = setTimeout(() => {
-    btn.innerHTML = btn.dataset.flashRestore;
-    delete btn.dataset.flashRestore;
-    delete btn.dataset.flashTimer;
+    // Auto-dismiss: play the fade-out, then restore the original label.
+    btn.classList.add("flash-out");
+    btn.dataset.flashOutTimer = setTimeout(() => {
+      btn.innerHTML = btn.dataset.flashRestore;
+      btn.classList.remove("flash-copied", "flash-out");
+      delete btn.dataset.flashRestore;
+      delete btn.dataset.flashTimer;
+      delete btn.dataset.flashOutTimer;
+    }, 260);
   }, ms || 1500);
 }
 

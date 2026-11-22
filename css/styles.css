@@ -3253,10 +3253,15 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .finish-text{flex:1;min-width:0;font-size:.9rem;font-weight:600}
 .finish-hint{display:block;font-size:.75rem;font-weight:400;color:var(--text-muted)}
 .finish-body .winner-copy{margin:0;max-width:22rem;width:100%}
-.export-bar.finish-sq{justify-content:start;padding:0}
+.export-bar.finish-sq{justify-content:center;padding:0}
 .finish-body .wc-btn{height:auto;min-height:44px;white-space:normal;overflow:visible;flex-wrap:wrap;min-width:0}
 .finish-body .wc-label{min-width:0}
 .finish-body .wc-name{min-width:0;overflow-wrap:anywhere;word-break:normal;text-align:left}
+
+.btn.flash-copied,.btn.flash-copied:hover{background:var(--correct-badge-bg);color:var(--correct-badge-fg);border-color:var(--correct-badge-bg);animation:flashPop .32s ease-out}
+.btn.flash-copied.flash-out{animation:flashOut .26s ease-in forwards}
+@keyframes flashPop{0%{transform:scale(.94)}55%{transform:scale(1.04)}100%{transform:scale(1)}}
+@keyframes flashOut{to{opacity:0;transform:scale(.96)}}
 
 /* Reduced motion: honor the OS setting for every animation and transition. Short and simple
    beats surgical here; essential state changes still happen, they just don't move. */

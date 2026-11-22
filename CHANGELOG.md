@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.61 - 2026-11-21
+
+- **"Copied" confirmation is colored and animated:** the team-name copy buttons under Winner Photos turn green with a short pop on tap, then fade out when the confirmation auto-dismisses (`flashBtn()` adds `.flash-copied` / `.flash-out`; reduced-motion honored).
+- **Winner Photos and PDF buttons centered** in their Game Submission steps.
+
 ## v22.60 - 2026-11-21
 
 - **Game Submission buttons back to squares:** Winner Photos, PDF and Game Confirmation use the square `.export-sq` buttons again (inside their numbered steps). The team-name copy rows under Winner Photos now wrap long names instead of cutting them off.
