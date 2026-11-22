@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.78] - 22 Nov 2026
+
+### Changed
+
+- **Wrapping up:** the `clear-scoresheet-prompt` screenshots (dark + light) are regenerated for app v22.80, and the answers now quote "Clear the Scoresheet and start a new game?".
+
 ## [1.77] - 22 Nov 2026
 
 ### Changed
