@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.77 - 2026-11-22
+
+- **Copy on a winner button no longer wraps long team names.** The Copy chip now holds both "Copy" and "✓ Copied" stacked in one spot, so it is always as wide as the wider label and tapping it changes only the colour and which label shows. Previously the longer "Copied" widened the chip and pushed the name onto a second line.
+- FAQ v1.76: regenerated the Craft Prize winner screenshots (dark + light) from the real app, now showing the "Excluded from the draw" box and the light-mode rank colour.
+
 ## v22.76 - 2026-11-22
 
 - **Craft Prize "Excluded" list numbers are readable in light mode.** The #1/#2/#3 ranks now use the darker gold already used for the Game Confirmation labels instead of the pale gold (1.8:1 on white). Dark mode is unchanged.

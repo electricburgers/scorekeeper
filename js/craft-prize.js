@@ -563,7 +563,7 @@ function winnerCopyButtonsHtml() {
   if (!gameState.teams.length) return "";
   const nm = (ti) => esc(gameState.teams[ti].name || "Team " + (ti + 1));
   const btn = (ti, label) =>
-    `<button class="btn wc-btn" onclick="copyTeamName(this,${ti})" title="Copy team name" aria-label="Copy ${label}: ${nm(ti)}"><span class="wc-label${label[0] === "#" ? " wc-num" : ""}">${label.replace(" ", "<br>")}</span><span class="wc-name">${nm(ti)}</span><span class="wc-copy">Copy</span></button>`;
+    `<button class="btn wc-btn" onclick="copyTeamName(this,${ti})" title="Copy team name" aria-label="Copy ${label}: ${nm(ti)}"><span class="wc-label${label[0] === "#" ? " wc-num" : ""}">${label.replace(" ", "<br>")}</span><span class="wc-name">${nm(ti)}</span><span class="wc-copy"><span class="wc-copy-idle">Copy</span><span class="wc-copy-done" aria-hidden="true">${ICON_DONE} Copied</span></span></button>`;
   const rows = ranked()
     .slice(0, gameState.meta.excludeTopN || 2)
     .map((r, i) => btn(r.index, "#" + (i + 1)));
@@ -571,22 +571,15 @@ function winnerCopyButtonsHtml() {
   if (w && gameState.teams[w.ti]) rows.push(btn(w.ti, "Craft Prize"));
   return `<div class="winner-copy">${rows.join("")}</div>`;
 }
-// Copy confirmation for the winner buttons: only the small "Copy" chip changes, in place. The
-// chip's width is pinned so the longer "Copied" can't reflow the team name beside it, and the
-// button's badge/name never swap, fade or move — nothing to flicker.
+// Copy confirmation for the winner buttons: only the small Copy chip changes, in place. Both
+// labels ("Copy" and "✓ Copied") are always in the chip, stacked in one grid cell, so the chip is
+// permanently as wide as the wider one and toggling a class can't reflow the team name beside it.
+// No text swap, no fade, no measured widths — nothing to flicker or wrap.
 function flashChip(chip) {
   clearTimeout(+chip.dataset.flashTimer || 0);
-  if (chip.dataset.flashRestore == null) {
-    chip.dataset.flashRestore = chip.innerHTML;
-    chip.style.minWidth = chip.offsetWidth + "px";
-  }
-  chip.innerHTML = ICON_DONE + " Copied";
   chip.classList.add("wc-copied");
   chip.dataset.flashTimer = setTimeout(() => {
-    chip.innerHTML = chip.dataset.flashRestore;
     chip.classList.remove("wc-copied");
-    chip.style.minWidth = "";
-    delete chip.dataset.flashRestore;
     delete chip.dataset.flashTimer;
   }, 1500);
 }

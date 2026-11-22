@@ -50,7 +50,7 @@ comparison it exists to make.
 | `craft-prize-choose.webp` | The Craft Prize Drawing section before it's opened — the single square **Choose / Craft Prize / Winner** button with the beer icon (v19.65). Dark + light. | Craft Prize Drawing |
 | `craft-prize.webp` | The Craft Prize Drawing section open pre-draw, showing the Exclude Top / Drumroll-seconds steppers and the square **Start Drumroll** button (v19.60). | Craft Prize Drawing |
 | `craft-prize-drumroll.webp` | The Craft Prize drumroll actively playing, right after clicking Start Drumroll — the spinning name and countdown bar. | Craft Prize Drawing |
-| `craft-prize-winner.webp` | The finished draw — winning team announced, with the **Clear** button next to the result and the Winner Announcement Script below. | Craft Prize Drawing |
+| `craft-prize-winner.webp` | The finished draw — the "Excluded from the draw" top-teams box, the winning team announced with the **Clear** button next to the result, and the Winner Announcement Script below (v22.77). Dark + light. | Craft Prize Drawing |
 | `export-bar.webp` | The Game Confirmation section as one numbered list — Save a Scoresheet backup (Optional), Submit the winners' names and photos (📷 form button with the Copy buttons for the top teams and craft prize winner under it), Save the Scoresheet (Download PDF), Submit your Game Confirmation (🎭 form button), then Clear Session. Each step button is a wide rectangle with a gold outline and the picto on the left (v22.74). Dark + light. | Exporting |
 | `pdf-export.webp` | The downloaded PDF scoresheet — same header plus full standings. | Exporting |
 | `jd-upload-form.webp` | The Game Confirmation page, opened in its own browser tab. | Exporting |

@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.76] - 22 Nov 2026
+
+### Changed
+
+- **Craft Prize Drawing:** the `craft-prize-winner` screenshots (dark + light) are regenerated for app v22.77, now showing the "Excluded from the draw" box and the darker light-mode rank numbers. The image size attributes are updated to match.
+
 ## [1.75] - 22 Nov 2026
 
 ### Changed
