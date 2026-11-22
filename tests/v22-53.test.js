@@ -39,10 +39,11 @@ describe("v22.53 timer progress bar", () => {
     evalIn(window, "resetQTimer();");
     assert.equal(evalIn(window, "qtTotalMs"), 180000);
   });
-  it("has no animation/transition and never uses the warn/crit colors", () => {
+  it("only fades opacity (no animation) and never uses the warn/crit colors", () => {
     const css = fs.readFileSync(path.join(__dirname, "../css/styles.css"), "utf8");
     const rules = css.split("\n").filter((l) => /^\.qtimer-bar/.test(l)).join("\n");
     assert.ok(rules.length > 0);
-    assert.doesNotMatch(rules, /animation|transition|accent-gold|danger/);
+    assert.doesNotMatch(rules, /animation|accent-gold|danger/);
+    assert.match(rules, /transition:opacity/);
   });
 });

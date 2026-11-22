@@ -1222,8 +1222,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    0:30 warn/crit thresholds fall, and the fill visibly passes them. The notches are cut in
    --bg-primary so they show against both the fill and the track in either theme. flex-basis:100%
    puts the bar on its own line under the display/buttons in both widget copies. No flashing. */
-.qtimer-bar{visibility:hidden;position:relative;flex:0 0 100%;height:4px;margin-top:2px;border-radius:2px;background:var(--border-strong);overflow:hidden}
-.qtimer-bar.qt-live{visibility:visible}
+.qtimer-bar{opacity:.3;transition:opacity .4s ease;position:relative;flex:0 0 100%;height:4px;margin-top:2px;border-radius:2px;background:var(--border-control);overflow:hidden}
+.qtimer-bar.qt-live{opacity:1}
+@media (prefers-reduced-motion:reduce){.qtimer-bar{transition:none}}
 .qtimer-bar-fill{position:absolute;inset:0;background:var(--text-primary);transform-origin:left center;transform:scaleX(1)}
 .qtimer-bar::before,.qtimer-bar::after{content:"";position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--bg-primary);z-index:1;display:none}
 .qtimer-bar[data-n1]::before{display:block;left:var(--qt-n1)}
