@@ -2,6 +2,11 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.68] - 21 Nov 2026
+
+### Changed
+- **Game Submission screenshot** (`export-bar`, dark + light) regenerated for app v22.61: Winner Photos and PDF are centered in their steps.
+
 ## [1.67] - 21 Nov 2026
 
 ### Changed
