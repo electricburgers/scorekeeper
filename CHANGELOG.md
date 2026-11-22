@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.72 - 2026-11-22
+
+- **Copy-name labels** (#1/#2/Craft Prize) in step 2 moved a bit to the left (narrower label column, so team names also fit on one line more often).
+- **Step 1 floppy disk:** the silver strokes now sit under the purple outline (drawn first in `ICON_SAVE_PICT`).
+- FAQ v1.73: regenerated `export-bar` screenshots.
+
 ## v22.71 - 2026-11-22
 
 - **Game Confirmation steps lose their subtitles** (the hint line under each step title) so the list is shorter and less wordy.

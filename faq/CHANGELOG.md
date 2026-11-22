@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.73] - 22 Nov 2026
+
+### Changed
+
+- **Game Confirmation screenshot** (`export-bar`, dark + light) regenerated for app v22.72: place labels shifted left and the floppy's silver strokes sit under the purple outline.
+
 ## [1.72] - 22 Nov 2026
 
 ### Changed
