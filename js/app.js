@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.62"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 22, 2026 3:29 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.63"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 22, 2026 3:42 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1111,7 +1111,7 @@ const FINISH_CONFIRM_URL = "https://app.jotform.com/261954293403156";
 const FINISH_STEPS = [
   { k: "backup", label: "Save a backup file (Optional)", hint: "So you can reopen the game later" },
   { k: "photos", label: "Winner Photos", hint: "Open the form, then copy the winning teams' names into it" },
-  { k: "pdf", label: "Save the PDF scoresheet", hint: "Download a copy to attach to the confirmation" },
+  { k: "pdf", label: "Save the PDF scoresheet", hint: "Download a copy to attach to the confirmation page" },
   { k: "confirm", label: "Game Confirmation", hint: "Submit the PDF you just saved" },
 ];
 
@@ -2790,13 +2790,13 @@ function finishActionHtml(k) {
   const rect = (icon, label, sub) =>
     `${icon}<span class="finish-rect-text"><span class="finish-rect-label">${label}</span>${sub ? `<span class="finish-rect-sub">${sub}</span>` : ""}</span>`;
   if (k === "backup") return `<button class="btn finish-rect" onclick="saveToFile()" title="Save backup file" aria-label="Save backup file">${rect(ICON_SAVE, "Save backup file")}</button>`;
-  if (k === "pdf") return `<button class="btn finish-rect" onclick="exportPDF()" title="Export PDF" aria-label="Export PDF">${rect(ICON_PDF, "PDF", "To attach to the confirmation page")}</button>`;
+  if (k === "pdf") return `<button class="btn finish-rect" onclick="exportPDF()" title="Save PDF Scoresheet" aria-label="Save PDF Scoresheet">${rect(ICON_PDF, "Save PDF Scoresheet")}</button>`;
   if (k === "confirm")
-    return `<a class="btn finish-rect jd-upload-btn" href="${FINISH_CONFIRM_URL}" target="_blank" rel="noopener noreferrer" title="Game Confirmation" aria-label="Game Confirmation" onclick="markFinish('confirm')">${rect(ICON_FAWKES, "Game Confirmation")}</a>`;
+    return `<a class="btn finish-rect jd-upload-btn" href="${FINISH_CONFIRM_URL}" target="_blank" rel="noopener noreferrer" title="Game Confirmation" aria-label="Game Confirmation" onclick="markFinish('confirm')">${rect(ICON_FAWKES, "Open Game Confirmation Form")}</a>`;
   if (k === "photos") {
     const w = gameState.craftPrizeWinner;
     const note = w && gameState.teams[w.ti] ? "" : `<p class="finish-warn">No Craft Prize winner drawn yet. Skip that name if this game has none.</p>`;
-    return `<a class="btn finish-rect photo-upload-btn" href="${FINISH_PHOTOS_URL}" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${rect(ICON_CAMERA, "Winner Photos")}</a>${winnerCopyButtonsHtml()}${note}`;
+    return `<a class="btn finish-rect photo-upload-btn" href="${FINISH_PHOTOS_URL}" target="_blank" rel="noopener noreferrer" title="Upload winner photos" aria-label="Upload winner photos" onclick="markFinish('photos')">${rect(ICON_CAMERA, "Submit Winners' Photos")}</a>${winnerCopyButtonsHtml()}${note}`;
   }
   return "";
 }

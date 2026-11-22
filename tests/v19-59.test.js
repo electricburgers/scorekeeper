@@ -199,7 +199,7 @@ describe("v19.59 — icons", () => {
       assert.ok(a, "Winner Photos button missing");
       assert.equal(a.getAttribute("href"), "https://form.jotform.com/263015326852050");
       assert.ok(a.querySelector("svg.icon-camera"), "camera icon missing");
-      assert.equal(a.querySelector("span").textContent, "Winner Photos");
+      assert.equal(a.querySelector(".finish-rect-label").textContent, "Submit Winners' Photos");
       // Step 2 of the Game Submission list; the copy buttons for the team names sit right under it.
       assert.equal(a.closest("li").querySelector("a.finish-rect"), a);
       assert.ok(a.closest(".finish-body").querySelector(".winner-copy"), "team name copy buttons missing under the link");
@@ -220,8 +220,8 @@ describe("v19.59 — icons", () => {
       assert.ok(a, "Game Confirmation button missing");
       assert.ok(a.classList.contains("finish-rect"));
       assert.ok(a.querySelector("svg.icon-fawkes"), "Guy Fawkes icon missing");
-      const label = a.querySelector("span").textContent;
-      assert.equal(label, "Game Confirmation");
+      const label = a.querySelector(".finish-rect-label").textContent;
+      assert.equal(label, "Open Game Confirmation Form");
       assert.match(evalIn(window, "ICON_FAWKES"), /icon-fawkes|🎭/);
     } finally {
       window.close();

@@ -1088,6 +1088,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    is what keeps it distinct from the spreadsheet sitting immediately beside it. */
 .icon-pdf{--icon-tint:var(--tint-pdf)}
 .icon-camera{--icon-tint:var(--tint-cap)}
+.icon-save{--icon-tint:var(--tint-flask)}
 /* Second and third colours, for the icons whose emoji had more than one: the cream head of the
    drum against its red shell and its wooden sticks, the foam on the beer, the trophy's darker
    plinth, the mic's darker yoke, the pale clip on the clipboard. Each part needs fill and stroke
@@ -3258,7 +3259,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .finish-rect-label{font-size:1rem;font-weight:800;line-height:1.15}
 .finish-rect-sub{font-size:.78rem;font-weight:600;line-height:1.2;white-space:normal}
 .finish-body .wc-btn{height:auto;min-height:44px;white-space:normal;overflow:visible;flex-wrap:wrap;min-width:0}
-.finish-body .wc-label{min-width:0}
+.finish-body .wc-label{min-width:4.2rem;line-height:1.1}
 .finish-body .wc-name{min-width:0;overflow-wrap:anywhere;word-break:normal;text-align:left}
 
 .btn.flash-copied,.btn.flash-copied:hover{background:var(--correct-badge-bg);color:var(--correct-badge-fg);border-color:var(--correct-badge-bg);animation:flashPop .32s ease-out}

@@ -561,7 +561,7 @@ function winnerCopyButtonsHtml() {
   if (!gameState.teams.length) return "";
   const nm = (ti) => esc(gameState.teams[ti].name || "Team " + (ti + 1));
   const btn = (ti, label) =>
-    `<button class="btn wc-btn" onclick="copyTeamName(this,${ti})" title="Copy team name" aria-label="Copy ${label}: ${nm(ti)}"><span class="wc-label">${label}</span><span class="wc-name">${nm(ti)}</span><span class="wc-copy">Copy</span></button>`;
+    `<button class="btn wc-btn" onclick="copyTeamName(this,${ti})" title="Copy team name" aria-label="Copy ${label}: ${nm(ti)}"><span class="wc-label">${label.replace(" ", "<br>")}</span><span class="wc-name">${nm(ti)}</span><span class="wc-copy">Copy</span></button>`;
   const rows = ranked()
     .slice(0, gameState.meta.excludeTopN || 2)
     .map((r, i) => btn(r.index, "#" + (i + 1)));
