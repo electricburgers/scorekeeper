@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.89 - 2026-11-22
+
+- **Timer bar refill speed.** The refill sweep on reset now scales with how empty the bar was, from a quick 0.2s when nearly full to a slower 1s when empty, so an empty bar no longer snaps back.
+
 ## v22.88 - 2026-11-22
 
 - **Timer bar and warning fade.** Resetting from overtime now refills the bar at the dim idle brightness and never lights it up. The timer display also fades gently to yellow when it reaches 1:00 instead of snapping.

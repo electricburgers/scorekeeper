@@ -1229,7 +1229,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 [data-theme="light"] .qtimer-bar{background:#c3d0e6}
 .qtimer-bar-fill{position:absolute;inset:0;background:var(--text-primary);transform-origin:left center;transform:scaleX(1)}
 /* On reset the fill used to snap to full, which read as a blink (and, from overtime, a bright flash). While not live, refill it with a quick ease-out sweep instead, running alongside the fade-out. */
-.qtimer-bar:not(.qt-live) .qtimer-bar-fill{transition:transform .3s ease-out}
+.qtimer-bar:not(.qt-live) .qtimer-bar-fill{transition:transform var(--qt-refill-dur,.3s) ease-out}
 /* Reset from overtime: drop straight to the dim idle opacity (no fade) so the refilling fill is never shown bright. */
 .qtimer-bar.qt-refill{transition:none}
 @media (prefers-reduced-motion:reduce){.qtimer-bar:not(.qt-live) .qtimer-bar-fill,.qtimer-bar.qt-refill{transition:none}}

@@ -210,6 +210,7 @@ function toggleQTimer() {
   tickQTimer();
 }
 let qtRefillTimer = 0;
+let qtRefillDurTimer = 0;
 function resetQTimer() {
   // From overtime the bar is empty and fully lit; .qt-refill (see styles.css) snaps it to the dim idle
   // opacity so the refilling fill is never shown bright.
@@ -219,6 +220,15 @@ function resetQTimer() {
     bars.forEach((b) => b.classList.add("qt-refill"));
     clearTimeout(qtRefillTimer);
     qtRefillTimer = setTimeout(() => bars.forEach((b) => b.classList.remove("qt-refill")), 500);
+  }
+  // The emptier the bar, the longer the refill sweep (.2s nearly full up to 1s empty), so an empty bar doesn't snap.
+  if (qtState !== "idle" && qtTotalMs > 0) {
+    const remMs = qtState === "running" ? qtEndEpoch - Date.now() : qtRemainMs;
+    const empty = 1 - Math.max(0, Math.min(1, remMs / qtTotalMs));
+    const bars = document.querySelectorAll(".qtimer-bar");
+    bars.forEach((b) => b.style.setProperty("--qt-refill-dur", (0.2 + 0.8 * empty).toFixed(2) + "s"));
+    clearTimeout(qtRefillDurTimer);
+    qtRefillDurTimer = setTimeout(() => bars.forEach((b) => b.style.removeProperty("--qt-refill-dur")), 1100);
   }
   qtState = "idle";
   qtEndEpoch = 0;
