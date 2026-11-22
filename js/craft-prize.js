@@ -525,6 +525,23 @@ function copyCraftEligible(btn) {
   if (blocked) return appAlert(blocked);
   copyTextToClipboard(craftEligibleNames().join("\n"), btn, "Couldn't copy — use the TXT button instead.");
 }
+// One text block for the host's photo-taking partner: each prize place on one line with the
+// team name beneath it, blank line between prizes. Covers the top N (same excluded set as the
+// winner buttons) plus the craft prize winner when one has been drawn.
+function prizeWinnersText() {
+  const ord = (n) => n + (["th", "st", "nd", "rd"][(n % 100 >> 3) ^ 1 && n % 10 < 4 ? n % 10 : 0] || "th");
+  const nm = (ti) => gameState.teams[ti].name || "Team " + (ti + 1);
+  const blocks = ranked()
+    .slice(0, gameState.meta.excludeTopN || 2)
+    .map((r, i) => ord(i + 1) + " Place\n" + nm(r.index));
+  const w = gameState.craftPrizeWinner;
+  if (w && gameState.teams[w.ti]) blocks.push("Craft Prize\n" + nm(w.ti));
+  return blocks.join("\n\n");
+}
+function copyPrizeWinners(btn) {
+  if (!gameState.teams.length) return appAlert("Add some teams first — there are no winners to copy.");
+  copyTextToClipboard(prizeWinnersText(), btn, "Couldn't copy the winners.");
+}
 // Shared one-tap copy: flashes "Copied" on the pressed button. Uses navigator.clipboard when it
 // exists, else the execCommand fallback.
 function copyTextToClipboard(text, btn, failMsg) {

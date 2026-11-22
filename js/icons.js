@@ -400,6 +400,7 @@ const STATIC_ICON_TARGETS = [
   { sel: 'button[onclick="savePrefsToFile()"]', emoji: '<span class="icon-emoji">💾</span>', label: " Save" },
   { sel: 'button[onclick="triggerLoadPrefsFile()"]', emoji: '<span class="icon-emoji">📂</span>', label: " Load" },
   { sel: 'button[onclick="copyCraftEligible(this)"]', emoji: '<span class="icon-emoji">📋</span>', label: " Copy" },
+  { sel: 'button[onclick="copyPrizeWinners(this)"]', emoji: '<span class="icon-emoji">📋</span>', label: " Copy" },
   { sel: 'button[onclick="exportCraftEligible()"]', emoji: '<span class="icon-emoji">📄</span>', label: " TXT" },
   { sel: ".settings-x-btn", emoji: '<span class="icon-emoji">✕</span>' },
 ];
