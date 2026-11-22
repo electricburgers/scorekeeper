@@ -14,6 +14,14 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.69 - 2026-11-22
+
+- **Ticked steps use the per-question checkmark** (`CHECK_ICON_SVG`) instead of a text "✓".
+- **No more view jump** when tapping Save a Scoresheet backup file: the checklist refresh keeps focus on the same button and the card at the same spot on screen.
+- **Light mode:** the #1/#2/Craft Prize labels use a darker gold (`--tint-theme-2`).
+- **Step 4 renamed "Submit your Game Confirmation".**
+- FAQ v1.70: step 4 name and regenerated `export-bar` screenshots (backup step shown ticked).
+
 ## v22.68 - 2026-11-22
 
 - **Game Confirmation step buttons have a gold outline** to draw the eye.

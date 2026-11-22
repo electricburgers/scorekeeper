@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.70] - 22 Nov 2026
+
+### Changed
+
+- **Game Confirmation steps:** step 4 is now "Submit your Game Confirmation" (wrap-up list, alt text), and the `export-bar` screenshots (dark + light) are regenerated for app v22.69 with the backup step ticked, the new checkmark and darker light-mode labels.
+
 ## [1.69] - 22 Nov 2026
 
 ### Changed

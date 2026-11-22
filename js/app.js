@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.68"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 22, 2026 4:18 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.69"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 22, 2026 4:24 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1112,7 +1112,7 @@ const FINISH_STEPS = [
   { k: "backup", label: "Save a backup file (Optional)", hint: "So you can reopen the game later (just in case)" },
   { k: "photos", label: "Submit the winners' names and photos", hint: "Open the form, then copy the teams' names into it" },
   { k: "pdf", label: "Save the Scoresheet", hint: "Download a copy to attach to the confirmation page" },
-  { k: "confirm", label: "Attach the PDF you saved", hint: "Submit the PDF you just saved" },
+  { k: "confirm", label: "Submit your Game Confirmation", hint: "Submit the PDF you just saved" },
 ];
 
 
@@ -2804,7 +2804,7 @@ function finishChecklistHtml() {
   let h = `<ol class="finish-list">`;
   FINISH_STEPS.forEach((x, i) => {
     const done = finishDone.has(x.k);
-    h += `<li class="finish-item${done ? " done" : ""}"><span class="finish-box" aria-hidden="true">${done ? "\u2713" : i + 1}</span><div class="finish-body"><span class="finish-text">${x.label}${done ? '<span class="sr-only"> (done)</span>' : ""}${x.hint ? `<span class="finish-hint">${x.hint}</span>` : ""}</span>${finishActionHtml(x.k)}</div></li>`;
+    h += `<li class="finish-item${done ? " done" : ""}"><span class="finish-box" aria-hidden="true">${done ? CHECK_ICON_SVG : i + 1}</span><div class="finish-body"><span class="finish-text">${x.label}${done ? '<span class="sr-only"> (done)</span>' : ""}${x.hint ? `<span class="finish-hint">${x.hint}</span>` : ""}</span>${finishActionHtml(x.k)}</div></li>`;
   });
   return h + "</ol>";
 }
@@ -2818,7 +2818,24 @@ function markFinish(key) {
 // writes to the DOM behind its back, so anything that resets finishDone must call this too.
 function refreshFinishChecklist() {
   const el = document.getElementById("finishChecklist");
-  if (el) el.innerHTML = finishChecklistHtml();
+  if (!el) return;
+  // Swapping the HTML drops the button the host just tapped (and its focus), which made the
+  // view jump. Keep the card at the same spot on screen and put focus back on the same control.
+  const ae = document.activeElement;
+  const focusSel = ae && el.contains(ae) ? ae.closest("li") : null;
+  const idx = focusSel ? [...el.querySelectorAll("li")].indexOf(focusSel) : -1;
+  const main = document.getElementById("mainContent");
+  const top0 = el.getBoundingClientRect().top;
+  el.innerHTML = finishChecklistHtml();
+  if (idx >= 0) {
+    const t = el.querySelectorAll("li")[idx]?.querySelector("button, a");
+    if (t) t.focus({ preventScroll: true });
+  }
+  const d = el.getBoundingClientRect().top - top0;
+  if (d) {
+    if (main && main.scrollHeight > main.clientHeight) main.scrollTop += d;
+    else window.scrollBy(0, d);
+  }
 }
 // "Yes" on the post-export prompt: same safety net as Clear Session when no backup was saved.
 function clearAfterExport() {
