@@ -2464,6 +2464,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .cp-excluded-list li{display:flex;align-items:baseline;gap:8px;padding:3px 0;font-size:1rem;color:var(--text-primary,inherit)}
 .cp-excluded-rank{font-family:var(--font-display);font-weight:800;min-width:2.2rem;color:var(--accent-gold)}
 .cp-excluded-name{font-weight:600;word-break:break-word}
+[data-theme="light"] .cp-excluded-rank{color:var(--tint-theme-2)}
 .cp-note{font-size:.66rem;color:var(--text-muted);margin-bottom:8px;font-style:italic}
 .cp-draw-btn{width:100%}
 .cp-draw-btn:disabled{opacity:.5;cursor:not-allowed}
