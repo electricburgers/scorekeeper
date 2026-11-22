@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.65] - 21 Nov 2026
+
+### Changed
+- **Game Submission screenshot** (`export-bar`, dark and light) regenerated to show the new Copy buttons for the excluded top teams and the craft prize winner.
+- **"What is the Winner Photos button?"** now mentions the Copy buttons.
+
 ## [1.64] - 21 Nov 2026
 
 ### Changed
