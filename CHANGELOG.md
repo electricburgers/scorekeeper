@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.67 - 2026-11-22
+
+- **Step 3 renamed "Save the Scoresheet"** (its button is still "Download Scoresheet PDF").
+
 ## v22.66 - 2026-11-22
 
 - **Timer progress line stays visible while paused** (hidden only when idle).
