@@ -2290,6 +2290,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .wc-label{font-family:var(--font-display);font-weight:800;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--accent-gold);min-width:4.6rem}
 .wc-name{flex:1;font-weight:600;word-break:break-word}
 .wc-copy{flex:none;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.3px;padding:2px 10px;border:1px solid var(--border);border-radius:var(--radius)}
+.wc-copy{text-align:center;white-space:nowrap}
+.wc-copy.wc-copied{background:var(--correct-badge-bg);color:var(--correct-badge-fg);border-color:var(--correct-badge-bg)}
 .export-bar{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;padding:10px 0}
 /* XLSX / PDF export as square, icon-forward buttons — a big glyph stacked over a small label is
    a far bigger tap target on a phone (and click target on desktop) than a .78rem icon beside a

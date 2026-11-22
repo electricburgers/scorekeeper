@@ -528,7 +528,9 @@ function copyCraftEligible(btn) {
 // Shared one-tap copy: flashes "Copied" on the pressed button. Uses navigator.clipboard when it
 // exists, else the execCommand fallback.
 function copyTextToClipboard(text, btn, failMsg) {
-  const ok = () => flashBtn(btn, ICON_DONE + " Copied");
+  // Winner buttons confirm on their small Copy chip only; every other button flashes whole.
+  const chip = btn && btn.querySelector ? btn.querySelector(".wc-copy") : null;
+  const ok = () => (chip ? flashChip(chip) : flashBtn(btn, ICON_DONE + " Copied"));
   const fail = () => {
     // execCommand is deprecated, but navigator.clipboard is undefined on a plain-http origin —
     // which is exactly what a laptop serving this over venue wifi looks like. Keep the fallback.
@@ -569,6 +571,25 @@ function winnerCopyButtonsHtml() {
   if (w && gameState.teams[w.ti]) rows.push(btn(w.ti, "Craft Prize"));
   return `<div class="winner-copy">${rows.join("")}</div>`;
 }
+// Copy confirmation for the winner buttons: only the small "Copy" chip changes, in place. The
+// chip's width is pinned so the longer "Copied" can't reflow the team name beside it, and the
+// button's badge/name never swap, fade or move — nothing to flicker.
+function flashChip(chip) {
+  clearTimeout(+chip.dataset.flashTimer || 0);
+  if (chip.dataset.flashRestore == null) {
+    chip.dataset.flashRestore = chip.innerHTML;
+    chip.style.minWidth = chip.offsetWidth + "px";
+  }
+  chip.innerHTML = ICON_DONE + " Copied";
+  chip.classList.add("wc-copied");
+  chip.dataset.flashTimer = setTimeout(() => {
+    chip.innerHTML = chip.dataset.flashRestore;
+    chip.classList.remove("wc-copied");
+    chip.style.minWidth = "";
+    delete chip.dataset.flashRestore;
+    delete chip.dataset.flashTimer;
+  }, 1500);
+}
 // Momentary label swap for confirmation — the app has no toast, and the button is already
 // under the pointer that pressed it. Restores from the original label, so a double-tap mid-
 // flash can't leave "✓ Copied" stuck there.
@@ -577,8 +598,12 @@ function winnerCopyButtonsHtml() {
 // button itself already had when restoring it.
 function flashBtn(btn, label, ms) {
   if (!btn) return;
-  if (btn.dataset.flashRestore == null)
+  if (btn.dataset.flashRestore == null) {
     btn.dataset.flashRestore = btn.innerHTML;
+    // Pin the pre-flash height: the short "Copied" label can be shorter than the original
+    // (e.g. two-line "Craft Prize" badge), which would pull everything below the button up.
+    btn.style.minHeight = btn.offsetHeight + "px";
+  }
   clearTimeout(+btn.dataset.flashTimer || 0);
   clearTimeout(+btn.dataset.flashOutTimer || 0);
   btn.classList.remove("flash-out", "flash-in");
@@ -596,6 +621,7 @@ function flashBtn(btn, label, ms) {
       btn.innerHTML = btn.dataset.flashRestore;
       btn.classList.remove("flash-copied", "flash-out");
       btn.classList.add("flash-in");
+      btn.style.minHeight = "";
       delete btn.dataset.flashRestore;
       delete btn.dataset.flashTimer;
       delete btn.dataset.flashOutTimer;

@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.75 - 2026-11-22
+
+- **Copy buttons in Game Confirmation no longer flash.** Tapping Copy on a winner button now turns only its small Copy chip green ("✓ Copied") for 1.5 seconds. The #1/#2/Craft Prize badge and team name stay put, so nothing below moves.
+- FAQ screenshots unchanged: the resting look of the Copy buttons is the same.
+
 ## v22.74 - 2026-11-22
 
 - **Step 1 renamed "Save a Scoresheet backup (Optional)"** and its button is now "Save backup".
