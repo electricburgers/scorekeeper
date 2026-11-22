@@ -65,7 +65,7 @@ describe("v21.42 Theme Night report + Advanced settings", () => {
       ["Display", ["Icon Style", "Row Density", "Row Zebra Stripes", "Game Progress Bar", "Keep screen awake"]],
       ["Scoring", ["Point Adjustments", "Crowd-Wisdom Percentage", "Edit Locked Fields", "Teams Without a Guess"]],
       ["Timer", ["Question Timer", "Timer Widget", "Timer Stepper Buttons", "Timer Pulse"]],
-      ["Craft Prize", ["Craft Prize Eligible List", "Manual Drumroll Control", "Drumroll Crossfade", "Sound Test Buttons"]],
+      ["Craft Prize", ["Craft Prize Eligible List", "Prize Winners for Photos", "Manual Drumroll Control", "Drumroll Crossfade", "Sound Test Buttons"]],
       ["Tools", ["Score progression", "Keyboard shortcuts"]],
     ]);
     const mainLabels = [...d.querySelectorAll("#settingsPanel .settings-row .size-label")].filter((l) => !l.closest("#advancedGroup")).map((l) => l.textContent.trim());

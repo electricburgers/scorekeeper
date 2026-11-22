@@ -1226,6 +1226,9 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-bar.qt-live{opacity:1}
 @media (prefers-reduced-motion:reduce){.qtimer-bar{transition:none}}
 .qtimer-bar-fill{position:absolute;inset:0;background:var(--text-primary);transform-origin:left center;transform:scaleX(1)}
+/* Reset from overflow jumps the fill empty -> full the instant the bar starts fading out, which flashed it bright. While not live, hold the old fill for the length of the fade before moving it. */
+.qtimer-bar:not(.qt-live) .qtimer-bar-fill{transition:transform 0s linear .4s}
+@media (prefers-reduced-motion:reduce){.qtimer-bar:not(.qt-live) .qtimer-bar-fill{transition:none}}
 .qtimer-bar::before,.qtimer-bar::after{content:"";position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--bg-primary);z-index:1;display:none}
 .qtimer-bar[data-n1]::before{display:block;left:var(--qt-n1)}
 .qtimer-bar[data-n2]::after{display:block;left:var(--qt-n2)}

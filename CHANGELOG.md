@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.84 - 2026-11-22
+
+- **Timer bar reset flash.** Tapping reset while the timer was in overtime no longer flashes the bar bright before it fades out; the empty fill now holds until the fade finishes. Also updated the Advanced Settings grouping test for the Prize Winners for Photos row.
+
 ## v22.83 - 2026-11-22
 
 - **Timer bar fades.** The question timer's shrinking bar is no longer hidden while idle; it stays in place and fades out (and back in when the timer starts). Track color now uses the control border so it holds 3:1+ against the panel in light and dark themes and both color-vision modes; the bar is monochrome so color vision doesn't affect it.
