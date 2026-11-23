@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.91 - 2026-11-23
+
+- **Game Confirmation icon.** The mask now has a wide, thin, angular mustache with a centre hump and fine upturned tips, redrawn from a reference photo and kept clear of the face edge, plus a slim teardrop goatee in place of the old flared one.
+
 ## v22.90 - 2026-11-23
 
 - **Game Confirmation icon.** The paper plane is now a single-fold "send" arrow pointing up and right, with three speed streaks trailing behind it.

@@ -1041,8 +1041,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 /* Light theme only: a pale purple wash plate with deep purple mustache and goatee. */
 [data-theme="light"] .icon-tinted.icon-fawkes{fill:color-mix(in srgb,var(--icon-tint) 12%,#fff)}
 [data-theme="light"] .icon-fawkes .ip-2,[data-theme="light"] .icon-tinted.icon-fawkes .ip-2{fill:#12041f}
-/* Thicker mustache: the first .ip-2 path gets a same-colour stroke (goatee stays a plain fill). */
-.icon-fawkes path.ip-2:nth-of-type(2){stroke:#fff;stroke-width:.7;stroke-linejoin:round}
+/* Mustache: the first .ip-2 path gets a hairline same-colour stroke so its fine tips stay visible (goatee stays a plain fill). */
+.icon-fawkes path.ip-2:nth-of-type(2){stroke:#fff;stroke-width:.25;stroke-linejoin:round}
 [data-theme="light"] .icon-fawkes path.ip-2:nth-of-type(2){stroke:#12041f}
 .icon-shuffle{--icon-tint:var(--tint-shuffle)}
 /* Test Sounds bar: Crash echoes 💥 — a jagged red-orange outer burst (--tint-drum, the identifying
