@@ -69,7 +69,7 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.91"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v22.92"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 23, 2026 5:16 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -1962,12 +1962,12 @@ function noGuessBtnInner(state) {
       : state === "last"
         ? '<path d="M5 18V5"/><path d="m2 8 3-3 3 3"/>'
         : "";
-  return `<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${arrow}<path d="M12 9a3.5 3.5 0 1 1 5.3 3c-.8.5-1.3 1-1.3 2"/><path d="M16 18h.01"/></svg>`;
+  return `<svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${arrow}<path d="M12 9a3.5 3.5 0 1 1 5.3 3c-.8.5-1.3 1-1.3 2"/><path d="M16 18h.01"/></svg><span class="btn-label">No guess</span>`;
 }
 function alphaBtnInner(state) {
   if (loadPrefs().iconStyle === "emoji")
     return `${state === "az" ? ICON_ARROW_DOWN : state === "za" ? ICON_ARROW_UP : ""}<span class="qa-text">${state === "za" ? "Z-A" : "A-Z"}</span>`;
-  return state === "za" ? ICON_AZ_UP_PICT : ICON_AZ_DOWN_PICT;
+  return `${state === "za" ? ICON_AZ_UP_PICT : ICON_AZ_DOWN_PICT}<span class="btn-label">${state === "za" ? "Z-A" : "A-Z"}</span>`;
 }
 function renderQStatsRow(s) {
   if (!s.done) return "";

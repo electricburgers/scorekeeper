@@ -3323,3 +3323,16 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .dev-fixture-mode{padding:6px 0}
 .dev-fixture-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
 #devToolsGroup[hidden]{display:none}
+
+/* Wide score column (v22.92): the per-question and Teams-header sort buttons become labelled rounded buttons.
+   At 24px tall and .7rem they were hard to hit with a mouse. 40px tall, 14px text, icon plus word
+   (Sort / A-Z / Reset / No guess). The narrow-column rule above (max-width:600px) hides .btn-label
+   and keeps the compact icon squares, so phones are unchanged. */
+@container scorecol (min-width:601px){
+  .q-sort-btn,.q-reset-btn,.q-alpha-btn{height:40px;font-size:.9rem;gap:.5em;padding:0 16px;border-radius:9px}
+  .q-alpha-btn.team-guess-btn{width:auto;padding:0 16px;border-radius:9px}
+  .q-sort-btn .icon-ui,.q-reset-btn .icon-ui,.q-alpha-btn .icon-ui{width:1.3em;height:1.3em}
+  .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.3)}
+  .team-sort-row{gap:8px}
+  .q-stat{height:40px;font-size:.8rem;padding:0 12px;border-radius:9px}
+}
