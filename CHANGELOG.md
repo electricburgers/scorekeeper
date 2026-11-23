@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.94 - 2026-11-23
+
+- **More mouse hover polish.** Big tile buttons (export, craft draw, finish) lift on hover and press back down on click. Question and wager headers get an accent edge on hover. Selected, correct and incorrect buttons brighten on hover so they read as changeable. Scoreboard rows with a clickable name (Craft Beer prize) get an outline and underline. Disabled buttons never show a hover.
+
 ## v22.93 - 2026-11-23
 
 - **Clearer mouse hover and press feedback.** Buttons now get an accent border, a ring and a stronger fill on hover (mouse only, so phones are unchanged), and a 1px press on click. Checkbox chips, Host Tools chips, section and sidebar headers, the mini progress bar and the Settings "What's new" line now react on hover too.

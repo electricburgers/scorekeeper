@@ -3368,3 +3368,28 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* Pressed: sink 1px and darken, on every button-like control. */
 :is(.toolbar>button,.btn,.settings-btn,.settings-toggle-btn,.settings-advanced-toggle,.sort-btn,.standings-sort-btn,.adj-chip,.qtimer-btn,.cv-select-btn,.banter-refresh,.stepper button,.adj-stepper button,.result-btn,.wager-btn,.bonus-choice-btn,.bonus-zero,.bonus-clear,.q-sort-btn,.q-alpha-btn,.q-reset-btn,.export-sq,.cp-sq-btn,.cp-wide-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-horn-btn,.cp-clear-btn,.finish-rect,.wc-btn,.aud-edit-btn,.settings-x-btn,.audit-close,.resume-banner-close,.remove-team button,.tutorial-callout-next,.tutorial-callout-back):active:not(:disabled):not(.used){
   transform:translateY(1px);filter:brightness(.88);box-shadow:none}
+
+/* v22.94: follow-up to the hover block above. */
+@media (hover:hover) and (pointer:fine){
+  /* Big tile buttons lift a little on hover; :active below presses them back down. */
+  :is(.export-sq,.cp-sq-btn,.cp-wide-btn,.finish-rect,.wc-btn):hover:not(:disabled):not(.cp-preview-btn){
+    transform:translateY(-2px);box-shadow:0 0 0 1px var(--hover-ring),0 4px 10px rgba(0,0,0,.35)}
+  /* Question / special-wager headers: accent edge on the left plus the fill set above. */
+  .q-header:has(.q-header-left:hover),.q-header:has(.sw-header-left:hover){box-shadow:inset 3px 0 0 var(--hover-ring)}
+  /* Selected / answered states keep their colour but still react, so they read as changeable. */
+  :is(.wager-btn,.place-btn,.result-btn,.bonus-choice-btn,.q-sort-btn,.q-alpha-btn,.settings-btn,.settings-toggle-btn,.sort-btn,.standings-sort-btn):is(.selected,.correct,.incorrect,.correct-sel,.incorrect-sel,.active):hover:not(:disabled){
+    filter:brightness(1.18)}
+  [data-theme="light"] :is(.wager-btn,.place-btn,.result-btn,.bonus-choice-btn,.q-sort-btn,.q-alpha-btn,.settings-btn,.settings-toggle-btn,.sort-btn,.standings-sort-btn):is(.selected,.correct,.incorrect,.correct-sel,.incorrect-sel,.active):hover:not(:disabled){
+    filter:brightness(.88)}
+  /* Scoreboard rows whose name toggles the Craft Beer prize winner. */
+  .score-row:has(.sr-name-clickable):hover{outline:2px solid var(--hover-ring);outline-offset:-2px;cursor:pointer}
+  .sr-name-clickable:hover{text-decoration:underline}
+}
+/* Pressing a lifted tile sinks it past rest. */
+:is(.export-sq,.cp-sq-btn,.cp-wide-btn,.finish-rect,.wc-btn):active:not(:disabled){transform:translateY(1px)}
+/* Disabled / unavailable controls never look hoverable, whatever the earlier rules say. */
+button:disabled,.cp-preview-btn{cursor:not-allowed}
+:is(.btn,.settings-btn,.qtimer-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-preview-btn):is(:disabled,.cp-preview-btn):hover{
+  background:var(--bg-card);border-color:var(--border-control);box-shadow:none;transform:none;filter:none}
+:is(.q-sort-btn,.q-alpha-btn,.q-reset-btn,.team-guess-btn,.btn-accent,.btn-danger,.qtimer-pause):disabled:hover{filter:none;box-shadow:none;transform:none}
+:is(button,[role="button"]):disabled:active{transform:none;filter:none}
