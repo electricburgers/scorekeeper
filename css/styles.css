@@ -2358,6 +2358,16 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    cells, which are single-line and have width to spare. */
 .ta-name.ta-name-clickable::after{content:none}
 .ta-name-clickable:hover::after{opacity:1}
+/* Wide score column only: question-row names get the magnifier as a small badge laid OVER the end of
+   the name box (absolutely positioned, so it takes no room and cannot change where names wrap or
+   how they centre, which was the original reason for dropping it). The narrow layout is unchanged. */
+@container scorecol (min-width:601px){
+  .ta-name.ta-name-clickable{position:relative}
+  .ta-name.ta-name-clickable::before,.ta-name.ta-name-clickable::after{content:'';position:absolute;top:50%;opacity:0;transition:opacity .15s;pointer-events:none}
+  .ta-name.ta-name-clickable::before{right:2px;width:1.7em;height:1.7em;margin-top:-.85em;border-radius:50%;box-sizing:border-box;background:var(--bg-card);border:1px solid var(--hover-ring)}
+  .ta-name.ta-name-clickable::after{right:calc(2px + .35em);width:1em;height:1em;margin:-.5em 0 0;font-size:inherit;background:var(--txt-cyan);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-linecap='round'%3E%3Ccircle cx='10' cy='10' r='6.5' stroke-width='2.8'/%3E%3Cpath d='M15.2 15.2 21 21' stroke-width='3.2'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-linecap='round'%3E%3Ccircle cx='10' cy='10' r='6.5' stroke-width='2.8'/%3E%3Cpath d='M15.2 15.2 21 21' stroke-width='3.2'/%3E%3C/svg%3E") center/contain no-repeat}
+  .ta-name.ta-name-clickable:hover::before,.ta-name.ta-name-clickable:hover::after{opacity:1}
+}
 
 /* FULLY CLICKABLE ROWS (standings + final results) — the whole row is the audit target, not
    just the name text, so the magnifying glass needs to react to hovering anywhere in the row,
@@ -3393,3 +3403,16 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
   background:var(--bg-card);border-color:var(--border-control);box-shadow:none;transform:none;filter:none}
 :is(.q-sort-btn,.q-alpha-btn,.q-reset-btn,.team-guess-btn,.btn-accent,.btn-danger,.qtimer-pause):disabled:hover{filter:none;box-shadow:none;transform:none}
 :is(button,[role="button"]):disabled:active{transform:none;filter:none}
+
+/* Pause / Delete team (and the other round red X buttons) had only a faint tint on hover.
+   They keep their own colour: red for Delete/close, gold for Pause. Ring + a firmer fill. */
+@media (hover:hover) and (pointer:fine){
+  :is(.remove-team button:not(.pause-team),.settings-x-btn,.audit-close,.resume-banner-close):hover{
+    background:color-mix(in srgb,var(--accent-red) 32%,var(--bg-card));border-color:var(--accent-red);box-shadow:0 0 0 2px var(--accent-red);color:var(--txt-red)}
+  .remove-team .pause-team:not(.is-on):hover{
+    background:color-mix(in srgb,var(--accent-gold) 30%,var(--bg-card));border-color:var(--accent-gold);box-shadow:0 0 0 2px var(--accent-gold);color:var(--text-primary)}
+  .remove-team .pause-team.is-on:hover{box-shadow:0 0 0 2px var(--accent-gold);filter:brightness(1.12)}
+  [data-theme="light"] .remove-team button:not(.pause-team):hover,[data-theme="light"] :is(.settings-x-btn,.audit-close,.resume-banner-close):hover{background:#ffb8b8;color:#8a0000}
+  [data-theme="light"] .remove-team .pause-team:not(.is-on):hover{background:#ffe2a0;color:#4a2e00}
+  [data-theme="light"] .remove-team .pause-team.is-on:hover{filter:brightness(.9)}
+}

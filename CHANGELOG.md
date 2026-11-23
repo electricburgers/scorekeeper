@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.95 - 2026-11-23
+
+- **Pause and Delete team hover.** Pause team fills gold with a gold ring on hover, and Delete team (plus the red close X buttons in Settings, Team Report and the resume banner) fill red with a red ring. Pause no longer picks up the red Delete tint.
+- **Magnifying glass on question rows.** On desktop, hovering a team name in a question row now shows a small flat magnifying-glass badge over the end of the name. It takes no space, so names wrap as before. Standings and Final Results keep the existing icon; narrow layouts are unchanged.
+
 ## v22.94 - 2026-11-23
 
 - **More mouse hover polish.** Big tile buttons (export, craft draw, finish) lift on hover and press back down on click. Question and wager headers get an accent edge on hover. Selected, correct and incorrect buttons brighten on hover so they read as changeable. Scoreboard rows with a clickable name (Craft Beer prize) get an outline and underline. Disabled buttons never show a hover.
