@@ -116,12 +116,12 @@ const ICON_SHUFFLE_TINTED_PICT =
 // and baseline are the font's business rather than the layout's. Lucide geometry throughout.
 const ICON_CLIPBOARD_PICT =
   '<svg class="icon-ui icon-tinted icon-clipboard" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect class="ip-2" width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>';
-// Game Submission's header: a paper plane (results sent off), climbing, with three wind lines
-// trailing behind it. Outline plus a keel fold filled with the icon tint (.ip-2), the same two-tone
-// treatment as the beer and drum, in sky blue (.icon-plane); the wind lines take a lighter blue
-// (.ip-3). The group is rotated so the trail follows the flight path.
+// Game Submission's header: a paper plane (results sent off) in the "send" arrow shape, pointing
+// up and right, with three speed streaks trailing parallel to the flight path. Outline plus a keel
+// fold filled with the icon tint (.ip-2), the same two-tone treatment as the beer and drum, in sky
+// blue (.icon-plane); the streaks take a lighter blue (.ip-3).
 const ICON_PLANE_PICT =
-  '<svg class="icon-ui icon-tinted icon-plane" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g transform="rotate(-20 12 11) translate(0 1)"><path d="M23 10 7 5.500 11 11.500Z"/><path class="ip-2" d="M23 10 11 11.500 8.500 16.500Z"/><path d="M23 10 11 11.500"/><path d="M7 5.500 11 11.500 8.500 16.500"/><path class="ip-3" d="M1.500 8.500h3.500"/><path class="ip-3" d="M1 12.500h5"/><path class="ip-3" d="M2.500 16.500h3.500"/></g></svg>';
+  '<svg class="icon-ui icon-tinted icon-plane" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m22 2-7 20-4-9-9-4Z"/><path class="ip-2" d="M22 2 15 22l-4-9Z"/><path d="M22 2 11 13"/><path class="ip-3" d="M2 18l3.500-3.500"/><path class="ip-3" d="M5 22l5-5"/><path class="ip-3" d="M1.500 22.500 3 21"/></svg>';
 const ICON_MIC_PICT =
   '<svg class="icon-ui icon-tinted icon-mic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path class="ip-2" d="M19 10v2a7 7 0 0 1-14 0v-2"/><line class="ip-2" x1="12" x2="12" y1="19" y2="22"/></svg>';
 const ICON_HEART_PICT =

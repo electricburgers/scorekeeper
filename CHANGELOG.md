@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.90 - 2026-11-23
+
+- **Game Confirmation icon.** The paper plane is now a single-fold "send" arrow pointing up and right, with three speed streaks trailing behind it.
+
 ## v22.89 - 2026-11-22
 
 - **Timer bar refill speed.** The refill sweep on reset now scales with how empty the bar was, from a quick 0.2s when nearly full to a slower 1s when empty, so an empty bar no longer snaps back.
