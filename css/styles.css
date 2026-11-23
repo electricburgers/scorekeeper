@@ -3336,3 +3336,35 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .team-sort-row{gap:8px}
   .q-stat{height:40px;font-size:.8rem;padding:0 12px;border-radius:9px}
 }
+
+/* Mouse hover and press feedback (v22.93). Before this, most hovers were a background shift of
+   about 8 levels (#1c1c1c -> #242424 in dark, #dfe9f8 -> #d2e1f6 in light) that a mouse user
+   could not see, and a handful of clickable things had no hover at all. Hover now also changes
+   the border to the accent colour and adds a 1px ring, and the fill moves further. Gated on a
+   real hovering pointer so a tap on a phone does not leave a stuck hover state; :active press
+   feedback applies everywhere. Placed last so it wins over the earlier per-control :hover rules. */
+:root,[data-theme="dark"]{--hover-fill:#333;--hover-ring:var(--accent-cyan-solid)}
+[data-theme="light"]{--hover-fill:#c2d6f1;--hover-ring:var(--accent-cyan-solid)}
+@media (hover:hover) and (pointer:fine){
+  /* Ring + accent border on every button-like control (not disabled or already-used wagers). */
+  :is(.toolbar>button,.btn,.settings-btn,.settings-toggle-btn,.settings-advanced-toggle,.sort-btn,.standings-sort-btn,.adj-chip,.qtimer-btn,.cv-select-btn,.theme-select,.banter-refresh,.stepper button,.adj-stepper button,.sw-select,.result-btn,.wager-btn,.bonus-choice-btn,.bonus-zero,.bonus-clear,.q-sort-btn,.q-alpha-btn,.q-reset-btn,.export-sq,.cp-sq-btn,.cp-wide-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-horn-btn,.cp-clear-btn,.finish-rect,.wc-btn,.aud-edit-btn,.tutorial-callout-next,.tutorial-callout-back):hover:not(:disabled):not(.used){
+    border-color:var(--hover-ring);box-shadow:0 0 0 1px var(--hover-ring)}
+  /* Stronger fill on the neutral ones. Solid-fill states (active/selected/correct...) and the
+     coloured controls keep their own fill and show the ring only. */
+  :is(.toolbar>button,.btn:not(.btn-accent):not(.btn-danger),.settings-btn,.settings-toggle-btn,.settings-advanced-toggle,.sort-btn,.standings-sort-btn,.adj-chip,.qtimer-btn,.cv-select-btn,.theme-select,.banter-refresh,.stepper button,.adj-stepper button,.sw-select,.result-btn,.wager-btn,.bonus-choice-btn,.export-sq,.cp-sq-btn,.cp-wide-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-horn-btn,.cp-clear-btn,.finish-rect,.wc-btn,.aud-edit-btn):hover:not(:disabled):not(.used):not(.active):not(.selected):not(.correct):not(.incorrect):not(.correct-sel):not(.incorrect-sel):not(.qtimer-pause):not(.qtimer-reset-active){
+    background-color:var(--hover-fill)}
+  /* Previously hover-less clickables. */
+  .check-label:hover{border-color:var(--hover-ring);box-shadow:0 0 0 1px var(--hover-ring)}
+  .check-label:not(.is-checked):hover{background:var(--hover-fill)}
+  .ht-chip:hover{border-color:var(--hover-ring);box-shadow:0 0 0 1px var(--hover-ring);background:var(--hover-fill)}
+  .mobile-scores-peek:hover,.standings-title-row:hover{background:var(--bg-hover)}
+  .standings-title-row:hover .standings-title{color:var(--txt-cyan);text-decoration:underline}
+  .settings-about summary:hover{color:var(--txt-cyan);text-decoration:underline}
+  .update-available-btn:hover,.tutorial-callout-skip:hover{text-decoration-thickness:2px}
+  .section-header:hover,.sidebar-header:hover,.mini-progress:hover{background:var(--hover-fill)}
+  .q-header-left:hover,.sw-header-left:hover{opacity:1}
+  .q-header:has(.q-header-left:hover),.q-header:has(.sw-header-left:hover){background:var(--hover-fill)}
+}
+/* Pressed: sink 1px and darken, on every button-like control. */
+:is(.toolbar>button,.btn,.settings-btn,.settings-toggle-btn,.settings-advanced-toggle,.sort-btn,.standings-sort-btn,.adj-chip,.qtimer-btn,.cv-select-btn,.banter-refresh,.stepper button,.adj-stepper button,.result-btn,.wager-btn,.bonus-choice-btn,.bonus-zero,.bonus-clear,.q-sort-btn,.q-alpha-btn,.q-reset-btn,.export-sq,.cp-sq-btn,.cp-wide-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-horn-btn,.cp-clear-btn,.finish-rect,.wc-btn,.aud-edit-btn,.settings-x-btn,.audit-close,.resume-banner-close,.remove-team button,.tutorial-callout-next,.tutorial-callout-back):active:not(:disabled):not(.used){
+  transform:translateY(1px);filter:brightness(.88);box-shadow:none}
