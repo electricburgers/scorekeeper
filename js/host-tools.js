@@ -449,6 +449,15 @@ function backupWhen(ts) {
     minute: "2-digit",
   });
 }
+// Venue name (Event Details > location) stored inside a backup's state string; "" if unreadable.
+function backupVenue(b) {
+  try {
+    const loc = JSON.parse(b.state).meta.location;
+    return typeof loc === "string" ? loc.trim() : "";
+  } catch (e) {
+    return "";
+  }
+}
 function openBackups() {
   const o = ensureOverlay("backupsOverlay");
   const list = loadBackups();
@@ -460,9 +469,11 @@ function openBackups() {
       ? `<ul class="ht-backups">` +
         list
           .map(
-            (b, i) =>
-              `<li><div class="ht-b-info"><b>${esc(backupWhen(b.ts))}</b><span>${esc(BACKUP_WHY[b.why] || b.why)} · ${b.q} question${b.q === 1 ? "" : "s"} scored · ${b.teams} team${b.teams === 1 ? "" : "s"}</span></div>` +
-              `<button type="button" class="btn" onclick="restoreBackup(${i})">Restore</button></li>`,
+            (b, i) => {
+              const venue = backupVenue(b);
+              return `<li><div class="ht-b-info"><b>${esc(backupWhen(b.ts))}</b><span>${venue ? esc(venue) + " · " : ""}${esc(BACKUP_WHY[b.why] || b.why)} · ${b.q} question${b.q === 1 ? "" : "s"} scored · ${b.teams} team${b.teams === 1 ? "" : "s"}</span></div>` +
+              `<button type="button" class="btn" onclick="restoreBackup(${i})">Restore</button></li>`;
+            },
           )
           .join("") +
         `</ul>`

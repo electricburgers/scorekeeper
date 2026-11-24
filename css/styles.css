@@ -2511,7 +2511,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    cheaper to animate. width:100% is the unscaled full-track size scaleX() then shrinks down
    from, taking over the role the JS-set inline width used to play. */
 .cp-countdown-fill{height:100%;width:100%;transform-origin:left;background:var(--accent-cyan-solid);transition:transform .1s linear}
-.cp-countdown-num{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--txt-cyan);min-width:2.8rem;text-align:left;font-variant-numeric:tabular-nums}
+.cp-countdown-num{font-family:var(--font-display);font-size:1.15rem;font-weight:800;color:var(--txt-cyan);min-width:2.8rem;padding-left:.6rem;box-sizing:content-box;text-align:left;font-variant-numeric:tabular-nums}
 .cp-manual-end-btn{width:100%;margin-top:8px}
 /* Start Drumroll / Stop Drumroll / Play Horn as square, icon-forward buttons (the same
    .export-sq treatment as XLSX/PDF and the sound-test bar) so they're an easy phone tap. A hair

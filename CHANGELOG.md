@@ -14,6 +14,12 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.96 - 2026-11-23
+
+- **Backups show the venue.** Each entry in Settings > Backups now lists the venue name alongside when it was saved and why.
+- **Drumroll countdown.** The seconds readout is nudged right so it no longer hugs the left edge.
+- **Import button label.** "Import from old games" is now "Import info from prev. games".
+
 ## v22.95 - 2026-11-23
 
 - **Pause and Delete team hover.** Pause team fills gold with a gold ring on hover, and Delete team (plus the red close X buttons in Settings, Team Report and the resume banner) fill red with a red ring. Pause no longer picks up the red Delete tint.
