@@ -1,6 +1,6 @@
 # Architecture
 
-A short orientation for reading the code. For features and history see `README.md` and `CHANGELOG.md`.
+A short orientation for reading the code. For features and history see `README.md` and `CHANGELOG.md` (in this folder).
 
 ## Shape of the project
 

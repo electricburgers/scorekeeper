@@ -150,7 +150,7 @@ function freshState() {
   const now = new Date().toISOString();
   return {
     // Forward-compat fields (v22.45). Every one is optional for readers: older builds just carry
-    // them along, newer ones can rely on them. See native-ios-plan.md > "Fields to add to the JSON now".
+    // them along, newer ones can rely on them. See docs/native-ios-plan.md > "Fields to add to the JSON now".
     schemaVersion: SCHEMA_VERSION,
     savedBy: "", // "web v22.45" / "ios 1.0" — stamped on every real save
     gameId: newId(), // one game night; survives mode switches, new for a fresh board

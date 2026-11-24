@@ -2,7 +2,7 @@
 
 A live scoring tool for trivia nights — a static, no-build-step web app built with plain HTML, CSS, and JavaScript. Scorekeeper runs in any modern browser and works on both desktop and mobile devices.
 
-**Current version:** v22.22 (as of 2026-11-14) — see [CHANGELOG.md](CHANGELOG.md)
+**Current version:** v22.22 (as of 2026-11-14) — see [CHANGELOG.md](docs/CHANGELOG.md)
 
 ## What it does
 
@@ -41,7 +41,7 @@ Or use any other HTTP server you prefer (`npx http-server`, Node.js, Ruby, PHP, 
 | `js/app.js` | Main app: rendering, settings, event handling and the score-changing actions. |
 | `js/scoring.js` | Pure scoring, ranking and game-mode rules. |
 | `js/storage.js` | Autosave, rolling backups, save/load, import and sample games. |
-| `js/export.js`, `js/craft-prize.js`, `js/team-audit.js`, `js/question-timer.js`, `js/tutorial*.js`, … | Exports (XLSX/PDF), Craft Prize drawing, Team Report, timer and guided tour. See [ARCHITECTURE.md](ARCHITECTURE.md). |
+| `js/export.js`, `js/craft-prize.js`, `js/team-audit.js`, `js/question-timer.js`, `js/tutorial*.js`, … | Exports (XLSX/PDF), Craft Prize drawing, Team Report, timer and guided tour. See [ARCHITECTURE.md](docs/ARCHITECTURE.md). |
 | `js/data/` | Bundled XLSX templates for export. |
 | `assets/audio/` | Drumroll start/loop/end and horn clips. |
 | `desktop/` | Electron wrapper for the desktop app (see `desktop/README.md`). |
@@ -52,7 +52,7 @@ Or use any other HTTP server you prefer (`npx http-server`, Node.js, Ruby, PHP, 
 | `assets/` | Static assets (social sharing images, etc.). |
 | `faq/` | Standalone FAQ & Tips site — searchable, collapsible sections, screenshots, and the same design system as the main app. |
 | `manifest.json` | Web app manifest for PWA installation and home-screen bookmarking. |
-| `CHANGELOG.md` | Full version history. |
+| `docs/CHANGELOG.md` | Full version history. |
 
 ## Features
 
@@ -113,7 +113,7 @@ npm test
 - **ESLint** for JavaScript code style.
 - **Stylelint** for CSS consistency.
 - **html-validate** for HTML structure and accessibility.
-- **Node.js test runner + jsdom** — `npm test` loads the real page and covers scoring/ranking unit tests (`tests/unit-scoring.test.js`), end-to-end flows (`tests/integration-flows.test.js`), exports, PWA/service-worker integrity, accessibility contrast and HTML/CSS structure. `TESTING.md` holds the manual QA checklist.
+- **Node.js test runner + jsdom** — `npm test` loads the real page and covers scoring/ranking unit tests (`tests/unit-scoring.test.js`), end-to-end flows (`tests/integration-flows.test.js`), exports, PWA/service-worker integrity, accessibility contrast and HTML/CSS structure. `docs/TESTING.md` holds the manual QA checklist.
 
 ### No build step required
 All HTML, CSS, and JS are served as-is. The only pre-processing is:
