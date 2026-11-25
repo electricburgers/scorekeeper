@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.79] - 24 Nov 2026
+
+### Added
+
+- **Advanced Settings:** new "Unlock Next Question" entry (1 or 2 teams scored before the next question and Bonus Questions unlock), linked from "Why can't I score a question?".
+
 ## [1.78] - 22 Nov 2026
 
 ### Changed

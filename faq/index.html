@@ -1337,7 +1337,7 @@
             <span class="faq-q-text">Why can't I score a question?</span><span class="faq-q-arrow">▼</span>
           </summary>
           <div class="faq-a">
-            <p>Questions are scored in order. A locked question shows "Score Qn first" until the one before it has at least one answer. Tapping a locked question shows a short message explaining why.</p>
+            <p>Questions are scored in order. A locked question shows "Score Qn first" until the one before it has at least one answer (or two, if <a href="#q-unlock-next-question">Unlock Next Question</a> is set to 2 teams). Tapping a locked question shows a short message explaining why.</p>
             <p>You'll see the same message if Event Details (Quiz ID, Host Name, Location, and Theme Name in Theme Night) or a team's Score Guess is still missing.</p>
           </div>
         </details>
@@ -2056,6 +2056,21 @@
                 onerror="faqShotFallback(this,'Question header with Crowd-Wisdom Percentage on — correct/incorrect counts next to Sort/Reset')"
               />
             </div>
+          </div>
+        </details>
+
+        <details class="faq-item" id="q-unlock-next-question">
+          <summary>
+            <span class="faq-q-text">Unlock Next Question</span><span class="faq-q-arrow">▼</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Sets how many teams must be scored on a question before the next question, and each round's Bonus Question, unlock.
+              The default is <b>1 team</b>. Switch it to <b>2 teams</b> if you want a second answer in before moving on.
+            </p>
+            <p>
+              A question that already has a score stays editable, and a game with only one team never gets stuck.
+            </p>
           </div>
         </details>
 
