@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.80] - 24 Nov 2026
+
+### Added
+
+- **Advanced Settings:** `unlock-next-question` screenshots (dark + light) on the "Unlock Next Question" entry.
+
 ## [1.79] - 24 Nov 2026
 
 ### Added
