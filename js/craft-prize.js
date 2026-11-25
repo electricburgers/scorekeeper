@@ -447,9 +447,9 @@ function craftPrizeScript(ti) {
   return `Congratulations to ${name}! You've won a craft beer gift card to ${brewery}${town ? " in " + town : ""}. Cheers!`;
 }
 function setExcludeTopN(v) {
-  // Can exclude at most N-1 of the N teams in the game — one team always has to stay
+  // Can exclude at most N-1 of the N teams in the game — one active team always has to stay
   // eligible for the craft prize, so the ceiling scales with the roster instead of a flat cap.
-  const maxExcludeN = Math.max(1, gameState.teams.length - 1);
+  const maxExcludeN = Math.max(1, activeTeamCount() - 1);
   const n = Math.max(1, Math.min(maxExcludeN, parseInt(v, 10) || 2));
   gameState.meta.excludeTopN = n;
   autosave();
@@ -469,6 +469,7 @@ function updateCraftScript(val) {
   }
 }
 // The top N places (N = exclude-top setting) don't compete for the one craft-beer prize.
+// Paused teams sit out the game, so they're left out of the random pool too.
 function craftEligiblePool() {
   const n = gameState.meta.excludeTopN || 2;
   const topN = new Set(
@@ -476,7 +477,7 @@ function craftEligiblePool() {
       .slice(0, n)
       .map((r) => r.index),
   );
-  return gameState.teams.map((_, i) => i).filter((i) => !topN.has(i));
+  return gameState.teams.map((_, i) => i).filter((i) => !topN.has(i) && !gameState.teams[i].paused);
 }
 
 /* ── ELIGIBLE LIST EXPORT (for an outside drumroll app) ─────────────
@@ -507,7 +508,7 @@ function craftEligibleBlocker() {
   if (!gameState.teams.length)
     return "Add some teams first — there's nobody to export.";
   if (!craftEligibleTeamNames().length)
-    return `No eligible teams: every team is inside the excluded top ${gameState.meta.excludeTopN || 2}. Lower "Exclude Top" in the Craft Prize Drawing section.`;
+    return `No eligible teams: every team is paused or inside the excluded top ${gameState.meta.excludeTopN || 2}. Unpause a team, or lower "Exclude Top" in the Craft Prize Drawing section.`;
   return "";
 }
 function exportCraftEligible() {
@@ -801,7 +802,7 @@ function renderCraftPrizeBlock() {
   if (!n)
     return '<p class="fr-note">Add teams to run the craft prize drawing.</p>';
   const excludeN = gameState.meta.excludeTopN || 2;
-  const maxExcludeN = Math.max(1, n - 1);
+  const maxExcludeN = Math.max(1, activeTeamCount() - 1);
   const poolLeft = craftEligiblePool().length;
   const prefs = loadPrefs();
   const secs = prefs.craftDrawSeconds || 6;
@@ -817,7 +818,7 @@ function renderCraftPrizeBlock() {
   // a winner already picked (e.g. restored from autosave) opens the flow on its own, so a
   // reload never hides a result behind the gate.
   if (!craftFlowOpen && !drawing && !winner) {
-    return `<div class="cp-btn-row"><button class="btn btn-accent cp-wide-btn cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>${ICON_BEER}<span class="cp-wide-label">Choose Craft<br>Prize Winner</span></button></div>${poolLeft <= 0 ? `<p class="fr-note">No teams left to draw from — top ${excludeN} place${excludeN > 1 ? "s" : ""} excluded covers everyone entered. Add a team, or open this to lower Exclude Top.</p>` : ""}`;
+    return `<div class="cp-btn-row"><button class="btn btn-accent cp-wide-btn cp-draw-btn" onclick="openCraftPrizeFlow()" ${poolLeft <= 0 ? "disabled" : ""}>${ICON_BEER}<span class="cp-wide-label">Choose Craft<br>Prize Winner</span></button></div>${poolLeft <= 0 ? `<p class="fr-note">No teams left to draw from — paused teams and the top ${excludeN} place${excludeN > 1 ? "s" : ""} excluded cover everyone entered. Unpause or add a team, or open this to lower Exclude Top.</p>` : ""}`;
   }
   let h = `<div class="cp-config">
       <div class="cp-field"><span class="cp-field-label">Exclude Top</span><div class="stepper">

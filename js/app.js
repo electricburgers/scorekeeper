@@ -69,7 +69,7 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.97"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION = "v22.98"; // #Version Number — bump this manually when you release a new build
 const APP_VERSION_DATE = "Nov 24, 2026 8:10 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
@@ -2759,7 +2759,7 @@ function removeTeamAt(ti) {
   // Exclude Top can never cover the whole remaining roster (at least one team must stay
   // eligible for the craft prize) — a removal can push a previously-valid setting over that
   // new N-1 ceiling, so pull it back in line rather than leaving a stale, now-invalid number.
-  const maxExcludeN = Math.max(1, gameState.teams.length - 1);
+  const maxExcludeN = Math.max(1, activeTeamCount() - 1);
   if ((gameState.meta.excludeTopN || 2) > maxExcludeN)
     gameState.meta.excludeTopN = maxExcludeN;
 }
