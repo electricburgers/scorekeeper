@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.81] - 24 Nov 2026
+
+### Changed
+
+- **Craft Prize Drawing:** the eligibility answer now says paused teams are left out of the draw and Exclude Top only counts active teams.
+
 ## [1.80] - 24 Nov 2026
 
 ### Added
