@@ -518,7 +518,7 @@ test("js/*.js: every icon-only <button> with a literal (non-interpolated) glyph 
 
 // ---- Locks in the v19.33 PWA status-bar-shadow fix: index.html's status bar meta must not be
 // "black-translucent" (which pulls content under the notch and gets an OS-drawn translucency
-// scrim, the actual shadow this session's bug report was about — see CHANGELOG.md's v19.33 entry
+// scrim, the actual shadow this session's bug report was about — see docs/CHANGELOG.md's v19.33 entry
 // for the full diagnosis), and neither page's viewport meta may reintroduce viewport-fit=cover
 // (what makes black-translucent's scrim apply in the first place). Not a page-to-page equality
 // check — faq/index.html deliberately has no status-bar meta at all (it's never launched as its

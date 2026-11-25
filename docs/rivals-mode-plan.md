@@ -69,7 +69,7 @@ Status: plan only, no code changed. Written against v21.62.
 3. **FAQ**: new section on Rivals (rules, place picker, Q5), screenshots per `faq-screenshot-generation.md`, FAQ version bump.
 4. **Styling** for the place buttons: needs WCAG AA in every theme x colour-vision combination. This repo audits that strictly (`wcag-aa.test.js`, `contrast-modes.test.js`), so expect real time here. Reuse `.wager-btn` classes where possible to inherit the existing audited colours.
 5. **Tests**: a `v21-xx.test.js` for Rivals scoring (210 perfect score, wager loss, tie-break), mode switch wipe, migration, and export column labels.
-6. **Release bookkeeping** per `scorekeeper-versioning.md`: `APP_VERSION`/date in `app.js`, `version.json`, `CHANGELOG.md`, Settings What's new (last two versions only), `faq/CHANGELOG.md` and `FAQ_VERSION`.
+6. **Release bookkeeping** per `scorekeeper-versioning.md`: `APP_VERSION`/date in `app.js`, `version.json`, `docs/CHANGELOG.md`, Settings What's new (last two versions only), `faq/CHANGELOG.md` and `FAQ_VERSION`.
 
 ## Data model decision
 

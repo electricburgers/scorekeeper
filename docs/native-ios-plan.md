@@ -240,7 +240,7 @@ The web app changes constantly (v22.43 as of now, several bumps a day). Native c
 
 - Keep a **parity ledger** at the top of `ios/README.md`: "Ported through web v22.xx". Native releases target a web baseline, not each patch.
 - Anything that changes **data shape or scoring** must update the fixtures in the same web commit (CI enforces it). UI-only web tweaks (button size, spacing) can be batched into periodic native catch-ups.
-- Version numbers: native gets its own (`1.0`, `1.1`...), plus the "ported through" marker. They are independent of the web `vX.Y` and the FAQ `v1.Z` numbers; the web release bump (`js/app.js`, `version.json`, `CHANGELOG.md`) does not need to touch native.
+- Version numbers: native gets its own (`1.0`, `1.1`...), plus the "ported through" marker. They are independent of the web `vX.Y` and the FAQ `v1.Z` numbers; the web release bump (`js/app.js`, `version.json`, `docs/CHANGELOG.md`) does not need to touch native.
 - New game modes are the highest-cost change: one entry in web `GAME_MODES` is a scoring branch, UI, and PDF columns on every platform. Decide per mode whether native ships it day one.
 
 ## Risks

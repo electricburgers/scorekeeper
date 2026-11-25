@@ -14,6 +14,10 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.97 - 2026-11-24
+
+- **Optional two-team unlock.** New Settings > Advanced > Scoring > Unlock Next Question toggle: set it to "2 teams" and the next question, and each round's Bonus Question (including wager Q5s), stay locked until two teams are scored on the question before. Default remains 1 team; already-scored questions stay editable.
+
 ## v22.96 - 2026-11-23
 
 - **Backups show the venue.** Each entry in Settings > Backups now lists the venue name alongside when it was saved and why.

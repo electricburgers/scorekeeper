@@ -380,10 +380,21 @@ function checkGameStarted() {
 // right before it (Q4 of the previous round, for Q1) has at least one response. A question that
 // already has a response is never locked, so existing scores stay editable.
 function questionHasResponse(ri, qi) {
+  return questionResponseCount(ri, qi) > 0;
+}
+// Teams scored on a question. The next question / bonus stays locked until one team is scored,
+// or two when Settings > Advanced > Scoring > Unlock Next Question is set to "2 teams"
+// (capped at the team count, so a one-team game never deadlocks).
+function questionResponseCount(ri, qi) {
   const q = gameState.rounds[ri] && gameState.rounds[ri].questions[qi];
-  if (!q) return false;
-  for (const k in q) if (q[k]) return true;
-  return false;
+  if (!q) return 0;
+  let n = 0;
+  for (const k in q) if (q[k]) n++;
+  return n;
+}
+function lockTeamsNeeded() {
+  const want = loadPrefs().lockTwoTeams ? 2 : 1;
+  return Math.max(1, Math.min(want, gameState.teams.length));
 }
 function previousQuestion(ri, qi) {
   if (qi > 0) return { ri, qi: qi - 1 };
@@ -392,24 +403,28 @@ function previousQuestion(ri, qi) {
 }
 function questionLocked(ri, qi) {
   const prev = previousQuestion(ri, qi);
-  return !!prev && !questionHasResponse(prev.ri, prev.qi) && !questionHasResponse(ri, qi);
+  return !!prev && questionResponseCount(prev.ri, prev.qi) < lockTeamsNeeded() && !questionHasResponse(ri, qi);
 }
-// The round's Q5 Bonus Question follows the same rule: locked until that round's Q4 has a response
+// The round's Q5 Bonus Question follows the same rule: locked until that round's Q4 has a response (two teams if the Unlock setting asks for it)
 // (and, like the questions, never locked once it already holds a score).
 // Rounds 2 and 4 (and Theme/Tune/Rivals wager rounds) have a wager Q5 instead (`type`), held in wagerStore().
 function bonusLocked(ri, type) {
-  if (questionHasResponse(ri, 3)) return false;
+  if (questionResponseCount(ri, 3) >= lockTeamsNeeded()) return false;
   const b = type ? wagerStore(type) : gameState.rounds[ri] && gameState.rounds[ri].bonus;
   return !(b && Object.keys(b).length);
 }
 function bonusLockedMessage(ri) {
-  return "R" + (ri + 1) + "-Q4 has no responses yet. Score it first before the Bonus Question.";
+  return lockTeamsNeeded() > 1
+    ? "R" + (ri + 1) + "-Q4 needs 2 teams scored first before the Bonus Question."
+    : "R" + (ri + 1) + "-Q4 has no responses yet. Score it first before the Bonus Question.";
 }
 function questionLockedMessage(ri, qi) {
   const prev = previousQuestion(ri, qi);
   if (!prev) return "";
   const name = "R" + (prev.ri + 1) + "-Q" + (prev.qi + 1);
-  return name + " has no responses yet. Score it first so you stay on the right question.";
+  return lockTeamsNeeded() > 1
+    ? name + " needs 2 teams scored first so you stay on the right question."
+    : name + " has no responses yet. Score it first so you stay on the right question.";
 }
 
 // BEER ROUND: question is a beer round if every team has been marked AND all are correct

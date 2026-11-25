@@ -86,6 +86,7 @@
       <h3 class="settings-group-label">Scoring</h3>
       <div class="settings-row"><span class="size-label">Point Adjustments</span><div class="settings-controls"><button class="settings-btn" id="adjToggle" onclick="toggleAdjSetting()" title="Show a manual ± point adjustment control on each team row">Hidden</button></div></div>
       <div class="settings-row"><span class="size-label">Crowd-Wisdom Percentage</span><div class="settings-controls"><button class="settings-btn" id="qResultToggleBtn" onclick="toggleQResultButtons()" title="Show a live correct/incorrect percentage next to each round question's Sort/Reset buttons">Off</button></div></div>
+      <div class="settings-row"><span class="size-label">Unlock Next Question</span><div class="settings-controls"><button class="settings-btn" id="lockTeamsToggle" onclick="toggleLockTeams()" title="How many teams must be scored on a question before the next question and each Bonus Question unlock">1 team</button></div></div>
       <div class="settings-row"><span class="size-label">Edit Locked Fields</span><div class="settings-controls"><button class="settings-btn" id="unlockEventDetailsToggle" onclick="toggleUnlockEventDetails()" title="Allow fixing a typo in Event Details (Date, Quiz ID, Location, Craft Partner, Partner Town) after scoring has started">Locked</button></div></div>
       <div class="settings-row"><span class="size-label">Teams Without a Guess</span><div class="settings-controls"><button class="settings-btn" onclick="removeTeamsWithoutGuess()" title="Delete every team that has no Final score guess (asks first; never deletes all teams)">Delete…</button></div></div>
       <h3 class="settings-group-label">Timer</h3>
@@ -110,7 +111,7 @@
     </div>
     </div>
     <div class="settings-panel-foot">
-    <div class="settings-meta"><span class="settings-version" id="versionLabel"></span><details class="settings-about"><summary>What's new</summary><div class="about-ver"><b>v22.96</b><ul><li>Backups now show the venue name. Drumroll countdown number nudged right. &ldquo;Import info from prev. games&rdquo; renamed.</li></ul></div><div class="about-ver"><b>v22.95</b><ul><li>Mouse users: Pause team and Delete team (and the red close X buttons) highlight clearly on hover, and question rows show a magnifying glass on hover.</li></ul></div><div class="about-ver"><b>v22.94</b><ul><li>Mouse users: big tile buttons lift on hover, selected answers still react, and scoreboard rows with a clickable name highlight.</li></ul></div></details><span class="settings-disclaimer"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></div>
+    <div class="settings-meta"><span class="settings-version" id="versionLabel"></span><details class="settings-about"><summary>What's new</summary><div class="about-ver"><b>v22.97</b><ul><li>New optional setting (Advanced Settings &gt; Scoring &gt; Unlock Next Question): require 2 teams scored before the next question and Bonus Questions unlock. Default stays 1 team.</li></ul></div><div class="about-ver"><b>v22.96</b><ul><li>Backups now show the venue name. Drumroll countdown number nudged right. &ldquo;Import info from prev. games&rdquo; renamed.</li></ul></div><div class="about-ver"><b>v22.95</b><ul><li>Mouse users: Pause team and Delete team (and the red close X buttons) highlight clearly on hover, and question rows show a magnifying glass on hover.</li></ul></div></details><span class="settings-disclaimer"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></div>
     </div>
   </div>
 </div>
@@ -630,7 +631,7 @@
   still one undifferentiated file after that). These ten are
   what came out of it, split along its clearest natural seams via a real parse of the file (each
   file boundary sits exactly on a top-level statement, verified byte-for-byte against the
-  original before this split shipped — see the "how this was verified" note in CHANGELOG.md).
+  original before this split shipped — see the "how this was verified" note in docs/CHANGELOG.md).
   Classic <script> tags, not modules, on purpose — same shared global scope as before (see
   js/tutorial.js's own top comment for why), just organized into readable, single-purpose files
   instead of one scroll-forever one. Load order relative to EACH OTHER genuinely doesn't matter —

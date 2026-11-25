@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.96"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 23, 2026 7:40 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.97"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 24, 2026 8:10 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -177,6 +177,7 @@ function loadPrefs() {
       if (p.craftSoundTest == null) p.craftSoundTest = false;
       if (p.qResultToggle == null) p.qResultToggle = false;
       if (p.keepAwake == null) p.keepAwake = true;
+      if (p.lockTwoTeams == null) p.lockTwoTeams = false;
       prefsCache = p;
       return { ...p };
     }
@@ -201,6 +202,7 @@ function loadPrefs() {
     craftSoundTest: false,
     qResultToggle: false,
     keepAwake: true,
+    lockTwoTeams: false,
     showProgressBar: false,
   };
   return { ...prefsCache };
@@ -286,6 +288,11 @@ function applyPrefs() {
   if (pbt) {
     pbt.classList.toggle("active", !!p.showProgressBar);
     pbt.textContent = p.showProgressBar ? "Shown" : "Hidden";
+  }
+  const ltt = document.getElementById("lockTeamsToggle");
+  if (ltt) {
+    ltt.classList.toggle("active", !!p.lockTwoTeams);
+    ltt.textContent = p.lockTwoTeams ? "2 teams" : "1 team";
   }
   const adt = document.getElementById("adjToggle");
   if (adt) {
@@ -429,6 +436,15 @@ function toggleProgressBar() {
   savePrefs(p);
   applyPrefs();
   renderLeft();
+}
+// Settings > Advanced > Scoring > Unlock Next Question: how many teams must be scored on a question
+// before the next question / bonus unlocks (1 by default, 2 optional). See lockTeamsNeeded().
+function toggleLockTeams() {
+  const p = loadPrefs();
+  p.lockTwoTeams = !p.lockTwoTeams;
+  savePrefs(p);
+  applyPrefs();
+  renderAll();
 }
 function toggleAdjSetting() {
   const p = loadPrefs();
