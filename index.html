@@ -111,7 +111,7 @@
     </div>
     </div>
     <div class="settings-panel-foot">
-    <div class="settings-meta"><span class="settings-version" id="versionLabel"></span><details class="settings-about"><summary>What's new</summary><div class="about-ver"><b>v22.98</b><ul><li>Paused teams are no longer in the random pool when drawing the Craft Prize winner.</li></ul></div><div class="about-ver"><b>v22.97</b><ul><li>New optional setting (Advanced Settings &gt; Scoring &gt; Unlock Next Question): require 2 teams scored before the next question and Bonus Questions unlock. Default stays 1 team.</li></ul></div><div class="about-ver"><b>v22.96</b><ul><li>Backups now show the venue name. Drumroll countdown number nudged right. &ldquo;Import info from prev. games&rdquo; renamed.</li></ul></div></details><span class="settings-disclaimer"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></div>
+    <div class="settings-meta"><span class="settings-version" id="versionLabel"></span><details class="settings-about"><summary>What's new</summary><div class="about-ver"><b>v22.99</b><ul><li>On a computer: score from the keyboard (press N, or click a team row; press ? for the keys). Wide screens keep scoring compact, narrow windows keep bigger buttons, the +3 button spells out Craft Beer Card when there is room, and the sort Reset button is now &ldquo;Entry order&rdquo;. The PDF can&rsquo;t replace the app&rsquo;s tab. Two page-height bugs fixed.</li></ul></div><div class="about-ver"><b>v22.98</b><ul><li>Paused teams are no longer in the random pool when drawing the Craft Prize winner.</li></ul></div><div class="about-ver"><b>v22.97</b><ul><li>New optional setting (Advanced Settings &gt; Scoring &gt; Unlock Next Question): require 2 teams scored before the next question and Bonus Questions unlock. Default stays 1 team.</li></ul></div></details><span class="settings-disclaimer"><svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg> Built with Anthropic's Claude AI — double-check scores &amp; banter yourself.</span></div>
     </div>
   </div>
 </div>
@@ -546,7 +546,7 @@
        its class, and this leaves that untouched while still giving screen-reader users the
        landmark to jump to. -->
   <div class="col-left" id="mainContent" role="main"></div>
-  <div class="drag-handle" id="dragHandle"></div>
+  <div class="drag-handle" id="dragHandle" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Resize scoreboard" aria-valuemin="200" aria-valuemax="1600" aria-valuenow="380" title="Drag or use arrow keys to resize. Double-click or press Enter to reset."></div>
   <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
   <div class="mobile-bottom-dock" id="mobileBottomDock">
     <div class="mobile-scores-peek" id="mobileScoresPeek" role="button" tabindex="0" aria-label="Open scores" aria-expanded="false" aria-controls="sidebar" onclick="toggleSidebar()">

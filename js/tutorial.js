@@ -723,15 +723,14 @@ const Tutorial = (function () {
         },
       },
       {
-        // targetEnd unions Sort with Reset — the step already talks the host through both
-        // buttons ("Sort... or ↺ Reset to go back to entry order"), so the spotlight now covers
-        // both instead of leaving Reset unspotlighted while the text describes it.
+        // targetEnd unions Sort with Entry order (.q-reset-btn) — the step talks the host through both
+        // buttons, so the spotlight covers both.
         target: "#qblock-1-1 .q-sort-btn",
         targetEnd: "#qblock-1-1 .q-reset-btn",
         calloutPosition: "above",
-        text: `${tapWordCap()} Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or Reset to go back to entry order. This header (question name, number left and A-Z too) pins to the top as you scroll a long team list, on every question and wager card, so you never have to scroll back up to re-sort. ${tapWordCap()} Next when you're ready to move on.`,
+        text: `${tapWordCap()} Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or Entry order to put teams back as you entered them. This header (question name, number left and A-Z too) pins to the top as you scroll a long team list, on every question and wager card, so you never have to scroll back up to re-sort. ${tapWordCap()} Next when you're ready to move on.`,
         // 'confirm' rather than 'on-click' here on purpose — the host might want to tap Sort a
-        // few times (and try Reset) to get a feel for it, not get whisked away the instant it
+        // few times (and try Entry order) to get a feel for it, not get whisked away the instant it
         // sorts once.
         advance: "confirm",
         waitHint: `${tapWordCap()} Sort to continue`,

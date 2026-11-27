@@ -46,11 +46,13 @@ function tutorialMaybeOfferFirstRun() {
     `<button class="btn" onclick="dismissTutorialFirstRun()">Skip</button>` +
     `</div>`;
   banner.parentNode.insertBefore(card, banner);
+  syncLayoutTop();
 }
 function dismissTutorialFirstRun() {
   TRStore.setItem(TUTORIAL_SEEN_KEY, "1");
   const el = document.getElementById("tutorialFirstRun");
   if (el) el.remove();
+  syncLayoutTop();
 }
 // Runs once, on script load — by this point app.js's own top-level IIFE (js/app.js ~line 784)
 // has already run and either shown the real #resumeBanner (a saved session exists) or rendered

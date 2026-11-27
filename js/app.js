@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.98"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 24, 2026 8:10 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.99"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 27, 2026 12:18 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1209,6 +1209,15 @@ function syncQtimerH() {
   sync();
 })();
 
+function syncLayoutTop() {
+  const layoutEl = document.querySelector(".app-layout");
+  if (!layoutEl) return;
+  document.documentElement.style.setProperty(
+    "--layout-top",
+    layoutEl.getBoundingClientRect().top + window.scrollY + "px",
+  );
+}
+
 // Keeps --layout-top in sync with where .app-layout actually starts down the viewport, which is
 // what its desktop height subtracts from 100dvh (see the note on .app-layout in styles.css for
 // what the hardcoded 60px this replaces got wrong, and why the blank strip it left below the
@@ -1235,11 +1244,7 @@ function syncQtimerH() {
 (function () {
   const layoutEl = document.querySelector(".app-layout");
   if (!layoutEl) return;
-  const sync = () =>
-    document.documentElement.style.setProperty(
-      "--layout-top",
-      layoutEl.getBoundingClientRect().top + window.scrollY + "px",
-    );
+  const sync = syncLayoutTop;
   const ro = new ResizeObserver(sync);
   // The two things in flow above the panel, and deliberately NOT the panel itself: a
   // ResizeObserver reports size, not position, so observing the panel could not detect it being
@@ -1574,7 +1579,9 @@ function renderAll() {
 }
 
 function renderLeft() {
-  return withScoreMemo(renderLeftBody);
+  withScoreMemo(renderLeftBody);
+  // Re-mark the keyboard-scoring row, which the redraw above replaced (js/host-tools.js loads later).
+  if (typeof kbRestoreRow === "function") kbRestoreRow();
 }
 function renderLeftBody() {
   const m = document.getElementById("mainContent");
@@ -1704,7 +1711,7 @@ function renderLeftBody() {
         <input type="text" maxlength="40" value="${esc(t.name)}" placeholder="Team name" aria-label="Team ${i + 1} name" onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
         <div class="team-checks">
           <label class="check-label njcb-check${t.njcb ? " is-checked" : ""}">
-            <input type="checkbox" class="check-input" id="nj${i}" ${t.njcb ? "checked" : ""} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+3 CB
+            <input type="checkbox" class="check-input" id="nj${i}" ${t.njcb ? "checked" : ""} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+3 <span class="cb-xs">CB</span><span class="cb-md">Craft Beer</span><span class="cb-lg">Craft Beer Card</span>
           </label>
           <label class="check-label item-check${t.bonusItem ? " is-checked" : ""}">
             <input type="checkbox" class="check-input" id="bi${i}" ${t.bonusItem ? "checked" : ""} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+5 <span class="lbl-full">Bonus</span><span class="lbl-short" aria-hidden="true">BON</span>
@@ -2038,7 +2045,7 @@ function renderWQ(ri, qi) {
           ? `${ICON_DONE} Done`
           : qs.total - qs.done + " left";
 
-  const sortBtns = `${sortBtnHtml(qKey, (ti) => qAnswered(ri, qi, ti), `sortQuestion(${ri},${qi})`)}<button class="q-alpha-btn${qAlpha(qKey) ? " active" : ""}" data-state="${qAlpha(qKey) || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(qKey) === "az" ? "A to Z" : qAlpha(qKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(qKey))}</button><button class="q-reset-btn${resetIdleCls(qKey)}" onclick="resetQuestionSort(${ri},${qi})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
+  const sortBtns = `${sortBtnHtml(qKey, (ti) => qAnswered(ri, qi, ti), `sortQuestion(${ri},${qi})`)}<button class="q-alpha-btn${qAlpha(qKey) ? " active" : ""}" data-state="${qAlpha(qKey) || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(qKey) === "az" ? "A to Z" : qAlpha(qKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(qKey))}</button><button class="q-reset-btn${resetIdleCls(qKey)}" onclick="resetQuestionSort(${ri},${qi})" title="Put teams back in entry order (scores are not changed)" aria-label="Restore entry order">${ICON_RESET}<span class="btn-label">Entry order</span></button>`;
   let h = `<div class="${blockCls}" id="qblock-${ri}-${qi}">`;
 
   // Collapsible header
@@ -2307,7 +2314,7 @@ function renderBQ(ri) {
   if (bqLocked) blockCls += " q-locked";
   const bqStyle = BONUS_Q_STYLE[ri] || { cls: "" };
   const bqKey = "b" + ri;
-  const sortBtns = `${sortBtnHtml(bqKey, (ti) => bonusAnswered(ri, ti), `sortBonusQuestion(${ri})`)}<button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(bqKey))}</button><button class="q-reset-btn${resetIdleCls(bqKey)}" onclick="resetBonusQuestionSort(${ri})" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
+  const sortBtns = `${sortBtnHtml(bqKey, (ti) => bonusAnswered(ri, ti), `sortBonusQuestion(${ri})`)}<button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(bqKey))}</button><button class="q-reset-btn${resetIdleCls(bqKey)}" onclick="resetBonusQuestionSort(${ri})" title="Put teams back in entry order (scores are not changed)" aria-label="Restore entry order">${ICON_RESET}<span class="btn-label">Entry order</span></button>`;
   let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right">${sortBtns}</div></div><div class="q-body">`;
   const bqEntryOrder = gameState.teams.map((_, i) => i);
   let bqTeamOrder = questionSortOrder[bqKey]
@@ -2354,7 +2361,7 @@ function renderBQ(ri) {
         return `<button class="${cls}" onclick="setB(${ri},${ti},${k})" title="${k} correct \u2014 +${k * 5} pts \u2014 tap again to unselect">${k}${cbadge}</button>`;
       })
       .join("");
-    h += `<div class="bonus-row${submitted ? " is-submitted" : ""}"><span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 tap to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
+    h += `<div class="bonus-row${submitted ? " is-submitted" : ""}" data-ta="bq-${ri}-${ti}"><span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 tap to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
       <div class="bonus-right"><div class="bonus-choice">${choices}</div>
       ${ptsHtml}</div></div>`;
   });
@@ -2415,7 +2422,7 @@ function renderSpecialWager(type) {
   // ignoring the toggle entirely, so turning the setting Off didn't hide it here like it does
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
-  const sortBtns = `${sortBtnHtml(swKey, (ti) => swAnswered(type, ti), `sortSpecialWager('${type}')`)}<button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(swKey))}</button><button class="q-reset-btn${resetIdleCls(swKey)}" onclick="resetSpecialWagerSort('${type}')" title="Restore entry order" aria-label="Reset sort order">${ICON_RESET}<span class="btn-label">Reset</span></button>`;
+  const sortBtns = `${sortBtnHtml(swKey, (ti) => swAnswered(type, ti), `sortSpecialWager('${type}')`)}<button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(swKey))}</button><button class="q-reset-btn${resetIdleCls(swKey)}" onclick="resetSpecialWagerSort('${type}')" title="Put teams back in entry order (scores are not changed)" aria-label="Restore entry order">${ICON_RESET}<span class="btn-label">Entry order</span></button>`;
   let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swLocked ? " q-locked" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}${sortBtns}</div></div>`;
   // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
   // badge is two inches away and says the same thing, and the whole block is already washed gold
@@ -3169,6 +3176,20 @@ document.addEventListener("mousemove", (e) => {
   let dragging = false,
     startX = 0,
     startW = 0;
+  const clampW = (w) => Math.max(200, Math.min(window.innerWidth * 0.6, w));
+  function announceWidth() {
+    handle.setAttribute("aria-valuenow", String(Math.round(sidebar.offsetWidth)));
+  }
+  function setWidth(w) {
+    sidebar.style.width = clampW(w) + "px";
+    TRStore.setItem("trivRev6_sideW", Math.round(clampW(w)));
+    announceWidth();
+  }
+  function resetWidth() {
+    sidebar.style.width = "";
+    TRStore.removeItem("trivRev6_sideW");
+    announceWidth();
+  }
   function onDown(e) {
     e.preventDefault();
     dragging = true;
@@ -3193,19 +3214,30 @@ document.addEventListener("mousemove", (e) => {
       x = e.clientX;
     }
     const delta = startX - x;
-    const newW = Math.max(
-      200,
-      Math.min(window.innerWidth * 0.6, startW + delta),
-    );
-    sidebar.style.width = newW + "px";
+    // A plain click (or either half of a double-click) must not pin the automatic width.
+    if (!delta && !sidebar.style.width) return;
+    sidebar.style.width = clampW(startW + delta) + "px";
   }
   function onUp() {
     if (!dragging) return;
     dragging = false;
     handle.classList.remove("dragging");
     document.body.classList.remove("col-resizing");
-    TRStore.setItem("trivRev6_sideW", sidebar.offsetWidth);
+    if (sidebar.style.width) TRStore.setItem("trivRev6_sideW", sidebar.offsetWidth);
+    announceWidth();
   }
+  handle.addEventListener("dblclick", resetWidth);
+  handle.addEventListener("keydown", (e) => {
+    const step = e.shiftKey ? 80 : 20;
+    // The scoreboard is on the right, so moving the divider left widens it.
+    if (e.key === "ArrowLeft") setWidth(sidebar.offsetWidth + step);
+    else if (e.key === "ArrowRight") setWidth(sidebar.offsetWidth - step);
+    else if (e.key === "Home") setWidth(window.innerWidth);
+    else if (e.key === "End") setWidth(0);
+    else if (e.key === "Enter") resetWidth();
+    else return;
+    e.preventDefault();
+  });
   handle.addEventListener("mousedown", onDown);
   document.addEventListener("mousemove", onMove);
   document.addEventListener("mouseup", onUp);
@@ -3215,6 +3247,7 @@ document.addEventListener("mousemove", (e) => {
   document.addEventListener("touchcancel", onUp); // reset if touch interrupted (notification, etc.)
   const saved = TRStore.getItem("trivRev6_sideW");
   if (saved) sidebar.style.width = saved + "px";
+  announceWidth();
 })();
 bindSheetDrag(document.getElementById("mobileScoresPeek"), true, () => {
   if (!document.getElementById("sidebar")?.classList.contains("open"))

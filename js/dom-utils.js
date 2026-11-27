@@ -3,7 +3,7 @@
 
      - esc(s): escapes text for safe insertion into HTML strings. Anything a user typed (team
        names!) must go through esc() before it is placed in innerHTML, or it could inject HTML.
-     - dl(blob, name): triggers a file download (handles the iOS quirks).
+     - dl(blob, name): triggers a file download without ever replacing the app's tab.
      - toggleSection(id): collapse/expand a section while keeping the scroll position steady.
      - bindSheetDrag(): the swipe-up/swipe-down gesture for the mobile scores sheet.
    ========================================================================== */
@@ -35,33 +35,17 @@ function toggleSection(id) {
     if (el) el.classList.toggle("collapsed");
   });
 }
-// iPadOS 13+ dropped "iPad" from its own user agent and reports as a plain Mac — the standard
-// way to tell it apart from an actual Mac is that only the iPad also claims multi-touch support,
-// which no desktop Mac does.
-const IS_IOS =
-  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-  (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 function dl(blob, name) {
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = name;
-  // target="_blank" used to be set unconditionally here, which is what let a PDF export "open a
-  // new link that navigates away from the app" instead of just downloading: Chrome (and other
-  // Chromium browsers) DO honor the download attribute on their own — the file saves in place,
-  // no navigation, target irrelevant — but pairing it with target="_blank" on a PDF blob can make
-  // Chrome's own built-in PDF viewer win the race and open the file in a new tab instead of
-  // triggering the download it would have done unprompted. iOS Safari is the one browser that
-  // does NOT honor download at all — it navigates the CURRENT tab straight to the blob URL,
-  // which reloads the whole page and wipes all in-memory state (mid Tutorial Mode, that meant
-  // the practice game vanishing and the host getting dumped back to step 1) — and needs
-  // target="_blank" specifically to turn that navigation into a new tab instead, leaving the
-  // running tab untouched. No feature-detect distinguishes "actually honors download" from "iOS
-  // Safari, which claims to but doesn't", so this checks the platform directly and only sets
-  // target where it's actually needed.
-  if (IS_IOS) {
-    a.target = "_blank";
-    a.rel = "noopener";
-  }
+  // The app's tab must never be replaced: a navigation reloads the page and loses in-memory state.
+  // Browsers that honor `download` save the file and ignore the target. Any that don't (iOS Safari,
+  // some in-app browsers) open the file in a new tab instead of over the running game.
+  // v18.82 limited this to iOS because some Chrome setups show the PDF in a new tab rather than
+  // only saving it; that is accepted now, since it still leaves the app's tab alone.
+  a.target = "_blank";
+  a.rel = "noopener";
   a.click();
 }
 function esc(s) {

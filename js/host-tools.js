@@ -20,7 +20,7 @@
 // ---------------------------------------------------------------------------------------------
 const SHORTCUT_LIST = [
   ["N", "Jump to the next unscored question"],
-  ["1 – 4", "Jump to Round 1 – 4"],
+  ["1 – 4", "Jump to Round 1 – 4 (when no team row is selected)"],
   ["F", "Jump to Final Results"],
   ["E", "Scoreboard: entry order"],
   ["R", "Scoreboard: shuffle"],
@@ -28,7 +28,21 @@ const SHORTCUT_LIST = [
   ["D", "Scoreboard: descending (leaderboard)"],
   ["G", "Score progression chart"],
   ["?", "Show / hide this list"],
-  ["Esc", "Close the open panel"],
+  ["Esc", "Close the open panel or deselect the team row"],
+];
+// Keys that act on the highlighted team row (see KEYBOARD SCORING below).
+const ROW_SHORTCUT_LIST = [
+  ["N", "Select the next unscored team (or click a team’s row)"],
+  ["↑ ↓", "Previous / next team"],
+  ["Enter", "Next team"],
+  ["Number", "Questions: the wager, marked correct. Type 12 as 1 then 2"],
+  ["X", "Mark wrong"],
+  ["C", "Mark correct"],
+  ["⌫", "Clear this score"],
+  ["0 – 4", "Bonus Question: how many parts were correct"],
+  ["Number", "Q5 wagers: the amount, then C or X"],
+  ["1 2 3 O", "Revolution Rivals: survey place, or Other"],
+  ["Esc", "Deselect the row"],
 ];
 
 // True while typing into a field or while a modal/overlay owns the keyboard — plain-letter
@@ -57,6 +71,14 @@ function ensureOverlay(id) {
   return o;
 }
 
+function shortcutTableHtml(list) {
+  return (
+    `<table class="ht-keys"><tbody>` +
+    list.map(([k, d]) => `<tr><th scope="row"><kbd>${esc(k)}</kbd></th><td>${esc(d)}</td></tr>`).join("") +
+    `</tbody></table>`
+  );
+}
+
 function toggleShortcutsHelp(force) {
   const o = ensureOverlay("shortcutsOverlay");
   const show = force === undefined ? !o.classList.contains("show") : force;
@@ -64,11 +86,10 @@ function toggleShortcutsHelp(force) {
     o.innerHTML =
       `<div class="audit-modal ht-modal" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts">` +
       `<div class="ht-head"><h2>Keyboard shortcuts</h2><button type="button" class="btn" onclick="toggleShortcutsHelp(false)" aria-label="Close">Close</button></div>` +
-      `<table class="ht-keys"><tbody>` +
-      SHORTCUT_LIST.map(
-        ([k, d]) => `<tr><th scope="row"><kbd>${esc(k)}</kbd></th><td>${esc(d)}</td></tr>`,
-      ).join("") +
-      `</tbody></table><p class="fr-note">Shortcuts pause while you are typing in a field or a panel is open.</p></div>`;
+      shortcutTableHtml(SHORTCUT_LIST) +
+      `<h3 class="ht-keys-sub">Scoring from the keyboard</h3>` +
+      shortcutTableHtml(ROW_SHORTCUT_LIST) +
+      `<p class="fr-note">Shortcuts pause while you are typing in a field or a panel is open.</p></div>`;
   }
   o.classList.toggle("show", show);
 }
@@ -78,14 +99,17 @@ document.addEventListener("keydown", (e) => {
     ["shortcutsOverlay", "chartOverlay", "backupsOverlay"].forEach((id) =>
       document.getElementById(id)?.classList.remove("show"),
     );
+    kbClearRow(true);
     return;
   }
-  if (shortcutsBlocked(e) || e.repeat) return;
+  if (shortcutsBlocked(e)) return;
+  if (kbHandleRowKey(e)) return e.preventDefault();
+  if (e.repeat) return;
   const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
   const rounds = roundCount();
   let handled = true;
   if (k === "?") toggleShortcutsHelp();
-  else if (k === "n") jumpToFirstUnanswered();
+  else if (k === "n") kbJumpToNextUnscored();
   else if (k === "f") jumpToSection("sec-final");
   else if (k === "e") setSortMode("entry");
   else if (k === "r") setSortMode("random");
@@ -95,6 +119,240 @@ document.addEventListener("keydown", (e) => {
   else if (/^[1-4]$/.test(k) && +k <= rounds) jumpToSection("sec-r" + k);
   else handled = false;
   if (handled) e.preventDefault();
+});
+
+// ---------------------------------------------------------------------------------------------
+// Keyboard scoring
+// ---------------------------------------------------------------------------------------------
+// One team row at a time can be "selected" (highlighted); score keys act on that row only. A row
+// is selected by pressing N or by clicking it, and dropped by Esc, or by clicking or tabbing
+// elsewhere. Rows are redrawn after every score, so the selection is kept as the row's data-ta id:
+// "ri-qi-ti" (question), "bq-ri-ti" (bonus question) or "type-ti" (special wager).
+const KB_DIGIT_MS = 900; // how long a first digit waits for a second one (10, 12, 20...)
+let kbRowId = null;
+let kbDigits = "";
+let kbDigitAt = 0;
+let kbHintShown = false;
+
+function kbRowEl(id) {
+  return id ? document.querySelector(`#mainContent [data-ta="${id}"]`) : null;
+}
+const KB_COLLAPSED = ".section.collapsed, .q-collapsed, .bq-collapsed, .sw-collapsed";
+function kbRows(root) {
+  return [...(root || document.getElementById("mainContent")).querySelectorAll("[data-ta]")].filter(
+    (el) => !el.closest(KB_COLLAPSED),
+  );
+}
+function kbParseRow(id) {
+  const p = id.split("-");
+  if (p[0] === "bq") return { kind: "bonus", ri: +p[1], ti: +p[2] };
+  if (p.length === 2) return { kind: "wager", type: p[0], ti: +p[1] };
+  return { kind: "question", ri: +p[0], qi: +p[1], ti: +p[2] };
+}
+function kbIsAnswered(id) {
+  const r = kbParseRow(id);
+  if (r.kind === "bonus") return bonusAnswered(r.ri, r.ti);
+  if (r.kind === "wager") return swAnswered(r.type, r.ti);
+  return qAnswered(r.ri, r.qi, r.ti);
+}
+function kbMarkRow(el) {
+  el.classList.add("kb-row");
+  el.setAttribute("tabindex", "-1");
+}
+function kbClearRow(blur) {
+  const el = kbRowEl(kbRowId);
+  kbRowId = null;
+  kbDigits = "";
+  if (!el) return;
+  el.classList.remove("kb-row");
+  el.removeAttribute("tabindex");
+  if (blur && el.contains(document.activeElement)) document.activeElement.blur();
+}
+function kbSelectRow(el, opts) {
+  const id = el.getAttribute("data-ta");
+  if (id !== kbRowId) kbClearRow(false);
+  kbRowId = id;
+  kbMarkRow(el);
+  if (opts?.focus) el.focus({ preventScroll: true });
+  if (opts?.scroll && el.scrollIntoView) el.scrollIntoView({ block: "nearest" });
+}
+// Called by renderLeft(): re-marks the selected row, and takes focus back only if the redraw
+// dropped it (never from a field or button the host has moved to).
+function kbRestoreRow() {
+  if (!kbRowId) return;
+  const el = kbRowEl(kbRowId);
+  if (!el || el.closest(KB_COLLAPSED)) {
+    kbRowId = null;
+    return;
+  }
+  kbMarkRow(el);
+  const ae = document.activeElement;
+  if (!ae || ae === document.body) el.focus({ preventScroll: true });
+}
+function kbKeyboardSelect(el) {
+  kbSelectRow(el, { focus: true, scroll: true });
+  if (kbHintShown) return;
+  kbHintShown = true;
+  showToast("Keyboard scoring: type the wager, X = wrong, ↑↓ to move, Esc to stop. Press ? for all keys.", 7000);
+}
+function kbJumpToNextUnscored() {
+  const s = currentProgressSummary();
+  kbClearRow(false);
+  jumpToFirstUnanswered();
+  if (!s || s.ri == null) return;
+  const section = document.getElementById("sec-r" + (s.ri + 1));
+  const next = section && kbRows(section).find((el) => !kbIsAnswered(el.getAttribute("data-ta")));
+  // No scroll here: jumpToFirstUnanswered() is already scrolling to this question's header.
+  if (!next) return;
+  kbKeyboardSelect(next);
+}
+// A score key must never change a row the host can't see.
+function kbRowVisible(el) {
+  const r = el.getBoundingClientRect();
+  if (!r.height) return true; // no layout to judge by (tests)
+  const main = document.getElementById("mainContent").getBoundingClientRect();
+  return r.top >= Math.max(0, main.top) && r.bottom <= Math.min(window.innerHeight, main.bottom);
+}
+// Collects typed digits into a value from `valid`. Returns null while waiting or if invalid.
+function kbDigitValue(d, valid) {
+  const joined = kbDigits + d;
+  if (kbDigits && Date.now() - kbDigitAt < KB_DIGIT_MS && valid.includes(+joined)) {
+    kbDigits = "";
+    return +joined;
+  }
+  kbDigits = d;
+  kbDigitAt = Date.now();
+  if (valid.includes(+d)) return +d;
+  if (!valid.some((v) => String(v).startsWith(d))) {
+    kbDigits = "";
+    showToast(
+      valid.length > 5
+        ? `Type a number from ${valid[0]} to ${valid[valid.length - 1]}.`
+        : `The wagers here are ${valid.join(", ")}.`,
+    );
+  }
+  return null;
+}
+// The key actions go through the same functions as the buttons, so locks and checks still apply.
+// cycleW cycles correct -> wrong -> cleared, so each target state is reached by stepping it.
+function kbScoreQuestion(r, k) {
+  const get = () => gameState.rounds[r.ri].questions[r.qi][r.ti];
+  if (isRivals()) {
+    const place = k === "o" || k === "0" ? 0 : /^[1-3]$/.test(k) ? +k : null;
+    if (place != null) {
+      if (get()?.place !== place) setPlace(r.ri, r.qi, r.ti, place);
+    } else if (k === "Backspace" && get()) setPlace(r.ri, r.qi, r.ti, get().place);
+    else return k === "Backspace";
+    return true;
+  }
+  const step = (w) => cycleW(r.ri, r.qi, r.ti, w);
+  const a = get();
+  if (/^\d$/.test(k)) {
+    const w = kbDigitValue(k, roundWagers(r.ri));
+    if (w == null) return true;
+    if (usedW(r.ti, r.ri).some((u) => u.wager === w && u.qi !== r.qi)) {
+      showToast(`${teamLabel(r.ti)} already used ${w} in this round.`);
+      return true;
+    }
+    if (a?.wager === w && a.correct === true) return true;
+    if (a?.wager === w) step(w); // wrong -> cleared, then the call below marks it correct
+    step(w);
+    return true;
+  }
+  if (k !== "c" && k !== "x" && k !== "Backspace") return false;
+  if (!a || a.wager === undefined) {
+    if (k !== "Backspace") showToast("Type the wager first.");
+    return true;
+  }
+  const w = a.wager;
+  if (k === "x") {
+    if (a.correct !== false) step(w);
+  } else if (k === "c") {
+    if (a.correct !== true) {
+      step(w);
+      if (get()?.wager === undefined) step(w);
+    }
+  } else {
+    step(w);
+    if (get()?.wager !== undefined) step(w);
+  }
+  return true;
+}
+function kbScoreBonus(r, k) {
+  const cur = gameState.rounds[r.ri].bonus[r.ti];
+  if (/^[0-4]$/.test(k)) {
+    if (cur !== +k) setB(r.ri, r.ti, +k);
+  } else if (k === "Backspace") {
+    if (cur != null) setB(r.ri, r.ti, cur);
+  } else return false;
+  return true;
+}
+function kbScoreWager(r, k) {
+  const [setWager, setCorrect] = {
+    wager1: [setW1, setC1],
+    halftime: [setHW, setHC],
+    wager3: [setW3, setC3],
+    final: [setFW, setFC],
+  }[r.type];
+  const d = () => wagerStore(r.type)[r.ti] || {};
+  if (/^\d$/.test(k)) {
+    const w = kbDigitValue(k, Array.from({ length: wagerMax(r.type) }, (_, i) => i + 1));
+    if (w != null) setWager(r.ti, w);
+  } else if (k === "c" || k === "x") {
+    if (d().wager == null) showToast("Type the wager first.");
+    else if (d().correct !== (k === "c")) setCorrect(r.ti, k === "c");
+  } else if (k === "Backspace") {
+    if (d().correct !== undefined) setCorrect(r.ti, d().correct);
+    if (d().wager != null) setWager(r.ti, "");
+  } else return false;
+  return true;
+}
+// Returns true when the key was used on the selected row.
+function kbHandleRowKey(e) {
+  const el = kbRowEl(kbRowId);
+  if (!el || el.closest(KB_COLLAPSED)) return false;
+  let k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  if (k === "Delete") k = "Backspace";
+  if (k === "Enter" && e.target.closest?.('button, a, [role="button"], [role="separator"]')) return false;
+  if (k === "ArrowUp" || k === "ArrowDown" || k === "Enter") {
+    const rows = kbRows();
+    const next = rows[rows.indexOf(el) + (k === "ArrowUp" ? -1 : 1)];
+    kbDigits = "";
+    if (next) kbKeyboardSelect(next);
+    else el.scrollIntoView?.({ block: "nearest" });
+    return true;
+  }
+  if (!/^(\d|c|x|o|Backspace)$/.test(k)) return false;
+  if (e.repeat) return true;
+  if (!kbRowVisible(el)) {
+    el.scrollIntoView({ block: "center" });
+    showToast("Scrolled back to the selected team. Press the key again to score.");
+    return true;
+  }
+  const r = kbParseRow(kbRowId);
+  if (r.kind === "bonus") return kbScoreBonus(r, k);
+  if (r.kind === "wager") return kbScoreWager(r, k);
+  return kbScoreQuestion(r, k);
+}
+// Capture phase: the row is noted before the click's own handler redraws the list. Safari doesn't
+// focus a clicked button, so clicks are tracked here and not left to focus alone.
+document.addEventListener(
+  "click",
+  (e) => {
+    if (e.target.closest(".audit-overlay, .confirm-overlay, .app-toast")) return;
+    const row = e.target.closest("#mainContent [data-ta]");
+    if (row && !e.target.closest(".ta-name-clickable")) {
+      kbDigits = "";
+      kbSelectRow(row, { focus: !e.target.closest("select") });
+    } else kbClearRow(false);
+  },
+  true,
+);
+// Tabbing anywhere outside the selected row ends the selection.
+document.addEventListener("focusin", (e) => {
+  if (!kbRowId || e.target.closest(".audit-overlay, .confirm-overlay")) return;
+  const el = kbRowEl(kbRowId);
+  if (el && !el.contains(e.target)) kbClearRow(false);
 });
 
 // ---------------------------------------------------------------------------------------------

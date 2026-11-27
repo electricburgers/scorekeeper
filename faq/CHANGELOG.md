@@ -2,6 +2,16 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.82] - 27 Nov 2026
+
+### Added
+
+- **Tips & Tricks:** "Score from the keyboard" and "Resize the scoreboard".
+
+### Changed
+
+- The sort "Reset" button is now "Entry order", and the +3 checkbox is "Craft Beer Card".
+
 ## [1.81] - 24 Nov 2026
 
 ### Changed

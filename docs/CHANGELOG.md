@@ -14,6 +14,21 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.99 - 2026-11-27
+
+Desktop browser usability pass.
+
+- **Keyboard scoring.** Press N or click a team row to select it. Up/Down move between teams; a number sets the wager as correct; X marks it wrong, C correct, Backspace clears. Bonus Questions take 0-4, Q5 wagers take the amount then C or X, Revolution Rivals takes 1-3 or O. Esc or clicking elsewhere deselects. A key never changes a row that is scrolled out of view.
+- **Wide screens.** The scoring column's cards stop at 960px, the scoreboard widens (up to 560px) and score rows highlight on hover.
+- **Narrow desktop windows.** The default scoreboard narrows (down to 260px) and score buttons stay larger.
+- **Craft beer button.** Reads CB, Craft Beer or Craft Beer Card depending on the room, and it and the Bonus button no longer stretch.
+- **Mouse sizing.** Text is at least 12px; Delete and Pause are at least 32px and sit further apart.
+- **Sort.** The red Reset button is now a neutral "Entry order" button.
+- **Scoreboard divider.** Arrow keys resize it; double-click or Enter restores the automatic width.
+- **App tab stays put.** The PDF and other files made with dl() now carry a new-tab target in every browser (before, only iOS), so a browser that ignores the download instruction can't replace the app. The Winner Photos and Game Confirmation links already opened in new tabs; tests now cover them.
+- **Fixed:** after a section jump the whole page could scroll, leaving a blank band under the app.
+- **Fixed:** skipping the first-visit tour offer left a blank gap until the window was resized.
+
 ## v22.98 - 2026-11-24
 
 - **Craft Prize skips paused teams.** Paused teams are removed from the random pool for the Craft Prize drawing and from the Craft Prize Eligible List export. Exclude Top now only counts active teams, and the "no eligible teams" messages mention paused teams.

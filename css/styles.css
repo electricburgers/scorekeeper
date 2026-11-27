@@ -836,10 +836,17 @@ button,[role="button"]{touch-action:manipulation}
    desktop-only in effect anyway — the mobile media query below sets height:auto, since there the
    document is the scroller and the columns stack. */
 .app-layout{display:flex;height:calc(100vh - var(--layout-top,60px));height:calc(100dvh - var(--layout-top,60px));overflow:hidden}
-.col-left{flex:1;min-width:300px;padding:0 16px 40px;overflow-y:auto;overflow-x:hidden;max-width:100%;container-type:inline-size;container-name:scorecol;overflow-anchor:none}
-.col-right{position:relative;width:380px;min-width:200px;max-width:60vw;height:100%;overflow-y:auto;background:var(--bg-card);display:flex;flex-direction:column;flex-shrink:0;border-left:1px solid var(--border)}
+.col-left{position:relative;flex:1;min-width:300px;padding:0 16px 40px;overflow-y:auto;overflow-x:hidden;max-width:100%;container-type:inline-size;container-name:scorecol;overflow-anchor:none}
+.col-right{position:relative;width:max(clamp(260px,30vw,380px),min(560px,calc(100vw - 1000px)));min-width:200px;max-width:60vw;height:100%;overflow-y:auto;background:var(--bg-card);display:flex;flex-direction:column;flex-shrink:0;border-left:1px solid var(--border)}
 .drag-handle{position:relative;width:6px;flex-shrink:0;height:100%;background:var(--border);cursor:col-resize;z-index:101;transition:background .15s}
-.drag-handle:hover,.drag-handle.dragging{background:var(--accent-cyan)}
+.drag-handle:hover,.drag-handle.dragging,.drag-handle:focus-visible{background:var(--accent-cyan)}
+/* A wider invisible grab area than the 6px bar, for trackpads. */
+.drag-handle::before{content:'';position:absolute;top:0;bottom:0;left:-4px;right:-4px}
+/* Wide desktop windows: stop the scoring column's cards stretching, so a team's name stays near its
+   score buttons. The spare width goes to the scoreboard (see .col-right) and to even side margins. */
+@media(min-width:769px){
+  .col-left>:not(.mini-progress){max-width:960px;margin-left:auto;margin-right:auto}
+}
 .drag-handle::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:2px;height:32px;border-radius:1px;background:var(--text-muted);opacity:.5}
 .drag-handle:hover::after,.drag-handle.dragging::after{background:#000;opacity:.8}
 body.col-resizing{cursor:col-resize!important;user-select:none!important}
@@ -1809,11 +1816,21 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* Native checkbox is kept for real keyboard/screen-reader semantics but rendered invisible —
    accent-color can't guarantee the checkmark glyph's own contrast (browser-chosen, unverifiable),
    so the visible box + checkmark below is fully custom-drawn and contrast-audited instead. */
-.team-checks .check-label{flex:1 1 0;min-width:0;box-sizing:border-box;justify-content:flex-start}
-.lbl-short{display:none}
+.team-checks .check-label{flex:1 1 0;max-width:13.5rem;min-width:0;box-sizing:border-box;justify-content:flex-start}
+.lbl-short,.cb-md,.cb-lg{display:none}
 /* Quiet chips: while unticked the chip is neutral (outline + text) and the colour lives only in the
    box itself; ticking fills the whole chip with its colour. */
 .team-checks .check-label:not(.is-checked){border-color:var(--border-control);color:var(--text-secondary)}
+/* The craft beer chip names itself by the room available: "CB", then "Craft Beer" (row 21rem and up),
+   then "Craft Beer Card" (28rem and up). */
+@container (min-width:21rem){
+  .cb-xs{display:none}
+  .cb-md{display:inline}
+}
+@container (min-width:28rem){
+  .cb-md{display:none}
+  .cb-lg{display:inline}
+}
 /* Three stages, by the width of the checks row (container query, in rem so it follows the font-size
    setting): both full labels side by side; "BON" once "Bonus" would no longer fit beside CB; and
    below that even BON is too tight, so the chips stack one per row. flex-basis 0 keeps the two
@@ -1824,7 +1841,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
   .lbl-short{display:inline}
 }
 @container (max-width:12.5rem){
-  .team-checks .check-label{flex-basis:100%}
+  .team-checks .check-label{flex-basis:100%;max-width:none}
 }
 
 
@@ -2026,10 +2043,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
 .q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
 .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.15)}
-.q-reset-btn{background:var(--danger-solid-bg);color:#fff;border-color:var(--danger-solid-bg)}
+.q-reset-btn{background:var(--bg-card);color:var(--text-primary);border-color:var(--border-control)}
 .q-reset-btn:hover{filter:brightness(1.15)}
 /* Nothing to reset: red outline and text, no fill (v22.16). --txt-red is the contrast-audited red text token. */
-.q-reset-btn.is-idle{background:transparent;color:var(--txt-red);border-color:color-mix(in srgb,var(--danger-solid-bg) 55%,transparent)}
+.q-reset-btn.is-idle{background:transparent;color:var(--text-muted)}
 .q-reset-btn.is-idle:hover{filter:none}
 .q-badge{font-family:var(--font-body);font-size:1rem;line-height:1;font-weight:700;padding:1px 9px;border-radius:4px;border:1px solid currentColor}
 .q-badge.q-remaining{background:color-mix(in srgb,var(--accent-gold) 13%,transparent);color:var(--badge-gold-fg)}
@@ -3416,3 +3433,36 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
   [data-theme="light"] .remove-team .pause-team:not(.is-on):hover{background:#ffe2a0;color:#4a2e00}
   [data-theme="light"] .remove-team .pause-team.is-on:hover{filter:brightness(.9)}
 }
+
+/* MOUSE / TRACKPAD LAYOUTS. Comes last so it wins over the compact desktop sizes and over the
+   (max-width:1024px) touch rules, which also match a half-screen browser window. */
+@media (hover:hover) and (pointer:fine){
+  /* Follow a team's name across to its buttons. */
+  .team-answer:hover,.bonus-row:hover,.special-wager-row:hover{background:var(--bg-hover)}
+  /* Text floor: nothing readable drops under 12px. */
+  label,.team-number,thead th,.team-guess-cell>label,.guess-warn,.sort-mode-label,.round-label,
+  .cp-field-label,.cp-script-label,.export-sq-label,.fr-guess-h,.fr-diff-h,.fr-tiebadge,summary,
+  .size-label,.settings-version,.settings-about,.settings-about summary,.settings-about .about-ver,
+  .fr-details summary,.fr-note,.cv-select-arrow,.aud-rank-of,.aud-meta,.aud-wager,.aud-stat-pct,
+  .aud-dot,.aud-eyebrow,.aud-res,.standings-table thead th,.final-table thead th,
+  .banter-cat,.staff-thanks-edit-label,.standings-sort-btn{font-size:max(12px,.75rem)}
+  .toolbar>button,.btn,.check-label{font-size:max(12px,.8rem)}
+  /* Delete and Pause: at least 32px, with Delete at the top of the card and Pause at the bottom. */
+  .remove-team button{width:max(32px,2rem);height:max(32px,2rem)}
+  .remove-team .pause-team{width:max(40px,2.5rem)}
+  .team-entry .remove-team:not(.remove-team-corner){align-self:end}
+}
+/* A narrow scoring column in a desktop window (beside another app): keep score buttons a
+   comfortable click size instead of shrinking them as far as the phone rules do. */
+@media (pointer:fine){
+  @container scorecol (max-width:600px){
+    .wager-btn:not(.place-btn),.result-btn{width:clamp(2.4rem,11cqw,var(--wager-size));min-width:clamp(2.4rem,11cqw,var(--wager-size));height:clamp(2.4rem,11cqw,var(--wager-size));min-height:clamp(2.4rem,11cqw,var(--wager-size))}
+    .bonus-choice-btn{width:clamp(2.2rem,9cqw,2.4rem);height:clamp(2.2rem,9cqw,2.4rem)}
+  }
+}
+
+/* KEYBOARD SCORING: the row that score keys act on (js/host-tools.js). */
+.team-answer,.bonus-row,.special-wager-row{scroll-margin-top:calc(var(--qbar-top,0px) + 6rem);scroll-margin-bottom:1rem}
+.team-answer.kb-row,.bonus-row.kb-row,.special-wager-row.kb-row{outline:3px solid var(--accent-cyan-solid);outline-offset:-3px;background:var(--bg-hover)}
+.ht-keys-sub{font-size:.85rem;margin:14px 0 4px}
+

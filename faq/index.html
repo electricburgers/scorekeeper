@@ -497,7 +497,7 @@
             width="1376" height="1114" decoding="async"
             src="screenshots/teams-list.webp"
             data-shot-base="teams-list"
-            alt="Teams section showing team rows with name fields, +3 CB and +5 Bonus checkboxes, Score Guess field, and the pause and remove buttons"
+            alt="Teams section showing team rows with name fields, +3 Craft Beer Card and +5 Bonus checkboxes, Score Guess field, and the pause and remove buttons"
             onerror="faqShotFallback(this,'Teams section — a few rows, showing the Bonus/NJCB checkboxes and Score Guess field')"
           />
         </div>
@@ -520,7 +520,7 @@
 
         <details class="faq-item" id="q-what-do-the-5-bonus-and-3-njcb">
           <summary>
-            <span class="faq-q-text">What do the "+5 Bonus" and "+3 NJCB" checkboxes do?</span><span
+            <span class="faq-q-text">What do the "+5 Bonus" and "+3 Craft Beer Card" checkboxes do?</span><span
               class="faq-q-arrow"
               >▼</span
             >
@@ -528,8 +528,9 @@
           <div class="faq-a">
             <p>
               <strong>+5 Bonus</strong> is for teams that brought tonight's
-              Bonus Item. <strong>+3 NJCB</strong> is for teams that show their
-              NJCB membership card. Both add to the team's total, and both
+              Bonus Item. <strong>+3 Craft Beer Card</strong> is for teams that show their
+              NJCB membership card (the button reads "Craft Beer" or "CB" when
+              the window is narrow). Both add to the team's total, and both
               are taken back out when comparing a team's Score Guess to their
               score. See <a href="#final-results">Final Results &amp; Ties</a>.
             </p>
@@ -1886,9 +1887,10 @@
           <div class="faq-a">
             <p>
               Every question has <svg class="icon-ui" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↕️"><use href="#ic-sort"></use></svg> <strong>Sort</strong> and <svg class="icon-ui icon-ui-reset" viewBox="0 0 24 24" aria-hidden="true" focusable="false" data-emoji="↩️"><use href="#ic-reset"></use></svg>
-              <strong>Reset</strong> buttons. Sort moves teams that haven't
+              <strong>Entry order</strong> buttons. Sort moves teams that haven't
               answered to the top, so you can see who you're still waiting on.
-              Reset puts teams back in their original order.
+              Entry order puts teams back the way you entered them. It never
+              changes scores.
             </p>
             <p>
               The question's header stays pinned to the top of the screen as
@@ -1900,8 +1902,8 @@
                 width="1344" height="344" decoding="async"
             src="screenshots/sort-buttons.webp"
                 data-shot-base="sort-buttons"
-                alt="Close-up of a question's header showing the A-Z, Sort and Reset buttons"
-                onerror="faqShotFallback(this,'Close-up of the Sort/Reset buttons on a question header')"
+                alt="Close-up of a question's header showing the A-Z, Sort and Entry order buttons"
+                onerror="faqShotFallback(this,'Close-up of the Sort and Entry order buttons on a question header')"
               />
             </div>
           </div>
@@ -2041,6 +2043,47 @@
           </div>
         </details>
 
+        <details class="faq-item" id="q-score-from-the-keyboard">
+          <summary>
+            <span class="faq-q-text">Score from the keyboard</span><span class="faq-q-arrow">▼</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              Press <strong>N</strong> to select the next unscored team, or
+              click a team's row. The selected row has a blue outline, and these
+              keys act on it:
+            </p>
+            <ul>
+              <li><strong>↑ ↓</strong> moves between teams. <strong>Enter</strong> goes to the next one.</li>
+              <li>On a question, type the wager to mark it correct. For 12, type 1 then 2.</li>
+              <li><strong>X</strong> marks it wrong, <strong>C</strong> marks it correct, <strong>Backspace</strong> clears it.</li>
+              <li>On a Bonus Question, type 0 to 4.</li>
+              <li>On a Q5 wager, type the amount, then <strong>C</strong> or <strong>X</strong>.</li>
+              <li>In Revolution Rivals, type 1, 2 or 3 for the survey place, or <strong>O</strong> for Other.</li>
+              <li><strong>Esc</strong> or a click elsewhere deselects the row, and keys 1 to 4 jump to rounds again.</li>
+            </ul>
+            <p>
+              If you've scrolled away from the selected row, the first key only
+              scrolls back to it, so you can't change a score you can't see.
+              Press <strong>?</strong> for the full list of shortcuts.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item" id="q-resize-the-scoreboard">
+          <summary>
+            <span class="faq-q-text">Resize the scoreboard</span><span class="faq-q-arrow">▼</span>
+          </summary>
+          <div class="faq-a">
+            <p>
+              On a computer, drag the bar between scoring and the scoreboard.
+              You can also Tab to it and use the left and right arrow keys.
+              Double-click it, or press Enter, to go back to the automatic
+              width.
+            </p>
+          </div>
+        </details>
+
         <details class="faq-item" id="q-crowd-wisdom-percentage">
           <summary>
             <span class="faq-q-text">Crowd-Wisdom Percentage</span><span class="faq-q-arrow"
@@ -2058,8 +2101,8 @@
                 width="1130" height="188" decoding="async"
             src="screenshots/crowd-wisdom-percentage.webp"
                 data-shot-base="crowd-wisdom-percentage"
-                alt="A question header with Crowd-Wisdom Percentage on, showing 4/11 (36%) correct and 7/11 (64%) incorrect next to the Sort and Reset buttons"
-                onerror="faqShotFallback(this,'Question header with Crowd-Wisdom Percentage on — correct/incorrect counts next to Sort/Reset')"
+                alt="A question header with Crowd-Wisdom Percentage on, showing 4/11 (36%) correct and 7/11 (64%) incorrect next to the Sort and Entry order buttons"
+                onerror="faqShotFallback(this,'Question header with Crowd-Wisdom Percentage on — correct/incorrect counts next to Sort and Entry order')"
               />
             </div>
           </div>
