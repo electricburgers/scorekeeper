@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.102 - 2026-11-27
+
+- **Craft beer button.** It now reads "Craft Beer" instead of switching to "Craft Beer Card" at wide sizes; "CB" is still used when space is tight.
+- **FAQ screenshots** retaken (FAQ v1.86).
+
 ## v22.101 - 2026-11-27
 
 - **Sort button renamed.** "Entry order" is now "Reset Sort". It still puts teams back in the order entered and doesn't change scores.

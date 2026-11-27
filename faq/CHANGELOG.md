@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.86] - 27 Nov 2026
+
+### Changed
+
+- The +3 team checkbox is now called "Craft Beer" in the text and retaken screenshots.
+
 ## [1.85] - 27 Nov 2026
 
 ### Changed

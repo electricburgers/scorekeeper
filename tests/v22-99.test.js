@@ -1,5 +1,5 @@
 // v22.99 — desktop usability: keyboard scoring on a selected team row, the "Reset Sort" button,
-// the three-length craft beer label, and the two page-height fixes.
+// the CB / Craft Beer label, and the two page-height fixes.
 "use strict";
 const { describe, it, before, after, beforeEach } = require("node:test");
 const assert = require("node:assert/strict");
@@ -134,11 +134,11 @@ describe("v22.99 keyboard scoring", () => {
     }
   });
 
-  it("craft beer chip carries all three label lengths", () => {
+  it("craft beer chip reads CB when tight and Craft Beer otherwise, never anything longer", () => {
     const chip = window.document.querySelector(".njcb-check");
-    assert.equal(chip.querySelector(".cb-xs").textContent, "CB");
-    assert.equal(chip.querySelector(".cb-md").textContent, "Craft Beer");
-    assert.equal(chip.querySelector(".cb-lg").textContent, "Craft Beer Card");
+    assert.deepEqual([...chip.querySelectorAll('[class^="cb-"]')].map((e) => e.textContent), ["CB", "Craft Beer"]);
+    for (const f of ["js/app.js", "css/styles.css", "faq/index.html", "faq/screenshots/README.md"])
+      assert.doesNotMatch(read(f), /craft beer card|cb-lg/i, f);
   });
 });
 

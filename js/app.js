@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.101"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 27, 2026 12:42 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.102"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 27, 2026 12:50 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1711,7 +1711,7 @@ function renderLeftBody() {
         <input type="text" maxlength="40" value="${esc(t.name)}" placeholder="Team name" aria-label="Team ${i + 1} name" onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
         <div class="team-checks">
           <label class="check-label njcb-check${t.njcb ? " is-checked" : ""}">
-            <input type="checkbox" class="check-input" id="nj${i}" ${t.njcb ? "checked" : ""} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+3 <span class="cb-xs">CB</span><span class="cb-md">Craft Beer</span><span class="cb-lg">Craft Beer Card</span>
+            <input type="checkbox" class="check-input" id="nj${i}" ${t.njcb ? "checked" : ""} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+3 <span class="cb-xs">CB</span><span class="cb-md">Craft Beer</span>
           </label>
           <label class="check-label item-check${t.bonusItem ? " is-checked" : ""}">
             <input type="checkbox" class="check-input" id="bi${i}" ${t.bonusItem ? "checked" : ""} onchange="gameState.teams[${i}].bonusItem=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+5 <span class="lbl-full">Bonus</span><span class="lbl-short" aria-hidden="true">BON</span>
