@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.84] - 27 Nov 2026
+
+### Changed
+
+- Retook the out-of-date screenshots (settings, Advanced Settings, tour, themes, teams, scoring rows, sort buttons, row density and zebra stripes). The halftime wager image had been showing the tour offer by mistake.
+
 ## [1.83] - 27 Nov 2026
 
 ### Fixed

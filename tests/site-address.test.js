@@ -31,4 +31,11 @@ describe("site address", () => {
   it("the FAQ's open-from-the-website link goes to the live address", () => {
     assert.match(read("faq/index.html"), new RegExp(`<a href="${SITE}"\\s*>electricburgers\\.github\\.io/scorekeeper</a>`));
   });
+
+  // GitHub serves 404.html for a missing page at any depth, so only full addresses work from it.
+  // A root link ("/faq/") leaves out /scorekeeper/ and lands on another missing page.
+  it("the Page not found links go to the live app and FAQ", () => {
+    const hrefs = [...read("404.html").matchAll(/<a href="([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(hrefs, [SITE, SITE + "faq/"]);
+  });
 });

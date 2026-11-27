@@ -34,15 +34,15 @@ comparison it exists to make.
 | File | What to capture | Used in |
 |---|---|---|
 | `event-details.webp` | The Event Details section, expanded, fully filled in (Date, Quiz ID, Host Name, Location, Craft Partner, Partner Town, Bonus Item, Restaurant Staff). | Event Details |
-| `teams-list.webp` | A few rows of the Teams section — name field, the +3 CB / +5 Bonus checkboxes, the Score Guess field, and the rounded-rectangle pause button next to the ✕ remove button. | Teams |
+| `teams-list.webp` | A few rows of the Teams section — name field, the +3 Craft Beer Card / +5 Bonus checkboxes, the Score Guess field, and the rounded-rectangle pause button next to the ✕ remove button. | Teams |
 | `round-scoring.webp` | One round expanded, with a mix of green (correct), red (incorrect), and idle wager buttons across a few teams/questions. | Scoring Rounds |
 | `beer-round.webp` | A bonus (Q5) question where every team is marked correct, showing the gold wash and the 🍺 Beer Round! badge. The standalone "Everyone got it right!" banner was removed in app v18.57 — the badge and the gold block are the whole treatment now. Round 3's Q5 in the sample game is one; otherwise mark a question correct for every team by hand. | Scoring Rounds |
-| `sort-buttons.webp` | Close-up of a single question's header showing the A-Z, Sort and Reset buttons on one row (the header pins as one piece). | Tips & Tricks |
-| `crowd-wisdom-percentage.webp` | Close-up of a single question's header with Advanced Settings → Crowd-Wisdom Percentage on: the correct/incorrect count pills, then the A-Z / Sort / Reset buttons, all on one row. | Tips & Tricks |
+| `sort-buttons.webp` | Close-up of a single question's header showing the Sort, A-Z and Entry order buttons on one row (the header pins as one piece). | Tips & Tricks |
+| `crowd-wisdom-percentage.webp` | Close-up of a single question's header with Advanced Settings → Crowd-Wisdom Percentage on: the correct/incorrect count pills, then the Sort / A-Z / Entry order buttons, all on one row. | Tips & Tricks |
 | `unlock-next-question.webp` | Scoring group of Advanced Settings with Unlock Next Question set to 2 teams. | Advanced Settings |
 | `question-timer.webp` | The desktop-sidebar question timer mid-countdown: large digits, with the rectangular Pause and Reset buttons (same 3rem x 2.5rem rectangle docked or deployed). | Question Timer |
 | `timer-stepper-buttons.webp` | The question timer with the −30/+30 stepper buttons visible (Advanced Settings → Timer Stepper Buttons on), same rectangular Pause/Reset buttons. | Tips & Tricks |
-| `halftime-wager.webp` | The Halftime Wager card header (Q5 name, DONE badge, bonus description, A-Z / Sort / Reset on one row) and the first team rows — wager amount field plus the correct/incorrect toggle. | Halftime & Final Wager |
+| `halftime-wager.webp` | The Halftime Wager card header (Q5 name, DONE badge, bonus description, Sort / A-Z / Entry order on one row) and the first team rows — wager amount field plus the correct/incorrect toggle. | Halftime & Final Wager |
 | `scores-sidebar.webp` | The 📊 Scores sidebar open, with live totals and the Entry / 🎲 RAND / ↑ Asc / ↓ Desc sort buttons visible. | Scores & Standings |
 | `before-wager-scores.webp` | The "Scores — Before Halftime Wager" or "Before Final Wager" standings panel. | Scores & Standings |
 | `mobile-bottom-dock.webp` | The mobile bottom dock — the scores peek strip pinned to the bottom of a phone-width screen. Resize the browser window (or use device emulation) to phone width first. The timer shows the rectangular play/reset buttons; hide the first-run "Take the tour" card so it isn't in frame. | Scores & Standings |
@@ -57,9 +57,9 @@ comparison it exists to make.
 | `pdf-export.webp` | The downloaded PDF scoresheet — same header plus full standings. | Exporting |
 | `jd-upload-form.webp` | The Game Confirmation page, opened in its own browser tab. | Exporting |
 | `sound-test-buttons.webp` | The Craft Prize Drawing's Test Sounds bar — the square Roll / Fade out / Crash / Horn buttons (Advanced Settings → Manual Drumroll Control **and** Sound Test Buttons both on). | Tips & Tricks |
-| `settings-panel.webp` | The main Settings panel open (⚙️ gear icon) — Theme, Font size, Icon Style, Question Timer, Sample Data (🧪 Try Example and ℹ️ Take the Tour), Help, App Preferences, and the collapsed Advanced Settings toggle. | Getting Started |
+| `settings-panel.webp` | The main Settings panel open (gear icon): Game Mode, Theme, Font size, Color Vision, Import info from prev. games, Sample Data, Backups, Help, App Preferences, and the collapsed Advanced Settings toggle. | Getting Started |
 | `tutorial-spotlight.webp` | Mid-tour: the dimmed spotlight overlay around a highlighted control, with the callout box (step text, "Step X of Y", Back/Next, Skip Tutorial) visible. | Interactive Tutorial |
-| `advanced-settings.webp` | Advanced Settings expanded (the toggle takes its enabled cyan fill) — Row Density, Row Zebra Stripes, Craft Prize Eligible List, Crowd-Wisdom Percentage, Edit Locked Fields, timer controls, Manual Drumroll Control (on, so Drumroll Crossfade and Sound Test Buttons both show too), and Point Adjustments. | Tips & Tricks |
+| `advanced-settings.webp` | Advanced Settings expanded: the Display, Scoring, Timer, Craft Prize and Tools groups, with Manual Drumroll Control on so Drumroll Crossfade and Sound Test Buttons show. | Tips & Tricks |
 | `row-density-{relaxed,normal,compact}.webp` | The same completed Round 1 question at each Row Density, same frame height — the square wager buttons grow on Relaxed to fill the taller rows and shrink on Compact, always square (v19.65). | Row Density |
 | `manual-drumroll-control.webp` | The Craft Prize drawing paused mid-roll with Manual Drumroll Control on — the square **Play Horn** button where Stop Drumroll was (Advanced Settings → Manual Drumroll Control must be on). | Tips & Tricks |
 | `resume-banner.webp` | The "⚠️ Saved session found" banner with its Resume / New Game buttons (reload the page mid-session to see it). | Autosave & Resume |
