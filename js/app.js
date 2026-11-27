@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.102"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 27, 2026 12:50 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.103"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 27, 2026 3:51 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -263,6 +263,7 @@ function applyPrefs() {
     Math.min(FONT_SIZES.length - 1, p.sizeIndex ?? DEFAULT_SI),
   );
   document.documentElement.style.fontSize = FONT_SIZES[si] + "px";
+  fitNameColumn();
   const sr = document.getElementById("sizeResetBtn");
   if (sr) sr.textContent = si === DEFAULT_SI ? "A" : FONT_SIZES[si] + "px";
   const dt = document.getElementById("densityToggle");
@@ -1580,9 +1581,35 @@ function renderAll() {
 
 function renderLeft() {
   withScoreMemo(renderLeftBody);
+  fitNameColumn();
   // Re-mark the keyboard-scoring row, which the redraw above replaced (js/host-tools.js loads later).
   if (typeof kbRestoreRow === "function") kbRestoreRow();
 }
+// Wide scoring rows put the score buttons right after the name column, so that column is as wide as
+// the longest team name: names stay on one line and the buttons still line up. The width is
+// measured from an off-screen copy of the names and read by css/styles.css as --name-col.
+function fitNameColumn() {
+  let probe = document.getElementById("nameProbe");
+  if (!probe) {
+    probe = document.createElement("div");
+    probe.id = "nameProbe";
+    probe.className = "name-probe";
+    probe.setAttribute("aria-hidden", "true");
+    document.body.appendChild(probe);
+  }
+  probe.innerHTML = gameState.teams
+    .map((t, i) => `<div>${esc(t.name || "T" + (i + 1))}</div>`)
+    .join("");
+  const w = probe.offsetWidth;
+  // Emptied again so page text searches never find a second, hidden copy of the team names.
+  probe.textContent = "";
+  const root = document.documentElement.style;
+  // No width means no layout to measure (tests), so the stylesheet's own width applies.
+  if (w) root.setProperty("--name-col", w + 1 + "px");
+  else root.removeProperty("--name-col");
+}
+// The first measurement can happen before the web font has loaded.
+document.fonts?.ready.then(() => fitNameColumn());
 function renderLeftBody() {
   const m = document.getElementById("mainContent");
   if (!m) return;
@@ -1732,7 +1759,7 @@ function renderLeftBody() {
     </div>`;
   });
   if (gameState.teams.length < MAX_TEAMS)
-    h += `<button class="btn" id="addTeamBtn" onclick="addTeam()">+ Add Team</button>`;
+    h += `<button class="btn" id="addTeamBtn" onclick="addTeamAndFocus()">+ Add Team</button>`;
   else
     h += `<p class="fr-note">${MAX_TEAMS}-team max reached — remove a team to add another.</p>`;
   h += `</div></div>`;
@@ -2697,6 +2724,15 @@ function addTeam() {
   gameState.teams.push(freshTeam(""));
   autosave();
   renderAll();
+}
+// The + Add Team button: the cursor goes straight into the new name field, ready for typing.
+// addTeam() itself leaves focus alone, because the tour also calls it.
+function addTeamAndFocus() {
+  const before = gameState.teams.length;
+  addTeam();
+  if (gameState.teams.length === before) return;
+  // Found by team number, since an A-Z or No guess sort can show the new team out of last place.
+  document.querySelector(`#sec-teams .team-entry[data-ti="${before}"] input[type="text"]`)?.focus();
 }
 // Shift all integer keys above the removed index down by one (returns a new map).
 function reindexAfterRemoval(map, ti) {

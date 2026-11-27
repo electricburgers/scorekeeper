@@ -38,7 +38,7 @@ comparison it exists to make.
 | `round-scoring.webp` | One round expanded, with a mix of green (correct), red (incorrect), and idle wager buttons across a few teams/questions. | Scoring Rounds |
 | `beer-round.webp` | A bonus (Q5) question where every team is marked correct, showing the gold wash and the 🍺 Beer Round! badge. The standalone "Everyone got it right!" banner was removed in app v18.57 — the badge and the gold block are the whole treatment now. Round 3's Q5 in the sample game is one; otherwise mark a question correct for every team by hand. | Scoring Rounds |
 | `sort-buttons.webp` | Close-up of a single question's header showing the Sort, A-Z and Reset Sort buttons on one row (the header pins as one piece). | Tips & Tricks |
-| `crowd-wisdom-percentage.webp` | Close-up of a single question's header with Advanced Settings → Crowd-Wisdom Percentage on: the correct/incorrect count pills, then the Sort / A-Z / Reset Sort buttons, all on one row. | Tips & Tricks |
+| `crowd-wisdom-percentage.webp` | Close-up of a single question's header with Advanced Settings → Crowd-Wisdom Percentage on: the Sort / A-Z / Reset Sort buttons, then the correct/incorrect count pills, all on one row. | Tips & Tricks |
 | `unlock-next-question.webp` | Scoring group of Advanced Settings with Unlock Next Question set to 2 teams. | Advanced Settings |
 | `question-timer.webp` | The desktop-sidebar question timer mid-countdown: large digits, with the rectangular Pause and Reset buttons (same 3rem x 2.5rem rectangle docked or deployed). | Question Timer |
 | `timer-stepper-buttons.webp` | The question timer with the −30/+30 stepper buttons visible (Advanced Settings → Timer Stepper Buttons on), same rectangular Pause/Reset buttons. | Tips & Tricks |

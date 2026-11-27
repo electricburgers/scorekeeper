@@ -3461,3 +3461,20 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
 .team-answer.kb-row,.bonus-row.kb-row,.special-wager-row.kb-row{outline:3px solid var(--accent-cyan-solid);outline-offset:-3px;background:var(--bg-hover)}
 .ht-keys-sub{font-size:.85rem;margin:14px 0 4px}
 
+/* ONE-LINE TEAM NAMES: where a scoring row has room, the name column fits the longest team name
+   (--name-col, measured by fitNameColumn() in js/app.js) and the score buttons follow it, instead
+   of sitting at the far right. If the buttons need the space, the name shrinks and wraps as before.
+   The right padding keeps the hover Team Report icon off the end of the name. */
+.name-probe{position:absolute;left:-9999px;top:0;width:max-content;visibility:hidden;white-space:nowrap;font-weight:600;font-size:.88rem;line-height:1.3;padding:0 2.2em 0 4px}
+@container scorecol (min-width:601px){
+  :is(.team-answer,.bonus-row,.special-wager-row)>.ta-name{width:var(--name-col,11rem);flex-shrink:1;min-width:6rem;padding-right:2.2em}
+  .team-answer>.ta-wagers,.bonus-row>.bonus-right,.special-wager-row>.sw-select{margin-left:0}
+  /* The question header's sort buttons start where the score buttons do: the title area takes the
+     name column's width, or its own if that is wider. The percentage pills go after the buttons.
+     The title area only takes space the buttons leave (a zero flex-basis), so they stay on one row
+     whenever the title can narrow enough; only then do they wrap, the two percentages together. */
+  .q-header-left,.sw-header-left{flex:1 1 0;max-width:var(--name-col,11rem);min-width:min-content}
+  .q-header-right{margin-left:0;flex-shrink:1;flex-wrap:wrap;min-width:0}
+  .q-header-right .q-stats-row{display:flex;gap:inherit;order:1}
+  .q-header-left .q-badge{white-space:nowrap}
+}

@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.87] - 27 Nov 2026
+
+### Changed
+
+- Retook the wide-layout scoring screenshots (scoring rows, Beer Round, halftime wager, sort buttons, crowd-wisdom percentage, themes and row density): the score and sort buttons now sit beside the team names.
+
 ## [1.86] - 27 Nov 2026
 
 ### Changed

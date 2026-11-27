@@ -14,6 +14,13 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.103 - 2026-11-27
+
+- **Team names on one line.** Where the scoring column is wider than 600px, the name column now fits the longest team name and the score buttons follow it, so there is less mouse travel on large displays. This covers questions, bonus questions and Q5 wagers. Names still wrap if the buttons need the room, and narrow layouts are unchanged.
+- **Sort buttons moved.** On the same wide layouts, each question's Sort, A-Z and Reset Sort buttons now start where the score buttons do. The correct/incorrect percentages, when shown, follow them on the same row whenever there is room.
+- **+ Add Team** now puts the cursor in the new team's name field.
+- **FAQ screenshots** retaken (FAQ v1.87).
+
 ## v22.102 - 2026-11-27
 
 - **Craft beer button.** It now reads "Craft Beer" instead of switching to "Craft Beer Card" at wide sizes; "CB" is still used when space is tight.
