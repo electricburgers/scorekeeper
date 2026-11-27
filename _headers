@@ -1,7 +1,7 @@
 # Cloudflare Pages response headers (backup deploy). Ignored by GitHub Pages.
 # Docs: https://developers.cloudflare.com/pages/configuration/headers/
 
-# Backup mirror must not be indexed as a duplicate of scorekeeper.triviarevolution.com.
+# Backup mirror must not be indexed as a duplicate of electricburgers.github.io/scorekeeper.
 /*
   X-Robots-Tag: noindex
 

@@ -1,6 +1,6 @@
 # Scorekeeper FAQ
 
-The standalone FAQ &amp; Tips site for [Scorekeeper](https://scorekeeper.triviarevolution.com/),
+The standalone FAQ &amp; Tips site for [Scorekeeper](https://electricburgers.github.io/scorekeeper/),
 a live scoring tool for trivia nights. It's a static site — searchable, collapsible questions
 organized by section, plus screenshots for the harder-to-describe parts of the app.
 

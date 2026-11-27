@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.83] - 27 Nov 2026
+
+### Fixed
+
+- The "open it from the website" link, and the search and link-preview tags (app and FAQ), now use https://electricburgers.github.io/scorekeeper/. The old address didn't resolve.
+
 ## [1.82] - 27 Nov 2026
 
 ### Added

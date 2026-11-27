@@ -68,7 +68,7 @@ describe("v22.99 wrap-up links and downloads open away from the app tab", () => 
       for (const doc of [window.document, faq.document]) {
         for (const a of doc.querySelectorAll('a[href^="http"]')) {
           // The app's own address (the FAQ's "open it from the website" help link) isn't "another site".
-          if (["scorekeeper.test", "scorekeeper.triviarevolution.com"].includes(new URL(a.href).hostname)) continue;
+          if (["scorekeeper.test", "electricburgers.github.io"].includes(new URL(a.href).hostname)) continue;
           assert.equal(a.target, "_blank", a.href + " would replace the current tab");
         }
       }
