@@ -14,6 +14,11 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.101 - 2026-11-27
+
+- **Sort button renamed.** "Entry order" is now "Reset Sort". It still puts teams back in the order entered and doesn't change scores.
+- **FAQ screenshots** retaken with the new name (FAQ v1.85).
+
 ## v22.100 - 2026-11-27
 
 - **Fixed:** both links on the "Page not found" page left out `/scorekeeper/` and led to another missing page.

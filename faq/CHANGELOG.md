@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.85] - 27 Nov 2026
+
+### Changed
+
+- The "Entry order" sort button is now "Reset Sort" in the text and retaken screenshots.
+
 ## [1.84] - 27 Nov 2026
 
 ### Changed

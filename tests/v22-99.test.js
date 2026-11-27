@@ -1,4 +1,4 @@
-// v22.99 — desktop usability: keyboard scoring on a selected team row, the "Entry order" button,
+// v22.99 — desktop usability: keyboard scoring on a selected team row, the "Reset Sort" button,
 // the three-length craft beer label, and the two page-height fixes.
 "use strict";
 const { describe, it, before, after, beforeEach } = require("node:test");
@@ -124,9 +124,14 @@ describe("v22.99 keyboard scoring", () => {
     run("toggleShortcutsHelp(false)");
   });
 
-  it("labels the sort-restore button Entry order, not Reset", () => {
-    const b = window.document.querySelector("#qblock-0-0 .q-reset-btn");
-    assert.equal(b.textContent.trim(), "Entry order");
+  it("labels the sort-restore button Reset Sort on every kind of card", () => {
+    for (const card of ["#qblock-0-0", "#bqblock-0", "#swblock-final"]) {
+      const b = window.document.querySelector(card + " .q-reset-btn");
+      assert.equal(b.textContent.trim(), "Reset Sort", card);
+      // The spoken name has to match the visible one (WCAG 2.5.3, Label in Name).
+      assert.equal(b.getAttribute("aria-label"), "Reset Sort", card);
+      assert.match(b.title, /scores are not changed/, card);
+    }
   });
 
   it("craft beer chip carries all three label lengths", () => {
