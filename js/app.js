@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v23.3"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 28, 2026 6:15 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v23.4"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 28, 2026 6:45 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1423,7 +1423,7 @@ function renderFinalResults() {
     const diffSigned =
       r.diffSign > 0 ? "+" + r.diff : r.diffSign < 0 ? "-" + r.diff : r.diff;
     h +=
-      `<tr class="${r.tie ? "fr-tie" : ""}${medal}${pausedRowCls(r.index)}" role="button" tabindex="0" title="${esc(r.name)} \u2014 tap to view team report" onclick="openAudit(${r.index})">` +
+      `<tr class="${r.tie ? "fr-tie" : ""}${medal}${pausedRowCls(r.index)}" role="button" tabindex="0" title="${esc(r.name)} \u2014 click to view team report" onclick="openAudit(${r.index})">` +
       `<td class="fr-place" data-label="Place">${ordinal(r.place)}</td>` +
       `<td class="fr-name" data-label="Team"><span class="ta-name-clickable">${esc(r.name)}</span>${pausedMark(r.index)}${r.tie ? ` <span class="fr-tiebadge${r.tieWinner ? " fr-win" : ""}">${r.tieWinner ? CHECK_ICON_SVG + " closer" : "tie"}</span>` : ""}</td>` +
       `<td class="fr-score" data-label="Score">${r.score}</td>` +
@@ -1495,7 +1495,7 @@ function renderStandings(type) {
     `<div class="standings-sort-btns" id="standings-sortbtns-${type}">${btns}</div>` +
     `<table class="standings-table"><thead><tr><th>Team</th><th><span class="st-score">Score</span></th></tr></thead><tbody>`;
   list.forEach((t) => {
-    h += `<tr class="standings-row${pausedRowCls(t.ti)}" role="button" tabindex="0" title="${esc(t.name)}${isPaused(t.ti) ? " (paused)" : ""} — tap to view team report" onclick="openAudit(${t.ti})"><td class="standings-name ta-name-clickable">${esc(t.name)}${pausedMark(t.ti)}</td><td class="standings-pts"><span class="st-score">${t.pts}</span></td></tr>`;
+    h += `<tr class="standings-row${pausedRowCls(t.ti)}" role="button" tabindex="0" title="${esc(t.name)}${isPaused(t.ti) ? " (paused)" : ""} — click to view team report" onclick="openAudit(${t.ti})"><td class="standings-name ta-name-clickable">${esc(t.name)}${pausedMark(t.ti)}</td><td class="standings-pts"><span class="st-score">${t.pts}</span></td></tr>`;
   });
   return h + "</tbody></table></div></div>";
 }
@@ -1750,7 +1750,7 @@ function renderLeftBody(keepId) {
     : "";
   const teamSortBtns =
     gameState.teams.length > 1
-      ? `<span class="team-sort-row" onclick="event.stopPropagation()"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept.${teamResort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}${teamAlphaSort ? resortDot : ""}</button><button class="q-alpha-btn team-guess-btn${teamGuessSort ? " active" : ""}"${anyNoGuess || teamGuessSort ? "" : " disabled"} onclick="toggleTeamGuessSort()" title="${anyNoGuess ? "" : "Every team has a score guess. "}Teams with no final score guess: first, then last, then back to entry order. Works with A-Z.${teamResort && !teamAlphaSort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Teams without a score guess, currently ${teamGuessSort === "first" ? "shown first" : teamGuessSort === "last" ? "shown last" : "off"}">${noGuessBtnInner(teamGuessSort)}${!teamAlphaSort && teamGuessSort ? resortDot : ""}</button></span>`
+      ? `<span class="team-sort-row" onclick="event.stopPropagation()"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept.${teamResort ? " The dot means teams are out of order: click to re-sort." : ""}" aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}${teamAlphaSort ? resortDot : ""}</button><button class="q-alpha-btn team-guess-btn${teamGuessSort ? " active" : ""}"${anyNoGuess || teamGuessSort ? "" : " disabled"} onclick="toggleTeamGuessSort()" title="${anyNoGuess ? "" : "Every team has a score guess. "}Teams with no final score guess: first, then last, then back to entry order. Works with A-Z.${teamResort && !teamAlphaSort ? " The dot means teams are out of order: click to re-sort." : ""}" aria-label="Teams without a score guess, currently ${teamGuessSort === "first" ? "shown first" : teamGuessSort === "last" ? "shown last" : "off"}">${noGuessBtnInner(teamGuessSort)}${!teamAlphaSort && teamGuessSort ? resortDot : ""}</button></span>`
       : "";
   h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><span class="chevron">▼</span><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:max(12px,.65rem);font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2>${teamSortBtns}</div><div class="section-body">`;
   const showAdj = !!loadPrefs().showAdjustments;
@@ -2153,7 +2153,7 @@ function renderWQ(ri, qi) {
     if (isBeerFlash) rowCls += " beer-flash";
     else if (isFlash) rowCls += " flash";
 
-    h += `<div class="${rowCls}" data-ta="${ri}-${qi}-${ti}"><span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} — tap to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span><div class="ta-wagers">`;
+    h += `<div class="${rowCls}" data-ta="${ri}-${qi}-${ti}"><span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} — click to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span><div class="ta-wagers">`;
     if (rivals)
       RIVALS_PLACES.forEach((pl) => {
         const on = ans.place === pl.place;
@@ -2323,10 +2323,10 @@ function renderBQ(ri) {
           cls += " correct";
           cbadge = `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>`;
         }
-        return `<button class="${cls}" onclick="setB(${ri},${ti},${k})" title="${k} correct \u2014 +${k * 5} pts \u2014 tap again to unselect">${k}${cbadge}</button>`;
+        return `<button class="${cls}" onclick="setB(${ri},${ti},${k})" title="${k} correct \u2014 +${k * 5} pts \u2014 click again to unselect">${k}${cbadge}</button>`;
       })
       .join("");
-    h += `<div class="bonus-row${submitted ? " is-submitted" : ""}" data-ta="bq-${ri}-${ti}"><span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 tap to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
+    h += `<div class="bonus-row${submitted ? " is-submitted" : ""}" data-ta="bq-${ri}-${ti}"><span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 click to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
       <div class="bonus-right"><div class="bonus-choice">${choices}</div>
       ${ptsHtml}</div></div>`;
   });
@@ -2411,7 +2411,7 @@ function renderSpecialWager(type) {
     }
     const selectHtml = `<select class="sw-select" aria-label="Wager amount (1\u2013${max})" onchange="${wSet}(${ti},this.value)">${selOpts}</select>`;
     h += `<div class="special-wager-row" data-ta="${type}-${ti}">
-      <span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 tap to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
+      <span class="ta-name ta-name-clickable" role="button" tabindex="0" title="${esc(t.name || "Team " + (ti + 1))} \u2014 click to view team report" onclick="openAudit(${ti})">${esc(t.name || "T" + (ti + 1))}</span>
       ${selectHtml}
       <div class="ta-result">
         <button class="result-btn ${d.correct === true ? "correct-sel" : ""}" onclick="${cSet}(${ti},true)" aria-label="Mark correct">${ICON_MARK_CORRECT}${d.correct === true ? `<span class="wager-badge bg-correct">${CORRECT_BADGE_SVG}</span>` : ""}</button>
@@ -2576,7 +2576,7 @@ function buildScores() {
     const cbTag = t.craftPrize
       ? ` <span class="cb-tag">${ICON_BEER} CB Prize</span>`
       : "";
-    h += `<div class="score-row${cb}${rc ? " " + rc : ""}" data-ti="${ti}" title="${tip.join(" | ")}"><span class="sr-rank ${rc}">${rank}</span><span class="sr-name sr-name-clickable" role="button" tabindex="0" title="Tap to set or clear the Craft Beer prize winner" onclick="toggleCraftPrize(${ti})">${esc(t.name || "Team " + (ti + 1))}${cbTag}</span><span class="sr-score">${tot}</span></div>`;
+    h += `<div class="score-row${cb}${rc ? " " + rc : ""}" data-ti="${ti}" title="${tip.join(" | ")}"><span class="sr-rank ${rc}">${rank}</span><span class="sr-name sr-name-clickable" role="button" tabindex="0" title="${tip.join(" | ")}&#10;Click to set or clear the Craft Beer prize winner" onclick="toggleCraftPrize(${ti})">${esc(t.name || "Team " + (ti + 1))}${cbTag}</span><span class="sr-score">${tot}</span></div>`;
   });
   return h + "</div>";
 }

@@ -1005,18 +1005,24 @@ function raceSvg(width, height, labels, series, order, slots, partial) {
     `<title>${esc(series[ti].name)}: ${series[ti].pts.map((v, i) => labels[i] + " " + v).join(", ")}</title>`;
   const line = (ti, colour, w, o) => {
     const pts = series[ti].pts.map((v, i) => X(i) + "," + Y(v)).join(" ");
-    return `<g>${title(ti)}<polyline points="${pts}" fill="none" stroke="${colour}" stroke-width="${w}" stroke-opacity="${o}" stroke-linejoin="round" stroke-linecap="round"/></g>`;
+    // The wide invisible polyline is the pointer target: the drawn line alone is too thin to hit.
+    return (
+      `<polyline class="race-line" points="${pts}" fill="none" stroke="${colour}" stroke-width="${w}" stroke-opacity="${o}" stroke-linejoin="round" stroke-linecap="round"/>` +
+      `<polyline class="race-hit" points="${pts}" fill="none" stroke="transparent" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/>`
+    );
   };
-  order.slice(RACE_TOP).forEach((ti) => (g += line(ti, "var(--race-rest)", 1.5, 0.45)));
+  // One group per team, so pointing at any part of it (or its legend entry) highlights all of it.
+  const team = (ti, body) => `<g data-race="${ti}">${title(ti)}${body}</g>`;
+  order.slice(RACE_TOP).forEach((ti) => (g += team(ti, line(ti, "var(--race-rest)", 1.5, 0.45))));
   const top = order.slice(0, RACE_TOP);
   // Drawn from fifth to first, so the leader's line is on top.
   for (let k = top.length - 1; k >= 0; k--) {
     const ti = top[k];
     const colour = `var(--race-${slots[k] + 1})`;
-    g += line(ti, colour, 2.5, 1);
-    series[ti].pts.forEach((v, i) => {
-      g += `<circle cx="${X(i)}" cy="${Y(v)}" r="4.5" fill="${colour}" stroke="var(--bg-card-alt)" stroke-width="2">${title(ti)}</circle>`;
-    });
+    const dots = series[ti].pts.map(
+      (v, i) => `<circle cx="${X(i)}" cy="${Y(v)}" r="4.5" fill="${colour}" stroke="var(--bg-card-alt)" stroke-width="2"/>`,
+    );
+    g += team(ti, line(ti, colour, 2.5, 1) + dots.join(""));
   }
   // Rank numbers at the line ends, spread apart where scores are close.
   let last = -Infinity;
@@ -1061,7 +1067,7 @@ function renderScoreRace() {
   const legend = top
     .map(
       (ti, k) =>
-        `<li><button type="button" onclick="openAudit(${ti})" title="${esc(series[ti].name)}: view team report"><span class="race-key" style="background:var(--race-${slots[k] + 1})" aria-hidden="true"></span><span class="race-rank">${k + 1}</span><span class="race-name">${esc(series[ti].name)}</span><span class="race-pts">${series[ti].pts.at(-1)}</span></button></li>`,
+        `<li><button type="button" data-race="${ti}" onclick="openAudit(${ti})" title="${esc(series[ti].name)}: view team report"><span class="race-key" style="background:var(--race-${slots[k] + 1})" aria-hidden="true"></span><span class="race-rank">${k + 1}</span><span class="race-name">${esc(series[ti].name)}</span><span class="race-pts">${series[ti].pts.at(-1)}</span></button></li>`,
     )
     .join("");
   const rest = order.length - top.length;
@@ -1073,6 +1079,25 @@ function renderScoreRace() {
     (rest ? `<p class="race-note">Grey lines: the other ${rest} team${rest === 1 ? "" : "s"}. Point at a line to see its team.</p>` : "");
   drawRaceChart();
 }
+
+// Highlights one team in both the chart and the legend, or none when ti is null.
+function raceHighlight(ti) {
+  document.querySelectorAll("#racePanel [data-race]").forEach((el) => {
+    el.classList.toggle("race-on", el.dataset.race === ti);
+  });
+}
+
+// Bound to the panel itself, which survives the re-renders that replace everything inside it.
+(function () {
+  const panel = document.getElementById("racePanel");
+  if (!panel) return;
+  const teamAt = (node) => node?.closest?.("[data-race]")?.dataset.race ?? null;
+  // Mouse and trackpad only: a finger has no way to move off again, so the highlight would stick.
+  panel.addEventListener("pointerover", (e) => {
+    if (e.pointerType !== "touch") raceHighlight(teamAt(e.target));
+  });
+  panel.addEventListener("pointerleave", () => raceHighlight(null));
+})();
 
 // Redraws when the panel appears or changes size (window resize, text size).
 if (window.ResizeObserver) {

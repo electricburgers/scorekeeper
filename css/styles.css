@@ -3547,7 +3547,14 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
 .race-grid{stroke:var(--border)}
 .race-legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(17rem,1fr));gap:4px 14px}
 .race-legend button{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;padding:3px 6px;border:0;border-radius:6px;background:transparent;color:var(--text-primary);font:600 max(12px,.85rem) var(--font-body);text-align:left;cursor:pointer}
-.race-legend button:hover{background:var(--bg-hover)}
+.race-legend button:hover,.race-legend button.race-on{background:var(--bg-hover)}
+/* The pointed-at team stands out in the chart and the legend; the other chart lines fade. */
+.race-chart .race-hit{pointer-events:stroke}
+.race-chart g[data-race]:hover,.race-chart g.race-on{cursor:default}
+.race-chart svg:has(g.race-on) g[data-race]:not(.race-on){opacity:.2}
+.race-chart g.race-on .race-line{stroke-width:4.5;stroke-opacity:1}
+.race-chart g.race-on .race-line[stroke="var(--race-rest)"]{stroke:var(--text-primary)}
+.race-legend button.race-on{box-shadow:inset 0 0 0 2px var(--accent-cyan-solid)}
 .race-key{flex:none;width:12px;height:12px;border-radius:3px}
 .race-rank{flex:none;min-width:1.2em;color:var(--text-muted)}
 .race-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

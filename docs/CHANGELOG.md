@@ -17,6 +17,13 @@ v19.79 through v19.84; git history isn't rewritten).
 The release with the Score race panel is a major change, so it is numbered v23.0 here and in the
 app. Its first commit subject says "v22.105"; git history isn't rewritten.
 
+## v23.4 - 2026-11-28
+
+- **Scoreboard tooltips.** Pointing at a team name now shows its points by round above the Craft Beer prize hint. Before, the hint replaced the points.
+- **Score race lines are easier to point at.** Each line has a wider invisible hover area, and the team you point at is highlighted while the other lines fade.
+- **Score race legend and chart are linked.** Pointing at a legend entry highlights that team's line, and pointing at a top-five line or dot highlights its legend entry. This is for mouse and trackpad; touch doesn't trigger it.
+- **Tooltips say "click".** The team report, bonus choice, Craft Beer prize and re-sort tooltips no longer say "tap".
+
 ## v23.3 - 2026-11-28
 
 - **One sort button per question.** Teams on every question, bonus question and Q5 wager are now always listed A-Z, and the only button moves unanswered teams to the top. The A-Z / Z-A and Reset Sort buttons are gone. Once every team is scored, press the button again for plain A-Z. On wider screens it is labelled Unanswered.
