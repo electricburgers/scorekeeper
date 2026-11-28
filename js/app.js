@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.104"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 27, 2026 10:48 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.105"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 27, 2026 11:08 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -2569,7 +2569,11 @@ function toggleSidebar() {
 }
 
 function renderSB() {
-  return withScoreMemo(renderSBBody);
+  withScoreMemo(() => {
+    renderSBBody();
+    // The score race panel follows every score change (js/host-tools.js loads later).
+    if (typeof renderScoreRace === "function") renderScoreRace();
+  });
 }
 function renderSBBody() {
   const body = document.getElementById("sidebarBody");
@@ -3237,7 +3241,12 @@ document.addEventListener("mousemove", (e) => {
   let dragging = false,
     startX = 0,
     startW = 0;
-  const clampW = (w) => Math.max(200, Math.min(window.innerWidth * 0.6, w));
+  // The limit leaves room for the score race panel (0 wide when hidden) and the scoring column.
+  const clampW = (w) => {
+    const race = document.getElementById("racePanel")?.offsetWidth || 0;
+    const room = window.innerWidth - race - (race ? 306 : 0);
+    return Math.max(200, Math.min(window.innerWidth * 0.6, race ? room : w, w));
+  };
   function announceWidth() {
     handle.setAttribute("aria-valuenow", String(Math.round(sidebar.offsetWidth)));
   }

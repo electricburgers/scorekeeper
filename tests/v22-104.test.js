@@ -115,7 +115,6 @@ describe("v22.104 narrower score boxes", () => {
 
   it("only the score boxes and the text between them are limited, not the round cards", () => {
     assert.match(css, /\.section-body>:is\(\.question-block,\.special-section,\.standings-block,\.banter,\.staff-thanks\)\{max-width:var\(--fit\)\}/);
-    assert.match(css, /\.col-left:has\(\.q-stats-row\) \.section-body\{--fit:/);
   });
 
   it("records a header title's width on its block, and keeps it while hidden", () => {

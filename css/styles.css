@@ -2123,7 +2123,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 :root:not([data-cb]){--place-sel:#ffb020}
 [data-theme="light"]:not([data-cb]){--place-sel:#b45309}
 [data-theme="light"] .place-btn.selected{color:#fff}
-.wager-btn.used{background:var(--btn-used-bg);opacity:.22;cursor:not-allowed;text-decoration:line-through}
+/* A wager already used in this round: faded to 22% with a fine diagonal slash. The fade is applied
+   to the button's own colours, not with opacity, so the slash can be easier to see than the rest. */
+.wager-btn.used{background:color-mix(in srgb,var(--btn-used-bg) 22%,transparent);color:color-mix(in srgb,var(--text-secondary) 22%,transparent);border-color:color-mix(in srgb,var(--border-control) 22%,transparent);position:relative;cursor:not-allowed}
+.wager-btn.used::after{content:'';position:absolute;inset:5px;pointer-events:none;background:linear-gradient(to bottom right,transparent calc(50% - .5px),color-mix(in srgb,var(--text-muted) 45%,transparent) calc(50% - .5px),color-mix(in srgb,var(--text-muted) 45%,transparent) calc(50% + .5px),transparent calc(50% + .5px))}
+@media (forced-colors:active){.wager-btn.used{text-decoration:line-through}.wager-btn.used::after{content:none}}
 
 .wager-badge{position:absolute;top:-8px;right:-5px;width:1.3rem;height:1.3rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.15rem;font-weight:900;line-height:1;padding-bottom:1px;pointer-events:none}
 /* .bg-correct's own square is drawn by CORRECT_BADGE_SVG (app.js), not this circle — it's a
@@ -3496,13 +3500,47 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
   .standings-table thead th:last-child,.standings-table td.standings-pts{text-align:left}
   .standings-table .st-score{display:inline-block;min-width:3.7rem;text-align:center}
   /* Question, Q5 wager and pre-wager score boxes (and the text boxes between them) are only as wide
-     as their contents need, which follows the longest team name. Round cards stay full width. The
-     second width makes room for the percentage pills when they are on. */
+     as their contents need, which follows the longest team name. Round cards stay full width. */
   .section-body{--fit:calc(max(var(--name-col,11rem),13rem) + 19.85rem + 8px + 2.9rem)}
-  .col-left:has(.q-stats-row) .section-body{--fit:calc(max(var(--name-col,11rem),13rem) + 19.85rem + 8px + 17.4rem)}
   .section-body>:is(.question-block,.special-section,.standings-block,.banter,.staff-thanks){max-width:var(--fit)}
-  /* The percentage pills go after the buttons. */
-  .q-header-right .q-stats-row{display:flex;gap:inherit;order:1}
+  /* Percentages: a slim line of text on its own row under the sort buttons, exactly their width. */
+  :is(.q-header,.sw-header):has(.q-stats-row){align-items:flex-start}
+  :is(.q-header,.sw-header):has(.q-stats-row)>:is(.q-header-left,.sw-header-left){min-height:2.7rem}
+  .q-header-right:has(.q-stats-row){flex:0 1 var(--sort-w);row-gap:2px}
+  .q-header-right .q-stats-row{flex:0 0 100%;order:1;display:flex;justify-content:center;gap:1.1rem}
+  .q-header-right .q-stats-row .q-stat{height:1.15rem;padding:0;background:none;border:0;gap:.3em;font-size:.76rem}
+  .q-header-right .q-stats-row .q-stat-correct{color:var(--pts-pos-fg)}
+  .q-header-right .q-stats-row .q-stat-incorrect{color:var(--pts-neg-fg)}
+  /* Light theme's pill text is white, so plain text takes a darker shade of the pill colour. */
+  [data-theme="light"] .q-header-right .q-stats-row .q-stat-correct{color:color-mix(in srgb,var(--pts-pos-bg) 78%,#000)}
+  [data-theme="light"] .q-header-right .q-stats-row .q-stat-incorrect{color:color-mix(in srgb,var(--pts-neg-bg) 78%,#000)}
   .q-header-left .q-badge{white-space:nowrap}
 }
 @media (forced-colors:active){.special-wager-row>.sw-select{appearance:auto;-webkit-appearance:auto}}
+/* A used wager keeps its faded look on hover; this outranks the shared button hover rules. */
+.wager-btn.wager-btn.used:hover:not(.selected){background:color-mix(in srgb,var(--btn-used-bg) 22%,transparent);border-color:color-mix(in srgb,var(--border-control) 22%,transparent);box-shadow:none;transform:none;filter:none}
+
+/* SCORE RACE: a third panel, right of the scoreboard, only on very wide windows. The legend sits
+   under the chart so the chart gets the panel's whole width. Drawn by renderScoreRace() in
+   js/host-tools.js; the five line colours are checked for colour-blind separation. */
+:root{--race-1:#338ced;--race-2:#e76624;--race-3:#00a888;--race-4:#d28e05;--race-5:#e24d8b;--race-rest:#8a8a8a}
+[data-theme="light"]{--race-1:#257de0;--race-2:#f47230;--race-3:#00b894;--race-4:#f2a600;--race-5:#ee7fac;--race-rest:#7a7a7a}
+.race-panel{display:none}
+@media (min-width:2100px){
+  .race-panel{display:flex;flex-direction:column;gap:8px;flex:0 0 clamp(520px,calc(100vw - 1600px),900px);height:100%;overflow-y:auto;padding:14px 18px;border-left:1px solid var(--border-strong);background:var(--bg-card-alt)}
+}
+.race-title{font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--txt-cyan)}
+.race-sub,.race-note{font-size:.8rem;color:var(--text-muted)}
+/* The drawing is taken out of the flow, so redrawing it can't resize the box being measured. */
+.race-chart{position:relative;flex:1 1 0;min-height:300px;max-height:760px}
+.race-chart svg{position:absolute;inset:0;overflow:visible}
+.race-chart text{font-family:var(--font-body);font-size:.75rem;fill:var(--text-muted)}
+.race-chart .race-end{font-weight:700;fill:var(--text-primary)}
+.race-grid{stroke:var(--border)}
+.race-legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(17rem,1fr));gap:4px 14px}
+.race-legend button{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;padding:3px 6px;border:0;border-radius:6px;background:transparent;color:var(--text-primary);font:600 .85rem var(--font-body);text-align:left;cursor:pointer}
+.race-legend button:hover{background:var(--bg-hover)}
+.race-key{flex:none;width:12px;height:12px;border-radius:3px}
+.race-rank{flex:none;min-width:1.2em;color:var(--text-muted)}
+.race-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.race-pts{flex:none;font-family:var(--font-display);font-weight:700;font-variant-numeric:tabular-nums}

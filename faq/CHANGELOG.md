@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.89] - 27 Nov 2026
+
+### Changed
+
+- Noted the Score race panel on very wide screens and that crowd-wisdom percentages now sit under the sort buttons. Retook the wide-layout scoring screenshots with the new crossed-out wagers.
+
 ## [1.88] - 27 Nov 2026
 
 ### Changed

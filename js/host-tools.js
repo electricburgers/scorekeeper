@@ -953,3 +953,137 @@ function renderDevTools() {
     });
   });
 })();
+
+// ---------------------------------------------------------------------------------------------
+// Score race panel (very wide windows)
+// ---------------------------------------------------------------------------------------------
+// The current top five are drawn in colour and everyone else in grey. A team keeps its colour for
+// as long as it stays in the top five, however the order changes: the colour follows the team.
+const RACE_TOP = 5;
+const raceSlots = new Map(); // team id -> colour slot 0-4
+
+function raceColourSlots(topIds) {
+  for (const id of [...raceSlots.keys()]) if (!topIds.includes(id)) raceSlots.delete(id);
+  const used = new Set(raceSlots.values());
+  for (const id of topIds) {
+    if (raceSlots.has(id)) continue;
+    let slot = 0;
+    while (used.has(slot)) slot++;
+    used.add(slot);
+    raceSlots.set(id, slot);
+  }
+  return topIds.map((id) => raceSlots.get(id));
+}
+
+// A gridline step of 10, 25, 50, 100... that gives about six lines.
+function raceStep(span) {
+  return [5, 10, 20, 25, 50, 100, 200, 250, 500].find((s) => span / s <= 6) || 1000;
+}
+
+function raceSvg(width, height, labels, series, order, slots, partial) {
+  const L = 36;
+  const R = 30;
+  const T = 10;
+  const B = 24;
+  const n = labels.length;
+  const all = series.flatMap((s) => s.pts);
+  const step = raceStep(Math.max(10, Math.max(...all) - Math.min(0, ...all)));
+  const lo = Math.floor(Math.min(0, ...all) / step) * step;
+  const hi = Math.max(lo + step, Math.ceil(Math.max(...all) / step) * step);
+  const X = (i) => (n === 1 ? (L + width - R) / 2 : L + ((width - L - R) * i) / (n - 1));
+  const Y = (v) => T + (height - T - B) * (1 - (v - lo) / (hi - lo));
+  let g = "";
+  for (let v = lo; v <= hi; v += step)
+    g += `<line class="race-grid" x1="${L}" x2="${width - R}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L - 6}" y="${Y(v) + 4}" text-anchor="end">${v}</text>`;
+  labels.forEach((l, i) => {
+    const text = l + (partial && i === n - 1 ? " so far" : "");
+    // The end labels are anchored inward so "R4 so far" can't run off the drawing.
+    const anchor = n > 1 && i === n - 1 ? "end" : "middle";
+    g += `<text x="${anchor === "end" ? X(i) + 12 : X(i)}" y="${height - 6}" text-anchor="${anchor}">${text}</text>`;
+  });
+  const title = (ti) =>
+    `<title>${esc(series[ti].name)}: ${series[ti].pts.map((v, i) => labels[i] + " " + v).join(", ")}</title>`;
+  const line = (ti, colour, w, o) => {
+    const pts = series[ti].pts.map((v, i) => X(i) + "," + Y(v)).join(" ");
+    return `<g>${title(ti)}<polyline points="${pts}" fill="none" stroke="${colour}" stroke-width="${w}" stroke-opacity="${o}" stroke-linejoin="round" stroke-linecap="round"/></g>`;
+  };
+  order.slice(RACE_TOP).forEach((ti) => (g += line(ti, "var(--race-rest)", 1.5, 0.45)));
+  const top = order.slice(0, RACE_TOP);
+  // Drawn from fifth to first, so the leader's line is on top.
+  for (let k = top.length - 1; k >= 0; k--) {
+    const ti = top[k];
+    const colour = `var(--race-${slots[k] + 1})`;
+    g += line(ti, colour, 2.5, 1);
+    series[ti].pts.forEach((v, i) => {
+      g += `<circle cx="${X(i)}" cy="${Y(v)}" r="4.5" fill="${colour}" stroke="var(--bg-card-alt)" stroke-width="2">${title(ti)}</circle>`;
+    });
+  }
+  // Rank numbers at the line ends, spread apart where scores are close.
+  let last = -Infinity;
+  const ends = top
+    .map((ti, k) => ({ k, y: Y(series[ti].pts[n - 1]) }))
+    .sort((a, b) => a.y - b.y || a.k - b.k)
+    .map((e) => ({ ...e, ly: (last = Math.max(e.y, last + 15)) }));
+  ends.forEach((e) => {
+    g += `<text class="race-end" x="${X(n - 1) + 12}" y="${e.ly + 4}">${e.k + 1}</text>`;
+  });
+  return g;
+}
+
+function drawRaceChart() {
+  const box = document.getElementById("raceChart");
+  if (!box || !box.clientWidth || !renderScoreRace.data) return;
+  const d = renderScoreRace.data;
+  const w = box.clientWidth;
+  const h = box.clientHeight;
+  box.innerHTML = `<svg width="${w}" height="${h}" role="img" aria-label="${esc(d.alt)}">${raceSvg(w, h, d.labels, d.series, d.order, d.slots, d.partial)}</svg>`;
+}
+
+function renderScoreRace() {
+  const panel = document.getElementById("racePanel");
+  // Hidden below the breakpoint: nothing to draw until the window is wide enough.
+  if (!panel || !panel.offsetWidth) return;
+  const { labels, series } = progressionData();
+  const head = `<h2 class="race-title">Score race</h2>`;
+  if (!labels.length) {
+    renderScoreRace.data = null;
+    panel.innerHTML = head + `<p class="race-sub">Score a question to start the race.</p>`;
+    return;
+  }
+  const order = ranked().map((r) => r.index);
+  const top = order.slice(0, RACE_TOP);
+  const slots = raceColourSlots(top.map((ti) => gameState.teams[ti].id));
+  const progress = roundProgress(labels.length - 1);
+  const alt =
+    "Line chart of running totals by round. " +
+    top.map((ti, k) => `${k + 1}: ${series[ti].name}, ${series[ti].pts.at(-1)} points`).join("; ");
+  renderScoreRace.data = { labels, series, order, slots, alt, partial: progress.done < progress.total };
+  const legend = top
+    .map(
+      (ti, k) =>
+        `<li><button type="button" onclick="openAudit(${ti})" title="${esc(series[ti].name)}: view team report"><span class="race-key" style="background:var(--race-${slots[k] + 1})" aria-hidden="true"></span><span class="race-rank">${k + 1}</span><span class="race-name">${esc(series[ti].name)}</span><span class="race-pts">${series[ti].pts.at(-1)}</span></button></li>`,
+    )
+    .join("");
+  const rest = order.length - top.length;
+  panel.innerHTML =
+    head +
+    `<p class="race-sub">Running totals by round.${rest ? " Top 5 in colour." : ""}</p>` +
+    `<div class="race-chart" id="raceChart"></div>` +
+    `<ol class="race-legend">${legend}</ol>` +
+    (rest ? `<p class="race-note">Grey lines: the other ${rest} team${rest === 1 ? "" : "s"}. Point at a line to see its team.</p>` : "");
+  drawRaceChart();
+}
+
+// Redraws when the panel appears or changes size (window resize, text size).
+if (window.ResizeObserver) {
+  const racePanelEl = document.getElementById("racePanel");
+  let racePanelSize = "";
+  if (racePanelEl)
+    new ResizeObserver(() => {
+      const size = racePanelEl.offsetWidth + "x" + racePanelEl.offsetHeight;
+      if (size === racePanelSize) return;
+      racePanelSize = size;
+      renderScoreRace();
+    }).observe(racePanelEl);
+}
+renderScoreRace();

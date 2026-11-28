@@ -469,7 +469,8 @@ test("css/styles.css uses !important only in the known, already-reviewed set of 
 // panel gap fix (this session) chased down, just in a media query instead of a padding value. ----
 test("css/styles.css only uses the project's known set of @media width breakpoints", () => {
   const src = read("css/styles.css");
-  const KNOWN = new Set([480, 600, 601, 768, 769]);
+  // 2100: very wide windows only, where the score race panel appears.
+  const KNOWN = new Set([480, 600, 601, 768, 769, 2100]);
   const found = [...src.matchAll(/@media\s*\(\s*(?:min|max)-width:\s*(\d+)px/g)].map(
     (m) => Number(m[1]),
   );

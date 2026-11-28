@@ -55,7 +55,7 @@ describe("v22.103", () => {
 
   it("wide question headers start the sort buttons at the score column, percentages after", () => {
     assert.match(css, /\.q-header-left,\.sw-header-left\{flex:1 1 0;max-width:var\(--score-col\);min-width:min-content\}/);
-    assert.match(css, /\.q-header-right \.q-stats-row\{display:flex;gap:inherit;order:1\}/);
+    assert.match(css, /\.q-header-right \.q-stats-row\{flex:0 0 100%;order:1;/);
   });
 
   it("wide scoring rows use the measured column, with a floor for short names", () => {
