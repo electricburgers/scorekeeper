@@ -40,12 +40,11 @@ describe("unit: scoring helpers", () => {
   });
   it("applyAlphaSort sorts numerically-aware: Team 2 before Team 10", () => {
     E(`gameState = freshState(); gameState.teams = [freshTeam("Team 10"), freshTeam("Team 2"), freshTeam("Team 1")]; 0`);
-    assert.deepEqual(J(w, `applyAlphaSort([0,1,2], "az")`), [2, 1, 0]);
-    assert.deepEqual(J(w, `applyAlphaSort([0,1,2], "za")`), [0, 1, 2]);
+    assert.deepEqual(J(w, `applyAlphaSort([0,1,2])`), [2, 1, 0]);
   });
   it("applyAlphaSort keeps pending (unanswered) teams grouped above answered ones", () => {
     E(`gameState = freshState(); gameState.teams = [freshTeam("Alpha"), freshTeam("Bravo"), freshTeam("Charlie")]; 0`);
-    assert.deepEqual(J(w, `applyAlphaSort([0,1,2], "az", new Set([2]))`), [2, 0, 1]);
+    assert.deepEqual(J(w, `applyAlphaSort([0,1,2], new Set([2]))`), [2, 0, 1]);
   });
   it("answerPoints: place → 10/7/4/0, correct wager → wager, wrong or missing → 0", () => {
     assert.deepEqual(

@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v23.2"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 28, 2026 12:22 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v23.3"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 28, 2026 6:15 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -99,21 +99,13 @@ const STRIPE_LEVELS = [0, 1, 2],
 let collapsedQuestions = new Set();
 let collapsedBonusQuestions = new Set();
 let collapsedSpecialWagers = new Set();
-let questionSortOrder = {};
-// Per-question name sort ("az" | "za"), independent of questionSortOrder so both can be on at once;
-// questionSortPending remembers which teams were unanswered when the unanswered-first sort ran.
-let questionAlphaSort = {};
-// Each question's team list starts sorted A-Z; a key holds "az" | "za" | "off" (entry order) once
-// the host has changed it. Reset sets "off", i.e. restores entry order.
-function qAlpha(key) {
-  const v = questionAlphaSort[key];
-  return v === "off" ? undefined : v || "az";
-}
 // Teams section A-Z / Z-A view ("az" | "za" | undefined). View only: gameState.teams keeps its entry
 // order, every row keeps its "Team N" entry number and data-ti, so nothing downstream shifts.
 let teamAlphaSort;
 let teamGuessSort = false; // Teams section: false (off) | "first" (teams missing a final score guess on top) | "last"; combines with A-Z
 let teamSortSnapshot; // frozen display order while A-Z/Z-A is on; only re-computed when the sort button is tapped
+// Per question: the teams that were unanswered when Sort was last tapped. They stay on top, and each
+// group stays A-Z, until the next tap. No entry for a key means plain A-Z.
 let questionSortPending = {};
 
 // loadPrefs() is called constantly — several times from inside a single renderLeft() alone,
@@ -1051,7 +1043,7 @@ let lastRenderedLeftHTML = null,
 // back to the full innerHTML whenever the section list can't be matched 1:1 to the DOM's
 // children (first render, a section appearing/disappearing, anything else appended to the pane,
 // or a part that isn't exactly one element).
-function patchPaneSections(m, parts, prevParts, full) {
+function patchPaneSections(m, parts, prevParts, full, keepId) {
   if (
     !prevParts ||
     prevParts.length !== parts.length ||
@@ -1073,7 +1065,23 @@ function patchPaneSections(m, parts, prevParts, full) {
     }
     swaps.push([i, box.firstElementChild]);
   }
-  swaps.forEach(([i, el]) => m.children[i].replaceWith(el));
+  swaps.forEach(([i, el]) => {
+    const live = m.children[i];
+    if (keepId && live.id === keepId) syncSortButtons(live, el);
+    else live.replaceWith(el);
+  });
+}
+// For a section whose live DOM is kept: copy over only its header sort buttons' dot and tooltip. The
+// buttons themselves stay, so a click already on its way to one still lands.
+function syncSortButtons(live, next) {
+  const fresh = next.querySelectorAll(".team-sort-row button");
+  live.querySelectorAll(".team-sort-row button").forEach((button, k) => {
+    if (!fresh[k]) return;
+    button.title = fresh[k].title;
+    button.querySelector(".resort-dot")?.remove();
+    const dot = fresh[k].querySelector(".resort-dot");
+    if (dot) button.appendChild(dot);
+  });
 }
 // renderLeft() and renderSB() each need one requestAnimationFrame-deferred pass after their own
 // render to re-assert the scroll anchor once layout has fully settled (fonts/container-queries
@@ -1336,8 +1344,6 @@ function resetBoardUi() {
   collapsedQuestions = new Set();
   collapsedBonusQuestions = new Set();
   collapsedSpecialWagers = new Set();
-  questionSortOrder = {};
-  questionAlphaSort = {};
   teamAlphaSort = undefined;
   teamSortSnapshot = undefined;
   teamGuessSort = false;
@@ -1579,8 +1585,8 @@ function renderAll() {
   syncWakeLock();
 }
 
-function renderLeft() {
-  withScoreMemo(renderLeftBody);
+function renderLeft(keepId) {
+  withScoreMemo(() => renderLeftBody(keepId));
   fitNameColumn();
   watchHeaderTitles();
   // Re-mark the keyboard-scoring row, which the redraw above replaced (js/host-tools.js loads later).
@@ -1610,7 +1616,7 @@ function fitNameColumn() {
   else root.removeProperty("--name-col");
 }
 // A crowded question header narrows its title area to keep the percentages on one row, which moves
-// Reset Sort. Each block records its title's real width as --title-w so its rows end there too. The
+// the Sort button. Each block records its title's real width as --title-w so its rows end there too. The
 // observer also fires when a collapsed section opens or the column is resized.
 // The observer is kept on the function, not in a let: startup draws the page before a let declared
 // down here would be set up.
@@ -1635,7 +1641,7 @@ function setTitleWidth(title) {
 }
 // The first measurement can happen before the web font has loaded.
 document.fonts?.ready.then(() => fitNameColumn());
-function renderLeftBody() {
+function renderLeftBody(keepId) {
   const m = document.getElementById("mainContent");
   if (!m) return;
   let sy = m.scrollTop;
@@ -1735,19 +1741,16 @@ function renderLeftBody() {
   const missingGuessCount = gameState.teams.filter(
     (t) => !t.paused && (t.scoreGuess === "" || t.scoreGuess == null),
   ).length;
-  // The No guess button has nothing to do once every team has a guess: grey it out and drop any lingering sort.
+  // With every team guessed, the No guess button is greyed out, unless its sort is still on. It is never
+  // switched off from here: that would re-sort the list while the host is typing.
   const anyNoGuess = gameState.teams.some((t) => t.scoreGuess === "" || t.scoreGuess == null);
-  if (!anyNoGuess && teamGuessSort) {
-    teamGuessSort = false;
-    teamSortSnapshot = undefined;
-  }
   const teamResort = teamResortPending();
   const resortDot = teamResort
     ? `<span class="resort-dot" aria-hidden="true"></span>`
     : "";
   const teamSortBtns =
     gameState.teams.length > 1
-      ? `<span class="team-sort-row" onclick="event.stopPropagation()"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept.${teamResort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}${teamAlphaSort ? resortDot : ""}</button><button class="q-alpha-btn team-guess-btn${teamGuessSort ? " active" : ""}"${anyNoGuess ? "" : " disabled"} onclick="toggleTeamGuessSort()" title="${anyNoGuess ? "" : "Every team has a score guess. "}Teams with no final score guess: first, then last, then back to entry order. Works with A-Z.${teamResort && !teamAlphaSort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Teams without a score guess, currently ${teamGuessSort === "first" ? "shown first" : teamGuessSort === "last" ? "shown last" : "off"}">${noGuessBtnInner(teamGuessSort)}${!teamAlphaSort && teamGuessSort ? resortDot : ""}</button></span>`
+      ? `<span class="team-sort-row" onclick="event.stopPropagation()"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept.${teamResort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}${teamAlphaSort ? resortDot : ""}</button><button class="q-alpha-btn team-guess-btn${teamGuessSort ? " active" : ""}"${anyNoGuess || teamGuessSort ? "" : " disabled"} onclick="toggleTeamGuessSort()" title="${anyNoGuess ? "" : "Every team has a score guess. "}Teams with no final score guess: first, then last, then back to entry order. Works with A-Z.${teamResort && !teamAlphaSort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Teams without a score guess, currently ${teamGuessSort === "first" ? "shown first" : teamGuessSort === "last" ? "shown last" : "off"}">${noGuessBtnInner(teamGuessSort)}${!teamAlphaSort && teamGuessSort ? resortDot : ""}</button></span>`
       : "";
   h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><span class="chevron">▼</span><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:max(12px,.65rem);font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2>${teamSortBtns}</div><div class="section-body">`;
   const showAdj = !!loadPrefs().showAdjustments;
@@ -1760,7 +1763,7 @@ function renderLeftBody() {
     h += `<div class="team-entry${showAdj ? " has-adj" : ""}${t.paused ? " is-paused" : ""}" data-ti="${i}">
       <div class="team-name-cell">
         <span class="team-number">Team ${i + 1}</span>
-        <input type="text" maxlength="40" value="${esc(t.name)}" placeholder="Team name" aria-label="Team ${i + 1} name" onchange="gameState.teams[${i}].name=this.value;autosave();renderSB();">
+        <input type="text" maxlength="40" value="${esc(t.name)}" placeholder="Team name" aria-label="Team ${i + 1} name" onchange="setTeamName(${i},this.value)">
         <div class="team-checks">
           <label class="check-label njcb-check${t.njcb ? " is-checked" : ""}">
             <input type="checkbox" class="check-input" id="nj${i}" ${t.njcb ? "checked" : ""} onchange="gameState.teams[${i}].njcb=this.checked;this.closest('.check-label').classList.toggle('is-checked',this.checked);autosave();renderSB();"><span class="check-box" aria-hidden="true"></span>+3 <span class="cb-xs">CB</span><span class="cb-md">Craft Beer</span>
@@ -1845,7 +1848,7 @@ function renderLeftBody() {
   // means the anchor's rect can't have moved, so pinAnchor() below measures a delta of ~0 and
   // writes nothing.
   if (h !== lastRenderedLeftHTML) {
-    patchPaneSections(m, parts, lastRenderedLeftParts, h);
+    patchPaneSections(m, parts, lastRenderedLeftParts, h, keepId);
     lastRenderedLeftHTML = h;
     lastRenderedLeftParts = parts;
   }
@@ -2097,7 +2100,7 @@ function renderWQ(ri, qi) {
           ? `${ICON_DONE} Done`
           : qs.total - qs.done + " left";
 
-  const sortBtns = `${sortBtnHtml(qKey, (ti) => qAnswered(ri, qi, ti), `sortQuestion(${ri},${qi})`)}<button class="q-alpha-btn${qAlpha(qKey) ? " active" : ""}" data-state="${qAlpha(qKey) || "off"}" onclick="toggleAlphaSort(${ri},${qi})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(qKey) === "az" ? "A to Z" : qAlpha(qKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(qKey))}</button><button class="q-reset-btn${resetIdleCls(qKey)}" onclick="resetQuestionSort(${ri},${qi})" title="Put teams back in entry order (scores are not changed)" aria-label="Reset Sort">${ICON_RESET}<span class="btn-label">Reset Sort</span></button>`;
+  const sortBtns = `${sortBtnHtml(qKey, (ti) => qAnswered(ri, qi, ti), `sortQuestion(${ri},${qi})`)}`;
   let h = `<div class="${blockCls}" id="qblock-${ri}-${qi}">`;
 
   // Collapsible header
@@ -2110,29 +2113,14 @@ function renderWQ(ri, qi) {
       </div>
     </div>
     <div class="q-header-right">
-      ${qResultToggle && !rivals ? renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length)) : ""}
       ${sortBtns}
     </div>
+    ${qResultToggle && !rivals ? renderQStatsRow(scoreBreakdown(gameState.rounds[ri].questions[qi], gameState.teams.length)) : ""}
   </div>`;
 
   // Body (collapsible)
   h += `<div class="q-body">`;
-  const entryOrder = gameState.teams.map((_, i) => i);
-  let teamOrder = questionSortOrder[qKey]
-    ? questionSortOrder[qKey].filter((ti) => ti < gameState.teams.length)
-    : entryOrder;
-  if (questionSortOrder[qKey]) {
-    // include any teams added after the sort was taken (e.g. new team) at the end
-    const have = new Set(teamOrder);
-    entryOrder.forEach((ti) => {
-      if (!have.has(ti)) teamOrder.push(ti);
-    });
-  }
-  teamOrder = applyAlphaSort(
-    teamOrder,
-    qAlpha(qKey),
-    questionSortOrder[qKey] ? questionSortPending[qKey] : null,
-  );
+  const teamOrder = questionTeamOrder(questionSortPending[qKey]);
   teamOrder.forEach((ti) => {
     const t = gameState.teams[ti];
     if (t.paused) return;
@@ -2218,108 +2206,47 @@ function swAnswered(type, ti) {
   const d = wagerStore(type)[ti];
   return !!(d && d.wager != null && d.wager !== "" && d.correct != null);
 }
-// How many (non-paused) teams would change position if Sort ran right now: current order (the
-// last Sort's, else entry order, plus any late-added teams) vs. unanswered-first. 0 = nothing to re-sort.
+// Every question list is A-Z, with the teams in `pending` (unanswered when Sort was tapped) on top.
+// The lists and the Sort button's dot both use this, so the dot always matches what is on screen.
+function questionTeamOrder(pending) {
+  return applyAlphaSort(
+    gameState.teams.map((_, ti) => ti),
+    pending,
+  );
+}
+function unansweredTeams(answered) {
+  return new Set(gameState.teams.map((_, ti) => ti).filter((ti) => !answered(ti)));
+}
+// How many (non-paused) rows would change place if Sort ran right now. 0 = nothing to re-sort.
 function sortMoveCount(key, answered) {
-  const n = gameState.teams.length;
-  const active = (ti) => !gameState.teams[ti].paused;
-  const entry = gameState.teams.map((_, ti) => ti);
-  const saved = (questionSortOrder[key] || []).filter((ti) => ti < n);
-  const have = new Set(saved);
-  const cur = saved.concat(entry.filter((ti) => !have.has(ti))).filter(active);
-  const fresh = entry
-    .filter(active)
-    .sort((a, b) => (answered(a) ? 1 : 0) - (answered(b) ? 1 : 0) || a - b);
-  return cur.reduce((c, ti, i) => c + (ti !== fresh[i] ? 1 : 0), 0);
+  const shown = (pending) => questionTeamOrder(pending).filter((ti) => !gameState.teams[ti].paused);
+  const now = shown(questionSortPending[key]);
+  const next = shown(unansweredTeams(answered));
+  return now.reduce((c, ti, i) => c + (ti !== next[i] ? 1 : 0), 0);
 }
-// The "Sort" button. Grey outline when nothing would move; solid fill + a count badge of how many
-// a notification dot when a re-sort would change the order (v21.42, dot-only from v21.43).
-// Reset does nothing when no answer sort is saved and name sort is off: show it quiet (v22.16).
-function resetIdleCls(key) {
-  return !questionSortOrder[key] && !qAlpha(key) ? " is-idle" : "";
-}
+// The "Sort" button. Grey outline when no row would move; solid fill plus a notification dot when a
+// tap would move rows (v21.42, dot-only from v21.43). Once every team is scored, a tap returns the
+// list to plain A-Z.
 function sortBtnHtml(key, answered, onclick) {
   const moves = sortMoveCount(key, answered);
+  const waiting = gameState.teams.some((t, ti) => !t.paused && !answered(ti));
   const title = moves
-    ? `Re-sort: ${moves} team${moves === 1 ? "" : "s"} would move (unanswered teams go to the top)`
-    : "Move currently unanswered teams to the top (nothing to re-sort right now)";
-  return `<button class="q-sort-btn${questionSortOrder[key] ? " active" : ""}${moves ? " can-resort" : ""}" onclick="${onclick}" title="${title}" aria-label="Sort by answer${moves ? `, ${moves} team${moves === 1 ? "" : "s"} would move` : ""}">${ICON_SORT}<span class="btn-label">Sort</span>${moves ? `<span class="resort-dot" aria-hidden="true"></span>` : ""}</button>`;
+    ? `Re-sort: ${moves} team${moves === 1 ? "" : "s"} would move (${waiting ? "unanswered teams go to the top" : "back to A-Z"})`
+    : "Move unanswered teams to the top (nothing to re-sort right now)";
+  return `<button class="q-sort-btn${questionSortPending[key] ? " active" : ""}${moves ? " can-resort" : ""}" onclick="${onclick}" title="${title}" aria-label="Sort unanswered to top${moves ? `, ${moves} team${moves === 1 ? "" : "s"} would move` : ""}">${ICON_SORT}<span class="btn-label">Unanswered</span>${moves ? `<span class="resort-dot" aria-hidden="true"></span>` : ""}</button>`;
+}
+function applyQuestionSort(key, answered) {
+  questionSortPending[key] = unansweredTeams(answered);
+  renderAll();
 }
 function sortQuestion(ri, qi) {
-  const key = ri + "-" + qi;
-  const answered = (ti) => qAnswered(ri, qi, ti);
-  questionSortOrder[key] = gameState.teams
-    .map((_, ti) => ti)
-    .sort((a, b) => {
-      const aa = answered(a) ? 1 : 0,
-        bb = answered(b) ? 1 : 0;
-      return aa - bb || a - b;
-    });
-  questionSortPending[key] = new Set(
-    gameState.teams.map((_, ti) => ti).filter((ti) => !answered(ti)),
-  );
-  renderAll();
-}
-function toggleAlphaSort(ri, qi) {
-  cycleAlphaSort(ri + "-" + qi);
-}
-function toggleBonusAlphaSort(ri) {
-  cycleAlphaSort("b" + ri);
-}
-function cycleAlphaSort(key) {
-  questionAlphaSort[key] = { az: "za", za: "off", undefined: "az" }[qAlpha(key)];
-  renderAll();
-}
-function resetQuestionSort(ri, qi) {
-  delete questionSortOrder[ri + "-" + qi];
-  delete questionSortPending[ri + "-" + qi];
-  questionAlphaSort[ri + "-" + qi] = "off";
-  renderAll();
+  applyQuestionSort(ri + "-" + qi, (ti) => qAnswered(ri, qi, ti));
 }
 function sortBonusQuestion(ri) {
-  const key = "b" + ri;
-  const answered = (ti) => bonusAnswered(ri, ti);
-  questionSortOrder[key] = gameState.teams
-    .map((_, ti) => ti)
-    .sort((a, b) => {
-      const aa = answered(a) ? 1 : 0,
-        bb = answered(b) ? 1 : 0;
-      return aa - bb || a - b;
-    });
-  questionSortPending[key] = new Set(
-    gameState.teams.map((_, ti) => ti).filter((ti) => !answered(ti)),
-  );
-  renderAll();
-}
-function resetBonusQuestionSort(ri) {
-  delete questionSortOrder["b" + ri];
-  delete questionSortPending["b" + ri];
-  questionAlphaSort["b" + ri] = "off";
-  renderAll();
+  applyQuestionSort("b" + ri, (ti) => bonusAnswered(ri, ti));
 }
 function sortSpecialWager(type) {
-  const key = "sw-" + type;
-  const answered = (ti) => swAnswered(type, ti);
-  questionSortOrder[key] = gameState.teams
-    .map((_, ti) => ti)
-    .sort((a, b) => {
-      const aa = answered(a) ? 1 : 0,
-        bb = answered(b) ? 1 : 0;
-      return aa - bb || a - b;
-    });
-  questionSortPending[key] = new Set(
-    gameState.teams.map((_, ti) => ti).filter((ti) => !answered(ti)),
-  );
-  renderAll();
-}
-function resetSpecialWagerSort(type) {
-  delete questionSortOrder["sw-" + type];
-  delete questionSortPending["sw-" + type];
-  questionAlphaSort["sw-" + type] = "off";
-  renderAll();
-}
-function toggleSpecialWagerAlphaSort(type) {
-  cycleAlphaSort("sw-" + type);
+  applyQuestionSort("sw-" + type, (ti) => swAnswered(type, ti));
 }
 function toggleBonusQ(ri) {
   const key = "b" + ri;
@@ -2366,23 +2293,9 @@ function renderBQ(ri) {
   if (bqLocked) blockCls += " q-locked";
   const bqStyle = BONUS_Q_STYLE[ri] || { cls: "" };
   const bqKey = "b" + ri;
-  const sortBtns = `${sortBtnHtml(bqKey, (ti) => bonusAnswered(ri, ti), `sortBonusQuestion(${ri})`)}<button class="q-alpha-btn${qAlpha(bqKey) ? " active" : ""}" data-state="${qAlpha(bqKey) || "off"}" onclick="toggleBonusAlphaSort(${ri})" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(bqKey) === "az" ? "A to Z" : qAlpha(bqKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(bqKey))}</button><button class="q-reset-btn${resetIdleCls(bqKey)}" onclick="resetBonusQuestionSort(${ri})" title="Put teams back in entry order (scores are not changed)" aria-label="Reset Sort">${ICON_RESET}<span class="btn-label">Reset Sort</span></button>`;
+  const sortBtns = `${sortBtnHtml(bqKey, (ti) => bonusAnswered(ri, ti), `sortBonusQuestion(${ri})`)}`;
   let h = `<div class="${blockCls}" id="bqblock-${ri}"><div class="q-header"><div class="q-header-left" role="button" tabindex="0" onclick="toggleBonusQ(${ri})"><span class="q-chevron">\u25BC</span><div class="question-title bonus-title"><div class="bonus-title-top"><span class="${bqStyle.cls}">Q5</span>${badge}</div><span class="${bqStyle.cls} bonus-title-sub">BONUS (0-4 \u00D7 5)</span></div></div><div class="q-header-right">${sortBtns}</div></div><div class="q-body">`;
-  const bqEntryOrder = gameState.teams.map((_, i) => i);
-  let bqTeamOrder = questionSortOrder[bqKey]
-    ? questionSortOrder[bqKey].filter((ti) => ti < gameState.teams.length)
-    : bqEntryOrder;
-  if (questionSortOrder[bqKey]) {
-    const have = new Set(bqTeamOrder);
-    bqEntryOrder.forEach((ti) => {
-      if (!have.has(ti)) bqTeamOrder.push(ti);
-    });
-  }
-  bqTeamOrder = applyAlphaSort(
-    bqTeamOrder,
-    qAlpha(bqKey),
-    questionSortOrder[bqKey] ? questionSortPending[bqKey] : null,
-  );
+  const bqTeamOrder = questionTeamOrder(questionSortPending[bqKey]);
   bqTeamOrder.forEach((ti) => {
     const t = gameState.teams[ti];
     if (t.paused) return;
@@ -2474,28 +2387,14 @@ function renderSpecialWager(type) {
   // ignoring the toggle entirely, so turning the setting Off didn't hide it here like it does
   // everywhere else.
   const swResultToggle = !!loadPrefs().qResultToggle;
-  const sortBtns = `${sortBtnHtml(swKey, (ti) => swAnswered(type, ti), `sortSpecialWager('${type}')`)}<button class="q-alpha-btn${qAlpha(swKey) ? " active" : ""}" data-state="${qAlpha(swKey) || "off"}" onclick="toggleSpecialWagerAlphaSort('${type}')" title="Sort teams by name: A-Z, then Z-A, then off" aria-label="Sort by name, currently ${qAlpha(swKey) === "az" ? "A to Z" : qAlpha(swKey) === "za" ? "Z to A" : "off"}">${alphaBtnInner(qAlpha(swKey))}</button><button class="q-reset-btn${resetIdleCls(swKey)}" onclick="resetSpecialWagerSort('${type}')" title="Put teams back in entry order (scores are not changed)" aria-label="Reset Sort">${ICON_RESET}<span class="btn-label">Reset Sort</span></button>`;
-  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swLocked ? " q-locked" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}${sortBtns}</div></div>`;
+  const sortBtns = `${sortBtnHtml(swKey, (ti) => swAnswered(type, ti), `sortSpecialWager('${type}')`)}`;
+  let h = `<div class="${sectionCls}${beer ? " beer-round" : ""}${swLocked ? " q-locked" : ""}${swCollapsed ? " sw-collapsed" : ""}" id="swblock-${type}"><div class="sw-header"><div class="sw-header-left" role="button" tabindex="0" onclick="toggleSpecialWager('${type}')"><span class="q-chevron">\u25BC</span><h3 class="sw-title"><span class="sw-title-row">Q5${swBadge}</span><span class="sw-title-sub">${titleSub}</span></h3></div><div class="q-header-right">${sortBtns}</div>${swResultToggle ? renderQStatsRow(scoreBreakdown(data, swN)) : ""}</div>`;
   // No "Beer Round! Everyone got it right!" stripe under the header. The header's own Beer Round
   // badge is two inches away and says the same thing, and the whole block is already washed gold
   // with a gold border — three statements of one fact. Same call, same reasoning, as removing the
   // bonus questions' version of this line in v18.57.
   h += `<div class="sw-body">`;
-  const swEntryOrder = gameState.teams.map((_, i) => i);
-  let swTeamOrder = questionSortOrder[swKey]
-    ? questionSortOrder[swKey].filter((ti) => ti < gameState.teams.length)
-    : swEntryOrder;
-  if (questionSortOrder[swKey]) {
-    const have = new Set(swTeamOrder);
-    swEntryOrder.forEach((ti) => {
-      if (!have.has(ti)) swTeamOrder.push(ti);
-    });
-  }
-  swTeamOrder = applyAlphaSort(
-    swTeamOrder,
-    qAlpha(swKey),
-    questionSortOrder[swKey] ? questionSortPending[swKey] : null,
-  );
+  const swTeamOrder = questionTeamOrder(questionSortPending[swKey]);
   swTeamOrder.forEach((ti) => {
     const t = gameState.teams[ti];
     if (t.paused) return;
@@ -2741,6 +2640,32 @@ function cycleTeamAlphaSort() {
   teamSortSnapshot = undefined;
   renderAll();
 }
+// The Teams section's name field. Everything else that shows the name is redrawn, but the Teams rows
+// are left in place: they don't re-sort until A-Z is tapped, and focus can move on to the next field.
+function setTeamName(ti, v) {
+  if (!gameState.teams[ti]) return;
+  gameState.teams[ti].name = v;
+  autosave();
+  renderSB();
+  afterPointerRelease(() => renderLeft("sec-teams"));
+}
+// Leaving a field by pressing something else fires "change" before that click lands, so redrawing right
+// away could replace the button under the pointer and lose the click. Wait until the press is over.
+let pointerIsDown = false;
+document.addEventListener("pointerdown", () => (pointerIsDown = true), true);
+["pointerup", "pointercancel"].forEach((type) =>
+  document.addEventListener(type, () => (pointerIsDown = false), true),
+);
+function afterPointerRelease(fn) {
+  if (!pointerIsDown) return fn();
+  const done = () => {
+    document.removeEventListener("pointerup", done);
+    document.removeEventListener("pointercancel", done);
+    setTimeout(fn, 0); // after the click that follows pointerup
+  };
+  document.addEventListener("pointerup", done);
+  document.addEventListener("pointercancel", done);
+}
 // Team Report's name field: same edit as the Teams section, then refresh the rest of the app.
 function setAuditTeamName(ti, v) {
   if (!gameState.teams[ti]) return;
@@ -2806,7 +2731,9 @@ function removeTeamAt(ti) {
     if (at < 0) gameState.craftPrizeWinner = null;
     else cw.ti = at;
   }
-  if (teamSortSnapshot) teamSortSnapshot = teamSortSnapshot.filter((i) => i !== ti).map((i) => (i > ti ? i - 1 : i));
+  const reindex = (list) => list.filter((i) => i !== ti).map((i) => (i > ti ? i - 1 : i));
+  if (teamSortSnapshot) teamSortSnapshot = reindex(teamSortSnapshot);
+  for (const key in questionSortPending) questionSortPending[key] = new Set(reindex([...questionSortPending[key]]));
   const newAdj = new Set();
   adjOpenTeams.forEach((i) => {
     if (i < ti) newAdj.add(i);

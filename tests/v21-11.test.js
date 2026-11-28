@@ -1,4 +1,4 @@
-// v21.11+: each question's header (label, badge, description, A-Z / Sort / Reset) pins itself while
+// v21.11+: each question's header (label, badge, description, Sort) pins itself while
 // its team list scrolls - no duplicate row.
 "use strict";
 const { describe, it, before, after } = require("node:test");
@@ -15,9 +15,9 @@ describe("sticky question header", () => {
   const d = () => w.document;
 
   it("the buttons sit in the real header of every question card; no separate sort row", () => {
-    assert.ok(d().querySelector("#qblock-0-0 .q-header .q-alpha-btn"));
-    assert.ok(d().querySelector("#bqblock-0 .q-header .q-alpha-btn"));
-    ["halftime", "final"].forEach((t) => assert.ok(d().querySelector("#swblock-" + t + " .sw-header .q-alpha-btn"), t));
+    assert.ok(d().querySelector("#qblock-0-0 .q-header .q-sort-btn"));
+    assert.ok(d().querySelector("#bqblock-0 .q-header .q-sort-btn"));
+    ["halftime", "final"].forEach((t) => assert.ok(d().querySelector("#swblock-" + t + " .sw-header .q-sort-btn"), t));
     assert.ok(!d().querySelector(".q-sortbar"));
   });
 });

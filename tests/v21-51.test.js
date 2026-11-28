@@ -21,7 +21,7 @@ describe("A-Z sort ignores leading articles", () => {
     const names = JSON.stringify(["The Quizzards", "Alpha", "Zed"]);
     const out = evalIn(window, `
       gameState.teams = ${names}.map((n) => ({ name: n }));
-      JSON.stringify(applyAlphaSort([0,1,2], "az"))`);
+      JSON.stringify(applyAlphaSort([0,1,2]))`);
     assert.deepEqual(JSON.parse(out), [1, 0, 2]);
   });
 });

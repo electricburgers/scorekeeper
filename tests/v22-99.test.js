@@ -1,5 +1,5 @@
-// v22.99 — desktop usability: keyboard scoring on a selected team row, the "Reset Sort" button,
-// the CB / Craft Beer label, and the two page-height fixes.
+// v22.99 — desktop usability: keyboard scoring on a selected team row, the
+// CB / Craft Beer label, and the two page-height fixes.
 "use strict";
 const { describe, it, before, after, beforeEach } = require("node:test");
 const assert = require("node:assert/strict");
@@ -35,7 +35,7 @@ describe("v22.99 keyboard scoring", () => {
       gameState.gameStarted = true;
       // Q4 of rounds 1 and 4 scored, so the Bonus Question and final wager below are unlocked.
       [0, 3].forEach((ri) => [0, 1].forEach((ti) => (gameState.rounds[ri].questions[3][ti] = { wager: 4, correct: true })));
-      questionSortOrder = {}; questionAlphaSort = { "0-0": "off", "0-1": "off", "3-0": "off", b0: "off", "sw-final": "off" };
+      questionSortPending = {};
       collapsedSections.clear(); collapsedQuestions.clear(); collapsedBonusQuestions.clear(); collapsedSpecialWagers.clear();
       renderAll();`);
   });
@@ -122,16 +122,6 @@ describe("v22.99 keyboard scoring", () => {
     run("toggleShortcutsHelp(true)");
     assert.match(window.document.getElementById("shortcutsOverlay").textContent, /Scoring from the keyboard/);
     run("toggleShortcutsHelp(false)");
-  });
-
-  it("labels the sort-restore button Reset Sort on every kind of card", () => {
-    for (const card of ["#qblock-0-0", "#bqblock-0", "#swblock-final"]) {
-      const b = window.document.querySelector(card + " .q-reset-btn");
-      assert.equal(b.textContent.trim(), "Reset Sort", card);
-      // The spoken name has to match the visible one (WCAG 2.5.3, Label in Name).
-      assert.equal(b.getAttribute("aria-label"), "Reset Sort", card);
-      assert.match(b.title, /scores are not changed/, card);
-    }
   });
 
   it("craft beer chip reads CB when tight and Craft Beer otherwise, never anything longer", () => {

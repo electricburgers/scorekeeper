@@ -222,9 +222,7 @@ function alphaSortKey(name) {
   const stripped = s.replace(/^(?:the|an|a)\s+/i, "");
   return stripped || s;
 }
-function applyAlphaSort(order, dir, pending) {
-  if (!dir) return order;
-  const sign = dir === "za" ? -1 : 1;
+function applyAlphaSort(order, pending) {
   // Labels built once per sort (O(n)) instead of re-derived inside every comparison
   // (O(n log n) lookups), and one shared Collator instead of a fresh locale resolution per
   // localeCompare call — same ordering as localeCompare(…, {sensitivity:"base", numeric:true}).
@@ -233,7 +231,7 @@ function applyAlphaSort(order, dir, pending) {
     const g = pending ? (pending.has(a) ? 0 : 1) - (pending.has(b) ? 0 : 1) : 0;
     if (g) return g;
     const c = ALPHA_COLLATOR.compare(labels.get(a), labels.get(b));
-    return sign * c || a - b;
+    return c || a - b;
   });
 }
 function teamLabel(ti) {

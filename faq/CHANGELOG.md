@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.91] - 28 Nov 2026
+
+### Changed
+
+- Questions now list teams A-Z with a single Sort button: updated the Sort and Crowd-Wisdom Percentage answers and retook the screenshots that showed the A-Z and Reset Sort buttons.
+
 ## [1.90] - 27 Nov 2026
 
 ### Changed

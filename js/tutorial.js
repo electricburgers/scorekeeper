@@ -715,7 +715,7 @@ const Tutorial = (function () {
         // row while saying that, not just the Sort/Reset corner those rows are about to justify.
         target: "#qblock-1-1",
         calloutPosition: "above",
-        text: `For Q2, I'll fill in answers only for two teams. With a full room of teams, scanning every row to find a specific team to score gets tedious. ${tapWordCap()} Next, then we'll try out Sorting.`,
+        text: `For Q2, I'll fill in answers only for two teams. With a full room of teams, scanning every row to find a specific team to score gets tedious. ${tapWordCap()} Next, then we'll try out sorting.`,
         advance: "manual",
         fill: (ready) => {
           runBatched(() => partialFillTeams(1, 1, [0, 2]));
@@ -723,18 +723,15 @@ const Tutorial = (function () {
         },
       },
       {
-        // targetEnd unions Sort with Reset Sort (.q-reset-btn) — the step talks the host through both
-        // buttons, so the spotlight covers both.
         target: "#qblock-1-1 .q-sort-btn",
-        targetEnd: "#qblock-1-1 .q-reset-btn",
         calloutPosition: "above",
-        text: `${tapWordCap()} Sort and see it shift the unanswered teams to the top, so you can easily find who's left to score. ${tapWordCap()} it again to re-sort as you score more teams, or Reset Sort to put teams back as you entered them. This header (question name, number left and A-Z too) pins to the top as you scroll a long team list, on every question and wager card, so you never have to scroll back up to re-sort. ${tapWordCap()} Next when you're ready to move on.`,
-        // 'confirm' rather than 'on-click' here on purpose — the host might want to tap Sort a
-        // few times (and try Reset Sort) to get a feel for it, not get whisked away the instant it
+        text: `${tapWordCap()} the arrows button (Unanswered) and see it shift the unanswered teams to the top, so you can easily find who's left to score. Teams are always A-Z. ${tapWordCap()} it again to re-sort as you score more teams; once every team is scored, it puts the list back in plain A-Z. This header (question name, number left and the button) pins to the top as you scroll a long team list, on every question and wager card, so you never have to scroll back up to re-sort. ${tapWordCap()} Next when you're ready to move on.`,
+        // 'confirm' rather than 'on-click' here on purpose — the host might want to tap it a
+        // few times to get a feel for it, not get whisked away the instant it
         // sorts once.
         advance: "confirm",
-        waitHint: `${tapWordCap()} Sort to continue`,
-        done: () => !!questionSortOrder["1-1"],
+        waitHint: `${tapWordCap()} the arrows button to continue`,
+        done: () => !!questionSortPending["1-1"],
       },
       {
         target: "#sec-r2",
@@ -983,9 +980,9 @@ const Tutorial = (function () {
         () => collapsedSpecialWagers,
       ],
       [
-        "questionSortOrder",
-        (v) => (questionSortOrder = v),
-        () => questionSortOrder,
+        "questionSortPending",
+        (v) => (questionSortPending = v),
+        () => questionSortPending,
       ],
       ["adjOpenTeams", (v) => (adjOpenTeams = v), () => adjOpenTeams],
       [

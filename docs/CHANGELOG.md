@@ -17,6 +17,15 @@ v19.79 through v19.84; git history isn't rewritten).
 The release with the Score race panel is a major change, so it is numbered v23.0 here and in the
 app. Its first commit subject says "v22.105"; git history isn't rewritten.
 
+## v23.3 - 2026-11-28
+
+- **One sort button per question.** Teams on every question, bonus question and Q5 wager are now always listed A-Z, and the only button moves unanswered teams to the top. The A-Z / Z-A and Reset Sort buttons are gone. Once every team is scored, press the button again for plain A-Z. On wider screens it is labelled Unanswered.
+- **Calmer headers.** Percentages have a full-width line of their own, and badges stay on one line. On 320px phones with percentages on, a badge could run under the buttons or into the percentages.
+- **Fixed: yellow dot on question sort buttons.** It compared teams in the order they were entered. It now compares the order on screen, so it shows only when pressing the button would move a row.
+- **Fixed: the dot in Teams after typing a name.** It now appears as soon as the name makes the list out of order, and the questions show the new name right away. The team stays where it is until you press the sort button.
+- **Fixed: Teams jumping after a score guess.** With the No guess sort on, entering the last missing guess re-sorted the whole list. Rows now stay put, and the button stays available while its sort is on.
+- **Fixed: removing a team** could change which teams a saved question sort kept on top.
+
 ## v23.2 - 2026-11-28
 
 - **Q5 wager dropdown on phones** now matches the wide layout: wider, with a larger number and the same arrow, and as tall as the correct and incorrect buttons. On touch phones it was 44px tall.

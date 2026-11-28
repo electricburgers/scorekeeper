@@ -65,18 +65,7 @@ describe("v22.104 Enter and Space", () => {
 describe("v22.104 wide scoring rows", () => {
   const css = require("fs").readFileSync(require("path").join(__dirname, "..", "css/styles.css"), "utf8");
 
-  it("--sort-w is the sum of the three fixed button widths and their two gaps", () => {
-    const rem = (re) => Number(css.match(re)[1]);
-    const sort = rem(/\.q-header-right>:is\(\.q-sort-btn,\.q-alpha-btn,\.q-reset-btn\)\{width:([\d.]+)rem/);
-    const alpha = rem(/\.q-header-right>\.q-alpha-btn\{width:([\d.]+)rem\}/);
-    const reset = rem(/\.q-header-right>\.q-reset-btn\{width:([\d.]+)rem\}/);
-    const gap = Number(css.match(/\.q-header-right\{[^}]*column-gap:(\d+)px\}/)[1]);
-    const total = css.match(/--sort-w:calc\(([\d.]+)rem \+ (\d+)px\)/);
-    assert.equal(Number(total[1]).toFixed(2), (sort + alpha + reset).toFixed(2));
-    assert.equal(Number(total[2]), gap * 2);
-  });
-
-  it("rows end their controls at the Reset Sort edge, and A-Z has the larger picture", () => {
+  it("rows end their controls at the Sort button's edge, and the Teams A-Z has the larger picture", () => {
     assert.match(css, /padding-right:max\(10px,calc\(100% \+ 4px - var\(--title-w,var\(--score-col\)\) - var\(--sort-w\)\)\)/);
     assert.match(css, /\.q-alpha-btn:not\(\.team-guess-btn\) \.icon-ui\{width:1\.75em;height:1\.75em\}/);
   });

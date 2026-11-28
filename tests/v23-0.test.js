@@ -1,4 +1,4 @@
-// v23.0 — a fine slash on used wagers, percentages on their own row under the sort buttons, and
+// v23.0 — a fine slash on used wagers, percentages on their own row under the Sort button, and
 // the Score race panel for very wide windows.
 "use strict";
 const { describe, it, before, after, beforeEach } = require("node:test");
@@ -18,7 +18,8 @@ describe("v23.0 styles", () => {
   });
 
   it("puts the percentages on their own row without widening the score boxes", () => {
-    assert.match(css, /\.q-header-right:has\(\.q-stats-row\)\{flex:0 1 var\(--sort-w\)/);
+    assert.match(css, /:is\(\.q-header,\.sw-header\):has\(\.q-stats-row\)\{flex-wrap:wrap/);
+    assert.match(css, /\.q-stats-row\{flex:0 0 100%\}/);
     assert.doesNotMatch(css, /\.col-left:has\(\.q-stats-row\)/);
   });
 

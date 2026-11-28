@@ -1,154 +1,49 @@
-// v19.70 — per-question A-Z / Z-A name sort (starts A-Z; cycles A-Z -> Z-A -> off -> A-Z since v21.10), combinable with
-// the existing "unanswered first" sort.
+// v19.70 / v23.3 — question lists are always A-Z by team name. Sort (unanswered to the top) is the one
+// button; v23.3 removed the per-question A-Z / Z-A and Reset Sort buttons.
 "use strict";
 const { describe, it, before, after } = require("node:test");
 const assert = require("node:assert/strict");
 const { loadAppWindow, evalIn } = require("./helpers/load-app");
 
-const rowNames = (w, sel = "#qblock-0-0") =>
-  [...w.document.querySelectorAll(sel + " .team-answer .ta-name")].map((e) => e.textContent.trim());
-const btn = (w, sel = "#qblock-0-0") => w.document.querySelector(sel + " .q-alpha-btn");
+const CARDS = [
+  ["question", "#qblock-0-0", "gameState.rounds[0].questions[0][0] = {wager:1, correct:true}", "sortQuestion(0, 0)"],
+  ["bonus", "#bqblock-0", "gameState.rounds[0].bonus[0] = 3", "sortBonusQuestion(0)"],
+  ["halftime", "#swblock-halftime", "gameState.halftime[0] = {wager:1, correct:true}", "sortSpecialWager('halftime')"],
+  ["final", "#swblock-final", "gameState.finalWager[0] = {wager:1, correct:true}", "sortSpecialWager('final')"],
+];
 
-describe("Per-question A-Z sort", () => {
+describe("question lists are A-Z with one Sort button", () => {
   let window;
   before(async () => {
     window = await loadAppWindow();
   });
   after(() => window.close());
 
-  const setup = () =>
-    evalIn(
-      window,
-      `gameState = freshState();
-       gameState.teams = ["Charlie", "alpha", "Bravo"].map(freshTeam);
-       questionSortOrder = {}; questionAlphaSort = {}; questionSortPending = {};
-       renderAll();`,
-    );
-
-  it("applyAlphaSort orders case-insensitively, either direction, and is a no-op when off", () => {
-    setup();
-    assert.deepEqual(JSON.parse(evalIn(window, "JSON.stringify(applyAlphaSort([0,1,2],'az'))")), [1, 2, 0]);
-    assert.deepEqual(JSON.parse(evalIn(window, "JSON.stringify(applyAlphaSort([0,1,2],'za'))")), [0, 2, 1]);
-    assert.deepEqual(JSON.parse(evalIn(window, "JSON.stringify(applyAlphaSort([0,1,2],undefined))")), [0, 1, 2]);
-  });
-
-  it("starts A-Z; tapping cycles Z-A, off (entry order), A-Z with distinct visual states", () => {
-    setup();
-    assert.ok(btn(window), "button exists");
-    assert.equal(btn(window).getAttribute("data-state"), "az");
-    assert.ok(btn(window).classList.contains("active"));
-    assert.deepEqual(rowNames(window), ["alpha", "Bravo", "Charlie"]);
-
-    window.toggleAlphaSort(0, 0);
-    assert.equal(btn(window).getAttribute("data-state"), "za");
-    assert.deepEqual(rowNames(window), ["Charlie", "Bravo", "alpha"]);
-
-    window.toggleAlphaSort(0, 0);
-    assert.equal(btn(window).getAttribute("data-state"), "off");
-    assert.ok(!btn(window).classList.contains("active"));
-    assert.deepEqual(rowNames(window), ["Charlie", "alpha", "Bravo"]);
-
-    window.toggleAlphaSort(0, 0);
-    assert.equal(btn(window).getAttribute("data-state"), "az");
-  });
-
-  it("works together with the unanswered-first sort (both on at once)", () => {
-    setup();
-    // Charlie answered; alpha + Bravo not.
-    evalIn(window, "gameState.rounds[0].questions[0][0] = {wager:1, correct:true};");
-    window.sortQuestion(0, 0);
-    assert.ok(window.document.querySelector("#qblock-0-0 .q-sort-btn").classList.contains("active"));
-    assert.ok(btn(window).classList.contains("active")); // A-Z by default
-    // unanswered first (alpha, Bravo A-Z), answered Charlie last
-    assert.deepEqual(rowNames(window), ["alpha", "Bravo", "Charlie"]);
-    window.toggleAlphaSort(0, 0); // Z-A
-    assert.deepEqual(rowNames(window), ["Bravo", "alpha", "Charlie"]);
-    window.toggleAlphaSort(0, 0); // off -> back to unanswered-first entry order
-    assert.deepEqual(rowNames(window), ["alpha", "Bravo", "Charlie"]);
-    assert.ok(window.document.querySelector("#qblock-0-0 .q-sort-btn").classList.contains("active"));
-  });
-
-  it("is per question and Reset clears it", () => {
-    setup();
-    window.toggleAlphaSort(0, 0);
-    assert.equal(btn(window).getAttribute("data-state"), "za");
-    assert.equal(btn(window, "#qblock-0-1").getAttribute("data-state"), "az");
-    window.resetQuestionSort(0, 0); // Reset restores entry order
-    assert.equal(btn(window).getAttribute("data-state"), "off");
-  });
-});
-
-
-describe("A-Z sort on bonus questions", () => {
-  let window;
-  before(async () => {
-    window = await loadAppWindow();
-  });
-  after(() => window.close());
-  const names = () =>
-    [...window.document.querySelectorAll("#bqblock-0 .bonus-row .ta-name")].map((e) => e.textContent.trim());
-  const abtn = () => window.document.querySelector("#bqblock-0 .q-alpha-btn");
-
-  it("bonus card has an A-Z button that cycles A-Z, Z-A, off and combines with Sort", () => {
-    evalIn(
-      window,
-      `gameState = freshState();
-       gameState.teams = ["Charlie", "alpha", "Bravo"].map(freshTeam);
-       questionSortOrder = {}; questionAlphaSort = {}; questionSortPending = {};
-       renderAll();`,
-    );
-    assert.ok(abtn(), "button exists");
-    assert.equal(abtn().getAttribute("data-state"), "az");
-    assert.deepEqual(names(), ["alpha", "Bravo", "Charlie"]);
-    window.toggleBonusAlphaSort(0);
-    assert.deepEqual(names(), ["Charlie", "Bravo", "alpha"]);
-    // with unanswered-first also on: Charlie answered stays last
-    evalIn(window, "gameState.rounds[0].bonus[0] = 3;");
-    window.sortBonusQuestion(0);
-    assert.ok(window.document.querySelector("#bqblock-0 .q-sort-btn").classList.contains("active"));
-    assert.deepEqual(names(), ["Bravo", "alpha", "Charlie"]);
-    window.toggleBonusAlphaSort(0);
-    assert.equal(abtn().getAttribute("data-state"), "off");
-    window.toggleBonusAlphaSort(0);
-    window.resetBonusQuestionSort(0);
-    assert.equal(abtn().getAttribute("data-state"), "off");
-  });
-});
-
-describe("A-Z sort on Round 2 and 4 bonus (special wager) cards", () => {
-  let window;
-  before(async () => {
-    window = await loadAppWindow();
-  });
-  after(() => window.close());
-  const names = (type) =>
-    [...window.document.querySelectorAll(`#swblock-${type} .special-wager-row .ta-name`)].map((e) =>
-      e.textContent.trim(),
-    );
-  const abtn = (type) => window.document.querySelector(`#swblock-${type} .q-alpha-btn`);
-
-  for (const type of ["halftime", "final"]) {
-    it(`${type} card cycles A-Z, Z-A, off and combines with Sort`, () => {
+  for (const [kind, card, answer, sort] of CARDS) {
+    it(`${kind}: A-Z, Sort lifts the unanswered, and a Sort after all are scored restores A-Z`, () => {
       evalIn(
         window,
-        `gameState = freshState();
-         gameState.teams = ["Charlie", "alpha", "Bravo"].map(freshTeam);
-         questionSortOrder = {}; questionAlphaSort = {}; questionSortPending = {};
-         renderAll();`,
+        `gameState = freshState(); gameState.teams = ["Charlie", "alpha", "Bravo"].map(freshTeam);
+         questionSortPending = {}; renderAll();`,
       );
-      assert.ok(abtn(type), "button exists");
-      assert.equal(abtn(type).getAttribute("data-state"), "az");
-      assert.deepEqual(names(type), ["alpha", "Bravo", "Charlie"]);
-      window.toggleSpecialWagerAlphaSort(type);
-      assert.deepEqual(names(type), ["Charlie", "Bravo", "alpha"]);
-      evalIn(
-        window,
-        `(${JSON.stringify(type)} === "final" ? gameState.finalWager : gameState.halftime)[0] = {wager: 1, correct: true};`,
-      );
-      window.sortSpecialWager(type);
-      assert.deepEqual(names(type), ["Bravo", "alpha", "Charlie"]);
-      window.resetSpecialWagerSort(type);
-      assert.equal(abtn(type).getAttribute("data-state"), "off");
+      const $ = (sel) => window.document.querySelectorAll(card + " " + sel);
+      const names = () => [...$(".ta-name")].map((e) => e.textContent.trim());
+      assert.deepEqual(names(), ["alpha", "Bravo", "Charlie"]);
+      assert.equal($(".q-sort-btn").length, 1);
+      assert.equal($(".q-alpha-btn, .q-reset-btn").length, 0);
+
+      // "alpha" is team 1; answer team 0 (Charlie) and then sort.
+      evalIn(window, answer);
+      evalIn(window, sort);
+      assert.deepEqual(names(), ["alpha", "Bravo", "Charlie"]);
+      evalIn(window, answer.replace("[0] =", "[1] ="));
+      evalIn(window, sort);
+      assert.deepEqual(names(), ["Bravo", "alpha", "Charlie"]);
+      evalIn(window, answer.replace("[0] =", "[2] ="));
+      evalIn(window, "renderAll()");
+      assert.deepEqual(names(), ["Bravo", "alpha", "Charlie"], "scoring alone never moves a row");
+      evalIn(window, sort);
+      assert.deepEqual(names(), ["alpha", "Bravo", "Charlie"]);
     });
   }
 });

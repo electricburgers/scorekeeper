@@ -1283,8 +1283,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    carry; --text-primary already clears AAA against the unchanged --bg-card fill underneath. */
 .qtimer-btn.qtimer-resume{border:2px solid var(--accent-gold);color:var(--text-primary)}
 /* Reset: neutral while idle (nothing to reset), solid red + halo ring once a timer is actually
-   running or paused — same --danger-solid-bg/#fff pairing already used for .q-reset-btn
-   elsewhere. Icon-only (no "Reset" label) and a fixed equal width/height — rather than sizing to
+   running or paused — same --danger-solid-bg/#fff pairing used for destructive
+   states elsewhere. Icon-only (no "Reset" label) and a fixed equal width/height — rather than sizing to
    its content like every other .qtimer-btn — so the docked and deployed copies of the widget
    render this button identically instead of the deployed one being a wider text+icon pill.
    Font-size bumped up from the shared .8rem base so the glyph reads clearly at this smaller
@@ -1996,10 +1996,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .q-header-right{display:flex;align-items:center;gap:4px;flex-shrink:0;margin-left:auto}
 .question-block.q-collapsed .q-body{display:none}
 .question-block.q-collapsed .q-chevron{transform:rotate(-90deg)}
-.question-block.q-collapsed .q-header-right{visibility:hidden}
+.question-block.q-collapsed :is(.q-header-right,.q-stats-row){visibility:hidden}
 .question-block.bq-collapsed .q-body{display:none}
 .question-block.bq-collapsed .q-chevron{transform:rotate(-90deg)}
-.question-block.bq-collapsed .q-header-right{visibility:hidden}
+.question-block.bq-collapsed :is(.q-header-right,.q-stats-row){visibility:hidden}
 
 /* Sort/Reset are always-on colored actions rather than neutral buttons, so their purpose reads
    at a glance on a phone-width row instead of relying on the (now single-word) label alone.
@@ -2015,7 +2015,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    rather than by whatever the glyph's metrics happened to be. gap replaces the leading space that
    used to be baked into the label text. */
 /* The transition names its properties: with all of them, visibility animates too, and the buttons outlive their collapsed question by the length of the transition. */
-.q-sort-btn,.q-reset-btn,.q-alpha-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:max(12px,.7rem);font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition-property:background-color,border-color,color,box-shadow,filter,transform;transition-duration:.18s;transition-timing-function:ease;text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
+.q-sort-btn,.q-alpha-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:max(12px,.7rem);font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition-property:background-color,border-color,color,box-shadow,filter,transform;transition-duration:.18s;transition-timing-function:ease;text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
 .settings-toggle-btn.active,.settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 /* Sort buttons (unanswered-first and name): blank with a coloured outline + icon when off, solid
    fill with a contrasting icon when on. Name sort tells A-Z from Z-A by its arrow, not by fill. */
@@ -2043,13 +2043,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 #sec-final h2 .icon-emoji,#sec-craftprize h2 .icon-emoji,#sec-export h2 .icon-emoji{font-size:1.6em}
 .team-guess-btn:disabled{opacity:.4;cursor:not-allowed;filter:none}
 /* 1.15em, not 1em: at .7rem the label reads fine but the icon needs the extra to stay legible. */
-.q-sort-btn .icon-ui,.q-reset-btn .icon-ui{width:1.15em;height:1.15em}
-.q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.15)}
-.q-reset-btn{background:var(--bg-card);color:var(--text-primary);border-color:var(--border-control)}
-.q-reset-btn:hover{filter:brightness(1.15)}
-/* Nothing to reset: red outline and text, no fill (v22.16). --txt-red is the contrast-audited red text token. */
-.q-reset-btn.is-idle{background:transparent;color:var(--text-muted)}
-.q-reset-btn.is-idle:hover{filter:none}
+.q-sort-btn .icon-ui{width:1.15em;height:1.15em}
+.q-sort-btn .icon-emoji{transform:scale(1.15)}
 .q-badge{font-family:var(--font-body);font-size:1rem;line-height:1;font-weight:700;padding:1px 9px;border-radius:4px;border:1px solid currentColor}
 .q-badge.q-remaining{background:color-mix(in srgb,var(--accent-gold) 13%,transparent);color:var(--badge-gold-fg)}
 .q-badge.q-complete{background:color-mix(in srgb,var(--accent-green) 10%,transparent);color:var(--badge-green-fg)}
@@ -2067,18 +2062,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 
 .q-body{padding:0 10px 8px}
 
-/* PER-QUESTION CORRECT/INCORRECT STATS — lives inline in .q-header-right next to Sort/Reset.
-   display:contents on the wrapper makes it invisible to flex layout so the two pills become
-   direct flex items of .q-header-right instead of adding an extra nesting level. Reuses the
-   same fg/bg/border token pairs as .ta-pts .pts-pos/.pts-neg (already contrast-checked per
-   theme and per colorblind mode) so this reads as the same "correct vs incorrect" language
-   used everywhere else in the app. height matches .q-sort-btn/.q-reset-btn exactly (same value,
-   same flex-centering technique) so the whole .q-header-right row reads as one consistent
-   height — kept compact on purpose (vertical space here is at a premium with many question
-   blocks stacked on the page), so both this and the buttons are sized down together rather
-   than growing either one to match the other. */
-.q-stats-row{display:contents}
-.q-stat{font-family:var(--font-body);font-size:max(12px,.7rem);font-weight:700;height:1.5rem;padding:0 6px;border-radius:6px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
+/* PER-QUESTION CORRECT/INCORRECT STATS: plain text on their own full-width line under the question's
+   title and Sort button, so they can't run into a badge. Their colours are set further down. */
+.q-stats-row{display:flex;justify-content:flex-end;gap:1.1rem}
+.q-stat{font-family:var(--font-body);font-size:max(12px,.76rem);font-weight:700;height:1.15rem;gap:.3em;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center}
 
 /* TEAM ANSWER ROWS */
 .team-answer{display:flex;align-items:center;gap:.35rem;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);flex-wrap:nowrap;margin-left:-10px;margin-right:-10px;min-height:3.2rem}
@@ -2449,7 +2436,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .q-badge.q-badge-lg{padding:3px 10px}
 
 /* SPECIAL WAGER collapse (R2 Bonus Wager / R4 Final Wager) — the collapse toggle and the
-   Sort/Reset buttons are separate flex children (sw-header-left/q-header-right) so tapping
+   Sort button are separate flex children (sw-header-left/q-header-right) so tapping
    a button doesn't also collapse the section. */
 .sw-header{display:flex;align-items:center;gap:8px;user-select:none}
 .sw-header-left{display:flex;align-items:center;gap:8px;cursor:pointer;flex:1;min-width:0}
@@ -2465,7 +2452,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .sw-header .q-chevron{transition:transform .25s}
 .special-section.sw-collapsed .q-chevron{transform:rotate(-90deg)}
 .special-section.sw-collapsed .sw-body{display:none}
-.special-section.sw-collapsed .q-header-right{visibility:hidden}
+.special-section.sw-collapsed :is(.q-header-right,.q-stats-row){visibility:hidden}
 .special-section .sw-body{margin-top:8px}
 
 /* Beer round — full gold border so it reads at a glance (no size change) */
@@ -2849,29 +2836,23 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
      below the badge's own size — one shared .8rem (not three separate step-downs) keeps the
      badge and the Sort/Reset buttons reading as one control cluster at every FONT_SIZES step,
      down to the 12px floor. */
-  /* One row: label + badge on the left, the icon-only A-Z / Sort / Reset buttons on the right (the
-     header pins while scrolling, so it has to stay short). The label shrinks before the buttons do. */
+  /* One row: label + badge on the left, the icon-only Sort button on the right (the header pins while
+     scrolling, so it has to stay short). */
   .q-header,.sw-header{flex-wrap:nowrap}
   .q-header-right{flex-basis:auto;flex-wrap:nowrap;column-gap:10px;justify-content:flex-end;margin-left:auto}
   .q-header-left,.sw-header-left{min-width:0}
-  /* v21.38: A-Z/Z-A pictograph 2.7em (was 1.7em) so it reads clearly in the ~41px button. */
+  /* v21.38: A-Z/Z-A pictograph 2.7em (was 1.7em) so it reads clearly in the Teams header's ~41px button. */
   .q-alpha-btn .icon-ui{width:2.7em;height:2.7em}
   .q-badge,.round-badge{font-size:max(12px,.8rem)}
-  /* Sort/Reset drop their text label and shrink to icon-only squares here so the correct/
-     incorrect stat pills (which carry the count+% the host actually needs) always have room
-     to sit on the same row instead of wrapping to a line of their own. The aria-label/title
-     already on each button keep them accessible with the label hidden. */
+  /* The Sort button drops its text label and shrinks to an icon-only square here, leaving the width
+     to the badge. Its aria-label and title keep it accessible with the label hidden. */
   .btn-label{display:none}
   /* Icon is the button's whole visible content now that its label is hidden, so it gets its
      own larger font-size (not the .78rem sized for the old icon+text pairing) to actually
      read at a glance instead of looking lost in the middle of a same-sized tap target. */
   /* This size only scales the A-Z picture (the label is hidden here), so it has no 12px floor. */
   .q-alpha-btn{width:auto;min-width:clamp(2.3rem,9.5cqw,2.7rem);height:clamp(2.3rem,9.5cqw,2.7rem);padding:0 6px;font-size:.7rem}
-  .q-sort-btn,.q-reset-btn{font-size:1.1rem;line-height:1;padding:0;width:clamp(2.3rem,9.5cqw,2.7rem);height:clamp(2.3rem,9.5cqw,2.7rem);display:inline-flex;align-items:center;justify-content:center}
-  /* height matches .q-sort-btn/.q-reset-btn's own (now smaller) clamp exactly, same reasoning
-     as the desktop rule above — width isn't matched (unlike the buttons) since the pill's text
-     content needs to stay readable rather than being squeezed into a square. */
-  .q-stat{font-size:max(12px,.7rem);height:clamp(2.3rem,9.5cqw,2.7rem);padding:0 6px}
+  .q-sort-btn{font-size:1.1rem;line-height:1;padding:0;width:clamp(2.3rem,9.5cqw,2.7rem);height:clamp(2.3rem,9.5cqw,2.7rem);display:inline-flex;align-items:center;justify-content:center}
 }
 
 @media(max-width:480px){
@@ -3256,11 +3237,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* v22.22: iPad landscape (touch, wider than the phone layout) kept the compact 1.5rem desktop per-question
    buttons, which were too short and small to tap. Give them the same tap-sized height and larger icon as phones. */
 @media (pointer:coarse) and (min-width:769px){
-  .q-sort-btn,.q-reset-btn,.q-alpha-btn,.q-stat{height:2.5rem;font-size:max(12px,.9rem)}
-  .q-sort-btn,.q-reset-btn{min-width:2.5rem;padding:0 12px}
+  .q-sort-btn,.q-alpha-btn{height:2.5rem;font-size:max(12px,.9rem)}
+  .q-sort-btn{min-width:2.5rem;padding:0 12px}
   .q-alpha-btn{min-width:2.5rem;padding:0 10px}
-  .q-sort-btn .icon-ui,.q-reset-btn .icon-ui,.q-alpha-btn .icon-ui{width:1.4em;height:1.4em}
-  .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.4)}
+  .q-sort-btn .icon-ui,.q-alpha-btn .icon-ui{width:1.4em;height:1.4em}
+  .q-sort-btn .icon-emoji{transform:scale(1.4)}
 }
 
 /* v21.42: group headings inside Advanced Settings. */
@@ -3362,15 +3343,14 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 
 /* Wide score column (v22.92): the per-question and Teams-header sort buttons become labelled rounded buttons.
    At 24px tall and .7rem they were hard to hit with a mouse. 40px tall, 14px text, icon plus word
-   (Sort / A-Z / Reset / No guess). The narrow-column rule above (max-width:600px) hides .btn-label
+   (Unanswered / A-Z / No guess). The narrow-column rule above (max-width:600px) hides .btn-label
    and keeps the compact icon squares, so phones are unchanged. */
 @container scorecol (min-width:601px){
-  .q-sort-btn,.q-reset-btn,.q-alpha-btn{height:40px;font-size:max(12px,.9rem);gap:.5em;padding:0 16px;border-radius:9px}
+  .q-sort-btn,.q-alpha-btn{height:40px;font-size:max(12px,.9rem);gap:.5em;padding:0 16px;border-radius:9px}
   .q-alpha-btn.team-guess-btn{width:auto;padding:0 16px;border-radius:9px}
-  .q-sort-btn .icon-ui,.q-reset-btn .icon-ui,.q-alpha-btn .icon-ui{width:1.3em;height:1.3em}
-  .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.3)}
+  .q-sort-btn .icon-ui,.q-alpha-btn .icon-ui{width:1.3em;height:1.3em}
+  .q-sort-btn .icon-emoji{transform:scale(1.3)}
   .team-sort-row{gap:8px}
-  .q-stat{height:40px;font-size:max(12px,.8rem);padding:0 12px;border-radius:9px}
 }
 
 /* Mouse hover and press feedback (v22.93). Before this, most hovers were a background shift of
@@ -3383,7 +3363,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 [data-theme="light"]{--hover-fill:#c2d6f1;--hover-ring:var(--accent-cyan-solid)}
 @media (hover:hover) and (pointer:fine){
   /* Ring + accent border on every button-like control (not disabled or already-used wagers). */
-  :is(.toolbar>button,.btn,.settings-btn,.settings-toggle-btn,.settings-advanced-toggle,.sort-btn,.standings-sort-btn,.adj-chip,.qtimer-btn,.cv-select-btn,.theme-select,.banter-refresh,.stepper button,.adj-stepper button,.sw-select,.result-btn,.wager-btn,.bonus-choice-btn,.bonus-zero,.bonus-clear,.q-sort-btn,.q-alpha-btn,.q-reset-btn,.export-sq,.cp-sq-btn,.cp-wide-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-horn-btn,.cp-clear-btn,.finish-rect,.wc-btn,.aud-edit-btn,.tutorial-callout-next,.tutorial-callout-back):hover:not(:disabled):not(.used){
+  :is(.toolbar>button,.btn,.settings-btn,.settings-toggle-btn,.settings-advanced-toggle,.sort-btn,.standings-sort-btn,.adj-chip,.qtimer-btn,.cv-select-btn,.theme-select,.banter-refresh,.stepper button,.adj-stepper button,.sw-select,.result-btn,.wager-btn,.bonus-choice-btn,.bonus-zero,.bonus-clear,.q-sort-btn,.q-alpha-btn,.export-sq,.cp-sq-btn,.cp-wide-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-horn-btn,.cp-clear-btn,.finish-rect,.wc-btn,.aud-edit-btn,.tutorial-callout-next,.tutorial-callout-back):hover:not(:disabled):not(.used){
     border-color:var(--hover-ring);box-shadow:0 0 0 1px var(--hover-ring)}
   /* Stronger fill on the neutral ones. Solid-fill states (active/selected/correct...) and the
      coloured controls keep their own fill and show the ring only. */
@@ -3402,7 +3382,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .q-header:has(.q-header-left:hover),.q-header:has(.sw-header-left:hover){background:var(--hover-fill)}
 }
 /* Pressed: sink 1px and darken, on every button-like control. */
-:is(.toolbar>button,.btn,.settings-btn,.settings-toggle-btn,.settings-advanced-toggle,.sort-btn,.standings-sort-btn,.adj-chip,.qtimer-btn,.cv-select-btn,.banter-refresh,.stepper button,.adj-stepper button,.result-btn,.wager-btn,.bonus-choice-btn,.bonus-zero,.bonus-clear,.q-sort-btn,.q-alpha-btn,.q-reset-btn,.export-sq,.cp-sq-btn,.cp-wide-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-horn-btn,.cp-clear-btn,.finish-rect,.wc-btn,.aud-edit-btn,.settings-x-btn,.audit-close,.resume-banner-close,.remove-team button,.tutorial-callout-next,.tutorial-callout-back):active:not(:disabled):not(.used){
+:is(.toolbar>button,.btn,.settings-btn,.settings-toggle-btn,.settings-advanced-toggle,.sort-btn,.standings-sort-btn,.adj-chip,.qtimer-btn,.cv-select-btn,.banter-refresh,.stepper button,.adj-stepper button,.result-btn,.wager-btn,.bonus-choice-btn,.bonus-zero,.bonus-clear,.q-sort-btn,.q-alpha-btn,.export-sq,.cp-sq-btn,.cp-wide-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-horn-btn,.cp-clear-btn,.finish-rect,.wc-btn,.aud-edit-btn,.settings-x-btn,.audit-close,.resume-banner-close,.remove-team button,.tutorial-callout-next,.tutorial-callout-back):active:not(:disabled):not(.used){
   transform:translateY(1px);filter:brightness(.88);box-shadow:none}
 
 /* v22.94: follow-up to the hover block above. */
@@ -3427,7 +3407,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 button:disabled,.cp-preview-btn{cursor:not-allowed}
 :is(.btn,.settings-btn,.qtimer-btn,.cp-draw-btn,.cp-manual-end-btn,.cp-preview-btn):is(:disabled,.cp-preview-btn):hover{
   background:var(--bg-card);border-color:var(--border-control);box-shadow:none;transform:none;filter:none}
-:is(.q-sort-btn,.q-alpha-btn,.q-reset-btn,.team-guess-btn,.btn-accent,.btn-danger,.qtimer-pause):disabled:hover{filter:none;box-shadow:none;transform:none}
+:is(.q-sort-btn,.q-alpha-btn,.team-guess-btn,.btn-accent,.btn-danger,.qtimer-pause):disabled:hover{filter:none;box-shadow:none;transform:none}
 :is(button,[role="button"]):disabled:active{transform:none;filter:none}
 
 /* Pause / Delete team (and the other round red X buttons) had only a faint tint on hover.
@@ -3477,30 +3457,28 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
 
 /* ONE-LINE TEAM NAMES: where a scoring row has room, the name column fits the longest team name
    (--name-col, measured by fitNameColumn() in js/app.js), so names stay on one line. In each row the
-   points end where the header's Reset Sort button ends, so the score buttons sit near the name and
+   points end where the header's Sort button ends, so the score buttons sit near the name and
    not at the far right. If the buttons need the space, the name shrinks and wraps as before.
    The right padding on the name keeps the hover Team Report icon off the end of it. */
 .name-probe{position:absolute;left:-9999px;top:0;width:max-content;visibility:hidden;white-space:nowrap;font-weight:600;font-size:max(12px,.88rem);line-height:1.3;padding:0 2.2em 0 4px}
 @container scorecol (min-width:601px){
   /* --score-col has a floor so a game of short names still leaves room for the header's title.
-     --sort-w is the three sort buttons below plus the two gaps between them. */
+     --sort-w is the room after the title: the header's Sort button and the rows' points end there. */
   .team-answer,.bonus-row,.special-wager-row,.q-header,.sw-header,.standings-block{--score-col:max(var(--name-col,11rem),13rem);--sort-w:calc(19.85rem + 8px)}
   :is(.team-answer,.bonus-row,.special-wager-row)>.ta-name{width:var(--score-col);flex-shrink:1;min-width:6rem;padding-right:2.2em}
   /* The row itself stays full width (stripes, hover); its right padding moves the end of the
-     controls to the Reset Sort edge. The first control keeps margin-left:auto, so it all slides. */
+     controls to the Sort button's edge. The first control keeps margin-left:auto, so it all slides. */
   :is(.team-answer,.bonus-row,.special-wager-row){padding-right:max(10px,calc(100% + 4px - var(--title-w,var(--score-col)) - var(--sort-w)))}
   .special-wager-row>.sw-select{margin-left:auto}
   /* The title area only takes space the buttons leave (a zero flex-basis), so they stay on one row
      whenever the title can narrow enough; only then do they wrap, the two percentages together. */
   .q-header-left,.sw-header-left{flex:1 1 0;max-width:var(--score-col);min-width:min-content}
-  .q-header-right{margin-left:0;flex-shrink:1;flex-wrap:wrap;min-width:0;column-gap:4px}
-  /* Fixed widths, so the rows above know where Reset Sort ends (and A-Z / Z-A don't differ). */
-  .q-header-right>:is(.q-sort-btn,.q-alpha-btn,.q-reset-btn){width:5.75rem;padding-left:4px;padding-right:4px;justify-content:center}
-  .q-header-right>.q-alpha-btn{width:5.6rem}
-  .q-header-right>.q-reset-btn{width:8.5rem}
+  /* The button area runs to that edge and holds the Sort button at its right, over the points. */
+  .q-header-right{margin-left:0;flex:0 1 var(--sort-w);min-width:max-content;justify-content:flex-end}
+  .q-header-right>.q-sort-btn{min-width:5.75rem}
   /* Larger A-Z / Z-A picture; the No guess button keeps its own. */
   .q-alpha-btn:not(.team-guess-btn) .icon-ui{width:1.75em;height:1.75em}
-  /* Scores before a wager: the score column sits where the rows' points are, under Reset Sort. The
+  /* Scores before a wager: the score column sits where the rows' points are, under the Sort button. The
      first column has the width; the score column takes the rest and holds its number at the left. */
   .standings-table th:first-child,.standings-table td.standings-name{width:calc(var(--title-w,var(--score-col)) + var(--sort-w) - 3.7rem + 3px)}
   .standings-table thead th:last-child,.standings-table td.standings-pts{text-align:left}
@@ -3509,35 +3487,25 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
      as their contents need, which follows the longest team name. Round cards stay full width. */
   .section-body{--fit:calc(max(var(--name-col,11rem),13rem) + 19.85rem + 8px + 2.9rem)}
   .section-body>:is(.question-block,.special-section,.standings-block,.banter,.staff-thanks){max-width:var(--fit)}
-  .q-header-right:has(.q-stats-row){flex:0 1 var(--sort-w)}
-  :is(.q-header,.sw-header):has(.q-stats-row)>:is(.q-header-left,.sw-header-left){min-height:2.7rem}
   .q-header-left .q-badge{white-space:nowrap}
 }
-/* Percentages, at every width: a slim line of plain text on its own row under the sort buttons. */
-:is(.q-header,.sw-header):has(.q-stats-row){align-items:flex-start}
-.q-header-right:has(.q-stats-row){flex-wrap:wrap;row-gap:2px}
-.q-header-right .q-stats-row{flex:0 0 100%;order:1;display:flex;justify-content:center;gap:1.1rem}
-.q-header-right .q-stats-row .q-stat{height:1.15rem;padding:0;background:none;border:0;gap:.3em;font-size:max(12px,.76rem)}
-.q-header-right .q-stats-row .q-stat-correct{color:var(--pts-pos-fg)}
-.q-header-right .q-stats-row .q-stat-incorrect{color:var(--pts-neg-fg)}
+/* A header with percentages wraps them onto a second line. */
+:is(.q-header,.sw-header):has(.q-stats-row){flex-wrap:wrap;row-gap:2px}
+.q-stats-row{flex:0 0 100%}
+.q-stats-row .q-stat-correct{color:var(--pts-pos-fg);background:none;border:0}
+.q-stats-row .q-stat-incorrect{color:var(--pts-neg-fg);background:none;border:0}
 /* Light theme's pill text is white, so plain text takes a darker shade of the pill colour. */
-[data-theme="light"] .q-header-right .q-stats-row .q-stat-correct{color:color-mix(in srgb,var(--pts-pos-bg) 78%,#000)}
-[data-theme="light"] .q-header-right .q-stats-row .q-stat-incorrect{color:color-mix(in srgb,var(--pts-neg-bg) 78%,#000)}
-/* Phones: the button group gets a fixed width that fits "11/11 (100%)" twice. */
-@container scorecol (max-width:600px){
-  .q-header-right:has(.q-stats-row){flex:0 0 11.5rem;justify-content:center}
-  .q-header-right .q-stats-row{gap:.8rem}
-  :is(.q-header,.sw-header):has(.q-stats-row)>:is(.q-header-left,.sw-header-left){min-height:clamp(2.3rem,9.5cqw,2.7rem)}
-  /* Narrowest phones: the badge drops under the question number instead of running under the buttons. */
-  .q-header:has(.q-stats-row) .question-title{flex-wrap:wrap;row-gap:3px}
-  .q-header:has(.q-stats-row) .q-badge{white-space:nowrap}
-  .q-header:has(.q-stats-row) .q-badge.q-beer{white-space:normal;line-height:1.1}
+[data-theme="light"] .q-stats-row .q-stat-correct{color:color-mix(in srgb,var(--pts-pos-bg) 78%,#000)}
+[data-theme="light"] .q-stats-row .q-stat-incorrect{color:color-mix(in srgb,var(--pts-neg-bg) 78%,#000)}
+/* Wide column: the percentages end at the same edge as the Sort button. The row's basis is the
+   title plus the button area and the gap between them. */
+@container scorecol (min-width:601px){
+  .q-stats-row{flex:0 1 calc(var(--title-w,var(--score-col)) + var(--sort-w) + 6px)}
 }
+/* Badges stay on one line at every width; the Sort button alone leaves them the room. */
+.q-badge,.sw-title-sub,.bonus-title-sub{white-space:nowrap}
 @container scorecol (max-width:360px){
-  :is(.q-header,.sw-header):has(.q-stats-row){padding-left:6px;padding-right:6px}
-  .q-header-right:has(.q-stats-row){flex-basis:10rem;column-gap:6px}
-  .q-header-right .q-stats-row{gap:.4rem}
-  .q-header-right .q-stats-row .q-stat{font-size:max(12px,.68rem);gap:.15em}
+  .q-stats-row{gap:.6rem}
 }
 /* Q5 wager dropdown, at every width: as tall as the correct / incorrect buttons, wider, with a larger
    number. The arrow is a background image, so the hover and focus rules here set only the colour. */
