@@ -1,4 +1,4 @@
-// v22.105 — a fine slash on used wagers, percentages on their own row under the sort buttons, and
+// v23.0 — a fine slash on used wagers, percentages on their own row under the sort buttons, and
 // the Score race panel for very wide windows.
 "use strict";
 const { describe, it, before, after, beforeEach } = require("node:test");
@@ -10,7 +10,7 @@ const { loadAppWindow, evalIn } = require("./helpers/load-app");
 const read = (f) => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
 const css = read("css/styles.css");
 
-describe("v22.105 styles", () => {
+describe("v23.0 styles", () => {
   it("fades a used wager through its colours, so the slash isn't faded with it", () => {
     const used = css.match(/^\.wager-btn\.used\{[^}]*\}/m)[0];
     assert.doesNotMatch(used, /opacity:/);
@@ -28,7 +28,7 @@ describe("v22.105 styles", () => {
   });
 });
 
-describe("v22.105 score race", () => {
+describe("v23.0 score race", () => {
   let window;
   before(async () => {
     window = await loadAppWindow();
