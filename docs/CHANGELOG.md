@@ -17,6 +17,14 @@ v19.79 through v19.84; git history isn't rewritten).
 The release with the Score race panel is a major change, so it is numbered v23.0 here and in the
 app. Its first commit subject says "v22.105"; git history isn't rewritten.
 
+## v23.1 - 2026-11-27
+
+- **Larger Craft Beer and Bonus labels.** The text on each team's two checkboxes, including +3 and +5, is bigger: 17px at the default font size, up from 12px. The buttons keep their size. In narrow rows the text shrinks to fit.
+- **BON on narrower rows.** "Bonus" now shortens to "BON" sooner, and "CB" spells out as "Craft Beer" only when there is more room. BON is now the same size as CB on touch screens.
+- **Fixed: sort buttons lingering.** When you collapsed a question, bonus question or Q5 wager, its Sort, A-Z and Reset Sort buttons stayed visible for a moment. They now hide at once.
+- **Crowd-Wisdom Percentage on phones** now sits as a line of text under the sort buttons, as in the wide layout.
+- **Fixed:** with Crowd-Wisdom Percentage on, phones 390px wide and narrower had percentages covering the question title and Reset Sort cut off.
+
 ## v23.0 - 2026-11-27
 
 - **Score race panel.** On windows 2100 pixels or wider, a third panel to the right of the scoreboard graphs each team's running total by round. The top five are in colour with a legend under the chart, and everyone else is grey. A team keeps its colour while it stays in the top five. Pointing at a line shows its team, and choosing a legend entry opens that team's report. Dragging the scoreboard divider leaves room for it.

@@ -1816,13 +1816,15 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 /* Native checkbox is kept for real keyboard/screen-reader semantics but rendered invisible —
    accent-color can't guarantee the checkmark glyph's own contrast (browser-chosen, unverifiable),
    so the visible box + checkmark below is fully custom-drawn and contrast-audited instead. */
-.team-checks .check-label{flex:1 1 0;max-width:13.5rem;min-width:0;box-sizing:border-box;justify-content:flex-start}
+.team-checks .check-label{flex:1 1 0;max-width:13.5rem;min-width:0;box-sizing:border-box;justify-content:flex-start;font-size:1.133rem;line-height:1;gap:6px;padding-left:8px;padding-right:6px;letter-spacing:0}
 .lbl-short,.cb-md{display:none}
+/* BON is the same size as CB, whatever the touch-screen small-label floor says. */
+.team-checks .lbl-short{font-size:inherit}
 /* Quiet chips: while unticked the chip is neutral (outline + text) and the colour lives only in the
    box itself; ticking fills the whole chip with its colour. */
 .team-checks .check-label:not(.is-checked){border-color:var(--border-control);color:var(--text-secondary)}
-/* The craft beer chip names itself by the room available: "CB", then "Craft Beer" (row 21rem and up). */
-@container (min-width:21rem){
+/* The craft beer chip names itself by the room available: "CB", then "Craft Beer" (row 25rem and up). */
+@container (min-width:25rem){
   .cb-xs{display:none}
   .cb-md{display:inline}
 }
@@ -1831,12 +1833,16 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    below that even BON is too tight, so the chips stack one per row. flex-basis 0 keeps the two
    chips equal width whenever they share a row. */
 .team-checks{container-type:inline-size}
-@container (max-width:15.5rem){
+@container (max-width:19rem){
   .lbl-full{display:none}
   .lbl-short{display:inline}
 }
+/* Narrow rows: tighten, and let the text follow the row's width, so the chips keep their size. */
+@container (max-width:14.5rem) or (max-width:217px){
+  .team-checks .check-label{gap:4px;padding-left:5px;padding-right:3px;font-size:min(1.133rem,7.4cqw)}
+}
 @container (max-width:12.5rem){
-  .team-checks .check-label{flex-basis:100%;max-width:none}
+  .team-checks .check-label{flex-basis:100%;max-width:none;font-size:min(1.133rem,12cqw)}
 }
 
 
@@ -2008,7 +2014,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    main axis by justify-content, so the icon is centred horizontally and vertically by layout
    rather than by whatever the glyph's metrics happened to be. gap replaces the leading space that
    used to be baked into the label text. */
-.q-sort-btn,.q-reset-btn,.q-alpha-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition:var(--transition);text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
+/* The transition names its properties: with all of them, visibility animates too, and the buttons outlive their collapsed question by the length of the transition. */
+.q-sort-btn,.q-reset-btn,.q-alpha-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition-property:background-color,border-color,color,box-shadow,filter,transform;transition-duration:.18s;transition-timing-function:ease;text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
 .settings-toggle-btn.active,.settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 /* Sort buttons (unanswered-first and name): blank with a coloured outline + icon when off, solid
    fill with a contrasting icon when on. Name sort tells A-Z from Z-A by its arrow, not by fill. */
@@ -3503,18 +3510,35 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
      as their contents need, which follows the longest team name. Round cards stay full width. */
   .section-body{--fit:calc(max(var(--name-col,11rem),13rem) + 19.85rem + 8px + 2.9rem)}
   .section-body>:is(.question-block,.special-section,.standings-block,.banter,.staff-thanks){max-width:var(--fit)}
-  /* Percentages: a slim line of text on its own row under the sort buttons, exactly their width. */
-  :is(.q-header,.sw-header):has(.q-stats-row){align-items:flex-start}
+  .q-header-right:has(.q-stats-row){flex:0 1 var(--sort-w)}
   :is(.q-header,.sw-header):has(.q-stats-row)>:is(.q-header-left,.sw-header-left){min-height:2.7rem}
-  .q-header-right:has(.q-stats-row){flex:0 1 var(--sort-w);row-gap:2px}
-  .q-header-right .q-stats-row{flex:0 0 100%;order:1;display:flex;justify-content:center;gap:1.1rem}
-  .q-header-right .q-stats-row .q-stat{height:1.15rem;padding:0;background:none;border:0;gap:.3em;font-size:.76rem}
-  .q-header-right .q-stats-row .q-stat-correct{color:var(--pts-pos-fg)}
-  .q-header-right .q-stats-row .q-stat-incorrect{color:var(--pts-neg-fg)}
-  /* Light theme's pill text is white, so plain text takes a darker shade of the pill colour. */
-  [data-theme="light"] .q-header-right .q-stats-row .q-stat-correct{color:color-mix(in srgb,var(--pts-pos-bg) 78%,#000)}
-  [data-theme="light"] .q-header-right .q-stats-row .q-stat-incorrect{color:color-mix(in srgb,var(--pts-neg-bg) 78%,#000)}
   .q-header-left .q-badge{white-space:nowrap}
+}
+/* Percentages, at every width: a slim line of plain text on its own row under the sort buttons. */
+:is(.q-header,.sw-header):has(.q-stats-row){align-items:flex-start}
+.q-header-right:has(.q-stats-row){flex-wrap:wrap;row-gap:2px}
+.q-header-right .q-stats-row{flex:0 0 100%;order:1;display:flex;justify-content:center;gap:1.1rem}
+.q-header-right .q-stats-row .q-stat{height:1.15rem;padding:0;background:none;border:0;gap:.3em;font-size:.76rem}
+.q-header-right .q-stats-row .q-stat-correct{color:var(--pts-pos-fg)}
+.q-header-right .q-stats-row .q-stat-incorrect{color:var(--pts-neg-fg)}
+/* Light theme's pill text is white, so plain text takes a darker shade of the pill colour. */
+[data-theme="light"] .q-header-right .q-stats-row .q-stat-correct{color:color-mix(in srgb,var(--pts-pos-bg) 78%,#000)}
+[data-theme="light"] .q-header-right .q-stats-row .q-stat-incorrect{color:color-mix(in srgb,var(--pts-neg-bg) 78%,#000)}
+/* Phones: the button group gets a fixed width that fits "11/11 (100%)" twice. */
+@container scorecol (max-width:600px){
+  .q-header-right:has(.q-stats-row){flex:0 0 11.5rem;justify-content:center}
+  .q-header-right .q-stats-row{gap:.8rem}
+  :is(.q-header,.sw-header):has(.q-stats-row)>:is(.q-header-left,.sw-header-left){min-height:clamp(2.3rem,9.5cqw,2.7rem)}
+  /* Narrowest phones: the badge drops under the question number instead of running under the buttons. */
+  .q-header:has(.q-stats-row) .question-title{flex-wrap:wrap;row-gap:3px}
+  .q-header:has(.q-stats-row) .q-badge{white-space:nowrap}
+  .q-header:has(.q-stats-row) .q-badge.q-beer{white-space:normal;line-height:1.1}
+}
+@container scorecol (max-width:360px){
+  :is(.q-header,.sw-header):has(.q-stats-row){padding-left:6px;padding-right:6px}
+  .q-header-right:has(.q-stats-row){flex-basis:10rem;column-gap:6px}
+  .q-header-right .q-stats-row{gap:.4rem}
+  .q-header-right .q-stats-row .q-stat{font-size:.68rem;gap:.15em}
 }
 @media (forced-colors:active){.special-wager-row>.sw-select{appearance:auto;-webkit-appearance:auto}}
 /* A used wager keeps its faded look on hover; this outranks the shared button hover rules. */
