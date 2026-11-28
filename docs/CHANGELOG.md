@@ -17,6 +17,12 @@ v19.79 through v19.84; git history isn't rewritten).
 The release with the Score race panel is a major change, so it is numbered v23.0 here and in the
 app. Its first commit subject says "v22.105"; git history isn't rewritten.
 
+## v23.2 - 2026-11-28
+
+- **Q5 wager dropdown on phones** now matches the wide layout: wider, with a larger number and the same arrow, and as tall as the correct and incorrect buttons. On touch phones it was 44px tall.
+- **Taller points boxes on phones.** Each row's points box is now as tall as the buttons beside it, and wider, with a larger number.
+- **12px minimum text size.** Text no longer goes below 12px, including at smaller font-size settings. On phones some text was under 9px.
+
 ## v23.1 - 2026-11-27
 
 - **Larger Craft Beer and Bonus labels.** The text on each team's two checkboxes, including +3 and +5, is bigger: 17px at the default font size, up from 12px. The buttons keep their size. In narrow rows the text shrinks to fit.

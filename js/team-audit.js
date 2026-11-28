@@ -179,7 +179,7 @@ function buildAudit(ti) {
 
   let run = 0;
   function roundBlock(ri, label, colorCls) {
-    let b = `<div class="aud-round"><div class="aud-round-h"><span class="round-label ${colorCls}">${label}</span><span style="color:var(--text-muted);font-weight:400;font-size:.68rem;letter-spacing:0;text-transform:none">wagers ${roundWagers(ri).join(", ")}</span></div>`;
+    let b = `<div class="aud-round"><div class="aud-round-h"><span class="round-label ${colorCls}">${label}</span><span style="color:var(--text-muted);font-weight:400;font-size:max(12px,.68rem);letter-spacing:0;text-transform:none">wagers ${roundWagers(ri).join(", ")}</span></div>`;
     for (let qi = 0; qi < 4; qi++) b += auditQLine(ri, qi, ti);
     if (hasBonusQ(ri)) {
       const v = gameState.rounds[ri].bonus[ti];
@@ -230,7 +230,7 @@ function buildAudit(ti) {
     }
     const p = w != null && data.correct != null ? (data.correct ? w : -w) : 0;
     run += p;
-    let b = `<div class="aud-round"><div class="aud-round-h"><span class="round-label ${colorCls}">${label}</span><span style="color:var(--text-muted);font-weight:400;font-size:.68rem;letter-spacing:0;text-transform:none">${maxTxt}</span></div>`;
+    let b = `<div class="aud-round"><div class="aud-round-h"><span class="round-label ${colorCls}">${label}</span><span style="color:var(--text-muted);font-weight:400;font-size:max(12px,.68rem);letter-spacing:0;text-transform:none">${maxTxt}</span></div>`;
     b += `<div class="aud-line"><span class="aud-q">\u2605</span><span class="aud-wager">${w != null ? "wager " + w : "\u2014"}</span>${res}<span class="aud-p ${pcls}">${pts}</span></div>`;
     // Final Wager's own running total always equals Grand Total (nothing scores after it), which
     // sits right below in its own callout \u2014 showing it again here would just repeat that number.

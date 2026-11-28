@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v23.1"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 27, 2026 11:31 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v23.2"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 28, 2026 12:22 AM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1749,7 +1749,7 @@ function renderLeftBody() {
     gameState.teams.length > 1
       ? `<span class="team-sort-row" onclick="event.stopPropagation()"><button class="q-alpha-btn${teamAlphaSort ? " active" : ""}" data-state="${teamAlphaSort || "off"}" onclick="cycleTeamAlphaSort()" title="View teams by name: A-Z, then Z-A, then back to entry order. Entry numbers and order are kept.${teamResort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Sort teams by name, currently ${teamAlphaSort === "az" ? "A to Z" : teamAlphaSort === "za" ? "Z to A" : "entry order"}">${alphaBtnInner(teamAlphaSort)}${teamAlphaSort ? resortDot : ""}</button><button class="q-alpha-btn team-guess-btn${teamGuessSort ? " active" : ""}"${anyNoGuess ? "" : " disabled"} onclick="toggleTeamGuessSort()" title="${anyNoGuess ? "" : "Every team has a score guess. "}Teams with no final score guess: first, then last, then back to entry order. Works with A-Z.${teamResort && !teamAlphaSort ? " The dot means teams are out of order: tap to re-sort." : ""}" aria-label="Teams without a score guess, currently ${teamGuessSort === "first" ? "shown first" : teamGuessSort === "last" ? "shown last" : "off"}">${noGuessBtnInner(teamGuessSort)}${!teamAlphaSort && teamGuessSort ? resortDot : ""}</button></span>`
       : "";
-  h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><span class="chevron">▼</span><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:.65rem;font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2>${teamSortBtns}</div><div class="section-body">`;
+  h += `<div class="section ${collapsedSections.has("sec-teams") ? "collapsed" : ""}" id="sec-teams"><div class="section-header" role="button" tabindex="0" onclick="toggleSection('sec-teams')"><span class="chevron">▼</span><h2>Teams (${gameState.teams.length})${missingGuessCount ? ` <span style="font-size:max(12px,.65rem);font-weight:700;color:var(--txt-orange);background:rgba(255,170,0,.12);border:1px solid var(--accent-orange);border-radius:4px;padding:1px 6px;vertical-align:middle">&#9888; ${missingGuessCount} missing guess${missingGuessCount > 1 ? "es" : ""}</span>` : ""}</h2>${teamSortBtns}</div><div class="section-body">`;
   const showAdj = !!loadPrefs().showAdjustments;
   // 146 = a perfect Regular night; the Theme Night script calls 95 a perfect score.
   const guessMax = guessLimit();

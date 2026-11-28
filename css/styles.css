@@ -419,7 +419,7 @@ button,[role="button"]{touch-action:manipulation}
 .logo{font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:var(--accent-cyan);text-transform:uppercase;letter-spacing:2px}
 .logo span{color:var(--accent-magenta)}
 .toolbar{display:flex;gap:6px;align-items:center;flex-wrap:nowrap}
-.toolbar>button,.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.78rem;font-weight:600;padding:5px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
+.toolbar>button,.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:max(12px,.78rem);font-weight:600;padding:5px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .toolbar>button:hover,.btn:hover{background:var(--bg-hover);border-color:var(--border-light)}
 .btn-accent{background:var(--accent-cyan-solid)!important;color:var(--on-accent-cyan)!important;border-color:var(--accent-cyan-solid)!important;font-weight:700!important}
 .btn-accent:hover{filter:brightness(.92)}
@@ -436,7 +436,7 @@ button,[role="button"]{touch-action:manipulation}
    this font stack, and 12px is this rule's own padding+border (5px×2 + 1px×2) — so it tracks
    Settings > Size the same way Save/Load's real text metrics already do, rather than a fixed px
    height that wouldn't scale alongside them. */
-.settings-toggle-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.78rem;font-weight:600;min-height:calc(1.24em + 12px);padding:5px 12px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
+.settings-toggle-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:max(12px,.78rem);font-weight:600;min-height:calc(1.24em + 12px);padding:5px 12px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition)}
 .settings-toggle-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 /* The one visible cue for checkForUpdate() (js/app.js) finding a real newer build — deliberately
    just a dot, not a banner: a host mid-game shouldn't have their attention pulled by anything
@@ -448,9 +448,9 @@ button,[role="button"]{touch-action:manipulation}
    above, spelled out for whoever actually opens Settings and wants to know what it means. A
    real link (js/app.js), not a button — it navigates to the FAQ's own instructions for actually
    updating an installed app, which a reload can't reliably do itself (see js/app.js). */
-.update-available-btn{font-family:var(--font-display);font-size:.66rem;font-weight:700;color:var(--txt-cyan);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
-.update-reload-hint{font-size:.66rem;color:var(--text-muted)}
-.update-reload-hint .update-available-btn{font-size:.85rem;padding:8px 14px;margin:2px 4px;min-height:40px;border:1px solid var(--txt-cyan);border-radius:8px;text-decoration:none}
+.update-available-btn{font-family:var(--font-display);font-size:max(12px,.66rem);font-weight:700;color:var(--txt-cyan);background:none;border:none;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.update-reload-hint{font-size:max(12px,.66rem);color:var(--text-muted)}
+.update-reload-hint .update-available-btn{font-size:max(12px,.85rem);padding:8px 14px;margin:2px 4px;min-height:40px;border:1px solid var(--txt-cyan);border-radius:8px;text-decoration:none}
 .update-available-btn:hover{color:var(--accent-cyan)}
 
 /* Overlay, not in-flow: .header is position:sticky (a valid containing block for an
@@ -564,14 +564,14 @@ button,[role="button"]{touch-action:manipulation}
    and tabular so it doesn't jitter in width as the value changes under a drag. */
 .settings-range{width:120px;accent-color:var(--accent-cyan-solid);background:transparent;cursor:pointer;flex-shrink:0}
 .settings-range:focus-visible{outline:2px solid var(--accent-cyan);outline-offset:2px}
-.settings-range-val{font-family:var(--font-display);font-size:.78rem;font-weight:700;color:var(--txt-cyan);min-width:2.7rem;text-align:right;font-variant-numeric:tabular-nums}
+.settings-range-val{font-family:var(--font-display);font-size:max(12px,.78rem);font-weight:700;color:var(--txt-cyan);min-width:2.7rem;text-align:right;font-variant-numeric:tabular-nums}
 @keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 /* ADVANCED SETTINGS — collapsible group holding the rarer controls (point adjustments,
    legacy CSV/XLSM export) so the default settings list stays short. */
 .settings-advanced-toggle-row{grid-column:1/-1;margin-top:2px}
 /* Off (collapsed) vs enabled (expanded) get distinct backgrounds so the state
    reads at a glance, the same accent-fill convention the settings toggles use. */
-.settings-advanced-toggle{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-body);font-size:.78rem;font-weight:700;padding:8px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px}
+.settings-advanced-toggle{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:var(--font-body);font-size:max(12px,.78rem);font-weight:700;padding:8px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-muted);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px}
 .settings-advanced-toggle:hover{background:var(--bg-hover);color:var(--text-primary)}
 .settings-advanced-toggle.open{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 .settings-advanced-toggle.open:hover{background:var(--accent-cyan-solid);color:var(--on-accent-cyan)}
@@ -582,7 +582,7 @@ button,[role="button"]{touch-action:manipulation}
 .settings-advanced-group{grid-column:1/-1;display:none;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));column-gap:24px}
 .settings-advanced-group.open{display:grid}
 
-.settings-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:.8rem;font-weight:600;padding:5px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
+.settings-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-body);font-size:max(12px,.8rem);font-weight:600;padding:5px 10px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;transition:var(--transition);white-space:nowrap}
 .settings-btn:hover{background:var(--bg-hover)}
 /* Theme toggle's sun/moon (THEME_ICON_SUN/THEME_ICON_MOON, app.js) — see the const comment there
    for why these replaced the old ☀️/🌑 emoji. --badge-gold-fg/--txt-cyan are this app's existing
@@ -690,7 +690,7 @@ button,[role="button"]{touch-action:manipulation}
      the head (and its shadow) above .settings-panel-body, so the row buttons scrolling under the
      shadow's 9px overlap sit *beneath* it rather than punching through on top. */
   .settings-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;grid-column:1/-1;flex-shrink:0;position:relative;z-index:3;margin:-10px -16px 0;padding:10px 16px;background:var(--bg-card);border-bottom:1px solid var(--border-strong);box-shadow:0 7px 11px 0 var(--edge-fade);transform:translateZ(0);-webkit-transform:translateZ(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
-  .settings-panel-title{font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt-cyan)}
+  .settings-panel-title{font-family:var(--font-display);font-size:max(12px,.8rem);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt-cyan)}
   /* X close button — same circular affordance as .resume-banner-close, reused here for visual
      consistency. With the panel now capped at max-height and scrolling only in the middle, the
      header is always on screen the instant Settings opens, so this is reachable without
@@ -707,8 +707,8 @@ button,[role="button"]{touch-action:manipulation}
      rather than inheriting whatever size .settings-x-btn's text happens to run at. */
   .settings-x-btn .icon-emoji{font-size:1.3rem}
   .settings-row{padding:10px 2px;gap:10px}
-  .settings-row .size-label{font-size:.78rem}
-  .settings-controls .settings-btn{padding:7px 12px;font-size:.85rem}
+  .settings-row .size-label{font-size:max(12px,.78rem)}
+  .settings-controls .settings-btn{padding:7px 12px;font-size:max(12px,.85rem)}
   /* Footer divider — the panel-foot's border-top does the job .settings-meta's own padding-top
      used to (visually separating the version/disclaimer block from the scrolling settings rows
      above); moved to the wrapper since it separates the whole anchored footer from the body,
@@ -737,7 +737,7 @@ button,[role="button"]{touch-action:manipulation}
 /* The head/foot depth shadow used to need a theme-split override here (a black shadow is nearly
    invisible against Dark's #0d0d0d --bg-card). Both directions now use --edge-fade, which is
    already defined per theme — pale in Dark, darker in Light — so the per-theme override is gone. */
-.theme-select{min-height:1.75rem;font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
+.theme-select{min-height:1.75rem;font-family:var(--font-body);font-size:max(12px,.72rem);font-weight:700;padding:4px 22px 4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;appearance:none;-webkit-appearance:none;outline:none;transition:var(--transition);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888888'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 6px center}
 .theme-select:hover{background-color:var(--bg-hover)}
 .theme-select:focus-visible{outline:2px solid var(--accent-cyan-solid);outline-offset:2px}
 .theme-select:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 13%,transparent)}
@@ -755,10 +755,10 @@ button,[role="button"]{touch-action:manipulation}
    escapes that clipping entirely; the JS also flips the menu above the button instead of
    below when opening downward would run past the bottom of the viewport itself. */
 .cv-select{position:relative;display:inline-block}
-.cv-select-btn{font-family:var(--font-body);font-size:.72rem;font-weight:700;padding:4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:var(--transition)}
+.cv-select-btn{font-family:var(--font-body);font-size:max(12px,.72rem);font-weight:700;padding:4px 8px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-card);color:var(--text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;transition:var(--transition)}
 .cv-select-btn:hover{background:var(--bg-hover)}
 .cv-select-btn:focus-visible{outline:2px solid var(--accent-cyan-solid);outline-offset:2px}
-.cv-select-arrow{font-size:.6rem;color:var(--text-muted);transition:transform .15s}
+.cv-select-arrow{font-size:max(12px,.6rem);color:var(--text-muted);transition:transform .15s}
 .cv-select.open .cv-select-arrow{transform:rotate(180deg)}
 /* z-index above the tutorial overlay's own layers (bars/ring 600, callout 601), not merely above
    the settings panel it lives in. An open dropdown is the most transient, most foreground thing
@@ -772,10 +772,10 @@ button,[role="button"]{touch-action:manipulation}
    app.js) and is no longer a descendant of .cv-select.open at that point. The descendant form is
    kept as the belt-and-braces case for any path that adds .open without going through there. */
 .cv-select.open .cv-select-menu,.cv-select-menu.cv-open{display:block}
-.cv-select-menu li{padding:6px 8px;border-radius:6px;cursor:pointer;font-size:.78rem;color:var(--text-primary);display:flex;flex-direction:column;gap:1px;line-height:1.25}
+.cv-select-menu li{padding:6px 8px;border-radius:6px;cursor:pointer;font-size:max(12px,.78rem);color:var(--text-primary);display:flex;flex-direction:column;gap:1px;line-height:1.25}
 .cv-select-menu li:hover{background:var(--bg-hover)}
 .cv-select-menu li[aria-selected="true"]{font-weight:700;color:var(--txt-cyan)}
-.cv-opt-sub{font-size:.68rem;font-weight:500;color:var(--text-muted)}
+.cv-opt-sub{font-size:max(12px,.68rem);font-weight:500;color:var(--text-muted)}
 /* Swatch squares next to "Red-Green"/"Blue-Yellow" — a color preview so the label isn't just a
    clinical name for the deficiency; see the --cv-preview-* tokens above for the values and their
    contrast notes. aria-hidden since the option's own text already names the mode. */
@@ -791,7 +791,7 @@ button,[role="button"]{touch-action:manipulation}
    markup in here. Empty (and so zero-width) whenever "Off" is selected, since Off has no
    swatch pair of its own either. */
 .cv-select-swatch:empty{display:none}
-.size-label{font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
+.size-label{font-size:max(12px,.68rem);color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600}
 .sep{width:1px;height:18px;background:var(--border-light);margin:0 2px;flex-shrink:0}
 
 .resume-banner{position:relative;background:var(--bg-card);border:1px solid var(--accent-gold);border-radius:var(--radius-lg);padding:16px;margin:0 16px 12px;display:none}
@@ -879,11 +879,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    bigger panels since this is a slim bar, not a full overlay. */
 .mini-progress{box-shadow:0 5px 22px rgba(255,255,255,.24),0 0 8px rgba(255,255,255,.16);box-shadow:0 5px 22px light-dark(rgba(0,0,0,.38),rgba(255,255,255,.24)),0 0 8px light-dark(rgba(0,0,0,.26),rgba(255,255,255,.16))}
 .mini-progress:hover{background:var(--bg-hover)}
-.mp-round{font-family:var(--font-display);font-weight:700;font-size:.95rem;flex-shrink:0}
-.mp-count{font-family:var(--font-body);font-size:.8rem;font-weight:600;color:var(--text-secondary);white-space:nowrap}
+.mp-round{font-family:var(--font-display);font-weight:700;font-size:max(12px,.95rem);flex-shrink:0}
+.mp-count{font-family:var(--font-body);font-size:max(12px,.8rem);font-weight:600;color:var(--text-secondary);white-space:nowrap}
 .mp-bar{flex:1;height:6px;border-radius:3px;background:var(--bg-input);overflow:hidden;min-width:40px}
 .mp-fill{height:100%;background:var(--accent-cyan-solid);border-radius:3px;transition:width .25s ease}
-.mp-pct{font-family:var(--font-display);font-size:.8rem;font-weight:700;color:var(--text-secondary);flex-shrink:0;min-width:2.4em;text-align:right}
+.mp-pct{font-family:var(--font-display);font-size:max(12px,.8rem);font-weight:700;color:var(--text-secondary);flex-shrink:0;min-width:2.4em;text-align:right}
 .mini-progress.mp-complete{justify-content:center}
 /* Rendered with real content before the first score lands (see renderLeft() in app.js), just
    invisible — reserves its actual height so Event Details and everything below it don't jump
@@ -893,7 +893,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .mini-progress.mp-pending{visibility:hidden}
 /* Same .95rem as .mp-round above — see the line-height comment on .mini-progress for why these
    two need to match. */
-.mp-label{font-family:var(--font-body);font-size:.95rem;font-weight:700;color:var(--badge-green-fg)}
+.mp-label{font-family:var(--font-body);font-size:max(12px,.95rem);font-weight:700;color:var(--badge-green-fg)}
 /* Shared sizing/coloring for CHECK_ICON_SVG/X_ICON_SVG (app.js) wherever they sit inline in
    text — the mini-progress label above, round/question "Done" badges, per-question correct/
    incorrect stat pills, the Quiz ID "looks good" check, and Team Report lines. currentColor
@@ -1243,7 +1243,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .qtimer-bar::before,.qtimer-bar::after{content:"";position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--bg-primary);z-index:1;display:none}
 .qtimer-bar[data-n1]::before{display:block;left:var(--qt-n1)}
 .qtimer-bar[data-n2]::after{display:block;left:var(--qt-n2)}
-.qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-control);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:.8rem;cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
+.qtimer-btn{min-height:2rem;padding:5px 10px;border:1px solid var(--border-control);border-radius:6px;background:var(--bg-card);color:var(--text-primary);font-family:var(--font-body);font-weight:700;font-size:max(12px,.8rem);cursor:pointer;touch-action:manipulation;white-space:nowrap;transition:var(--transition)}
 .qtimer-btn:hover{background:var(--bg-hover)}
 .qtimer-btn:disabled{opacity:.4;cursor:not-allowed}
 /* Icon-only (play/pause, no "Start"/"Pause"/"Resume" label) — same fixed square treatment as
@@ -1268,7 +1268,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    Each button sits directly in .qtimer's own flex row now (−30 before .qtimer-display, +30
    after it) rather than sharing a wrapper, so the two visually flank the countdown instead of
    both landing on the same side of it. */
-.qtimer-btn.qtimer-step{display:none;padding:5px 8px;font-size:.75rem}
+.qtimer-btn.qtimer-step{display:none;padding:5px 8px;font-size:max(12px,.75rem)}
 [data-timer-steppers] .qtimer-btn.qtimer-step{display:inline-block}
 /* Only the control that's actually "live" right now gets the bold treatment — same halo-ring
    language as .qtimer-display above (a --bg-primary ring separating a solid fill from the
@@ -1391,7 +1391,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    phone sheet matches the big timer in the docked strip (.qtimer-mobile) instead of staying small. */
 @media(min-width:0){
   .qtimer-desktop .qtimer-display{font-size:2.15rem;padding:6px 14px}
-  .qtimer-desktop .qtimer-btn{min-height:2.5rem;padding:7px 14px;font-size:.95rem}
+  .qtimer-desktop .qtimer-btn{min-height:2.5rem;padding:7px 14px;font-size:max(12px,.95rem)}
   .qtimer-desktop .qtimer-btn.qtimer-toggle,
   .qtimer-desktop .qtimer-btn.qtimer-reset{width:2.5rem;height:2.5rem;min-height:2.5rem;font-size:1.35rem}
   /* The toggle/reset glyphs (an SVG in Pictograph mode) inherit width:1em from the base rule —
@@ -1403,7 +1403,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .qtimer-desktop .qtimer-btn.qtimer-reset .icon-ui{width:1.15em;height:1.15em}
   .qtimer-desktop .qtimer-btn.qtimer-toggle .icon-emoji,
   .qtimer-desktop .qtimer-btn.qtimer-reset .icon-emoji{transform:scale(1.1)}
-  .qtimer-desktop .qtimer-btn.qtimer-step{padding:6px 12px;font-size:.85rem}
+  .qtimer-desktop .qtimer-btn.qtimer-step{padding:6px 12px;font-size:max(12px,.85rem)}
 }
 
 /* Settings backdrop dims the page behind the dropdown exactly like the scores drawer's own
@@ -1569,7 +1569,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .qtimer-mobile .qtimer-btn.qtimer-reset{
     width:2.4rem;height:2.4rem;min-height:2.4rem;font-size:1.15rem;
   }
-  .qtimer-mobile .qtimer-btn.qtimer-step{font-size:.82rem;padding:5px 8px;min-height:2.4rem}
+  .qtimer-mobile .qtimer-btn.qtimer-step{font-size:max(12px,.82rem);padding:5px 8px;min-height:2.4rem}
   /* v21.20: the deployed sheet's timer (.qtimer-desktop) uses the exact same row metrics as the docked
      one above, so the digits and buttons stay put when the dock deploys instead of shifting a few px.
      Side padding is 11px (not 10) because the dock has a 1px side border the sheet doesn't. */
@@ -1580,11 +1580,11 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
   .qtimer-desktop .qtimer-btn.qtimer-toggle .icon-emoji,.qtimer-desktop .qtimer-btn.qtimer-reset .icon-emoji{transform:scale(1.35)}
   .qtimer-desktop .qtimer-btn.qtimer-toggle,
   .qtimer-desktop .qtimer-btn.qtimer-reset{font-size:1.15rem}
-  .qtimer-desktop .qtimer-btn.qtimer-step{font-size:.82rem;padding:5px 8px;min-height:2.4rem;width:44px;height:44px}
+  .qtimer-desktop .qtimer-btn.qtimer-step{font-size:max(12px,.82rem);padding:5px 8px;min-height:2.4rem;width:44px;height:44px}
   /* Column 1 is left empty on purpose — an unfilled 1fr grid track still reserves the same
      width as column 3's chevron, which is what keeps column 2 centered against the full strip
      rather than just the leftover space; it doesn't need visible content of its own to do that. */
-  .msp-label{grid-column:2;justify-self:center;display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:.95rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--txt-cyan);white-space:nowrap}
+  .msp-label{grid-column:2;justify-self:center;display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:max(12px,.95rem);font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--txt-cyan);white-space:nowrap}
   /* Matches .section-header .chevron's size (1.1rem) so every collapse/expand chevron in the
      app reads as the same size/scale of control, rather than this one dominating the row. */
   .msp-chevron{grid-column:3;justify-self:end;font-size:1.1rem;line-height:1;color:var(--text-muted);transition:transform .28s ease}
@@ -1600,7 +1600,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    content needed for the centering to work). */
 .sidebar-header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 14px;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg-card-alt)}
 .sidebar-header:hover{background:var(--bg-hover)}
-.sidebar-header h3{grid-column:2;justify-self:center;font-family:var(--font-display);font-size:.95rem;text-transform:uppercase;letter-spacing:1px;color:var(--txt-cyan)}
+.sidebar-header h3{grid-column:2;justify-self:center;font-family:var(--font-display);font-size:max(12px,.95rem);text-transform:uppercase;letter-spacing:1px;color:var(--txt-cyan)}
 /* Matches .msp-chevron's size (1.1rem) so the arrow reads the same whether the sheet is
    docked (peek strip) or deployed (this header) — was .7rem, visibly smaller than every
    other collapse/expand chevron in the app. */
@@ -1622,7 +1622,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .sidebar-body{flex:1;min-height:0;overscroll-behavior:contain;overflow-y:auto;display:flex;flex-direction:column;overflow-anchor:none}
 
 .sort-controls{display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
-.sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.3em;flex:1;min-width:0;font-family:var(--font-display);font-size:.86rem;font-weight:700;padding:8px 4px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;touch-action:manipulation}
+.sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.3em;flex:1;min-width:0;font-family:var(--font-display);font-size:max(12px,.86rem);font-weight:700;padding:8px 4px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;touch-action:manipulation}
 .sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 /* Shuffle carries no visible label (its name is there for screen readers only), so the icon runs
    a little larger to hold the same optical weight as "Entry"/"Asc"/"Desc" beside it. Dropping the
@@ -1636,7 +1636,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
    cue onto the top of .scores-list that .settings-panel-head casts in the Settings panel — same
    token, same intensity, on both mobile and desktop. The matching cue on the list's BOTTOM edge
    is the upward --edge-fade on .qtimer-desktop (which overlays that edge — see its rule above). */
-.sort-mode-label{position:relative;z-index:1;padding:6px 12px 4px;font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0;box-shadow:0 7px 11px -1px var(--edge-fade)}
+.sort-mode-label{position:relative;z-index:1;padding:6px 12px 4px;font-size:max(12px,.7rem);color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border);flex-shrink:0;box-shadow:0 7px 11px -1px var(--edge-fade)}
 
 /* padding-bottom reserves room for .qtimer-desktop (see LAYOUT above), which overlays this
    list's bottom edge — without it the last row would be permanently stranded behind the timer
@@ -1670,7 +1670,7 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 [data-theme="dark"] .sr-rank.sr-rank-1{background:#6e5600;color:#fff;border:2px solid #ffd700}
 [data-theme="dark"] .sr-rank.sr-rank-2{background:#55555f;color:#fff;border:2px solid #c8c8d0}
 [data-theme="dark"] .sr-rank.sr-rank-3{background:#6b3d15;color:#fff;border:2px solid #d68a42}
-.sr-name{flex:1;font-weight:600;font-size:.85rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sr-name{flex:1;font-weight:600;font-size:max(12px,.85rem);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 /* Subtle 1st/2nd/3rd podium tint across the whole row container — same idea as Final Results'
    .fr-gold/.fr-silver/.fr-bronze row wash. All three are plain fixed, muted tints, matching the
    same muted approach the #1/#2/#3 badges themselves now use (see .sr-rank.sr-rank-1's comment
@@ -1723,8 +1723,8 @@ body.col-resizing *{cursor:col-resize!important;user-select:none!important}
 .section-body{padding:0 14px 14px}
 .section.round-complete>.section-header{border-left-color:var(--accent-green)}
 
-label{display:block;font-size:.72rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
-input[type="text"],input[type="number"],input[type="date"]{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;outline:none;transition:var(--transition)}
+label{display:block;font-size:max(12px,.72rem);font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+input[type="text"],input[type="number"],input[type="date"]{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:max(12px,.9rem);outline:none;transition:var(--transition)}
 input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 13%,transparent)}
 /* color-scheme tells the browser which native-control palette to use for the date input's
    own calendar-picker icon and popup (so the icon isn't a near-invisible dark glyph on our
@@ -1755,7 +1755,7 @@ input:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in sr
    actually apply to it — a backstop for the rare case (a long localized month name, an unusually
    wide font at the very top of the Size range) where the rem-scaled cap above still isn't quite
    enough; same ellipsis-on-overflow pattern .sr-name uses elsewhere in this file. */
-.date-native-wrap .date-display-text{position:absolute;left:10px;right:6px;top:0;bottom:0;display:flex;align-items:center;pointer-events:none;font-family:var(--font-body);font-size:.9rem;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.date-native-wrap .date-display-text{position:absolute;left:10px;right:6px;top:0;bottom:0;display:flex;align-items:center;pointer-events:none;font-family:var(--font-body);font-size:max(12px,.9rem);color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .date-native-wrap .date-display-text.is-placeholder{color:var(--text-muted)}
 .date-native-wrap .date-native:disabled ~ .date-display-text{opacity:.65}
 /* Same rem-not-px reasoning as .date-native-wrap above — a real <input> scrolls its own overflow
@@ -1779,7 +1779,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .field.field-warn>label{color:var(--txt-orange)}
 .field.field-warn input{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
 .field.field-good input{border-color:var(--accent-green);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-green) 18%,transparent)}
-.guess-good{display:block;font-size:.58rem;font-weight:700;color:var(--badge-green-fg);letter-spacing:.3px;margin-top:2px}
+.guess-good{display:block;font-size:max(12px,.58rem);font-weight:700;color:var(--badge-green-fg);letter-spacing:.3px;margin-top:2px}
 
 /* TEAM ENTRY */
 /* align-items:start (not center): the name column's stacked label+input+checks is taller than
@@ -1809,10 +1809,10 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    over an input, on one row. They had been diverging on five counts at once — display font vs
    body, weight 400 vs 600, letter-spacing 1px vs .5px, sentence case vs upper, --text-muted vs
    --text-secondary — which is what made the pair read as two unrelated bits of text. */
-.team-number{font-family:var(--font-body);font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary)}
+.team-number{font-family:var(--font-body);font-size:max(12px,.66rem);font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary)}
 .team-name-cell>input[type="text"]{width:100%}
 .team-checks{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px}
-.check-label{position:relative;display:inline-flex;align-items:center;gap:7px;font-size:.85rem;font-weight:700;cursor:pointer;padding:6px 10px;border-radius:6px;border:1px solid var(--border-control);background:var(--bg-input);white-space:nowrap;transition:var(--transition);letter-spacing:.3px;margin-bottom:0!important;color:var(--text-muted)}
+.check-label{position:relative;display:inline-flex;align-items:center;gap:7px;font-size:max(12px,.85rem);font-weight:700;cursor:pointer;padding:6px 10px;border-radius:6px;border:1px solid var(--border-control);background:var(--bg-input);white-space:nowrap;transition:var(--transition);letter-spacing:.3px;margin-bottom:0!important;color:var(--text-muted)}
 /* Native checkbox is kept for real keyboard/screen-reader semantics but rendered invisible —
    accent-color can't guarantee the checkmark glyph's own contrast (browser-chosen, unverifiable),
    so the visible box + checkmark below is fully custom-drawn and contrast-audited instead. */
@@ -1885,7 +1885,7 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
 .team-guess-cell input[type="number"]{-moz-appearance:textfield;appearance:textfield}
 .team-guess-cell input[type="number"]::-webkit-outer-spin-button,
 .team-guess-cell input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.team-guess-cell>label{font-size:.66rem;margin-bottom:7px;display:block;text-align:center}
+.team-guess-cell>label{font-size:max(12px,.66rem);margin-bottom:7px;display:block;text-align:center}
 .team-guess-cell input[type="number"]{text-align:center}
 .team-guess-cell.guess-missing>label{color:var(--txt-orange)}
 .team-guess-cell.guess-missing input{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
@@ -1895,20 +1895,20 @@ input[list]::-webkit-calendar-picker-indicator{opacity:0}
    has already learned it from the required-field and Quiz ID hints. Not blocking, though,
    so unlike .field-invalid the field keeps a plain border and only gains the ring; what was
    typed is valid, there is just no room for more of it. */
-.guess-warn,.limit-note{display:block;font-size:.58rem;font-weight:700;color:var(--txt-orange);letter-spacing:.3px;margin-top:2px}
+.guess-warn,.limit-note{display:block;font-size:max(12px,.58rem);font-weight:700;color:var(--txt-orange);letter-spacing:.3px;margin-top:2px}
 input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-orange) 18%,transparent)}
 
 /* PER-TEAM ADJ */
 .adj-wrap{display:flex;flex-direction:column;align-items:center;gap:5px;align-self:center}
 .remove-team{align-self:center}
-.adj-chip{font-family:var(--font-display);font-size:.72rem;font-weight:700;padding:5px 7px;border-radius:6px;border:1px solid var(--border-control);background:var(--bg-input);color:var(--text-muted);cursor:pointer;transition:var(--transition);white-space:nowrap;min-width:34px;text-align:center;line-height:1}
+.adj-chip{font-family:var(--font-display);font-size:max(12px,.72rem);font-weight:700;padding:5px 7px;border-radius:6px;border:1px solid var(--border-control);background:var(--bg-input);color:var(--text-muted);cursor:pointer;transition:var(--transition);white-space:nowrap;min-width:34px;text-align:center;line-height:1}
 .adj-chip:hover{background:var(--bg-hover);border-color:var(--border-light);color:var(--text-primary)}
 .adj-chip.adj-active{color:var(--txt-orange);border-color:var(--accent-orange);background:color-mix(in srgb,var(--accent-orange) 10%,transparent)}
-.adj-stepper button{width:1.5rem;height:1.5rem;border:1px solid var(--border-control);background:var(--bg-input);color:var(--text-primary);font-size:.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.adj-stepper button{width:1.5rem;height:1.5rem;border:1px solid var(--border-control);background:var(--bg-input);color:var(--text-primary);font-size:max(12px,.9rem);font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
 .adj-stepper button:first-child{border-radius:5px 0 0 5px}
 .adj-stepper button:last-child{border-radius:0 5px 5px 0}
 .adj-stepper button:hover{background:var(--bg-hover)}
-.adj-val{min-width:2rem;height:1.5rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:.75rem}
+.adj-val{min-width:2rem;height:1.5rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:max(12px,.75rem)}
 .adj-val.pos{color:var(--badge-green-fg)}
 .adj-val.neg{color:var(--txt-red)}
 .remove-team button{width:1.6rem;height:1.6rem;border-radius:50%;border:1px solid var(--accent-red);background:none;color:var(--txt-red);font-size:1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
@@ -1930,7 +1930,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 
 #addTeamBtn{margin-top:10px;width:100%;padding:8px;font-family:var(--font-display);text-transform:uppercase;letter-spacing:1px}
 
-.round-label{display:inline-block;font-family:var(--font-display);font-size:.66rem;padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:1px}
+.round-label{display:inline-block;font-family:var(--font-display);font-size:max(12px,.66rem);padding:2px 7px;border-radius:4px;text-transform:uppercase;letter-spacing:1px}
 /* Tints via color-mix off the accent tokens, not hardcoded rgba. As literal rgba(0,255,255,.13)
    and rgba(255,238,0,.13) these washes stayed cyan and gold in EVERY colour-vision mode — so in
    blue-yellow mode, which swaps cyan for green and gold for magenta, Round 1's "Wagers: 1, 2, 3,
@@ -1991,8 +1991,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .q-header{display:flex;align-items:center;gap:6px;padding:8px 10px;user-select:none;transition:var(--transition);background:var(--bg-input)}
 .q-header-left{display:flex;align-items:center;gap:6px;cursor:pointer;flex:1;min-width:0}
 .q-header-left:hover{opacity:.8}
-.question-title{font-family:var(--font-display);font-size:.82rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
-.q-chevron{font-size:.85rem;color:var(--text-muted);transition:transform .25s;flex-shrink:0}
+.question-title{font-family:var(--font-display);font-size:max(12px,.82rem);font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:6px}
+.q-chevron{font-size:max(12px,.85rem);color:var(--text-muted);transition:transform .25s;flex-shrink:0}
 .q-header-right{display:flex;align-items:center;gap:4px;flex-shrink:0;margin-left:auto}
 .question-block.q-collapsed .q-body{display:none}
 .question-block.q-collapsed .q-chevron{transform:rotate(-90deg)}
@@ -2015,7 +2015,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    rather than by whatever the glyph's metrics happened to be. gap replaces the leading space that
    used to be baked into the label text. */
 /* The transition names its properties: with all of them, visibility animates too, and the buttons outlive their collapsed question by the length of the transition. */
-.q-sort-btn,.q-reset-btn,.q-alpha-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition-property:background-color,border-color,color,box-shadow,filter,transform;transition-duration:.18s;transition-timing-function:ease;text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
+.q-sort-btn,.q-reset-btn,.q-alpha-btn{display:inline-flex;align-items:center;justify-content:center;gap:.34em;font-family:var(--font-body);font-size:max(12px,.7rem);font-weight:700;height:1.5rem;padding:0 8px;border-radius:6px;cursor:pointer;border:1px solid transparent;transition-property:background-color,border-color,color,box-shadow,filter,transform;transition-duration:.18s;transition-timing-function:ease;text-transform:none;letter-spacing:0;line-height:1.2;white-space:nowrap;touch-action:manipulation}
 .settings-toggle-btn.active,.settings-btn.active{background:var(--accent-cyan-solid);color:var(--on-accent-cyan);border-color:var(--accent-cyan-solid)}
 /* Sort buttons (unanswered-first and name): blank with a coloured outline + icon when off, solid
    fill with a contrasting icon when on. Name sort tells A-Z from Z-A by its arrow, not by fill. */
@@ -2062,8 +2062,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 @keyframes beerPop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 .beer-banner-icon{font-size:1.3rem;animation:beerWobble 1.2s ease-in-out infinite alternate}
 @keyframes beerWobble{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
-.beer-banner-text{font-family:var(--font-display);font-size:.78rem;font-weight:700;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:1.5px}
-.beer-banner-sub{font-size:.68rem;color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;display:block;margin-top:1px}
+.beer-banner-text{font-family:var(--font-display);font-size:max(12px,.78rem);font-weight:700;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:1.5px}
+.beer-banner-sub{font-size:max(12px,.68rem);color:var(--text-muted);font-weight:400;text-transform:none;letter-spacing:0;display:block;margin-top:1px}
 
 .q-body{padding:0 10px 8px}
 
@@ -2078,14 +2078,14 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    blocks stacked on the page), so both this and the buttons are sized down together rather
    than growing either one to match the other. */
 .q-stats-row{display:contents}
-.q-stat{font-family:var(--font-body);font-size:.7rem;font-weight:700;height:1.5rem;padding:0 6px;border-radius:6px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
+.q-stat{font-family:var(--font-body);font-size:max(12px,.7rem);font-weight:700;height:1.5rem;padding:0 6px;border-radius:6px;line-height:1.2;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center}
 
 /* TEAM ANSWER ROWS */
 .team-answer{display:flex;align-items:center;gap:.35rem;padding:var(--row-pad) 10px;border-bottom:1px solid var(--border);flex-wrap:nowrap;margin-left:-10px;margin-right:-10px;min-height:3.2rem}
 .team-answer:last-child{border-bottom:none}
 .team-answer:nth-child(even){background:var(--row-stripe)}
 
-.ta-name{font-weight:600;font-size:.88rem;flex-shrink:0;width:11rem;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;padding-left:4px;padding-right:8px;line-height:1.3}
+.ta-name{font-weight:600;font-size:max(12px,.88rem);flex-shrink:0;width:11rem;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word;padding-left:4px;padding-right:8px;line-height:1.3}
 /* No hover magnifier on these rows — see .ta-name-clickable::after below. Nothing else here
    controls the vertical position of the name: .team-answer is align-items:center, so a box whose
    height is exactly its own lines is centred by that alone, one line or two. What broke it was
@@ -2122,8 +2122,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .wager-btn.correct{background:var(--btn-correct-bg);border:2px solid var(--accent-green)}
 .wager-btn.incorrect{background:var(--btn-incorrect-bg);border:2px solid var(--accent-red)}
 /* Revolution Rivals place picker: same audited .wager-btn colours; each button is wider so it can hold "#1" plus its points. */
-.place-btn{width:3.6rem;min-width:0;height:calc(var(--wager-size) * 1.1);min-height:0;padding:0;flex-direction:column;gap:1px;line-height:1.1;font-size:.95rem;border-radius:8px}
-.place-btn .place-pts{font-size:.7rem;font-weight:700;opacity:.85;background:none;padding:0}
+.place-btn{width:3.6rem;min-width:0;height:calc(var(--wager-size) * 1.1);min-height:0;padding:0;flex-direction:column;gap:1px;line-height:1.1;font-size:max(12px,.95rem);border-radius:8px}
+.place-btn .place-pts{font-size:max(12px,.7rem);font-weight:700;opacity:.85;background:none;padding:0}
 /* Selected: the Rivals mode accent, with ink picked per theme so the label keeps its contrast. */
 .place-btn.selected{background:var(--place-sel,var(--mode-accent));border:1px solid var(--place-sel,var(--mode-accent));color:#000}
 /* Normal vision uses amber (red read as "incorrect"); the colour-vision modes keep their own audited Rivals accents. */
@@ -2214,7 +2214,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .standings-block{background:var(--bg-card-alt);border:1px solid var(--border);border-radius:var(--radius);padding:10px;margin-bottom:8px}
 /* Whole row (chevron + title) is the collapse toggle, like a question header's q-header-left. */
 .standings-title-row{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
-.standings-block .standings-title{font-family:var(--font-display);font-size:.88rem;font-weight:600;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:.5px}
+.standings-block .standings-title{font-family:var(--font-display);font-size:max(12px,.88rem);font-weight:600;color:var(--badge-gold-fg);text-transform:uppercase;letter-spacing:.5px}
 /* Light theme only: --badge-gold-fg has to stay dark enough to hold 4.5:1 on white (#845e00),
    which reads as a dull brownish mustard rather than actual gold — a problem dark theme's own
    vivid #ffee00 gold never has, so dark theme keeps the shared token above untouched. Nothing
@@ -2242,7 +2242,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    and lower at the small end of the range. The px floor holds the bottom. Deliberately not
    narrowed further on desktop: this app is used on a phone or tablet at a venue far more than at
    a desk. */
-.standings-sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-display);font-size:.72rem;font-weight:700;min-height:max(2rem,32px);min-width:max(2rem,32px);padding:0 11px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
+.standings-sort-btn{display:inline-flex;align-items:center;justify-content:center;gap:.4em;font-family:var(--font-display);font-size:max(12px,.72rem);font-weight:700;min-height:max(2rem,32px);min-width:max(2rem,32px);padding:0 11px;border:1px solid var(--border-control);border-radius:var(--radius);background:var(--bg-input);color:var(--text-secondary);cursor:pointer;transition:var(--transition);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;touch-action:manipulation}
 .standings-sort-btn:hover{background:var(--bg-hover);color:var(--text-primary)}
 .standings-sort-btn.active{background:var(--badge-gold-fg);color:var(--on-badge);border-color:var(--badge-gold-fg)}
 /* Light theme only — same dull-mustard problem and same fix as .standings-title just above:
@@ -2251,9 +2251,9 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    accent), a problem dark theme's vivid gold doesn't have. --on-badge (white) still clears 6.4:1
    against this teal, so it's reused as-is rather than needing its own override too. */
 [data-theme="light"] .standings-sort-btn.active{background:var(--txt-cyan);border-color:var(--txt-cyan)}
-.standings-table{width:100%;border-collapse:collapse;font-size:.86rem}
+.standings-table{width:100%;border-collapse:collapse;font-size:max(12px,.86rem)}
 .standings-table th,.standings-table td{padding:7px 8px;border-bottom:1px solid var(--border)}
-.standings-table thead th{color:var(--text-muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;text-align:left}
+.standings-table thead th{color:var(--text-muted);font-weight:600;font-size:max(12px,.7rem);text-transform:uppercase;letter-spacing:.04em;text-align:left}
 .standings-table thead th:last-child{text-align:right}
 .standings-table tbody tr:last-child td{border-bottom:none}
 .standings-row{cursor:pointer;transition:var(--transition)}
@@ -2282,7 +2282,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 
 /* SPECIAL WAGER SECTIONS */
 .special-section{background:var(--bg-card-alt);border:2px solid var(--accent-magenta);border-radius:var(--radius-lg);padding:12px;margin-bottom:8px;scroll-margin-top:calc(var(--header-h,80px) + var(--mini-progress-h,0px) + 12px)}
-.special-section h3{font-family:var(--font-display);font-size:.88rem;color:var(--txt-magenta);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+.special-section h3{font-family:var(--font-display);font-size:max(12px,.88rem);color:var(--txt-magenta);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
 .special-section.final-wager{border-color:var(--accent-orange)}
 .special-section.final-wager h3{color:var(--txt-orange)}
 .special-wager-row{display:flex;align-items:center;gap:.5rem;padding:var(--row-pad) 12px;border-bottom:1px solid var(--border);margin-left:-12px;margin-right:-12px;min-height:3.2rem}
@@ -2301,7 +2301,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .stepper button:hover{background:var(--bg-hover);color:var(--text-primary)}
 .stepper-val{width:2.2rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem}
 .sw-val{width:2.8rem;height:1.9rem;display:flex;align-items:center;justify-content:center;background:var(--bg-card);border-top:1px solid var(--border-light);border-bottom:1px solid var(--border-light);font-family:var(--font-display);font-weight:700;font-size:1rem;color:var(--text-primary)}
-.sw-val.unset{color:var(--text-muted);font-size:.85rem}
+.sw-val.unset{color:var(--text-muted);font-size:max(12px,.85rem)}
 /* Same fixed-width reasoning as .ta-pts above — see that comment. */
 .ta-pts,.bonus-pts{font-family:var(--font-display);font-size:1.18rem;font-weight:800;width:3.7rem;text-align:center;flex-shrink:0;padding:6px 10px;border-radius:8px;line-height:1.05;letter-spacing:.3px}
 .q-stat-correct,.pts-pos,.bonus-pts.pts-pos{color:var(--pts-pos-fg);background:var(--pts-pos-bg);border:1px solid var(--pts-pos-border)}
@@ -2315,13 +2315,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    text-align:center all along — left-aligned, the section read as two rows that had
    nothing to do with each other. Applies at every width: the same reasoning holds once
    the three wrap onto separate lines on a phone. */
-.export-group-title{margin:12px 0 0;text-align:center;font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted)}
+.export-group-title{margin:12px 0 0;text-align:center;font-family:var(--font-display);font-size:max(12px,.8rem);font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted)}
 .export-group-title+.export-bar{padding-top:6px}
 .winner-copy{display:flex;flex-direction:column;gap:6px;max-width:22rem;margin:0 auto 8px}
 .wc-btn{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:8px 10px}
-.wc-label{font-family:var(--font-display);font-weight:800;font-size:.75rem;text-transform:uppercase;letter-spacing:.3px;color:var(--accent-gold);min-width:4.6rem}
+.wc-label{font-family:var(--font-display);font-weight:800;font-size:max(12px,.75rem);text-transform:uppercase;letter-spacing:.3px;color:var(--accent-gold);min-width:4.6rem}
 .wc-name{flex:1;font-weight:600;word-break:break-word}
-.wc-copy{flex:none;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.3px;padding:2px 10px;border:1px solid var(--border);border-radius:var(--radius)}
+.wc-copy{flex:none;font-weight:700;font-size:max(12px,.8rem);text-transform:uppercase;letter-spacing:.3px;padding:2px 10px;border:1px solid var(--border);border-radius:var(--radius)}
 .wc-copy{display:inline-grid;text-align:center;white-space:nowrap}
 .wc-copy>span{grid-area:1/1}
 .wc-copy{transition:background-color .35s ease,color .35s ease,border-color .35s ease}
@@ -2335,7 +2335,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    short word. Reused verbatim by the Craft Prize sound-test bar (.cp-test-bar). font-size here
    sizes the glyph itself — .icon-ui is 1em, .icon-emoji inherits it. */
 .export-sq{flex-direction:column;gap:3px;width:4.6rem;height:4.6rem;padding:6px 4px;font-size:1.9rem;line-height:1}
-.export-sq .export-sq-label{font-family:var(--font-body);font-size:.62rem;font-weight:700;letter-spacing:.5px}
+.export-sq .export-sq-label{font-family:var(--font-body);font-size:max(12px,.62rem);font-weight:700;letter-spacing:.5px}
 .export-sq .icon-emoji{line-height:1}
 /* JD Form is a square icon-forward button like XLSX/PDF now — the big Guy Fawkes mask
    stacked over a "JD Upload / Form" label. Wider than the 4.6rem XLSX/PDF squares because its
@@ -2348,19 +2348,19 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .export-bar{display:grid;grid-template-columns:repeat(2,clamp(5.5rem,28vw,6rem));justify-content:center;gap:12px 16px}
 .export-bar .export-sq{width:100%;min-width:0;height:auto;aspect-ratio:1/1;justify-content:center;font-size:clamp(2.6rem,11vw,3rem)}
 .export-bar .export-sq:not(.jd-upload-btn){font-size:clamp(2.6rem,11vw,3rem)}
-.export-bar .export-sq .export-sq-label{font-size:.9rem;font-weight:800}
+.export-bar .export-sq .export-sq-label{font-size:max(12px,.9rem);font-weight:800}
 .export-bar .jd-upload-btn .icon-fawkes{width:1.2em;height:1.2em}
 .export-bar .photo-upload-btn .export-sq-label,.export-bar .jd-upload-btn .export-sq-label{white-space:normal;text-align:center;line-height:1.05}
-.export-bar .jd-upload-btn .export-sq-label{font-size:.78rem;letter-spacing:0;margin-top:-.1rem}
+.export-bar .jd-upload-btn .export-sq-label{font-size:max(12px,.78rem);letter-spacing:0;margin-top:-.1rem}
 }
 .export-prompt{display:none;background:var(--bg-card-alt);border:1px solid var(--accent-gold);border-radius:var(--radius);padding:10px;margin-top:8px}
 .export-prompt.show{display:block}
 .export-prompt-btns{display:flex;gap:16px;margin-top:10px}
 .export-prompt-btns .btn{flex:1;min-height:44px;font-size:1rem}
 .export-prompt-btns .btn.export-prompt-no{background:transparent;border:2px solid var(--accent-red);color:var(--txt-red);font-weight:700}
-.export-photo-hint{font-size:.78rem;margin:0 0 8px}
+.export-photo-hint{font-size:max(12px,.78rem);margin:0 0 8px}
 .export-photo-hint a{color:var(--accent-gold);text-decoration:underline}
-.export-prompt p{margin-bottom:6px;color:var(--badge-gold-fg);font-weight:600;font-size:.85rem}
+.export-prompt p{margin-bottom:6px;color:var(--badge-gold-fg);font-weight:600;font-size:max(12px,.85rem)}
 #fileLoadInput,#prefsLoadInput,#importLoadInput{display:none}
 
 
@@ -2422,11 +2422,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .sw-select:focus{background:var(--bg-hover);outline:2px solid var(--accent-cyan-solid);outline-offset:1px}
 
 /* BONUS submitted / zero-correct state (R1 & R3) */
-.stepper-val.unset{color:var(--text-muted);font-size:.85rem}
+.stepper-val.unset{color:var(--text-muted);font-size:max(12px,.85rem)}
 .bonus-pts.submitted-zero{color:var(--pts-neg-fg);background:var(--pts-neg-bg);border:1px solid var(--pts-neg-border);font-size:1.05rem;font-weight:800}
-.bonus-zero{font-family:var(--font-display);font-size:.72rem;font-weight:700;padding:0 8px;height:1.9rem;border:1px solid var(--accent-green);border-radius:6px;background:color-mix(in srgb,var(--accent-green) 8%,transparent);color:var(--badge-green-fg);cursor:pointer;transition:var(--transition);white-space:nowrap;flex-shrink:0;touch-action:manipulation}
+.bonus-zero{font-family:var(--font-display);font-size:max(12px,.72rem);font-weight:700;padding:0 8px;height:1.9rem;border:1px solid var(--accent-green);border-radius:6px;background:color-mix(in srgb,var(--accent-green) 8%,transparent);color:var(--badge-green-fg);cursor:pointer;transition:var(--transition);white-space:nowrap;flex-shrink:0;touch-action:manipulation}
 .bonus-zero:hover{background:color-mix(in srgb,var(--accent-green) 18%,transparent)}
-.bonus-clear{width:1.9rem;height:1.9rem;border:1px solid var(--border-control);border-radius:6px;background:var(--bg-input);color:var(--text-muted);cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;touch-action:manipulation}
+.bonus-clear{width:1.9rem;height:1.9rem;border:1px solid var(--border-control);border-radius:6px;background:var(--bg-input);color:var(--text-muted);cursor:pointer;font-size:max(12px,.95rem);display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;touch-action:manipulation}
 .bonus-clear:hover{background:color-mix(in srgb,var(--accent-red) 12%,transparent);color:var(--txt-red);border-color:var(--accent-red)}
 
 /* BONUS ONE-CLICK CHOICE (R1 & R3) — one tap sets 0-4 correct, tap again to unselect */
@@ -2482,7 +2482,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .sr-name-clickable{cursor:pointer}
 .sr-name-clickable:hover{color:var(--badge-gold-fg)}
 .score-row.cb-prize{border:1px solid var(--badge-gold-fg);border-radius:8px;background:color-mix(in srgb,var(--accent-gold) 8%,transparent);margin-left:0;margin-right:0}
-.cb-tag{font-family:var(--font-body);font-size:.58rem;font-weight:700;color:var(--badge-gold-fg);background:color-mix(in srgb,var(--accent-gold) 14%,transparent);border:1px solid var(--badge-gold-fg);border-radius:4px;padding:1px 5px;margin-left:5px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle}
+.cb-tag{font-family:var(--font-body);font-size:max(12px,.58rem);font-weight:700;color:var(--badge-gold-fg);background:color-mix(in srgb,var(--accent-gold) 14%,transparent);border:1px solid var(--badge-gold-fg);border-radius:4px;padding:1px 5px;margin-left:5px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;vertical-align:middle}
 /* .cb-tag can sit on a team row that is ALSO gold-tinted (.score-row.cb-prize), compounding
    the tint darker than badge-gold-fg was tuned for — bump brightness for that one case. */
 [data-theme="dark"][data-cb="2"] .score-row.cb-prize .cb-tag{color:#ffb3ff}
@@ -2501,24 +2501,24 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    takes for the same job one section down. */
 #sec-craftprize .section-body>:first-child{margin-top:10px}
 .cp-field{display:flex;flex-direction:column;align-items:center;gap:5px}
-.cp-field-label{font-size:.8rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;text-align:center}
+.cp-field-label{font-size:max(12px,.8rem);color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.3px;text-align:center}
 .cp-field .stepper input.sw-input{width:3.6rem;font-size:1.75rem;line-height:1;font-weight:700;font-variant-numeric:tabular-nums}
 /* v21.25: the Craft Prize Drumroll (sec) / Exclude Top +/- buttons were small and short; now roomier tap targets. */
 .cp-field .stepper button{width:2.6rem;height:2.6rem;font-size:1.3rem}
 .cp-field .stepper input.sw-input{height:2.6rem;min-height:0;box-sizing:border-box;padding-top:0;padding-bottom:0}
 .cp-field .stepper button{min-height:0;box-sizing:border-box}
-.cp-status{font-size:.72rem;color:var(--text-muted);margin-bottom:2px}
+.cp-status{font-size:max(12px,.72rem);color:var(--text-muted);margin-bottom:2px}
 .cp-excluded{margin:8px 0;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-input)}
-.cp-excluded-title{font-size:.8rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px}
+.cp-excluded-title{font-size:max(12px,.8rem);font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.3px;margin-bottom:4px}
 .cp-excluded-list{list-style:none;margin:0;padding:0}
 .cp-excluded-list li{display:flex;align-items:baseline;gap:8px;padding:3px 0;font-size:1rem;color:var(--text-primary,inherit)}
 .cp-excluded-rank{font-family:var(--font-display);font-weight:800;min-width:2.2rem;color:var(--accent-gold)}
 .cp-excluded-name{font-weight:600;word-break:break-word}
 [data-theme="light"] .cp-excluded-rank{color:var(--tint-theme-2)}
-.cp-note{font-size:.66rem;color:var(--text-muted);margin-bottom:8px;font-style:italic}
+.cp-note{font-size:max(12px,.66rem);color:var(--text-muted);margin-bottom:8px;font-style:italic}
 .cp-draw-btn{width:100%}
 .cp-draw-btn:disabled{opacity:.5;cursor:not-allowed}
-.cp-intro{font-size:.78rem;color:var(--text-secondary);margin-bottom:6px;font-style:italic}
+.cp-intro{font-size:max(12px,.78rem);color:var(--text-secondary);margin-bottom:6px;font-style:italic}
 .cp-flash{font-family:var(--font-display);font-size:1.3rem;font-weight:800;text-align:center;padding:14px 8px;color:var(--badge-gold-fg);background:color-mix(in srgb,var(--accent-gold) 8%,transparent);border:2px dashed var(--accent-gold);border-radius:var(--radius);animation:cpPulse .22s ease-in-out infinite alternate}
 @keyframes cpPulse{from{opacity:.75;transform:scale(.99)}to{opacity:1;transform:scale(1.01)}}
 /* Drumroll countdown — lets the host glance at exactly how far into the drumroll they are
@@ -2555,20 +2555,20 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .cp-btn-row .cp-wide-btn{flex-direction:column;gap:2px;width:5.5rem;height:5.5rem;min-height:0;padding:6px 4px}
 .cp-wide-btn .icon-ui{width:2.4rem;height:2.4rem}
 .cp-wide-btn .icon-emoji{font-size:2.1rem}
-.cp-wide-label{font-size:.8rem;text-align:center}
+.cp-wide-label{font-size:max(12px,.8rem);text-align:center}
 }
 .cp-preview-btn{opacity:.35;cursor:not-allowed}
 /* Trophy+name+"won!" are one flowing text span (not separate flex items) so a long team name
    wraps onto a second line on its own, with "won!" following right after it — the Clear
    button is the only other flex item, so it stays put on the first line instead of also
    wrapping to its own row. */
-.cp-winner{font-size:.9rem;margin:8px 0 6px;color:var(--text-primary);display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.cp-winner{font-size:max(12px,.9rem);margin:8px 0 6px;color:var(--text-primary);display:flex;align-items:center;flex-wrap:wrap;gap:10px}
 /* flex:0 1 auto (not flex:1): the text takes only its own natural width so the Clear button
    sits right next to "won!" instead of being pushed out to the far right edge of the card at
    every viewport width. flex-wrap on .cp-winner above still lets the button drop to its own
    line if a long team name eats the whole row's width, so it never ends up stranded. */
 .cp-winner-text{flex:0 1 auto;min-width:0}
-.cp-horn-btn,.cp-clear-btn{font-size:.9rem;line-height:1;padding:5px 9px;border-radius:var(--radius);flex-shrink:0}
+.cp-horn-btn,.cp-clear-btn{font-size:max(12px,.9rem);line-height:1;padding:5px 9px;border-radius:var(--radius);flex-shrink:0}
 /* "Clear" label text is desktop-only (icon-only "✕" on mobile keeps the button compact there);
    the closer positioning above, though, applies everywhere. */
 .cp-clear-label{display:none}
@@ -2586,8 +2586,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .cp-test-bar{display:flex;flex-direction:column;align-items:center;gap:6px;margin:6px 0;padding:8px;background:color-mix(in srgb,var(--text-primary) 3%,transparent);border-radius:var(--radius);border:1px solid var(--border)}
 .cp-test-bar .cp-field-label{margin-right:0}
 .cp-test-bar-btns{display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
-.cp-script-label{display:block;font-size:.66rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
-.cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.85rem;line-height:1.4;resize:vertical}
+.cp-script-label{display:block;font-size:max(12px,.66rem);font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.cp-script{width:100%;min-height:5.5rem;padding:8px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:max(12px,.85rem);line-height:1.4;resize:vertical}
 
 /* TEAM REPORT MODAL (formerly "Score Audit") */
 /* Bottom padding includes the safe-area inset so the scrollable content at the very bottom
@@ -2617,7 +2617,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .confirm-overlay{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.72);align-items:center;justify-content:center;padding:20px}
 .confirm-overlay.show{display:flex}
 .confirm-modal{background:var(--bg-card);border:1px solid var(--border-light);border-radius:var(--radius-lg);width:100%;max-width:22rem;box-shadow:var(--shadow);padding:20px;animation:auditPop .18s ease-out}
-.confirm-message{font-family:var(--font-body);font-size:.9rem;line-height:1.5;color:var(--text-primary);white-space:pre-line;margin:0 0 16px}
+.confirm-message{font-family:var(--font-body);font-size:max(12px,.9rem);line-height:1.5;color:var(--text-primary);white-space:pre-line;margin:0 0 16px}
 .confirm-actions{display:flex;justify-content:flex-end;gap:8px}
 .import-modal{max-width:26rem;max-height:90vh;overflow:auto}
 .import-title{font-weight:700;margin-bottom:10px}
@@ -2626,10 +2626,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .import-row{display:flex;align-items:flex-start;gap:10px}
 .import-text{display:flex;flex-direction:column;min-width:0}
 .import-name{font-weight:600}
-.import-val{font-size:.8rem;color:var(--text-secondary);overflow-wrap:anywhere}
+.import-val{font-size:max(12px,.8rem);color:var(--text-secondary);overflow-wrap:anywhere}
 .import-row input:disabled+.import-text{opacity:1}
 .import-row input:disabled+.import-text .import-val{font-style:italic}
-.import-warn{font-size:.8rem;line-height:1.4;color:var(--text-primary);margin:0 0 14px}
+.import-warn{font-size:max(12px,.8rem);line-height:1.4;color:var(--text-primary);margin:0 0 14px}
 #importOkBtn:disabled{opacity:.5;cursor:not-allowed}
 /* alert() has nothing to cancel — appAlert hides Cancel outright rather than leaving a button
    that would just do the same thing OK does. */
@@ -2662,10 +2662,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .aud-edit-btn .icon-ui{width:1rem;height:1rem}
 .team-sort-row{display:inline-flex;gap:6px;margin:0 0 0 auto;flex-shrink:0;cursor:default}
 #sec-teams>.section-header{position:sticky;top:var(--qbar-top);z-index:50;border-bottom:1px solid var(--border-strong);padding-block:8px}
-.audit-head .aud-eyebrow{display:block;font-family:var(--font-body);font-size:.74rem;color:var(--text-secondary);text-transform:none;letter-spacing:0;font-weight:500;margin-bottom:3px}
+.audit-head .aud-eyebrow{display:block;font-family:var(--font-body);font-size:max(12px,.74rem);color:var(--text-secondary);text-transform:none;letter-spacing:0;font-weight:500;margin-bottom:3px}
 .aud-name-row{flex-wrap:wrap}
 .aud-name-row .paused-pill{margin-left:0}
-.audit-head .aud-sub{display:flex;flex-wrap:wrap;align-items:center;gap:2px 0;font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:5px}
+.audit-head .aud-sub{display:flex;flex-wrap:wrap;align-items:center;gap:2px 0;font-family:var(--font-body);font-size:max(12px,.72rem);color:var(--text-muted);text-transform:none;letter-spacing:0;font-weight:400;margin-top:5px}
 .aud-rank{color:var(--txt-cyan);font-weight:700}
 .aud-rank-of{color:var(--text-muted);font-weight:400}
 .aud-dot{margin:0 .6em;font-weight:700}
@@ -2679,7 +2679,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* Border/icon red (same --accent-red/--txt-red pair as .remove-team button) now that it's just
    an X with no "Close" text next to it to carry the "this dismisses something" signal on its
    own — red reads as that affordance the way a plain neutral-gray X didn't as clearly. */
-.audit-close{font-family:var(--font-body);font-size:.85rem;border:1px solid var(--accent-red);background:var(--bg-input);color:var(--txt-red);border-radius:50%;width:2.1rem;height:2.1rem;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
+.audit-close{font-family:var(--font-body);font-size:max(12px,.85rem);border:1px solid var(--accent-red);background:var(--bg-input);color:var(--txt-red);border-radius:50%;width:2.1rem;height:2.1rem;padding:0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:700;flex-shrink:0;white-space:nowrap}
 .audit-close:hover{background:color-mix(in srgb,var(--accent-red) 15%,transparent)}
 .audit-body{padding:12px 14px 18px}
 /* Mobile default: the two columns' markup is just two sequential <div>s (no grid), so column 1
@@ -2692,17 +2692,17 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    stretched through the middle of it. One column reads as a single chronological run of rounds
    and lets the modal be as narrow as its widest row. */
 .aud-round{margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.aud-round-h{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-card-alt);font-family:var(--font-display);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.aud-line{display:flex;align-items:center;gap:8px;padding:6px 12px;border-top:1px solid var(--border);font-size:.85rem}
+.aud-round-h{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--bg-card-alt);font-family:var(--font-display);font-size:max(12px,.8rem);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.aud-line{display:flex;align-items:center;gap:8px;padding:6px 12px;border-top:1px solid var(--border);font-size:max(12px,.85rem)}
 .aud-line:nth-child(even){background:var(--row-stripe)}
 .aud-q{font-family:var(--font-display);font-weight:700;width:2.3rem;flex-shrink:0;color:var(--text-secondary)}
-.aud-wager{color:var(--text-secondary);font-size:.78rem;width:5.2rem;flex-shrink:0}
+.aud-wager{color:var(--text-secondary);font-size:max(12px,.78rem);width:5.2rem;flex-shrink:0}
 /* nowrap: "correct" / "incorrect" / "4 of 4 correct" is one atomic result, and breaking it
    across two lines made a round's rows different heights and the column ragged. The room to keep
    it on one line comes from .aud-columns collapsing to a single column once the font is large
    enough that two won't fit (see the container query below); this just makes sure the text never
    breaks in the meantime. */
-.aud-res{flex:1;font-size:.8rem;font-weight:600;min-width:0;white-space:nowrap}
+.aud-res{flex:1;font-size:max(12px,.8rem);font-weight:600;min-width:0;white-space:nowrap}
 /* The wager cell is the one fixed-width thing here that can afford to give: it holds at most
    "wager 12". Letting it shrink below its 5.2rem when the row is tight buys .aud-res the space
    it needs before anything has to overflow. */
@@ -2721,13 +2721,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    every question line above them, making a round's per-question scores and the totals they add up
    to one continuous right-hand column. Grand Total below stays centered — it's a full-width band
    of its own with no column above it to line up with. */
-.aud-subline{display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:7px 12px;border-top:1px solid var(--border-light);background:var(--bg-input);font-size:.78rem;font-weight:700}
+.aud-subline{display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:7px 12px;border-top:1px solid var(--border-light);background:var(--bg-input);font-size:max(12px,.78rem);font-weight:700}
 /* Each label/value pair on its own line, held together by a fixed gap rather than pushed to
    opposite edges — that gap is what keeps them reading as one pair instead of two unrelated ends
    of a bar. */
 .aud-subline .asl-row{display:flex;align-items:center;gap:10px}
 .aud-subline .lbl{color:var(--text-secondary);text-transform:uppercase;letter-spacing:.5px}
-.aud-subline .run{font-family:var(--font-display);color:var(--txt-cyan);font-size:.95rem}
+.aud-subline .run{font-family:var(--font-display);color:var(--txt-cyan);font-size:max(12px,.95rem)}
 .aud-subline .sub{font-family:var(--font-display);color:var(--text-primary)}
 /* justify-content:center (not the old space-between) + a fixed gap: space-between pushed the
    label to the box's left edge and the score to its right edge, however wide the audit panel
@@ -2780,11 +2780,11 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .aud-grid-4{grid-template-columns:repeat(4,auto);justify-content:center}
   .aud-grid-4 .aud-cell{padding-left:26px;padding-right:26px}
 }
-.aud-stat-n,.aud-cell .aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:.95rem}
-.aud-stat-pct,.aud-cell .aud-stat-pct{font-family:var(--font-body);font-size:.72rem;color:var(--text-muted);font-weight:600}
+.aud-stat-n,.aud-cell .aud-stat-n{font-family:var(--font-display);font-weight:700;font-size:max(12px,.95rem)}
+.aud-stat-pct,.aud-cell .aud-stat-pct{font-family:var(--font-body);font-size:max(12px,.72rem);color:var(--text-muted);font-weight:600}
 .aud-cell.aud-stat-correct .aud-stat-n{color:var(--badge-green-fg)}
 .aud-cell.aud-stat-wrong .aud-stat-n{color:var(--txt-red)}
-.aud-note{font-size:.72rem;color:var(--text-muted);margin-top:10px;line-height:1.4}
+.aud-note{font-size:max(12px,.72rem);color:var(--text-muted);margin-top:10px;line-height:1.4}
 
 /* ── Scoring rows reflow based on the CONTENT COLUMN's own width, not the
       viewport. This catches narrow desktop windows (≈500px) where the sidebar
@@ -2795,7 +2795,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   /* The name is only as wide as its text (it used to span the whole row, so the empty space above
      the right-aligned wager buttons opened the Team Report too). A zero-height 100%-wide spacer item
      forces the controls onto the next line exactly as before; its negative top margin cancels the extra row-gap. */
-  .ta-name{flex:0 1 auto;width:auto;max-width:100%;order:1;min-width:0;overflow-wrap:break-word;font-size:.82rem;padding-left:2px;padding-right:0;line-height:1.3}
+  .ta-name{flex:0 1 auto;width:auto;max-width:100%;order:1;min-width:0;overflow-wrap:break-word;font-size:max(12px,.82rem);padding-left:2px;padding-right:0;line-height:1.3}
   .team-answer::before,.bonus-row::before,.special-wager-row::before{content:"";flex:0 0 100%;height:0;margin-top:-.35rem;order:2}
   .team-answer>:not(.ta-name),.bonus-row>:not(.ta-name),.special-wager-row>:not(.ta-name){order:3}
   .ta-name-clickable::after{display:none}
@@ -2808,9 +2808,9 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
      at this narrower size (screenshot, not box math; see that rule's own comment) rather than
      assumed to scale evenly from the wide-desktop value, since it doesn't. */
   /* Rivals place tiles keep their own size (the clamp above would squash them to a 2rem square). */
-  .place-btn{width:clamp(3rem,15cqw,3.6rem);min-width:0;height:calc(var(--wager-size) * 1.1);min-height:0;font-size:.95rem}
+  .place-btn{width:clamp(3rem,15cqw,3.6rem);min-width:0;height:calc(var(--wager-size) * 1.1);min-height:0;font-size:max(12px,.95rem)}
   .result-btn>.icon-emoji{margin-top:-.13em}
-  .bonus-choice-btn{width:clamp(1.7rem,7.5cqw,2.2rem);height:clamp(1.7rem,7.5cqw,2.2rem);font-size:.92rem}
+  .bonus-choice-btn{width:clamp(1.7rem,7.5cqw,2.2rem);height:clamp(1.7rem,7.5cqw,2.2rem);font-size:max(12px,.92rem)}
 
   /* score pill — width (not min-width), same reasoning as the base rule: a floor sized to the
      real scored values let the "—" placeholder render wider than them, shifting the buttons
@@ -2824,7 +2824,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .stepper-val{width:clamp(1.8rem,8cqw,2.2rem);min-width:0}
 
   /* R2/R4 wager dropdown */
-  .sw-select{width:clamp(3.4rem,15cqw,4.4rem);min-width:0;font-size:clamp(.82rem,3.6cqw,1rem)}
+  .sw-select{width:clamp(3.4rem,15cqw,4.4rem);min-width:0;font-size:clamp(max(12px,.82rem),3.6cqw,1rem)}
 
   /* team-setup grid */
   /* v21.35: Date + Quiz ID share one row (both are short fields); everything else stays full width. */
@@ -2838,7 +2838,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .meta-grid .date-native{position:absolute;inset:0;width:100%;height:100%;min-width:0;max-width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none}
   .team-entry{grid-template-columns:1fr 4.3rem auto;gap:5px}
   .team-entry.has-adj{grid-template-columns:1fr 4.3rem auto auto}
-  .check-label{font-size:.72rem;padding:5px 8px;gap:5px}
+  .check-label{font-size:max(12px,.72rem);padding:5px 8px;gap:5px}
   .check-box{width:20px;height:20px}
 
   /* Q1-4 / Q5 Bonus / Q5 Wager headers: title + badge + two Sort/Reset buttons don't fit on
@@ -2856,7 +2856,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .q-header-left,.sw-header-left{min-width:0}
   /* v21.38: A-Z/Z-A pictograph 2.7em (was 1.7em) so it reads clearly in the ~41px button. */
   .q-alpha-btn .icon-ui{width:2.7em;height:2.7em}
-  .q-badge,.round-badge{font-size:.8rem}
+  .q-badge,.round-badge{font-size:max(12px,.8rem)}
   /* Sort/Reset drop their text label and shrink to icon-only squares here so the correct/
      incorrect stat pills (which carry the count+% the host actually needs) always have room
      to sit on the same row instead of wrapping to a line of their own. The aria-label/title
@@ -2865,12 +2865,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   /* Icon is the button's whole visible content now that its label is hidden, so it gets its
      own larger font-size (not the .78rem sized for the old icon+text pairing) to actually
      read at a glance instead of looking lost in the middle of a same-sized tap target. */
+  /* This size only scales the A-Z picture (the label is hidden here), so it has no 12px floor. */
   .q-alpha-btn{width:auto;min-width:clamp(2.3rem,9.5cqw,2.7rem);height:clamp(2.3rem,9.5cqw,2.7rem);padding:0 6px;font-size:.7rem}
   .q-sort-btn,.q-reset-btn{font-size:1.1rem;line-height:1;padding:0;width:clamp(2.3rem,9.5cqw,2.7rem);height:clamp(2.3rem,9.5cqw,2.7rem);display:inline-flex;align-items:center;justify-content:center}
   /* height matches .q-sort-btn/.q-reset-btn's own (now smaller) clamp exactly, same reasoning
      as the desktop rule above — width isn't matched (unlike the buttons) since the pill's text
      content needs to stay readable rather than being squeezed into a square. */
-  .q-stat{font-size:.7rem;height:clamp(2.3rem,9.5cqw,2.7rem);padding:0 6px}
+  .q-stat{font-size:max(12px,.7rem);height:clamp(2.3rem,9.5cqw,2.7rem);padding:0 6px}
 }
 
 @media(max-width:480px){
@@ -2879,8 +2880,10 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .standings-pts{min-width:clamp(2rem,9vw,2.5rem)}
 
   /* ── team report modal rows (body-level overlay) ── */
-  .aud-wager{width:4.2rem;font-size:.72rem;min-width:0}
-  .aud-res{font-size:.74rem;min-width:0}
+  .aud-wager{width:4.2rem;font-size:max(12px,.72rem);min-width:0}
+  .aud-res{font-size:max(12px,.74rem);min-width:0}
+  /* A tighter gap, so "4 of 4 correct" at the 12px floor still fits a 320px phone. */
+  .aud-line{gap:6px}
   .aud-q{min-width:0;width:2rem}
   .aud-p{min-width:clamp(2rem,8vw,2.8rem)}
 
@@ -2890,13 +2893,13 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .logo{font-size:1.1rem;letter-spacing:1px}
 
   /* ── sort buttons (sidebar) ── */
-  .sort-btn{font-size:.74rem;padding:7px 2px}
+  .sort-btn{font-size:max(12px,.74rem);padding:7px 2px}
 }
 
 /* Final results table */
-.final-table{width:100%;border-collapse:collapse;font-size:.86rem;margin-top:4px}
+.final-table{width:100%;border-collapse:collapse;font-size:max(12px,.86rem);margin-top:4px}
 .final-table th,.final-table td{padding:7px 8px;border-bottom:1px solid var(--border);text-align:center}
-.final-table thead th{color:var(--text-muted);font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.04em}
+.final-table thead th{color:var(--text-muted);font-weight:600;font-size:max(12px,.7rem);text-transform:uppercase;letter-spacing:.04em}
 .final-table td.fr-name{text-align:left;color:var(--text-primary)}
 .final-table td.fr-place{color:var(--text-secondary);font-weight:700;white-space:nowrap}
 .final-table td.fr-score{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:var(--txt-cyan)}
@@ -2933,7 +2936,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    color" trick as .qtimer-btn.qtimer-pause above, for the same reason: a gold pill was
    disappearing into a same-hued background behind it (there, the warning pulse; here, a tied
    row's own yellow, and worse still on a #1-place row now that .fr-gold sits under it too). */
-.fr-tiebadge{display:inline-block;font-size:.74rem;padding:2px 9px;border-radius:999px;background:var(--badge-gold-fg);color:var(--on-badge);border:2px solid var(--bg-card);margin-left:6px;vertical-align:middle;font-weight:700}
+.fr-tiebadge{display:inline-block;font-size:max(12px,.74rem);padding:2px 9px;border-radius:999px;background:var(--badge-gold-fg);color:var(--on-badge);border:2px solid var(--bg-card);margin-left:6px;vertical-align:middle;font-weight:700}
 /* Same pause-button match as the row background above, applied to the plain "tie" chip too.
    Declared BEFORE .fr-win below (same specificity, so source order decides) — the "closer"
    .fr-win variant must still win and stay green, a different signal from "the current yellow". */
@@ -2947,7 +2950,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    own [data-cb] overrides) instead of inventing a new color. */
 [data-theme="light"] .fr-tiebadge.fr-win{background:var(--pts-pos-bg);color:var(--pts-pos-fg)}
 .fr-diff-win{color:var(--badge-green-fg)!important;font-weight:800!important}
-.fr-note{font-size:.72rem;color:var(--text-muted);margin-top:9px;line-height:1.45}
+.fr-note{font-size:max(12px,.72rem);color:var(--text-muted);margin-top:9px;line-height:1.45}
 /* Event Details' "Locked once scoring starts" note (see metaLocked in app.js) is now always
    rendered, not conditionally included — same fix, same reasoning, as .mini-progress.mp-pending
    above: omitting it outright until the first score landed meant Teams/Round 1/everything below
@@ -2965,7 +2968,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* Collapsed by default so the tie-break/Diff explanation doesn't eat vertical space every time
    Final Results is open — <details>/<summary> gets keyboard support and toggling for free. */
 .fr-details{margin-top:9px}
-.fr-details summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;font-size:.72rem;font-weight:700;color:var(--text-muted);padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition)}
+.fr-details summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;font-size:max(12px,.72rem);font-weight:700;color:var(--text-muted);padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius);transition:var(--transition)}
 .fr-details summary::-webkit-details-marker{display:none}
 .fr-details summary:hover{background:var(--bg-hover);color:var(--text-primary)}
 .fr-details[open] summary{margin-bottom:6px}
@@ -3047,7 +3050,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
      each one prefixed with its own mini-label (via ::before) so the number reads on its own
      without needing to look back up at a header. */
   .final-table td.fr-place{grid-column:1;grid-row:1;font-size:1rem}
-  .final-table td.fr-name {grid-column:2;grid-row:1;font-size:.95rem;white-space:normal;overflow-wrap:break-word;line-height:1.25}
+  .final-table td.fr-name {grid-column:2;grid-row:1;font-size:max(12px,.95rem);white-space:normal;overflow-wrap:break-word;line-height:1.25}
   .final-table td.fr-score{grid-column:3;grid-row:1;text-align:right;font-size:1.1rem}
   /* Negative margin pulls Guess in against the grid's column-gap (which row 1's Team/Score
      still needs) so the G/D pair reads as one close-together unit instead of two numbers
@@ -3055,8 +3058,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
      (not the td's own border) so it sits right next to "D", not at the fixed column's left
      edge — a border on the td would leave a gap that grows or shrinks with the diff value's
      own digit count, since the td is wider than short values like "+4" need. */
-  .final-table td.fr-guess{grid-column:2/3;grid-row:2;text-align:right;white-space:nowrap;font-size:.78rem;color:var(--text-secondary);padding-right:4px;margin-right:-10px}
-  .final-table td.fr-diff{grid-column:3/4;grid-row:2;text-align:right;white-space:nowrap;font-size:.78rem;color:var(--text-secondary)}
+  .final-table td.fr-guess{grid-column:2/3;grid-row:2;text-align:right;white-space:nowrap;font-size:max(12px,.78rem);color:var(--text-secondary);padding-right:4px;margin-right:-10px}
+  .final-table td.fr-diff{grid-column:3/4;grid-row:2;text-align:right;white-space:nowrap;font-size:max(12px,.78rem);color:var(--text-secondary)}
   .final-table td.fr-guess::before,.final-table td.fr-diff::before{color:var(--text-muted);font-weight:700}
   .final-table td.fr-guess::before{content:"G "}
   .final-table td.fr-diff::before{content:"D ";border-left:1px solid var(--border);padding-left:4px;margin-left:2px}
@@ -3070,8 +3073,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    shrink:0 with a fixed touch-size so it stays put as text changes. */
 .banter{display:flex;align-items:flex-start;gap:8px;background:var(--bg-card-alt);border:1px solid var(--border);border-left:3px solid var(--accent-magenta);border-radius:var(--radius);padding:8px 10px;margin-bottom:8px}
 .banter-main{flex:1;min-width:0}
-.banter-text{font-size:.9rem;line-height:1.35;color:var(--text-primary);min-height:3.6rem;display:flex;align-items:center}
-.banter-sm .banter-text{min-height:2.45rem;font-size:.85rem}
+.banter-text{font-size:max(12px,.9rem);line-height:1.35;color:var(--text-primary);min-height:3.6rem;display:flex;align-items:center}
+.banter-sm .banter-text{min-height:2.45rem;font-size:max(12px,.85rem)}
 .banter-refresh{flex-shrink:0;width:2.6rem;height:2.6rem;min-width:2.6rem;border:1px solid var(--border-control);border-radius:8px;background:var(--bg-input);color:var(--txt-cyan);font-size:1.2rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation;transition:var(--transition)}
 .banter-refresh:hover{background:var(--bg-hover);border-color:var(--accent-cyan)}
 .banter-refresh:active{transform:scale(.94)}
@@ -3091,23 +3094,23 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .staff-thanks-names{color:var(--txt-orange);font-weight:700}
 .staff-thanks-missing{color:var(--text-muted)}
 .staff-thanks-edit{display:block}
-.banter-cat,.staff-thanks-edit-label{display:block;font-family:var(--font-display);font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:3px}
+.banter-cat,.staff-thanks-edit-label{display:block;font-family:var(--font-display);font-size:max(12px,.6rem);font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:3px}
 
 /* round header: wagers label forced onto its own row (h2 is flex-wrap) */
 /* round header: forced line break, then wager label sized to its text (not full width) */
 .round-break{flex-basis:100%;height:0}
-.round-wager-label{font-size:.82rem;padding:3px 10px;margin-top:5px}
+.round-wager-label{font-size:max(12px,.82rem);padding:3px 10px;margin-top:5px}
 
 /* session-info: restaurant staff free-text box */
-.meta-textarea{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:.9rem;line-height:1.35;outline:none;resize:vertical;min-height:2.6rem;transition:var(--transition)}
+.meta-textarea{width:100%;padding:7px 10px;background:var(--bg-input);border:1px solid var(--border-control);border-radius:var(--radius);color:var(--text-primary);font-family:var(--font-body);font-size:max(12px,.9rem);line-height:1.35;outline:none;resize:vertical;min-height:2.6rem;transition:var(--transition)}
 .meta-textarea:focus{border-color:var(--accent-cyan);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-cyan) 13%,transparent)}
 
 /* settings: version label + Claude disclaimer */
 .settings-meta{display:flex;flex-direction:column;gap:2px;grid-column:1/-1;margin-top:4px}
-.settings-version{font-family:var(--font-display);font-size:.66rem;font-weight:600;color:var(--text-muted);letter-spacing:.5px}
-.settings-disclaimer{font-size:.62rem;line-height:1.3;color:var(--text-muted)}
+.settings-version{font-family:var(--font-display);font-size:max(12px,.66rem);font-weight:600;color:var(--text-muted);letter-spacing:.5px}
+.settings-disclaimer{font-size:max(12px,.62rem);line-height:1.3;color:var(--text-muted)}
 
-.settings-about{font-size:.66rem;color:var(--text-muted)}
+.settings-about{font-size:max(12px,.66rem);color:var(--text-muted)}
 .settings-about summary{cursor:pointer;font-weight:600;letter-spacing:.5px}
 .settings-about .about-older{margin-top:2px}
 .settings-about .about-older summary{font-weight:500;letter-spacing:0}
@@ -3145,8 +3148,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   .settings-toggle-btn{min-height:44px;min-width:44px}
   .settings-toggle-btn .icon-ui{width:1.9em;height:1.9em}
   .settings-toggle-btn .icon-emoji{transform:scale(1.9)}
-  .theme-select{font-size:.85rem;padding-right:28px}
-  .cv-select-btn{font-size:.85rem}
+  .theme-select{font-size:max(12px,.85rem);padding-right:28px}
+  .cv-select-btn{font-size:max(12px,.85rem)}
   .cv-select-menu li{min-height:44px;align-items:flex-start;justify-content:center}
   .mobile-scores-peek,.mini-progress,.settings-about summary,.sidebar-header,.section-header,.q-header{min-height:44px}
   .settings-about summary,.settings-footer a,a.footer-link{display:inline-flex;align-items:center;min-height:44px}
@@ -3179,7 +3182,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    Dimming is --text-muted (AA-audited), not opacity. */
 .standings-table tr.row-paused td,.final-table tbody tr.row-paused td,.row-paused td .ta-name-clickable{color:var(--text-muted)}
 .row-paused .fr-score,.row-paused .standings-pts{font-weight:600}
-.paused-pill{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:1px 7px;border:1px solid var(--border-strong);border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary);background:var(--bg-input);vertical-align:middle;white-space:nowrap}
+.paused-pill{display:inline-flex;align-items:center;gap:4px;margin-left:6px;padding:1px 7px;border:1px solid var(--border-strong);border-radius:999px;font-size:max(12px,.68rem);font-weight:700;letter-spacing:.3px;text-transform:uppercase;color:var(--text-secondary);background:var(--bg-input);vertical-align:middle;white-space:nowrap}
 .paused-pill .icon-ui{width:.8rem;height:.8rem}
 
 /* PHONE SCORES SHEET: the slide-up ranking reaches up to just under the page header (was 75% of the
@@ -3187,7 +3190,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 @media(max-width:768px){
   /* Short sort buttons (32px, was 48px) so more team rows fit in the sheet without scrolling. */
   .sort-controls{padding:4px 10px}
-  .sort-btn{font-size:.9rem;padding:4px 4px;min-height:32px}
+  .sort-btn{font-size:max(12px,.9rem);padding:4px 4px;min-height:32px}
   @media (pointer:coarse),(max-width:1024px){.sort-btn{min-height:32px}}
   .sort-btn .icon-ui{width:1.2em;height:1.2em}
   .sort-btn .icon-emoji{transform:scale(1.2)}
@@ -3211,15 +3214,15 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .ht-modal-wide{max-width:46rem}
 .ht-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
 .ht-head h2{font-size:1.05rem}
-.ht-keys{width:100%;border-collapse:collapse;font-size:.85rem}
+.ht-keys{width:100%;border-collapse:collapse;font-size:max(12px,.85rem)}
 .ht-keys th,.ht-keys td{padding:6px 4px;text-align:left;border-bottom:1px solid var(--border-light)}
 .ht-keys th{width:6.5rem;white-space:nowrap}
-.ht-keys kbd{font-family:var(--font-body);font-weight:700;font-size:.78rem;padding:2px 7px;border:1px solid var(--border-control);border-radius:4px;background:var(--bg-input);color:var(--text-primary)}
+.ht-keys kbd{font-family:var(--font-body);font-weight:700;font-size:max(12px,.78rem);padding:2px 7px;border:1px solid var(--border-control);border-radius:4px;background:var(--bg-input);color:var(--text-primary)}
 .ht-canvas{display:block;width:100%;height:auto;border-radius:var(--radius);border:1px solid var(--border-light)}
 .ht-presets{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0 8px}
-.ht-sub{font-size:.78rem;font-weight:700;color:var(--text-secondary);margin-right:4px}
+.ht-sub{font-size:max(12px,.78rem);font-weight:700;color:var(--text-secondary);margin-right:4px}
 .ht-chips{display:flex;flex-wrap:wrap;gap:6px;max-height:9.5rem;overflow-y:auto}
-.ht-chip{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;padding:4px 9px;border:1px solid var(--border-control);border-radius:999px;background:var(--bg-card-alt);color:var(--text-primary);cursor:pointer}
+.ht-chip{display:inline-flex;align-items:center;gap:6px;font-size:max(12px,.78rem);padding:4px 9px;border:1px solid var(--border-control);border-radius:999px;background:var(--bg-card-alt);color:var(--text-primary);cursor:pointer}
 .ht-chip.on{background:var(--bg-hover)}
 .ht-chip input{accent-color:currentColor}
 .ht-dot{width:10px;height:10px;border-radius:50%;flex:none}
@@ -3227,8 +3230,8 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .ht-actions [hidden]{display:none}
 .ht-backups{list-style:none;margin:8px 0 0;padding:0}
 .ht-backups li{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-light)}
-.ht-b-info{display:flex;flex-direction:column;gap:2px;font-size:.82rem}
-.ht-b-info span{color:var(--text-secondary);font-size:.75rem}
+.ht-b-info{display:flex;flex-direction:column;gap:2px;font-size:max(12px,.82rem)}
+.ht-b-info span{color:var(--text-secondary);font-size:max(12px,.75rem)}
 
 /* v21.35: iOS Safari auto-zooms the page when a focused field's font-size is under 16px (inputs were
    13.5-14.4px on phones/tablets), leaving the layout shifted and zoomed after typing. Keep the look
@@ -3242,9 +3245,9 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
   /* Text floor: labels, table headers and footer notes were 9-10.8px; nothing readable drops under 11.5px. */
   label,.team-number,thead th,.team-guess-cell>label,.round-label,.cp-field-label,.cp-script-label,
   .export-sq-label,.fr-guess-h,.fr-diff-h,.lbl-short,summary,.size-label,.settings-version,
-  .settings-about .about-ver,.aud-rank-of,.aud-meta,.aud-wager,.aud-stat-pct,.fr-note{font-size:max(11.5px,.72rem)}
+  .settings-about .about-ver,.aud-rank-of,.aud-meta,.aud-wager,.aud-stat-pct,.fr-note{font-size:max(12px,.72rem)}
   .check-label,.standings-table thead th,.final-table thead th,.settings-about,.settings-about summary,
-  .fr-details summary,.cv-select-arrow,.aud-dot,.aud-eyebrow,.aud-res,.fr-tiebadge,.aud-stat-pct,.aud-dot+*{font-size:max(11.5px,.72rem)}
+  .fr-details summary,.cv-select-arrow,.aud-dot,.aud-eyebrow,.aud-res,.fr-tiebadge,.aud-stat-pct,.aud-dot+*{font-size:max(12px,.72rem)}
   /* Team report close/edit buttons keep their drawn size; an invisible ::after extends the tap area to 44px. */
   .audit-close,.aud-edit-btn{position:relative}
   .audit-close::after,.aud-edit-btn::after{content:"";position:absolute;inset:-7px}
@@ -3253,7 +3256,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 /* v22.22: iPad landscape (touch, wider than the phone layout) kept the compact 1.5rem desktop per-question
    buttons, which were too short and small to tap. Give them the same tap-sized height and larger icon as phones. */
 @media (pointer:coarse) and (min-width:769px){
-  .q-sort-btn,.q-reset-btn,.q-alpha-btn,.q-stat{height:2.5rem;font-size:.9rem}
+  .q-sort-btn,.q-reset-btn,.q-alpha-btn,.q-stat{height:2.5rem;font-size:max(12px,.9rem)}
   .q-sort-btn,.q-reset-btn{min-width:2.5rem;padding:0 12px}
   .q-alpha-btn{min-width:2.5rem;padding:0 10px}
   .q-sort-btn .icon-ui,.q-reset-btn .icon-ui,.q-alpha-btn .icon-ui{width:1.4em;height:1.4em}
@@ -3261,7 +3264,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 }
 
 /* v21.42: group headings inside Advanced Settings. */
-.settings-group-label{margin:14px 0 2px;padding-top:12px;border-top:1px solid var(--border-light);font-family:var(--font-display);font-size:max(11.5px,.7rem);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.settings-group-label{margin:14px 0 2px;padding-top:12px;border-top:1px solid var(--border-light);font-family:var(--font-display);font-size:max(12px,.7rem);font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
 .settings-group-label:first-child{margin-top:4px;padding-top:0;border-top:0}
 
 /* Light theme icon legibility (v22.7). Pause, Reset and the close X were all drawn as thin or faded
@@ -3285,7 +3288,7 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 .question-block.q-locked .bonus-title span,.special-section.q-locked .sw-title span:not(.q-badge){color:var(--text-secondary)}
 .special-section.q-locked h3{color:var(--text-secondary)}
 .q-badge.q-locked-badge{background:transparent;color:var(--text-muted)}
-.app-toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(12px);width:max-content;max-width:min(92vw,28rem);padding:10px 16px 14px;border-radius:var(--radius);background:var(--bg-card-alt);color:var(--text-primary);border:2px solid var(--accent-gold);box-shadow:var(--shadow-lg);font-size:.9rem;font-weight:600;text-align:center;white-space:pre-line;overflow:hidden;opacity:0;pointer-events:none;z-index:900;transition:opacity .2s,transform .2s}
+.app-toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(12px);width:max-content;max-width:min(92vw,28rem);padding:10px 16px 14px;border-radius:var(--radius);background:var(--bg-card-alt);color:var(--text-primary);border:2px solid var(--accent-gold);box-shadow:var(--shadow-lg);font-size:max(12px,.9rem);font-weight:600;text-align:center;white-space:pre-line;overflow:hidden;opacity:0;pointer-events:none;z-index:900;transition:opacity .2s,transform .2s}
 .app-toast-bar{position:absolute;left:0;bottom:0;height:5px;width:100%;background:var(--accent-gold);transform-origin:left center;transform:scaleX(0)}
 .app-toast-bar.run{animation:toastShrink var(--toast-ms,5000ms) linear forwards}
 @keyframes toastShrink{from{transform:scaleX(1)}to{transform:scaleX(0)}}
@@ -3293,30 +3296,30 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
 
 /* Finish game checklist (Game Submission) */
 .finish-card{margin-top:10px;padding:10px 12px;background:var(--bg-card-alt);border:1px solid var(--border-strong);border-radius:var(--radius)}
-.finish-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:.9rem}
-.finish-count{color:var(--text-muted);font-size:.8rem}
+.finish-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;font-size:max(12px,.9rem)}
+.finish-count{color:var(--text-muted);font-size:max(12px,.8rem)}
 .finish-list{list-style:none;margin:0;padding:0}
 .finish-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0}
 .finish-item+.finish-item{border-top:1px solid var(--border)}
 .finish-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:8px}
-.finish-warn{margin:0;font-size:.78rem;color:var(--accent-gold)}
+.finish-warn{margin:0;font-size:max(12px,.78rem);color:var(--accent-gold)}
 .finish-box{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.4rem;height:1.4rem;border:2px solid var(--border-control);border-radius:5px;font-weight:700;line-height:1}
 .finish-item.done .finish-box{background:var(--accent-green);border-color:var(--accent-green);color:#000}
 [data-theme="light"] .finish-item.done .finish-box{color:#fff}
 .finish-box .icon-mark{width:.9rem;height:.9rem;vertical-align:0}
-.finish-text{flex:1;min-width:0;font-size:.9rem;font-weight:600}
-.finish-hint{display:block;font-size:.75rem;font-weight:400;color:var(--text-muted)}
+.finish-text{flex:1;min-width:0;font-size:max(12px,.9rem);font-weight:600}
+.finish-hint{display:block;font-size:max(12px,.75rem);font-weight:400;color:var(--text-muted)}
 .finish-body .winner-copy{margin:0;max-width:22rem;width:100%}
 .finish-rect{border:2px solid var(--accent-gold);box-sizing:border-box;overflow:hidden;height:auto;white-space:normal;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:14px;width:100%;max-width:22rem;min-height:4.6rem;padding:8px 16px;text-align:left;text-decoration:none;font-size:3.4rem;line-height:1}
 .finish-rect .icon-ui,.finish-rect .icon-emoji{flex:none;font-size:3.4rem;width:1em;height:1em;line-height:1}
 .finish-rect .icon-fawkes{width:1.35em;height:1.35em}
 .finish-rect .icon-save{--icon-tint:var(--tint-flask)}
 .finish-rect-label .lb-line{display:block}
-.finish-body .wc-label.wc-num{font-size:.95rem}
+.finish-body .wc-label.wc-num{font-size:max(12px,.95rem)}
 [data-theme="light"] .finish-body .wc-label{color:var(--tint-theme-2)}
 .finish-rect-text{flex:1 1 0;display:flex;flex-direction:column;gap:2px;min-width:0;font-family:var(--font-body)}
 .finish-rect-label{font-size:1rem;font-weight:800;line-height:1.15;white-space:normal;overflow-wrap:anywhere}
-.finish-rect-sub{font-size:.78rem;font-weight:600;line-height:1.2;white-space:normal}
+.finish-rect-sub{font-size:max(12px,.78rem);font-weight:600;line-height:1.2;white-space:normal}
 .finish-body .wc-btn{height:auto;min-height:44px;white-space:normal;overflow:visible;flex-wrap:wrap;min-width:0}
 .finish-body .wc-label{flex:none;width:4rem;min-width:0;text-align:center;line-height:1.1}
 .finish-body .wc-name{min-width:0;overflow-wrap:anywhere;word-break:normal;text-align:left}
@@ -3362,12 +3365,12 @@ input.at-limit,textarea.at-limit{border-color:var(--accent-orange);box-shadow:0 
    (Sort / A-Z / Reset / No guess). The narrow-column rule above (max-width:600px) hides .btn-label
    and keeps the compact icon squares, so phones are unchanged. */
 @container scorecol (min-width:601px){
-  .q-sort-btn,.q-reset-btn,.q-alpha-btn{height:40px;font-size:.9rem;gap:.5em;padding:0 16px;border-radius:9px}
+  .q-sort-btn,.q-reset-btn,.q-alpha-btn{height:40px;font-size:max(12px,.9rem);gap:.5em;padding:0 16px;border-radius:9px}
   .q-alpha-btn.team-guess-btn{width:auto;padding:0 16px;border-radius:9px}
   .q-sort-btn .icon-ui,.q-reset-btn .icon-ui,.q-alpha-btn .icon-ui{width:1.3em;height:1.3em}
   .q-sort-btn .icon-emoji,.q-reset-btn .icon-emoji{transform:scale(1.3)}
   .team-sort-row{gap:8px}
-  .q-stat{height:40px;font-size:.8rem;padding:0 12px;border-radius:9px}
+  .q-stat{height:40px;font-size:max(12px,.8rem);padding:0 12px;border-radius:9px}
 }
 
 /* Mouse hover and press feedback (v22.93). Before this, most hovers were a background shift of
@@ -3470,14 +3473,14 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
 /* KEYBOARD SCORING: the row that score keys act on (js/host-tools.js). */
 .team-answer,.bonus-row,.special-wager-row{scroll-margin-top:calc(var(--qbar-top,0px) + 6rem);scroll-margin-bottom:1rem}
 .team-answer.kb-row,.bonus-row.kb-row,.special-wager-row.kb-row{outline:3px solid var(--accent-cyan-solid);outline-offset:-3px;background:var(--bg-hover)}
-.ht-keys-sub{font-size:.85rem;margin:14px 0 4px}
+.ht-keys-sub{font-size:max(12px,.85rem);margin:14px 0 4px}
 
 /* ONE-LINE TEAM NAMES: where a scoring row has room, the name column fits the longest team name
    (--name-col, measured by fitNameColumn() in js/app.js), so names stay on one line. In each row the
    points end where the header's Reset Sort button ends, so the score buttons sit near the name and
    not at the far right. If the buttons need the space, the name shrinks and wraps as before.
    The right padding on the name keeps the hover Team Report icon off the end of it. */
-.name-probe{position:absolute;left:-9999px;top:0;width:max-content;visibility:hidden;white-space:nowrap;font-weight:600;font-size:.88rem;line-height:1.3;padding:0 2.2em 0 4px}
+.name-probe{position:absolute;left:-9999px;top:0;width:max-content;visibility:hidden;white-space:nowrap;font-weight:600;font-size:max(12px,.88rem);line-height:1.3;padding:0 2.2em 0 4px}
 @container scorecol (min-width:601px){
   /* --score-col has a floor so a game of short names still leaves room for the header's title.
      --sort-w is the three sort buttons below plus the two gaps between them. */
@@ -3497,10 +3500,6 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
   .q-header-right>.q-reset-btn{width:8.5rem}
   /* Larger A-Z / Z-A picture; the No guess button keeps its own. */
   .q-alpha-btn:not(.team-guess-btn) .icon-ui{width:1.75em;height:1.75em}
-  /* Q5 wager dropdown: as tall as the correct / incorrect buttons, wider, with a larger number. The
-     arrow is a background image, so the hover and focus rules here set only the colour. */
-  .special-wager-row>.sw-select{appearance:none;-webkit-appearance:none;width:4.2rem;height:2.6rem;padding:0 1.2rem 0 .2rem;font-size:1.25rem;background:var(--btn-idle-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23bbbbbb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 2l4 4 4-4'/%3E%3C/svg%3E") no-repeat right .55rem center/.8rem .53rem}
-  [data-theme="light"] .special-wager-row>.sw-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 2l4 4 4-4'/%3E%3C/svg%3E")}
   /* Scores before a wager: the score column sits where the rows' points are, under Reset Sort. The
      first column has the width; the score column takes the rest and holds its number at the left. */
   .standings-table th:first-child,.standings-table td.standings-name{width:calc(var(--title-w,var(--score-col)) + var(--sort-w) - 3.7rem + 3px)}
@@ -3518,7 +3517,7 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
 :is(.q-header,.sw-header):has(.q-stats-row){align-items:flex-start}
 .q-header-right:has(.q-stats-row){flex-wrap:wrap;row-gap:2px}
 .q-header-right .q-stats-row{flex:0 0 100%;order:1;display:flex;justify-content:center;gap:1.1rem}
-.q-header-right .q-stats-row .q-stat{height:1.15rem;padding:0;background:none;border:0;gap:.3em;font-size:.76rem}
+.q-header-right .q-stats-row .q-stat{height:1.15rem;padding:0;background:none;border:0;gap:.3em;font-size:max(12px,.76rem)}
 .q-header-right .q-stats-row .q-stat-correct{color:var(--pts-pos-fg)}
 .q-header-right .q-stats-row .q-stat-incorrect{color:var(--pts-neg-fg)}
 /* Light theme's pill text is white, so plain text takes a darker shade of the pill colour. */
@@ -3538,7 +3537,24 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
   :is(.q-header,.sw-header):has(.q-stats-row){padding-left:6px;padding-right:6px}
   .q-header-right:has(.q-stats-row){flex-basis:10rem;column-gap:6px}
   .q-header-right .q-stats-row{gap:.4rem}
-  .q-header-right .q-stats-row .q-stat{font-size:.68rem;gap:.15em}
+  .q-header-right .q-stats-row .q-stat{font-size:max(12px,.68rem);gap:.15em}
+}
+/* Q5 wager dropdown, at every width: as tall as the correct / incorrect buttons, wider, with a larger
+   number. The arrow is a background image, so the hover and focus rules here set only the colour. */
+.special-wager-row>.sw-select{appearance:none;-webkit-appearance:none;width:4.2rem;height:2.6rem;padding:0 1.2rem 0 .2rem;font-size:1.25rem;background:var(--btn-idle-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23bbbbbb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 2l4 4 4-4'/%3E%3C/svg%3E") no-repeat right .55rem center/.8rem .53rem}
+[data-theme="light"] .special-wager-row>.sw-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23333333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 2l4 4 4-4'/%3E%3C/svg%3E")}
+/* Phones: the dropdown and each row's points box are as tall as the buttons beside them (the smaller
+   0-4 buttons on bonus rows). The points box is also wider, with a larger number. */
+@container scorecol (max-width:600px){
+  .special-wager-row>.sw-select{height:clamp(2rem,9cqw,var(--wager-size));min-height:0}
+  :is(.team-answer,.bonus-row,.special-wager-row) :is(.ta-pts,.bonus-pts){height:clamp(2rem,9cqw,var(--wager-size));width:clamp(3.2rem,16cqw,4.1rem);box-sizing:border-box;display:flex;align-items:center;justify-content:center;padding:0;font-size:1.3rem}
+  .bonus-row .bonus-pts{height:clamp(1.7rem,7.5cqw,2.2rem)}
+}
+@media (pointer:fine){
+  @container scorecol (max-width:600px){
+    .special-wager-row>.sw-select,:is(.team-answer,.special-wager-row) .ta-pts{height:clamp(2.4rem,11cqw,var(--wager-size))}
+    .bonus-row .bonus-pts{height:clamp(2.2rem,9cqw,2.4rem)}
+  }
 }
 @media (forced-colors:active){.special-wager-row>.sw-select{appearance:auto;-webkit-appearance:auto}}
 /* A used wager keeps its faded look on hover; this outranks the shared button hover rules. */
@@ -3554,15 +3570,15 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
   .race-panel{display:flex;flex-direction:column;gap:8px;flex:0 0 clamp(520px,calc(100vw - 1600px),900px);height:100%;overflow-y:auto;padding:14px 18px;border-left:1px solid var(--border-strong);background:var(--bg-card-alt)}
 }
 .race-title{font-family:var(--font-display);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--txt-cyan)}
-.race-sub,.race-note{font-size:.8rem;color:var(--text-muted)}
+.race-sub,.race-note{font-size:max(12px,.8rem);color:var(--text-muted)}
 /* The drawing is taken out of the flow, so redrawing it can't resize the box being measured. */
 .race-chart{position:relative;flex:1 1 0;min-height:300px;max-height:760px}
 .race-chart svg{position:absolute;inset:0;overflow:visible}
-.race-chart text{font-family:var(--font-body);font-size:.75rem;fill:var(--text-muted)}
+.race-chart text{font-family:var(--font-body);font-size:max(12px,.75rem);fill:var(--text-muted)}
 .race-chart .race-end{font-weight:700;fill:var(--text-primary)}
 .race-grid{stroke:var(--border)}
 .race-legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(17rem,1fr));gap:4px 14px}
-.race-legend button{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;padding:3px 6px;border:0;border-radius:6px;background:transparent;color:var(--text-primary);font:600 .85rem var(--font-body);text-align:left;cursor:pointer}
+.race-legend button{display:flex;align-items:center;gap:8px;width:100%;min-height:32px;padding:3px 6px;border:0;border-radius:6px;background:transparent;color:var(--text-primary);font:600 max(12px,.85rem) var(--font-body);text-align:left;cursor:pointer}
 .race-legend button:hover{background:var(--bg-hover)}
 .race-key{flex:none;width:12px;height:12px;border-radius:3px}
 .race-rank{flex:none;min-width:1.2em;color:var(--text-muted)}
