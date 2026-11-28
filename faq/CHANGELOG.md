@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.90] - 27 Nov 2026
+
+### Changed
+
+- Retook the dark theme scoring screenshots with the slightly stronger points boxes.
+
 ## [1.89] - 27 Nov 2026
 
 ### Changed

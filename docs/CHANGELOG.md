@@ -20,6 +20,7 @@ app. Its first commit subject says "v22.105"; git history isn't rewritten.
 ## v23.0 - 2026-11-27
 
 - **Score race panel.** On windows 2100 pixels or wider, a third panel to the right of the scoreboard graphs each team's running total by round. The top five are in colour with a legend under the chart, and everyone else is grey. A team keeps its colour while it stays in the top five. Pointing at a line shows its team, and choosing a legend entry opens that team's report. Dragging the scoreboard divider leaves room for it.
+- **Dark theme points boxes** (+2, +4, 0) have a slightly stronger fill: 25% opacity, in the default and colour-blind palettes. With Medium or High row stripes their number is brighter, so it stays readable. Light theme is unchanged.
 - **Clearer used wagers.** A wager already used in the round now has a fine diagonal slash instead of a faint line through it. It stays faded, including when pointed at.
 - **Crowd-Wisdom Percentage** now sits as a line of text under the sort buttons in the wide layout, so score boxes stay the same width whether it is on or off.
 - **FAQ** screenshots retaken, with notes on the new panel and percentage line (FAQ v1.89).

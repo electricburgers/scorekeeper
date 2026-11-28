@@ -49,8 +49,8 @@
      existing cb1 --pts-pos-bg; white clears ~5.6:1. Tritanopia (cb2) doesn't change green per the
      COLOR VISION MODES rule below, so there's no cb2 override — only [data-cb="1"] further down. */
   --correct-badge-bg:#0c7a0c;--correct-badge-fg:#fff;
-  --pts-pos-bg:rgba(68,255,68,.18);--pts-pos-border:rgba(68,255,68,.55);--pts-pos-fg:#8dff8d;
-  --pts-neg-bg:rgba(255,68,68,.2);--pts-neg-border:rgba(255,68,68,.6);--pts-neg-fg:#ffa3a3;
+  --pts-pos-bg:rgba(68,255,68,.25);--pts-pos-border:rgba(68,255,68,.55);--pts-pos-fg:#8dff8d;
+  --pts-neg-bg:rgba(255,68,68,.25);--pts-neg-border:rgba(255,68,68,.6);--pts-neg-fg:#ffa3a3;
   --pts-nil-bg:rgba(255,255,255,.06);--pts-nil-border:rgba(255,255,255,.12);
   --on-accent-cyan:#000;--on-accent-gold:#000;--on-badge:#000;
   /* Each of these is BOTH the chip's own text colour (against --bg-input) and, once ticked, the
@@ -268,8 +268,8 @@
 [data-theme="dark"][data-cb="1"]{
   --accent-green:#3399ff;--accent-red:#ff8800;
   --btn-correct-bg:#0d1f2e;--btn-incorrect-bg:#2e1f0d;
-  --pts-pos-bg:rgba(51,153,255,.2);--pts-pos-border:rgba(51,153,255,.6);--pts-pos-fg:#8fc6ff;
-  --pts-neg-bg:rgba(255,136,0,.2);--pts-neg-border:rgba(255,136,0,.6);--pts-neg-fg:#ffc182;
+  --pts-pos-bg:rgba(51,153,255,.25);--pts-pos-border:rgba(51,153,255,.6);--pts-pos-fg:#8fc6ff;
+  --pts-neg-bg:rgba(255,136,0,.25);--pts-neg-border:rgba(255,136,0,.6);--pts-neg-fg:#ffc182;
   --badge-green-fg:#55bbff;--txt-red:#ff9008;
   /* Same fix as the base dark theme's --danger-solid-bg: #884900 was a solid fill that read at
      only 2.2-2.4:1 against the surfaces it sits on, so nothing identified the Reset button or the
@@ -3544,3 +3544,7 @@ button:disabled,.cp-preview-btn{cursor:not-allowed}
 .race-rank{flex:none;min-width:1.2em;color:var(--text-muted)}
 .race-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .race-pts{flex:none;font-family:var(--font-display);font-weight:700;font-variant-numeric:tabular-nums}
+/* DARK POINTS BOXES on Medium or High row stripes (data-stripe is only set for those): the lighter
+   row shows through the 25% fill, so the number is brightened to keep 4.5:1. */
+[data-theme="dark"][data-stripe] :is(.ta-pts,.bonus-pts).pts-pos{color:color-mix(in srgb,var(--pts-pos-fg) 40%,#fff)}
+[data-theme="dark"][data-stripe] :is(.ta-pts,.bonus-pts):is(.pts-neg,.pts-nil,.submitted-zero){color:color-mix(in srgb,var(--pts-neg-fg) 40%,#fff)}

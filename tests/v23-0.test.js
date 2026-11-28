@@ -102,3 +102,11 @@ describe("v23.0 score race", () => {
     assert.match(svg, />-10</);
   });
 });
+
+describe("v23.0 dark points boxes", () => {
+  it("fills them at 25% in the default and colour-blind dark palettes, light theme staying solid", () => {
+    const fills = [...css.matchAll(/--pts-(?:pos|neg)-bg:([^;}]+)/g)].map((m) => m[1]);
+    assert.equal(fills.filter((v) => /^rgba\(.*,\.25\)$/.test(v)).length, 4);
+    assert.equal(fills.filter((v) => /^#[0-9a-f]{6}$/i.test(v)).length, 4);
+  });
+});
