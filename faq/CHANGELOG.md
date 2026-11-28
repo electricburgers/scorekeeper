@@ -2,6 +2,12 @@
 
 All notable changes to the Scorekeeper FAQ site are documented here.
 
+## [1.88] - 27 Nov 2026
+
+### Changed
+
+- Retook the wide-layout scoring screenshots, including the scores before a wager: more room after team names, a bigger A-Z picture, a larger wager dropdown, scores closer to names and narrower score boxes.
+
 ## [1.87] - 27 Nov 2026
 
 ### Changed

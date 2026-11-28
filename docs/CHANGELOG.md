@@ -14,6 +14,18 @@ Theme Night is a major change, so its first release (commit subject "v19.78") is
 v20.0 here and in the app, and the follow-ups after it are v20.1 through v20.6 (commit subjects
 v19.79 through v19.84; git history isn't rewritten).
 
+## v22.104 - 2026-11-27
+
+- **More room after team names.** In the wide layout, each row's points now end where the Reset Sort button ends. The three sort buttons have fixed widths so this stays true.
+- **Larger A-Z / Z-A picture** in the wide layout.
+- **Larger Q5 wager dropdown** in the wide layout: as tall as the correct and incorrect buttons, wider, with a bigger number.
+- **Narrower score boxes.** In the wide layout, question, Q5 wager and pre-wager score boxes, and the text boxes between them, are now only as wide as they need to be, based on the longest team name. Round cards stay full width.
+- **Fixed:** with Crowd-Wisdom Percentage on in a narrow window, rows now still line up with Reset Sort when the header squeezes its title.
+- **FAQ screenshots** retaken (FAQ v1.88).
+- **Scores before a wager.** In the wide layout, the scores now sit in the same place as the points on the rows above, not at the far right.
+- **Fixed: Enter and Space.** Pressing either on a section or question header now opens or closes it. Two handlers were each clicking it, so it toggled and toggled straight back. This also affected the other clickable headers, names and rows that aren't real buttons.
+- **Fixed:** Enter or Space on a button inside a section header, such as A-Z on Teams, now presses that button and no longer toggles the section instead.
+
 ## v22.103 - 2026-11-27
 
 - **Team names on one line.** Where the scoring column is wider than 600px, the name column now fits the longest team name and the score buttons follow it, so there is less mouse travel on large displays. This covers questions, bonus questions and Q5 wagers. Names still wrap if the buttons need the room, and narrow layouts are unchanged.

@@ -54,12 +54,12 @@ describe("v22.103", () => {
   });
 
   it("wide question headers start the sort buttons at the score column, percentages after", () => {
-    assert.match(css, /\.q-header-left,\.sw-header-left\{flex:1 1 0;max-width:var\(--name-col,11rem\);min-width:min-content\}/);
-    assert.match(css, /\.q-header-right\{margin-left:0;flex-shrink:1;flex-wrap:wrap;min-width:0\}\n {2}\.q-header-right \.q-stats-row\{display:flex;gap:inherit;order:1\}/);
+    assert.match(css, /\.q-header-left,\.sw-header-left\{flex:1 1 0;max-width:var\(--score-col\);min-width:min-content\}/);
+    assert.match(css, /\.q-header-right \.q-stats-row\{display:flex;gap:inherit;order:1\}/);
   });
 
-  it("wide scoring rows use the measured column and drop the right-alignment", () => {
-    assert.match(css, /@container scorecol \(min-width:601px\)\{\n {2}:is\(\.team-answer,\.bonus-row,\.special-wager-row\)>\.ta-name\{width:var\(--name-col,11rem\)/);
-    assert.match(css, /\.team-answer>\.ta-wagers,\.bonus-row>\.bonus-right,\.special-wager-row>\.sw-select\{margin-left:0\}/);
+  it("wide scoring rows use the measured column, with a floor for short names", () => {
+    assert.match(css, /--score-col:max\(var\(--name-col,11rem\),13rem\)/);
+    assert.match(css, /:is\(\.team-answer,\.bonus-row,\.special-wager-row\)>\.ta-name\{width:var\(--score-col\)/);
   });
 });

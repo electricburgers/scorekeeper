@@ -128,6 +128,7 @@ function collectUsedCustomProps(file) {
     "--qt-n1", // qtSetBar() sets the timer progress bar notch positions
     "--qt-n2",
     "--qt-refill-dur", // question-timer.js sets the bar refill duration per refill
+    "--title-w", // setTitleWidth() in app.js: a question header title's real width
     "--name-col", // fitNameColumn() in app.js: the longest team name's width
   ]);
   test("every var(--x) in css/styles.css resolves to a --x defined in that same file (or is one of the small set app.js computes and sets directly)", () => {

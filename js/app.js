@@ -69,8 +69,8 @@ const FIELD_MAX = {
   timezone: 64,
   locale: 35,
 };
-const APP_VERSION = "v22.103"; // #Version Number — bump this manually when you release a new build
-const APP_VERSION_DATE = "Nov 27, 2026 3:51 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
+const APP_VERSION = "v22.104"; // #Version Number — bump this manually when you release a new build
+const APP_VERSION_DATE = "Nov 27, 2026 10:48 PM"; // #Version Date — bump alongside APP_VERSION so folks can spot a stale build
 // version.json (repo root) mirrors these two — see checkForUpdate() below for why, and bump it
 // in the same commit as these two or the update-available check starts lying: it'd either miss
 // a real new release (version.json still saying the old version) or nag a host running the
@@ -1487,9 +1487,9 @@ function renderStandings(type) {
     `<div class="standings-collapsible">` +
     renderBanter("scores", "sc-" + type, { sm: true }) +
     `<div class="standings-sort-btns" id="standings-sortbtns-${type}">${btns}</div>` +
-    `<table class="standings-table"><thead><tr><th>Team</th><th>Score</th></tr></thead><tbody>`;
+    `<table class="standings-table"><thead><tr><th>Team</th><th><span class="st-score">Score</span></th></tr></thead><tbody>`;
   list.forEach((t) => {
-    h += `<tr class="standings-row${pausedRowCls(t.ti)}" role="button" tabindex="0" title="${esc(t.name)}${isPaused(t.ti) ? " (paused)" : ""} — tap to view team report" onclick="openAudit(${t.ti})"><td class="standings-name ta-name-clickable">${esc(t.name)}${pausedMark(t.ti)}</td><td class="standings-pts">${t.pts}</td></tr>`;
+    h += `<tr class="standings-row${pausedRowCls(t.ti)}" role="button" tabindex="0" title="${esc(t.name)}${isPaused(t.ti) ? " (paused)" : ""} — tap to view team report" onclick="openAudit(${t.ti})"><td class="standings-name ta-name-clickable">${esc(t.name)}${pausedMark(t.ti)}</td><td class="standings-pts"><span class="st-score">${t.pts}</span></td></tr>`;
   });
   return h + "</tbody></table></div></div>";
 }
@@ -1582,6 +1582,7 @@ function renderAll() {
 function renderLeft() {
   withScoreMemo(renderLeftBody);
   fitNameColumn();
+  watchHeaderTitles();
   // Re-mark the keyboard-scoring row, which the redraw above replaced (js/host-tools.js loads later).
   if (typeof kbRestoreRow === "function") kbRestoreRow();
 }
@@ -1607,6 +1608,30 @@ function fitNameColumn() {
   // No width means no layout to measure (tests), so the stylesheet's own width applies.
   if (w) root.setProperty("--name-col", w + 1 + "px");
   else root.removeProperty("--name-col");
+}
+// A crowded question header narrows its title area to keep the percentages on one row, which moves
+// Reset Sort. Each block records its title's real width as --title-w so its rows end there too. The
+// observer also fires when a collapsed section opens or the column is resized.
+// The observer is kept on the function, not in a let: startup draws the page before a let declared
+// down here would be set up.
+function watchHeaderTitles() {
+  if (!window.ResizeObserver) return;
+  watchHeaderTitles.observer?.disconnect();
+  const observer = new ResizeObserver((entries) => entries.forEach((e) => setTitleWidth(e.target)));
+  watchHeaderTitles.observer = observer;
+  document
+    .querySelectorAll("#mainContent :is(.q-header-left, .sw-header-left)")
+    .forEach((el) => observer.observe(el));
+}
+function setTitleWidth(title) {
+  const block = title.closest(".question-block, .special-section");
+  const w = title.getBoundingClientRect().width;
+  // Zero means hidden (a collapsed section), so the last real width is kept.
+  if (!block || !w) return;
+  block.style.setProperty("--title-w", w + "px");
+  // The scores list above a Q5 wager has no header of its own, so it follows that wager's.
+  if (block.id.startsWith("swblock-"))
+    document.getElementById(block.id.replace("swblock-", "standings-"))?.style.setProperty("--title-w", w + "px");
 }
 // The first measurement can happen before the web font has loaded.
 document.fonts?.ready.then(() => fitNameColumn());
@@ -3301,15 +3326,6 @@ document.addEventListener("keydown", function (e) {
     const sb = document.getElementById("sidebar");
     if (sb && sb.classList.contains("open")) toggleSidebar();
   }
-});
-
-// Keyboard support for div/span controls styled as buttons (role="button"): Enter/Space activates them.
-document.addEventListener("keydown", function (e) {
-  if (e.key !== "Enter" && e.key !== " ") return;
-  const el = e.target.closest('[role="button"]');
-  if (!el) return;
-  e.preventDefault();
-  el.click();
 });
 
 /* If real storage is unavailable (opaque origin, e.g. Chrome opened from file://), warn once.
